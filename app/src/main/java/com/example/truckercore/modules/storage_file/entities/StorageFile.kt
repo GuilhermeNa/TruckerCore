@@ -2,7 +2,6 @@ package com.example.truckercore.modules.storage_file.entities
 
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Entity
-import java.net.MalformedURLException
 import java.net.URL
 import java.time.LocalDateTime
 

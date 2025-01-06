@@ -36,7 +36,9 @@ internal class StorageFileMapperTest {
 
     @ParameterizedTest
     @MethodSource("getArrWithMissingFields")
-    fun `toEntity() should throw IllegalArgumentException when there is missing fields`(dto: StorageFileDto) {
+    fun `toEntity() should throw IllegalArgumentException when there is missing fields`(
+        dto: StorageFileDto
+    ) {
         assertThrows<MissingFieldException> {
             StorageFileMapper.toEntity(dto)
         }

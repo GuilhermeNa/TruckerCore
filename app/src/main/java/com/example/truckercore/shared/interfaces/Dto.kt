@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.shared.annotations.Required
 import java.util.Date
 
 /**

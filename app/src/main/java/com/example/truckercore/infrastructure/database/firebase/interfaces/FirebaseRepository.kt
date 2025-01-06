@@ -11,8 +11,6 @@ internal interface FirebaseRepository {
      * @param collectionName The name of the Firestore collection.
      * @param dto The DTO to be saved.
      * @return The ID of the newly created document.
-     * @throws ValidatorNotFoundException If no validation strategy is registered for the given DTO type.
-     * @throws CorruptedFileException If the DTO cannot be inserted due to validation issues.
      */
     fun <T> create(collectionName: String, dto: Dto<T>): String
 
@@ -22,9 +20,6 @@ internal interface FirebaseRepository {
      *
      * @param collectionName The name of the Firestore collection.
      * @param dto The DTO to update the document with.
-     *
-     * @throws CorruptedFileException If the DTO cannot be inserted due to validation issues.
-     * @throws ValidatorNotFoundException If no validation strategy is registered for the given DTO type.
      */
     fun <T> update(collectionName: String, dto: Dto<T>)
 
