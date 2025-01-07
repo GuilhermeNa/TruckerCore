@@ -1,14 +1,14 @@
-package com.example.truckercore._data_provider
+package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.modules.storage_file.dtos.StorageFileDto
-import com.example.truckercore.modules.storage_file.entities.StorageFile
+import com.example.truckercore.modules.personal_data.dtos.PersonalDataDto
+import com.example.truckercore.modules.personal_data.entities.PersonalData
 import com.example.truckercore.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 
-internal object TestStorageFileDataProvider {
+internal object TestPersonalDataDataProvider {
 
-    fun getBaseEntity() = StorageFile(
+    fun getBaseEntity() = PersonalData(
         masterUid = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
@@ -16,20 +16,24 @@ internal object TestStorageFileDataProvider {
         lastUpdate = LocalDateTime.now(),
         persistenceStatus = PersistenceStatus.PERSISTED,
         parentId = "parentId",
-        url = "https://www.example.com",
-        isUpdating = false
+        name = "name",
+        number = "number",
+        emissionDate = LocalDateTime.now(),
+        expirationDate = LocalDateTime.now()
     )
 
-    fun getBaseDto() = StorageFileDto(
+    fun getBaseDto() = PersonalDataDto(
         masterUid = "masterUid",
         id = "id",
-        lastModifierId = "id",
+        lastModifierId = "lastModifierId",
         creationDate = Date(),
         lastUpdate = Date(),
-        persistenceStatus = "PERSISTED",
+        persistenceStatus = PersistenceStatus.PERSISTED.name,
         parentId = "parentId",
-        url = "https://www.example.com",
-        isUpdating = false
+        name = "name",
+        number = "number",
+        emissionDate = Date(),
+        expirationDate = Date()
     )
 
     fun getArrWithMissingFields() = arrayOf(
@@ -40,9 +44,9 @@ internal object TestStorageFileDataProvider {
         getBaseDto().copy(lastUpdate = null),
         getBaseDto().copy(persistenceStatus = null),
         getBaseDto().copy(parentId = null),
-        getBaseDto().copy(url = null),
-        getBaseDto().copy(isUpdating = null)
+        getBaseDto().copy(name = null),
+        getBaseDto().copy(number = null),
+        getBaseDto().copy(emissionDate = null)
     )
 
 }
-

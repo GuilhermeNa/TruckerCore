@@ -22,6 +22,11 @@ object Field {
     const val CREATION_DATE = "creationDate"
     const val LAST_UPDATE = "lastUpdate"
     const val IS_UPDATING = "isUpdating"
+    const val NAME = "name"
+    const val NUMBER = "number"
+    const val EMISSION_DATE = "emissionDate"
     const val PERSISTENCE_STATUS = "persistenceStatus"
+
+
 
 }

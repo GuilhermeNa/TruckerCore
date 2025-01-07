@@ -1,31 +1,31 @@
-package com.example.truckercore.modules.storage_file.configs
+package com.example.truckercore.modules.personal_data.configs
 
-import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
-import com.example.truckercore.modules.storage_file.dtos.StorageFileDto
+import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
+import com.example.truckercore.modules.personal_data.dtos.PersonalDataDto
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
-internal class StorageFileConfigsTest {
+internal class PersonalDataConfigsTest {
 
     companion object {
         @JvmStatic
-        fun getArrWithMissingFields() = TestStorageFileDataProvider.getArrWithMissingFields()
+        fun getArrWithMissingFields() = TestPersonalDataDataProvider.getArrWithMissingFields()
     }
 
     @Test
     fun `validateRequiredFields() should not throw exception when all required fields are present`() {
         // Object
-        val dto = TestStorageFileDataProvider.getBaseDto()
+        val dto = TestPersonalDataDataProvider.getBaseDto()
 
         //Call
         assertDoesNotThrow {
-            StorageFileConfigs.validateRequiredFields(dto)
+            PersonalDataConfigs.validateRequiredFields(dto)
         }
 
     }
@@ -33,18 +33,18 @@ internal class StorageFileConfigsTest {
     @ParameterizedTest
     @MethodSource("getArrWithMissingFields")
     fun `should throw IllegalArgumentException when there is missing fields`(
-        dto: StorageFileDto
+        dto: PersonalDataDto
     ) {
         // Objects
         val validFields = mutableListOf<String>()
         dto::class.memberProperties.forEach { property ->
-            val value = (property as KProperty1<StorageFileDto, Any?>).get(dto)
+            val value = (property as KProperty1<PersonalDataDto, Any?>).get(dto)
             if (value != null) validFields.add(property.name)
         }
 
         // Call
         val exception = assertThrows<IllegalArgumentException> {
-            StorageFileConfigs.validateRequiredFields(dto)
+            PersonalDataConfigs.validateRequiredFields(dto)
         }
 
         //Assert

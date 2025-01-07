@@ -1,4 +1,4 @@
-package com.example.truckercore._utils
+package com.example.truckercore._test_utils
 
 import android.util.Log
 import io.mockk.every

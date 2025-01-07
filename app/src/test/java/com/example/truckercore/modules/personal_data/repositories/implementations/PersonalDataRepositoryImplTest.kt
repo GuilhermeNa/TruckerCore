@@ -1,4 +1,4 @@
-package com.example.truckercore.modules.storage_file.repositories.implementations
+package com.example.truckercore.modules.personal_data.repositories.implementations
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTask
@@ -8,7 +8,7 @@ import com.example.truckercore.infrastructure.database.firebase.exceptions.NullQ
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
-import com.example.truckercore.modules.storage_file.dtos.StorageFileDto
+import com.example.truckercore.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.utils.Response
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -27,13 +27,13 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class StorageFileRepositoryImplTest {
+internal class PersonalDataRepositoryImplTest {
 
     private lateinit var firebaseRepository: FirebaseRepository
     private lateinit var queryBuilder: FirebaseQueryBuilder
-    private lateinit var converter: FirebaseConverter<StorageFileDto>
-    private lateinit var repository: StorageFileRepositoryImpl
-    private lateinit var dto: StorageFileDto
+    private lateinit var converter: FirebaseConverter<PersonalDataDto>
+    private lateinit var repository: PersonalDataRepositoryImpl
+    private lateinit var dto: PersonalDataDto
     private lateinit var documentReference: DocumentReference
     private lateinit var documentSnapShot: DocumentSnapshot
     private lateinit var query: Query
@@ -42,7 +42,7 @@ internal class StorageFileRepositoryImplTest {
     companion object {
         @JvmStatic
         @BeforeAll
-        fun setup() {
+        fun setup(): Unit {
             mockStaticLog()
             mockStaticTask()
         }
@@ -50,7 +50,7 @@ internal class StorageFileRepositoryImplTest {
 
     @BeforeEach
     fun repeat() {
-        dto = mockk<StorageFileDto>()
+        dto = mockk<PersonalDataDto>()
         documentReference = mockk<DocumentReference>()
         documentSnapShot = mockk<DocumentSnapshot>()
         query = mockk<Query>()
@@ -58,41 +58,41 @@ internal class StorageFileRepositoryImplTest {
         firebaseRepository = mockk()
         queryBuilder = mockk()
         converter = mockk()
-        repository = StorageFileRepositoryImpl(firebaseRepository, queryBuilder, converter)
+        repository = PersonalDataRepositoryImpl(firebaseRepository, queryBuilder, converter)
     }
 
     @Test
-    fun `collection name should be files`() {
-        assertEquals(repository.collectionName, Collection.FILE)
+    fun `collection name should be personal_data`() {
+        assertEquals(repository.collectionName, Collection.PERSONAL_DATA)
     }
 
     @Test
     fun `create() should call create from firebaseRepository and return id`() {
-        // Object
+        // Objects ---------------------------------------------------------------------------------
         val newId = "newId"
 
         // Behaviors -------------------------------------------------------------------------------
-        every { firebaseRepository.create(Collection.FILE, dto) } returns newId
+        every { firebaseRepository.create(Collection.PERSONAL_DATA, dto) } returns newId
 
         // Call ------------------------------------------------------------------------------------
         val result = repository.create(dto)
 
         // Assertions ------------------------------------------------------------------------------
         assertEquals(newId, result)
-        verify { firebaseRepository.create(Collection.FILE, dto) }
+        verify { firebaseRepository.create(Collection.PERSONAL_DATA, dto) }
     }
 
     @Test
     fun `update() should call update from firebaseRepository`() {
         // Behaviors -------------------------------------------------------------------------------
-        every { firebaseRepository.update(Collection.FILE, dto) } returns Unit
+        every { firebaseRepository.update(Collection.PERSONAL_DATA, dto) } returns Unit
 
         // Call ------------------------------------------------------------------------------------
         val result = repository.update(dto)
 
         // Assertions ------------------------------------------------------------------------------
         assertEquals(Unit, result)
-        verify { firebaseRepository.update(Collection.FILE, dto) }
+        verify { firebaseRepository.update(Collection.PERSONAL_DATA, dto) }
     }
 
     @Test
@@ -101,14 +101,14 @@ internal class StorageFileRepositoryImplTest {
         val id = "id"
 
         // Behaviors -------------------------------------------------------------------------------
-        every { firebaseRepository.delete(Collection.FILE, id) } returns Unit
+        every { firebaseRepository.delete(Collection.PERSONAL_DATA, id) } returns Unit
 
         // Call ------------------------------------------------------------------------------------
         val result = repository.delete(id)
 
         // Assertions ------------------------------------------------------------------------------
         assertEquals(Unit, result)
-        verify { firebaseRepository.delete(Collection.FILE, id) }
+        verify { firebaseRepository.delete(Collection.PERSONAL_DATA, id) }
     }
 
     @Test
@@ -119,7 +119,7 @@ internal class StorageFileRepositoryImplTest {
 
         // Behaviors -------------------------------------------------------------------------------
         every {
-            queryBuilder.buildDocumentReferenceQuery(Collection.FILE, id)
+            queryBuilder.buildDocumentReferenceQuery(Collection.PERSONAL_DATA, id)
         } returns documentReference
         coEvery { documentReference.get().await() } returns documentSnapShot
         every { converter.processDocumentSnapShot(documentSnapShot) } returns response
@@ -130,7 +130,7 @@ internal class StorageFileRepositoryImplTest {
         // Assertions ------------------------------------------------------------------------------
         assertEquals(response, result)
         coVerifyOrder {
-            queryBuilder.buildDocumentReferenceQuery(Collection.FILE, id)
+            queryBuilder.buildDocumentReferenceQuery(Collection.PERSONAL_DATA, id)
             documentReference.get().await()
             converter.processDocumentSnapShot(documentSnapShot)
         }
@@ -144,7 +144,7 @@ internal class StorageFileRepositoryImplTest {
 
         // Behaviors -------------------------------------------------------------------------------
         every {
-            queryBuilder.buildDocumentReferenceQuery(Collection.FILE, id)
+            queryBuilder.buildDocumentReferenceQuery(Collection.PERSONAL_DATA, id)
         } returns documentReference
         coEvery { documentReference.get().await() } returns documentSnapShot
         every { converter.processDocumentSnapShot(documentSnapShot) } returns response
@@ -155,26 +155,26 @@ internal class StorageFileRepositoryImplTest {
         // Assertions ------------------------------------------------------------------------------
         assertEquals(response, result)
         coVerifyOrder {
-            queryBuilder.buildDocumentReferenceQuery(Collection.FILE, id)
+            queryBuilder.buildDocumentReferenceQuery(Collection.PERSONAL_DATA, id)
             documentReference.get().await()
             converter.processDocumentSnapShot(documentSnapShot)
         }
     }
 
     @Test
-    fun `fetchById() should return a ResponseError(NullDocumentSnapShotException) when Firestore fails to respond`() =
+    fun `fetchById() should return a ResponseError(NullDocumentSnapShotException) when firestore fails to respond`() =
         runTest {
             // Objects ---------------------------------------------------------------------------------
             val id = "id1"
-            val exception = NullDocumentSnapShotException("Simulated exception.")
+            val exception = NullDocumentSnapShotException("Simulated exception")
             val response = Response.Error(exception)
 
             // Behaviors -------------------------------------------------------------------------------
             every {
-                queryBuilder.buildDocumentReferenceQuery(Collection.FILE, id)
+                queryBuilder.buildDocumentReferenceQuery(Collection.PERSONAL_DATA, id)
             } returns documentReference
-            coEvery { documentReference.get().await() } returns documentSnapShot
-            every { converter.processDocumentSnapShot(documentSnapShot) } throws exception
+            coEvery { documentReference.get().await() } returns mockk()
+            every { converter.processDocumentSnapShot(any()) } throws exception
 
             // Call ------------------------------------------------------------------------------------
             val result = repository.fetchById(id).first()
@@ -182,84 +182,80 @@ internal class StorageFileRepositoryImplTest {
             // Assertions ------------------------------------------------------------------------------
             assertEquals(response, result)
             coVerifyOrder {
-                queryBuilder.buildDocumentReferenceQuery(Collection.FILE, id)
+                queryBuilder.buildDocumentReferenceQuery(Collection.PERSONAL_DATA, id)
                 documentReference.get().await()
-                converter.processDocumentSnapShot(documentSnapShot)
+                converter.processDocumentSnapShot(any())
             }
         }
 
     @Test
-    fun `fetchFilesByParentUid() should return a response Success`() = runTest {
+    fun `fetchPersonalDataByParentId() should return a response Success`() = runTest {
         // Objects ---------------------------------------------------------------------------------
-        val parentId = "parentId"
-        val response = Response.Success(mockk<List<StorageFileDto>>())
+        val parentId = "parentId1"
+        val response = Response.Success<List<PersonalDataDto>>(mockk())
 
         // Behaviors -------------------------------------------------------------------------------
-        every {
-            queryBuilder.buildParentIdQuery(Collection.FILE, parentId)
-        } returns query
+        every { queryBuilder.buildParentIdQuery(Collection.PERSONAL_DATA, parentId) } returns query
         coEvery { query.get().await() } returns querySnapshot
         every { converter.processQuerySnapShot(querySnapshot) } returns response
 
         // Call ------------------------------------------------------------------------------------
-        val result = repository.fetchFilesByParentUid(parentId).first()
+        val result = repository.fetchPersonalDataByParentId(parentId).first()
 
         // Assertions ------------------------------------------------------------------------------
         assertEquals(response, result)
         coVerifyOrder {
-            queryBuilder.buildParentIdQuery(Collection.FILE, parentId)
+            queryBuilder.buildParentIdQuery(Collection.PERSONAL_DATA, parentId)
             query.get().await()
             converter.processQuerySnapShot(querySnapshot)
         }
     }
 
     @Test
-    fun `fetchFilesByParentUid() should return a response Empty`() = runTest {
+    fun `fetchPersonalDataByParentId() should return a response Empty`() = runTest {
         // Objects ---------------------------------------------------------------------------------
-        val parentId = "parentId"
+        val parentId = "parentId1"
         val response = Response.Empty
 
         // Behaviors -------------------------------------------------------------------------------
-        every {
-            queryBuilder.buildParentIdQuery(Collection.FILE, parentId)
-        } returns query
+        every { queryBuilder.buildParentIdQuery(Collection.PERSONAL_DATA, parentId) } returns query
         coEvery { query.get().await() } returns querySnapshot
         every { converter.processQuerySnapShot(querySnapshot) } returns response
 
         // Call ------------------------------------------------------------------------------------
-        val result = repository.fetchFilesByParentUid(parentId).first()
+        val result = repository.fetchPersonalDataByParentId(parentId).first()
 
         // Assertions ------------------------------------------------------------------------------
         assertEquals(response, result)
         coVerifyOrder {
-            queryBuilder.buildParentIdQuery(Collection.FILE, parentId)
+            queryBuilder.buildParentIdQuery(Collection.PERSONAL_DATA, parentId)
             query.get().await()
             converter.processQuerySnapShot(querySnapshot)
         }
     }
 
     @Test
-    fun `fetchFilesByParentUid() should return a ResponseError(NullQuerySnapShotException) when Firestore fails to respond`() =
+    fun `fetchPersonalDataByParentId() should return a ResponseError when firestore fails to respond`() =
         runTest {
             // Objects ---------------------------------------------------------------------------------
-            val parentId = "parentId"
+            val parentId = "parentId1"
             val exception = NullQuerySnapShotException("Simulated exception")
             val response = Response.Error(exception)
 
             // Behaviors -------------------------------------------------------------------------------
             every {
-                queryBuilder.buildParentIdQuery(Collection.FILE, parentId)
+                queryBuilder.buildParentIdQuery(Collection.PERSONAL_DATA, parentId)
             } returns query
             coEvery { query.get().await() } returns querySnapshot
             every { converter.processQuerySnapShot(querySnapshot) } throws exception
 
             // Call ------------------------------------------------------------------------------------
-            val result = repository.fetchFilesByParentUid(parentId).first()
+            val result = repository.fetchPersonalDataByParentId(parentId).first()
 
             // Assertions ------------------------------------------------------------------------------
             assertEquals(response, result)
             coVerifyOrder {
-                queryBuilder.buildParentIdQuery(Collection.FILE, parentId)
+                queryBuilder.buildParentIdQuery(Collection.PERSONAL_DATA, parentId)
                 query.get().await()
                 converter.processQuerySnapShot(querySnapshot)
             }
