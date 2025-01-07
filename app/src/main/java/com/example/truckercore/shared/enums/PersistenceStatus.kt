@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.enums
 
-import com.example.truckercore.shared.exceptions.InvalidStateException
-import com.example.truckercore.shared.exceptions.InvalidStateParameterException
+import com.example.truckercore.shared.errors.InvalidStateException
+import com.example.truckercore.shared.errors.InvalidStateParameterException
 import java.security.InvalidParameterException
 
 enum class PersistenceStatus {

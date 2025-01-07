@@ -1,0 +1,36 @@
+backend-core/
+│
+├── src/                        # Código-fonte principal do backend
+│   ├── config/                 # Configurações gerais do sistema
+│   │   │── app_constants/      # Constantes do sistema (ex: nomes de coleções no banco de dados)
+│   │   └── di/                 # Configuração da injeção de dependência (DI)
+│   │
+│   │── infrastructure/         # Camada de infraestrutura
+│   │   │── database/           # Configuração e abstração de acesso ao banco de dados
+│   │   └── security/           # Configurações relacionadas à segurança (ex: autenticação, permissões...)
+│   │
+│   ├── modules/                # Módulos principal do sistema
+│   │   ├── employee/           # Módulo relacionado a funcionários(ex: motorista, admin...)
+│   │   ├── travel/             # Módulo relacionado a viagens (ex: frete, abastecimento...)
+│   │   └── user/               # Módulo relacionado a usuários (funcionários que podem acessar o sistema)
+│   │
+│   └── shared/                 # Componentes e funcionalidades compartilhadas entre os módulos
+│       ├── enums/              # Definições de enums usados em várias partes do sistema, relacionados a lógica
+│       ├── errors/             # Tratamento e definição de erros comuns no sistema
+│       ├── interfaces/         # Interfaces (ex: contratos gerais do sistema)
+│       ├── modules/            # Modulos reutilizáveis (ex: dados pessoais, arquivos de imagem...)
+│       ├── services/           # Serviços globais usados por múltiplos módulos (ex: envio de email, logs...)
+│       └── utils/              # Funções utilitárias e helpers compartilhados
+│
+├── tests/                      # Diretório de testes
+│   ├── _test_data_provider/    # Fornecedores de dados para testes
+│   ├── _test_utils/            # Funções auxiliares para facilitar a execução dos testes
+│   ├── integration/            # Testes de integração (verificando interação entre diferentes partes do sistema)
+│   └── unit/                   # Testes unitários (verificando funcionalidades isoladas)
+│
+└── README.md                   # Documentação geral do projeto (visão geral, como configurar, rodar, etc.)
+
+
+//--------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------

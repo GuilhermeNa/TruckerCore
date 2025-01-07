@@ -1,6 +1,6 @@
 package com.example.truckercore.modules.user.enums
 
-import com.example.truckercore.shared.exceptions.InvalidStateException
+import com.example.truckercore.shared.errors.InvalidStateException
 import java.security.InvalidParameterException
 
 enum class PermissionLevel {

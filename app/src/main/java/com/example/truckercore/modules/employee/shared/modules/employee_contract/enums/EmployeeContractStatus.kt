@@ -1,6 +1,6 @@
 package com.example.truckercore.modules.employee.shared.modules.employee_contract.enums
 
-import com.example.truckercore.shared.exceptions.InvalidStateException
+import com.example.truckercore.shared.errors.InvalidStateException
 import java.security.InvalidParameterException
 
 enum class EmployeeContractStatus {

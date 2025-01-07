@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.shared.exceptions.NotApprovedObjectException
+import com.example.truckercore.shared.errors.NotApprovedObjectException
 
 /**
  * The `Approvable` interface defines the structure for objects that require approval

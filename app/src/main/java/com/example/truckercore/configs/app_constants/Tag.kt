@@ -1,7 +1,9 @@
 package com.example.truckercore.configs.app_constants
 
-object Tag {
+enum class Tag(private val tagName: String) {
+    DEBUG("tag_debug"),
+    ERROR("tag_error");
 
-    const val DEBUG = "tag_debug"
-    const val ERROR = "tag_error"
+    fun getName(): String = tagName
+
 }

@@ -1,17 +1,12 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.shared.utils.Response
 import kotlinx.coroutines.flow.Flow
 
-internal interface Repository<T> {
+internal interface Repository<T: Dto> {
 
-    val firebaseRepository: FirebaseRepository
-    val queryBuilder: FirebaseQueryBuilder
-    val converter: FirebaseConverter<T>
-    val collectionName: String
+    val firebaseRepository: FirebaseRepository<T>
 
     /**
      * Creates a new entity entity in the database.
@@ -35,6 +30,19 @@ internal interface Repository<T> {
      * @param id The unique identifier (ID) of the entity to be deleted.
      */
     fun delete(id: String)
+
+    /**
+     * Checks if an Entity exists in the database by its ID.
+     *
+     * This method queries the database to check whether an entity with the given ID
+     * exists or not. It returns a boolean response wrapped in a [Flow]. If the entity
+     * exists, the response will emit `true`; otherwise, it will emit `false`.
+     *
+     * @param id The unique identifier (ID) of the entity to check for existence.
+     * @return A [Flow] that emits a [Response] containing a [Boolean].
+     *         The [Boolean] will be `true` if the entity exists, `false` otherwise.
+     */
+    suspend fun entityExists(id: String): Flow<Response<Boolean>>
 
     /**
      * Fetches an Entity by its ID.
