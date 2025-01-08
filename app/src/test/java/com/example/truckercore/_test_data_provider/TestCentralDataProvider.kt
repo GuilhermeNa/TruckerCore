@@ -1,14 +1,14 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.modules.central.dto.CentralDto
-import com.example.truckercore.modules.central.entity.Central
+import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 
 internal object TestCentralDataProvider {
 
-    fun getBaseEntity() = Central(
+    fun getBaseEntity() = BusinessCentral(
         centralId = "centralId",
         id = "id",
         lastModifierId = "lastModifierId",
@@ -17,7 +17,7 @@ internal object TestCentralDataProvider {
         persistenceStatus = PersistenceStatus.PERSISTED
     )
 
-    fun getBaseDto() = CentralDto(
+    fun getBaseDto() = BusinessCentralDto(
         centralId = "centralId",
         id = "id",
         lastModifierId = "lastModifierId",

@@ -7,7 +7,7 @@ import com.example.truckercore.infrastructure.database.firebase.implementations.
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
-import com.example.truckercore.modules.central.dto.CentralDto
+import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
 import com.google.firebase.auth.ktx.auth
@@ -26,7 +26,7 @@ val firebaseModule = module {
 }
 
 val firebaseRepositoryModule = module {
-    single<FirebaseRepository<CentralDto>> {
+    single<FirebaseRepository<BusinessCentralDto>> {
         FirebaseRepositoryImpl(get(), get(), Collection.CENTRAL)
     }
     single<FirebaseRepository<PersonalDataDto>> {
@@ -38,7 +38,7 @@ val firebaseRepositoryModule = module {
 }
 
 val converterModule = module {
-    single<FirebaseConverter<CentralDto>> { FirebaseConverterImpl(CentralDto::class.java) }
+    single<FirebaseConverter<BusinessCentralDto>> { FirebaseConverterImpl(BusinessCentralDto::class.java) }
     single<FirebaseConverter<PersonalDataDto>> { FirebaseConverterImpl(PersonalDataDto::class.java) }
     single<FirebaseConverter<StorageFileDto>> { FirebaseConverterImpl(StorageFileDto::class.java) }
 }
