@@ -17,7 +17,7 @@ import java.time.LocalDateTime
  * @throws IllegalArgumentException if the URL provided is not valid.
  */
 data class StorageFile(
-    override val masterUid: String,
+    override val centralId: String,
     override val id: String?,
     override val lastModifierId: String,
     override val creationDate: LocalDateTime,

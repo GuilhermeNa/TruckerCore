@@ -18,7 +18,7 @@ import java.time.LocalDateTime
  * @property file The file that contains the image data of the document.
  */
 data class PersonalData(
-    override val masterUid: String,
+    override val centralId: String,
     override val id: String?,
     override val lastModifierId: String,
     override val creationDate: LocalDateTime,

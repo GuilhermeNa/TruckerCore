@@ -39,7 +39,7 @@ internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
 
     private fun mapEntityToDto(entity: StorageFile) =
         StorageFileDto(
-            masterUid = entity.masterUid,
+            centralId = entity.centralId,
             id = entity.id,
             lastModifierId = entity.lastModifierId,
             creationDate = entity.creationDate.toDate(),
@@ -53,7 +53,7 @@ internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
     private fun mapDtoToEntity(dto: StorageFileDto): StorageFile {
         StorageFileConfigs.validateRequiredFields(dto)
         return StorageFile(
-            masterUid = dto.masterUid!!,
+            centralId = dto.centralId!!,
             id = dto.id!!,
             lastModifierId = dto.lastModifierId!!,
             creationDate = dto.creationDate!!.toLocalDateTime(),

@@ -7,7 +7,7 @@ import java.util.Date
  * DTOs are used for transferring data between different layers of an application.
  */
 interface Dto {
-    val masterUid: String?
+    val centralId: String?
     val id: String?
     val lastModifierId: String?
     val creationDate: Date?

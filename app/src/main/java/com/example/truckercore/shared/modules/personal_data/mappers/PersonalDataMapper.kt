@@ -6,6 +6,7 @@ import com.example.truckercore.shared.errors.InvalidStateParameterException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.interfaces.Mapper
+import com.example.truckercore.shared.modules.personal_data.configs.PersonalDataConfigs
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.entities.PersonalData
 import com.example.truckercore.shared.utils.expressions.toDate
@@ -33,7 +34,7 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
 
     private fun mapEntityToDto(entity: PersonalData) =
         PersonalDataDto(
-            masterUid = entity.masterUid,
+            centralId = entity.centralId,
             id = entity.id,
             lastModifierId = entity.lastModifierId,
             creationDate = entity.creationDate.toDate(),
@@ -47,9 +48,9 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
         )
 
     private fun mapDtoToEntity(dto: PersonalDataDto): PersonalData {
-        com.example.truckercore.shared.modules.personal_data.configs.PersonalDataConfigs.validateRequiredFields(dto)
+        PersonalDataConfigs.validateRequiredFields(dto)
         return PersonalData(
-            masterUid = dto.masterUid!!,
+            centralId = dto.centralId!!,
             id = dto.id!!,
             lastModifierId = dto.lastModifierId!!,
             creationDate = dto.creationDate!!.toLocalDateTime(),
@@ -76,7 +77,7 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
                     "status, and received: ${dto.persistenceStatus} "
         }
 
-        else -> "Unknown error occurred while mapping a storage file."
+        else -> "Unknown error occurred while mapping a personal data."
     }
 
 }

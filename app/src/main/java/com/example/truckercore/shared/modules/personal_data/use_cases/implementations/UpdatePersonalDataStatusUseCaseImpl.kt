@@ -8,9 +8,10 @@ import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces
 internal class UpdatePersonalDataStatusUseCaseImpl(
     override val repository: PersonalDataRepository
 ) : UpdatePersonalDataStatusUseCase {
-    override fun execute(user: User, id: String, newState: PersistenceStatus) {
-        TODO("Not yet implemented")
-    }
 
+    override fun execute(user: User, id: String, newState: PersistenceStatus) {
+
+       // repository.updateField(id, newState.name)
+    }
 
 }

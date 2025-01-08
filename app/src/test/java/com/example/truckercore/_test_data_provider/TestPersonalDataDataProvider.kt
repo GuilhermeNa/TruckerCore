@@ -9,7 +9,7 @@ import java.util.Date
 internal object TestPersonalDataDataProvider {
 
     fun getBaseEntity() = PersonalData(
-        masterUid = "masterUid",
+        centralId = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = LocalDateTime.now(),
@@ -23,7 +23,7 @@ internal object TestPersonalDataDataProvider {
     )
 
     fun getBaseDto() = PersonalDataDto(
-        masterUid = "masterUid",
+        centralId = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = Date(),
@@ -37,7 +37,7 @@ internal object TestPersonalDataDataProvider {
     )
 
     fun getArrWithMissingFields() = arrayOf(
-        getBaseDto().copy(masterUid = null),
+        getBaseDto().copy(centralId = null),
         getBaseDto().copy(id = null),
         getBaseDto().copy(lastModifierId = null),
         getBaseDto().copy(creationDate = null),

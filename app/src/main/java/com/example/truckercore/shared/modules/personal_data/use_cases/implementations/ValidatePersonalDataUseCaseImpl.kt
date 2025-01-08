@@ -6,9 +6,9 @@ import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces
 internal class ValidatePersonalDataUseCaseImpl(
     override val repository: PersonalDataRepository
 ) : ValidatePersonalDataUseCase {
-    override fun execute() {
-        TODO("Not yet implemented")
-    }
 
+    override fun execute() {
+
+    }
 
 }

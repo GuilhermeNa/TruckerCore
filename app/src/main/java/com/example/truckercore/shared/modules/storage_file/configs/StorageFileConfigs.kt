@@ -8,7 +8,7 @@ internal object StorageFileConfigs {
     fun validateRequiredFields(dto: StorageFileDto) {
         val missingFields = mutableListOf<String>()
 
-        if(dto.masterUid.isNullOrEmpty()) missingFields.add(Field.MASTER_UID.getName())
+        if(dto.centralId.isNullOrEmpty()) missingFields.add(Field.CENTRAL_ID.getName())
 
         if(dto.id.isNullOrEmpty()) missingFields.add(Field.ID.getName())
 

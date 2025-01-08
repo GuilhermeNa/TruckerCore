@@ -18,7 +18,7 @@ class StorageFileDtoTest {
         assertEquals("newId", updatedDto.id)
         assertEquals("PERSISTED", updatedDto.persistenceStatus)
 
-        assertEquals(dto.masterUid, updatedDto.masterUid)
+        assertEquals(dto.centralId, updatedDto.centralId)
         assertEquals(dto.lastModifierId, updatedDto.lastModifierId)
         assertEquals(dto.creationDate, updatedDto.creationDate)
         assertEquals(dto.lastUpdate, updatedDto.lastUpdate)

@@ -2,7 +2,7 @@ package com.example.truckercore.configs.app_constants
 
 enum class Field(private val fieldName: String) {
 
-    MASTER_UID("masterUid"),
+    CENTRAL_ID("centralId"),
     EMPLOYEE_ID("employeeId"),
     INITIAL_DATE("initialDate"),
     ODOMETER("odometer"),

@@ -12,7 +12,7 @@ interface Entity {
     /**
      * The unique identifier for the master entity associated with this MODEL.
      */
-    val masterUid: String
+    val centralId: String
 
     /**
      * The unique identifier for this MODEL. Can be null before dataBase insertion.

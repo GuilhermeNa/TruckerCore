@@ -5,7 +5,7 @@ import com.example.truckercore.shared.interfaces.Entity
 import java.time.LocalDateTime
 
 data class EmployeeBenefits(
-    override val masterUid: String,
+    override val centralId: String,
     override val id: String?,
     override val lastModifierId: String,
     override val creationDate: LocalDateTime,

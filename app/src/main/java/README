@@ -1,3 +1,5 @@
+
+
 backend-core/
 │
 ├── src/                        # Código-fonte principal do backend
@@ -10,6 +12,7 @@ backend-core/
 │   │   └── security/           # Configurações relacionadas à segurança (ex: autenticação, permissões...)
 │   │
 │   ├── modules/                # Módulos principal do sistema
+│   │   ├── central/
 │   │   ├── employee/           # Módulo relacionado a funcionários(ex: motorista, admin...)
 │   │   ├── travel/             # Módulo relacionado a viagens (ex: frete, abastecimento...)
 │   │   └── user/               # Módulo relacionado a usuários (funcionários que podem acessar o sistema)

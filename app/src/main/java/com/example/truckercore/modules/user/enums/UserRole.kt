@@ -3,7 +3,8 @@ package com.example.truckercore.modules.user.enums
 import com.example.truckercore.shared.errors.InvalidStateException
 import java.security.InvalidParameterException
 
-enum class PermissionLevel {
+enum class UserRole {
+
     /**
      * Represents the operational level permission.
      * Typically assigned to users who have basic operational privileges in the system like drivers.
@@ -36,7 +37,7 @@ enum class PermissionLevel {
          * @param validStatuses The list of valid permission levels.
          * @throws InvalidStateException if the current permission level is not one of the valid states.
          */
-        fun validateState(actualState: PermissionLevel, vararg validStatuses: PermissionLevel) {
+        fun validateState(actualState: UserRole, vararg validStatuses: UserRole) {
             if (validStatuses.isEmpty()) throw InvalidParameterException(
                 "The validStatuses must have at least one state to be validated."
             )

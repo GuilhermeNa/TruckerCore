@@ -7,8 +7,10 @@ import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces
 internal class DeletePersonalDataUseCaseImpl(
     private val repository: PersonalDataRepository
 ) : DeletePersonalDataUseCase {
+
     override fun execute(user: User, id: String) {
-        TODO("Not yet implemented")
+
+        repository.delete(id)
     }
 
 
