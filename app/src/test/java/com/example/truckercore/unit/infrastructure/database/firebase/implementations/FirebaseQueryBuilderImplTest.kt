@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.implementations
+package com.example.truckercore.unit.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.configs.app_constants.Field

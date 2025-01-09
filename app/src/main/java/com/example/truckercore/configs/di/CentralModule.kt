@@ -15,12 +15,12 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Upd
 import org.koin.dsl.module
 
 val centralModule = module {
-    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get())}
+    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get()) }
 
-    single<CheckBusinessCentralExistenceUseCase> { CheckBusinessCentralExistenceUseCaseImpl(get()) }
-    single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get()) }
-    single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get()) }
-    single<GetBusinessCentralByIdUseCase> { GetBusinessCentralByIdUseCaseImpl(get()) }
-    single<UpdateBusinessCentralUseCase> { UpdateBusinessCentralUseCaseImpl(get()) }
+    single<CheckBusinessCentralExistenceUseCase> { CheckBusinessCentralExistenceUseCaseImpl(get(), get()) }
+    single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get()) }
+    single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get()) }
+    single<GetBusinessCentralByIdUseCase> { GetBusinessCentralByIdUseCaseImpl(get(), get()) }
+    single<UpdateBusinessCentralUseCase> { UpdateBusinessCentralUseCaseImpl(get(), get()) }
 
 }

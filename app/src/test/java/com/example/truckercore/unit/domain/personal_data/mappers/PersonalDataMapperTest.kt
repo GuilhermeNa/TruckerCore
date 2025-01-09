@@ -99,7 +99,7 @@ internal class PersonalDataMapperTest {
         }
 
         // Assertions
-        val expected = "Unknown error occurred while mapping a storage file."
+        val expected = "Unknown error occurred while mapping a personal data."
         val actual = result.message
         assertEquals(expected, actual)
 

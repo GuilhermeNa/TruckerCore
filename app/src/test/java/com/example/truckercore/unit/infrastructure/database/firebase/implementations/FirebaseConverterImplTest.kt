@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.implementations
+package com.example.truckercore.unit.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.utils.Response

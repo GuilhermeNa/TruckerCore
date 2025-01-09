@@ -33,6 +33,6 @@ internal class GetBusinessCentralByIdUseCaseImpl(
     }
 
     private fun userHasPermission(user: User): Boolean =
-        service.canPerformAction(user, Permission.DELETE_BUSINESS_CENTRAL)
+        service.canPerformAction(user, Permission.VIEW_BUSINESS_CENTRAL)
 
 }

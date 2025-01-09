@@ -1,25 +1,17 @@
 package com.example.truckercore.modules.business_central.use_cases.implementations
 
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
-import com.example.truckercore.modules.business_central.use_cases.interfaces.CheckBusinessCentralExistenceUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
 import com.example.truckercore.modules.business_central.validator.CentralCreationValidator
-import com.example.truckercore.modules.user.entity.User
 
 internal class CreateBusinessCentralUseCaseImpl(
-    override val repository: BusinessCentralRepository,
-    override val service: PermissionService
-): CreateBusinessCentralUseCase {
-
+    private val repository: BusinessCentralRepository
+) : CreateBusinessCentralUseCase {
+    // TODO(Nao precisa enviar o usuário. a central será criada no inicio do App enquando não existe usuário)
     override fun execute(dto: BusinessCentralDto): String {
         CentralCreationValidator.execute(dto)
         return repository.create(dto)
-    }
-
-    override fun userHasPermission(user: User): Boolean {
-        TODO("Not yet implemented")
     }
 
 }

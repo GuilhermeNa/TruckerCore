@@ -11,7 +11,8 @@ internal data class UserDto(
     override val creationDate: Date? = null,
     override val lastUpdate: Date? = null,
     override val persistenceStatus: String? = null,
-    val permissionLevel: String? = null
+    val level: String? = null,
+    val permissions: List<String>? = null
 ) : Dto {
 
     override fun initializeId(newId: String) = this.copy(
