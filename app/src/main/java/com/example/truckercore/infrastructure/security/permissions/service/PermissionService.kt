@@ -17,4 +17,5 @@ internal interface PermissionService {
      * @return A boolean indicating if the user has the permission (true) or not (false).
      */
     fun canPerformAction(user: User, permission: Permission): Boolean
+
 }

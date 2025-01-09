@@ -8,7 +8,7 @@ internal object PersonalDataConfigs {
     fun validateRequiredFields(dto: PersonalDataDto) {
         val missingFields = mutableListOf<String>()
 
-        if(dto.centralId.isNullOrEmpty()) missingFields.add(Field.CENTRAL_ID.getName())
+        if(dto.businessCentralId.isNullOrEmpty()) missingFields.add(Field.BUSINESS_CENTRAL_ID.getName())
 
         if(dto.id.isNullOrEmpty()) missingFields.add(Field.ID.getName())
 

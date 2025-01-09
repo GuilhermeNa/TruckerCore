@@ -5,7 +5,7 @@ import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
-import com.example.truckercore.shared.errors.InvalidStateParameterException
+import com.example.truckercore.shared.errors.InvalidEnumParameterException
 import com.example.truckercore.shared.errors.InvalidUrlFormatException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
@@ -24,7 +24,7 @@ internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
     } catch (e: IllegalArgumentException) {
         throw MissingFieldException(buildExceptionMessage(dto, e))
 
-    } catch (e: InvalidStateParameterException) {
+    } catch (e: InvalidEnumParameterException) {
         throw InvalidPersistenceStatusException(buildExceptionMessage(dto, e))
 
     } catch (e: MalformedURLException) {
@@ -39,7 +39,7 @@ internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
 
     private fun mapEntityToDto(entity: StorageFile) =
         StorageFileDto(
-            centralId = entity.centralId,
+            businessCentralId = entity.businessCentralId,
             id = entity.id,
             lastModifierId = entity.lastModifierId,
             creationDate = entity.creationDate.toDate(),
@@ -53,7 +53,7 @@ internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
     private fun mapDtoToEntity(dto: StorageFileDto): StorageFile {
         StorageFileConfigs.validateRequiredFields(dto)
         return StorageFile(
-            centralId = dto.centralId!!,
+            businessCentralId = dto.businessCentralId!!,
             id = dto.id!!,
             lastModifierId = dto.lastModifierId!!,
             creationDate = dto.creationDate!!.toLocalDateTime(),
@@ -73,7 +73,7 @@ internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
             "Failed while mapping a storage file. Missing fields: ${exception.message}"
         }
 
-        is InvalidStateParameterException -> {
+        is InvalidEnumParameterException -> {
             "Failed while mapping a storage file. Expecting a valid persistence " +
                     "status, and received: ${dto.persistenceStatus} "
         }

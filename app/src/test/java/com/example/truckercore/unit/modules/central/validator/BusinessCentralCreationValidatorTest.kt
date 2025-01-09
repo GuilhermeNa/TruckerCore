@@ -2,7 +2,6 @@ package com.example.truckercore.unit.modules.central.validator
 
 import com.example.truckercore._test_data_provider.TestCentralDataProvider
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.validator.CentralCreationValidator
 import com.example.truckercore.shared.enums.PersistenceStatus
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -24,7 +23,7 @@ internal class BusinessCentralCreationValidatorTest {
     fun `execute() should pass without exceptions when the central is valid for creation`() {
         // Object
         val dto = TestCentralDataProvider.getBaseDto().copy(
-            centralId = null,
+            businessCentralId = null,
             id = null,
             persistenceStatus = PersistenceStatus.PENDING.name
         )

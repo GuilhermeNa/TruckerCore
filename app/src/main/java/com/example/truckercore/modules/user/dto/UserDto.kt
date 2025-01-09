@@ -5,7 +5,7 @@ import com.example.truckercore.shared.interfaces.Dto
 import java.util.Date
 
 internal data class UserDto(
-    override val centralId: String? = null,
+    override val businessCentralId: String? = null,
     override val id: String? = null,
     override val lastModifierId: String? = null,
     override val creationDate: Date? = null,

@@ -6,7 +6,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class Compensation(
-    override val centralId: String,
+    override val businessCentralId: String,
     override val id: String?,
     override val lastModifierId: String,
     override val creationDate: LocalDateTime,

@@ -2,7 +2,7 @@ package com.example.truckercore.shared.modules.personal_data.mappers
 
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
-import com.example.truckercore.shared.errors.InvalidStateParameterException
+import com.example.truckercore.shared.errors.InvalidEnumParameterException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.interfaces.Mapper
@@ -22,7 +22,7 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
     } catch (e: IllegalArgumentException) {
         throw MissingFieldException(buildExceptionMessage(dto, e))
 
-    } catch (e: InvalidStateParameterException) {
+    } catch (e: InvalidEnumParameterException) {
         throw InvalidPersistenceStatusException(buildExceptionMessage(dto, e))
 
     } catch (e: Exception) {
@@ -34,7 +34,7 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
 
     private fun mapEntityToDto(entity: PersonalData) =
         PersonalDataDto(
-            centralId = entity.centralId,
+            businessCentralId = entity.businessCentralId,
             id = entity.id,
             lastModifierId = entity.lastModifierId,
             creationDate = entity.creationDate.toDate(),
@@ -50,7 +50,7 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
     private fun mapDtoToEntity(dto: PersonalDataDto): PersonalData {
         PersonalDataConfigs.validateRequiredFields(dto)
         return PersonalData(
-            centralId = dto.centralId!!,
+            businessCentralId = dto.businessCentralId!!,
             id = dto.id!!,
             lastModifierId = dto.lastModifierId!!,
             creationDate = dto.creationDate!!.toLocalDateTime(),
@@ -72,7 +72,7 @@ internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
             "Failed while mapping a personal data. Missing fields: ${exception.message}"
         }
 
-        is InvalidStateParameterException -> {
+        is InvalidEnumParameterException -> {
             "Failed while mapping a personal data. Expecting a valid persistence " +
                     "status, and received: ${dto.persistenceStatus} "
         }

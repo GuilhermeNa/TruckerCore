@@ -3,7 +3,6 @@ package com.example.truckercore.modules.business_central.use_cases.implementatio
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
-import com.example.truckercore.modules.business_central.validator.CentralCreationValidator
 
 internal class CreateBusinessCentralUseCaseImpl(
     private val repository: BusinessCentralRepository

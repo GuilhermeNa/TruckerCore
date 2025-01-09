@@ -9,7 +9,7 @@ import java.util.Date
 internal object TestCentralDataProvider {
 
     fun getBaseEntity() = BusinessCentral(
-        centralId = "centralId",
+        businessCentralId = "centralId",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = LocalDateTime.now(),
@@ -18,7 +18,7 @@ internal object TestCentralDataProvider {
     )
 
     fun getBaseDto() = BusinessCentralDto(
-        centralId = "centralId",
+        businessCentralId = "centralId",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = Date(),
@@ -27,7 +27,7 @@ internal object TestCentralDataProvider {
     )
 
     fun getArrWithMissingFields() = arrayOf(
-        getBaseDto().copy(centralId = null),
+        getBaseDto().copy(businessCentralId = null),
         getBaseDto().copy(id = null),
         getBaseDto().copy(lastModifierId = null),
         getBaseDto().copy(creationDate = null),
@@ -37,13 +37,13 @@ internal object TestCentralDataProvider {
 
     fun getArrForTestingCreationValidator() = arrayOf(
         getBaseDto().copy(id = null, persistenceStatus = PersistenceStatus.PENDING.name),
-        getBaseDto().copy(centralId = null, persistenceStatus = PersistenceStatus.PENDING.name),
-        getBaseDto().copy(id = null, centralId = null, lastModifierId = null, persistenceStatus = PersistenceStatus.PENDING.name),
-        getBaseDto().copy(id = null, centralId = null, lastModifierId = "", persistenceStatus = PersistenceStatus.PENDING.name),
-        getBaseDto().copy(id = null, centralId = null, creationDate = null, persistenceStatus = PersistenceStatus.PENDING.name),
-        getBaseDto().copy(id = null, centralId = null, lastUpdate = null, persistenceStatus = PersistenceStatus.PENDING.name),
-        getBaseDto().copy(id = null, centralId = null, persistenceStatus = null),
-        getBaseDto().copy(id = null, centralId = null, persistenceStatus = PersistenceStatus.PERSISTED.name)
+        getBaseDto().copy(businessCentralId = null, persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(id = null, businessCentralId = null, lastModifierId = null, persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(id = null, businessCentralId = null, lastModifierId = "", persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(id = null, businessCentralId = null, creationDate = null, persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(id = null, businessCentralId = null, lastUpdate = null, persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(id = null, businessCentralId = null, persistenceStatus = null),
+        getBaseDto().copy(id = null, businessCentralId = null, persistenceStatus = PersistenceStatus.PERSISTED.name)
     )
 
 }

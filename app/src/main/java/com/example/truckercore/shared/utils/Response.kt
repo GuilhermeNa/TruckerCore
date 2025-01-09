@@ -12,7 +12,7 @@ sealed class Response<out T> {
      *
      * @property data Optional data of type [T] representing the result of a successful operation.
      */
-    data class Success<T>(val data: T? = null): Response<T>()
+    data class Success<T>(val data: T): Response<T>()
 
     /**
      * Represents an error response encapsulating an [Exception].

@@ -9,7 +9,7 @@ import java.util.Date
 internal object TestStorageFileDataProvider {
 
     fun getBaseEntity() = StorageFile(
-        centralId = "masterUid",
+        businessCentralId = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = LocalDateTime.now(),
@@ -21,7 +21,7 @@ internal object TestStorageFileDataProvider {
     )
 
     fun getBaseDto() = StorageFileDto(
-        centralId = "masterUid",
+        businessCentralId = "masterUid",
         id = "id",
         lastModifierId = "id",
         creationDate = Date(),
@@ -33,7 +33,7 @@ internal object TestStorageFileDataProvider {
     )
 
     fun getArrWithMissingFields() = arrayOf(
-        getBaseDto().copy(centralId = null),
+        getBaseDto().copy(businessCentralId = null),
         getBaseDto().copy(id = null),
         getBaseDto().copy(lastModifierId = null),
         getBaseDto().copy(creationDate = null),

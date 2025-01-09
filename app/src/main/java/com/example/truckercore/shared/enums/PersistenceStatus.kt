@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.enums
 
 import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.errors.InvalidStateParameterException
+import com.example.truckercore.shared.errors.InvalidEnumParameterException
 import java.security.InvalidParameterException
 
 enum class PersistenceStatus {
@@ -35,10 +35,14 @@ enum class PersistenceStatus {
         fun convertString(nStr: String?): PersistenceStatus {
             return nStr?.let { str ->
                 if (entries.any { it.name == str }) valueOf(str)
-                else throw InvalidStateParameterException()
+                else throw InvalidEnumParameterException()
             } ?: throw IllegalArgumentException()
         }
 
+        fun enumExists(str: String): Boolean =
+            entries.any { it.name == str }
+
     }
+
 
 }

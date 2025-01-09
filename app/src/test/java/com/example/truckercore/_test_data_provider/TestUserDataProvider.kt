@@ -5,15 +5,13 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Permiss
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.modules.personal_data.entities.PersonalData
 import java.time.LocalDateTime
 import java.util.Date
 
 internal object TestUserDataProvider {
 
     fun getBaseEntity() = User(
-        centralId = "masterUid",
+        businessCentralId = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = LocalDateTime.now(),
@@ -24,7 +22,7 @@ internal object TestUserDataProvider {
     )
 
     fun getBaseDto() = UserDto(
-        centralId = "masterUid",
+        businessCentralId = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = Date(),

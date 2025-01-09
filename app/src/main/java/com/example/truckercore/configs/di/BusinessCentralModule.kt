@@ -18,9 +18,11 @@ val centralModule = module {
     single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get()) }
 
     single<CheckBusinessCentralExistenceUseCase> { CheckBusinessCentralExistenceUseCaseImpl(get(), get()) }
-    single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get()) }
+    single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get()) }
-    single<GetBusinessCentralByIdUseCase> { GetBusinessCentralByIdUseCaseImpl(get(), get()) }
+    single<GetBusinessCentralByIdUseCase> {
+        GetBusinessCentralByIdUseCaseImpl(get(), get(), get())
+    }
     single<UpdateBusinessCentralUseCase> { UpdateBusinessCentralUseCaseImpl(get(), get()) }
 
 }

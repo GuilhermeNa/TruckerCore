@@ -18,7 +18,7 @@ internal class PersonalDataDtoTest {
         assertEquals("newId", updatedDto.id)
         assertEquals("PERSISTED", updatedDto.persistenceStatus)
 
-        assertEquals(dto.centralId, updatedDto.centralId)
+        assertEquals(dto.businessCentralId, updatedDto.businessCentralId)
         assertEquals(dto.lastModifierId, updatedDto.lastModifierId)
         assertEquals(dto.creationDate, updatedDto.creationDate)
         assertEquals(dto.lastUpdate, updatedDto.lastUpdate)

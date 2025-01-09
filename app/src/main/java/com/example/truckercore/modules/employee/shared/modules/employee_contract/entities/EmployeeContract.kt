@@ -6,7 +6,7 @@ import com.example.truckercore.shared.interfaces.Entity
 import java.time.LocalDateTime
  //TODO( Preciso tirar o vinculo direto com ferias e etc, isso virá de outro modulo.)
 data class EmployeeContract(
-     override val centralId: String,
+     override val businessCentralId: String,
      override val id: String?,
      override val lastModifierId: String,
      override val creationDate: LocalDateTime,

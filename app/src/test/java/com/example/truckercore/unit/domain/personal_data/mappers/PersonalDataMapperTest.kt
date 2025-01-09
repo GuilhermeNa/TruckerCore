@@ -53,7 +53,7 @@ internal class PersonalDataMapperTest {
         val entity = PersonalDataMapper.toEntity(dto)
 
         // Asserts
-        assertEquals(dto.centralId, entity.centralId)
+        assertEquals(dto.businessCentralId, entity.businessCentralId)
         assertEquals(dto.id, entity.id)
         assertEquals(dto.lastModifierId, entity.lastModifierId)
         assertEquals(dto.creationDate?.toLocalDateTime(), entity.creationDate)
@@ -116,7 +116,7 @@ internal class PersonalDataMapperTest {
         val dto = PersonalDataMapper.toDto(entity)
 
         // Asserts
-        assertEquals(entity.centralId, dto.centralId)
+        assertEquals(entity.businessCentralId, dto.businessCentralId)
         assertEquals(entity.id, dto.id)
         assertEquals(entity.lastModifierId, dto.lastModifierId)
         assertEquals(entity.creationDate.toDate(), dto.creationDate)
