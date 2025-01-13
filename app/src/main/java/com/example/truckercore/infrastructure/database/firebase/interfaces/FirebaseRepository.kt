@@ -11,24 +11,26 @@ internal interface FirebaseRepository<T : Dto> {
      * Creates a new document in the specified Firestore collection using the provided DTO.
      * The DTO is assigned a new ID, and the document is saved to Firestore.
      *
-     * @param dto The DTO to be saved.
-     * @return The ID of the newly created document.
+     * @param dto The DTO to be saved. The DTO will have its ID assigned during the creation.
+     * @return A [Flow] of [Response], containing the document ID on success or an error on failure.
      */
-    fun create(dto: T): String
+    fun create(dto: T): Flow<Response<String>>
 
     /**
      * Updates an existing document in the specified Firestore collection with the provided DTO.
      *
-     * @param dto The DTO to update the document with.
+     * @param dto The DTO containing the data to update the document.
+     * @return A [Flow] of [Response], indicating the result of the update operation.
      */
-    fun update(dto: T)
+    fun update(dto: T): Flow<Response<Unit>>
 
     /**
      * Deletes a document from the specified Firestore collection by ID.
      *
      * @param id The ID of the document to delete.
+     * @return A [Flow] of [Response], indicating the result of the deletion operation.
      */
-    fun delete(id: String)
+    fun delete(id: String): Flow<Response<Unit>>
 
     /**
      * Checks whether an entity exists in the Firestore collection based on its ID.

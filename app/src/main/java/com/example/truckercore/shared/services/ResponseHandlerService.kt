@@ -2,18 +2,16 @@ package com.example.truckercore.shared.services
 
 import com.example.truckercore.modules.business_central.errors.BusinessCentralMappingException
 import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
-import com.example.truckercore.shared.errors.InvalidEnumParameterException
-import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.Mapper
+import com.example.truckercore.shared.interfaces.MapperI
 import com.example.truckercore.shared.utils.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logWarn
 
 internal class ResponseHandlerService<E : Entity, D : Dto>(
-    private val validatorService: ValidatorService<E, D>,
-    private val mapper: Mapper<E, D>
+    private val validator: ValidatorService,
+    private val mapper: MapperI<E, D>
 ) {
 
     fun processResponse(response: Response<D>): Response<E> {
@@ -25,7 +23,7 @@ internal class ResponseHandlerService<E : Entity, D : Dto>(
     }
 
     private fun handleSuccessResponse(response: Response.Success<D>): Response<E> = try {
-        validatorService.validateDto(response.data)
+        validator.validateDto(response.data)
         val entity = mapper.toEntity(response.data)
         Response.Success(entity)
 
@@ -40,7 +38,7 @@ internal class ResponseHandlerService<E : Entity, D : Dto>(
     }
 
     private fun handleErrorResponse(response: Response.Error): Response.Error {
-        logError("Error while handling with database response: ${response.message}")
+        logError("Error while handling with database response")// TODO()
         return response
     }
 

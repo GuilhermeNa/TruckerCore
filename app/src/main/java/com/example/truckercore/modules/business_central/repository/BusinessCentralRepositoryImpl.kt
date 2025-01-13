@@ -4,19 +4,17 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 
 internal class BusinessCentralRepositoryImpl(
-    override val firebaseRepository: FirebaseRepository<BusinessCentralDto>
+    private val firebaseRepository: FirebaseRepository<BusinessCentralDto>
 ) : BusinessCentralRepository {
 
-    override fun create(dto: BusinessCentralDto) =
+    override suspend fun create(dto: BusinessCentralDto) =
         firebaseRepository.create(dto)
 
-    override fun update(dto: BusinessCentralDto) {
+    override fun update(dto: BusinessCentralDto) =
         firebaseRepository.update(dto)
-    }
 
-    override fun delete(id: String) {
+    override fun delete(id: String) =
         firebaseRepository.delete(id)
-    }
 
     override suspend fun entityExists(id: String) =
         firebaseRepository.entityExists(id)

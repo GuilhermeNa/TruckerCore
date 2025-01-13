@@ -1,30 +1,29 @@
 package com.example.truckercore.modules.business_central.validator
 
 import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
+import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.ValidatorStrategy
+import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.shared.interfaces.Entity
 
-internal class BusinessCentralValidationStrategy :
-    ValidatorStrategy<BusinessCentral, BusinessCentralDto> {
+internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
 
-    override fun validateDto(dto: BusinessCentralDto) {
+    override fun validateDto(dto: Dto) {
         processDtoValidationRules(dto)
     }
 
-    override fun validateEntity(entity: BusinessCentral) {
+    override fun validateEntity(entity: Entity) {
         processEntityValidationRules(entity)
     }
 
-    override fun validateForCreation(entity: BusinessCentral) {
+    override fun validateForCreation(entity: Entity) {
         processEntityCreationRules(entity)
     }
 
     //----------------------------------------------------------------------------------------------
 
-    private fun processDtoValidationRules(dto: BusinessCentralDto) {
+    override fun processDtoValidationRules(dto: Dto) {
         val invalidFields = mutableListOf<String>()
 
         if (dto.businessCentralId.isNullOrBlank()) {
@@ -44,7 +43,7 @@ internal class BusinessCentralValidationStrategy :
         }
         if (dto.persistenceStatus.isNullOrBlank() ||
             dto.persistenceStatus == PersistenceStatus.PENDING.name ||
-            PersistenceStatus.enumExists(dto.persistenceStatus)
+            !PersistenceStatus.enumExists(dto.persistenceStatus!!)
         ) {
             invalidFields.add(Field.PERSISTENCE_STATUS.getName())
         }
@@ -52,13 +51,13 @@ internal class BusinessCentralValidationStrategy :
         if (invalidFields.isNotEmpty()) {
             throw BusinessCentralValidationException(
                 "Error while validating a Business Central dto, invalid fields:" +
-                        " ${invalidFields.joinToString(", ")}"
+                        " ${invalidFields.joinToString(", ")}."
             )
         }
 
     }
 
-    private fun processEntityValidationRules(entity: BusinessCentral) {
+    override fun processEntityValidationRules(entity: Entity) {
         val invalidFields = mutableListOf<String>()
 
         if (entity.businessCentralId.isBlank()) {
@@ -77,12 +76,12 @@ internal class BusinessCentralValidationStrategy :
         if (invalidFields.isNotEmpty()) {
             throw BusinessCentralValidationException(
                 "Error while validating a Business Central entity, invalid fields:" +
-                        " ${invalidFields.joinToString(", ")}"
+                        " ${invalidFields.joinToString(", ")}."
             )
         }
     }
 
-    private fun processEntityCreationRules(entity: BusinessCentral) {
+    override fun processEntityCreationRules(entity: Entity) {
         val invalidFields = mutableListOf<String>()
 
         if (!entity.id.isNullOrBlank()) {
@@ -98,9 +97,10 @@ internal class BusinessCentralValidationStrategy :
         if (invalidFields.isNotEmpty()) {
             throw BusinessCentralValidationException(
                 "Error while validating a Business Central entity for creation, invalid fields:" +
-                        " ${invalidFields.joinToString(", ")}"
+                        " ${invalidFields.joinToString(", ")}."
             )
         }
     }
+
 
 }

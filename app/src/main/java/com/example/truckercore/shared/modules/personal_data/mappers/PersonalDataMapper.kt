@@ -5,14 +5,14 @@ import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
 import com.example.truckercore.shared.errors.InvalidEnumParameterException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
-import com.example.truckercore.shared.interfaces.Mapper
+import com.example.truckercore.shared.interfaces.MapperI
 import com.example.truckercore.shared.modules.personal_data.configs.PersonalDataConfigs
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.entities.PersonalData
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal object PersonalDataMapper : Mapper<PersonalData, PersonalDataDto> {
+internal object PersonalDataMapper : MapperI<PersonalData, PersonalDataDto> {
 
     override fun toDto(entity: PersonalData) = mapEntityToDto(entity)
 

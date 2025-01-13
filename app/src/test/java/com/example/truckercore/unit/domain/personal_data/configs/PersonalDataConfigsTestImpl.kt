@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
-internal class PersonalDataConfigsTest {
+internal class PersonalDataConfigsTestImpl {
 
     companion object {
         @JvmStatic

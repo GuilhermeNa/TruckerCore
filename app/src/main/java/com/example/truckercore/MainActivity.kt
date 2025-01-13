@@ -5,12 +5,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionServiceImpl
-import com.example.truckercore.modules.user.entity.User
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
+
+    private val vm: MyViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity(){
             insets
         }
 
+        vm.execute()
 
     }
+
 }

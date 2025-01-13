@@ -19,7 +19,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-internal class StorageFileMapperTest {
+internal class StorageFileMapperITestImpl {
 
     companion object {
         @JvmStatic

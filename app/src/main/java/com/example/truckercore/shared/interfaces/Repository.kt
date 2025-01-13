@@ -1,12 +1,9 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.shared.utils.Response
 import kotlinx.coroutines.flow.Flow
 
 internal interface Repository<T: Dto> {
-
-    val firebaseRepository: FirebaseRepository<T>
 
     /**
      * Creates a new entity entity in the database.
@@ -15,21 +12,21 @@ internal interface Repository<T: Dto> {
      * This method generates an ID for the entity and stores it in the database.
      * @return The ID of the created object.
      */
-    fun create(dto: T): String
+    suspend fun create(dto: T): Flow<Response<String>>
 
     /**
      * Updates an existing Entity in the database.
      *
      * @param dto The data transfer object (DTO) containing the updated information.
      */
-    fun update(dto: T)
+    fun update(dto: T): Flow<Response<Unit>>
 
     /**
      * Deletes an Entity entity from the database by its ID.
      *
      * @param id The unique identifier (ID) of the entity to be deleted.
      */
-    fun delete(id: String)
+    fun delete(id: String): Flow<Response<Unit>>
 
     /**
      * Checks if an Entity exists in the database by its ID.

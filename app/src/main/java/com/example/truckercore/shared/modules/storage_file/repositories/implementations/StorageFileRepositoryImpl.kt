@@ -4,21 +4,21 @@ import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.repositories.interfaces.StorageFileRepository
+import com.example.truckercore.shared.utils.Response
+import kotlinx.coroutines.flow.Flow
 
 internal class StorageFileRepositoryImpl(
-    override val firebaseRepository: FirebaseRepository<StorageFileDto>,
+    private val firebaseRepository: FirebaseRepository<StorageFileDto>,
 ) : StorageFileRepository {
 
-    override fun create(dto: StorageFileDto): String =
+    override suspend fun create(dto: StorageFileDto): Flow<Response<String>> =
         firebaseRepository.create(dto)
 
-    override fun update(dto: StorageFileDto) {
+    override fun update(dto: StorageFileDto): Flow<Response<Unit>> =
         firebaseRepository.update(dto)
-    }
 
-    override fun delete(id: String) {
+    override fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(id)
-    }
 
     override suspend fun entityExists(id: String) = firebaseRepository.entityExists(id)
 

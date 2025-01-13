@@ -9,9 +9,9 @@ internal class CreatePersonalDataUseCaseImpl(
     override val repository: PersonalDataRepository
 ): CreatePersonalDataUseCase {
 
-    override fun execute(user: User, dto: PersonalDataDto): String {
-
-        return repository.create(dto)
+    override suspend fun execute(user: User, dto: PersonalDataDto): String {
+        TODO()
+       // return repository.create(dto)
     }
 
 }

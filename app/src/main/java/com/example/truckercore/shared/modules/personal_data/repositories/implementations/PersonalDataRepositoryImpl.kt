@@ -8,17 +8,17 @@ import com.example.truckercore.shared.utils.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class PersonalDataRepositoryImpl(
-    override val firebaseRepository: FirebaseRepository<PersonalDataDto>
+    private val firebaseRepository: FirebaseRepository<PersonalDataDto>
 ) : PersonalDataRepository {
 
-    override fun create(dto: PersonalDataDto): String =
-        firebaseRepository.create(dto)
+    override suspend fun create(dto: PersonalDataDto): Flow<Response<String>> = TODO()
+       // firebaseRepository.create(dto)
 
-    override fun update(dto: PersonalDataDto) {
+    override fun update(dto: PersonalDataDto): Flow<Response<Unit>> =
         firebaseRepository.update(dto)
-    }
 
-    override fun delete(id: String) =
+
+    override fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(id)
 
     override suspend fun entityExists(id: String) =

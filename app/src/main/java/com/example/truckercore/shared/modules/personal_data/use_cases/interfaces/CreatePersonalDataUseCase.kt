@@ -6,6 +6,6 @@ import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 internal interface CreatePersonalDataUseCase:
     com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.PersonalDataUseCase {
 
-    fun execute(user: User, dto: PersonalDataDto): String
+    suspend fun execute(user: User, dto: PersonalDataDto): String
 
 }

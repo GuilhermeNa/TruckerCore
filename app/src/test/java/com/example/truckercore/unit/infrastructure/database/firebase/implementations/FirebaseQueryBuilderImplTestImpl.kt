@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class FirebaseQueryBuilderImplTest {
+internal class FirebaseQueryBuilderImplTestImpl {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var queryBuilder: FirebaseQueryBuilderImpl

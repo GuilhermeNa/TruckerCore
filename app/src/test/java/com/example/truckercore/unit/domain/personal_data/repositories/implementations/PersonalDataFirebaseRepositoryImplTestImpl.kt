@@ -15,7 +15,7 @@ import io.mockk.mockk
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 
-internal class PersonalDataFirebaseRepositoryImplTest {
+internal class PersonalDataFirebaseRepositoryImplTestImpl {
 
     private lateinit var firebaseRepository: FirebaseRepository<PersonalDataDto>
     private lateinit var queryBuilder: FirebaseQueryBuilder

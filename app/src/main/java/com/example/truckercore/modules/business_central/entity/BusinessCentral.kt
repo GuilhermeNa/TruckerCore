@@ -4,7 +4,7 @@ import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Entity
 import java.time.LocalDateTime
 
-internal data class BusinessCentral(
+data class BusinessCentral(
     override val businessCentralId: String,
     override val id: String?,
     override val lastModifierId: String,

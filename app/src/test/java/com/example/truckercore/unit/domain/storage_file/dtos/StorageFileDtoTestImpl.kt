@@ -1,15 +1,15 @@
-package com.example.truckercore.unit.domain.personal_data.dtos
+package com.example.truckercore.unit.domain.storage_file.dtos
 
-import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
+import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class PersonalDataDtoTest {
+class StorageFileDtoTestImpl {
 
     @Test
     fun `initializeId() should initialize id and update persistence status`() {
         // Object
-        val dto = TestPersonalDataDataProvider.getBaseDto()
+        val dto = TestStorageFileDataProvider.getBaseDto()
 
         // Call
         val updatedDto = dto.initializeId("newId")
@@ -23,10 +23,9 @@ internal class PersonalDataDtoTest {
         assertEquals(dto.creationDate, updatedDto.creationDate)
         assertEquals(dto.lastUpdate, updatedDto.lastUpdate)
         assertEquals(dto.parentId, updatedDto.parentId)
-        assertEquals(dto.name, updatedDto.name)
-        assertEquals(dto.number, updatedDto.number)
-        assertEquals(dto.emissionDate, updatedDto.emissionDate)
-        assertEquals(dto.expirationDate, updatedDto.expirationDate)
+        assertEquals(dto.url, updatedDto.url)
+        assertEquals(dto.isUpdating, updatedDto.isUpdating)
+
     }
 
 }

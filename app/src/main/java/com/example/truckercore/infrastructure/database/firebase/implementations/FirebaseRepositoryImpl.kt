@@ -19,20 +19,47 @@ internal class FirebaseRepositoryImpl<T : Dto>(
     private val collection: Collection,
 ) : FirebaseRepository<T> {
 
-    override fun create(dto: T): String {
+    override fun create(dto: T): Flow<Response<String>> = flow {
         val document = queryBuilder.newDocument(collection.getName())
         val newDto = dto.initializeId(document.id)
-        document.set(newDto)
-        return document.id
+        var result: Response<String>? = null
+
+        document.set(newDto).addOnCompleteListener { task ->
+            result = converter.processTask(task, document) as Response<String>
+        }.await()
+        emit(result ?: Response.Empty)
+
+    }.catch { throwable ->
+        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
+        emit(errorResponse)
     }
 
-    override fun update(dto: T) {
+    override fun update(dto: T): Flow<Response<Unit>> = flow {
         val document = queryBuilder.getDocumentReference(collection.getName(), dto.id!!)
-        document.set(dto)
+        var result: Response<Unit>? = null
+
+        document.set(dto).addOnCompleteListener { task ->
+            result = converter.processTask(task = task) as Response<Unit>
+        }.await()
+        emit(result ?: Response.Empty)
+
+    }.catch { throwable ->
+        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
+        emit(errorResponse)
     }
 
-    override fun delete(id: String) {
-        queryBuilder.getDocumentReference(collection.getName(), id).delete()
+    override fun delete(id: String): Flow<Response<Unit>> = flow {
+        val document = queryBuilder.getDocumentReference(collection.getName(), id)
+        var result: Response<Unit>? = null
+
+        document.delete().addOnCompleteListener { task ->
+            result = converter.processTask(task) as Response<Unit>
+        }.await()
+        emit(result ?: Response.Empty)
+
+    }.catch { throwable ->
+        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
+        emit(errorResponse)
     }
 
     override suspend fun entityExists(id: String): Flow<Response<Boolean>> = flow {
@@ -45,10 +72,8 @@ internal class FirebaseRepositoryImpl<T : Dto>(
 
         emit(response)
 
-    }.catch { t ->
-        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(
-            collection = collection, value = id, throwable = t
-        )
+    }.catch { throwable ->
+        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
         emit(errorResponse)
     }
 
@@ -61,10 +86,9 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         } ?: Response.Empty
 
         emit(response)
-    }.catch { t ->
-        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(
-            collection = collection, value = id, throwable = t
-        )
+
+    }.catch { throwable ->
+        val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
         emit(errorResponse)
     }
 
@@ -79,10 +103,8 @@ internal class FirebaseRepositoryImpl<T : Dto>(
 
             emit(response)
 
-        }.catch { t ->
-            val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(
-                collection = collection, field = field, value = value, throwable = t
-            )
+        }.catch { throwable ->
+            val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
             emit(errorResponse)
         }
 

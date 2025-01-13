@@ -10,6 +10,8 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.utils.Response
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -19,6 +21,7 @@ import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,7 +29,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class FirebaseRepositoryImplTest {
+class FirebaseRepositoryImplTestImpl {
 
     private lateinit var repository: FirebaseRepositoryImpl<PersonalDataDto>
     private lateinit var queryBuilder: FirebaseQueryBuilder
@@ -62,46 +65,76 @@ class FirebaseRepositoryImplTest {
     }
 
     @Test
-    fun `create() should create the entity and return id`() {
+    fun `create() should create the entity and return id`() = runTest {
         // Objects
         val newId = "newId"
         val newDto = mockk<PersonalDataDto> { every { id } returns newId }
+        val task = mockk<Task<Void>> {
+            every { exception } returns null
+            every { isSuccessful } returns true
+            every { isComplete } returns true
+            every { isCanceled } returns false
+            every { result } returns mockk()
+        }
+        val response = Response.Success(newId)
 
         // Behaviors
         every { queryBuilder.newDocument(collection.getName()) } returns documentReference
         every { documentReference.id } returns newId
-        every { documentReference.set(newDto) } returns mockk()
+        every { documentReference.set(newDto) } returns task
         every { dto.initializeId(newId) } returns newDto
+        every { converter.processTask(task, documentReference) } returns response
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = it.invocation.args[0] as OnCompleteListener<Void>
+            listener.onComplete(task)
+            task
+        }
 
         // Call
-        val result = repository.create(dto)
+        val result = repository.create(dto).single()
 
         // Assertions
-        assertEquals(newId, result)
+        assertEquals(response, result)
+
         coVerifyOrder {
             queryBuilder.newDocument(collection.getName())
             dto.initializeId(newId)
             documentReference.set(newDto)
         }
+
     }
 
     @Test
-    fun `update() should update a document reference`() {
+    fun `update() should update a document reference`() = runTest {
         // Object
         val dtoId = "dtoId"
+        val task = mockk<Task<Void>> {
+            every { exception } returns null
+            every { isSuccessful } returns true
+            every { isComplete } returns true
+            every { isCanceled } returns false
+            every { result } returns mockk()
+        }
+        val response = Response.Success(Unit)
 
         // Behaviors
         every { dto.id } returns dtoId
         every {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(dtoId))
         } returns documentReference
-        every { documentReference.set(dto) } returns mockk()
+        every { documentReference.set(dto) } returns task
+        every { converter.processTask(task = task) } returns response
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = it.invocation.args[0] as OnCompleteListener<Void>
+            listener.onComplete(task)
+            task
+        }
 
         // Call
-        val result = repository.update(dto)
+        val result = repository.update(dto).single()
 
         // Assertions
-        assertEquals(Unit, result)
+        assertEquals(response, result)
         coVerifyOrder {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(dtoId))
             documentReference.set(dto)
@@ -109,21 +142,35 @@ class FirebaseRepositoryImplTest {
     }
 
     @Test
-    fun `delete() should update a document reference`() {
+    fun `delete() should update a document reference`() = runTest {
         // Object
         val id = "id"
+        val task = mockk<Task<Void>> {
+            every { exception } returns null
+            every { isSuccessful } returns true
+            every { isComplete } returns true
+            every { isCanceled } returns false
+            every { result } returns mockk()
+        }
+        val response = Response.Success(Unit)
 
         // Behaviors
         every {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
         } returns documentReference
-        every { documentReference.delete() } returns mockk()
+        every { documentReference.delete() } returns task
+        every { converter.processTask(task = task) } returns response
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = it.invocation.args[0] as OnCompleteListener<Void>
+            listener.onComplete(task)
+            task
+        }
 
         // Call
-        val result = repository.delete(id)
+        val result = repository.delete(id).single()
 
         // Assertions
-        assertEquals(Unit, result)
+        assertEquals(response , result)
         coVerifyOrder {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
             documentReference.delete()
@@ -209,11 +256,7 @@ class FirebaseRepositoryImplTest {
         // Object
         val id = "id"
         val exception = FirebaseConversionException("Simulated exception.")
-        val response = Response.Error(
-            message =  " FirebaseRepository: Error during conversion of Firestore document to " +
-                    "DTO class. Collection: [PERSONAL_DATA], Value: [id].",
-            exception = exception
-        )
+        val response = Response.Error(exception = exception)
 
         // Behaviors
         every {
@@ -312,11 +355,7 @@ class FirebaseRepositoryImplTest {
         // Object
         val id = "id"
         val exception = FirebaseConversionException("Simulated exception.")
-        val response = Response.Error(
-            message = " FirebaseRepository: Error during conversion of Firestore document to " +
-                    "DTO class. Collection: [PERSONAL_DATA], Value: [id].",
-            exception = exception
-        )
+        val response = Response.Error(exception = exception)
 
         // Behaviors
         every {
@@ -419,11 +458,7 @@ class FirebaseRepositoryImplTest {
         val field = mockk<Field>(relaxed = true)
         val value = "value"
         val exception = FirebaseConversionException("Simulated exception.")
-        val response = Response.Error(
-            message = " FirebaseRepository: Error during conversion of Firestore document to " +
-                    "DTO class. Collection: [PERSONAL_DATA], Field: [$field], Value: [$value].",
-            exception = exception
-        )
+        val response = Response.Error(exception = exception)
 
         // Behaviors
         every {

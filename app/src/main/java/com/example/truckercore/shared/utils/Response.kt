@@ -19,7 +19,7 @@ sealed class Response<out T> {
      *
      * @property exception The exception object that caused the error.
      */
-    data class Error(val message: String? = null, val exception: Exception): Response<Nothing>()
+    data class Error(val exception: Exception): Response<Nothing>()
 
     /**
      * Represents a response indicating that no data was found or the operation resulted in an empty state.

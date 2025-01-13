@@ -8,37 +8,28 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val firebaseModule = module {
     single { Firebase.auth }
     single { Firebase.firestore }
     single { Firebase.storage }
-    converterModule
-    firebaseRepositoryModule
     single<FirebaseQueryBuilder> { FirebaseQueryBuilderImpl(get()) }
-}
-
-val firebaseRepositoryModule = module {
+    single<FirebaseConverter<BusinessCentralDto>> {
+        FirebaseConverterImpl(BusinessCentralDto::class.java)
+    }
     single<FirebaseRepository<BusinessCentralDto>> {
-        FirebaseRepositoryImpl(get(), get(), Collection.CENTRAL)
-    }
-    single<FirebaseRepository<PersonalDataDto>> {
-        FirebaseRepositoryImpl(get(), get(), Collection.PERSONAL_DATA)
-    }
-    single<FirebaseRepository<StorageFileDto>> {
-        FirebaseRepositoryImpl(get(), get(), Collection.FILE)
+        FirebaseRepositoryImpl<BusinessCentralDto>(
+            get(),
+            get(),
+            Collection.CENTRAL
+        )
     }
 }
 
-val converterModule = module {
-    single<FirebaseConverter<BusinessCentralDto>> { FirebaseConverterImpl(BusinessCentralDto::class.java) }
-    single<FirebaseConverter<PersonalDataDto>> { FirebaseConverterImpl(PersonalDataDto::class.java) }
-    single<FirebaseConverter<StorageFileDto>> { FirebaseConverterImpl(StorageFileDto::class.java) }
-}

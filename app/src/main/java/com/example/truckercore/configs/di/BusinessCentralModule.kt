@@ -1,5 +1,6 @@
 package com.example.truckercore.configs.di
 
+import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepositoryImpl
 import com.example.truckercore.modules.business_central.use_cases.implementations.CheckBusinessCentralExistenceUseCaseImpl
@@ -12,17 +13,27 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Cre
 import com.example.truckercore.modules.business_central.use_cases.interfaces.DeleteBusinessCentralUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralByIdUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.UpdateBusinessCentralUseCase
+import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val centralModule = module {
-    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get()) }
+val businessCentralModule = module {
+    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get())}
 
-    single<CheckBusinessCentralExistenceUseCase> { CheckBusinessCentralExistenceUseCaseImpl(get(), get()) }
+
+    single<BusinessCentralValidationStrategy> { BusinessCentralValidationStrategy() }
+    single<BusinessCentralMapper> { BusinessCentralMapper() }
+
     single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get(), get()) }
-    single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get()) }
+    single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get(), get()) }
+    single<UpdateBusinessCentralUseCase> {
+        UpdateBusinessCentralUseCaseImpl(get(), get(), get(), get())
+    }
+    single<CheckBusinessCentralExistenceUseCase> {
+        CheckBusinessCentralExistenceUseCaseImpl(get(), get())
+    }
     single<GetBusinessCentralByIdUseCase> {
         GetBusinessCentralByIdUseCaseImpl(get(), get(), get())
     }
-    single<UpdateBusinessCentralUseCase> { UpdateBusinessCentralUseCaseImpl(get(), get()) }
-
 }
+

@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
-internal class StorageFileConfigsTest {
+internal class StorageFileConfigsTestImpl {
 
     companion object {
         @JvmStatic

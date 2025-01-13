@@ -9,12 +9,12 @@ import com.example.truckercore.shared.errors.InvalidEnumParameterException
 import com.example.truckercore.shared.errors.InvalidUrlFormatException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
-import com.example.truckercore.shared.interfaces.Mapper
+import com.example.truckercore.shared.interfaces.MapperI
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 import java.net.MalformedURLException
 
-internal object StorageFileMapper : Mapper<StorageFile, StorageFileDto> {
+internal object StorageFileMapper : MapperI<StorageFile, StorageFileDto> {
 
     override fun toDto(entity: StorageFile) = mapEntityToDto(entity)
 

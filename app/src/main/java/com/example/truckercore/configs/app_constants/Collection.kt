@@ -1,7 +1,7 @@
 package com.example.truckercore.configs.app_constants
 
 enum class Collection(private val collectionName: String) {
-    CENTRAL("central"),
+    CENTRAL("business_central"),
     CARGO("cargo"),
     TRAVEL("travel"),
     FREIGHT("freight"),

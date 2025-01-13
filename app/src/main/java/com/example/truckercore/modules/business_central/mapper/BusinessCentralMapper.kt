@@ -3,29 +3,29 @@ package com.example.truckercore.modules.business_central.mapper
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.errors.BusinessCentralMappingException
+import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Mapper
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal object BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDto> {
+internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDto>() {
 
     override fun toDto(entity: BusinessCentral): BusinessCentralDto = try {
         mapEntityToDto(entity)
     } catch (e: Exception) {
-        handleMappingToDtoError(e, entity)
+        handleMappingError("a BusinessCentral to Dto: $entity.", e)
     }
 
     override fun toEntity(dto: BusinessCentralDto): BusinessCentral = try {
         mapDtoToEntity(dto)
     } catch (e: Exception) {
-        handleMappingToEntityError(e, dto)
+        handleMappingError("a BusinessCentralDto to Entity: $dto.", e)
     }
 
     //----------------------------------------------------------------------------------------------
 
-    private fun mapEntityToDto(entity: BusinessCentral) =
+    override fun mapEntityToDto(entity: BusinessCentral) =
         BusinessCentralDto(
             businessCentralId = entity.businessCentralId,
             id = entity.id,
@@ -35,7 +35,7 @@ internal object BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralD
             persistenceStatus = entity.persistenceStatus.name
         )
 
-    private fun mapDtoToEntity(dto: BusinessCentralDto): BusinessCentral {
+    override fun mapDtoToEntity(dto: BusinessCentralDto): BusinessCentral {
         return BusinessCentral(
             businessCentralId = dto.businessCentralId!!,
             id = dto.id!!,
@@ -46,19 +46,11 @@ internal object BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralD
         )
     }
 
-    private fun handleMappingToDtoError(e: Exception, entity: BusinessCentral): Nothing {
-        logError("Error while mapping a Business Central entity to dto: ${e.message}")
+    override fun handleMappingError(context: String, exception: Exception): Nothing {
+        logError("Error while mapping $context: ${exception.message}.")
         throw BusinessCentralMappingException(
-            message = "Error while mapping a Business Central entity: $entity",
-            cause = e
-        )
-    }
-
-    private fun handleMappingToEntityError(e: Exception, dto: BusinessCentralDto): Nothing {
-        logError("Error while mapping a Business Central dto to entity: ${e.message}")
-        throw BusinessCentralMappingException(
-            message = "Error while mapping a Business Central dto: $dto",
-            cause = e
+            message = context,
+            cause = exception
         )
     }
 
