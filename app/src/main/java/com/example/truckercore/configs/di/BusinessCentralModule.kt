@@ -14,16 +14,14 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Del
 import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralByIdUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.UpdateBusinessCentralUseCase
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
+import com.example.truckercore.shared.abstractions.ValidatorStrategy
+import com.example.truckercore.shared.services.ValidatorService
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val businessCentralModule = module {
-    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get())}
-
-
-    single<BusinessCentralValidationStrategy> { BusinessCentralValidationStrategy() }
+    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get()) }
     single<BusinessCentralMapper> { BusinessCentralMapper() }
-
     single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<UpdateBusinessCentralUseCase> {

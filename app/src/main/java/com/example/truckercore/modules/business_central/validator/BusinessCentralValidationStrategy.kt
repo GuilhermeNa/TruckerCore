@@ -7,7 +7,7 @@ import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 
-internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
+internal class  BusinessCentralValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(dto: Dto) {
         processDtoValidationRules(dto)
@@ -20,7 +20,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
     override fun validateForCreation(entity: Entity) {
         processEntityCreationRules(entity)
     }
-
+//TODO(" garantir o tipo")
     //----------------------------------------------------------------------------------------------
 
     override fun processDtoValidationRules(dto: Dto) {
@@ -101,6 +101,5 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
             )
         }
     }
-
 
 }

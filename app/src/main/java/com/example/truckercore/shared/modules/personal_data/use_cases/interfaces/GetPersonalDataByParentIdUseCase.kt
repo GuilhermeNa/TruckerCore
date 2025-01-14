@@ -2,7 +2,7 @@ package com.example.truckercore.shared.modules.personal_data.use_cases.interface
 
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 
 internal interface GetPersonalDataByParentIdUseCase: PersonalDataUseCase  {
 

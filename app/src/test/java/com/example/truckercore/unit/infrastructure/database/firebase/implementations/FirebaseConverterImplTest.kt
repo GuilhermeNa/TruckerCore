@@ -2,7 +2,7 @@ package com.example.truckercore.unit.infrastructure.database.firebase.implementa
 
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseConverterImpl
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -74,27 +74,6 @@ class FirebaseConverterImplTest {
     }
 
     @Test
-    fun `processTask() should return empty response when receive an document and task has no exception and is not a success`() {
-        // Object
-        val newId = "id"
-        val response = Response.Empty
-        val document = mockk<DocumentReference> {
-            every { id } returns newId
-        }
-        val task = mockk<Task<Void>> {
-            every { exception } returns null
-            every { isSuccessful } returns false
-        }
-
-        // Call
-        val result = converter.processTask(task, document)
-
-        // Assertion
-        assertEquals(response, (result as Response.Empty))
-
-    }
-
-    @Test
     fun `processTask() should return success response when has no document and task is success`() {
         // Object
         val task = mockk<Task<Void>> {
@@ -126,23 +105,6 @@ class FirebaseConverterImplTest {
 
         // Assertion
         assertEquals(simulatedError, (result as Response.Error).exception)
-
-    }
-
-    @Test
-    fun `processTask() should return empty response when when has no document document and task has no exception and is not a success`() {
-        // Object
-        val response = Response.Empty
-        val task = mockk<Task<Void>> {
-            every { exception } returns null
-            every { isSuccessful } returns false
-        }
-
-        // Call
-        val result = converter.processTask(task)
-
-        // Assertion
-        assertEquals(response, (result as Response.Empty))
 
     }
 

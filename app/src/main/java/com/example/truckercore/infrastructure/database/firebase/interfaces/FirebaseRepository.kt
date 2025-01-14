@@ -2,7 +2,7 @@ package com.example.truckercore.infrastructure.database.firebase.interfaces
 
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal interface FirebaseRepository<T : Dto> {

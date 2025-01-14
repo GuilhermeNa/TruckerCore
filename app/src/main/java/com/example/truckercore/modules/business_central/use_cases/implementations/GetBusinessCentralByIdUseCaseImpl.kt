@@ -10,7 +10,7 @@ import com.example.truckercore.modules.business_central.repository.BusinessCentr
 import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralByIdUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.services.ResponseHandlerService
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +45,7 @@ internal class GetBusinessCentralByIdUseCaseImpl(
     private fun handleUnauthorizedPermission(user: User, id: String): Response.Error {
         logWarn("Unauthorized access attempt by user: ${user.id}, for BusinessCentral ID: $id")
         return Response.Error(
-            exception = UnauthorizedAccessException(
+            UnauthorizedAccessException(
                 "User does not have permission to view the business central."
             )
         )

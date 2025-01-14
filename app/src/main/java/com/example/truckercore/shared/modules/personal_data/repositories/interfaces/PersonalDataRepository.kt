@@ -2,7 +2,7 @@ package com.example.truckercore.shared.modules.personal_data.repositories.interf
 
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal interface PersonalDataRepository : Repository<PersonalDataDto> {

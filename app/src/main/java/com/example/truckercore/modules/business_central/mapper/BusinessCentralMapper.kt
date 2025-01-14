@@ -14,13 +14,13 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
     override fun toDto(entity: BusinessCentral): BusinessCentralDto = try {
         mapEntityToDto(entity)
     } catch (e: Exception) {
-        handleMappingError("a BusinessCentral to Dto: $entity.", e)
+        handleMappingError(e)
     }
 
     override fun toEntity(dto: BusinessCentralDto): BusinessCentral = try {
         mapDtoToEntity(dto)
     } catch (e: Exception) {
-        handleMappingError("a BusinessCentralDto to Entity: $dto.", e)
+        handleMappingError(e)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -46,12 +46,9 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
         )
     }
 
-    override fun handleMappingError(context: String, exception: Exception): Nothing {
-        logError("Error while mapping $context: ${exception.message}.")
-        throw BusinessCentralMappingException(
-            message = context,
-            cause = exception
-        )
+    override fun handleMappingError(exception: Exception): Nothing {
+        logError("Error while mapping a BusinessCentral object.")
+        throw BusinessCentralMappingException(cause = exception)
     }
 
 }

@@ -6,8 +6,9 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRepositoryErrorHandler
+import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -27,7 +28,8 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         document.set(newDto).addOnCompleteListener { task ->
             result = converter.processTask(task, document) as Response<String>
         }.await()
-        emit(result ?: Response.Empty)
+
+        emit(result ?: Response.Error(UnknownErrorException("Result is not initialized")))
 
     }.catch { throwable ->
         val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
@@ -41,7 +43,8 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         document.set(dto).addOnCompleteListener { task ->
             result = converter.processTask(task = task) as Response<Unit>
         }.await()
-        emit(result ?: Response.Empty)
+
+        emit(result ?: Response.Error(UnknownErrorException("Result is not initialized")))
 
     }.catch { throwable ->
         val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)
@@ -55,7 +58,8 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         document.delete().addOnCompleteListener { task ->
             result = converter.processTask(task) as Response<Unit>
         }.await()
-        emit(result ?: Response.Empty)
+
+        emit(result ?: Response.Error(UnknownErrorException("Result is not initialized")))
 
     }.catch { throwable ->
         val errorResponse = FirebaseRepositoryErrorHandler.buildErrorResponse(throwable)

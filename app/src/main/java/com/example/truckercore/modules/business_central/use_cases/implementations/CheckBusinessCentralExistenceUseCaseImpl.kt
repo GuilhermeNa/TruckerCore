@@ -7,7 +7,7 @@ import com.example.truckercore.infrastructure.security.permissions.service.Permi
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CheckBusinessCentralExistenceUseCase
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
@@ -52,7 +52,7 @@ internal class CheckBusinessCentralExistenceUseCaseImpl(
     }
 
     private fun handleErrorResponse(response: Response.Error): Response.Error {
-        logError("Error while handling with database response") //TODO()
+        logError("Error while handling with database response")
         return response
     }
 

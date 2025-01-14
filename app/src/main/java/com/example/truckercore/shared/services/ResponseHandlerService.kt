@@ -5,7 +5,7 @@ import com.example.truckercore.modules.business_central.errors.BusinessCentralVa
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.MapperI
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logWarn
 
@@ -38,7 +38,7 @@ internal class ResponseHandlerService<E : Entity, D : Dto>(
     }
 
     private fun handleErrorResponse(response: Response.Error): Response.Error {
-        logError("Error while handling with database response")// TODO()
+        logError("Error while handling with database response.")
         return response
     }
 

@@ -4,7 +4,7 @@ import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.repositories.interfaces.PersonalDataRepository
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class PersonalDataRepositoryImpl(

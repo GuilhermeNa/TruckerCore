@@ -43,10 +43,9 @@ internal abstract class Mapper<E: Entity, D: Dto>: MapperI<E, D> {
      * This method is intended to be implemented by subclasses to define how mapping errors should be logged or handled.
      * It is called whenever an exception is thrown during the conversion of an entity to a DTO or vice versa.
      *
-     * @param context A string that provides additional context about the specific mapping operation that failed (e.g., "Entity to DTO" or "DTO to Entity").
      * @param exception The exception that was thrown during the mapping operation.
      * @throws Nothing This method always throws an exception, preventing further execution of the program.
      */
-    protected abstract fun handleMappingError(context: String, exception: Exception): Nothing
+    protected abstract fun handleMappingError(exception: Exception): Nothing
 
 }

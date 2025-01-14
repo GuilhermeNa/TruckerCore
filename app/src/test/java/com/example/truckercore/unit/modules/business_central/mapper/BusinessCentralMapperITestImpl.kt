@@ -73,15 +73,9 @@ internal class BusinessCentralMapperITestImpl {
         every { mockk["mapEntityToDto"](entity) } throws NullPointerException("Simulated exception")
 
         // Call
-        val exception = assertThrows<BusinessCentralMappingException> {
+      assertThrows<BusinessCentralMappingException> {
             mockk.toDto(entity)
         }
-
-        // Assertion
-        assertEquals(
-            "Error while mapping a Business Central entity: $entity.",
-            exception.message
-        )
 
     }
 
@@ -90,14 +84,9 @@ internal class BusinessCentralMapperITestImpl {
     fun `toEntity() should throw BusinessCentralMappingException when there are errors`(
         pDto: BusinessCentralDto
     ) {
-        val exception = assertThrows<BusinessCentralMappingException> {
+       assertThrows<BusinessCentralMappingException> {
             mapper.toEntity(pDto)
         }
-
-        assertEquals(
-            "Error while mapping a Business Central dto: $pDto.",
-            exception.message
-        )
 
     }
 

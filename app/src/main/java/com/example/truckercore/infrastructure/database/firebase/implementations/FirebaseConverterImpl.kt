@@ -2,7 +2,8 @@ package com.example.truckercore.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.errors.UnknownErrorException
+import com.example.truckercore.shared.sealeds.Response
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -44,7 +45,7 @@ internal class FirebaseConverterImpl<T>(private val clazz: Class<T>) : FirebaseC
         }
         return if (task.isSuccessful) {
             Response.Success(document.id)
-        } else Response.Empty
+        } else Response.Error(UnknownErrorException("Failed while accessing task success state."))
     }
 
     private fun processUnitTask(task: Task<Void>): Response<Unit> {
@@ -53,7 +54,7 @@ internal class FirebaseConverterImpl<T>(private val clazz: Class<T>) : FirebaseC
         }
         return if (task.isSuccessful) {
             Response.Success(Unit)
-        } else Response.Empty
+        } else Response.Error(UnknownErrorException("Failed while accessing task success state."))
     }
 
     // Convert a list of fireBase documents into a List<DTO>

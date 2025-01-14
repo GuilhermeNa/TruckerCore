@@ -1,7 +1,7 @@
 package com.example.truckercore.infrastructure.database.firebase.util
 
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
@@ -30,12 +30,12 @@ internal object FirebaseRepositoryErrorHandler {
     fun buildErrorResponse(throwable: Throwable): Response.Error {
         val message = when (throwable) {
             is FirebaseConversionException -> "Error during conversion of Firestore document to DTO class."
-            is FirebaseNetworkException -> "A network error occurred while interacting with Firestore. Please check your internet connection."
+            is FirebaseNetworkException -> "Network error. Please check your internet connection."
             is FirebaseFirestoreException -> "Firestore exception occurred. It could be due to invalid data, permissions, or query failures."
             is FirebaseAuthException -> "Authentication failed. Ensure user is authenticated properly."
-            else -> "Unknown error occurred while interacting with Firestore."
+            else -> "Unknown error."
         }
-        logError("FirebaseRepository -> Exception: $throwable, with message: $message")
+        logError("An error occurred while interacting with firebase. Error: $throwable")
         return Response.Error(throwable as Exception)
     }
 

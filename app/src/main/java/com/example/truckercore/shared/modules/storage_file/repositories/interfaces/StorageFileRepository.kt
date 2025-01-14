@@ -2,7 +2,7 @@ package com.example.truckercore.shared.modules.storage_file.repositories.interfa
 
 import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
 import com.example.truckercore.shared.interfaces.Repository
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal interface StorageFileRepository : Repository<StorageFileDto> {

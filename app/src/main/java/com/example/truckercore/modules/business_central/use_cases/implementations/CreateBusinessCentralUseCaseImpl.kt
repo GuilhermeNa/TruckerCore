@@ -5,7 +5,11 @@ import com.example.truckercore.modules.business_central.mapper.BusinessCentralMa
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
 import com.example.truckercore.shared.services.ValidatorService
-import javax.inject.Named
+import com.example.truckercore.shared.sealeds.Response
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.single
 
 internal class CreateBusinessCentralUseCaseImpl(
     private val repository: BusinessCentralRepository,
@@ -13,11 +17,13 @@ internal class CreateBusinessCentralUseCaseImpl(
     private val mapper: BusinessCentralMapper
 ) : CreateBusinessCentralUseCase {
 
-    override suspend fun execute(entity: BusinessCentral): String {
+    override suspend fun execute(entity: BusinessCentral): Flow<Response<String>> = flow {
         validator.validateForCreation(entity)
         val dto = mapper.toDto(entity)
-        TODO()
-     //   return repository.create(dto)
+        val result = repository.create(dto).single()
+        emit(result)
+    }.catch {
+        emit(Response.Error(it as Exception))
     }
 
 }

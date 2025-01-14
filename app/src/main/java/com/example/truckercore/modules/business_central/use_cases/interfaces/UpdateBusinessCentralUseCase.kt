@@ -2,6 +2,8 @@ package com.example.truckercore.modules.business_central.use_cases.interfaces
 
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.sealeds.Response
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the use case for updating a [BusinessCentral] entity.
@@ -17,6 +19,6 @@ internal interface UpdateBusinessCentralUseCase {
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
      * @param entity The [BusinessCentral] entity that is being updated. This contains the data to be modified.
      */
-    suspend fun execute(user: User, entity: BusinessCentral)
+    suspend fun execute(user: User, entity: BusinessCentral): Flow<Response<Unit>>
 
 }

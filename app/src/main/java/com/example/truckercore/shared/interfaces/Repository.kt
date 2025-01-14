@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.shared.utils.Response
+import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal interface Repository<T: Dto> {

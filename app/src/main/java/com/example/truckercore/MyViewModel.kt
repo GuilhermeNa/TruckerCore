@@ -4,31 +4,34 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepositoryImpl
+import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.expressions.logWarn
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.util.Date
 import javax.inject.Named
 
 internal class MyViewModel(
-    private val repository: BusinessCentralRepository
+    private val repository: CreateBusinessCentralUseCase
 ) : ViewModel() {
 
-    private fun dto() = BusinessCentralDto(
+    private fun entity() = BusinessCentral(
         businessCentralId = "",
         id = null,
         lastModifierId = "lastModifier",
-        creationDate = Date(),
-        lastUpdate = Date(),
-        persistenceStatus = PersistenceStatus.PENDING.name
+        creationDate = LocalDateTime.now(),
+        lastUpdate = LocalDateTime.now(),
+        persistenceStatus = PersistenceStatus.PENDING
     )
 
     fun execute() {
         viewModelScope.launch {
-            repository.create(dto())
+            repository.execute(entity())
         }
     }
 

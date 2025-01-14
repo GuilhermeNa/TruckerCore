@@ -3,6 +3,8 @@ package com.example.truckercore.modules.business_central.use_cases.interfaces
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.EntityNotFoundException
+import com.example.truckercore.shared.sealeds.Response
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the use case for deleting a [BusinessCentral] entity by its ID.
@@ -21,6 +23,6 @@ internal interface DeleteBusinessCentralUseCase {
      * @throws EntityNotFoundException If the entity with the provided ID does not exist.
      * @throws UnauthorizedAccessException If the user does not have permission to delete the entity.
      */
-    suspend fun execute(user: User, id: String)
+    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

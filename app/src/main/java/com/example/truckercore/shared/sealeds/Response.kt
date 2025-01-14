@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.utils
+package com.example.truckercore.shared.sealeds
 
 /**
  * Sealed class representing a response from an asynchronous operation.
