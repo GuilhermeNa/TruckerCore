@@ -2,7 +2,7 @@ package com.example.truckercore.shared.services
 
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.errors.StrategyNotFoundException
-import com.example.truckercore.shared.errors.ValidationException
+import com.example.truckercore.shared.errors.abstractions.ValidationException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
@@ -34,8 +34,9 @@ internal class ValidatorService(
      * @throws ValidationException If the DTO fails any validation checks.
      */
     fun validateDto(dto: Dto) {
-        setStrategy(ValidatorInput.DtoInput(dto))
-        _strategy.validateDto(dto)
+        val input = ValidatorInput.DtoInput(dto)
+        setStrategy(input)
+        _strategy.validateDto(input)
     }
 
     /**
@@ -48,8 +49,9 @@ internal class ValidatorService(
      * @throws ValidationException If the entity fails any validation checks.
      */
     fun validateEntity(entity: Entity) {
-        setStrategy(ValidatorInput.EntityInput(entity))
-        _strategy.validateEntity(entity)
+        val input = ValidatorInput.EntityInput(entity)
+        setStrategy(input)
+        _strategy.validateEntity(input)
     }
 
     /**
@@ -62,8 +64,9 @@ internal class ValidatorService(
      * @throws ValidationException If the entity fails any validation checks for creation.
      */
     fun validateForCreation(entity: Entity) {
-        setStrategy(ValidatorInput.EntityInput(entity))
-        _strategy.validateForCreation(entity)
+        val input = ValidatorInput.EntityInput(entity)
+        setStrategy(input)
+        _strategy.validateForCreation(input)
     }
 
     /**

@@ -41,6 +41,7 @@ class ValidatorServiceTest {
         // Object
         val input = ValidatorInput.DtoInput(dto)
 
+
         // Behavior
         every { resolver.execute(input) } returns _strategy
 
@@ -49,7 +50,7 @@ class ValidatorServiceTest {
 
         verifyOrder {
             service["setStrategy"](input)
-            _strategy.validateDto(dto)
+            _strategy.validateDto(input)
         }
     }
 
@@ -66,7 +67,7 @@ class ValidatorServiceTest {
 
         verifyOrder {
             service["setStrategy"](input)
-            _strategy.validateEntity(entity)
+            _strategy.validateEntity(input)
         }
     }
 
@@ -83,7 +84,7 @@ class ValidatorServiceTest {
 
         verifyOrder {
             service["setStrategy"](input)
-            _strategy.validateForCreation(entity)
+            _strategy.validateForCreation(input)
         }
     }
 

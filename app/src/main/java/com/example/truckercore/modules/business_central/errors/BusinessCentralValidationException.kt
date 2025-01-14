@@ -1,6 +1,6 @@
 package com.example.truckercore.modules.business_central.errors
 
-import com.example.truckercore.shared.errors.ValidationException
+import com.example.truckercore.shared.errors.abstractions.ValidationException
 
 /**
  * Custom exception for validation errors related to BusinessCentral.

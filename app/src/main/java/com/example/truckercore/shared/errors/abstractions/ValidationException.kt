@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.errors
+package com.example.truckercore.shared.errors.abstractions
 
 /**
  * Custom exception class used for validation errors.
