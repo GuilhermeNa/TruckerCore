@@ -11,13 +11,14 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Cre
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.expressions.logWarn
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.util.Date
 import javax.inject.Named
 
 internal class MyViewModel(
-    private val repository: CreateBusinessCentralUseCase
+    private val useCase: CreateBusinessCentralUseCase
 ) : ViewModel() {
 
     private fun entity() = BusinessCentral(
@@ -31,7 +32,7 @@ internal class MyViewModel(
 
     fun execute() {
         viewModelScope.launch {
-            repository.execute(entity())
+            useCase.execute(entity()).single()
         }
     }
 

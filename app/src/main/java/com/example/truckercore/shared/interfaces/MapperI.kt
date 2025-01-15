@@ -11,7 +11,7 @@ package com.example.truckercore.shared.interfaces
  * @param D The type of the [Dto] being mapped.
  *
  */
-internal interface MapperI<E, D> {
+internal interface  MapperI<E, D> {
 
     /**
      * Converts an [Entity] to a [Dto].

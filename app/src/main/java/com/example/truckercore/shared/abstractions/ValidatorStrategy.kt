@@ -51,6 +51,7 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
         val className = this.javaClass.simpleName
 
         logError("$className: There are invalid fields when validating the $objectName.")
+
         throw BusinessCentralValidationException(
             "Invalid $objectName. Missing or invalid fields: ${fields.joinToString(", ")}."
         )
@@ -72,6 +73,7 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
         val received = inputClass.simpleName
 
         logError("$className: Awaited input was $expected, and received $received.")
+
         throw UnexpectedValidatorInputException("Awaited input was $expected, and received $received.")
     }
 

@@ -20,8 +20,7 @@ internal class CreateBusinessCentralUseCaseImpl(
     override suspend fun execute(entity: BusinessCentral): Flow<Response<String>> = flow {
         validator.validateForCreation(entity)
         val dto = mapper.toDto(entity)
-        val result = repository.create(dto).single()
-        emit(result)
+        emit(repository.create(dto).single())
     }.catch {
         emit(Response.Error(it as Exception))
     }

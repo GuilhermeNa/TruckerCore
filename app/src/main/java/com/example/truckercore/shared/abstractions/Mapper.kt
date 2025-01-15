@@ -3,6 +3,7 @@ package com.example.truckercore.shared.abstractions
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.MapperI
+import com.example.truckercore.shared.utils.expressions.logError
 
 /**
  * An abstract class responsible for mapping between [Entity] and [Dto] types.
@@ -15,7 +16,7 @@ import com.example.truckercore.shared.interfaces.MapperI
  *
  * @see MapperI
  */
-internal abstract class Mapper<E: Entity, D: Dto>: MapperI<E, D> {
+internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
 
     /**
      * Maps an [Entity] to a [Dto].
@@ -23,7 +24,7 @@ internal abstract class Mapper<E: Entity, D: Dto>: MapperI<E, D> {
      * This method is intended to be overridden by subclasses to define the specific logic of mapping an entity to its corresponding DTO.
      *
      * @param entity The entity to be converted to a DTO.
-     * @return The resulting DTO representation of the given entity.
+     * @return The resulting [Dto] representation of the given [Entity].
      */
     protected abstract fun mapEntityToDto(entity: E): D
 
@@ -33,19 +34,34 @@ internal abstract class Mapper<E: Entity, D: Dto>: MapperI<E, D> {
      * This method is intended to be overridden by subclasses to define the specific logic of mapping a DTO to its corresponding entity.
      *
      * @param dto The DTO to be converted to an entity.
-     * @return The resulting entity representation of the given DTO.
+     * @return The resulting [Entity] representation of the given [Dto].
      */
     protected abstract fun mapDtoToEntity(dto: D): E
 
     /**
      * Handles errors that occur during the mapping process.
      *
-     * This method is intended to be implemented by subclasses to define how mapping errors should be logged or handled.
-     * It is called whenever an exception is thrown during the conversion of an entity to a DTO or vice versa.
+     * This method is called whenever an exception is thrown during the conversion of an entity to a DTO or vice versa.
+     * It allows the caller to decide which exception will be thrown, enabling specific exceptions to be thrown instead of a generic one.
      *
-     * @param exception The exception that was thrown during the mapping operation.
-     * @throws Nothing This method always throws an exception, preventing further execution of the program.
+     * @param receivedException The exception that was thrown during the mapping operation.
+     * @param obj The object ([Entity] or [Dto]) that caused the exception.
+     * @param mappingException The class of the exception to be thrown.
+     *
+     * @throws T The exception specified by the [mappingException] parameter will be thrown.
      */
-    protected abstract fun handleMappingError(exception: Exception): Nothing
+    fun <T : Exception> handleMappingError(
+        receivedException: Exception,
+        obj: Any,
+        mappingException: Class<T>
+    ): Nothing {
+        val message = "Error while mapping a ${obj::class.simpleName} object."
+        logError(message)
+
+        val exceptionInstance = mappingException.getConstructor(String::class.java, Throwable::class.java)
+            .newInstance("$message Obj: $obj", receivedException)
+
+        throw exceptionInstance
+    }
 
 }
