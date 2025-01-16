@@ -14,10 +14,10 @@ internal class StorageFileRepositoryImpl(
     override suspend fun create(dto: StorageFileDto): Flow<Response<String>> =
         firebaseRepository.create(dto)
 
-    override fun update(dto: StorageFileDto): Flow<Response<Unit>> =
+    override suspend fun update(dto: StorageFileDto): Flow<Response<Unit>> =
         firebaseRepository.update(dto)
 
-    override fun delete(id: String): Flow<Response<Unit>> =
+    override suspend fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(id)
 
     override suspend fun entityExists(id: String) = firebaseRepository.entityExists(id)

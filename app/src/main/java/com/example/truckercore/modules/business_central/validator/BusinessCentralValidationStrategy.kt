@@ -43,9 +43,6 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
     override fun processDtoValidationRules(dto: Dto) {
         val invalidFields = mutableListOf<String>()
 
-        if (dto.businessCentralId.isNullOrBlank()) {
-            invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
-        }
         if (dto.id.isNullOrBlank()) {
             invalidFields.add(Field.ID.getName())
         }
@@ -71,9 +68,6 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
     override fun processEntityValidationRules(entity: Entity) {
         val invalidFields = mutableListOf<String>()
 
-        if (entity.businessCentralId.isBlank()) {
-            invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
-        }
         if (entity.id.isNullOrBlank()) {
             invalidFields.add(Field.ID.getName())
         }

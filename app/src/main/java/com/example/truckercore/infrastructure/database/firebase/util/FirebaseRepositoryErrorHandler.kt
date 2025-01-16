@@ -35,7 +35,7 @@ internal object FirebaseRepositoryErrorHandler {
             is FirebaseAuthException -> "Authentication failed. Ensure user is authenticated properly."
             else -> "Unknown error."
         }
-        logError("An error occurred while interacting with firebase. Error: $throwable")
+        logError("An error occurred while interacting with firebase. $message")
         return Response.Error(throwable as Exception)
     }
 

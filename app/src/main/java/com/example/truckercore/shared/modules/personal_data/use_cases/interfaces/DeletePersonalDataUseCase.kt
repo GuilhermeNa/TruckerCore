@@ -4,6 +4,6 @@ import com.example.truckercore.modules.user.entity.User
 
 internal interface DeletePersonalDataUseCase {
 
-    fun execute(user: User, id: String)
+    suspend fun execute(user: User, id: String)
 
 }

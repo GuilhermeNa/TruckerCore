@@ -5,6 +5,7 @@ import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.errors.BusinessCentralMappingException
 import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
@@ -13,13 +14,13 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
     override fun toDto(entity: BusinessCentral): BusinessCentralDto = try {
         mapEntityToDto(entity)
     } catch (e: Exception) {
-        handleMappingError(e, entity, BusinessCentralMappingException::class.java)
+        handleMappingError(e, entity)
     }
 
     override fun toEntity(dto: BusinessCentralDto): BusinessCentral = try {
         mapDtoToEntity(dto)
     } catch (e: Exception) {
-        handleMappingError(e, dto, BusinessCentralMappingException::class.java)
+        handleMappingError(e, dto)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -43,6 +44,12 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
             lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
             persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!)
         )
+    }
+
+    override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
+        val message = "Error while mapping a ${obj::class.simpleName} object."
+        logError(message)
+        throw BusinessCentralMappingException(message = "$message Obj: $obj", receivedException)
     }
 
 }

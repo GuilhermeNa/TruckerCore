@@ -32,9 +32,6 @@ internal object TestBusinessCentralDataProvider {
     )
 
     fun arrInvalidDtosForValidationRules() = arrayOf(
-        getBaseDto().copy(businessCentralId = null),
-        getBaseDto().copy(businessCentralId = ""),
-        getBaseDto().copy(businessCentralId = " "),
         getBaseDto().copy(id = null),
         getBaseDto().copy(id = ""),
         getBaseDto().copy(id = " "),
@@ -50,8 +47,6 @@ internal object TestBusinessCentralDataProvider {
     )
 
     fun arrInvalidEntitiesForValidationRules() = arrayOf(
-        getBaseEntity().copy(businessCentralId = ""),
-        getBaseEntity().copy(businessCentralId = " "),
         getBaseEntity().copy(id = null),
         getBaseEntity().copy(id = ""),
         getBaseEntity().copy(id = " "),

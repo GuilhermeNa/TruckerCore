@@ -13,7 +13,7 @@ internal class FirebaseConverterImpl<T>(private val clazz: Class<T>) : FirebaseC
 
     override fun processTask(task: Task<Void>, document: DocumentReference?): Response<*> {
         return document?.let {
-            processStringTask(task, it)
+            processDocumentTask(task, it)
         } ?: processUnitTask(task)
     }
 
@@ -35,11 +35,11 @@ internal class FirebaseConverterImpl<T>(private val clazz: Class<T>) : FirebaseC
 
     override fun processEntityExistence(documentSnapShot: DocumentSnapshot) =
         if (documentSnapShot.exists()) Response.Success(true)
-        else Response.Empty
+        else Response.Success(false)
 
     //----------------------------------------------------------------------------------------------
 
-    private fun processStringTask(task: Task<Void>, document: DocumentReference): Response<String> {
+    private fun processDocumentTask(task: Task<Void>, document: DocumentReference): Response<String> {
         task.exception?.let {
             return Response.Error(exception = it)
         }

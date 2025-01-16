@@ -6,6 +6,8 @@ import io.mockk.mockkStatic
 
 fun mockStaticLog() {
     mockkStatic(Log::class)
+    every { Log.w(any<String>(), any<String>()) } returns 0
+    every { Log.w(any<String>(), any<Throwable>()) } returns 0
     every { Log.e(any(), any()) } returns 0
     every { Log.d(any(), any()) } returns 0
 }

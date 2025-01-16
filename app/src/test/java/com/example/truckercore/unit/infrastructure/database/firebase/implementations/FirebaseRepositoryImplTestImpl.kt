@@ -229,10 +229,10 @@ class FirebaseRepositoryImplTestImpl {
     }
 
     @Test
-    fun `entityExists() should return Response Empty when the document is null`() = runTest {
+    fun `entityExists() should return false response when the document is null`() = runTest {
         // Object
         val id = "id"
-        val response = Response.Empty
+        val response = Response.Success(false)
 
         // Behaviors
         every {

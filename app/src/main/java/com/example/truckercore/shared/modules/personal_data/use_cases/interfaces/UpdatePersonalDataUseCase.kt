@@ -5,6 +5,6 @@ import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
 
 internal interface UpdatePersonalDataUseCase: PersonalDataUseCase  {
 
-    fun execute(user: User, dto: PersonalDataDto)
+    suspend fun execute(user: User, dto: PersonalDataDto)
 
 }

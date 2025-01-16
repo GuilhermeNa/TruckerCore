@@ -201,9 +201,9 @@ class FirebaseConverterImplTest {
     }
 
     @Test
-    fun `processEntityExistence() should return empty when document does not exist`() {
+    fun `processEntityExistence() should return false response when document does not exist`() {
         // Objects
-        val response = Response.Empty
+        val response = Response.Success(false)
 
         // Behavior
         every { documentSnapShot.exists() } returns false

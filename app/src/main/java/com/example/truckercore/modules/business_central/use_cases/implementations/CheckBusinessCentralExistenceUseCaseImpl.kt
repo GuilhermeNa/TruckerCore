@@ -7,6 +7,7 @@ import com.example.truckercore.infrastructure.security.permissions.service.Permi
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CheckBusinessCentralExistenceUseCase
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logWarn
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.single
 
 internal class CheckBusinessCentralExistenceUseCaseImpl(
     private val repository: BusinessCentralRepository,
-    private val service: PermissionService
+    private val permissionService: PermissionService
 ) : CheckBusinessCentralExistenceUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Boolean>> = flow {
@@ -32,18 +33,16 @@ internal class CheckBusinessCentralExistenceUseCaseImpl(
         emit(result)
 
     }.catch {
-        val result = handleUnexpectedError(it)
-        emit(result)
+        emit(handleUnexpectedError(it))
     }
 
     private fun userHasPermission(user: User): Boolean =
-        service.canPerformAction(user, Permission.VIEW_BUSINESS_CENTRAL)
+        permissionService.canPerformAction(user, Permission.VIEW_BUSINESS_CENTRAL)
 
     private fun processResponse(response: Response<Boolean>): Response<Boolean> {
         return when (response) {
             is Response.Success -> handleSuccessResponse(response)
-            is Response.Error -> handleErrorResponse(response)
-            is Response.Empty -> handleEmptyResponse(response)
+            else -> handleFailureResponse(response)
         }
     }
 
@@ -51,23 +50,24 @@ internal class CheckBusinessCentralExistenceUseCaseImpl(
         return response
     }
 
-    private fun handleErrorResponse(response: Response.Error): Response.Error {
-        logError("Error while handling with database response")
-        return response
-    }
-
-    private fun handleEmptyResponse(response: Response.Empty): Response.Empty {
-        logWarn("The database response came back empty.")
-        return response
+    private fun handleFailureResponse(response: Response<Boolean>): Response.Error {
+        return if (response is Response.Error) {
+            logError("${this.javaClass.simpleName}: Received an error response from database")
+            response
+        } else {
+            val message = "The database response came back empty."
+            logWarn("${this.javaClass.simpleName}: $message")
+            Response.Error(ObjectNotFoundException())
+        }
     }
 
     private fun handleUnexpectedError(throwable: Throwable): Response.Error {
-        logError("An unexpected error occurred during execution: $throwable")
+        logError("${this.javaClass.simpleName}: An unexpected error occurred during execution: $throwable")
         return Response.Error(exception = throwable as Exception)
     }
 
     private fun handleUnauthorizedPermission(user: User, id: String): Response.Error {
-        logWarn("Unauthorized access attempt by user: ${user.id}, for BusinessCentral ID: $id")
+        logWarn("${this.javaClass.simpleName}: Unauthorized access attempt by user: ${user.id}, for BusinessCentral ID: $id")
         return Response.Error(
             exception = UnauthorizedAccessException(
                 "User does not have permission to view the business central."

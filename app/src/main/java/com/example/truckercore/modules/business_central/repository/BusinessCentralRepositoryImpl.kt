@@ -10,10 +10,10 @@ internal class BusinessCentralRepositoryImpl(
     override suspend fun create(dto: BusinessCentralDto) =
         firebaseRepository.create(dto)
 
-    override fun update(dto: BusinessCentralDto) =
+    override suspend fun update(dto: BusinessCentralDto) =
         firebaseRepository.update(dto)
 
-    override fun delete(id: String) =
+    override suspend fun delete(id: String) =
         firebaseRepository.delete(id)
 
     override suspend fun entityExists(id: String) =

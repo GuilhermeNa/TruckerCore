@@ -10,6 +10,6 @@ package com.example.truckercore.shared.errors
  * @param message An optional message providing details about why the entity was not found. If no message is provided,
  *                the default value is `null`.
  *
- * @constructor Creates a new instance of [EntityNotFoundException] with the optional message.
+ * @constructor Creates a new instance of [ObjectNotFoundException] with the optional message.
  */
-class EntityNotFoundException(message: String? = null) : Exception(message)
+class ObjectNotFoundException(message: String? = null) : Exception(message)

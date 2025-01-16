@@ -8,7 +8,7 @@ internal class DeletePersonalDataUseCaseImpl(
     private val repository: PersonalDataRepository
 ) : DeletePersonalDataUseCase {
 
-    override fun execute(user: User, id: String) {
+    override suspend fun execute(user: User, id: String) {
 
         repository.delete(id)
     }

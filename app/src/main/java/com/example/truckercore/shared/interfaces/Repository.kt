@@ -19,14 +19,14 @@ internal interface Repository<T: Dto> {
      *
      * @param dto The data transfer object (DTO) containing the updated information.
      */
-    fun update(dto: T): Flow<Response<Unit>>
+    suspend fun update(dto: T): Flow<Response<Unit>>
 
     /**
      * Deletes an Entity entity from the database by its ID.
      *
      * @param id The unique identifier (ID) of the entity to be deleted.
      */
-    fun delete(id: String): Flow<Response<Unit>>
+    suspend fun delete(id: String): Flow<Response<Unit>>
 
     /**
      * Checks if an Entity exists in the database by its ID.

@@ -12,6 +12,7 @@ import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.tasks.await
 
 internal class FirebaseRepositoryImpl<T : Dto>(
@@ -20,7 +21,7 @@ internal class FirebaseRepositoryImpl<T : Dto>(
     private val collection: Collection,
 ) : FirebaseRepository<T> {
 
-    override fun create(dto: T): Flow<Response<String>> = flow {
+    override suspend fun create(dto: T): Flow<Response<String>> = flow {
         val document = queryBuilder.newDocument(collection.getName())
         val newDto = dto.initializeId(document.id)
         var result: Response<String>? = null
@@ -36,7 +37,7 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         emit(errorResponse)
     }
 
-    override fun update(dto: T): Flow<Response<Unit>> = flow {
+    override suspend fun update(dto: T): Flow<Response<Unit>> = flow {
         val document = queryBuilder.getDocumentReference(collection.getName(), dto.id!!)
         var result: Response<Unit>? = null
 
@@ -51,7 +52,7 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         emit(errorResponse)
     }
 
-    override fun delete(id: String): Flow<Response<Unit>> = flow {
+    override suspend fun delete(id: String): Flow<Response<Unit>> = flow {
         val document = queryBuilder.getDocumentReference(collection.getName(), id)
         var result: Response<Unit>? = null
 
@@ -72,7 +73,7 @@ internal class FirebaseRepositoryImpl<T : Dto>(
 
         val response = documentReference?.let { dss ->
             converter.processEntityExistence(dss)
-        } ?: Response.Empty
+        } ?: Response.Success(false)
 
         emit(response)
 

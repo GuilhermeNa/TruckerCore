@@ -1,9 +1,9 @@
 package com.example.truckercore.shared.abstractions
 
+import com.example.truckercore.shared.errors.MappingException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.MapperI
-import com.example.truckercore.shared.utils.expressions.logError
 
 /**
  * An abstract class responsible for mapping between [Entity] and [Dto] types.
@@ -46,22 +46,9 @@ internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
      *
      * @param receivedException The exception that was thrown during the mapping operation.
      * @param obj The object ([Entity] or [Dto]) that caused the exception.
-     * @param mappingException The class of the exception to be thrown.
      *
-     * @throws T The exception specified by the [mappingException] parameter will be thrown.
+     * @throws [MappingException]
      */
-    fun <T : Exception> handleMappingError(
-        receivedException: Exception,
-        obj: Any,
-        mappingException: Class<T>
-    ): Nothing {
-        val message = "Error while mapping a ${obj::class.simpleName} object."
-        logError(message)
-
-        val exceptionInstance = mappingException.getConstructor(String::class.java, Throwable::class.java)
-            .newInstance("$message Obj: $obj", receivedException)
-
-        throw exceptionInstance
-    }
+    protected abstract fun handleMappingError(receivedException: Exception, obj: Any): Nothing
 
 }

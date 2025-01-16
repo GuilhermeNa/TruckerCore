@@ -9,7 +9,7 @@ internal class UpdatePersonalDataUseCaseImpl(
     override val repository: PersonalDataRepository
 ) : UpdatePersonalDataUseCase {
 
-    override fun execute(user: User, dto: PersonalDataDto) {
+    override suspend fun execute(user: User, dto: PersonalDataDto) {
 
         repository.update(dto)
     }

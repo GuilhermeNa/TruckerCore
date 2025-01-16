@@ -47,14 +47,10 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
      * @throws BusinessCentralValidationException if there are invalid fields.
      */
     protected fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
-        val objectName = obj.simpleName
-        val className = this.javaClass.simpleName
-
-        logError("$className: There are invalid fields when validating the $objectName.")
-
-        throw BusinessCentralValidationException(
-            "Invalid $objectName. Missing or invalid fields: ${fields.joinToString(", ")}."
-        )
+        val message = "Invalid ${obj.simpleName}." +
+                " Missing or invalid fields: ${fields.joinToString(", ")}."
+        logError("${this.javaClass.simpleName}: $message")
+        throw BusinessCentralValidationException(message)
     }
 
     /**
@@ -68,13 +64,10 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
         expectedClass: E,
         inputClass: I
     ) {
-        val className = this.javaClass.simpleName
-        val expected = expectedClass.simpleName
-        val received = inputClass.simpleName
-
-        logError("$className: Awaited input was $expected, and received $received.")
-
-        throw UnexpectedValidatorInputException("Awaited input was $expected, and received $received.")
+        val message = "Awaited input was ${expectedClass.simpleName}, " +
+                "and received ${inputClass.simpleName}."
+        logError("${this.javaClass.simpleName}: $message")
+        throw UnexpectedValidatorInputException(message)
     }
 
 }

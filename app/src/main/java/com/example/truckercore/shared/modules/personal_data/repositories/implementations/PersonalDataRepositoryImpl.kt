@@ -14,11 +14,11 @@ internal class PersonalDataRepositoryImpl(
     override suspend fun create(dto: PersonalDataDto): Flow<Response<String>> = TODO()
        // firebaseRepository.create(dto)
 
-    override fun update(dto: PersonalDataDto): Flow<Response<Unit>> =
+    override suspend fun update(dto: PersonalDataDto): Flow<Response<Unit>> =
         firebaseRepository.update(dto)
 
 
-    override fun delete(id: String): Flow<Response<Unit>> =
+    override suspend fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(id)
 
     override suspend fun entityExists(id: String) =

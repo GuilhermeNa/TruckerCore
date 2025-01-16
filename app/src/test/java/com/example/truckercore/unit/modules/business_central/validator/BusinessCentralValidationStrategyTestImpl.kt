@@ -119,9 +119,7 @@ internal class BusinessCentralValidationStrategyTestImpl {
             override val creationDate: Date? = null
             override val lastUpdate: Date? = null
             override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto {
-                TODO()
-            }
+            override fun initializeId(newId: String): Dto { TODO() }
         }
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 

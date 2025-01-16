@@ -13,10 +13,6 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Cre
 import com.example.truckercore.modules.business_central.use_cases.interfaces.DeleteBusinessCentralUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralByIdUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.UpdateBusinessCentralUseCase
-import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.shared.abstractions.ValidatorStrategy
-import com.example.truckercore.shared.services.ValidatorService
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val businessCentralModule = module {
@@ -25,13 +21,13 @@ val businessCentralModule = module {
     single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<UpdateBusinessCentralUseCase> {
-        UpdateBusinessCentralUseCaseImpl(get(), get(), get(), get())
+        UpdateBusinessCentralUseCaseImpl(get(), get(), get(), get(), get())
     }
     single<CheckBusinessCentralExistenceUseCase> {
         CheckBusinessCentralExistenceUseCaseImpl(get(), get())
     }
     single<GetBusinessCentralByIdUseCase> {
-        GetBusinessCentralByIdUseCaseImpl(get(), get(), get())
+        GetBusinessCentralByIdUseCaseImpl(get(), get(), get(), get())
     }
 }
 
