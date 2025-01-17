@@ -70,7 +70,7 @@ internal class BusinessCentralMapperITestImpl {
         val mockk = spyk(mapper, recordPrivateCalls = true)
 
         // Behavior
-        every { mockk["mapEntityToDto"](entity) } throws NullPointerException("Simulated exception")
+        every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
 
         // Call
       assertThrows<BusinessCentralMappingException> {

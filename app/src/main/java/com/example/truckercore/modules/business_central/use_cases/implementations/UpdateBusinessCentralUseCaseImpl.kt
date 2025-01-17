@@ -73,7 +73,7 @@ internal class UpdateBusinessCentralUseCaseImpl(
     private fun handleNonExistentObject(entity: BusinessCentral): Response.Error {
         logError("${javaClass.simpleName}: Trying to update a non-existent object.")
         return Response.Error(
-            ObjectNotFoundException("Trying to update a non-existent object: $entity")
+            ObjectNotFoundException("Trying to update a non-persisted object: $entity")
         )
     }
 

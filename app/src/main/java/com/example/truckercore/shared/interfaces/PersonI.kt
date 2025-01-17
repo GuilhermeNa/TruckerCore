@@ -6,7 +6,7 @@ import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
 /**
  * Interface representing common properties of a person in the system.
  */
-internal interface PersonI: Entity {
+internal interface PersonI {
 
     /**
      * The unique identifier of the user. Can be null if not assigned.

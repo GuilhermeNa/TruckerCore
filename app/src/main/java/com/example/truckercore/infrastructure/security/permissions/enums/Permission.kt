@@ -1,5 +1,8 @@
 package com.example.truckercore.infrastructure.security.permissions.enums
 
+import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.InvalidEnumParameterException
+
 /**
  * Enum class representing various permissions that can be assigned to users or services.
  *
@@ -75,6 +78,19 @@ enum class Permission {
     /**
      * Permission to view personal data records.
      */
-    VIEW_PERSONAL_DATA
+    VIEW_PERSONAL_DATA;
 
+    companion object {
+
+        fun convertString(nStr: String?): Permission {
+            return nStr?.let { str ->
+                if (enumExists(str)) Permission.valueOf(str)
+                else throw InvalidEnumParameterException("Received an invalid string for Permission: $nStr.")
+            } ?: throw NullPointerException("Received a null string and can not convert Permission.")
+        }
+
+        fun enumExists(str: String): Boolean =
+            entries.any { it.name == str }
+
+    }
 }

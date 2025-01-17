@@ -12,7 +12,6 @@ import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.tasks.await
 
 internal class FirebaseRepositoryImpl<T : Dto>(

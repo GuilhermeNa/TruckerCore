@@ -8,12 +8,11 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
+import com.example.truckercore.modules.user.dto.UserDto
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val firebaseModule = module {
@@ -29,6 +28,16 @@ val firebaseModule = module {
             get(),
             get(),
             Collection.CENTRAL
+        )
+    }
+    single<FirebaseConverter<UserDto>> {
+        FirebaseConverterImpl(UserDto::class.java)
+    }
+    single<FirebaseRepository<UserDto>> {
+        FirebaseRepositoryImpl<UserDto>(
+            get(),
+            get(),
+            Collection.USER
         )
     }
 }

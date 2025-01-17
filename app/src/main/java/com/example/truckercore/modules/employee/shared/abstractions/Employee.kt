@@ -4,6 +4,7 @@ import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.modules.employee.shared.modules.benefits.entities.EmployeeBenefits
 import com.example.truckercore.modules.employee.shared.modules.compensation.entities.Compensation
 import com.example.truckercore.modules.employee.shared.modules.employee_contract.entities.EmployeeContract
+import com.example.truckercore.shared.abstractions.Person
 import com.example.truckercore.shared.interfaces.PersonI
 
 /**
@@ -19,4 +20,4 @@ abstract class Employee(
     open val benefits: EmployeeBenefits?,
     open val compensation: Compensation?,
     open val contractInfo: EmployeeContract?
-) : PersonI
+) : Person()

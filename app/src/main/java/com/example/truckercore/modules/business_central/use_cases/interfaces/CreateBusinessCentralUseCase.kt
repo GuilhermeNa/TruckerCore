@@ -17,7 +17,7 @@ internal interface CreateBusinessCentralUseCase {
      * Executes the use case to create a new [BusinessCentral] entity.
      *
      * @param entity The [BusinessCentral] entity to be created. This object contains the data to be stored in the system.
-     * @return A string representing the unique identifier of the newly created [BusinessCentral] entity.
+     * @return A [Response] string representing the unique identifier of the newly created [BusinessCentral] entity.
      */
     suspend fun execute(entity: BusinessCentral): Flow<Response<String>>
 

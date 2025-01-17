@@ -12,20 +12,20 @@ import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDto>() {
 
     override fun toDto(entity: BusinessCentral): BusinessCentralDto = try {
-        mapEntityToDto(entity)
+        handleEntityMapping(entity)
     } catch (e: Exception) {
         handleMappingError(e, entity)
     }
 
     override fun toEntity(dto: BusinessCentralDto): BusinessCentral = try {
-        mapDtoToEntity(dto)
+        handleDtoMapping(dto)
     } catch (e: Exception) {
         handleMappingError(e, dto)
     }
 
     //----------------------------------------------------------------------------------------------
 
-    override fun mapEntityToDto(entity: BusinessCentral) =
+    override fun handleEntityMapping(entity: BusinessCentral) =
         BusinessCentralDto(
             businessCentralId = entity.businessCentralId,
             id = entity.id,
@@ -35,7 +35,7 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
             persistenceStatus = entity.persistenceStatus.name
         )
 
-    override fun mapDtoToEntity(dto: BusinessCentralDto): BusinessCentral {
+    override fun handleDtoMapping(dto: BusinessCentralDto): BusinessCentral {
         return BusinessCentral(
             businessCentralId = dto.businessCentralId!!,
             id = dto.id!!,

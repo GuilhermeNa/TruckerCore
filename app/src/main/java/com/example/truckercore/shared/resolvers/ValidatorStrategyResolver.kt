@@ -3,6 +3,9 @@ package com.example.truckercore.shared.resolvers
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.modules.user.validator.UserValidationStrategy
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.errors.StrategyNotFoundException
 import com.example.truckercore.shared.sealeds.ValidatorInput
@@ -19,6 +22,8 @@ internal class ValidatorStrategyResolver {
     private val strategies = mapOf(
         Pair(BusinessCentral::class.java, BusinessCentralValidationStrategy()),
         Pair(BusinessCentralDto::class.java, BusinessCentralValidationStrategy()),
+        Pair(User::class.java, UserValidationStrategy()),
+        Pair(UserDto::class.java, UserValidationStrategy()),
     )
 
     /**

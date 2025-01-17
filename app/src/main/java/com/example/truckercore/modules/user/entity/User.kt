@@ -1,8 +1,8 @@
 package com.example.truckercore.modules.user.entity
 
-import android.app.Person
 import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.shared.abstractions.Person
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Entity
 import java.time.LocalDateTime
@@ -29,6 +29,10 @@ data class User(
 
     fun revokePermission(user: User, permission: Permission): User {
         return user.copy(permissions = user.permissions - permission)
+    }
+
+    fun grantsAccess(person: Person): User {
+        TODO()
     }
 
 }

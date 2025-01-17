@@ -26,7 +26,7 @@ internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
      * @param entity The entity to be converted to a DTO.
      * @return The resulting [Dto] representation of the given [Entity].
      */
-    protected abstract fun mapEntityToDto(entity: E): D
+    protected abstract fun handleEntityMapping(entity: E): D
 
     /**
      * Maps a [Dto] to an [Entity].
@@ -36,7 +36,7 @@ internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
      * @param dto The DTO to be converted to an entity.
      * @return The resulting [Entity] representation of the given [Dto].
      */
-    protected abstract fun mapDtoToEntity(dto: D): E
+    protected abstract fun handleDtoMapping(dto: D): E
 
     /**
      * Handles errors that occur during the mapping process.

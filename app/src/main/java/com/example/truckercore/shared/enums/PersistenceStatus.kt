@@ -34,9 +34,9 @@ enum class PersistenceStatus {
 
         fun convertString(nStr: String?): PersistenceStatus {
             return nStr?.let { str ->
-                if (entries.any { it.name == str }) valueOf(str)
-                else throw InvalidEnumParameterException()
-            } ?: throw IllegalArgumentException()
+                if (enumExists(str)) valueOf(str)
+                else throw InvalidEnumParameterException("Received an invalid string for PersistenceStatus: $nStr.")
+            } ?: throw NullPointerException("Received a null string and can not convert PersistenceStatus.")
         }
 
         fun enumExists(str: String): Boolean =

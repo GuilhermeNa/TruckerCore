@@ -16,10 +16,10 @@ internal object DefaultPermissions {
      * @param user The user whose permissions will be retrieved.
      * @return A set of permissions granted to the user based on their level.
      */
-    fun get(user: User): Set<Permission> {
-        return when (user.level) {
+    fun get(level: Level): Set<Permission> {
+        return when (level) {
             Level.MASTER -> masterPermissions
-            Level.ADMIN -> adminPermissions
+            Level.MANAGER -> adminPermissions
             Level.MODERATOR -> moderatorPermissions
             Level.DRIVER -> userPermissions
         }

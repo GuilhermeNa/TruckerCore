@@ -25,6 +25,8 @@ enum class Field(private val fieldName: String) {
     NAME("name"),
     NUMBER("number"),
     EMISSION_DATE("emissionDate"),
+    LEVEL("level"),
+    PERMISSIONS("permissions"),
     PERSISTENCE_STATUS("persistenceStatus");
 
     fun getName(): String = fieldName
