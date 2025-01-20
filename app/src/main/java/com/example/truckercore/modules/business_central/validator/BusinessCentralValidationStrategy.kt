@@ -3,11 +3,14 @@ package com.example.truckercore.modules.business_central.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.expressions.logError
+import kotlin.reflect.KClass
 
 internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
 
@@ -95,6 +98,13 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         }
 
         if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+    }
+
+    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
+        val message = "Invalid ${obj.simpleName}." +
+                " Missing or invalid fields: ${fields.joinToString(", ")}."
+        logError("${this.javaClass.simpleName}: $message")
+        throw BusinessCentralValidationException(message)
     }
 
 }

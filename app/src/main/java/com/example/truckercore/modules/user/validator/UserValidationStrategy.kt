@@ -5,11 +5,14 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.modules.user.errors.UserValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.expressions.logError
+import kotlin.reflect.KClass
 
 internal class UserValidationStrategy : ValidatorStrategy() {
 
@@ -43,8 +46,6 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         dto as UserDto
         val invalidFields = mutableListOf<String>()
 
-        if (dto.businessCentralId.isNullOrBlank()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
-
         if (dto.id.isNullOrBlank()) invalidFields.add(Field.ID.getName())
 
         if (dto.lastModifierId.isNullOrBlank()) invalidFields.add(Field.LAST_MODIFIER_ID.getName())
@@ -53,16 +54,18 @@ internal class UserValidationStrategy : ValidatorStrategy() {
 
         if (dto.lastUpdate == null) invalidFields.add(Field.LAST_UPDATE.getName())
 
-        if (dto.persistenceStatus.isNullOrBlank() || dto.persistenceStatus == PersistenceStatus.PENDING.name || !PersistenceStatus.enumExists(
-                dto.persistenceStatus!!
-            )
+        if (dto.persistenceStatus.isNullOrBlank() ||
+            dto.persistenceStatus == PersistenceStatus.PENDING.name ||
+            !PersistenceStatus.enumExists(dto.persistenceStatus!!)
         ) invalidFields.add(Field.PERSISTENCE_STATUS.getName())
 
-        if (dto.level.isNullOrBlank() || !Level.enumExists(dto.level)) invalidFields.add(Field.LEVEL.getName())
+        if (dto.level.isNullOrBlank() ||
+            !Level.enumExists(dto.level)
+        ) invalidFields.add(Field.LEVEL.getName())
 
-        if (dto.permissions!!.isEmpty() || dto.permissions.any { !Permission.enumExists(it) }) invalidFields.add(
-            Field.PERMISSIONS.getName()
-        )
+        if (dto.permissions.isNullOrEmpty() ||
+            dto.permissions.any { !Permission.enumExists(it) }
+        ) invalidFields.add(Field.PERMISSIONS.getName())
 
         if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
     }
@@ -71,7 +74,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         entity as User
         val invalidFields = mutableListOf<String>()
 
-        if (entity.businessCentralId.isBlank()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
+        if(entity.businessCentralId.isNotEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
 
         if (entity.id.isNullOrBlank()) invalidFields.add(Field.ID.getName())
 
@@ -88,17 +91,24 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         entity as User
         val invalidFields = mutableListOf<String>()
 
-        if (entity.businessCentralId.isBlank()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
+        if (entity.businessCentralId.isNotEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
 
-        if (!entity.id.isNullOrBlank()) invalidFields.add(Field.ID.getName())
+        if (entity.id != null) invalidFields.add(Field.ID.getName())
 
         if (entity.lastModifierId.isBlank()) invalidFields.add(Field.LAST_MODIFIER_ID.getName())
 
         if (entity.persistenceStatus != PersistenceStatus.PENDING) invalidFields.add(Field.PERSISTENCE_STATUS.getName())
 
-        if(entity.permissions.isEmpty()) invalidFields.add(Field.PERMISSIONS.getName())
+        if (entity.permissions.isEmpty()) invalidFields.add(Field.PERMISSIONS.getName())
 
         if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+    }
+
+    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
+        val message = "Invalid ${obj.simpleName}." +
+                " Missing or invalid fields: ${fields.joinToString(", ")}."
+        logError("${this.javaClass.simpleName}: $message")
+        throw UserValidationException(message)
     }
 
 }

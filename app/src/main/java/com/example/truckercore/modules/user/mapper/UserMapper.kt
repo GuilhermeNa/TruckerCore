@@ -40,7 +40,7 @@ internal class UserMapper : Mapper<User, UserDto>() {
 
     override fun handleDtoMapping(dto: UserDto) = User(
         businessCentralId = dto.businessCentralId!!,
-        id = dto.id,
+        id = dto.id!!,
         lastModifierId = dto.lastModifierId!!,
         creationDate = dto.creationDate!!.toLocalDateTime(),
         lastUpdate = dto.lastUpdate!!.toLocalDateTime(),

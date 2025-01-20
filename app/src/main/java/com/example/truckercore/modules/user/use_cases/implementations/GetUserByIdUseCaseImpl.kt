@@ -29,10 +29,11 @@ internal class GetUserByIdUseCaseImpl(
     override suspend fun execute(user: User, id: String): Flow<Response<User>> = flow {
         id.validateIsNotBlank(Field.ID.name)
 
-        val result = if (userHasPermission(user)) {
-            val response = repository.fetchById(id).single()
-            processResponse(response)
-        } else handleUnauthorizedPermission(user, id)
+        val result =
+            if (userHasPermission(user)) {
+                val response = repository.fetchById(id).single()
+                processResponse(response)
+            } else handleUnauthorizedPermission(user, id)
 
         emit(result)
 

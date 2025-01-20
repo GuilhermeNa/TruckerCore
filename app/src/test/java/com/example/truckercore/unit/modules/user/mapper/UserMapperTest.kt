@@ -1,42 +1,44 @@
-package com.example.truckercore.unit.modules.business_central.mapper
+package com.example.truckercore.unit.modules.user.mapper
 
-import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.business_central.errors.BusinessCentralMappingException
-import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
+import com.example.truckercore.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.modules.user.errors.UserMappingException
+import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 import io.mockk.every
 import io.mockk.spyk
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-internal class BusinessCentralMapperITestImpl {
+internal class UserMapperTest {
 
-    private lateinit var mapper: BusinessCentralMapper
-    private lateinit var entity: BusinessCentral
-    private lateinit var dto: BusinessCentralDto
+    private lateinit var mapper: UserMapper
+    private lateinit var entity: User
+    private lateinit var dto: UserDto
 
     companion object {
         @JvmStatic
-        fun getInvalidDtos(): Array<BusinessCentralDto> {
-            return TestBusinessCentralDataProvider.arrInvalidDtos()
+        fun getInvalidDtos(): Array<UserDto> {
+            return TestUserDataProvider.arrInvalidDtos()
         }
     }
 
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        mapper = BusinessCentralMapper()
-        entity = TestBusinessCentralDataProvider.getBaseEntity()
-        dto = TestBusinessCentralDataProvider.getBaseDto()
+        mapper = UserMapper()
+        entity = TestUserDataProvider.getBaseEntity()
+        dto = TestUserDataProvider.getBaseDto()
     }
 
     @Test
@@ -51,6 +53,8 @@ internal class BusinessCentralMapperITestImpl {
         assertEquals(entity.creationDate.toDate(), createdDto.creationDate)
         assertEquals(entity.lastUpdate.toDate(), createdDto.lastUpdate)
         assertEquals(entity.persistenceStatus.name, createdDto.persistenceStatus)
+        assertEquals(entity.level.name, createdDto.level)
+        assertEquals(entity.permissions.map { it.name }, createdDto.permissions)
     }
 
     @Test
@@ -68,10 +72,12 @@ internal class BusinessCentralMapperITestImpl {
             dto.persistenceStatus?.let { PersistenceStatus.valueOf(it) },
             createdEntity.persistenceStatus
         )
+        assertEquals(Level.convertString(dto.level), createdEntity.level)
+        assertEquals(dto.permissions?.map { Permission.convertString(it) }?.toSet(), createdEntity.permissions)
     }
 
     @Test
-    fun `toDto() should throw BusinessCentralMappingException when there are errors`() {
+    fun `toDto() should throw UserMappingException when there are errors`() {
         // Object
         val mockk = spyk(mapper, recordPrivateCalls = true)
 
@@ -79,18 +85,17 @@ internal class BusinessCentralMapperITestImpl {
         every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
 
         // Call
-      assertThrows<BusinessCentralMappingException> {
+        assertThrows<UserMappingException> {
             mockk.toDto(entity)
         }
-
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw BusinessCentralMappingException when there are errors`(
-        pDto: BusinessCentralDto
+    fun `toEntity() should throw UserMappingException when there are errors`(
+        pDto: UserDto
     ) {
-       assertThrows<BusinessCentralMappingException> {
+        assertThrows<UserMappingException> {
             mapper.toEntity(pDto)
         }
     }

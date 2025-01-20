@@ -11,7 +11,7 @@ import java.util.Date
 internal object TestUserDataProvider {
 
     fun getBaseEntity() = User(
-        businessCentralId = "masterUid",
+        businessCentralId = "",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = LocalDateTime.now(),
@@ -22,7 +22,7 @@ internal object TestUserDataProvider {
     )
 
     fun getBaseDto() = UserDto(
-        businessCentralId = "masterUid",
+        businessCentralId = "",
         id = "id",
         lastModifierId = "lastModifierId",
         creationDate = Date(),
@@ -30,6 +30,77 @@ internal object TestUserDataProvider {
         persistenceStatus = PersistenceStatus.PERSISTED.name,
         level = Level.MASTER.name,
         permissions = listOf(Permission.VIEW_USER.name, Permission.CREATE_USER.name)
+    )
+
+    fun arrInvalidDtos() = arrayOf(
+        getBaseDto().copy(businessCentralId = null),
+        getBaseDto().copy(id = null),
+        getBaseDto().copy(lastModifierId = null),
+        getBaseDto().copy(creationDate = null),
+        getBaseDto().copy(lastUpdate = null),
+        getBaseDto().copy(persistenceStatus = null),
+        getBaseDto().copy(level = null),
+        getBaseDto().copy(permissions = null),
+    )
+
+    fun arrValidDtosForValidationRules() = arrayOf(
+        getBaseDto(),
+        getBaseDto().copy(persistenceStatus = PersistenceStatus.ARCHIVED.name)
+    )
+
+    fun arrInvalidDtosForValidationRules() = arrayOf(
+        getBaseDto().copy(id = null),
+        getBaseDto().copy(id = ""),
+        getBaseDto().copy(id = " "),
+        getBaseDto().copy(lastModifierId = null),
+        getBaseDto().copy(lastModifierId = ""),
+        getBaseDto().copy(lastModifierId = " "),
+        getBaseDto().copy(creationDate = null),
+        getBaseDto().copy(lastUpdate = null),
+        getBaseDto().copy(persistenceStatus = null),
+        getBaseDto().copy(persistenceStatus = ""),
+        getBaseDto().copy(persistenceStatus = " "),
+        getBaseDto().copy(persistenceStatus = "INVALID_VALUE"),
+        getBaseDto().copy(persistenceStatus = "PENDING"),
+        getBaseDto().copy(level = null),
+        getBaseDto().copy(level = ""),
+        getBaseDto().copy(level = " "),
+        getBaseDto().copy(level = "INVALID"),
+        getBaseDto().copy(permissions = null),
+        getBaseDto().copy(permissions = emptyList()),
+        getBaseDto().copy(permissions = listOf("INVALID_VALUE"))
+    )
+
+    fun arrValidEntitiesForValidationRules() = arrayOf(
+        getBaseEntity(),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.ARCHIVED),
+    )
+
+    fun arrInvalidEntitiesForValidationRules() = arrayOf(
+        getBaseEntity().copy(businessCentralId = "INVALID_VALUE"),
+        getBaseEntity().copy(id = null),
+        getBaseEntity().copy(id = ""),
+        getBaseEntity().copy(id = " "),
+        getBaseEntity().copy(lastModifierId = ""),
+        getBaseEntity().copy(lastModifierId = " "),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.PENDING),
+        getBaseEntity().copy(permissions = emptySet())
+    )
+
+    fun arrValidEntitiesForCreationRules() = arrayOf(
+        getBaseEntity().copy(id = null, persistenceStatus = PersistenceStatus.PENDING)
+    )
+
+    fun arrInvalidEntitiesForCreationRules() = arrayOf(
+        getBaseEntity().copy(businessCentralId = " "),
+        getBaseEntity().copy(businessCentralId = "INVALID_VALUE"),
+        getBaseEntity().copy(id = ""),
+        getBaseEntity().copy(id = " "),
+        getBaseEntity().copy(lastModifierId = ""),
+        getBaseEntity().copy(lastModifierId = " "),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.PERSISTED),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.ARCHIVED),
+        getBaseEntity().copy(permissions = emptySet()),
     )
 
 }

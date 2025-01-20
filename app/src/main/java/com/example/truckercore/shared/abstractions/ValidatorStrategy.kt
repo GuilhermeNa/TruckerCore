@@ -44,14 +44,8 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
      *
      * @param obj The class type of the object being validated (either [Dto] or [Entity]).
      * @param fields The list of invalid fields.
-     * @throws BusinessCentralValidationException if there are invalid fields.
      */
-    protected fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
-        val message = "Invalid ${obj.simpleName}." +
-                " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
-        throw BusinessCentralValidationException(message)
-    }
+    protected abstract fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>)
 
     /**
      * Handles unexpected input errors when the input type does not match the expected type.

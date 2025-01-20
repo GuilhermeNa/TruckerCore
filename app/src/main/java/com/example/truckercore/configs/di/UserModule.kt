@@ -22,7 +22,7 @@ val userModule = module {
     single<UserMapper> { UserMapper() }
     single<CheckUserExistenceUseCase> { CheckUserExistenceUseCaseImpl(get(), get()) }
     single<CreateMasterUserUseCase> { CreateMasterUserUseCaseImpl(get(), get(), get()) }
-    single<CreateUserUseCase> { CreateUserUseCaseImpl(get(), get(), get()) }
+    single<CreateUserUseCase> { CreateUserUseCaseImpl(get(), get(), get(), get()) }
     single<DeleteUserUseCase> { DeleteUserUseCaseImpl(get(), get(), get()) }
     single<GetUserByIdUseCase> { GetUserByIdUseCaseImpl(get(), get(), get(), get()) }
     single<UpdateUserUseCase> { UpdateUserUseCaseImpl(get(), get(), get(), get(), get()) }
