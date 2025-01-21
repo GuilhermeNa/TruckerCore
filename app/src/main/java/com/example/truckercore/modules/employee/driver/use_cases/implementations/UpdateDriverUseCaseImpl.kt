@@ -1,5 +1,6 @@
 package com.example.truckercore.modules.employee.driver.use_cases.implementations
 
+import com.example.truckercore.configs.app_constants.DbOperation
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.employee.driver.entity.Driver
@@ -27,7 +28,7 @@ internal class UpdateDriverUseCaseImpl(
     override suspend fun execute(user: User, driver: Driver): Flow<Response<Unit>> = flow {
         val result =
             if (userHasPermission(user)) continueForExistenceCheckage(user, driver)
-            else handleUnauthorizedPermission(user = user, operation = "update", objName = "driver")
+            else handleUnauthorizedPermission(user, DbOperation.UPDATE, driver)
 
         emit(result)
 
@@ -42,7 +43,7 @@ internal class UpdateDriverUseCaseImpl(
         when (val existenceResponse = checkExistence.execute(user, driver.id!!).single()) {
             is Response.Success -> existenceResponse.data.let { driverExists ->
                 if (driverExists) updateDriver(driver)
-                else handleNonExistentObject("update", driver)
+                else handleNonExistentObject(DbOperation.UPDATE, driver)
             }
 
             else -> handleExistenceCheckageFailure(existenceResponse)

@@ -48,7 +48,7 @@ enum class EmployeeStatus {
             } ?: throw NullPointerException("Received a null string and can not convert EmployeeStatus.")
         }
 
-        private fun enumExists(str: String): Boolean =
+        fun enumExists(str: String): Boolean =
             entries.any { it.name == str }
 
     }

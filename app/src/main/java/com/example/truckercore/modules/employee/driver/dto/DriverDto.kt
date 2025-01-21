@@ -4,7 +4,7 @@ import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import java.util.Date
 
-data class DriverDto(
+internal data class DriverDto(
     override val businessCentralId: String? = null,
     override val id: String? = null,
     override val lastModifierId: String? = null,

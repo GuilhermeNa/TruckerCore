@@ -1,5 +1,6 @@
 package com.example.truckercore.shared.abstractions
 
+import com.example.truckercore.configs.app_constants.DbOperation
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
@@ -14,17 +15,17 @@ internal abstract class WriteUseCase {
 
     protected fun handleUnauthorizedPermission(
         user: User,
-        operation: String,
-        objName: String
+        operation: DbOperation,
+        entity: Entity
     ): Response.Error {
         val message =
-            "$clazz: Unauthorized access attempt by user: ${user.id}, for $operation ($objName)."
+            "$clazz: Unauthorized access attempt by user: ${user.id}, for ${operation.getName()} an entity: $entity."
         logWarn(message)
         return Response.Error(exception = UnauthorizedAccessException(message))
     }
 
-    protected fun handleNonExistentObject(operation: String, entity: Entity): Response.Error {
-        val message = "$clazz: Trying to $operation a non-persisted entity: $entity."
+    protected fun handleNonExistentObject(operation: DbOperation, entity: Entity): Response.Error {
+        val message = "$clazz: Trying to ${operation.getName()} a non-persisted entity: $entity."
         logError(message)
         return Response.Error(ObjectNotFoundException(message))
     }

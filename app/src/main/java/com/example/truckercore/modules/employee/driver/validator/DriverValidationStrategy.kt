@@ -4,6 +4,7 @@ import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
 import com.example.truckercore.modules.employee.driver.entity.Driver
 import com.example.truckercore.modules.employee.driver.errors.DriverValidationException
+import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
@@ -63,7 +64,9 @@ internal class DriverValidationStrategy : ValidatorStrategy() {
 
         if (dto.email.isNullOrBlank()) invalidFields.add(Field.EMAIL.getName())
 
-        if (dto.employeeStatus.isNullOrEmpty()) invalidFields.add(Field.EMPLOYEE_STATUS.getName())
+        if (dto.employeeStatus.isNullOrEmpty() ||
+            !EmployeeStatus.enumExists(dto.employeeStatus)
+            ) invalidFields.add(Field.EMPLOYEE_STATUS.getName())
 
         if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
 
@@ -73,7 +76,7 @@ internal class DriverValidationStrategy : ValidatorStrategy() {
         entity as Driver
         val invalidFields = mutableListOf<String>()
 
-        if (entity.businessCentralId.isEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
+        if (entity.businessCentralId.isBlank()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
 
         if (entity.id.isNullOrBlank()) invalidFields.add(Field.ID.getName())
 
@@ -81,9 +84,9 @@ internal class DriverValidationStrategy : ValidatorStrategy() {
 
         if (entity.persistenceStatus == PersistenceStatus.PENDING) invalidFields.add(Field.PERSISTENCE_STATUS.getName())
 
-        if (entity.name.isEmpty()) invalidFields.add(Field.NAME.getName())
+        if (entity.name.isBlank()) invalidFields.add(Field.NAME.getName())
 
-        if (entity.email.isEmpty()) invalidFields.add(Field.EMAIL.getName())
+        if (entity.email.isBlank()) invalidFields.add(Field.EMAIL.getName())
 
         if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
 
