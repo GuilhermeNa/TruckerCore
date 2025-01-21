@@ -23,11 +23,14 @@ enum class Field(private val fieldName: String) {
     LAST_UPDATE("lastUpdate"),
     IS_UPDATING("isUpdating"),
     NAME("name"),
+    EMAIL("email"),
     NUMBER("number"),
     EMISSION_DATE("emissionDate"),
     LEVEL("level"),
     PERMISSIONS("permissions"),
-    PERSISTENCE_STATUS("persistenceStatus");
+    PERSISTENCE_STATUS("persistenceStatus"),
+    EMPLOYEE_STATUS("employeeStatus");
+
 
     fun getName(): String = fieldName
 

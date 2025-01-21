@@ -5,7 +5,6 @@ import com.example.truckercore.modules.employee.shared.modules.benefits.entities
 import com.example.truckercore.modules.employee.shared.modules.compensation.entities.Compensation
 import com.example.truckercore.modules.employee.shared.modules.employee_contract.entities.EmployeeContract
 import com.example.truckercore.shared.abstractions.Person
-import com.example.truckercore.shared.interfaces.PersonI
 
 /**
  * Abstract class representing an Employee entity in the system.
@@ -17,7 +16,7 @@ import com.example.truckercore.shared.interfaces.PersonI
  */
 abstract class Employee(
     open val employeeStatus: EmployeeStatus,
-    open val benefits: EmployeeBenefits?,
-    open val compensation: Compensation?,
-    open val contractInfo: EmployeeContract?
+    // open val benefits: EmployeeBenefits?,
+    // open val compensation: Compensation?,
+    // open val contractInfo: EmployeeContract?
 ) : Person()

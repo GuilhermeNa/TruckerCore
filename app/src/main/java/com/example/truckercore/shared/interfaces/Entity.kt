@@ -40,25 +40,11 @@ interface Entity {
     val persistenceStatus: PersistenceStatus
 
     /**
-     * Checks whether the id has been initialized.
+     * Checks whether the identifier (id) has been initialized and is valid.
+     * An identifier is considered valid if it is not null or empty.
      *
-     * @throws UninitializedPropertyAccessException If the object is not approved.
+     * @return true if the id is not null or empty, indicating the id is valid; false otherwise.
      */
-    fun validateId() {
-        if (id == null) throw UninitializedPropertyAccessException("ID has not been initialized.")
-    }
-
-    /**
-     * Validates that the object has been persisted in the database.
-     *
-     * @throws InvalidStateException If the `persistenceStatus` is not `PERSISTED`,
-     *         indicating that the object has not been properly saved in the database.
-     */
-    fun validatePersisted() {
-        PersistenceStatus.validateState(
-            actualStatus = persistenceStatus,
-            validStatuses = arrayOf(PersistenceStatus.PERSISTED)
-        )
-    }
+    fun hasValidId() = !id.isNullOrEmpty()
 
 }
