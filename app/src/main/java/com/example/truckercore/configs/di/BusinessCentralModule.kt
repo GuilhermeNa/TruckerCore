@@ -18,6 +18,9 @@ import org.koin.dsl.module
 val businessCentralModule = module {
     single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get()) }
     single<BusinessCentralMapper> { BusinessCentralMapper() }
+
+    //--
+
     single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get(), get()) }
     single<UpdateBusinessCentralUseCase> {

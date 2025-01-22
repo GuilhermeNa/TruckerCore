@@ -3,6 +3,9 @@ package com.example.truckercore.shared.resolvers
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
+import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.employee.admin.entity.Admin
+import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy
@@ -24,6 +27,8 @@ internal class ValidatorStrategyResolver {
         Pair(BusinessCentralDto::class.java, BusinessCentralValidationStrategy()),
         Pair(User::class.java, UserValidationStrategy()),
         Pair(UserDto::class.java, UserValidationStrategy()),
+        Pair(Admin::class.java, AdminValidationStrategy()),
+        Pair(AdminDto::class.java, AdminValidationStrategy()),
     )
 
     /**

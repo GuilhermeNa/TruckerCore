@@ -1,13 +1,14 @@
-package com.example.truckercore.modules.user.use_cases.implementations
+package com.example.truckercore.modules.employee.admin.use_cases.implementations
 
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.employee.admin.entity.Admin
+import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
+import com.example.truckercore.modules.employee.admin.repository.AdminRepository
+import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminByIdUseCase
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.mapper.UserMapper
-import com.example.truckercore.modules.user.repository.UserRepository
-import com.example.truckercore.modules.user.use_cases.interfaces.GetUserByIdUseCase
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
@@ -17,18 +18,18 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single
 
-internal class GetUserByIdUseCaseImpl(
-    private val repository: UserRepository,
+internal class GetAdminByIdUseCaseImpl(
+    private val repository: AdminRepository,
     private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: UserMapper
-) : UseCase(), GetUserByIdUseCase {
+    private val mapper: AdminMapper
+) : UseCase(), GetAdminByIdUseCase {
 
-    override suspend fun execute(user: User, id: String): Flow<Response<User>> = flow {
+    override suspend fun execute(user: User, id: String): Flow<Response<Admin>> = flow {
         id.validateIsNotBlank(Field.ID.name)
 
         val result =
-            if (userHasPermission(user)) processResponse(id)
+            if (userHasPermission(user)) fetchAdminById(id)
             else handleUnauthorizedPermission(user, id)
 
         emit(result)
@@ -38,17 +39,18 @@ internal class GetUserByIdUseCaseImpl(
     }
 
     private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_USER)
+        permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
 
-    private suspend fun processResponse(id: String): Response<User> {
-        return when (val response = repository.fetchById(id).single()) {
-            is Response.Success -> handleSuccessResponse(response)
+    private suspend fun fetchAdminById(id: String): Response<Admin> =
+        when (
+            val response = repository.fetchById(id).single()
+        ) {
+            is Response.Success -> processResponse(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response
         }
-    }
 
-    private fun handleSuccessResponse(response: Response.Success<UserDto>): Response<User> {
+    private fun processResponse(response: Response.Success<AdminDto>): Response<Admin> {
         validatorService.validateDto(response.data)
         val entity = mapper.toEntity(response.data)
         return Response.Success(entity)

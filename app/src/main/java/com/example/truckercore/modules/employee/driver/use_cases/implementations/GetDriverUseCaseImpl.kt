@@ -29,7 +29,7 @@ internal class GetDriverUseCaseImpl(
         id.validateIsNotBlank(Field.ID.name)
 
         val result =
-            if (userHasPermission(user)) fetchData(id)
+            if (userHasPermission(user)) fetchDriverById(id)
             else handleUnauthorizedPermission(user, id)
 
         emit(result)
@@ -41,7 +41,7 @@ internal class GetDriverUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
 
-    private suspend fun fetchData(id: String): Response<Driver> =
+    private suspend fun fetchDriverById(id: String): Response<Driver> =
         when (
             val response = repository.fetchById(id).single()
         ) {

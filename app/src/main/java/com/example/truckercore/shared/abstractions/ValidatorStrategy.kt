@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.abstractions
 
-import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
 import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity

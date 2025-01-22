@@ -20,6 +20,7 @@ enum class Collection(private val collectionName: String) {
     ALLOWANCE("allowance"),
     ENJOY("enjoy"),
     PAYROLL("payroll"),
+    ADMIN("admin"),
     DRIVER("driver"),
     USER("user");
 

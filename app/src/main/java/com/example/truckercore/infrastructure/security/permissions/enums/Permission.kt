@@ -13,6 +13,27 @@ import com.example.truckercore.shared.errors.InvalidEnumParameterException
  * to ensure that the user or service has the necessary access rights.
  */
 enum class Permission {
+
+    /**
+     * Permission to create a new admin.
+     */
+    CREATE_ADMIN,
+
+    /**
+     * Permission to update a admin.
+     */
+    UPDATE_ADMIN,
+
+    /**
+     * Permission to delete a admin.
+     */
+    DELETE_ADMIN,
+
+    /**
+     * Permission to view a admin.
+     */
+    VIEW_ADMIN,
+
     /**
      * Permission to create a new driver.
      */
