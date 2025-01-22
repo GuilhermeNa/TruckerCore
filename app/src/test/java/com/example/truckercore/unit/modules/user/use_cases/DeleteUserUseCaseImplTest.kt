@@ -42,7 +42,7 @@ class DeleteUserUseCaseImplTest {
     fun `should delete user successfully if user exists and has permission`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.DELETE_USER) } returns true
-        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(true))
+        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(Unit))
         coEvery { repository.delete(id) } returns flowOf(Response.Success(Unit))
 
         // Act
@@ -77,7 +77,7 @@ class DeleteUserUseCaseImplTest {
     fun `should handle non-existent user for deletion`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.DELETE_USER) } returns true
-        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(false))
+        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Empty)
 
         // Act
         val result = deleteUserUseCase.execute(user, id).single()
@@ -112,7 +112,7 @@ class DeleteUserUseCaseImplTest {
     fun `should handle unexpected error during deletion`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.DELETE_USER) } returns true
-        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(true))
+        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(Unit))
         coEvery { repository.delete(id) } returns flowOf(Response.Error(Exception("Unexpected error")))
 
         // Act

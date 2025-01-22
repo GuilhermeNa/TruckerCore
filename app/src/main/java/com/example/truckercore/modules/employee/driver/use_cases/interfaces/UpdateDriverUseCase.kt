@@ -14,7 +14,9 @@ interface UpdateDriverUseCase {
      * Executes the use case to update a [Driver] entity.
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
      * @param driver The [Driver] entity that is being updated. This contains the data to be modified.
-     * @return A [Flow] of [Response] that contains the result of the operation.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully updated.
+     * - [Response.Error] when the object update fails.
      */
     suspend fun execute(user: User, driver: Driver): Flow<Response<Unit>>
 

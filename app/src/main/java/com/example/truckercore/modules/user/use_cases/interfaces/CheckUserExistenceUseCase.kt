@@ -20,6 +20,6 @@ internal interface CheckUserExistenceUseCase {
      * @param id The ID of the User entity to check for existence.
      * @return A [Flow] of [Response] that contains a `Boolean` value indicating whether the entity exists (`true`) or not (`false`).
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Boolean>>
+    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

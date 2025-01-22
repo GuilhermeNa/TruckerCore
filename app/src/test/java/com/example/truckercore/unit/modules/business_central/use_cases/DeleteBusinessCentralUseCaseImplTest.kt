@@ -55,7 +55,7 @@ class DeleteBusinessCentralUseCaseImplTest {
             // Object
             val mockk = spyk(useCase, recordPrivateCalls = true)
             val deleteResponse = Response.Success(Unit)
-            val existsResponse = Response.Success(true)
+            val existsResponse = Response.Success(Unit)
 
             // Behavior
             coEvery {
@@ -71,10 +71,8 @@ class DeleteBusinessCentralUseCaseImplTest {
             // Assertions
             assertTrue(result is Response.Success)
             coVerify {
-                mockk["userHasPermission"](userWithPermission)
-                mockk["checkEntityExists"](userWithPermission, id)
-                mockk["handleCheckExistenceSuccess"](id, existsResponse)
-                mockk["handleExistentObject"](id)
+                checkExistence.execute(userWithPermission, id)
+                repository.delete(id)
             }
         }
 
@@ -113,9 +111,7 @@ class DeleteBusinessCentralUseCaseImplTest {
             assertTrue(result is Response.Error)
             assertTrue((result as Response.Error).exception is NullPointerException)
             coVerify {
-                mockk["userHasPermission"](userWithPermission)
-                mockk["checkEntityExists"](userWithPermission, id)
-                mockk["handleCheckExistenceFailure"](existenceResponse)
+                checkExistence.execute(userWithPermission, id)
             }
         }
 
@@ -136,9 +132,7 @@ class DeleteBusinessCentralUseCaseImplTest {
             assertTrue(result is Response.Error)
             assertTrue((result as Response.Error).exception is ObjectNotFoundException)
             coVerify {
-                mockk["userHasPermission"](userWithPermission)
-                mockk["checkEntityExists"](userWithPermission, id)
-                mockk["handleCheckExistenceFailure"](existenceResponse)
+                checkExistence.execute(userWithPermission, id)
             }
         }
 

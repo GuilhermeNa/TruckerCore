@@ -9,7 +9,7 @@ internal class CheckPersonalDataExistenceUseCaseImpl(
     override val repository: PersonalDataRepository
 ) : CheckPersonalDataExistenceUseCase {
 
-    override suspend fun execute(id: String): Flow<Response<Boolean>> {
+    override suspend fun execute(id: String): Flow<Response<Unit>> {
         return repository.entityExists(id)
     }
 

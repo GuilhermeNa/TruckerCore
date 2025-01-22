@@ -18,7 +18,7 @@ internal class DriverRepositoryImpl(
     override suspend fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(id)
 
-    override suspend fun entityExists(id: String): Flow<Response<Boolean>> =
+    override suspend fun entityExists(id: String): Flow<Response<Unit>> =
         firebaseRepository.entityExists(id)
 
     override suspend fun fetchById(id: String): Flow<Response<DriverDto>> =

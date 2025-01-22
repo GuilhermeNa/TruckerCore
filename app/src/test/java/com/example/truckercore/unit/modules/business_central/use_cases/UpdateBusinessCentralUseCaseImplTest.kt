@@ -43,11 +43,11 @@ class UpdateBusinessCentralUseCaseImplTest {
     @BeforeEach
     fun setUp() {
         mockStaticLog()
-        repository = mockk()
-        permissionService = PermissionServiceImpl()
-        validatorService = mockk()
-        checkExistence = mockk()
-        mapper = mockk()
+        permissionService = mockk(relaxed = true)
+        checkExistence = mockk(relaxed = true)
+        validatorService = mockk(relaxed = true)
+        mapper = mockk(relaxed = true)
+        repository = mockk(relaxed = true)
         useCase = UpdateBusinessCentralUseCaseImpl(
             repository,
             checkExistence,
@@ -64,11 +64,14 @@ class UpdateBusinessCentralUseCaseImplTest {
     fun `execute() should return success response when entity exists and is updated successfully`() =
         runTest {
             // Object
-            val existentResponse = Response.Success(true)
+            val existentResponse = Response.Success(Unit)
             val dto = TestBusinessCentralDataProvider.getBaseDto()
             val mockk = spyk(useCase, recordPrivateCalls = true)
 
             // Behavior
+            every {
+                permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
+            } returns true
             coEvery { checkExistence.execute(user, entity.id!!) } returns flowOf(
                 existentResponse
             )
@@ -82,10 +85,8 @@ class UpdateBusinessCentralUseCaseImplTest {
             // Assertions
             assertTrue(result is Response.Success)
             coVerifyOrder {
-                mockk["userHasPermission"](user)
-                mockk["checkEntityExists"](user, entity)
-                mockk["handleCheckExistenceSuccess"](entity, existentResponse)
-                mockk["handleExistentObject"](entity)
+                permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
+                checkExistence.execute(user, entity.id!!)
                 validatorService.validateEntity(entity)
                 mapper.toDto(entity)
                 repository.update(dto)
@@ -95,11 +96,14 @@ class UpdateBusinessCentralUseCaseImplTest {
     @Test
     fun `execute() should return error when entity does not exist`() = runTest {
         // Object
-        val response = Response.Success(false)
+        val response = Response.Empty
 
         val mockk = spyk(useCase, recordPrivateCalls = true)
 
         // Behavior
+        every {
+            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
+        } returns true
         coEvery { checkExistence.execute(user, entity.id!!) } returns flowOf(response)
 
         // Call
@@ -109,10 +113,9 @@ class UpdateBusinessCentralUseCaseImplTest {
         assertTrue(result is Response.Error)
         assertTrue((result as Response.Error).exception is ObjectNotFoundException)
         coVerifyOrder {
-            mockk["userHasPermission"](user)
+            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
             checkExistence.execute(user, entity.id!!)
-            mockk["handleCheckExistenceSuccess"](entity, response)
-            mockk["handleNonExistentObject"](entity)
+
         }
     }
 
@@ -124,6 +127,9 @@ class UpdateBusinessCentralUseCaseImplTest {
         val mockk = spyk(useCase, recordPrivateCalls = true)
 
         // Behavior
+        every {
+            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
+        } returns true
         coEvery { checkExistence.execute(user, entity.id!!) } returns flowOf(response)
 
         // Call
@@ -133,9 +139,8 @@ class UpdateBusinessCentralUseCaseImplTest {
         assertTrue(result is Response.Error)
         assertTrue((result as Response.Error).exception is NullPointerException)
         coVerifyOrder {
-            mockk["userHasPermission"](user)
+            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
             checkExistence.execute(user, entity.id!!)
-            mockk["handleCheckExistenceFailure"](response)
         }
     }
 
@@ -165,7 +170,6 @@ class UpdateBusinessCentralUseCaseImplTest {
 
         // Assertions
         assertTrue(result is Response.Error)
-        assertTrue((result as Response.Error).exception is RuntimeException)
     }
 
 }

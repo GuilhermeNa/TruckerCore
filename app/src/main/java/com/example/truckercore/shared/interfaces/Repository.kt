@@ -3,14 +3,16 @@ package com.example.truckercore.shared.interfaces
 import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
-internal interface Repository<T: Dto> {
+internal interface Repository<T : Dto> {
 
     /**
      * Creates a new entity entity in the database.
      *
      * @param dto The data transfer object (DTO) containing the entity information to be created.
      * This method generates an ID for the entity and stores it in the database.
-     * @return The ID of the created object.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully created.
+     * - [Response.Error] when the object creation fails.
      */
     suspend fun create(dto: T): Flow<Response<String>>
 
@@ -18,6 +20,9 @@ internal interface Repository<T: Dto> {
      * Updates an existing Entity in the database.
      *
      * @param dto The data transfer object (DTO) containing the updated information.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully updated.
+     * - [Response.Error] when the object update fails.
      */
     suspend fun update(dto: T): Flow<Response<Unit>>
 
@@ -25,6 +30,9 @@ internal interface Repository<T: Dto> {
      * Deletes an Entity entity from the database by its ID.
      *
      * @param id The unique identifier (ID) of the entity to be deleted.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully deleted.
+     * - [Response.Error] when the object delete fails.
      */
     suspend fun delete(id: String): Flow<Response<Unit>>
 
@@ -36,10 +44,12 @@ internal interface Repository<T: Dto> {
      * exists, the response will emit `true`; otherwise, it will emit `false`.
      *
      * @param id The unique identifier (ID) of the entity to check for existence.
-     * @return A [Flow] that emits a [Response] containing a [Boolean].
-     *         The [Boolean] will be `true` if the entity exists, `false` otherwise.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object exists.
+     * - [Response.Empty] when the object does not exist.
+     * - [Response.Error] when any error occurs.
      */
-    suspend fun entityExists(id: String): Flow<Response<Boolean>>
+    suspend fun entityExists(id: String): Flow<Response<Unit>>
 
     /**
      * Fetches an Entity by its ID.

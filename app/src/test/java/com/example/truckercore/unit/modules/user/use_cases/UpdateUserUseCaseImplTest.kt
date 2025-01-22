@@ -47,7 +47,7 @@ class UpdateUserUseCaseImplTest {
     fun `should update user successfully if user exists and has permission`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.UPDATE_USER) } returns true
-        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(true))
+        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(Unit))
         every { validatorService.validateEntity(userToUpdate) } returns Unit
         every { mapper.toDto(userToUpdate) } returns dto
         coEvery { repository.update(dto) } returns flowOf(Response.Success(Unit))
@@ -83,7 +83,7 @@ class UpdateUserUseCaseImplTest {
     fun `should handle non-existent user for update`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.UPDATE_USER) } returns true
-        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(false))
+        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Empty)
 
         // Act
         val result = updateUserUseCase.execute(user, userToUpdate).single()
@@ -117,7 +117,7 @@ class UpdateUserUseCaseImplTest {
     fun `should handle unexpected error during update`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.UPDATE_USER) } returns true
-        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(true))
+        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(Unit))
        every { validatorService.validateEntity(userToUpdate) } throws NullPointerException()
 
         // Act

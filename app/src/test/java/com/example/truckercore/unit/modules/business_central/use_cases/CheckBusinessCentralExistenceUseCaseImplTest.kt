@@ -49,14 +49,13 @@ class CheckBusinessCentralExistenceUseCaseImplTest {
     @Test
     fun `execute() should return a response success with true when object is found`() = runTest {
         // Behavior
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Success(true))
+        coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
         // Call
         val response = useCase.execute(userWithPermission, id).single()
 
         // Assertions
         assertTrue(response is Response.Success)
-        assertEquals(true, (response as Response.Success).data)
 
     }
 
@@ -90,8 +89,7 @@ class CheckBusinessCentralExistenceUseCaseImplTest {
             val response = useCase.execute(userWithPermission, id).single()
 
             // Assertions
-            assertTrue(response is Response.Error)
-            assertTrue((response as Response.Error).exception is ObjectNotFoundException)
+            assertTrue(response is Response.Empty)
         }
 
     @Test

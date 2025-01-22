@@ -18,6 +18,9 @@ interface DeleteDriverUseCase {
      *
      * @param user The [User] who is requesting the deletion. This parameter might be used for permission checks or tracking.
      * @param id The ID of the [Driver] entity to be deleted.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully deleted.
+     * - [Response.Error] when the object delete fails.
      */
     suspend fun execute(user: User, id: String): Flow<Response<Unit>>
 

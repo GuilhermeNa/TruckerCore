@@ -24,8 +24,25 @@ internal abstract class WriteUseCase {
         return Response.Error(exception = UnauthorizedAccessException(message))
     }
 
+    protected fun handleUnauthorizedPermission(
+        user: User,
+        operation: DbOperation,
+        id: String
+    ): Response.Error {
+        val message =
+            "$clazz: Unauthorized access attempt by user: ${user.id}, for ${operation.getName()} an entity with Id: $id."
+        logWarn(message)
+        return Response.Error(exception = UnauthorizedAccessException(message))
+    }
+
     protected fun handleNonExistentObject(operation: DbOperation, entity: Entity): Response.Error {
         val message = "$clazz: Trying to ${operation.getName()} a non-persisted entity: $entity."
+        logError(message)
+        return Response.Error(ObjectNotFoundException(message))
+    }
+
+    protected fun handleNonExistentObject(operation: DbOperation, id: String): Response.Error {
+        val message = "$clazz: Trying to ${operation.getName()} a non-persisted entity with ID: $id."
         logError(message)
         return Response.Error(ObjectNotFoundException(message))
     }
@@ -45,6 +62,5 @@ internal abstract class WriteUseCase {
         logError("$clazz: An unexpected error occurred during execution: $throwable")
         return Response.Error(exception = throwable as Exception)
     }
-
 
 }

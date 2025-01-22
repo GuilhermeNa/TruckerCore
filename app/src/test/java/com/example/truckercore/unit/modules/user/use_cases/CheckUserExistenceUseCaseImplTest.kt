@@ -42,7 +42,7 @@ class CheckUserExistenceUseCaseImplTest {
         runTest {
             // Arrange
             coEvery { permissionService.canPerformAction(user, Permission.VIEW_USER) } returns true
-            coEvery { repository.entityExists(id) } returns flowOf(Response.Success(true))
+            coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
             // Act
             val result = useCase.execute(user, id).first()
@@ -53,7 +53,7 @@ class CheckUserExistenceUseCaseImplTest {
                 repository.entityExists(id)
             }
 
-            assertTrue(result is Response.Success && result.data)
+            assertTrue(result is Response.Success)
         }
 
     @Test

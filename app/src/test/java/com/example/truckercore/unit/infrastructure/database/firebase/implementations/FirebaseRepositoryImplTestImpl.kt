@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -83,7 +84,6 @@ class FirebaseRepositoryImplTestImpl {
         every { documentReference.id } returns newId
         every { documentReference.set(newDto) } returns task
         every { dto.initializeId(newId) } returns newDto
-        every { converter.processTask(task, documentReference) } returns response
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
             listener.onComplete(task)
@@ -123,7 +123,6 @@ class FirebaseRepositoryImplTestImpl {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(dtoId))
         } returns documentReference
         every { documentReference.set(dto) } returns task
-        every { converter.processTask(task = task) } returns response
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
             listener.onComplete(task)
@@ -159,7 +158,6 @@ class FirebaseRepositoryImplTestImpl {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
         } returns documentReference
         every { documentReference.delete() } returns task
-        every { converter.processTask(task = task) } returns response
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
             listener.onComplete(task)
@@ -182,24 +180,22 @@ class FirebaseRepositoryImplTestImpl {
         runTest {
         // Object
         val id = "id"
-        val response = Response.Success(true)
 
         // Behaviors
         every {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
         } returns documentReference
         coEvery { documentReference.get().await() } returns documentSnapShot
-        every { converter.processEntityExistence(documentSnapShot) } returns response
+        every { documentSnapShot.exists() } returns true
 
         // Call
-        val result = repository.entityExists(id).first()
+        val result = repository.entityExists(id).single()
 
         // Assertions
-        assertEquals(response, result)
+        assertTrue(result is Response.Success)
         coVerifyOrder {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
             documentReference.get().await()
-            converter.processEntityExistence(eq(documentSnapShot))
         }
     }
 
@@ -207,24 +203,21 @@ class FirebaseRepositoryImplTestImpl {
     fun `entityExists() should return Response Empty when the entity don't exists`() = runTest {
         // Object
         val id = "id"
-        val response = Response.Empty
 
         // Behaviors
         every {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
         } returns documentReference
         coEvery { documentReference.get().await() } returns documentSnapShot
-        every { converter.processEntityExistence(documentSnapShot) } returns response
-
+        every { documentSnapShot.exists() } returns false
         // Call
-        val result = repository.entityExists(id).first()
+        val result = repository.entityExists(id).single()
 
         // Assertions
-        assertEquals(response, result)
+        assertTrue(result is Response.Empty)
         coVerifyOrder {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
             documentReference.get().await()
-            converter.processEntityExistence(eq(documentSnapShot))
         }
     }
 
@@ -232,7 +225,6 @@ class FirebaseRepositoryImplTestImpl {
     fun `entityExists() should return false response when the document is null`() = runTest {
         // Object
         val id = "id"
-        val response = Response.Success(false)
 
         // Behaviors
         every {
@@ -244,36 +236,10 @@ class FirebaseRepositoryImplTestImpl {
         val result = repository.entityExists(id).first()
 
         // Assertions
-        assertEquals(response, result)
+        assertTrue(result is Response.Error)
         coVerifyOrder {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
             documentReference.get().await()
-        }
-    }
-
-    @Test
-    fun `entityExists() should return Response Error when get some exception`() = runTest {
-        // Object
-        val id = "id"
-        val exception = FirebaseConversionException("Simulated exception.")
-        val response = Response.Error(exception = exception)
-
-        // Behaviors
-        every {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-        } returns documentReference
-        coEvery { documentReference.get().await() } returns documentSnapShot
-        every { converter.processEntityExistence(eq(documentSnapShot)) } throws exception
-
-        // Call
-        val result = repository.entityExists(id).first()
-
-        // Assertions
-        assertEquals(response, result)
-        coVerifyOrder {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-            documentReference.get().await()
-            converter.processEntityExistence(eq(documentSnapShot))
         }
     }
 

@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 internal interface CheckPersonalDataExistenceUseCase: PersonalDataUseCase {
 
-    suspend fun execute(id: String): Flow<Response<Boolean>>
+    suspend fun execute(id: String): Flow<Response<Unit>>
 
 }

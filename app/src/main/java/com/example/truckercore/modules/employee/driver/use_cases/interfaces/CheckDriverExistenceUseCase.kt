@@ -15,8 +15,11 @@ interface CheckDriverExistenceUseCase {
      *
      * @param user The [User] who is making the request. This parameter may be used for permission checks or to track the request.
      * @param id The ID of the [Driver] entity to check for existence.
-     * @return A [Flow] of [Response] that contains a `Boolean` value indicating whether the entity exists (`true`) or not (`false`).
+     * @return A [Flow] of:
+     * - [Response.Success] when the object exists.
+     * - [Response.Empty] when the object does not exist.
+     * - [Response.Error] when any error occurs.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Boolean>>
+    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

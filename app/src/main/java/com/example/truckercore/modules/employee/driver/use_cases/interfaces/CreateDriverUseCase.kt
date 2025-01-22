@@ -18,7 +18,9 @@ interface CreateDriverUseCase {
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param driver The [Driver] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Response] string representing the unique identifier of the newly created [Driver] entity.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully created.
+     * - [Response.Error] when the object creation fails.
      */
     suspend fun execute(user: User, driver: Driver): Flow<Response<String>>
 
