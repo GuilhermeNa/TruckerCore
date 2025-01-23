@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single
 
 internal class CreateAdminUseCaseImpl(
-    private val adminRepository: AdminRepository,
+    private val repository: AdminRepository,
     private val validatorService: ValidatorService,
     private val permissionService: PermissionService,
     private val mapper: AdminMapper
@@ -39,7 +39,7 @@ internal class CreateAdminUseCaseImpl(
     private suspend fun processAdminCreation(admin: Admin): Response<String> {
         validatorService.validateForCreation(admin)
         val adminDto = mapper.toDto(admin)
-        return adminRepository.create(adminDto).single()
+        return repository.create(adminDto).single()
     }
 
 }
