@@ -39,9 +39,7 @@ internal class UpdateAdminUseCaseImpl(
         permissionService.canPerformAction(user, Permission.UPDATE_ADMIN)
 
     private suspend fun continueForExistenceCheck(user: User, admin: Admin): Response<Unit> =
-        when (
-            val existenceResponse = checkExistence.execute(user, admin.id!!).single()
-        ) {
+        when (val existenceResponse = checkExistence.execute(user, admin.id!!).single()) {
             is Response.Success -> updateAdmin(admin)
             is Response.Empty -> handleNonExistentObject(admin.id)
             is Response.Error -> handleFailureResponse(existenceResponse)

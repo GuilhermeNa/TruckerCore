@@ -3,7 +3,6 @@ package com.example.truckercore.unit.modules.employee.admin.use_cases
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.DeleteAdminUseCaseImpl
@@ -16,7 +15,6 @@ import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
@@ -59,7 +57,7 @@ class DeleteAdminUseCaseImplTest {
     }
 
     @Test
-    fun `should return error when user does not have permission for creation`() = runTest {
+    fun `should return error when user does not have permission for delete`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.DELETE_ADMIN) } returns false
 

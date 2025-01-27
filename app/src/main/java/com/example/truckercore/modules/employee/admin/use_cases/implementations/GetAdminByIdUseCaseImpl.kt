@@ -42,9 +42,7 @@ internal class GetAdminByIdUseCaseImpl(
         permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
 
     private suspend fun fetchAdminById(id: String): Response<Admin> =
-        when (
-            val response = repository.fetchById(id).single()
-        ) {
+        when (val response = repository.fetchById(id).single()) {
             is Response.Success -> processResponse(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response
