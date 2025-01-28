@@ -11,6 +11,12 @@ import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.errors.StrategyNotFoundException
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
+import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
+import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
+import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
+import com.example.truckercore.shared.modules.storage_file.validator.StorageFileValidationStrategy
 import com.example.truckercore.shared.sealeds.ValidatorInput
 
 /**
@@ -29,6 +35,10 @@ internal class ValidatorStrategyResolver {
         Pair(UserDto::class.java, UserValidationStrategy()),
         Pair(Admin::class.java, AdminValidationStrategy()),
         Pair(AdminDto::class.java, AdminValidationStrategy()),
+        Pair(PersonalData::class.java, PersonalDataValidationStrategy()),
+        Pair(PersonalDataDto::class.java, PersonalDataValidationStrategy()),
+        Pair(StorageFile::class.java, StorageFileValidationStrategy()),
+        Pair(StorageFileDto::class.java, StorageFileValidationStrategy()),
     )
 
     /**

@@ -1,6 +1,5 @@
-package com.example.truckercore.shared.modules.storage_file.dtos
+package com.example.truckercore.shared.modules.storage_file.dto
 
-import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import java.util.Date

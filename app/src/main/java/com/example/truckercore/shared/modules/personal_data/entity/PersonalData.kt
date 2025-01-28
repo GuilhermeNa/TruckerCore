@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.modules.personal_data.entity
 
-import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
+import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Entity
 import java.time.LocalDateTime

@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.interfaces
 
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
+import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 
 /**
  * Interface representing common properties of a person in the system.

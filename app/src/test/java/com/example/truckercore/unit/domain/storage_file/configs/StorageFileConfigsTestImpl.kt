@@ -1,8 +1,7 @@
 package com.example.truckercore.unit.domain.storage_file.configs
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
-import com.example.truckercore.shared.modules.storage_file.configs.StorageFileConfigs
-import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
+import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow

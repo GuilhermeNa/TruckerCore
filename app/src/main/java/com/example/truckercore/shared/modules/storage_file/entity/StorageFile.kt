@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.modules.storage_file.entities
+package com.example.truckercore.shared.modules.storage_file.entity
 
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Entity

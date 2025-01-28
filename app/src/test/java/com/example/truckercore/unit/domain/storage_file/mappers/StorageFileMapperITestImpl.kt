@@ -2,12 +2,12 @@ package com.example.truckercore.unit.domain.storage_file.mappers
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
+import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
 import com.example.truckercore.shared.errors.InvalidUrlFormatException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
-import com.example.truckercore.shared.modules.storage_file.mappers.StorageFileMapper
+import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 import io.mockk.every

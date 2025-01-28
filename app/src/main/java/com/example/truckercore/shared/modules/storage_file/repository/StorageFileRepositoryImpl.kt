@@ -1,9 +1,8 @@
-package com.example.truckercore.shared.modules.storage_file.repositories.implementations
+package com.example.truckercore.shared.modules.storage_file.repository
 
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
-import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
-import com.example.truckercore.shared.modules.storage_file.repositories.interfaces.StorageFileRepository
+import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -24,7 +23,7 @@ internal class StorageFileRepositoryImpl(
 
     override suspend fun fetchById(id: String) = firebaseRepository.simpleDocumentFetch(id)
 
-    override suspend fun fetchFilesByParentUid(parentId: String) =
+    override suspend fun fetchByParentId(parentId: String) =
         firebaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId)
 
 }

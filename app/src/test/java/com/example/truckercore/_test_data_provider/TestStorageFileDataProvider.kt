@@ -1,7 +1,7 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.shared.modules.storage_file.dtos.StorageFileDto
-import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
+import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
+import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date

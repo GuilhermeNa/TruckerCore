@@ -13,6 +13,25 @@ import com.example.truckercore.shared.errors.InvalidEnumParameterException
  * to ensure that the user or service has the necessary access rights.
  */
 enum class Permission {
+    /**
+     * Permission to update a storage file.
+     */
+    UPDATE_STORAGE_FILE,
+
+    /**
+     * Permission to create a new storage file.
+     */
+    CREATE_STORAGE_FILE,
+
+    /**
+     * Permission to view a storage file.
+     */
+    VIEW_STORAGE_FILE,
+
+    /**
+     * Permission to delete a storage file.
+     */
+    DELETE_STORAGE_FILE,
 
     /**
      * Permission to create a new admin.
