@@ -36,7 +36,7 @@ internal object TestPersonalDataDataProvider {
         expirationDate = Date()
     )
 
-    fun getArrWithMissingFields() = arrayOf(
+    fun arrInvalidDtos() = arrayOf(
         getBaseDto().copy(businessCentralId = null),
         getBaseDto().copy(id = null),
         getBaseDto().copy(lastModifierId = null),
@@ -47,6 +47,83 @@ internal object TestPersonalDataDataProvider {
         getBaseDto().copy(name = null),
         getBaseDto().copy(number = null),
         getBaseDto().copy(emissionDate = null)
+    )
+
+    fun arrValidDtosForValidationRules() = arrayOf(
+        getBaseDto(),
+        getBaseDto().copy(persistenceStatus = PersistenceStatus.ARCHIVED.name)
+    )
+
+    fun arrInvalidDtosForValidationRules() = arrayOf(
+        getBaseDto().copy(businessCentralId = null),
+        getBaseDto().copy(businessCentralId = ""),
+        getBaseDto().copy(businessCentralId = " "),
+        getBaseDto().copy(id = null),
+        getBaseDto().copy(id = ""),
+        getBaseDto().copy(id = " "),
+        getBaseDto().copy(lastModifierId = null),
+        getBaseDto().copy(lastModifierId = ""),
+        getBaseDto().copy(lastModifierId = " "),
+        getBaseDto().copy(creationDate = null),
+        getBaseDto().copy(lastUpdate = null),
+        getBaseDto().copy(persistenceStatus = null),
+        getBaseDto().copy(persistenceStatus = ""),
+        getBaseDto().copy(persistenceStatus = " "),
+        getBaseDto().copy(persistenceStatus = "PENDING"),
+        getBaseDto().copy(persistenceStatus = "INVALID"),
+        getBaseDto().copy(parentId = null),
+        getBaseDto().copy(parentId = ""),
+        getBaseDto().copy(parentId = " "),
+        getBaseDto().copy(name = null),
+        getBaseDto().copy(name = ""),
+        getBaseDto().copy(name = " "),
+        getBaseDto().copy(number = null),
+        getBaseDto().copy(number = ""),
+        getBaseDto().copy(number = " "),
+        getBaseDto().copy(emissionDate = null)
+    )
+
+    fun arrValidEntitiesForValidationRules() = arrayOf(
+        getBaseEntity(),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.ARCHIVED)
+    )
+
+    fun arrInvalidEntitiesForValidationRules() = arrayOf(
+        getBaseEntity().copy(businessCentralId = ""),
+        getBaseEntity().copy(businessCentralId = " "),
+        getBaseEntity().copy(id = null),
+        getBaseEntity().copy(id = ""),
+        getBaseEntity().copy(id = " "),
+        getBaseEntity().copy(lastModifierId = ""),
+        getBaseEntity().copy(lastModifierId = " "),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.PENDING),
+        getBaseEntity().copy(parentId = ""),
+        getBaseEntity().copy(parentId = " "),
+        getBaseEntity().copy(name = ""),
+        getBaseEntity().copy(name = " "),
+        getBaseEntity().copy(number = ""),
+        getBaseEntity().copy(number = " ")
+    )
+
+    fun arrValidEntitiesForCreationRules() = arrayOf(
+        getBaseEntity().copy(id = null, persistenceStatus = PersistenceStatus.PENDING)
+    )
+
+    fun arrInvalidEntitiesForCreationRules() = arrayOf(
+        getBaseEntity().copy(businessCentralId = ""),
+        getBaseEntity().copy(businessCentralId = " "),
+        getBaseEntity().copy(id = "123"),
+        getBaseEntity().copy(),
+        getBaseEntity().copy(lastModifierId = ""),
+        getBaseEntity().copy(lastModifierId = " "),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.PERSISTED),
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.ARCHIVED),
+        getBaseEntity().copy(parentId = ""),
+        getBaseEntity().copy(parentId = " "),
+        getBaseEntity().copy(name = ""),
+        getBaseEntity().copy(name = " "),
+        getBaseEntity().copy(number = ""),
+        getBaseEntity().copy(number = " ")
     )
 
 }

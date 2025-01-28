@@ -95,7 +95,7 @@ internal class PersonalDataValidationStrategy : ValidatorStrategy() {
         entity as PersonalData
         val invalidFields = mutableListOf<String>()
 
-        if (entity.businessCentralId.isNotEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
+        if (entity.businessCentralId.isBlank()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
 
         if (entity.id != null) invalidFields.add(Field.ID.getName())
 

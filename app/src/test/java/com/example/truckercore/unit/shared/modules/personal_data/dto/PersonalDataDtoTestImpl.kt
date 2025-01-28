@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.domain.personal_data.dtos
+package com.example.truckercore.unit.shared.modules.personal_data.dto
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
 import org.junit.jupiter.api.Assertions.assertEquals

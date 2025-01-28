@@ -1,18 +1,17 @@
-package com.example.truckercore.unit.modules.employee.admin.validator
+package com.example.truckercore.unit.shared.modules.storage_file.validator
 
-import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.employee.admin.errors.AdminValidationException
-import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.modules.storage_file.errors.StorageFileValidationException
+import com.example.truckercore.shared.modules.storage_file.validator.StorageFileValidationStrategy
 import com.example.truckercore.shared.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -21,52 +20,53 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDateTime
 import java.util.Date
 
-class AdminValidationStrategyTest {
+internal class StorageFileValidationStrategyTest {
 
-    private lateinit var validator: AdminValidationStrategy
+    private val validator = StorageFileValidationStrategy()
 
     companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+        }
+
         @JvmStatic
         fun arrValidDtosForValidationRules() =
-            TestAdminDataProvider.arrValidDtosForValidationRules().map {
+            TestStorageFileDataProvider.arrValidDtosForValidationRules().map {
+                ValidatorInput.DtoInput(it)
+            }
+
+        @JvmStatic
+        fun arrInvalidDtosForValidationRules() =
+            TestStorageFileDataProvider.arrInvalidDtosForValidationRules().map {
                 ValidatorInput.DtoInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForValidationRules() =
-            TestAdminDataProvider.arrValidEntitiesForValidationRules().map {
+            TestStorageFileDataProvider.arrValidEntitiesForValidationRules().map {
+                ValidatorInput.EntityInput(it)
+            }
+
+        @JvmStatic
+        fun arrInvalidEntitiesForValidationRules() =
+            TestStorageFileDataProvider.arrInvalidEntitiesForValidationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForCreationRules() =
-            TestAdminDataProvider.arrValidEntitiesForCreationRules().map {
-                ValidatorInput.EntityInput(it)
-            }
-
-        @JvmStatic
-        fun arrInvalidDtosForValidationRules() =
-            TestAdminDataProvider.arrInvalidDtosForValidationRules().map {
-                ValidatorInput.DtoInput(it)
-            }
-
-        @JvmStatic
-        fun arrInvalidEntitiesForValidationRules() =
-            TestAdminDataProvider.arrInvalidEntitiesForValidationRules().map {
+            TestStorageFileDataProvider.arrValidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrInvalidEntitiesForCreationRules() =
-            TestAdminDataProvider.arrInvalidEntitiesForCreationRules().map {
+            TestStorageFileDataProvider.arrInvalidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        validator = AdminValidationStrategy()
     }
 
     @ParameterizedTest
@@ -76,12 +76,10 @@ class AdminValidationStrategyTest {
     ) {
         val mock = spyk(validator, recordPrivateCalls = true)
 
-        // Call
         assertDoesNotThrow {
             mock.validateDto(input)
         }
 
-        // Assertion
         verify {
             mock["processDtoValidationRules"](input.dto)
         }
@@ -89,19 +87,15 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw AdminValidationException when there is any invalid field`(
+    fun `validateDto() should throw StorageFileValidationException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<StorageFileValidationException> {
             validator.validateDto(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        assert(exception.message?.contains("Invalid") == true)
+        assert(exception.message?.contains("Missing or invalid fields") == true)
     }
 
     @Test
@@ -113,7 +107,9 @@ class AdminValidationStrategyTest {
             override val creationDate: Date? = null
             override val lastUpdate: Date? = null
             override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto { TODO() }
+            override fun initializeId(newId: String): Dto {
+                TODO()
+            }
         }
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
@@ -121,12 +117,8 @@ class AdminValidationStrategyTest {
             validator.validateDto(unexpectedDtoInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assert(exception.message?.contains("Awaited input was") == true)
+        assert(exception.message?.contains("and received") == true)
     }
 
     @ParameterizedTest
@@ -147,27 +139,23 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw AdminValidationException when there is any invalid field`(
+    fun `validateEntity() should throw StorageFileValidationException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<StorageFileValidationException> {
             validator.validateEntity(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        assert(exception.message?.contains("Invalid") == true)
+        assert(exception.message?.contains("Missing or invalid fields") == true)
     }
 
     @Test
     fun `validateEntity() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
         val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
+            override val businessCentralId: String = "dummy"
+            override val id: String = "dummy"
+            override val lastModifierId = "dummy"
             override val creationDate = LocalDateTime.now()
             override val lastUpdate = LocalDateTime.now()
             override val persistenceStatus = PersistenceStatus.PERSISTED
@@ -178,12 +166,8 @@ class AdminValidationStrategyTest {
             validator.validateEntity(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assert(exception.message?.contains("Awaited input was") == true)
+        assert(exception.message?.contains("and received") == true)
     }
 
     @ParameterizedTest
@@ -204,27 +188,23 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() should throw AdminValidationException when there is any invalid field`(
+    fun `validateForCreation() should throw StorageFileValidationException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<StorageFileValidationException> {
             validator.validateForCreation(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        assert(exception.message?.contains("Invalid") == true)
+        assert(exception.message?.contains("Missing or invalid fields") == true)
     }
 
     @Test
     fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
         val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
+            override val businessCentralId: String = "dummy"
+            override val id: String = "dummy"
+            override val lastModifierId = "dummy"
             override val creationDate = LocalDateTime.now()
             override val lastUpdate = LocalDateTime.now()
             override val persistenceStatus = PersistenceStatus.PERSISTED
@@ -235,12 +215,8 @@ class AdminValidationStrategyTest {
             validator.validateForCreation(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assert(exception.message?.contains("Awaited input was") == true)
+        assert(exception.message?.contains("and received") == true)
     }
 
 }

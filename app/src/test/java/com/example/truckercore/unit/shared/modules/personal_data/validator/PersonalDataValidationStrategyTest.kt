@@ -1,13 +1,13 @@
-package com.example.truckercore.unit.modules.employee.admin.validator
+package com.example.truckercore.unit.shared.modules.personal_data.validator
 
-import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.employee.admin.errors.AdminValidationException
-import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.modules.personal_data.errors.PersonalDataValidationException
+import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
 import com.example.truckercore.shared.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
@@ -21,44 +21,44 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDateTime
 import java.util.Date
 
-class AdminValidationStrategyTest {
+class PersonalDataValidationStrategyTest {
 
-    private lateinit var validator: AdminValidationStrategy
+    private lateinit var validator: PersonalDataValidationStrategy
 
     companion object {
         @JvmStatic
         fun arrValidDtosForValidationRules() =
-            TestAdminDataProvider.arrValidDtosForValidationRules().map {
+            TestPersonalDataDataProvider.arrValidDtosForValidationRules().map {
+                ValidatorInput.DtoInput(it)
+            }
+
+        @JvmStatic
+        fun arrInvalidDtosForValidationRules() =
+            TestPersonalDataDataProvider.arrInvalidDtosForValidationRules().map {
                 ValidatorInput.DtoInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForValidationRules() =
-            TestAdminDataProvider.arrValidEntitiesForValidationRules().map {
+            TestPersonalDataDataProvider.arrValidEntitiesForValidationRules().map {
+                ValidatorInput.EntityInput(it)
+            }
+
+        @JvmStatic
+        fun arrInvalidEntitiesForValidationRules() =
+            TestPersonalDataDataProvider.arrInvalidEntitiesForValidationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForCreationRules() =
-            TestAdminDataProvider.arrValidEntitiesForCreationRules().map {
-                ValidatorInput.EntityInput(it)
-            }
-
-        @JvmStatic
-        fun arrInvalidDtosForValidationRules() =
-            TestAdminDataProvider.arrInvalidDtosForValidationRules().map {
-                ValidatorInput.DtoInput(it)
-            }
-
-        @JvmStatic
-        fun arrInvalidEntitiesForValidationRules() =
-            TestAdminDataProvider.arrInvalidEntitiesForValidationRules().map {
+            TestPersonalDataDataProvider.arrValidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrInvalidEntitiesForCreationRules() =
-            TestAdminDataProvider.arrInvalidEntitiesForCreationRules().map {
+            TestPersonalDataDataProvider.arrInvalidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
     }
@@ -66,7 +66,7 @@ class AdminValidationStrategyTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        validator = AdminValidationStrategy()
+        validator = PersonalDataValidationStrategy()
     }
 
     @ParameterizedTest
@@ -74,6 +74,7 @@ class AdminValidationStrategyTest {
     fun `validateDto() should call processDtoValidationRules() and don't throw exception`(
         input: ValidatorInput.DtoInput
     ) {
+        // Object
         val mock = spyk(validator, recordPrivateCalls = true)
 
         // Call
@@ -89,10 +90,11 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw AdminValidationException when there is any invalid field`(
+    fun `validateDto() should throw PersonalDataValidationException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        // Call
+        val exception = assertThrows<PersonalDataValidationException> {
             validator.validateDto(input)
         }
 
@@ -106,6 +108,7 @@ class AdminValidationStrategyTest {
 
     @Test
     fun `validateDto() should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
+        // Object
         val unexpectedDto = object : Dto {
             override val businessCentralId: String? = null
             override val id: String? = null
@@ -117,6 +120,7 @@ class AdminValidationStrategyTest {
         }
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
+        // Call
         val exception = assertThrows<UnexpectedValidatorInputException> {
             validator.validateDto(unexpectedDtoInput)
         }
@@ -134,12 +138,15 @@ class AdminValidationStrategyTest {
     fun `validateEntity() should call processEntityValidationRules() and don't throw exception`(
         input: ValidatorInput.EntityInput
     ) {
+        // Object
         val mock = spyk(validator, recordPrivateCalls = true)
 
+        // Call
         assertDoesNotThrow {
             mock.validateEntity(input)
         }
 
+        // Assertion
         verify {
             mock["processEntityValidationRules"](input.entity)
         }
@@ -147,10 +154,11 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw AdminValidationException when there is any invalid field`(
+    fun `validateEntity() should throw PersonalDataValidationException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        // Call
+        val exception = assertThrows<PersonalDataValidationException> {
             validator.validateEntity(input)
         }
 
@@ -164,6 +172,7 @@ class AdminValidationStrategyTest {
 
     @Test
     fun `validateEntity() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
+        // Object
         val unexpectedEntity = object : Entity {
             override val businessCentralId: String = ""
             override val id: String = ""
@@ -174,6 +183,7 @@ class AdminValidationStrategyTest {
         }
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
+        // Call
         val exception = assertThrows<UnexpectedValidatorInputException> {
             validator.validateEntity(unexpectedEntityInput)
         }
@@ -191,12 +201,15 @@ class AdminValidationStrategyTest {
     fun `validateForCreation() should call processEntityCreationRules() and don't throw exception`(
         input: ValidatorInput.EntityInput
     ) {
+        // Object
         val mock = spyk(validator, recordPrivateCalls = true)
 
+        // Call
         assertDoesNotThrow {
             mock.validateForCreation(input)
         }
 
+        // Assertion
         verify {
             mock["processEntityCreationRules"](input.entity)
         }
@@ -204,10 +217,11 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() should throw AdminValidationException when there is any invalid field`(
+    fun `validateForCreation() should throw PersonalDataValidationException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        // Call
+        val exception = assertThrows<PersonalDataValidationException> {
             validator.validateForCreation(input)
         }
 
@@ -221,6 +235,7 @@ class AdminValidationStrategyTest {
 
     @Test
     fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
+        // Object
         val unexpectedEntity = object : Entity {
             override val businessCentralId: String = ""
             override val id: String = ""
@@ -231,6 +246,7 @@ class AdminValidationStrategyTest {
         }
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
+        // Call
         val exception = assertThrows<UnexpectedValidatorInputException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
@@ -242,5 +258,6 @@ class AdminValidationStrategyTest {
             } ?: false
         )
     }
+
 
 }

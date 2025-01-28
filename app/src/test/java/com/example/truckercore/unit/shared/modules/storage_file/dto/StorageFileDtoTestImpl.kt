@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.domain.storage_file.dtos
+package com.example.truckercore.unit.shared.modules.storage_file.dto
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import org.junit.jupiter.api.Assertions.assertEquals
