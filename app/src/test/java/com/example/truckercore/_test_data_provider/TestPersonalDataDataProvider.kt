@@ -1,8 +1,8 @@
 package com.example.truckercore._test_data_provider
 
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.modules.personal_data.entities.PersonalData
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import java.time.LocalDateTime
 import java.util.Date
 

@@ -5,8 +5,8 @@ import com.example.truckercore._test_utils.mockStaticTask
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.modules.personal_data.repositories.implementations.PersonalDataRepositoryImpl
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepositoryImpl
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query

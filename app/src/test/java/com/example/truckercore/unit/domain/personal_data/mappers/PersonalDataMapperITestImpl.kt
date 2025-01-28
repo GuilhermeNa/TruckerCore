@@ -5,8 +5,8 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
-import com.example.truckercore.shared.modules.personal_data.mappers.PersonalDataMapper
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.mapper.PersonalDataMapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 import io.mockk.every

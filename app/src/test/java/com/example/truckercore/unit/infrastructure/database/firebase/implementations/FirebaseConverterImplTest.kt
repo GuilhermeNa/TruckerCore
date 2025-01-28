@@ -1,10 +1,8 @@
 package com.example.truckercore.unit.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseConverterImpl
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.sealeds.Response
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import io.mockk.every

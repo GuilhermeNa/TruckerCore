@@ -8,7 +8,7 @@ import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseC
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseRepositoryImpl
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.sealeds.Response
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task

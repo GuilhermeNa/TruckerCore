@@ -39,15 +39,13 @@ internal class UpdateDriverUseCaseImpl(
         permissionService.canPerformAction(user, Permission.UPDATE_DRIVER)
 
     private suspend fun continueForExistenceCheckage(user: User, driver: Driver) =
-        when (
-            val existenceResponse = checkExistence.execute(user, driver.id!!).single()
-        ) {
-            is Response.Success -> updateDriver(driver)
+        when (val existenceResponse = checkExistence.execute(user, driver.id!!).single()) {
+            is Response.Success -> processUpdate(driver)
             is Response.Empty -> handleNonExistentObject(driver.id)
             is Response.Error -> handleFailureResponse(existenceResponse)
         }
 
-    private suspend fun updateDriver(driverToUpdate: Driver): Response<Unit> {
+    private suspend fun processUpdate(driverToUpdate: Driver): Response<Unit> {
         validatorService.validateEntity(driverToUpdate)
         val dto = mapper.toDto(driverToUpdate)
         return repository.update(dto).single()

@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.domain.personal_data.configs
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
-import com.example.truckercore.shared.modules.personal_data.dtos.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test

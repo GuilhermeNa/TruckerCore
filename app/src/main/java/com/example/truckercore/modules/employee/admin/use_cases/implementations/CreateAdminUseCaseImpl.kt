@@ -24,7 +24,7 @@ internal class CreateAdminUseCaseImpl(
 
     override suspend fun execute(user: User, admin: Admin): Flow<Response<String>> = flow {
         val result =
-            if (userHasPermission(user)) processAdminCreation(admin)
+            if (userHasPermission(user)) processCreation(admin)
             else handleUnauthorizedPermission(user, admin.id!!)
 
         emit(result)
@@ -36,7 +36,7 @@ internal class CreateAdminUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.CREATE_ADMIN)
 
-    private suspend fun processAdminCreation(admin: Admin): Response<String> {
+    private suspend fun processCreation(admin: Admin): Response<String> {
         validatorService.validateForCreation(admin)
         val adminDto = mapper.toDto(admin)
         return repository.create(adminDto).single()

@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.modules.personal_data.entities
+package com.example.truckercore.shared.modules.personal_data.entity
 
 import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
 import com.example.truckercore.shared.enums.PersistenceStatus
@@ -31,6 +31,7 @@ data class PersonalData(
     val expirationDate: LocalDateTime? = null,
     val file: StorageFile? = null
 ) : Entity {
+
 
 
 

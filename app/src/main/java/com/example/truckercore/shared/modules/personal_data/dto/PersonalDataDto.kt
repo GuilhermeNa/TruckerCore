@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.modules.personal_data.dtos
+package com.example.truckercore.shared.modules.personal_data.dto
 
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto

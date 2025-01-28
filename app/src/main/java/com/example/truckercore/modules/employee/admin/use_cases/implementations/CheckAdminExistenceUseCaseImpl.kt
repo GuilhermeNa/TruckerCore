@@ -23,7 +23,7 @@ internal class CheckAdminExistenceUseCaseImpl(
         id.validateIsNotBlank(Field.ID.name)
 
         val result =
-            if (userHasPermission(user)) checkForExistence(id)
+            if (userHasPermission(user)) verifyExistence(id)
             else handleUnauthorizedPermission(user, id)
 
         emit(result)
@@ -35,7 +35,7 @@ internal class CheckAdminExistenceUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
 
-    private suspend fun checkForExistence(id: String): Response<Unit> =
+    private suspend fun verifyExistence(id: String): Response<Unit> =
         when (val response = repository.entityExists(id).single()) {
             is Response.Error -> handleFailureResponse(response)
             else -> response

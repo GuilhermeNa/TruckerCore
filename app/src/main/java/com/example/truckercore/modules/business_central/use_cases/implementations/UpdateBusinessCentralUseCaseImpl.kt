@@ -39,15 +39,13 @@ internal class UpdateBusinessCentralUseCaseImpl(
         permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
 
     private suspend fun continueForExistenceCheckage(user: User, entity: BusinessCentral) =
-        when (
-            val response = checkExistence.execute(user, entity.id!!).single()
-        ) {
-            is Response.Success -> update(entity)
+        when (val response = checkExistence.execute(user, entity.id!!).single()) {
+            is Response.Success -> processUpdate(entity)
             is Response.Empty -> handleNonExistentObject(entity.id)
             is Response.Error -> handleFailureResponse(response)
         }
 
-    private suspend fun update(entity: BusinessCentral): Response<Unit> {
+    private suspend fun processUpdate(entity: BusinessCentral): Response<Unit> {
         validatorService.validateEntity(entity)
         val dto = mapper.toDto(entity)
         return repository.update(dto).single()

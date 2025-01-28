@@ -26,7 +26,7 @@ internal class UpdateAdminUseCaseImpl(
 
     override suspend fun execute(user: User, admin: Admin): Flow<Response<Unit>> = flow {
         val result =
-            if (userHasPermission(user)) continueForExistenceCheck(user, admin)
+            if (userHasPermission(user)) verifyExistence(user, admin)
             else handleUnauthorizedPermission(user, admin.id!!)
 
         emit(result)
@@ -38,14 +38,14 @@ internal class UpdateAdminUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.UPDATE_ADMIN)
 
-    private suspend fun continueForExistenceCheck(user: User, admin: Admin): Response<Unit> =
+    private suspend fun verifyExistence(user: User, admin: Admin): Response<Unit> =
         when (val existenceResponse = checkExistence.execute(user, admin.id!!).single()) {
-            is Response.Success -> updateAdmin(admin)
+            is Response.Success -> processUpdate(admin)
             is Response.Empty -> handleNonExistentObject(admin.id)
             is Response.Error -> handleFailureResponse(existenceResponse)
         }
 
-    private suspend fun updateAdmin(adminToUpdate: Admin): Response<Unit> {
+    private suspend fun processUpdate(adminToUpdate: Admin): Response<Unit> {
         validatorService.validateEntity(adminToUpdate)
         val dto = mapper.toDto(adminToUpdate)
         return repository.update(dto).single()

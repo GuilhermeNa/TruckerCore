@@ -55,7 +55,6 @@ internal interface Repository<T : Dto> {
      * Fetches an Entity by its ID.
      *
      * @param id The unique identifier (ID) of the entity to be fetched.
-     * @return A [Flow] that emits a [Response] containing the StorageFileDto entity.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully found.
      * - [Response.Error] when any error occurs.

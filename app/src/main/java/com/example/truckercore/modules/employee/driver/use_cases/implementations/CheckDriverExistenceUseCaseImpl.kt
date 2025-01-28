@@ -23,7 +23,7 @@ internal class CheckDriverExistenceUseCaseImpl(
         id.validateIsNotBlank(Field.ID.name)
 
         val result =
-            if (userHasPermission(user)) processExistenceCheckage(id)
+            if (userHasPermission(user)) verifyExistence(id)
             else handleUnauthorizedPermission(user, id)
 
         emit(result)
@@ -35,10 +35,8 @@ internal class CheckDriverExistenceUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
 
-    private suspend fun processExistenceCheckage(id: String): Response<Unit> =
-        when (
-            val response = repository.entityExists(id).single()
-        ) {
+    private suspend fun verifyExistence(id: String): Response<Unit> =
+        when (val response = repository.entityExists(id).single()) {
             is Response.Error -> handleFailureResponse(response)
             else -> response
         }

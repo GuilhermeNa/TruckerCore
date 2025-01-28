@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.shared.modules.personal_data.entities.PersonalData
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.storage_file.entities.StorageFile
 
 /**
