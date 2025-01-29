@@ -18,6 +18,18 @@ import com.example.truckercore.shared.interfaces.MapperI
  */
 internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
 
+    override fun toEntity(dto: D): E = try {
+        handleDtoMapping(dto)
+    } catch (e: Exception) {
+        handleMappingError(e, dto)
+    }
+
+    override fun toDto(entity: E): D = try {
+        handleEntityMapping(entity)
+    } catch (e: Exception) {
+        handleMappingError(e, entity)
+    }
+
     /**
      * Maps an [Entity] to a [Dto].
      *

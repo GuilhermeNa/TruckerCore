@@ -1,5 +1,6 @@
 package com.example.truckercore.unit.modules.employee.driver.use_cases
 
+import com.example.truckercore._test_data_provider.TestDriverDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
@@ -29,6 +30,8 @@ class GetDriverUseCaseImplTestTest {
     private lateinit var mapper: DriverMapper
     private lateinit var useCase: GetDriverUseCase
     private lateinit var user: User
+    private val driver = TestDriverDataProvider.getBaseEntity()
+    private val dto = TestDriverDataProvider.getBaseDto()
     private val id = "id"
 
     @BeforeEach
@@ -46,13 +49,16 @@ class GetDriverUseCaseImplTestTest {
     fun `should return data correctly when its found`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.VIEW_DRIVER) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Success(mockk()))
+        coEvery { repository.fetchById(id) } returns flowOf(Response.Success(dto))
+        every { validatorService.validateDto(dto) } returns Unit
+        every { mapper.toEntity(dto) } returns driver
 
         // Call
         val result = useCase.execute(user, id).single()
 
         // Assertions
         assertTrue(result is Response.Success)
+
     }
 
     @Test

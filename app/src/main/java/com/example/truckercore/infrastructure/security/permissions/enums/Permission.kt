@@ -13,6 +13,17 @@ import com.example.truckercore.shared.errors.InvalidEnumParameterException
  * to ensure that the user or service has the necessary access rights.
  */
 enum class Permission {
+
+    VIEW_TRAILER,
+    CREATE_TRAILER,
+    DELETE_TRAILER,
+    UPDATE_TRAILER,
+
+    VIEW_TRUCK,
+    CREATE_TRUCK,
+    DELETE_TRUCK,
+    UPDATE_TRUCK,
+
     /**
      * Permission to update a storage file.
      */

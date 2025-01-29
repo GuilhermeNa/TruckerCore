@@ -1,47 +1,45 @@
-package com.example.truckercore.modules.employee.driver.mapper
+package com.example.truckercore.modules.fleet.truck.mapper
 
-import com.example.truckercore.modules.employee.driver.dto.DriverDto
-import com.example.truckercore.modules.employee.driver.entity.Driver
-import com.example.truckercore.modules.employee.driver.errors.DriverMappingException
-import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.entity.Truck
+import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
+import com.example.truckercore.modules.fleet.truck.errors.TruckMappingException
 import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal class DriverMapper : Mapper<Driver, DriverDto>() {
+internal class TruckMapper : Mapper<Truck, TruckDto>() {
 
-    override fun handleEntityMapping(entity: Driver) = DriverDto(
+    override fun handleEntityMapping(entity: Truck) = TruckDto(
         businessCentralId = entity.businessCentralId,
         id = entity.id,
         lastModifierId = entity.lastModifierId,
         creationDate = entity.creationDate.toDate(),
         lastUpdate = entity.lastUpdate.toDate(),
         persistenceStatus = entity.persistenceStatus.name,
-        userId = entity.userId,
-        name = entity.name,
-        email = entity.email,
-        employeeStatus = entity.employeeStatus.name
+        plate = entity.plate,
+        color = entity.color,
+        brand = entity.brand.name
     )
 
-    override fun handleDtoMapping(dto: DriverDto) = Driver(
+    override fun handleDtoMapping(dto: TruckDto) = Truck(
         businessCentralId = dto.businessCentralId!!,
         id = dto.id!!,
         lastModifierId = dto.lastModifierId!!,
         creationDate = dto.creationDate!!.toLocalDateTime(),
         lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
         persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus),
-        userId = dto.userId,
-        name = dto.name!!,
-        email = dto.email!!,
-        employeeStatus = EmployeeStatus.convertString(dto.employeeStatus)
+        plate = dto.plate!!,
+        color = dto.color!!,
+        brand = TruckBrand.convertString(dto.brand)
     )
 
     override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
         val message = "Error while mapping a ${obj::class.simpleName} object."
         logError(message)
-        throw DriverMappingException(message = "$message Obj: $obj", receivedException)
+        throw TruckMappingException(message = "$message Obj: $obj", receivedException)
     }
 
 }
