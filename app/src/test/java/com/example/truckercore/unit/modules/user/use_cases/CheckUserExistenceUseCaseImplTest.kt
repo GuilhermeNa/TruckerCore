@@ -27,7 +27,6 @@ class CheckUserExistenceUseCaseImplTest {
     private lateinit var useCase: CheckUserExistenceUseCase
     private val repository: UserRepository = mockk()
     private val permissionService: PermissionService = mockk()
-
     private val user = TestUserDataProvider.getBaseEntity()
     private val id = "id"
 

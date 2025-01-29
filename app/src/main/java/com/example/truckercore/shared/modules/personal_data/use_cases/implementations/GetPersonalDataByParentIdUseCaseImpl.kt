@@ -47,8 +47,8 @@ internal class GetPersonalDataByParentIdUseCaseImpl(
     private suspend fun fetchByParentId(parentId: String): Response<List<PersonalData>> =
         when (val response = repository.fetchByParentId(parentId).single()) {
             is Response.Success -> processData(response.data)
-            is Response.Empty -> handleNonExistentObject(parentId)
             is Response.Error -> handleFailureResponse(response)
+            is Response.Empty -> response
         }
 
     private fun processData(dtos: List<PersonalDataDto>): Response<List<PersonalData>> {

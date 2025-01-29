@@ -1,13 +1,13 @@
-package com.example.truckercore.unit.modules.employee.admin.use_cases
+package com.example.truckercore.unit.shared.modules.personal_data.use_cases
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.employee.admin.repository.AdminRepository
-import com.example.truckercore.modules.employee.admin.use_cases.implementations.CheckAdminExistenceUseCaseImpl
-import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CheckAdminExistenceUseCase
+import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
+import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.CheckPersonalDataExistenceUseCaseImpl
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.shared.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.every
@@ -19,24 +19,24 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class CheckAdminExistenceUseCaseImplTest {
+class CheckPersonalDataExistenceUseCaseImplTest {
 
-    private val repository: AdminRepository = mockk()
+    private val repository: PersonalDataRepository = mockk()
     private val permissionService: PermissionService = mockk()
-    private lateinit var useCase: CheckAdminExistenceUseCase
+    private lateinit var useCase: CheckPersonalDataExistenceUseCase
     private val user = TestUserDataProvider.getBaseEntity()
     private val id = "id"
 
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckAdminExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckPersonalDataExistenceUseCaseImpl(repository, permissionService)
     }
 
     @Test
     fun `should return success when user has permission and object exists`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
+        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns true
         coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
         // Call
@@ -47,9 +47,9 @@ class CheckAdminExistenceUseCaseImplTest {
     }
 
     @Test
-    fun `should return empty when object does not exists`() = runTest {
+    fun `should return empty when object does not exist`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
+        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns true
         coEvery { repository.entityExists(id) } returns flowOf(Response.Empty)
 
         // Call
@@ -62,7 +62,7 @@ class CheckAdminExistenceUseCaseImplTest {
     @Test
     fun `should return error when user does not have permission`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns false
+        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns false
 
         // Call
         val result = useCase.execute(user, id).single()
@@ -74,7 +74,7 @@ class CheckAdminExistenceUseCaseImplTest {
     @Test
     fun `should return error when database returns an error`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
+        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns true
         coEvery { repository.entityExists(id) } returns flowOf(Response.Error(NullPointerException()))
 
         // Call

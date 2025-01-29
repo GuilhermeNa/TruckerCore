@@ -29,7 +29,7 @@ internal class GetPersonalDataByIdUseCaseImpl(
         id.validateIsNotBlank(Field.ID.name)
 
         val result =
-            if (userHasPermission(user)) fetchAdminById(id)
+            if (userHasPermission(user)) fetchById(id)
             else handleUnauthorizedPermission(user, id)
 
         emit(result)
@@ -41,7 +41,7 @@ internal class GetPersonalDataByIdUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
 
-    private suspend fun fetchAdminById(id: String): Response<PersonalData> =
+    private suspend fun fetchById(id: String): Response<PersonalData> =
         when (val response = repository.fetchById(id).single()) {
             is Response.Success -> processResponse(response)
             is Response.Error -> handleFailureResponse(response)
