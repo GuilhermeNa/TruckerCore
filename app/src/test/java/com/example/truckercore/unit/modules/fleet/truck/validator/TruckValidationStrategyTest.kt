@@ -1,9 +1,9 @@
-package com.example.truckercore.unit.modules.employee.admin.validator
+package com.example.truckercore.unit.modules.fleet.truck.validator
 
-import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestTruckDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.employee.admin.errors.AdminValidationException
-import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
+import com.example.truckercore.modules.fleet.truck.errors.TruckValidationException
+import com.example.truckercore.modules.fleet.truck.validator.TruckValidationStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
@@ -12,7 +12,7 @@ import com.example.truckercore.shared.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -21,50 +21,50 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDateTime
 import java.util.Date
 
-class AdminValidationStrategyTest {
+class TruckValidationStrategyTest {
 
-    private val validator = AdminValidationStrategy()
+    private val validator = TruckValidationStrategy()
 
     companion object {
-
-        @BeforeEach
+        @JvmStatic
+        @BeforeAll
         fun setup() {
             mockStaticLog()
         }
 
         @JvmStatic
         fun arrValidDtosForValidationRules() =
-            TestAdminDataProvider.arrValidDtosForValidationRules().map {
+            TestTruckDataProvider.arrValidDtosForValidationRules().map {
                 ValidatorInput.DtoInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForValidationRules() =
-            TestAdminDataProvider.arrValidEntitiesForValidationRules().map {
+            TestTruckDataProvider.arrValidEntitiesForValidationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForCreationRules() =
-            TestAdminDataProvider.arrValidEntitiesForCreationRules().map {
+            TestTruckDataProvider.arrValidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrInvalidDtosForValidationRules() =
-            TestAdminDataProvider.arrInvalidDtosForValidationRules().map {
+            TestTruckDataProvider.arrInvalidDtosForValidationRules().map {
                 ValidatorInput.DtoInput(it)
             }
 
         @JvmStatic
         fun arrInvalidEntitiesForValidationRules() =
-            TestAdminDataProvider.arrInvalidEntitiesForValidationRules().map {
+            TestTruckDataProvider.arrInvalidEntitiesForValidationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrInvalidEntitiesForCreationRules() =
-            TestAdminDataProvider.arrInvalidEntitiesForCreationRules().map {
+            TestTruckDataProvider.arrInvalidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
     }
@@ -89,10 +89,10 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw AdminValidationException when there is any invalid field`(
+    fun `validateDto() should throw TruckValidationException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<TruckValidationException> {
             validator.validateDto(input)
         }
 
@@ -149,10 +149,10 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw AdminValidationException when there is any invalid field`(
+    fun `validateEntity() should throw TruckValidationException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<TruckValidationException> {
             validator.validateEntity(input)
         }
 
@@ -206,10 +206,10 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() should throw AdminValidationException when there is any invalid field`(
+    fun `validateForCreation() should throw TruckValidationException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<TruckValidationException> {
             validator.validateForCreation(input)
         }
 

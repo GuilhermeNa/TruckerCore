@@ -1,31 +1,30 @@
-package com.example.truckercore.unit.modules.employee.admin.repository
+package com.example.truckercore.unit.modules.fleet.trailer.repository
 
-import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestTrailerDataProvider
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
-import com.example.truckercore.modules.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.employee.admin.repository.AdminRepository
-import com.example.truckercore.modules.employee.admin.repository.AdminRepositoryImpl
+import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
+import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
+import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepositoryImpl
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class AdminRepositoryImplTest {
+class TrailerRepositoryImplTest {
 
-    private lateinit var repository: AdminRepository
-    private lateinit var fireBaseRepository: FirebaseRepository<AdminDto>
+    private lateinit var repository: TrailerRepository
+    private val fireBaseRepository: FirebaseRepository<TrailerDto> = mockk(relaxed = true)
 
     @BeforeEach
     fun setup() {
-        fireBaseRepository = mockk(relaxed = true)
-        repository = AdminRepositoryImpl(fireBaseRepository)
+        repository = TrailerRepositoryImpl(fireBaseRepository)
     }
 
     @Test
     fun `should call fireBase repository create`() = runTest {
         // Arrange
-        val dto = TestAdminDataProvider.getBaseDto()
+        val dto = TestTrailerDataProvider.getBaseDto()
 
         // Call
         repository.create(dto)
@@ -37,7 +36,7 @@ internal class AdminRepositoryImplTest {
     @Test
     fun `should call fireBase repository update`() = runTest {
         // Arrange
-        val dto = TestAdminDataProvider.getBaseDto()
+        val dto = TestTrailerDataProvider.getBaseDto()
 
         // Call
         repository.update(dto)

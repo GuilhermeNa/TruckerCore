@@ -1,31 +1,31 @@
-package com.example.truckercore.unit.modules.employee.admin.repository
+package com.example.truckercore.unit.modules.fleet.truck.repository
 
-import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestTruckDataProvider
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
-import com.example.truckercore.modules.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.employee.admin.repository.AdminRepository
-import com.example.truckercore.modules.employee.admin.repository.AdminRepositoryImpl
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
+import com.example.truckercore.modules.fleet.truck.repository.TruckRepositoryImpl
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class AdminRepositoryImplTest {
+class TruckRepositoryImplTest {
 
-    private lateinit var repository: AdminRepository
-    private lateinit var fireBaseRepository: FirebaseRepository<AdminDto>
+    private lateinit var repository: TruckRepository
+    private lateinit var fireBaseRepository: FirebaseRepository<TruckDto>
 
     @BeforeEach
     fun setup() {
         fireBaseRepository = mockk(relaxed = true)
-        repository = AdminRepositoryImpl(fireBaseRepository)
+        repository = TruckRepositoryImpl(fireBaseRepository)
     }
 
     @Test
     fun `should call fireBase repository create`() = runTest {
         // Arrange
-        val dto = TestAdminDataProvider.getBaseDto()
+        val dto = TestTruckDataProvider.getBaseDto()
 
         // Call
         repository.create(dto)
@@ -37,7 +37,7 @@ internal class AdminRepositoryImplTest {
     @Test
     fun `should call fireBase repository update`() = runTest {
         // Arrange
-        val dto = TestAdminDataProvider.getBaseDto()
+        val dto = TestTruckDataProvider.getBaseDto()
 
         // Call
         repository.update(dto)

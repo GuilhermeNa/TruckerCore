@@ -4,6 +4,7 @@ import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.modules.fleet.truck.dto.TruckDto
 import com.example.truckercore.modules.fleet.truck.entity.Truck
+import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
 import com.example.truckercore.modules.fleet.truck.errors.TruckValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
@@ -65,7 +66,7 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
         if (dto.color.isNullOrBlank()) invalidFields.add(Field.COLOR.getName())
 
         if (dto.brand.isNullOrEmpty() ||
-            !TrailerBrand.enumExists(dto.brand)
+            !TruckBrand.enumExists(dto.brand)
         ) invalidFields.add(Field.BRAND.getName())
 
         if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)

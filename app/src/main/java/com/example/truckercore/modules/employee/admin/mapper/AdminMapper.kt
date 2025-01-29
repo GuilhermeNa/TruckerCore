@@ -12,20 +12,6 @@ import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
 internal class AdminMapper : Mapper<Admin, AdminDto>() {
 
-    override fun toEntity(dto: AdminDto): Admin = try {
-        handleDtoMapping(dto)
-    } catch (e: Exception) {
-        handleMappingError(e, dto)
-    }
-
-    override fun toDto(entity: Admin): AdminDto = try {
-        handleEntityMapping(entity)
-    } catch (e: Exception) {
-        handleMappingError(e, entity)
-    }
-
-    //----------------------------------------------------------------------------------------------
-
     override fun handleEntityMapping(entity: Admin) = AdminDto(
         businessCentralId = entity.businessCentralId,
         id = entity.id,
