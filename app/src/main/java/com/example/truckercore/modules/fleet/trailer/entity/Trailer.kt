@@ -1,5 +1,6 @@
 package com.example.truckercore.modules.fleet.trailer.entity
 
+import com.example.truckercore.modules.fleet.shared.abstraction.FleetData
 import com.example.truckercore.modules.fleet.shared.interfaces.Fleet
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerCategory
@@ -16,6 +17,7 @@ data class Trailer(
     override val persistenceStatus: PersistenceStatus,
     override val plate: String,
     override val color: String,
+    override val documents: List<FleetData> = emptyList(),
     val brand: TrailerBrand,
     val category: TrailerCategory
 ): Entity, Fleet

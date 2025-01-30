@@ -1,8 +1,9 @@
 package com.example.truckercore.modules.fleet.shared.interfaces
 
-interface Fleet {
+import com.example.truckercore.modules.fleet.shared.abstraction.FleetData
 
+interface Fleet {
     val plate: String
     val color: String
-
+    val documents: List<FleetData>
 }

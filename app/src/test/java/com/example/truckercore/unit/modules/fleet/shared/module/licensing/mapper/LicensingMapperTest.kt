@@ -1,12 +1,10 @@
-package com.example.truckercore.unit.modules.fleet.trailer.mapper
+package com.example.truckercore.unit.modules.fleet.shared.module.licensing.mapper
 
-import com.example.truckercore._test_data_provider.TestTrailerDataProvider
+import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
-import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
-import com.example.truckercore.modules.fleet.trailer.enums.TrailerCategory
-import com.example.truckercore.modules.fleet.trailer.errors.TrailerMappingException
-import com.example.truckercore.modules.fleet.trailer.mapper.TrailerMapper
+import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.modules.fleet.shared.module.licensing.errors.LicensingMappingException
+import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
@@ -19,11 +17,11 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class TrailerMapperTest {
+internal class LicensingMapperTest {
 
-    private val mapper = TrailerMapper()
-    private val entity = TestTrailerDataProvider.getBaseEntity()
-    private val dto = TestTrailerDataProvider.getBaseDto()
+    private val mapper = LicensingMapper()
+    private val entity = TestLicensingDataProvider.getBaseEntity()
+    private val dto = TestLicensingDataProvider.getBaseDto()
 
     companion object {
         @BeforeAll
@@ -31,9 +29,10 @@ class TrailerMapperTest {
         fun setup() {
             mockStaticLog()
         }
+
         @JvmStatic
-        fun getInvalidDtos(): Array<TrailerDto> {
-            return TestTrailerDataProvider.arrInvalidDtos()
+        fun getInvalidDtos(): Array<LicensingDto> {
+            return TestLicensingDataProvider.arrInvalidDtosForMapping()
         }
     }
 
@@ -49,10 +48,11 @@ class TrailerMapperTest {
         assertEquals(entity.creationDate.toDate(), createdDto.creationDate)
         assertEquals(entity.lastUpdate.toDate(), createdDto.lastUpdate)
         assertEquals(entity.persistenceStatus.name, createdDto.persistenceStatus)
+        assertEquals(entity.parentId, createdDto.parentId)
+        assertEquals(entity.emissionDate.toDate(), createdDto.emissionDate)
+        assertEquals(entity.expirationDate.toDate(), createdDto.expirationDate)
         assertEquals(entity.plate, createdDto.plate)
-        assertEquals(entity.color, createdDto.color)
-        assertEquals(entity.brand.name, createdDto.brand)
-        assertEquals(entity.category.name, createdDto.category)
+        assertEquals(entity.exercise.toDate(), createdDto.exercise)
     }
 
     @Test
@@ -70,20 +70,15 @@ class TrailerMapperTest {
             PersistenceStatus.convertString(dto.persistenceStatus),
             createdEntity.persistenceStatus
         )
+        assertEquals(dto.parentId, createdEntity.parentId)
+        assertEquals(dto.emissionDate?.toLocalDateTime(), createdEntity.emissionDate)
+        assertEquals(dto.expirationDate?.toLocalDateTime(), createdEntity.expirationDate)
         assertEquals(dto.plate, createdEntity.plate)
-        assertEquals(dto.color, createdEntity.color)
-        assertEquals(
-            TrailerBrand.convertString(dto.brand),
-            createdEntity.brand
-        )
-        assertEquals(
-            TrailerCategory.convertString(dto.category),
-            createdEntity.category
-        )
+        assertEquals(dto.exercise?.toLocalDateTime(), createdEntity.exercise)
     }
 
     @Test
-    fun `toDto() should throw TrailerMappingException when there are errors`() {
+    fun `toDto() should throw LicensingMappingException when there are errors`() {
         // Object
         val mockk = spyk(mapper, recordPrivateCalls = true)
 
@@ -91,17 +86,17 @@ class TrailerMapperTest {
         every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
 
         // Call
-        assertThrows<TrailerMappingException> {
+        assertThrows<LicensingMappingException> {
             mockk.toDto(entity)
         }
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw TrailerMappingException when there are errors`(
-        pDto: TrailerDto
+    fun `toEntity() should throw LicensingMappingException when there are errors`(
+        pDto: LicensingDto
     ) {
-        assertThrows<TrailerMappingException> {
+        assertThrows<LicensingMappingException> {
             mapper.toEntity(pDto)
         }
     }

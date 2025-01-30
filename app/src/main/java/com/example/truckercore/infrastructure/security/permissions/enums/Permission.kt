@@ -1,7 +1,6 @@
 package com.example.truckercore.infrastructure.security.permissions.enums
 
 import com.example.truckercore.shared.errors.InvalidEnumParameterException
-
 /**
  * Enum class representing various permissions that can be assigned to users or services.
  *
@@ -13,6 +12,10 @@ import com.example.truckercore.shared.errors.InvalidEnumParameterException
  * to ensure that the user or service has the necessary access rights.
  */
 enum class Permission {
+    VIEW_LICENSING,
+    CREATE_LICENSING,
+    UPDATE_LICENSING,
+    DELETE_LICENSING,
 
     VIEW_TRAILER,
     CREATE_TRAILER,
@@ -164,3 +167,4 @@ enum class Permission {
 
     }
 }
+
