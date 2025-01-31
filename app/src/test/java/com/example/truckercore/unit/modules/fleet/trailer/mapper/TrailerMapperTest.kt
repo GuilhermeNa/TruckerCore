@@ -53,6 +53,7 @@ class TrailerMapperTest {
         assertEquals(entity.color, createdDto.color)
         assertEquals(entity.brand.name, createdDto.brand)
         assertEquals(entity.category.name, createdDto.category)
+        assertEquals(entity.truckId, createdDto.truckId)
     }
 
     @Test
@@ -80,6 +81,7 @@ class TrailerMapperTest {
             TrailerCategory.convertString(dto.category),
             createdEntity.category
         )
+        assertEquals(dto.truckId, createdEntity.truckId)
     }
 
     @Test

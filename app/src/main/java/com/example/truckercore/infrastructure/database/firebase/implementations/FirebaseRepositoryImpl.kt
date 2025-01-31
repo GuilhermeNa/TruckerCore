@@ -142,6 +142,21 @@ internal class FirebaseRepositoryImpl<T : Dto>(
             emit(handleUnexpectedError(it))
         }
 
+    override suspend fun simpleQueryFetch(field: Field, values: List<String>): Flow<Response<List<T>>> =
+        flow {
+            val query = queryBuilder.getQuery(collection.getName(), field.name, values)
+            val querySnapshot = query.get().await()
+
+            val response = querySnapshot?.let { qss ->
+                converter.processQuerySnapShot(qss)
+            } ?: Response.Empty
+
+            emit(response)
+
+        }.catch {
+            emit(handleUnexpectedError(it))
+        }
+
     /**
      * Builds an error response based on the provided exception.
      *
@@ -155,7 +170,8 @@ internal class FirebaseRepositoryImpl<T : Dto>(
      * @param throwable The exception that was thrown during the Firebase operation.
      * @return A [Response.Error] containing a detailed error message and the thrown exception.
      */
-    fun handleUnexpectedError(throwable: Throwable): Response.Error {
+    private fun handleUnexpectedError(throwable: Throwable): Response.Error {
+        throwable as Exception
         val message = when (throwable) {
             is FirebaseConversionException -> "Error during conversion of Firestore document to DTO class."
             is FirebaseNetworkException -> "Network error. Please check your internet connection."
@@ -163,8 +179,12 @@ internal class FirebaseRepositoryImpl<T : Dto>(
             is FirebaseAuthException -> "Authentication failed. Ensure user is authenticated properly."
             else -> "Unknown error."
         }
-        logError("An error occurred while interacting with firebase. $message")
-        return Response.Error(throwable as Exception)
+        logError(
+            context = javaClass,
+            exception = throwable,
+            message = message
+        )
+        return Response.Error(throwable)
     }
 
 }

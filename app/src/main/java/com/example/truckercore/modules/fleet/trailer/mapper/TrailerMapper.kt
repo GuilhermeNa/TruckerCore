@@ -5,9 +5,6 @@ import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerCategory
 import com.example.truckercore.modules.fleet.trailer.errors.TrailerMappingException
-import com.example.truckercore.modules.fleet.truck.dto.TruckDto
-import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
-import com.example.truckercore.modules.fleet.truck.errors.TruckMappingException
 import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.logError
@@ -26,7 +23,8 @@ internal class TrailerMapper : Mapper<Trailer, TrailerDto>() {
         plate = entity.plate,
         color = entity.color,
         brand = entity.brand.name,
-        category = entity.category.name
+        category = entity.category.name,
+        truckId = entity.truckId
     )
 
     override fun handleDtoMapping(dto: TrailerDto) = Trailer(
@@ -39,7 +37,8 @@ internal class TrailerMapper : Mapper<Trailer, TrailerDto>() {
         plate = dto.plate!!,
         color = dto.color!!,
         brand = TrailerBrand.convertString(dto.brand),
-        category = TrailerCategory.convertString(dto.category)
+        category = TrailerCategory.convertString(dto.category),
+        truckId = dto.truckId
     )
 
     override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {

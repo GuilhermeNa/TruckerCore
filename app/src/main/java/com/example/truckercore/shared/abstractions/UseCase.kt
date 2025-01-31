@@ -1,5 +1,6 @@
 package com.example.truckercore.shared.abstractions
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
@@ -18,8 +19,6 @@ import com.example.truckercore.shared.utils.expressions.logWarn
  */
 internal abstract class UseCase {
 
-    private val className = this.javaClass.simpleName
-
     /**
      * Handles an error response from the repository or service.
      *
@@ -29,9 +28,11 @@ internal abstract class UseCase {
      * @return The same error response.
      */
     protected fun handleFailureResponse(response: Response.Error): Response.Error {
-        val message =
-            "$className: Received an error response from database: ${response.exception}."
-        logError(message)
+        logError(
+            context = javaClass,
+            exception = response.exception,
+            message = "Received an error response from database."
+        )
         return response
     }
 
@@ -44,10 +45,13 @@ internal abstract class UseCase {
      * @return A `Response.Error` containing the exception.
      */
     protected fun handleUnexpectedError(throwable: Throwable): Response.Error {
-        val message =
-            "$className: An unexpected error occurred during execution: ${throwable}."
-        logError(message)
-        return Response.Error(exception = throwable as Exception)
+        throwable as Exception
+        logError(
+            context = javaClass,
+            exception = throwable,
+            message = "An unexpected error occurred during execution."
+        )
+        return Response.Error(throwable)
     }
 
     /**
@@ -61,9 +65,11 @@ internal abstract class UseCase {
      * @return A `Response.Error` with an `UnauthorizedAccessException`.
      */
     protected fun handleUnauthorizedPermission(user: User, id: String): Response.Error {
-        val message =
-            "$className: Unauthorized access attempt by user: ${user.id}, for entity ID: $id"
-        logWarn(message)
+        val message = "Unauthorized access attempt by user: ${user.id}, for entity ID: $id"
+        logWarn(
+            context = javaClass,
+            message = message
+        )
         return Response.Error(UnauthorizedAccessException(message))
     }
 
@@ -76,10 +82,34 @@ internal abstract class UseCase {
      * @return A `Response.Error` with an `ObjectNotFoundException`.
      */
     protected fun handleNonExistentObject(id: String): Response.Error {
-        val message =
-            "$className: The object with ID: $id was not found in the database."
-        logError(message)
+        val message = "Entity not found with ID: $id."
+        logError(
+            context = javaClass,
+            exception = ObjectNotFoundException(),
+            message = "Entity not found with id: $id"
+        )
         return Response.Error(ObjectNotFoundException(message))
+    }
+
+    /**
+     * Handles an unauthorized access attempt by a user when attempting to perform an action
+     * that requires specific permissions.
+     *
+     * @param user The user attempting the unauthorized action.
+     * @param missingPermission The permission that the user is missing in order to perform the action.
+     * @return A `Response.Error` containing an `UnauthorizedAccessException` indicating that the user
+     *         does not have the required permission.
+     */
+    protected fun handleUnauthorizedPermission(
+        user: User,
+        missingPermission: Permission
+    ): Response.Error {
+        val message = "Unauthorized access attempt by user: ${user.id}, for $missingPermission."
+        logWarn(
+            context = javaClass,
+            message = message
+        )
+        return Response.Error(UnauthorizedAccessException(message))
     }
 
 }

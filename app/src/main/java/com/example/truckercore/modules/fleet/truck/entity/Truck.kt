@@ -1,6 +1,5 @@
 package com.example.truckercore.modules.fleet.truck.entity
 
-import com.example.truckercore.modules.fleet.shared.abstraction.FleetData
 import com.example.truckercore.modules.fleet.shared.interfaces.Fleet
 import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
 import com.example.truckercore.shared.enums.PersistenceStatus
@@ -16,6 +15,5 @@ data class Truck(
     override val persistenceStatus: PersistenceStatus,
     override val plate: String,
     override val color: String,
-    override val documents: List<FleetData> = emptyList(),
     val brand: TruckBrand
 ) : Entity, Fleet

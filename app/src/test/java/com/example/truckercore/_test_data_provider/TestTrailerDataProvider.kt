@@ -20,7 +20,8 @@ object TestTrailerDataProvider {
         plate = "PLATE123",
         color = "Red",
         brand = TrailerBrand.RANDOM,
-        category = TrailerCategory.FOUR_AXIS
+        category = TrailerCategory.FOUR_AXIS,
+        truckId = "truckId"
     )
 
     fun getBaseDto() = TrailerDto(
@@ -33,7 +34,8 @@ object TestTrailerDataProvider {
         plate = "PLATE123",
         color = "Red",
         brand = TrailerBrand.RANDOM.name,
-        category = TrailerCategory.FOUR_AXIS.name
+        category = TrailerCategory.FOUR_AXIS.name,
+        truckId = "truckId"
     )
 
     fun arrInvalidDtos() = arrayOf(

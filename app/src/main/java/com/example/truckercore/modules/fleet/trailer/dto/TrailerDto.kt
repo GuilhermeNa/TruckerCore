@@ -14,7 +14,8 @@ data class TrailerDto(
     val plate: String? = null,
     val color: String? = null,
     val brand: String? = null,
-    val category: String? = null
+    val category: String? = null,
+    val truckId: String? = null
 ) : Dto {
 
     override fun initializeId(newId: String): Dto = this.copy(

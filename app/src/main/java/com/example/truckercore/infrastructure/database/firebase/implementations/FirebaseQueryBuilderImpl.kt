@@ -18,6 +18,8 @@ internal class FirebaseQueryBuilderImpl(private val firestore: FirebaseFirestore
     override fun getDocumentReference(collectionName: String, id: String) =
         collection(collectionName).document(id)
 
+    override fun getQuery(collectionName: String, field: String, values: List<String>) =
+        firestore.collection(collectionName).whereIn(field, values)
     /*  override fun buildTruckIdFilteredQuery(
           collectionName: String,
           truckId: String,

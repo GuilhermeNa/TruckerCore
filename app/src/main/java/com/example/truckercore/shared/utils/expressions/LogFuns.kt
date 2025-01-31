@@ -10,3 +10,15 @@ fun logError(message: String) {
 fun logWarn(message: String) {
     Log.w(Tag.WARN.getName(), message)
 }
+
+fun logError(context: Class<*>, exception: Exception, message: String) {
+    Log.e(Tag.ERROR.getName(), "$context | $exception | $message")
+}
+
+fun logWarn(context: Class<*>, message: String) {
+    Log.w(Tag.WARN.getName(), message)
+}
+
+fun logInfo(context: Class<*>, message: String) {
+    Log.i(Tag.WARN.getName(), "$context | $message")
+}

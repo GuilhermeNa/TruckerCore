@@ -26,6 +26,9 @@ internal interface FirebaseQueryBuilder {
      */
     fun getQuery(collectionName: String, field: String, value: String): Query
 
+
+    fun getQuery(collectionName: String, field: String, values: List<String>): Query
+
     /**
      * Builds a document reference query based on the collection name and document ID.
      *

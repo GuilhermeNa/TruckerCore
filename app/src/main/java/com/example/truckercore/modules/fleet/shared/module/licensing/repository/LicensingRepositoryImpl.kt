@@ -1,11 +1,21 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.repository
 
+import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.shared.sealeds.Response
+import kotlinx.coroutines.flow.Flow
 
 internal class LicensingRepositoryImpl(
     private val firebaseRepository: FirebaseRepository<LicensingDto>
 ) : LicensingRepository {
+
+    override suspend fun fetchByParentId(vararg parentId: String) =
+        if (parentId.size == 1) {
+            firebaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId.first())
+        } else {
+            firebaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId.asList())
+        }
 
     override suspend fun create(dto: LicensingDto) =
         firebaseRepository.create(dto)
