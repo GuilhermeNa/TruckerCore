@@ -3,7 +3,7 @@ package com.example.truckercore.shared.modules.storage_file.repository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**

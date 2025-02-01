@@ -8,7 +8,7 @@ import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.CreateStorageFileUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

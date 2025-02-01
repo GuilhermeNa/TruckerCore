@@ -12,7 +12,7 @@ import com.example.truckercore.shared.modules.storage_file.repository.StorageFil
 import com.example.truckercore.shared.modules.storage_file.use_cases.implementations.UpdateStorageFileUseCaseImpl
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.CheckStorageFileExistenceUseCase
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.UpdateStorageFileUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder

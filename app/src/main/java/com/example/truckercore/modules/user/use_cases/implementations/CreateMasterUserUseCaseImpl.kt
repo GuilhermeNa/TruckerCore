@@ -6,7 +6,7 @@ import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateMasterUserUseCase
 import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.logError
 import kotlinx.coroutines.flow.Flow

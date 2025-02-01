@@ -8,7 +8,7 @@ import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.DeleteUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every

@@ -1,7 +1,7 @@
 package com.example.truckercore.infrastructure.database.firebase.interfaces
 
 import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot

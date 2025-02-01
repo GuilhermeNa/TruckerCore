@@ -8,7 +8,7 @@ import com.example.truckercore.infrastructure.security.permissions.service.Permi
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.CheckPersonalDataExistenceUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

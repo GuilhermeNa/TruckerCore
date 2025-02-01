@@ -10,7 +10,7 @@ import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMap
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.implementations.GetStorageFileByIdUseCaseImpl
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileByIdUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerify

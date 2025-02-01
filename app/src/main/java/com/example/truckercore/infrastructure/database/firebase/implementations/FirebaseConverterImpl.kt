@@ -2,7 +2,7 @@ package com.example.truckercore.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 

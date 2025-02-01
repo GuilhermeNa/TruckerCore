@@ -2,7 +2,7 @@ package com.example.truckercore.modules.employee.driver.use_cases.interfaces
 
 import com.example.truckercore.modules.employee.driver.entity.Driver
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**

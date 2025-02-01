@@ -9,7 +9,7 @@ import com.example.truckercore.modules.employee.driver.repository.DriverReposito
 import com.example.truckercore.modules.employee.driver.use_cases.implementations.CheckDriverExistenceUseCaseImpl
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.CheckDriverExistenceUseCase
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder

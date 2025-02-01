@@ -12,7 +12,7 @@ import com.example.truckercore.modules.employee.driver.use_cases.implementations
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.CheckDriverExistenceUseCase
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.UpdateDriverUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.every

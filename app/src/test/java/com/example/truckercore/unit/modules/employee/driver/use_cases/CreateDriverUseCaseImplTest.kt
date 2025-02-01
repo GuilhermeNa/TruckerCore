@@ -14,7 +14,7 @@ import com.example.truckercore.modules.employee.driver.use_cases.implementations
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.CreateDriverUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerify

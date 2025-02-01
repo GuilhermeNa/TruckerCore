@@ -10,7 +10,7 @@ import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileByIdUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import kotlinx.coroutines.flow.Flow

@@ -10,7 +10,7 @@ import com.example.truckercore.modules.user.use_cases.implementations.CheckUserE
 import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.errors.UnknownErrorException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifySequence

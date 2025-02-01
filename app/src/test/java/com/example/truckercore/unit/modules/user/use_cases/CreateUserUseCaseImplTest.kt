@@ -10,7 +10,7 @@ import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.CreateUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateUserUseCase
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder

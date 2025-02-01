@@ -10,7 +10,7 @@ import com.example.truckercore.shared.modules.personal_data.repository.PersonalD
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.DeletePersonalDataUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.DeletePersonalDataUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.common.base.Verify.verify
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder

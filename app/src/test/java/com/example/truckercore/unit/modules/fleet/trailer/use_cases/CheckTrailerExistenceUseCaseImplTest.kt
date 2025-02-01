@@ -8,7 +8,7 @@ import com.example.truckercore.infrastructure.security.permissions.service.Permi
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
 import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.CheckTrailerExistenceUseCaseImpl
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.CheckTrailerExistenceUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder

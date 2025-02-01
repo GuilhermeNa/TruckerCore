@@ -2,7 +2,7 @@ package com.example.truckercore.modules.employee.driver.repository
 
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class DriverRepositoryImpl(

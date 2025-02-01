@@ -4,11 +4,11 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Lice
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingByParentIdsUseCase
 import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerByTruckIdUseCase
-import com.example.truckercore.modules.fleet.truck.configs.TruckDetailsConfig
+import com.example.truckercore.modules.fleet.truck.configs.TruckFetchConfig
 import com.example.truckercore.modules.fleet.truck.configs.TruckWithDetails
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.GetTruckByIdUseCase
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logInfo
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +27,7 @@ internal class TruckServiceImpl(
     override suspend fun getTruckWithDetails(
         user: User,
         truckId: String,
-        details: TruckDetailsConfig
+        details: TruckFetchConfig
     ): Flow<Response<TruckWithDetails>> = flow {
         val parentIds = mutableListOf(truckId)
         val trailers = mutableListOf<Trailer>()
@@ -63,7 +63,7 @@ internal class TruckServiceImpl(
 
     private fun handleTruckError(truckResponse: Response.Error, truckId: String): Response.Error {
         logError(
-            context = this@TruckServiceImpl.javaClass,
+            context = javaClass,
             exception = truckResponse.exception,
             message = "Error while fetching truck with id: $truckId."
         )
@@ -72,7 +72,7 @@ internal class TruckServiceImpl(
 
     private fun handleTruckEmpty(truckId: String): Response.Empty {
         logInfo(
-            context = this@TruckServiceImpl.javaClass,
+            context = javaClass,
             message = "No truck found for id: $truckId."
         )
         return Response.Empty
@@ -87,7 +87,7 @@ internal class TruckServiceImpl(
 
     private fun handleTrailersError(response: Response.Error, truckId: String): Nothing {
         logError(
-            context = this@TruckServiceImpl.javaClass,
+            context = javaClass,
             exception = response.exception,
             message = "Error while fetching trailers with truckId: $truckId."
         )
@@ -96,7 +96,7 @@ internal class TruckServiceImpl(
 
     private fun handleTrailersEmpty(truckId: String): List<Trailer> {
         logInfo(
-            context = this@TruckServiceImpl.javaClass,
+            context = javaClass,
             message = "No trailers found for truckId: $truckId."
         )
         return emptyList()
@@ -111,7 +111,7 @@ internal class TruckServiceImpl(
 
     private fun handleLicensingError(response: Response.Error, parentIds: List<String>): Nothing {
         logError(
-            context = this@TruckServiceImpl.javaClass,
+            context = javaClass,
             exception = response.exception,
             message = "Error while fetching licensing with parentIds: $parentIds."
         )
@@ -120,7 +120,7 @@ internal class TruckServiceImpl(
 
     private fun handleLicensingEmpty(parentIds: List<String>): List<Licensing> {
         logInfo(
-            context = this@TruckServiceImpl.javaClass,
+            context = javaClass,
             message = "No licensing found for parentIds: $parentIds."
         )
         return emptyList()

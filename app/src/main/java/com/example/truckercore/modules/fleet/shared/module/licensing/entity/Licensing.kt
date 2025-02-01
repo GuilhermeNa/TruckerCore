@@ -15,8 +15,7 @@ data class Licensing(
     override val persistenceStatus: PersistenceStatus,
     override val parentId: String,
     override val emissionDate: LocalDateTime,
-    override val file: StorageFile? = null,
     val expirationDate: LocalDateTime,
     val plate: String,
     val exercise: LocalDateTime
-) : FleetData(parentId, emissionDate, file), Entity
+) : FleetData(parentId, emissionDate), Entity

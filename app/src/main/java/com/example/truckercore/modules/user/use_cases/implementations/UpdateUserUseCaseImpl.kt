@@ -10,7 +10,7 @@ import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExiste
 import com.example.truckercore.modules.user.use_cases.interfaces.UpdateUserUseCase
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logWarn

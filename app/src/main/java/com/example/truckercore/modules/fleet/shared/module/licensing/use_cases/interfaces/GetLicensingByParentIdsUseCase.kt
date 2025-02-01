@@ -2,7 +2,7 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 interface GetLicensingByParentIdsUseCase {

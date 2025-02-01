@@ -10,7 +10,7 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.repository.
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingByParentIdsUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import kotlinx.coroutines.flow.Flow

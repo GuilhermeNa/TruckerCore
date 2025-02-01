@@ -11,7 +11,7 @@ import com.example.truckercore.modules.business_central.use_cases.implementation
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.abstractions.ValidationException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder

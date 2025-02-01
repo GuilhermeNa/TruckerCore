@@ -9,7 +9,7 @@ import com.example.truckercore.infrastructure.database.firebase.implementations.
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
@@ -32,15 +32,18 @@ import org.junit.jupiter.api.Test
 
 class FirebaseRepositoryImplTestImpl {
 
+    private val queryBuilder: FirebaseQueryBuilder = mockk()
+    private val converter: FirebaseConverter<PersonalDataDto> = mockk()
+    private val collection = Collection.PERSONAL_DATA
+
     private lateinit var repository: FirebaseRepositoryImpl<PersonalDataDto>
-    private lateinit var queryBuilder: FirebaseQueryBuilder
-    private lateinit var converter: FirebaseConverter<PersonalDataDto>
-    private lateinit var collection: Collection
-    private lateinit var dto: PersonalDataDto
+
+    private val dto: PersonalDataDto = mockk()
+
     private lateinit var documentReference: DocumentReference
     private lateinit var documentSnapShot: DocumentSnapshot
-    private lateinit var query: Query
     private lateinit var querySnapshot: QuerySnapshot
+    private lateinit var query: Query
 
     companion object {
         @JvmStatic
@@ -53,13 +56,11 @@ class FirebaseRepositoryImplTestImpl {
 
     @BeforeEach
     fun repeat() {
-        queryBuilder = mockk()
-        converter = mockk()
-        collection = Collection.PERSONAL_DATA
+
         repository = FirebaseRepositoryImpl(queryBuilder, converter, collection)
 
         documentReference = mockk()
-        dto = mockk()
+        dto
         documentSnapShot = mockk()
         query = mockk()
         querySnapshot = mockk()
@@ -168,7 +169,7 @@ class FirebaseRepositoryImplTestImpl {
         val result = repository.delete(id).single()
 
         // Assertions
-        assertEquals(response , result)
+        assertEquals(response, result)
         coVerifyOrder {
             queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
             documentReference.delete()
@@ -178,26 +179,26 @@ class FirebaseRepositoryImplTestImpl {
     @Test
     fun `entityExists() should return Response with true when found the entity`() =
         runTest {
-        // Object
-        val id = "id"
+            // Object
+            val id = "id"
 
-        // Behaviors
-        every {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-        } returns documentReference
-        coEvery { documentReference.get().await() } returns documentSnapShot
-        every { documentSnapShot.exists() } returns true
+            // Behaviors
+            every {
+                queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
+            } returns documentReference
+            coEvery { documentReference.get().await() } returns documentSnapShot
+            every { documentSnapShot.exists() } returns true
 
-        // Call
-        val result = repository.entityExists(id).single()
+            // Call
+            val result = repository.entityExists(id).single()
 
-        // Assertions
-        assertTrue(result is Response.Success)
-        coVerifyOrder {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-            documentReference.get().await()
+            // Assertions
+            assertTrue(result is Response.Success)
+            coVerifyOrder {
+                queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
+                documentReference.get().await()
+            }
         }
-    }
 
     @Test
     fun `entityExists() should return Response Empty when the entity don't exists`() = runTest {
@@ -244,54 +245,56 @@ class FirebaseRepositoryImplTestImpl {
     }
 
     @Test
-    fun `simpleDocumentFetch() should return Response with the fetched entity when found`() = runTest {
-        // Object
-        val id = "id"
-        val response = Response.Success(dto)
+    fun `simpleDocumentFetch() should return Response with the fetched entity when found`() =
+        runTest {
+            // Object
+            val id = "id"
+            val response = Response.Success(dto)
 
-        // Behaviors
-        every {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-        } returns documentReference
-        coEvery { documentReference.get().await() } returns documentSnapShot
-        every { converter.processDocumentSnapShot(documentSnapShot) } returns response
+            // Behaviors
+            every {
+                queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
+            } returns documentReference
+            coEvery { documentReference.get().await() } returns documentSnapShot
+            every { converter.processDocumentSnapShot(documentSnapShot) } returns response
 
-        // Call
-        val result = repository.simpleDocumentFetch(id).first()
+            // Call
+            val result = repository.simpleDocumentFetch(id).first()
 
-        // Assertions
-        assertEquals(response, result)
-        coVerifyOrder {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-            documentReference.get().await()
-            converter.processDocumentSnapShot(eq(documentSnapShot))
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
+                documentReference.get().await()
+                converter.processDocumentSnapShot(eq(documentSnapShot))
+            }
         }
-    }
 
     @Test
-    fun `simpleDocumentFetch() should return Response Empty when the entity doesn't exist`() = runTest {
-        // Object
-        val id = "id"
-        val response = Response.Empty
+    fun `simpleDocumentFetch() should return Response Empty when the entity doesn't exist`() =
+        runTest {
+            // Object
+            val id = "id"
+            val response = Response.Empty
 
-        // Behaviors
-        every {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-        } returns documentReference
-        coEvery { documentReference.get().await() } returns documentSnapShot
-        every { converter.processDocumentSnapShot(documentSnapShot) } returns response
+            // Behaviors
+            every {
+                queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
+            } returns documentReference
+            coEvery { documentReference.get().await() } returns documentSnapShot
+            every { converter.processDocumentSnapShot(documentSnapShot) } returns response
 
-        // Call
-        val result = repository.simpleDocumentFetch(id).first()
+            // Call
+            val result = repository.simpleDocumentFetch(id).first()
 
-        // Assertions
-        assertEquals(response, result)
-        coVerifyOrder {
-            queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
-            documentReference.get().await()
-            converter.processDocumentSnapShot(eq(documentSnapShot))
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getDocumentReference(eq(collection.getName()), eq(id))
+                documentReference.get().await()
+                converter.processDocumentSnapShot(eq(documentSnapShot))
+            }
         }
-    }
 
     @Test
     fun `simpleDocumentFetch() should return Response Empty when the document is null`() = runTest {
@@ -343,30 +346,31 @@ class FirebaseRepositoryImplTestImpl {
     }
 
     @Test
-    fun `simpleQueryFetch() should return Response with the fetched entities when found`() = runTest {
-        // Object
-        val field = mockk<Field>(relaxed = true)
-        val value = "value"
-        val response = Response.Success(listOf(dto))
+    fun `simpleQueryFetch() should return Response with the fetched entities when found`() =
+        runTest {
+            // Object
+            val field = mockk<Field>(relaxed = true)
+            val value = "value"
+            val response = Response.Success(listOf(dto))
 
-        // Behaviors
-        every {
-            queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
-        } returns query
-        coEvery { query.get().await() } returns querySnapshot
-        every { converter.processQuerySnapShot(querySnapshot) } returns response
+            // Behaviors
+            every {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
+            } returns query
+            coEvery { query.get().await() } returns querySnapshot
+            every { converter.processQuerySnapShot(querySnapshot) } returns response
 
-        // Call
-        val result = repository.simpleQueryFetch(field, value).first()
+            // Call
+            val result = repository.simpleQueryFetch(field, value).first()
 
-        // Assertions
-        assertEquals(response, result)
-        coVerifyOrder {
-            queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
-            query.get().await()
-            converter.processQuerySnapShot(eq(querySnapshot))
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
+                query.get().await()
+                converter.processQuerySnapShot(eq(querySnapshot))
+            }
         }
-    }
 
     @Test
     fun `simpleQueryFetch() should return Response Empty when no entities are found`() = runTest {
@@ -395,28 +399,29 @@ class FirebaseRepositoryImplTestImpl {
     }
 
     @Test
-    fun `simpleQueryFetch() should return Response Empty when the query result is null`() = runTest {
-        // Object
-        val field = mockk<Field>(relaxed = true)
-        val value = "value"
-        val response = Response.Empty
+    fun `simpleQueryFetch() should return Response Empty when the query result is null`() =
+        runTest {
+            // Object
+            val field = mockk<Field>(relaxed = true)
+            val value = "value"
+            val response = Response.Empty
 
-        // Behaviors
-        every {
-            queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
-        } returns query
-        coEvery { query.get().await() } returns null
+            // Behaviors
+            every {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
+            } returns query
+            coEvery { query.get().await() } returns null
 
-        // Call
-        val result = repository.simpleQueryFetch(field, value).first()
+            // Call
+            val result = repository.simpleQueryFetch(field, value).first()
 
-        // Assertions
-        assertEquals(response, result)
-        coVerifyOrder {
-            queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
-            query.get().await()
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(value))
+                query.get().await()
+            }
         }
-    }
 
     @Test
     fun `simpleQueryFetch() should return Response Error when get some exception`() = runTest {
@@ -444,5 +449,112 @@ class FirebaseRepositoryImplTestImpl {
             converter.processQuerySnapShot(eq(querySnapshot))
         }
     }
+
+    @Test
+    fun `simpleQueryFetch(list of values) should return Response with the fetched entities when found`() =
+        runTest {
+            // Object
+            val field = mockk<Field>(relaxed = true)
+            val values = listOf("value1", "value2")
+            val response = Response.Success(listOf(dto))
+
+            // Behaviors
+            every {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+            } returns query
+            coEvery { query.get().await() } returns querySnapshot
+            every { converter.processQuerySnapShot(querySnapshot) } returns response
+
+            // Call
+            val result = repository.simpleQueryFetch(field, values).first()
+
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+                query.get().await()
+                converter.processQuerySnapShot(eq(querySnapshot))
+            }
+        }
+
+    @Test
+    fun `simpleQueryFetch(list of values) should return Response Empty when no entities are found`() =
+        runTest {
+            // Object
+            val field = mockk<Field>(relaxed = true)
+            val values = listOf("value1", "value2")
+            val response = Response.Empty
+
+            // Behaviors
+            every {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+            } returns query
+            coEvery { query.get().await() } returns querySnapshot
+            every { converter.processQuerySnapShot(querySnapshot) } returns response
+
+            // Call
+            val result = repository.simpleQueryFetch(field, values).first()
+
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+                query.get().await()
+                converter.processQuerySnapShot(eq(querySnapshot))
+            }
+        }
+
+    @Test
+    fun `simpleQueryFetch(list of values) should return Response Empty when the query result is null`() =
+        runTest {
+            // Object
+            val field = mockk<Field>(relaxed = true)
+            val values = listOf("value1", "value2")
+            val response = Response.Empty
+
+            // Behaviors
+            every {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+            } returns query
+            coEvery { query.get().await() } returns null
+
+            // Call
+            val result = repository.simpleQueryFetch(field, values).first()
+
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+                query.get().await()
+            }
+        }
+
+    @Test
+    fun `simpleQueryFetch(list of values) should return Response Error when get some exception`() =
+        runTest {
+            // Object
+            val field = mockk<Field>(relaxed = true)
+            val values = listOf("value1", "value2")
+            val exception = FirebaseConversionException("Simulated exception.")
+            val response = Response.Error(exception = exception)
+
+            // Behaviors
+            every {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+            } returns query
+            coEvery { query.get().await() } returns querySnapshot
+            every { converter.processQuerySnapShot(eq(querySnapshot)) } throws exception
+
+            // Call
+            val result = repository.simpleQueryFetch(field, values).first()
+
+            // Assertions
+            assertEquals(response, result)
+            coVerifyOrder {
+                queryBuilder.getQuery(eq(collection.getName()), eq(field.name), eq(values))
+                query.get().await()
+                converter.processQuerySnapShot(eq(querySnapshot))
+            }
+        }
 
 }

@@ -8,7 +8,7 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException

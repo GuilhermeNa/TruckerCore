@@ -5,7 +5,7 @@ import com.example.truckercore.modules.business_central.mapper.BusinessCentralMa
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
 import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.logError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

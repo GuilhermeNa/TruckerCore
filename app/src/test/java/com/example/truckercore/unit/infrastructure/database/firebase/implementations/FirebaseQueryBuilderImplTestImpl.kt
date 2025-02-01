@@ -48,6 +48,24 @@ internal class FirebaseQueryBuilderImplTestImpl {
     }
 
     @Test
+    fun `getDocumentReference() should call correct document`() {
+        // Objects
+        val id = "id"
+
+        // Behaviors
+        every {
+            firestore.collection(collectionName).document(id)
+        } returns documentReference
+
+        // Call
+        val result = queryBuilder.getDocumentReference(collectionName, id)
+
+        // Assertions
+        assertEquals(documentReference, result)
+        verify { firestore.collection(collectionName).document(id) }
+    }
+
+    @Test
     fun `getQuery() should call correct query`() {
         // Object
         val field = Field.CUSTOMER_ID.getName()
@@ -67,22 +85,22 @@ internal class FirebaseQueryBuilderImplTestImpl {
     }
 
     @Test
-    fun `getDocumentReference() should call correct document`() {
-        // Objects
-        val id = "id"
+    fun `getQuery(list of strings) should call correct query`() {
+        // Object
+        val field = Field.CUSTOMER_ID.getName()
+        val values = listOf("id1", "id2")
 
         // Behaviors
         every {
-            firestore.collection(collectionName).document(id)
-        } returns documentReference
+            firestore.collection(collectionName).whereIn(field, values)
+        } returns query
 
         // Call
-        val result = queryBuilder.getDocumentReference(collectionName, id)
+        val result = queryBuilder.getQuery(collectionName, field, values)
 
         // Assertions
-        assertEquals(documentReference, result)
-        verify { firestore.collection(collectionName).document(id) }
+        assertEquals(query, result)
+        verify {  firestore.collection(collectionName).whereIn(eq(field), eq(values))}
     }
-
 
 }

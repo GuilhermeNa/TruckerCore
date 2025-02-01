@@ -3,7 +3,7 @@ package com.example.truckercore.shared.modules.storage_file.repository
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class StorageFileRepositoryImpl(

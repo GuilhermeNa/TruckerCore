@@ -5,7 +5,7 @@ import com.example.truckercore.modules.business_central.validator.BusinessCentra
 import com.example.truckercore.shared.errors.StrategyNotFoundException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

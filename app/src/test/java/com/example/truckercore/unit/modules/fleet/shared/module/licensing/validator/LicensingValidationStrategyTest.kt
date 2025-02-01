@@ -8,7 +8,7 @@ import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertTrue

@@ -9,7 +9,7 @@ import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.CheckTru
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.UpdateTruckUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

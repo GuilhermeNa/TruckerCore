@@ -17,7 +17,7 @@ import com.example.truckercore.shared.modules.personal_data.validator.PersonalDa
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.validator.StorageFileValidationStrategy
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 
 /**
  * A Class responsible for resolving the appropriate validation strategy.

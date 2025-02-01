@@ -9,7 +9,7 @@ import com.example.truckercore.modules.employee.admin.use_cases.implementations.
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CheckAdminExistenceUseCase
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.DeleteAdminUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every

@@ -10,7 +10,7 @@ import com.example.truckercore.modules.fleet.truck.mapper.TruckMapper
 import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
 import com.example.truckercore.modules.fleet.truck.use_cases.implementations.GetTruckByIdUseCaseImpl
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.GetTruckByIdUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerify

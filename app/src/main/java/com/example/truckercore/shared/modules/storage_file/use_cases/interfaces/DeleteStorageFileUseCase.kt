@@ -2,7 +2,7 @@ package com.example.truckercore.shared.modules.storage_file.use_cases.interfaces
 
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**

@@ -7,7 +7,7 @@ import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

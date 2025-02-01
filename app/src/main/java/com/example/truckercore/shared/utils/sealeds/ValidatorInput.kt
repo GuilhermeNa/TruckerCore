@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.sealeds
+package com.example.truckercore.shared.utils.sealeds
 
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity

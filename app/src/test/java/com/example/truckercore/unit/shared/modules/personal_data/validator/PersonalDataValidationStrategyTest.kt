@@ -8,7 +8,7 @@ import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.modules.personal_data.errors.PersonalDataValidationException
 import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertTrue

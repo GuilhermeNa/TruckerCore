@@ -10,10 +10,10 @@ import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepositor
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerByIdUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.sealeds.Response
-import com.example.truckercore.shared.sealeds.Response.Empty
-import com.example.truckercore.shared.sealeds.Response.Error
-import com.example.truckercore.shared.sealeds.Response.Success
+import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response.Empty
+import com.example.truckercore.shared.utils.sealeds.Response.Error
+import com.example.truckercore.shared.utils.sealeds.Response.Success
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import kotlinx.coroutines.flow.Flow

@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.interfaces
 
 import com.example.truckercore.shared.errors.abstractions.ValidationException
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import com.example.truckercore.shared.services.ValidatorService
 
 /**

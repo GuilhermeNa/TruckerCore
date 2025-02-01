@@ -8,7 +8,7 @@ import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.modules.storage_file.errors.StorageFileValidationException
 import com.example.truckercore.shared.modules.storage_file.validator.StorageFileValidationStrategy
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeAll

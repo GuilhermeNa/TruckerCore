@@ -6,7 +6,7 @@ import com.example.truckercore.shared.errors.abstractions.ValidationException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 
 /**
  * A service class responsible for validating [Entity] and [Dto] objects using a provided validation strategy.

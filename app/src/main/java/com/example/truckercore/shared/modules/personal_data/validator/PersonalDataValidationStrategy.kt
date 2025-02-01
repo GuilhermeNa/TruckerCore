@@ -8,7 +8,7 @@ import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.errors.PersonalDataValidationException
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import com.example.truckercore.shared.utils.expressions.logError
 import kotlin.reflect.KClass
 

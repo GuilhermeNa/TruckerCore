@@ -8,7 +8,7 @@ import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.errors.StorageFileValidationException
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import com.example.truckercore.shared.utils.expressions.logError
 import kotlin.reflect.KClass
 

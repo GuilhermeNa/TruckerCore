@@ -11,7 +11,7 @@ import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.GetUserByIdUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.GetUserByIdUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import com.google.common.base.Verify.verify
 import io.mockk.coEvery

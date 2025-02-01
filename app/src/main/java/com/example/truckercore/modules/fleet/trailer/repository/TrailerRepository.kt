@@ -2,5 +2,11 @@ package com.example.truckercore.modules.fleet.trailer.repository
 
 import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
 import com.example.truckercore.shared.interfaces.Repository
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.flow.Flow
 
-internal interface TrailerRepository: Repository<TrailerDto>
+internal interface TrailerRepository : Repository<TrailerDto> {
+
+    suspend fun fetchByTruckId(truckId: String): Flow<Response<List<TrailerDto>>>
+
+}

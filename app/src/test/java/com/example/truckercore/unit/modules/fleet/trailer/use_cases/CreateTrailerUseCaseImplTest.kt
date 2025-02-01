@@ -10,7 +10,7 @@ import com.example.truckercore.modules.fleet.trailer.mapper.TrailerMapper
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
 import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.CreateTrailerUseCaseImpl
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.CreateTrailerUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder

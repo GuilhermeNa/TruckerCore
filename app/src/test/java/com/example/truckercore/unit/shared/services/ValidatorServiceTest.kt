@@ -6,7 +6,7 @@ import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
-import com.example.truckercore.shared.sealeds.ValidatorInput
+import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.every
 import io.mockk.mockk

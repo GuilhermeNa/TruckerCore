@@ -12,7 +12,7 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Che
 import com.example.truckercore.modules.business_central.use_cases.interfaces.DeleteBusinessCentralUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

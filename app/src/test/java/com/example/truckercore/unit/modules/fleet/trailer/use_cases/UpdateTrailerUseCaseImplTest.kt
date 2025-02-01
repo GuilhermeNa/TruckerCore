@@ -12,7 +12,7 @@ import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.U
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.CheckTrailerExistenceUseCase
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.UpdateTrailerUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder

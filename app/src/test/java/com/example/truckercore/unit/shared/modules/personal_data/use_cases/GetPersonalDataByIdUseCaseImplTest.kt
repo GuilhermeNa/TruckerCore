@@ -10,7 +10,7 @@ import com.example.truckercore.shared.modules.personal_data.mapper.PersonalDataM
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataByIdUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataByIdUseCase
-import com.example.truckercore.shared.sealeds.Response
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
 import io.mockk.coVerify
