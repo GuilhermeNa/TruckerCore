@@ -3,6 +3,8 @@ package com.example.truckercore.unit.infrastructure.database.firebase.implementa
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseQueryBuilderImpl
+import com.example.truckercore.shared.enums.QueryType
+import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -81,7 +83,7 @@ internal class FirebaseQueryBuilderImplTestImpl {
 
         // Assertions
         assertEquals(query, result)
-        verify {  firestore.collection(collectionName).whereEqualTo(eq(field), eq(value))}
+        verify { firestore.collection(collectionName).whereEqualTo(eq(field), eq(value)) }
     }
 
     @Test
@@ -100,7 +102,7 @@ internal class FirebaseQueryBuilderImplTestImpl {
 
         // Assertions
         assertEquals(query, result)
-        verify {  firestore.collection(collectionName).whereIn(eq(field), eq(values))}
+        verify { firestore.collection(collectionName).whereIn(eq(field), eq(values)) }
     }
 
 }

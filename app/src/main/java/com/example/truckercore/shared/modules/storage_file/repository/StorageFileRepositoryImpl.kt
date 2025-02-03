@@ -21,7 +21,7 @@ internal class StorageFileRepositoryImpl(
 
     override suspend fun entityExists(id: String) = firebaseRepository.entityExists(id)
 
-    override suspend fun fetchById(id: String) = firebaseRepository.simpleDocumentFetch(id)
+    override suspend fun fetchById(id: String) = firebaseRepository.documentFetch(id)
 
     override suspend fun fetchByParentId(parentId: String) =
         firebaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId)

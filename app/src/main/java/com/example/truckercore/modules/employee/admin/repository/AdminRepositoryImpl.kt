@@ -22,6 +22,6 @@ internal class AdminRepositoryImpl(
         firebaseRepository.entityExists(id)
 
     override suspend fun fetchById(id: String): Flow<Response<AdminDto>> =
-        firebaseRepository.simpleDocumentFetch(id)
+        firebaseRepository.documentFetch(id)
 
 }

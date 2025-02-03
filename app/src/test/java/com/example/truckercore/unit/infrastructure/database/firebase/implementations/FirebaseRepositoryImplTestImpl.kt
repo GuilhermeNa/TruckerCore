@@ -259,7 +259,7 @@ class FirebaseRepositoryImplTestImpl {
             every { converter.processDocumentSnapShot(documentSnapShot) } returns response
 
             // Call
-            val result = repository.simpleDocumentFetch(id).first()
+            val result = repository.documentFetch(id).first()
 
             // Assertions
             assertEquals(response, result)
@@ -285,7 +285,7 @@ class FirebaseRepositoryImplTestImpl {
             every { converter.processDocumentSnapShot(documentSnapShot) } returns response
 
             // Call
-            val result = repository.simpleDocumentFetch(id).first()
+            val result = repository.documentFetch(id).first()
 
             // Assertions
             assertEquals(response, result)
@@ -309,7 +309,7 @@ class FirebaseRepositoryImplTestImpl {
         coEvery { documentReference.get().await() } returns null
 
         // Call
-        val result = repository.simpleDocumentFetch(id).first()
+        val result = repository.documentFetch(id).first()
 
         // Assertions
         assertEquals(response, result)
@@ -334,7 +334,7 @@ class FirebaseRepositoryImplTestImpl {
         every { converter.processDocumentSnapShot(eq(documentSnapShot)) } throws exception
 
         // Call
-        val result = repository.simpleDocumentFetch(id).first()
+        val result = repository.documentFetch(id).first()
 
         // Assertions
         assertEquals(response, result)

@@ -68,7 +68,7 @@ class UserRepositoryImplTest {
         repository.fetchById(id)
 
         // Assertions
-        coVerify { fireBaseRepository.simpleDocumentFetch(id) }
+        coVerify { fireBaseRepository.documentFetch(id) }
     }
 
 }

@@ -22,6 +22,6 @@ internal class DriverRepositoryImpl(
         firebaseRepository.entityExists(id)
 
     override suspend fun fetchById(id: String): Flow<Response<DriverDto>> =
-        firebaseRepository.simpleDocumentFetch(id)
+        firebaseRepository.documentFetch(id)
 
 }

@@ -23,7 +23,7 @@ internal class PersonalDataRepositoryImpl(
         firebaseRepository.entityExists(id)
 
     override suspend fun fetchById(id: String): Flow<Response<PersonalDataDto>> =
-        firebaseRepository.simpleDocumentFetch(id)
+        firebaseRepository.documentFetch(id)
 
     override suspend fun fetchByParentId(parentId: String): Flow<Response<List<PersonalDataDto>>> =
         firebaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId)

@@ -20,6 +20,6 @@ internal class UserRepositoryImpl(
         firebaseRepository.entityExists(id)
 
     override suspend fun fetchById(id: String) =
-        firebaseRepository.simpleDocumentFetch(id)
+        firebaseRepository.documentFetch(id)
 
 }

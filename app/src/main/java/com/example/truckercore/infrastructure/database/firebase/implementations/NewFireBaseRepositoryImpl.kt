@@ -1,11 +1,9 @@
 package com.example.truckercore.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.expressions.logError
@@ -19,13 +17,15 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-internal class FirebaseRepositoryImpl<T : Dto>(
+internal class NewFireBaseRepositoryImpl(
     private val queryBuilder: FirebaseQueryBuilder,
-    private val converter: FirebaseConverter<T>,
-    private val collection: Collection,
-) : FirebaseRepository<T> {
+    private val converter: NewFirebaseConverter
+) : NewFireBaseRepository {
 
-    override suspend fun create(dto: T): Flow<Response<String>> = flow {
+    override suspend fun create(
+        collection: Collection,
+        dto: Dto
+    ): Flow<Response<String>> = flow {
         val document = queryBuilder.newDocument(collection.getName())
         val newDto = dto.initializeId(document.id)
         var result: Response<String>? = null
@@ -51,7 +51,7 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         emit(handleUnexpectedError(it))
     }
 
-    override suspend fun update(dto: T): Flow<Response<Unit>> = flow {
+    override suspend fun update(collection: Collection, dto: Dto): Flow<Response<Unit>> = flow {
         val document = queryBuilder.getDocumentReference(collection.getName(), dto.id!!)
         var result: Response<Unit>? = null
 
@@ -74,7 +74,7 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         emit(handleUnexpectedError(it))
     }
 
-    override suspend fun delete(id: String): Flow<Response<Unit>> = flow {
+    override suspend fun delete(collection: Collection, id: String): Flow<Response<Unit>> = flow {
         val document = queryBuilder.getDocumentReference(collection.getName(), id)
         var result: Response<Unit>? = null
 
@@ -99,42 +99,33 @@ internal class FirebaseRepositoryImpl<T : Dto>(
         emit(handleUnexpectedError(it))
     }
 
-    override suspend fun entityExists(id: String): Flow<Response<Unit>> = flow {
-        val document = queryBuilder.getDocumentReference(collection.getName(), id)
-        val documentReference = document.get().await()
-
-        val response = documentReference?.let { dss ->
-            if (dss.exists()) Response.Success(Unit)
-            else Response.Empty
-        } ?: Response.Error(NullPointerException())
-
-        emit(response)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    override suspend fun documentFetch(id: String): Flow<Response<T>> = flow {
-        val document = queryBuilder.getDocumentReference(collection.getName(), id)
-        val documentSnapShot = document.get().await()
-
-        val response = documentSnapShot?.let { dss ->
-            converter.processDocumentSnapShot(dss)
-        } ?: Response.Empty
-
-        emit(response)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    override suspend fun simpleQueryFetch(field: Field, value: String): Flow<Response<List<T>>> =
+    override suspend fun entityExists(collection: Collection, id: String): Flow<Response<Unit>> =
         flow {
-            val query = queryBuilder.getQuery(collection.getName(), field.name, value)
-            val querySnapshot = query.get().await()
+            val document = queryBuilder.getDocumentReference(collection.getName(), id)
+            val documentReference = document.get().await()
 
-            val response = querySnapshot?.let { qss ->
-                converter.processQuerySnapShot(qss)
+            val response = documentReference?.let { dss ->
+                if (dss.exists()) Response.Success(Unit)
+                else Response.Empty
+            } ?: Response.Error(NullPointerException())
+
+            emit(response)
+
+        }.catch {
+            emit(handleUnexpectedError(it))
+        }
+
+    override suspend fun <T : Dto> documentFetch(
+        collection: Collection,
+        id: String,
+        clazz: Class<T>
+    ): Flow<Response<T>> =
+        flow {
+            val document = queryBuilder.getDocumentReference(collection.getName(), id)
+            val documentSnapShot = document.get().await()
+
+            val response = documentSnapShot?.let { dss ->
+                converter.processDocumentSnapShot(dss, clazz)
             } ?: Response.Empty
 
             emit(response)
@@ -143,31 +134,17 @@ internal class FirebaseRepositoryImpl<T : Dto>(
             emit(handleUnexpectedError(it))
         }
 
-    override suspend fun simpleQueryFetch(
-        field: Field,
-        values: List<String>
+    override suspend fun <T : Dto> queryFetch(
+        collection: Collection,
+        settings: List<QuerySettings>,
+        clazz: Class<T>
     ): Flow<Response<List<T>>> =
-        flow {
-            val query = queryBuilder.getQuery(collection.getName(), field.name, values)
-            val querySnapshot = query.get().await()
-
-            val response = querySnapshot?.let { qss ->
-                converter.processQuerySnapShot(qss)
-            } ?: Response.Empty
-
-            emit(response)
-
-        }.catch {
-            emit(handleUnexpectedError(it))
-        }
-
-    override suspend fun queryFetch(settings: List<QuerySettings>): Flow<Response<List<T>>> =
         flow {
             val query = queryBuilder.getQuery(collection.getName(), settings)
             val querySnapshot = query.get().await()
 
             val response = querySnapshot?.let { qss ->
-                converter.processQuerySnapShot(qss)
+                converter.processQuerySnapShot(qss, clazz)
             } ?: Response.Empty
 
             emit(response)
@@ -176,19 +153,6 @@ internal class FirebaseRepositoryImpl<T : Dto>(
             emit(handleUnexpectedError(it))
         }
 
-    /**
-     * Builds an error response based on the provided exception.
-     *
-     * This method identifies the type of exception thrown during Firebase operations
-     * (e.g., conversion issues, network failures, Firestore exceptions, or authentication errors)
-     * and constructs a detailed error message that will be returned to the caller.
-     *
-     * @param collection The name of the Firestore collection that was being accessed.
-     * @param field The field that was being queried, if applicable. Default is null.
-     * @param value The value of the field that caused the issue.
-     * @param throwable The exception that was thrown during the Firebase operation.
-     * @return A [Response.Error] containing a detailed error message and the thrown exception.
-     */
     private fun handleUnexpectedError(throwable: Throwable): Response.Error {
         throwable as Exception
         val message = when (throwable) {
@@ -207,3 +171,4 @@ internal class FirebaseRepositoryImpl<T : Dto>(
     }
 
 }
+

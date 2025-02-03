@@ -67,7 +67,7 @@ internal class StorageFileFirebaseRepositoryImplTest {
         repository.fetchById(id)
 
         // Assertions
-        coVerify { fireBaseRepository.simpleDocumentFetch(id) }
+        coVerify { fireBaseRepository.documentFetch(id) }
     }
 
     @Test

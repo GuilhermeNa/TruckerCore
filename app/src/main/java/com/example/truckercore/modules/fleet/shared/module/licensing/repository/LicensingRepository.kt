@@ -1,7 +1,9 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
+import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -17,8 +19,4 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see LicensingDto
  */
-internal interface LicensingRepository : Repository<LicensingDto> {
-
-    suspend fun fetchByParentId(vararg parentId: String): Flow<Response<List<LicensingDto>>>
-
-}
+internal interface LicensingRepository : NewRepository

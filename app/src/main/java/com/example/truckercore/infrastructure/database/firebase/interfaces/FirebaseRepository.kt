@@ -2,6 +2,7 @@ package com.example.truckercore.infrastructure.database.firebase.interfaces
 
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -58,7 +59,7 @@ internal interface FirebaseRepository<T : Dto> {
      * - [Response.Error] when any error occurs.
      * - [Response.Empty] when the data was not found.
      */
-    suspend fun simpleDocumentFetch(id: String): Flow<Response<T>>
+    suspend fun documentFetch(id: String): Flow<Response<T>>
 
     /**
      * Fetches a list of documents from the Firestore collection based on a query using a specific field and value.
@@ -79,5 +80,7 @@ internal interface FirebaseRepository<T : Dto> {
      * @return A [Flow] of [Response], containing the data.
      */
     suspend fun simpleQueryFetch(field: Field, values: List<String>): Flow<Response<List<T>>>
+
+    suspend fun queryFetch(settings: List<QuerySettings>): Flow<Response<List<T>>>
 
 }

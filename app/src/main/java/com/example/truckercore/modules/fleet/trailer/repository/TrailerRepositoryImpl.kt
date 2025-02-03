@@ -3,8 +3,6 @@ package com.example.truckercore.modules.fleet.trailer.repository
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
-import com.example.truckercore.shared.utils.sealeds.Response
-import kotlinx.coroutines.flow.Flow
 
 internal class TrailerRepositoryImpl(
     private val firebaseRepository: FirebaseRepository<TrailerDto>
@@ -26,6 +24,6 @@ internal class TrailerRepositoryImpl(
         firebaseRepository.entityExists(id)
 
     override suspend fun fetchById(id: String) =
-        firebaseRepository.simpleDocumentFetch(id)
+        firebaseRepository.documentFetch(id)
 
 }

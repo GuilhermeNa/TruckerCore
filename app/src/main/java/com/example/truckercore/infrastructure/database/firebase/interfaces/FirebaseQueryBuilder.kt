@@ -1,5 +1,6 @@
 package com.example.truckercore.infrastructure.database.firebase.interfaces
 
+import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 
@@ -45,5 +46,7 @@ internal interface FirebaseQueryBuilder {
      * @return A [DocumentReference] instance that can be used to access the document in Firestore.
      */
     fun getDocumentReference(collectionName: String, id: String): DocumentReference
+
+    fun getQuery(collectionName: String, querySettings: List<QuerySettings>): Query
 
 }

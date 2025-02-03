@@ -10,11 +10,13 @@ import com.example.truckercore.infrastructure.database.firebase.interfaces.Fireb
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
+import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.user.dto.UserDto
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val firebaseModule = module {
@@ -23,48 +25,20 @@ val firebaseModule = module {
     single { Firebase.storage }
     single<FirebaseQueryBuilder> { FirebaseQueryBuilderImpl(get()) }
 
-    //--
+    // Repository
+    single<FirebaseRepository<BusinessCentralDto>>(named("Repository_BusinessCentral")) { FirebaseRepositoryImpl(get(), get(named("Converter_BusinessCentral")), Collection.CENTRAL) }
+    single<FirebaseRepository<LicensingDto>>(named("Repository_Licensing")) { FirebaseRepositoryImpl(get(), get(named("Converter_Licensing")), Collection.LICENSING) }
+    single<FirebaseRepository<UserDto>>(named("Repository_User")) { FirebaseRepositoryImpl(get(), get(named("Converter_User")), Collection.USER) }
+    single<FirebaseRepository<DriverDto>>(named("Repository_Driver")) { FirebaseRepositoryImpl(get(), get(named("Converter_Driver")), Collection.DRIVER) }
+    single<FirebaseRepository<AdminDto>>(named("Repository_Admin")) { FirebaseRepositoryImpl(get(), get(named("Converter_Admin")), Collection.ADMIN) }
 
-    single<FirebaseConverter<BusinessCentralDto>> {
-        FirebaseConverterImpl(BusinessCentralDto::class.java)
-    }
-    single<FirebaseRepository<BusinessCentralDto>> {
-        FirebaseRepositoryImpl<BusinessCentralDto>(
-            get(),
-            get(),
-            Collection.CENTRAL
-        )
-    }
-    single<FirebaseConverter<UserDto>> {
-        FirebaseConverterImpl(UserDto::class.java)
-    }
-    single<FirebaseRepository<UserDto>> {
-        FirebaseRepositoryImpl<UserDto>(
-            get(),
-            get(),
-            Collection.USER
-        )
-    }
-    single<FirebaseConverter<DriverDto>> {
-        FirebaseConverterImpl(DriverDto::class.java)
-    }
-    single<FirebaseRepository<DriverDto>> {
-        FirebaseRepositoryImpl<DriverDto>(
-            get(),
-            get(),
-            Collection.DRIVER
-        )
-    }
-    single<FirebaseConverter<AdminDto>> {
-        FirebaseConverterImpl(AdminDto::class.java)
-    }
-    single<FirebaseRepository<AdminDto>> {
-        FirebaseRepositoryImpl<AdminDto>(
-            get(),
-            get(),
-            Collection.ADMIN
-        )
-    }
+    // Converter
+    single<FirebaseConverter<BusinessCentralDto>>(named("Converter_BusinessCentral")) { FirebaseConverterImpl(BusinessCentralDto::class.java) }
+    single<FirebaseConverter<LicensingDto>>(named("Converter_Licensing")) { FirebaseConverterImpl(LicensingDto::class.java) }
+    single<FirebaseConverter<UserDto>>(named("Converter_User")) { FirebaseConverterImpl(UserDto::class.java) }
+    single<FirebaseConverter<DriverDto>>(named("Converter_Driver")) { FirebaseConverterImpl(DriverDto::class.java) }
+    single<FirebaseConverter<AdminDto>>(named("Converter_Admin")) { FirebaseConverterImpl(AdminDto::class.java) }
 
 }
+
 

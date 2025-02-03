@@ -13,10 +13,11 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Cre
 import com.example.truckercore.modules.business_central.use_cases.interfaces.DeleteBusinessCentralUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralByIdUseCase
 import com.example.truckercore.modules.business_central.use_cases.interfaces.UpdateBusinessCentralUseCase
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val businessCentralModule = module {
-    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get()) }
+    single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get(named("Repository_BusinessCentral"))) }
     single<BusinessCentralMapper> { BusinessCentralMapper() }
 
     //--

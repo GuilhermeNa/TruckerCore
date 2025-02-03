@@ -6,6 +6,9 @@ import com.example.truckercore.modules.business_central.validator.BusinessCentra
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
+import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy
@@ -39,7 +42,10 @@ internal class ValidatorStrategyResolver {
         Pair(PersonalDataDto::class.java, PersonalDataValidationStrategy()),
         Pair(StorageFile::class.java, StorageFileValidationStrategy()),
         Pair(StorageFileDto::class.java, StorageFileValidationStrategy()),
-    )
+        Pair(Licensing::class.java, LicensingValidationStrategy()),
+        Pair(LicensingDto::class.java, LicensingValidationStrategy()),
+
+        )
 
     /**
      * Resolves and returns the appropriate [ValidatorStrategy] based on the provided [ValidatorInput].

@@ -68,7 +68,7 @@ internal class DriverRepositoryImplTest {
         repository.fetchById(id)
 
         // Assertions
-        coVerify { fireBaseRepository.simpleDocumentFetch(id) }
+        coVerify { fireBaseRepository.documentFetch(id) }
     }
 
 }

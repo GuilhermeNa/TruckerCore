@@ -79,7 +79,7 @@ internal class AdminRepositoryImplTest {
         repository.fetchById(id)
 
         // Assertion
-        coVerify { fireBaseRepository.simpleDocumentFetch(id) }
+        coVerify { fireBaseRepository.documentFetch(id) }
     }
 
 }
