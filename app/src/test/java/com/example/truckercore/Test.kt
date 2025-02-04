@@ -14,6 +14,7 @@ import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.QueryType
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.firebase.firestore.CollectionReference
@@ -44,42 +45,9 @@ internal class Test {
     private val firestore: FirebaseFirestore = mockk()
     private val builder = FirebaseQueryBuilderImpl(firestore)
 
-
-    val testando = Testando()
-    val nfb: NewFireBaseRepository = NewFireBaseRepositoryImpl(mockk(), mockk(), mockk())
-    val repo = LicensingRepositoryImpl(mockk(), mockk())
-
     @Test
     fun testar() = runTest {
-      val teste = repo.fetchById("")
 
-}
-
-class Testando {
-
-    inline fun <reified T : Any> testeA(t: T): T {
-        val copia = when (t) {
-            is Casa -> t.copy(testado = true)
-            is Apartamento -> t.copy(testado = true)
-            else -> throw NullPointerException()
-        }
-        return copia as T
     }
 
-}
-
-data class Casa(
-    val numero: Int,
-    val rua: String,
-    override val testado: Boolean = false
-) : Imovel
-
-data class Apartamento(
-    val numero: Int,
-    val bloco: String,
-    override val testado: Boolean = false
-) : Imovel
-
-interface Imovel {
-    val testado: Boolean
 }

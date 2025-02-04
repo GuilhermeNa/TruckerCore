@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
 internal class NewFireBaseRepositoryImpl(
-    private val queryBuilder: FirebaseQueryBuilder,
+    private val queryBuilder: NewFirebaseQueryBuilder,
     private val converter: NewFirebaseConverter
 ) : NewFireBaseRepository {
 
@@ -26,7 +26,7 @@ internal class NewFireBaseRepositoryImpl(
         collection: Collection,
         dto: Dto
     ): Flow<Response<String>> = flow {
-        val document = queryBuilder.newDocument(collection.getName())
+        val document = queryBuilder.createDocument(collection.getName())
         val newDto = dto.initializeId(document.id)
         var result: Response<String>? = null
 
@@ -52,7 +52,7 @@ internal class NewFireBaseRepositoryImpl(
     }
 
     override suspend fun update(collection: Collection, dto: Dto): Flow<Response<Unit>> = flow {
-        val document = queryBuilder.getDocumentReference(collection.getName(), dto.id!!)
+        val document = queryBuilder.getDocument(collection.getName(), dto.id!!)
         var result: Response<Unit>? = null
 
         document.set(dto).addOnCompleteListener { task ->
@@ -75,7 +75,7 @@ internal class NewFireBaseRepositoryImpl(
     }
 
     override suspend fun delete(collection: Collection, id: String): Flow<Response<Unit>> = flow {
-        val document = queryBuilder.getDocumentReference(collection.getName(), id)
+        val document = queryBuilder.getDocument(collection.getName(), id)
         var result: Response<Unit>? = null
 
         document.delete().addOnCompleteListener { task ->
@@ -101,7 +101,7 @@ internal class NewFireBaseRepositoryImpl(
 
     override suspend fun entityExists(collection: Collection, id: String): Flow<Response<Unit>> =
         flow {
-            val document = queryBuilder.getDocumentReference(collection.getName(), id)
+            val document = queryBuilder.getDocument(collection.getName(), id)
             val documentReference = document.get().await()
 
             val response = documentReference?.let { dss ->
@@ -121,7 +121,7 @@ internal class NewFireBaseRepositoryImpl(
         clazz: Class<T>
     ): Flow<Response<T>> =
         flow {
-            val document = queryBuilder.getDocumentReference(collection.getName(), id)
+            val document = queryBuilder.getDocument(collection.getName(), id)
             val documentSnapShot = document.get().await()
 
             val response = documentSnapShot?.let { dss ->

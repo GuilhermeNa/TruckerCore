@@ -1,11 +1,17 @@
 package com.example.truckercore.unit.shared.modules.storage_file.repositories
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
+import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
+import com.example.truckercore.shared.enums.QueryType
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepositoryImpl
+import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.shared.utils.parameters.QuerySettings
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,15 +20,16 @@ import org.junit.jupiter.api.Test
 
 internal class StorageFileFirebaseRepositoryImplTest {
 
-    private val fireBaseRepository: FirebaseRepository<StorageFileDto> = mockk(relaxed = true)
+    private val fireBaseRepository: NewFireBaseRepository = mockk(relaxed = true)
+    private val collection = Collection.FILE
     private lateinit var repository: StorageFileRepository
+
     private val dto = TestStorageFileDataProvider.getBaseDto()
     private val id = "testId"
-    private val parentId = "testParentId"
 
     @BeforeEach
     fun setup() {
-        repository = StorageFileRepositoryImpl(fireBaseRepository)
+        repository = StorageFileRepositoryImpl(fireBaseRepository, collection)
     }
 
     @Test
@@ -31,7 +38,7 @@ internal class StorageFileFirebaseRepositoryImplTest {
         repository.create(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.create(dto) }
+        coVerify { fireBaseRepository.create(collection, dto) }
     }
 
     @Test
@@ -40,7 +47,7 @@ internal class StorageFileFirebaseRepositoryImplTest {
         repository.update(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.update(dto) }
+        coVerify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
@@ -49,7 +56,7 @@ internal class StorageFileFirebaseRepositoryImplTest {
         repository.delete(id)
 
         // Assertions
-        coVerify { fireBaseRepository.delete(id) }
+        coVerify { fireBaseRepository.delete(collection, id) }
     }
 
     @Test
@@ -58,7 +65,7 @@ internal class StorageFileFirebaseRepositoryImplTest {
         repository.entityExists(id)
 
         // Assertions
-        coVerify { fireBaseRepository.entityExists(id) }
+        coVerify { fireBaseRepository.entityExists(collection, id) }
     }
 
     @Test
@@ -67,16 +74,19 @@ internal class StorageFileFirebaseRepositoryImplTest {
         repository.fetchById(id)
 
         // Assertions
-        coVerify { fireBaseRepository.documentFetch(id) }
+        coVerify { fireBaseRepository.documentFetch(collection, id, StorageFileDto::class.java) }
     }
 
     @Test
-    fun `fetchByParentId() should call fireBaseRepository`() = runTest {
+    fun `fetchByQuery() should call fireBaseRepository`() = runTest {
+        // Arrange
+        val settings = listOf(QuerySettings(Field.PARENT_ID, QueryType.WHERE_IN, "parentId"))
+
         // Call
-        repository.fetchByParentId(parentId)
+        repository.fetchByQuery(settings)
 
         // Assertions
-        coVerify { fireBaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId) }
+        coVerify { fireBaseRepository.queryFetch(collection, settings, StorageFileDto::class.java) }
     }
 
 }

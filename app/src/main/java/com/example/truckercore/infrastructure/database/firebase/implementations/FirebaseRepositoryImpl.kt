@@ -161,21 +161,6 @@ internal class FirebaseRepositoryImpl<T : Dto>(
             emit(handleUnexpectedError(it))
         }
 
-    override suspend fun queryFetch(settings: List<QuerySettings>): Flow<Response<List<T>>> =
-        flow {
-            val query = queryBuilder.getQuery(collection.getName(), settings)
-            val querySnapshot = query.get().await()
-
-            val response = querySnapshot?.let { qss ->
-                converter.processQuerySnapShot(qss)
-            } ?: Response.Empty
-
-            emit(response)
-
-        }.catch {
-            emit(handleUnexpectedError(it))
-        }
-
     /**
      * Builds an error response based on the provided exception.
      *

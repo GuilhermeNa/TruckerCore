@@ -1,8 +1,10 @@
 package com.example.truckercore.shared.modules.storage_file.repository
 
+import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
+import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -18,17 +20,10 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see StorageFile
  */
-internal interface StorageFileRepository : Repository<StorageFileDto> {
+internal interface StorageFileRepository : NewRepository {
 
-    /**
-     * Fetches a list of [StorageFile] entities by their parentId.
-     *
-     * @param parentId The parent unique identifier (parentId) used to filter the storage file entities.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object's are successfully found.
-     * - [Response.Error] when any error occurs.
-     * - [Response.Empty] when the data was not found.
-     */
-    suspend fun fetchByParentId(parentId: String): Flow<Response<List<StorageFileDto>>>
+    override suspend fun fetchById(id: String): Flow<Response<StorageFileDto>>
+
+    override suspend fun fetchByQuery(settings: List<QuerySettings>): Flow<Response<List<StorageFileDto>>>
 
 }

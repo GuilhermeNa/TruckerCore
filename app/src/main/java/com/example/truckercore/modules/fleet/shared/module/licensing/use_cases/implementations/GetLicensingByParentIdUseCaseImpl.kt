@@ -44,12 +44,12 @@ internal class GetLicensingByParentIdUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_LICENSING)
 
-    private suspend fun fetchLicensingByParentId(vararg parentId: String): Response<List<Licensing>> =
-        when (val response = repository.fetchByParentId(*parentId).single()) {
+    private suspend fun fetchLicensingByParentId(vararg parentId: String): Response<List<Licensing>> = TODO()
+       /* when (val response = repository.fetchByParentId(*parentId).single()) {
             is Response.Success -> processResponse(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response
-        }
+        }*/
 
     private fun processResponse(response: Response.Success<List<LicensingDto>>): Response<List<Licensing>> {
         val entities = response.data.map {

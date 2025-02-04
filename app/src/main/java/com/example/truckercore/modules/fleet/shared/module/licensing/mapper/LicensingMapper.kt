@@ -6,6 +6,7 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.errors.Lice
 import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.logError
+import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
@@ -41,8 +42,11 @@ internal class LicensingMapper : Mapper<Licensing, LicensingDto>() {
 
     override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
         val message = "Error while mapping a ${obj::class.simpleName} object."
-        logError(message)
-        throw LicensingMappingException(message = "$message Obj: $obj", receivedException)
+        logWarn(
+            context = javaClass,
+            message = message
+        )
+        throw LicensingMappingException(message, receivedException)
     }
 
 }

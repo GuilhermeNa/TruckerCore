@@ -23,7 +23,7 @@ class QueryParameters private constructor(
         private var liveObserver: Boolean = false
         private val queries = mutableListOf<QuerySettings>()
 
-        fun setQueries(newQueries: Array<QuerySettings>) = apply {
+        fun setQueries(vararg newQueries: QuerySettings) = apply {
             queries.clear()
             queries.addAll(newQueries)
         }

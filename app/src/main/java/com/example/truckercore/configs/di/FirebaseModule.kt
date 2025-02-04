@@ -4,9 +4,12 @@ import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseConverterImpl
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseQueryBuilderImpl
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseRepositoryImpl
+import com.example.truckercore.infrastructure.database.firebase.implementations.NewFireBaseRepositoryImpl
+import com.example.truckercore.infrastructure.database.firebase.implementations.NewFirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
@@ -23,7 +26,9 @@ val firebaseModule = module {
     single { Firebase.auth }
     single { Firebase.firestore }
     single { Firebase.storage }
+    single { NewFirebaseConverter() }
     single<FirebaseQueryBuilder> { FirebaseQueryBuilderImpl(get()) }
+    single<NewFireBaseRepository> { NewFireBaseRepositoryImpl(get(), get()) }
 
     // Repository
     single<FirebaseRepository<BusinessCentralDto>>(named("Repository_BusinessCentral")) { FirebaseRepositoryImpl(get(), get(named("Converter_BusinessCentral")), Collection.CENTRAL) }

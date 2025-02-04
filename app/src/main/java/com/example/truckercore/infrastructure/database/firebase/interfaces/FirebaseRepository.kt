@@ -81,6 +81,4 @@ internal interface FirebaseRepository<T : Dto> {
      */
     suspend fun simpleQueryFetch(field: Field, values: List<String>): Flow<Response<List<T>>>
 
-    suspend fun queryFetch(settings: List<QuerySettings>): Flow<Response<List<T>>>
-
 }

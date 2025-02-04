@@ -1,7 +1,9 @@
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
+import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
@@ -13,15 +15,16 @@ import org.junit.jupiter.api.Test
 
 class LicensingRepositoryImplTest {
 
-    private lateinit var fireBaseRepository: FirebaseRepository<LicensingDto>
+    private val fireBaseRepository: NewFireBaseRepository = mockk(relaxed = true)
+    private val collection = Collection.LICENSING
     private lateinit var repository: LicensingRepository
+
     private lateinit var dto: LicensingDto
     private lateinit var id: String
 
     @BeforeEach
     fun setup() {
-        fireBaseRepository = mockk(relaxed = true)
-        repository = LicensingRepositoryImpl(fireBaseRepository)
+        repository = LicensingRepositoryImpl(fireBaseRepository, collection)
         dto = TestLicensingDataProvider.getBaseDto()
         id = "testId"
     }
@@ -32,7 +35,7 @@ class LicensingRepositoryImplTest {
         repository.create(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.create(dto) }
+        coVerify { fireBaseRepository.create(collection, dto) }
     }
 
     @Test
@@ -41,7 +44,7 @@ class LicensingRepositoryImplTest {
         repository.update(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.update(dto) }
+        coVerify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
@@ -50,7 +53,7 @@ class LicensingRepositoryImplTest {
         repository.delete(id)
 
         // Assertions
-        coVerify { fireBaseRepository.delete(id) }
+        coVerify { fireBaseRepository.delete(collection, id) }
     }
 
     @Test
@@ -59,7 +62,7 @@ class LicensingRepositoryImplTest {
         repository.entityExists(id)
 
         // Assertions
-        coVerify { fireBaseRepository.entityExists(id) }
+        coVerify { fireBaseRepository.entityExists(collection, id) }
     }
 
     @Test
@@ -68,7 +71,7 @@ class LicensingRepositoryImplTest {
         repository.fetchById(id)
 
         // Assertions
-        coVerify { fireBaseRepository.documentFetch(id) }
+        coVerify { fireBaseRepository.documentFetch(collection, id, LicensingDto::class.java) }
     }
 
 }

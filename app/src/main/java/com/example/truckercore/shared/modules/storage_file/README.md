@@ -48,8 +48,8 @@ conversões necessárias para garantir a integridade dos dados.
   metadados do arquivo, incluindo a URL e o status de atualização.
 - **DeleteStorageFileUseCase**: Exclui um arquivo do sistema, removendo-o permanentemente do
   armazenamento.
-- **GetStorageFileByIdUseCase**: Recupera um arquivo de armazenamento pelo seu ID. Permite buscar
-  detalhes de um arquivo específico.
+- **GetStorageFileUseCase**: Recupera um arquivo de armazenamento pelo seu ID ou por um conjunto de
+  filtros. Permite buscar detalhes de um arquivo específico ou uma lista.
 - **GetStorageFileByParentIdUseCase**: Recupera arquivos de armazenamento relacionados a um ID de "
   pai" (parentId). Este caso de uso permite buscar múltiplos arquivos associados a um objeto
   principal.

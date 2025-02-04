@@ -6,7 +6,7 @@ import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
-interface GetLicensingByQuery {
+internal interface GetLicensingByQueryUseCase {
 
     suspend fun execute(user: User, querySettings: List<QuerySettings>): Flow<Response<List<Licensing>>>
 
