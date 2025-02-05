@@ -1,7 +1,6 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -24,6 +23,6 @@ internal interface LicensingRepository : NewRepository {
 
     override suspend fun fetchById(id: String): Flow<Response<LicensingDto>>
 
-    override suspend fun fetchByQuery(settings: List<QuerySettings>): Flow<Response<List<LicensingDto>>>
+    override suspend fun fetchByQuery(vararg settings: QuerySettings): Flow<Response<List<LicensingDto>>>
 
 }

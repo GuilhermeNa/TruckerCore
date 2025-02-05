@@ -40,7 +40,7 @@ internal interface GetStorageFileUseCase {
      */
     suspend fun execute(
         user: User,
-        querySettings: List<QuerySettings>
+        vararg querySettings: QuerySettings
     ): Flow<Response<List<StorageFile>>>
 
 }

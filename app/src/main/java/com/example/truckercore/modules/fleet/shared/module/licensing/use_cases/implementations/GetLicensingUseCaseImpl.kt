@@ -1,5 +1,6 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations
 
+import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
@@ -11,6 +12,7 @@ import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
+import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -26,24 +28,28 @@ internal class GetLicensingUseCaseImpl(
 ) : UseCase(), GetLicensingUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Licensing>> = flow {
+        id.validateIsNotBlank(Field.ID.name)
+
         val result =
             if (userHasPermission(user)) fetchData(id)
             else handleUnauthorizedPermission(user, Permission.VIEW_LICENSING)
+
         emit(result)
+
     }.catch {
-        emit(handleUnexpectedError(it))
+        emit(it.handleUnexpectedError())
     }
 
     override suspend fun execute(
         user: User,
-        querySettings: List<QuerySettings>
+        vararg querySettings: QuerySettings
     ): Flow<Response<List<Licensing>>> = flow {
         val result =
-            if (userHasPermission(user)) fetchData(querySettings)
+            if (userHasPermission(user)) fetchData(*querySettings)
             else handleUnauthorizedPermission(user, Permission.VIEW_LICENSING)
         emit(result)
     }.catch {
-        emit(handleUnexpectedError(it))
+        emit(it.handleUnexpectedError())
     }
 
     private fun userHasPermission(user: User): Boolean =
@@ -56,8 +62,8 @@ internal class GetLicensingUseCaseImpl(
             is Response.Empty -> response
         }
 
-    private suspend fun fetchData(settings: List<QuerySettings>): Response<List<Licensing>> =
-        when (val response = repository.fetchByQuery(settings).single()) {
+    private suspend fun fetchData(vararg settings: QuerySettings): Response<List<Licensing>> =
+        when (val response = repository.fetchByQuery(*settings).single()) {
             is Response.Success -> processResponseList(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response

@@ -5,6 +5,6 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.service.Lic
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 
 data class LicensingWithFile(
-    val licensing: Licensing? = null,
+    val licensing: Licensing,
     val files: List<StorageFile> = emptyList()
 )

@@ -40,7 +40,7 @@ internal interface GetLicensingUseCase {
      */
     suspend fun execute(
         user: User,
-        querySettings: List<QuerySettings>
+        vararg querySettings: QuerySettings
     ): Flow<Response<List<Licensing>>>
 
 }

@@ -84,7 +84,7 @@ interface NewFireBaseRepository {
      */
     suspend fun <T : Dto> queryFetch(
         collection: Collection,
-        settings: List<QuerySettings>,
+        vararg settings: QuerySettings,
         clazz: Class<T>
     ): Flow<Response<List<T>>>
 

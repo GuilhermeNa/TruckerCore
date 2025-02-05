@@ -7,13 +7,10 @@ import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingAggregation
 import com.example.truckercore.modules.fleet.shared.module.licensing.service.LicensingService
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.utils.expressions.logInfo
-import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -55,24 +52,25 @@ internal class MyViewModel(
 
     fun execute() {
         viewModelScope.launch {
-            val settings = listOf(
-                QuerySettings(Field.PARENT_ID, QueryType.WHERE_IN, listOf(""))
-            )
+
+           /* val queryParams =
+                QueryParameters.create(user)
+                    .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, ""))
+                    .build()*/
 
             val documentParams = DocumentParameters.create(user)
-                .setId("JXLR50V4kMRS5Qy69xQR")
-                .build()
+                .setId("JXLR50V4kMRS5Qy69xQR").build()
 
-            val queryParams = QueryParameters.create(user)
-                .setQueries(
-                    QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS,"parentId")
-                ).build()
-            val aggregation = LicensingAggregation(file = true)
-
-            when (val response = service.getWithAggregateData(queryParams, aggregation).single()) {
-                is Response.Success -> Log.i("TAG", "execute: $response")
-                is Response.Error -> Log.i("TAG", "execute: $response")
-                is Response.Empty -> Log.i("TAG", "execute: $response")
+            when (val response = service.fetchLicensingWithFiles(documentParams).single()) {
+                is Response.Success -> {
+                    Log.i("TAG", "execute: $response")
+                }
+                is Response.Error -> {
+                    Log.i("TAG", "execute: $response")
+                }
+                is Response.Empty -> {
+                    Log.i("TAG", "execute: $response")
+                }
             }
 
         }

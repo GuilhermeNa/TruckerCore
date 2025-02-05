@@ -35,10 +35,10 @@ internal class GetStorageFileUseCaseImpl(
 
     override suspend fun execute(
         user: User,
-        querySettings: List<QuerySettings>
+        vararg querySettings: QuerySettings
     ): Flow<Response<List<StorageFile>>> = flow {
         val result =
-            if (userHasPermission(user)) fetchData(querySettings)
+            if (userHasPermission(user)) fetchData(*querySettings)
             else handleUnauthorizedPermission(user, Permission.VIEW_STORAGE_FILE)
         emit(result)
     }.catch {
@@ -55,8 +55,8 @@ internal class GetStorageFileUseCaseImpl(
             is Response.Empty -> response
         }
 
-    private suspend fun fetchData(settings: List<QuerySettings>): Response<List<StorageFile>> =
-        when (val response = repository.fetchByQuery(settings).single()) {
+    private suspend fun fetchData(vararg settings: QuerySettings): Response<List<StorageFile>> =
+        when (val response = repository.fetchByQuery(*settings).single()) {
             is Response.Success -> processResponseList(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response

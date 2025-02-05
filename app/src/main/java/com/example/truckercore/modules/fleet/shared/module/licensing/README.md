@@ -6,6 +6,7 @@
 2. [Funcionalidades](#2-funcionalidades)
 3. [Fluxo de Dados](#3-fluxo-de-dados)
 4. [Estrutura](#4-estrutura)
+5. [Service](#5-service)
 
 ---
 
@@ -50,6 +51,10 @@ veículo sejam válidas.
 
 ## 2. **Funcionalidades**
 
+- **AggregateLicensingWithFilesUseCase**: Responsável por recuperar registros de licenciamento
+  junto com seus arquivos associados. Ela pode ser usada para buscar um único registro de
+  licenciamento ou uma lista, juntamente com os arquivos armazenados relacionados a cada um.
+-
 - **CreateLicensingUseCase**: Cria um novo licenciamento de veículo no sistema. Este caso de uso
   valida os dados de entrada e persiste no banco de dados, garantindo que todos os campos
   obrigatórios estejam corretamente preenchidos.
@@ -84,7 +89,7 @@ As operações no sistema retornam um tipo de `Response`, que pode ser:
 
 ## 4. **Estrutura**
 
-```text
+``text
 modules/
 │
 └── licensing/
@@ -96,3 +101,10 @@ modules/
     ├── use_cases/
     ├── validator/
     └── README.md
+``
+
+## 5. **LicensingService**
+
+A interface `LicensingService` é responsável por se comunicar com o backend para buscar e gerenciar
+dados de licenciamento. Ela atua como uma camada intermediária que permite que os aplicativos
+interajam com os registros de licenciamento no backend.

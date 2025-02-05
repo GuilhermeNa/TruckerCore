@@ -7,8 +7,9 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.repository.
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -27,9 +28,8 @@ internal class CheckLicensingExistenceUseCaseImpl(
             else handleUnauthorizedPermission(user, id)
 
         emit(result)
-
     }.catch {
-        emit(handleUnexpectedError(it))
+        emit(it.handleUnexpectedError())
     }
 
     private fun userHasPermission(user: User): Boolean =

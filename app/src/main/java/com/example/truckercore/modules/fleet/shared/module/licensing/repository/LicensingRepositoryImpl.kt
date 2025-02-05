@@ -28,7 +28,7 @@ internal class LicensingRepositoryImpl(
     override suspend fun fetchById(id: String): Flow<Response<LicensingDto>> =
         firebaseRepository.documentFetch(collection, id, LicensingDto::class.java)
 
-    override suspend fun fetchByQuery(settings: List<QuerySettings>) =
-        firebaseRepository.queryFetch(collection, settings, LicensingDto::class.java)
+    override suspend fun fetchByQuery(vararg settings: QuerySettings) =
+        firebaseRepository.queryFetch(collection, *settings, clazz = LicensingDto::class.java)
 
 }

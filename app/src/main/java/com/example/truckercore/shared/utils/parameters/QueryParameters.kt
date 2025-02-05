@@ -6,7 +6,7 @@ import com.example.truckercore.shared.utils.expressions.logWarn
 class QueryParameters private constructor(
     val user: User,
     val liveObserver: Boolean,
-    val queries: List<QuerySettings>
+    vararg val queries: QuerySettings
 ) {
 
     companion object {
@@ -27,11 +27,11 @@ class QueryParameters private constructor(
             apply { this.liveObserver = newLiveObserver }
 
         fun build(): QueryParameters {
-            if (queries.isEmpty()) handleError()
-            return QueryParameters(user, liveObserver, queries)
+            if (queries.isEmpty()) handleEmptyQueriesError()
+            return QueryParameters(user, liveObserver, *queries.toTypedArray())
         }
 
-        private fun handleError(): Nothing {
+        private fun handleEmptyQueriesError(): Nothing {
             val message = "You must provide at least one query before build a QueryParameter."
             logWarn(javaClass, message)
             throw IllegalArgumentException(message)

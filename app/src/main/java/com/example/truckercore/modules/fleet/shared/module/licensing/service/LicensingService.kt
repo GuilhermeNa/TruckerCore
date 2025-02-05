@@ -1,6 +1,5 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.service
 
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingAggregation
 import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
@@ -8,20 +7,47 @@ import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface for the Licensing Service, responsible for communicating with the backend
+ * to fetch and manage licensing data. This service acts as an intermediary layer that
+ * allows applications to interact with the backend for interacting with licensing records.
+ *
+ * @see Licensing
+ * @see LicensingWithFile
+ * @see Response
+ */
 interface LicensingService {
 
-    suspend fun getData(params: DocumentParameters): Flow<Response<Licensing>>
+    /**
+     * Fetches a single licensing record based on document parameters.
+     *
+     * @param params The document parameters to filter the licensing records.
+     * @return A [Flow] containing a [Response] with the [Licensing] record.
+     */
+    suspend fun fetchLicensing(params: DocumentParameters): Flow<Response<Licensing>>
 
-    suspend fun getData(params: QueryParameters): Flow<Response<List<Licensing>>>
+    /**
+     * Fetches a list of licensing records based on query parameters.
+     *
+     * @param params The query parameters to filter the licensing records.
+     * @return A [Flow] containing a [Response] with a list of [Licensing] records.
+     */
+    suspend fun fetchLicensing(params: QueryParameters): Flow<Response<List<Licensing>>>
 
-    suspend fun getWithAggregateData(
-        params: DocumentParameters,
-        aggregation: LicensingAggregation
-    ): Flow<Response<LicensingWithFile>>
+    /**
+     * Fetches a single licensing record along with its associated files based on document parameters.
+     *
+     * @param params The document parameters to filter the licensing records with files.
+     * @return A [Flow] containing a [Response] with the [LicensingWithFile] record.
+     */
+    suspend fun fetchLicensingWithFiles(params: DocumentParameters): Flow<Response<LicensingWithFile>>
 
-    suspend fun getWithAggregateData(
-        params: QueryParameters,
-        aggregation: LicensingAggregation
-    ): Flow<Response<List<LicensingWithFile>>>
+    /**
+     * Fetches a list of licensing records along with their associated files based on query parameters.
+     *
+     * @param params The query parameters to filter the licensing records with files.
+     * @return A [Flow] containing a [Response] with a list of [LicensingWithFile] records.
+     */
+    suspend fun fetchLicensingWithFiles(params: QueryParameters): Flow<Response<List<LicensingWithFile>>>
 
 }

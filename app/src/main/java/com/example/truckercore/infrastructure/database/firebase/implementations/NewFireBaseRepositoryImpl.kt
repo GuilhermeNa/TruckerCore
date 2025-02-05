@@ -136,11 +136,11 @@ internal class NewFireBaseRepositoryImpl(
 
     override suspend fun <T : Dto> queryFetch(
         collection: Collection,
-        settings: List<QuerySettings>,
+        vararg settings: QuerySettings,
         clazz: Class<T>
     ): Flow<Response<List<T>>> =
         flow {
-            val query = queryBuilder.getQuery(collection.getName(), settings)
+            val query = queryBuilder.getQuery(collection.getName(), *settings)
             val querySnapshot = query.get().await()
 
             val response = querySnapshot?.let { qss ->

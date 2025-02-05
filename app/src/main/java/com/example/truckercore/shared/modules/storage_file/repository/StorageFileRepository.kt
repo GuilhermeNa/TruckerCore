@@ -24,6 +24,6 @@ internal interface StorageFileRepository : NewRepository {
 
     override suspend fun fetchById(id: String): Flow<Response<StorageFileDto>>
 
-    override suspend fun fetchByQuery(settings: List<QuerySettings>): Flow<Response<List<StorageFileDto>>>
+    override suspend fun fetchByQuery(vararg settings: QuerySettings): Flow<Response<List<StorageFileDto>>>
 
 }

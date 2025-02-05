@@ -71,6 +71,6 @@ internal interface NewRepository {
      * - [Response.Error] if an error occurs during the query.
      * - [Response.Empty] if no entities match the query.
      */
-    suspend fun fetchByQuery(settings: List<QuerySettings>): Flow<Response<List<*>>>
+    suspend fun fetchByQuery(vararg settings: QuerySettings): Flow<Response<List<*>>>
 
 }

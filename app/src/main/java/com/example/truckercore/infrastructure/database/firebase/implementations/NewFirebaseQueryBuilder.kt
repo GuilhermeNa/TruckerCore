@@ -37,7 +37,7 @@ internal class NewFirebaseQueryBuilder(private val firestore: FirebaseFirestore)
      * @param querySettings The list of query settings to apply to the query (e.g., filters).
      * @return A [Query] that can be executed to retrieve documents based on the provided settings.
      */
-    fun getQuery(collectionName: String, querySettings: List<QuerySettings>): Query {
+    fun getQuery(collectionName: String, vararg querySettings: QuerySettings): Query {
         var query: Query = collection(collectionName)
 
         querySettings.forEach { settings ->

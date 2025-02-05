@@ -28,8 +28,8 @@ internal class StorageFileRepositoryImpl(
     override suspend fun fetchById(id: String) =
         firebaseRepository.documentFetch(collection, id, StorageFileDto::class.java)
 
-    override suspend fun fetchByQuery(settings: List<QuerySettings>) =
-        firebaseRepository.queryFetch(collection, settings, StorageFileDto::class.java)
+    override suspend fun fetchByQuery(vararg settings: QuerySettings) =
+        firebaseRepository.queryFetch(collection, *settings, clazz = StorageFileDto::class.java)
 
 }
 
