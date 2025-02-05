@@ -27,7 +27,7 @@ internal class GetStorageFileUseCaseImpl(
     override suspend fun execute(user: User, id: String): Flow<Response<StorageFile>> = flow {
         val result =
             if (userHasPermission(user)) fetchData(id)
-            else handleUnauthorizedPermission(user, Permission.VIEW_LICENSING)
+            else handleUnauthorizedPermission(user, Permission.VIEW_STORAGE_FILE)
         emit(result)
     }.catch {
         emit(handleUnexpectedError(it))
@@ -39,7 +39,7 @@ internal class GetStorageFileUseCaseImpl(
     ): Flow<Response<List<StorageFile>>> = flow {
         val result =
             if (userHasPermission(user)) fetchData(querySettings)
-            else handleUnauthorizedPermission(user, Permission.VIEW_LICENSING)
+            else handleUnauthorizedPermission(user, Permission.VIEW_STORAGE_FILE)
         emit(result)
     }.catch {
         emit(handleUnexpectedError(it))

@@ -5,25 +5,11 @@ import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.errors.StorageFileMappingException
-import com.example.truckercore.shared.utils.expressions.logError
+import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
 internal class StorageFileMapper : Mapper<StorageFile, StorageFileDto>() {
-
-    override fun toEntity(dto: StorageFileDto): StorageFile = try {
-        handleDtoMapping(dto)
-    } catch (e: Exception) {
-        handleMappingError(e, dto)
-    }
-
-    override fun toDto(entity: StorageFile): StorageFileDto = try {
-        handleEntityMapping(entity)
-    } catch (e: Exception) {
-        handleMappingError(e, entity)
-    }
-
-    //----------------------------------------------------------------------------------------------
 
     override fun handleEntityMapping(entity: StorageFile) = StorageFileDto(
         businessCentralId = entity.businessCentralId,
@@ -51,8 +37,11 @@ internal class StorageFileMapper : Mapper<StorageFile, StorageFileDto>() {
 
     override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
         val message = "Error while mapping a ${obj::class.simpleName} object."
-        logError(message)
-        throw StorageFileMappingException(message = "$message Obj: $obj", receivedException)
+        logWarn(
+            context = javaClass,
+            message = message
+        )
+        throw StorageFileMappingException(message, receivedException)
     }
 
 }

@@ -8,8 +8,8 @@ import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.errors.StorageFileValidationException
+import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.utils.expressions.logError
 import kotlin.reflect.KClass
 
 internal class StorageFileValidationStrategy : ValidatorStrategy() {
@@ -109,7 +109,10 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
     override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
         val message = "Invalid ${obj.simpleName}." +
                 " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
+        logWarn(
+            context = javaClass,
+            message = message
+        )
         throw StorageFileValidationException(message)
     }
 

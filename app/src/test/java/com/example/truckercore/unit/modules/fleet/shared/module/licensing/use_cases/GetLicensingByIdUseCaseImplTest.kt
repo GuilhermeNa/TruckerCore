@@ -8,8 +8,8 @@ import com.example.truckercore.infrastructure.security.permissions.errors.Unauth
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.GetLicensingByIdUseCaseImpl
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingByIdUseCase
+import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.GetLicensingUseCaseImpl
+import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test
 
 class GetLicensingByIdUseCaseImplTest {
 
-    private lateinit var useCase: GetLicensingByIdUseCase
+    private lateinit var useCase: GetLicensingUseCase
     private var repository: LicensingRepository = mockk()
     private var permissionService: PermissionService = mockk()
     private var validatorService: ValidatorService = mockk()
@@ -40,7 +40,7 @@ class GetLicensingByIdUseCaseImplTest {
     fun setup() {
         mockStaticLog()
         useCase =
-            GetLicensingByIdUseCaseImpl(repository, permissionService, validatorService, mapper)
+            GetLicensingUseCaseImpl(repository, permissionService, validatorService, mapper)
     }
 
     @Test

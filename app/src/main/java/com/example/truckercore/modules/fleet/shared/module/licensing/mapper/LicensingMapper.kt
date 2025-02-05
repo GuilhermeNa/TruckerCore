@@ -41,7 +41,7 @@ internal class LicensingMapper : Mapper<Licensing, LicensingDto>() {
     )
 
     override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
-        val message = "Error while mapping a ${obj::class.simpleName} object."
+        val message = "Error while mapping a ${obj::class.simpleName} object. Object: $obj"
         logWarn(
             context = javaClass,
             message = message

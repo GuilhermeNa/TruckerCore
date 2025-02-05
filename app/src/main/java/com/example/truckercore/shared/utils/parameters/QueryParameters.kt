@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.utils.parameters
 
-import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.utils.expressions.logWarn
 
@@ -12,10 +11,6 @@ class QueryParameters private constructor(
 
     companion object {
         fun create(user: User) = Builder(user)
-        internal const val EMPTY_QUERY_ERROR =
-            "You must provide at least one query before build a QueryParameter."
-        internal const val ID_ERROR =
-            "ID searches must be performed using DocumentParametersBuilder, not QueryParametersBuilder."
     }
 
     class Builder(val user: User) {
@@ -31,16 +26,15 @@ class QueryParameters private constructor(
         fun setLiveObserver(newLiveObserver: Boolean) =
             apply { this.liveObserver = newLiveObserver }
 
-
         fun build(): QueryParameters {
-            if (queries.isEmpty()) handleError(EMPTY_QUERY_ERROR)
-            if (queries.any { it.field == Field.ID }) handleError(ID_ERROR)
+            if (queries.isEmpty()) handleError()
             return QueryParameters(user, liveObserver, queries)
         }
 
-        private fun handleError(errorMessage: String): Nothing {
-            logWarn(javaClass, errorMessage)
-            throw IllegalArgumentException(errorMessage)
+        private fun handleError(): Nothing {
+            val message = "You must provide at least one query before build a QueryParameter."
+            logWarn(javaClass, message)
+            throw IllegalArgumentException(message)
         }
 
     }

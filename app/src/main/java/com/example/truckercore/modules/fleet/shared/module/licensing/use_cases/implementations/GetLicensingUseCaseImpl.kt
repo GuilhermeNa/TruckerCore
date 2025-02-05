@@ -10,6 +10,7 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.i
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow

@@ -8,8 +8,8 @@ import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.utils.expressions.logError
 import kotlin.reflect.KClass
 
 internal class LicensingValidationStrategy : ValidatorStrategy() {
@@ -122,7 +122,10 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
     override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
         val message = "Invalid ${obj.simpleName}." +
                 " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
+        logWarn(
+            context = javaClass,
+            message = message
+        )
         throw LicensingValidationException(message)
     }
 

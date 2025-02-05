@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.fleet.truck.service
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingByParentIdsUseCase
+import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerByTruckIdUseCase
 import com.example.truckercore.modules.fleet.truck.configs.TruckFetchConfig
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.single
 internal class TruckServiceImpl(
     private val getTruck: GetTruckByIdUseCase,
     private val getTrailers: GetTrailerByTruckIdUseCase,
-    private val getLicensing: GetLicensingByParentIdsUseCase
+    private val getLicensing: GetLicensingUseCase
 ) : TruckService {
 
     override suspend fun getTruck(user: User, truckId: String) = getTruck.execute(user, truckId)
@@ -102,12 +102,12 @@ internal class TruckServiceImpl(
         return emptyList()
     }
 
-    private suspend fun fetchLicensing(user: User, parentIds: List<String>): List<Licensing> =
-        when (val response = getLicensing.execute(user, *parentIds.toTypedArray()).single()) {
+    private suspend fun fetchLicensing(user: User, parentIds: List<String>): List<Licensing> = TODO()
+    /*    when (val response = getLicensing.execute(user, *parentIds.toTypedArray()).single()) {
             is Response.Success -> response.data
             is Response.Empty -> handleLicensingEmpty(parentIds)
             is Response.Error -> handleLicensingError(response, parentIds)
-        }
+        }*/
 
     private fun handleLicensingError(response: Response.Error, parentIds: List<String>): Nothing {
         logError(

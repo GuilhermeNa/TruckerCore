@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.service
 
-import com.example.truckercore.modules.fleet.shared.module.licensing.configs.LicensingAggregation
-import com.example.truckercore.modules.fleet.shared.module.licensing.configs.LicensingWithFile
+import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingAggregation
+import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters

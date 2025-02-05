@@ -11,4 +11,4 @@ import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
  *
  * @property message An optional message that describes the reason for the error.
  */
-class StorageFileValidationException(message: String? = null): ValidationException(message)
+class StorageFileValidationException(message: String? = null) : ValidationException(message)

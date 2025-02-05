@@ -23,7 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -46,8 +50,23 @@ internal class Test {
     private val builder = FirebaseQueryBuilderImpl(firestore)
 
     @Test
-    fun testar() = runTest {
+    fun testar() = runBlocking {
+        println("Início do programa")
 
+        coroutineScope {
+            println("Início coroutine")
+            launch {
+                delay(1000L)  // Simula uma operação assíncrona
+                println("Corrotina 1 concluída")
+            }
+            launch {
+                delay(500L)  // Simula outra operação assíncrona
+                println("Corrotina 2 concluída")
+            }
+        }
+
+        println("Fim do programa")
     }
+
 
 }

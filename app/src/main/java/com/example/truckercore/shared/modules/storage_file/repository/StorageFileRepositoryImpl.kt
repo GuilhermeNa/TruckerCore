@@ -1,8 +1,6 @@
 package com.example.truckercore.shared.modules.storage_file.repository
 
 import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto

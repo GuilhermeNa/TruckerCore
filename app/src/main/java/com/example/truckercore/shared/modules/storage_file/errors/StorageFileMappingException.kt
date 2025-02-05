@@ -12,4 +12,5 @@ import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
  * @property message An optional message that provides additional details about the error.
  * @property cause The underlying exception that caused this exception to be thrown.
  */
-class StorageFileMappingException(message: String? = null, cause: Exception): MappingException(message, cause)
+class StorageFileMappingException(message: String? = null, cause: Exception) :
+    MappingException(message, cause)

@@ -2,6 +2,7 @@ package com.example.truckercore.configs.di
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
+import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepositoryImpl
 import com.example.truckercore.shared.modules.storage_file.use_cases.implementations.CheckStorageFileExistenceUseCaseImpl
@@ -18,7 +19,7 @@ import org.koin.dsl.module
 
 val storageFileModule = module {
     single<StorageFileRepository> { StorageFileRepositoryImpl(get(), Collection.FILE) }
-    single { LicensingMapper() }
+    single { StorageFileMapper() }
 
     single<CheckStorageFileExistenceUseCase> {
         CheckStorageFileExistenceUseCaseImpl(get(), get())
@@ -28,9 +29,6 @@ val storageFileModule = module {
     }
     single<DeleteStorageFileUseCase> {
         DeleteStorageFileUseCaseImpl(get(), get(), get())
-    }
-    single<CheckStorageFileExistenceUseCase> {
-        CheckStorageFileExistenceUseCaseImpl(get(), get())
     }
     single<GetStorageFileUseCase> {
         GetStorageFileUseCaseImpl(get(), get(), get(), get())
