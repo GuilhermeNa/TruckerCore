@@ -5,9 +5,9 @@ import com.example.truckercore.shared.utils.expressions.logWarn
 
 class QueryParameters private constructor(
     val user: User,
-    val liveObserver: Boolean,
+    override val liveObserver: Boolean,
     vararg val queries: QuerySettings
-) {
+): SearchParameters { // TODO investigar uma forma de adicionar o limit, order, direction e etc
 
     companion object {
         fun create(user: User) = Builder(user)

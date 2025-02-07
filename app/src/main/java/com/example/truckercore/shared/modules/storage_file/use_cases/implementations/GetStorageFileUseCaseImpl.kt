@@ -10,6 +10,9 @@ import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMap
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileUseCase
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -24,39 +27,38 @@ internal class GetStorageFileUseCaseImpl(
     private val mapper: StorageFileMapper
 ) : UseCase(), GetStorageFileUseCase {
 
-    override suspend fun execute(user: User, id: String): Flow<Response<StorageFile>> = flow {
-        val result =
-            if (userHasPermission(user)) fetchData(id)
-            else handleUnauthorizedPermission(user, Permission.VIEW_STORAGE_FILE)
-        emit(result)
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
+    override suspend fun execute(documentParam: DocumentParameters): Flow<Response<StorageFile>> =
+        flow {
+            val result =
+                if (userHasPermission(documentParam.user)) fetchData(documentParam)
+                else handleUnauthorizedPermission(documentParam.user, Permission.VIEW_STORAGE_FILE)
+            emit(result)
+        }.catch {
+            emit(handleUnexpectedError(it))
+        }
 
-    override suspend fun execute(
-        user: User,
-        vararg querySettings: QuerySettings
-    ): Flow<Response<List<StorageFile>>> = flow {
-        val result =
-            if (userHasPermission(user)) fetchData(*querySettings)
-            else handleUnauthorizedPermission(user, Permission.VIEW_STORAGE_FILE)
-        emit(result)
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
+    override suspend fun execute(queryParam: QueryParameters): Flow<Response<List<StorageFile>>> =
+        flow {
+            val result =
+                if (userHasPermission(queryParam.user)) fetchData(queryParam)
+                else handleUnauthorizedPermission(queryParam.user, Permission.VIEW_STORAGE_FILE)
+            emit(result)
+        }.catch {
+            emit(it.handleUnexpectedError())
+        }
 
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_STORAGE_FILE)
 
-    private suspend fun fetchData(id: String): Response<StorageFile> =
-        when (val response = repository.fetchById(id).single()) {
+    private suspend fun fetchData(documentParam: DocumentParameters): Response<StorageFile> =
+        when (val response = repository.fetchByDocument(documentParam).single()) {
             is Response.Success -> processResponseSingle(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response
         }
 
-    private suspend fun fetchData(vararg settings: QuerySettings): Response<List<StorageFile>> =
-        when (val response = repository.fetchByQuery(*settings).single()) {
+    private suspend fun fetchData(queryParam: QueryParameters): Response<List<StorageFile>> =
+        when (val response = repository.fetchByQuery(queryParam).single()) {
             is Response.Success -> processResponseList(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response

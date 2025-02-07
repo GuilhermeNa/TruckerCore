@@ -1,5 +1,7 @@
 package com.example.truckercore.shared.interfaces
 
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -53,24 +55,24 @@ internal interface NewRepository {
      * Fetches an entity from the repository by its ID.
      * Returns the data as a generic object in the response.
      *
-     * @param id The ID of the entity to fetch.
+     * @param params The document parameters to filter the licensing records.
      * @return A [Flow] of:
      * - [Response.Success] containing the entity data.
      * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if no entity is found for the given ID.
      */
-    suspend fun fetchById(id: String): Flow<Response<*>>
+    suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<*>>
 
     /**
      * Fetches a list of entities from the repository based on a query.
      * The query is constructed using the provided query settings.
      *
-     * @param settings The list of query settings to filter the results.
+     * @param params The query parameters to filter the licensing records.
      * @return A [Flow] of:
      * - [Response.Success] containing a list of entities that match the query.
      * - [Response.Error] if an error occurs during the query.
      * - [Response.Empty] if no entities match the query.
      */
-    suspend fun fetchByQuery(vararg settings: QuerySettings): Flow<Response<List<*>>>
+    suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<*>>>
 
 }

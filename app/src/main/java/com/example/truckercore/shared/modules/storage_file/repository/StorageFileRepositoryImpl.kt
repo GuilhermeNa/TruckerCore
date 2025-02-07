@@ -2,16 +2,20 @@ package com.example.truckercore.shared.modules.storage_file.repository
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.shared.abstractions.Repository
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
-import com.example.truckercore.shared.utils.parameters.QuerySettings
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.shared.utils.parameters.SearchParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class StorageFileRepositoryImpl(
     private val firebaseRepository: NewFireBaseRepository,
     private val collection: Collection
-) : StorageFileRepository {
+) : Repository(), StorageFileRepository {
 
     override suspend fun <T : Dto> create(dto: T): Flow<Response<String>> =
         firebaseRepository.create(collection, dto)
@@ -25,11 +29,17 @@ internal class StorageFileRepositoryImpl(
     override suspend fun entityExists(id: String) =
         firebaseRepository.entityExists(collection, id)
 
-    override suspend fun fetchById(id: String) =
-        firebaseRepository.documentFetch(collection, id, StorageFileDto::class.java)
+    override suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<StorageFileDto>> =
+        firebaseRepository.documentFetch(createFirestoreRequest(params))
 
-    override suspend fun fetchByQuery(vararg settings: QuerySettings) =
-        firebaseRepository.queryFetch(collection, *settings, clazz = StorageFileDto::class.java)
+    override suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<StorageFileDto>>> =
+        firebaseRepository.queryFetch(createFirestoreRequest(params))
+
+    override fun createFirestoreRequest(params: SearchParameters) =
+        FirebaseRequest.create(StorageFileDto::class.java)
+            .setCollection(collection)
+            .setParams(params)
+            .build()
 
 }
 

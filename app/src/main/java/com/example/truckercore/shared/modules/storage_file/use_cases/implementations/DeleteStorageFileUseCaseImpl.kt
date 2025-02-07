@@ -8,6 +8,7 @@ import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.CheckStorageFileExistenceUseCase
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.DeleteStorageFileUseCase
+import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +32,7 @@ internal class DeleteStorageFileUseCaseImpl(
         emit(result)
 
     }.catch {
-        emit(handleUnexpectedError(it))
+        emit(it.handleUnexpectedError())
     }
 
     private fun userHasPermission(user: User): Boolean =

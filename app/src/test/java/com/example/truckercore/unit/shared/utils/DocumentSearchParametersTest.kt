@@ -13,7 +13,7 @@ import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.declaredMembers
 
-class DocumentParametersTest {
+class DocumentSearchParametersTest {
 
     private val user: User = mockk()
 

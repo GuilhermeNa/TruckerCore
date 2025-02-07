@@ -17,7 +17,7 @@ interface UpdateStorageFileUseCase {
      * Executes the use case to update an existing [StorageFile] entity.
      *
      * @param user The [User] performing the update. This is used to check if the user has the necessary permissions.
-     * @param pData The [StorageFile] entity that is being updated.
+     * @param file The [StorageFile] entity that is being updated.
      * @return A [Flow] of [Response<Unit>] that will emit:
      * - [Response.Success] if the update was successful.
      * - [Response.Error] if there was any error during the update.

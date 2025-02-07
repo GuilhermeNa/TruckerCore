@@ -13,9 +13,9 @@ import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
 import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
-import com.example.truckercore.shared.utils.parameters.QuerySettings
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single
@@ -27,12 +27,12 @@ internal class GetLicensingUseCaseImpl(
     private val mapper: LicensingMapper
 ) : UseCase(), GetLicensingUseCase {
 
-    override suspend fun execute(user: User, id: String): Flow<Response<Licensing>> = flow {
-        id.validateIsNotBlank(Field.ID.name)
+    override suspend fun execute(documentParams: DocumentParameters) = flow {
+        documentParams.id.validateIsNotBlank(Field.ID.name)
 
         val result =
-            if (userHasPermission(user)) fetchData(id)
-            else handleUnauthorizedPermission(user, Permission.VIEW_LICENSING)
+            if (userHasPermission(documentParams.user)) fetchData(documentParams)
+            else handleUnauthorizedPermission(documentParams.user, Permission.VIEW_LICENSING)
 
         emit(result)
 
@@ -40,14 +40,13 @@ internal class GetLicensingUseCaseImpl(
         emit(it.handleUnexpectedError())
     }
 
-    override suspend fun execute(
-        user: User,
-        vararg querySettings: QuerySettings
-    ): Flow<Response<List<Licensing>>> = flow {
+    override suspend fun execute(queryParams: QueryParameters) = flow {
         val result =
-            if (userHasPermission(user)) fetchData(*querySettings)
-            else handleUnauthorizedPermission(user, Permission.VIEW_LICENSING)
+            if (userHasPermission(queryParams.user)) fetchData(queryParams)
+            else handleUnauthorizedPermission(queryParams.user, Permission.VIEW_LICENSING)
+
         emit(result)
+
     }.catch {
         emit(it.handleUnexpectedError())
     }
@@ -55,15 +54,15 @@ internal class GetLicensingUseCaseImpl(
     private fun userHasPermission(user: User): Boolean =
         permissionService.canPerformAction(user, Permission.VIEW_LICENSING)
 
-    private suspend fun fetchData(id: String): Response<Licensing> =
-        when (val response = repository.fetchById(id).single()) {
+    private suspend fun fetchData(params: DocumentParameters): Response<Licensing> =
+        when (val response = repository.fetchByDocument(params).single()) {
             is Response.Success -> processResponseSingle(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response
         }
 
-    private suspend fun fetchData(vararg settings: QuerySettings): Response<List<Licensing>> =
-        when (val response = repository.fetchByQuery(*settings).single()) {
+    private suspend fun fetchData(params: QueryParameters): Response<List<Licensing>> =
+        when (val response = repository.fetchByQuery(params).single()) {
             is Response.Success -> processResponseList(response)
             is Response.Error -> handleFailureResponse(response)
             is Response.Empty -> response

@@ -37,7 +37,7 @@ class GetStorageFileUseCaseImplTest {
 
     private val user = TestUserDataProvider.getBaseEntity()
     private val id = "id"
-    private val settings = listOf(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, id))
+    private val settings = QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, id)
 
     private val storageFile = TestStorageFileDataProvider.getBaseEntity()
     private val dto = TestStorageFileDataProvider.getBaseDto()

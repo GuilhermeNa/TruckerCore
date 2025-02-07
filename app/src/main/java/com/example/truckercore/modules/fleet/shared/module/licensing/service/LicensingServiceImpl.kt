@@ -9,20 +9,20 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class LicensingServiceImpl(
-    private val getUseCase: GetLicensingUseCase,
-    private val aggregateLicensing: AggregateLicensingWithFilesUseCase
+    private val getLicensing: GetLicensingUseCase,
+    private val getLicensingWithFile: AggregateLicensingWithFilesUseCase
 ) : LicensingService {
 
-    override suspend fun fetchLicensing(params: DocumentParameters): Flow<Response<Licensing>> =
-        getUseCase.execute(params.user, params.id)
+    override suspend fun fetchLicensing(documentParam: DocumentParameters): Flow<Response<Licensing>> =
+        getLicensing.execute(documentParam)
 
-    override suspend fun fetchLicensing(params: QueryParameters): Flow<Response<List<Licensing>>> =
-        getUseCase.execute(params.user, *params.queries)
+    override suspend fun fetchLicensing(queryParam: QueryParameters): Flow<Response<List<Licensing>>> =
+        getLicensing.execute(queryParam)
 
-    override suspend fun fetchLicensingWithFiles(params: DocumentParameters) =
-        aggregateLicensing.execute(params.user, params.id)
+    override suspend fun fetchLicensingWithFiles(documentParam: DocumentParameters) =
+        getLicensingWithFile.execute(documentParam)
 
-    override suspend fun fetchLicensingWithFiles(params: QueryParameters) =
-        aggregateLicensing.execute(params.user, *params.queries)
+    override suspend fun fetchLicensingWithFiles(queryParam: QueryParameters) =
+        getLicensingWithFile.execute(queryParam)
 
 }

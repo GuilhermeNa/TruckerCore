@@ -21,33 +21,33 @@ interface LicensingService {
     /**
      * Fetches a single licensing record based on document parameters.
      *
-     * @param params The document parameters to filter the licensing records.
+     * @param documentParam The document parameters to filter the licensing records.
      * @return A [Flow] containing a [Response] with the [Licensing] record.
      */
-    suspend fun fetchLicensing(params: DocumentParameters): Flow<Response<Licensing>>
+    suspend fun fetchLicensing(documentParam: DocumentParameters): Flow<Response<Licensing>>
 
     /**
      * Fetches a list of licensing records based on query parameters.
      *
-     * @param params The query parameters to filter the licensing records.
+     * @param queryParam The query parameters to filter the licensing records.
      * @return A [Flow] containing a [Response] with a list of [Licensing] records.
      */
-    suspend fun fetchLicensing(params: QueryParameters): Flow<Response<List<Licensing>>>
+    suspend fun fetchLicensing(queryParam: QueryParameters): Flow<Response<List<Licensing>>>
 
     /**
      * Fetches a single licensing record along with its associated files based on document parameters.
      *
-     * @param params The document parameters to filter the licensing records with files.
+     * @param documentParam The document parameters to filter the licensing records with files.
      * @return A [Flow] containing a [Response] with the [LicensingWithFile] record.
      */
-    suspend fun fetchLicensingWithFiles(params: DocumentParameters): Flow<Response<LicensingWithFile>>
+    suspend fun fetchLicensingWithFiles(documentParam: DocumentParameters): Flow<Response<LicensingWithFile>>
 
     /**
      * Fetches a list of licensing records along with their associated files based on query parameters.
      *
-     * @param params The query parameters to filter the licensing records with files.
+     * @param queryParam The query parameters to filter the licensing records with files.
      * @return A [Flow] containing a [Response] with a list of [LicensingWithFile] records.
      */
-    suspend fun fetchLicensingWithFiles(params: QueryParameters): Flow<Response<List<LicensingWithFile>>>
+    suspend fun fetchLicensingWithFiles(queryParam: QueryParameters): Flow<Response<List<LicensingWithFile>>>
 
 }

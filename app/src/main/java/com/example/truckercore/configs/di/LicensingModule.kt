@@ -11,6 +11,8 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.i
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.CreateLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.DeleteLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.GetLicensingUseCaseImpl
+import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.ListLicensingWithFileUseCase
+import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.SingleLicensingWithFileUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.UpdateLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase
@@ -26,6 +28,9 @@ val licensingModule = module {
     single { LicensingMapper() }
 
     //--
+
+    single { SingleLicensingWithFileUseCase(get(), get()) }
+    single { ListLicensingWithFileUseCase(get(), get()) }
 
     single<AggregateLicensingWithFilesUseCase> {
         AggregateLicensingWithFilesUseCaseImpl(get(), get())

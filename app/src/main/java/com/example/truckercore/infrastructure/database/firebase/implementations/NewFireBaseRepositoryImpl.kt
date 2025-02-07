@@ -2,17 +2,21 @@ package com.example.truckercore.infrastructure.database.firebase.implementations
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.expressions.logError
-import com.example.truckercore.shared.utils.parameters.QuerySettings
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestoreException
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -115,43 +119,153 @@ internal class NewFireBaseRepositoryImpl(
             emit(handleUnexpectedError(it))
         }
 
-    override suspend fun <T : Dto> documentFetch(
-        collection: Collection,
-        id: String,
-        clazz: Class<T>
-    ): Flow<Response<T>> =
-        flow {
-            val document = queryBuilder.getDocument(collection.getName(), id)
-            val documentSnapShot = document.get().await()
+    override suspend fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>> {
+        return when (firebaseRequest.shouldObserve()) {
+            true -> observeDocumentStream(firebaseRequest)
+            false -> fetchByDocumentSingle(firebaseRequest)
+        }
+    }
 
-            val response = documentSnapShot?.let { dss ->
-                converter.processDocumentSnapShot(dss, clazz)
-            } ?: Response.Empty
+    override suspend fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>> {
+        return when (firebaseRequest.shouldObserve()) {
+            true -> observeQueryStream(firebaseRequest)
+            false -> fetchByQuerySingle(firebaseRequest)
+        }
+    }
 
-            emit(response)
+    /*
+        override suspend fun <T : Dto> documentFetch(
+            collection: Collection,
+            clazz: Class<T>,
+            id: String
+        ): Flow<Response<T>> =
+            flow {
+                val document = queryBuilder.getDocument(collection.getName(), id)
+                val documentSnapShot = document.get().await()
 
-        }.catch {
-            emit(handleUnexpectedError(it))
+                val response = documentSnapShot?.let { dss ->
+                    converter.processDocumentSnapShot(dss, clazz)
+                } ?: Response.Empty
+
+                emit(response)
+
+            }.catch {
+                emit(handleUnexpectedError(it))
+            }
+
+        override suspend fun <T : Dto> queryFetch(
+            collection: Collection,
+            clazz: Class<T>,
+            vararg settings: QuerySettings
+        ): Flow<Response<List<T>>> =
+            flow {
+                val query = queryBuilder.getQuery(collection.getName(), *settings)
+                val querySnapshot = query.get().await()
+
+                val response = querySnapshot?.let { qss ->
+                    converter.processQuerySnapShot(qss, clazz)
+                } ?: Response.Empty
+
+                emit(response)
+
+            }.catch {
+                emit(handleUnexpectedError(it))
+            }
+    */
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun <T : Dto> fetchByDocumentSingle(firebaseRequest: FirebaseRequest<T>) = flow {
+        if (firebaseRequest.params !is DocumentParameters) throw IllegalArgumentException(
+            "Expected a DocumentParameters and received ${firebaseRequest.params.javaClass.simpleName}."
+        )
+
+        val document = queryBuilder.getDocument(
+            firebaseRequest.collection.getName(),
+            firebaseRequest.params.id
+        )
+        val documentSnapShot = document.get().await()
+
+        val response = documentSnapShot?.let { dss ->
+            converter.processDocumentSnapShot(dss, firebaseRequest.clazz)
+        } ?: Response.Empty
+
+        emit(response)
+
+    }.catch {
+        emit(handleUnexpectedError(it))
+    }
+
+    private fun <T : Dto> fetchByQuerySingle(firebaseRequest: FirebaseRequest<T>) = flow {
+        if (firebaseRequest.params !is QueryParameters) throw IllegalArgumentException(
+            "Expected a QueryParameters and received ${firebaseRequest.params.javaClass.simpleName}."
+        )
+
+        val query = queryBuilder.getQuery(
+            firebaseRequest.collection.getName(),
+            *firebaseRequest.params.queries
+        )
+        val querySnapshot = query.get().await()
+
+        val response = querySnapshot?.let { qss ->
+            converter.processQuerySnapShot(qss, firebaseRequest.clazz)
+        } ?: Response.Empty
+
+        emit(response)
+
+    }.catch {
+        emit(handleUnexpectedError(it))
+    }
+
+    private fun <T : Dto> observeQueryStream(firebaseRequest: FirebaseRequest<T>) = callbackFlow {
+        if (firebaseRequest.params !is QueryParameters) throw IllegalArgumentException(
+            "Expected a QueryParameters and received ${firebaseRequest.params.javaClass.simpleName}."
+        )
+
+        val query = queryBuilder.getQuery(
+            firebaseRequest.collection.getName(),
+            *firebaseRequest.params.queries
+        )
+        query.addSnapshotListener { nSnapShot, nError ->
+            nError?.let { error ->
+                //this.trySend(Response.Error(error))
+                this.close(error)
+                return@addSnapshotListener
+            }
+            nSnapShot?.let { snapShot ->
+                val result = converter.processQuerySnapShot(snapShot, firebaseRequest.clazz)
+                this.trySend(result)
+            }
+        }
+        awaitClose { this.cancel() }
+    }
+
+    private fun <T : Dto> observeDocumentStream(firebaseRequest: FirebaseRequest<T>) =
+        callbackFlow {
+            if (firebaseRequest.params !is DocumentParameters) throw IllegalArgumentException(
+                "Expected a DocumentParameters and received ${firebaseRequest.params.javaClass.simpleName}."
+            )
+
+            val query = queryBuilder.getDocument(
+                firebaseRequest.collection.getName(),
+                firebaseRequest.params.id
+            )
+
+            query.addSnapshotListener { nDocSnap, nError ->
+                nError?.let { error ->
+                    // this.trySend(Response.Error(error))
+                    this.close(error)
+                    return@addSnapshotListener
+                }
+                nDocSnap?.let { docSnap ->
+                    val result = converter.processDocumentSnapShot(docSnap, firebaseRequest.clazz)
+                    this.trySend(result)
+                }
+            }
+            awaitClose { this.cancel() }
         }
 
-    override suspend fun <T : Dto> queryFetch(
-        collection: Collection,
-        vararg settings: QuerySettings,
-        clazz: Class<T>
-    ): Flow<Response<List<T>>> =
-        flow {
-            val query = queryBuilder.getQuery(collection.getName(), *settings)
-            val querySnapshot = query.get().await()
-
-            val response = querySnapshot?.let { qss ->
-                converter.processQuerySnapShot(qss, clazz)
-            } ?: Response.Empty
-
-            emit(response)
-
-        }.catch {
-            emit(handleUnexpectedError(it))
-        }
+    //----------------------------------------------------------------------------------------------
 
     private fun handleUnexpectedError(throwable: Throwable): Response.Error {
         throwable as Exception
@@ -169,6 +283,7 @@ internal class NewFireBaseRepositoryImpl(
         )
         return Response.Error(throwable)
     }
+
 
 }
 

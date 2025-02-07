@@ -1,16 +1,13 @@
 package com.example.truckercore.unit.shared.modules.storage_file.repositories
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.shared.enums.QueryType
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepositoryImpl
-import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -80,13 +77,19 @@ internal class StorageFileFirebaseRepositoryImplTest {
     @Test
     fun `fetchByQuery() should call fireBaseRepository`() = runTest {
         // Arrange
-        val settings = listOf(QuerySettings(Field.PARENT_ID, QueryType.WHERE_IN, "parentId"))
+        val settings = QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, "parentId")
 
         // Call
         repository.fetchByQuery(settings)
 
         // Assertions
-        coVerify { fireBaseRepository.queryFetch(collection, settings, StorageFileDto::class.java) }
+        coVerify {
+            fireBaseRepository.queryFetch(
+                collection,
+                settings,
+                clazz = StorageFileDto::class.java
+            )
+        }
     }
 
 }

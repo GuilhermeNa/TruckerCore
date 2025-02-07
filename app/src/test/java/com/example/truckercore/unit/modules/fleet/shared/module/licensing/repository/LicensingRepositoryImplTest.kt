@@ -2,7 +2,6 @@ package com.example.truckercore.unit.modules.fleet.shared.module.licensing.repos
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
@@ -68,7 +67,7 @@ class LicensingRepositoryImplTest {
     @Test
     fun `fetchById() should call fireBaseRepository`() = runTest {
         // Call
-        repository.fetchById(id)
+        repository.fetchByDocument(id)
 
         // Assertions
         coVerify { fireBaseRepository.documentFetch(collection, id, LicensingDto::class.java) }

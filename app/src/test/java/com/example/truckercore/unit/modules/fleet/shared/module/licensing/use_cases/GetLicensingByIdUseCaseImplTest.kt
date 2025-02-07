@@ -47,7 +47,7 @@ class GetLicensingByIdUseCaseImplTest {
     fun `should retrieve the entity when it's found and has permission`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.VIEW_LICENSING) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Success(dto))
+        coEvery { repository.fetchByDocument(id) } returns flowOf(Response.Success(dto))
         every { validatorService.validateDto(dto) } returns Unit
         every { mapper.toEntity(dto) } returns licensing
 
@@ -58,7 +58,7 @@ class GetLicensingByIdUseCaseImplTest {
         assertTrue(result is Response.Success && result.data == licensing)
         coVerifyOrder {
             permissionService.canPerformAction(user, Permission.VIEW_LICENSING)
-            repository.fetchById(id)
+            repository.fetchByDocument(id)
             validatorService.validateDto(dto)
             mapper.toEntity(dto)
         }
@@ -83,7 +83,7 @@ class GetLicensingByIdUseCaseImplTest {
     fun `should return an error when the repository returns an error`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.VIEW_LICENSING) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Error(NullPointerException()))
+        coEvery { repository.fetchByDocument(id) } returns flowOf(Response.Error(NullPointerException()))
 
         // Call
         val result = useCase.execute(user, id).single()
@@ -92,7 +92,7 @@ class GetLicensingByIdUseCaseImplTest {
         assertTrue(result is Response.Error && result.exception is NullPointerException)
         coVerifyOrder {
             permissionService.canPerformAction(user, Permission.VIEW_LICENSING)
-            repository.fetchById(id)
+            repository.fetchByDocument(id)
         }
     }
 
@@ -100,7 +100,7 @@ class GetLicensingByIdUseCaseImplTest {
     fun `should return empty when the repository returns empty`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.VIEW_LICENSING) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Empty)
+        coEvery { repository.fetchByDocument(id) } returns flowOf(Response.Empty)
 
         // Call
         val result = useCase.execute(user, id).single()
@@ -109,7 +109,7 @@ class GetLicensingByIdUseCaseImplTest {
         assertTrue(result is Response.Empty)
         coVerifyOrder {
             permissionService.canPerformAction(user, Permission.VIEW_LICENSING)
-            repository.fetchById(id)
+            repository.fetchByDocument(id)
         }
     }
 
@@ -117,7 +117,7 @@ class GetLicensingByIdUseCaseImplTest {
     fun `should return error when any error in flow occurs`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.VIEW_LICENSING) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Success(dto))
+        coEvery { repository.fetchByDocument(id) } returns flowOf(Response.Success(dto))
         every { validatorService.validateDto(dto) } returns Unit
         every { mapper.toEntity(dto) } throws NullPointerException()
 
@@ -128,7 +128,7 @@ class GetLicensingByIdUseCaseImplTest {
         assertTrue(result is Response.Error && result.exception is NullPointerException)
         coVerifyOrder {
             permissionService.canPerformAction(user, Permission.VIEW_LICENSING)
-            repository.fetchById(id)
+            repository.fetchByDocument(id)
             validatorService.validateDto(dto)
             mapper.toEntity(dto)
         }

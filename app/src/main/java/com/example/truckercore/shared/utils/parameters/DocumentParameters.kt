@@ -6,8 +6,8 @@ import com.example.truckercore.shared.utils.expressions.logWarn
 class DocumentParameters private constructor(
     val user: User,
     val id: String,
-    val liveObserver: Boolean
-) {
+    override val liveObserver: Boolean
+): SearchParameters {
 
     companion object {
         fun create(user: User) = Builder(user)
@@ -38,3 +38,4 @@ class DocumentParameters private constructor(
     }
 
 }
+

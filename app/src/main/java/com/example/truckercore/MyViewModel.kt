@@ -15,6 +15,7 @@ import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -53,28 +54,46 @@ internal class MyViewModel(
     fun execute() {
         viewModelScope.launch {
 
-           /* val queryParams =
+            val queryParams =
                 QueryParameters.create(user)
-                    .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, ""))
-                    .build()*/
+                    .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, "parentId"))
+                    .build()
 
-            val documentParams = DocumentParameters.create(user)
-                .setId("JXLR50V4kMRS5Qy69xQR").build()
+              val documentParams = DocumentParameters.create(user)
+                  .setId("JXLR50V4kMRS5Qy69xQR").build()
 
-            when (val response = service.fetchLicensingWithFiles(documentParams).single()) {
+            /* service.fetchLicensingWithFiles(documentParams).collect { response ->
+                 when (response) {
+                     is Response.Success -> {
+                         Log.i("TAG", "execute: $response")
+                     }
+
+                     is Response.Error -> {
+                         Log.i("TAG", "execute: $response")
+                     }
+
+                     is Response.Empty -> {
+                         Log.i("TAG", "execute: $response")
+                     }
+                 }
+             }*/
+
+            when (val response = service.fetchLicensingWithFiles(queryParams).first()) {
                 is Response.Success -> {
                     Log.i("TAG", "execute: $response")
                 }
+
                 is Response.Error -> {
                     Log.i("TAG", "execute: $response")
                 }
+
                 is Response.Empty -> {
                     Log.i("TAG", "execute: $response")
                 }
             }
-
         }
     }
 
 }
+
 

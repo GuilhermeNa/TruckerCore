@@ -1,6 +1,7 @@
 package com.example.truckercore.infrastructure.database.firebase.interfaces
 
 import com.example.truckercore.configs.app_constants.Collection
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
@@ -54,7 +55,11 @@ interface NewFireBaseRepository {
      */
     suspend fun entityExists(collection: Collection, id: String): Flow<Response<Unit>>
 
-    /**
+    suspend fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>>
+
+    suspend fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>>
+
+/*    *//**
      * Fetches a single document from the specified Firestore collection by ID.
      *
      * @param collection The Firestore collection to fetch the document from.
@@ -64,14 +69,14 @@ interface NewFireBaseRepository {
      * - [Response.Success] when the object is successfully found.
      * - [Response.Error] when any error occurs.
      * - [Response.Empty] when the data was not found.
-     */
+     *//*
     suspend fun <T : Dto> documentFetch(
         collection: Collection,
-        id: String,
-        clazz: Class<T>
-    ): Flow<Response<T>>
+        clazz: Class<T>,
+        id: String
+    ): Flow<Response<T>>*/
 
-    /**
+/*    *//**
      * Fetches a list of documents from the specified Firestore collection based on a query using the provided query settings.
      *
      * @param collection The Firestore collection to query.
@@ -81,11 +86,11 @@ interface NewFireBaseRepository {
      * - [Response.Success] containing a list of matching documents.
      * - [Response.Error] when any error occurs.
      * - [Response.Empty] when no matching documents are found.
-     */
+     *//*
     suspend fun <T : Dto> queryFetch(
         collection: Collection,
-        vararg settings: QuerySettings,
-        clazz: Class<T>
-    ): Flow<Response<List<T>>>
+        clazz: Class<T>,
+        vararg settings: QuerySettings
+    ): Flow<Response<List<T>>>*/
 
 }

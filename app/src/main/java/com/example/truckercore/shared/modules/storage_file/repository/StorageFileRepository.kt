@@ -4,7 +4,8 @@ import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.example.truckercore.shared.utils.parameters.QuerySettings
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -22,8 +23,8 @@ import kotlinx.coroutines.flow.Flow
  */
 internal interface StorageFileRepository : NewRepository {
 
-    override suspend fun fetchById(id: String): Flow<Response<StorageFileDto>>
+    override suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<StorageFileDto>>
 
-    override suspend fun fetchByQuery(vararg settings: QuerySettings): Flow<Response<List<StorageFileDto>>>
+    override suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<StorageFileDto>>>
 
 }
