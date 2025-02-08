@@ -2,7 +2,8 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.mapper
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.errors.LicensingMappingException
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.ObjectMappingException
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
@@ -14,15 +15,11 @@ internal class NewLicensingMapper : NewMapper {
 
     override fun toEntity(dto: Dto): Licensing =
         if (dto is LicensingDto) mapToEntity(dto)
-        else throw IllegalArgumentException(
-            "Expected a LicensingDto for mapping but received: ${dto.javaClass.simpleName}"
-        )
+        else throw IllegalMappingArgumentException(dto)
 
     override fun toDto(entity: Entity): LicensingDto =
         if (entity is Licensing) mapToDto(entity)
-        else throw IllegalArgumentException(
-            "Expected a Licensing entity for mapping but received: ${entity.javaClass.simpleName}"
-        )
+        else throw IllegalMappingArgumentException(entity)
 
     private fun mapToEntity(dto: LicensingDto) = try {
         Licensing(
@@ -39,7 +36,7 @@ internal class NewLicensingMapper : NewMapper {
             exercise = dto.exercise!!.toLocalDateTime()
         )
     } catch (error: Exception) {
-        throw LicensingMappingException(dto, error)
+        throw ObjectMappingException(dto, error)
     }
 
     private fun mapToDto(entity: Licensing) = try {
@@ -57,7 +54,7 @@ internal class NewLicensingMapper : NewMapper {
             exercise = entity.exercise.toDate()
         )
     } catch (error: Exception) {
-        throw LicensingMappingException(entity, error)
+        throw ObjectMappingException(entity, error)
     }
 
 }

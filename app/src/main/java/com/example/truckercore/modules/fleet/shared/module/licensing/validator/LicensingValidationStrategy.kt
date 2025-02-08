@@ -3,6 +3,7 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.shared.errors.validation.ObjectValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
@@ -69,7 +70,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (dto.exercise == null) invalidFields.add(Field.EXERCISE.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw ObjectValidationException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -94,7 +95,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty())  throw ObjectValidationException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -113,7 +114,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw ObjectValidationException(entity, invalidFields)
     }
 
 }

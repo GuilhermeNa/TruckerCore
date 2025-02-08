@@ -3,7 +3,7 @@ package com.example.truckercore.unit.modules.fleet.shared.module.licensing.mappe
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
-import com.example.truckercore.modules.fleet.shared.module.licensing.errors.LicensingMappingException
+import com.example.truckercore.shared.errors.mapping.ObjectMappingException
 import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.toDate
@@ -86,7 +86,7 @@ internal class LicensingMapperTest {
         every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
 
         // Call
-        assertThrows<LicensingMappingException> {
+        assertThrows<ObjectMappingException> {
             mockk.toDto(entity)
         }
     }
@@ -96,7 +96,7 @@ internal class LicensingMapperTest {
     fun `toEntity() should throw LicensingMappingException when there are errors`(
         pDto: LicensingDto
     ) {
-        assertThrows<LicensingMappingException> {
+        assertThrows<ObjectMappingException> {
             mapper.toEntity(pDto)
         }
     }
