@@ -19,10 +19,11 @@ import kotlinx.coroutines.flow.single
 internal class UpdateAdminUseCaseImpl(
     private val repository: AdminRepository,
     private val checkExistence: CheckAdminExistenceUseCase,
-    private val permissionService: PermissionService,
+    override val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: AdminMapper
-) : UseCase(), UpdateAdminUseCase {
+    private val mapper: AdminMapper,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), UpdateAdminUseCase {
 
     override suspend fun execute(user: User, admin: Admin): Flow<Response<Unit>> = flow {
         val result =
@@ -35,14 +36,11 @@ internal class UpdateAdminUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_ADMIN)
-
     private suspend fun verifyExistence(user: User, admin: Admin): Response<Unit> =
         when (val existenceResponse = checkExistence.execute(user, admin.id!!).single()) {
             is Response.Success -> processUpdate(admin)
             is Response.Empty -> handleNonExistentObject(admin.id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun processUpdate(adminToUpdate: Admin): Response<Unit> {

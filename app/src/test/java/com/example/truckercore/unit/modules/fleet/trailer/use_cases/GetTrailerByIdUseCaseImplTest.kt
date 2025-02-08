@@ -39,7 +39,7 @@ class GetTrailerByIdUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = GetTrailerByIdUseCaseImpl(repository, permissionService, validatorService, mapper)
+        useCase = GetTrailerByIdUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.VIEW_TRAILER)
     }
 
     @Test

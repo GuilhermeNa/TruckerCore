@@ -1,7 +1,10 @@
 package com.example.truckercore.infrastructure.database.firebase.util
 
 import com.example.truckercore.configs.app_constants.Collection
+import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseRequestException
 import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.SearchParameters
 
 class FirebaseRequest<T : Dto> private constructor(
@@ -10,7 +13,19 @@ class FirebaseRequest<T : Dto> private constructor(
     val params: SearchParameters
 ) {
 
-    fun shouldObserve() = params.liveObserver
+    fun getDocumentParams(): DocumentParameters =
+        if (params is DocumentParameters) params
+        else throw FirebaseRequestException(
+            "Expected a DocumentParameters but received a QueryParameters."
+        )
+
+    fun getQueryParams(): QueryParameters =
+        if (params is QueryParameters) params
+        else throw FirebaseRequestException(
+            "Expected a QueryParameters but received a DocumentParameters."
+        )
+
+    fun shouldObserve() = params.shouldStream
 
     companion object {
         fun <T : Dto> create(clazz: Class<T>) = Builder(clazz)
@@ -21,15 +36,9 @@ class FirebaseRequest<T : Dto> private constructor(
         private var params: SearchParameters? = null
         private var collection: Collection? = null
 
-        fun setParams(newParams: SearchParameters): Builder<T> {
-            this.params = newParams
-            return this
-        }
+        fun setParams(newParams: SearchParameters) = apply { this.params = newParams }
 
-        fun setCollection(newCollection: Collection): Builder<T> {
-            this.collection = newCollection
-            return this
-        }
+        fun setCollection(newCollection: Collection) = apply { this.collection = newCollection }
 
         fun build(): FirebaseRequest<T> {
             val validCollection = checkCollection()

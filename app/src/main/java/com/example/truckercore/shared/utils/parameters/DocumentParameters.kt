@@ -4,36 +4,33 @@ import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.utils.expressions.logWarn
 
 class DocumentParameters private constructor(
-    val user: User,
+    override val user: User,
     val id: String,
-    override val liveObserver: Boolean
-): SearchParameters {
+    override val shouldStream: Boolean
+) : SearchParameters {
+
+    init {
+        if (id.isBlank()) {
+            logWarn(javaClass, BLANK_ID_ERROR_MESSAGE)
+            throw IllegalArgumentException(BLANK_ID_ERROR_MESSAGE)
+        }
+    }
 
     companion object {
         fun create(user: User) = Builder(user)
-        internal const val ERROR_MESSAGE =
+        internal const val BLANK_ID_ERROR_MESSAGE =
             "You must provide the ID before build a DocumentParameter."
     }
 
     class Builder(val user: User) {
-
         private var id: String = ""
-        private var liveObserver: Boolean = false
+        private var shouldStream: Boolean = false
 
         fun setId(newId: String) = apply { this.id = newId }
 
-        fun setLiveObserver(newLiveObserver: Boolean) =
-            apply { this.liveObserver = newLiveObserver }
+        fun setStream(shouldStream: Boolean) = apply { this.shouldStream = shouldStream }
 
-        fun build(): DocumentParameters {
-            if (id.isBlank()) handleError()
-            return DocumentParameters(user, this.id, liveObserver)
-        }
-
-        private fun handleError(): Nothing {
-            logWarn(javaClass, ERROR_MESSAGE)
-            throw IllegalArgumentException(ERROR_MESSAGE)
-        }
+        fun build(): DocumentParameters = DocumentParameters(user, this.id, shouldStream)
 
     }
 

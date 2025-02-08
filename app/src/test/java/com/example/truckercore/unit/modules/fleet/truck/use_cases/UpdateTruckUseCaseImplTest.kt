@@ -44,9 +44,10 @@ class UpdateTruckUseCaseImplTest {
         useCase = UpdateTruckUseCaseImpl(
             repository,
             checkExistence,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.UPDATE_TRUCK
         )
     }
 

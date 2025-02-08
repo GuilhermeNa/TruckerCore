@@ -35,13 +35,23 @@ class DeleteStorageFileUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = DeleteStorageFileUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeleteStorageFileUseCaseImpl(
+            repository,
+            checkExistence,
+            permissionService,
+            Permission.DELETE_STORAGE_FILE
+        )
     }
 
     @Test
     fun `should delete entity when user has permission and data exists`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_STORAGE_FILE) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_STORAGE_FILE
+            )
+        } returns true
         coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(Unit))
         coEvery { repository.delete(id) } returns flowOf(Response.Success(Unit))
 
@@ -60,7 +70,12 @@ class DeleteStorageFileUseCaseImplTest {
     @Test
     fun `should return error when user does not have permission for delete`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_STORAGE_FILE) } returns false
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_STORAGE_FILE
+            )
+        } returns false
 
         // Call
         val result = useCase.execute(user, id).single()
@@ -92,7 +107,12 @@ class DeleteStorageFileUseCaseImplTest {
     @Test
     fun `should return error when database returns an error`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_STORAGE_FILE) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_STORAGE_FILE
+            )
+        } returns true
         coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(Unit))
         coEvery { repository.delete(id) } returns flowOf(Response.Error(NullPointerException()))
 
@@ -111,7 +131,12 @@ class DeleteStorageFileUseCaseImplTest {
     @Test
     fun `should return error when entity does not exist`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_STORAGE_FILE) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_STORAGE_FILE
+            )
+        } returns true
         coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Empty)
 
         // Call
@@ -128,7 +153,12 @@ class DeleteStorageFileUseCaseImplTest {
     @Test
     fun `should return error when existence check failed`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_STORAGE_FILE) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_STORAGE_FILE
+            )
+        } returns true
         coEvery {
             checkExistence.execute(user, id)
         } returns flowOf(Response.Error(NullPointerException()))

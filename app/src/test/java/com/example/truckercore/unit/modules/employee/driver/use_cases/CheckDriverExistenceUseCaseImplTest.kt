@@ -36,7 +36,7 @@ internal class CheckDriverExistenceUseCaseImplTest {
         mockStaticLog()
         repository = mockk(relaxed = true)
         permissionService = mockk(relaxed = true)
-        useCase = CheckDriverExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckDriverExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_DRIVER)
         user = TestUserDataProvider.getBaseEntity()
     }
 

@@ -33,7 +33,7 @@ class CheckUserExistenceUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckUserExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckUserExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_USER)
     }
 
     @Test

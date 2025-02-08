@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.single
 internal class CreateDriverUseCaseImpl(
     private val repository: DriverRepository,
     private val validatorService: ValidatorService,
-    private val permissionService: PermissionService,
-    private val mapper: DriverMapper
-) : UseCase(), CreateDriverUseCase {
+    private val mapper: DriverMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CreateDriverUseCase {
 
     override suspend fun execute(user: User, driver: Driver): Flow<Response<String>> = flow {
         val result =
@@ -32,9 +33,6 @@ internal class CreateDriverUseCaseImpl(
     }.catch {
         emit(handleUnexpectedError(it))
     }
-
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.CREATE_DRIVER)
 
     private suspend fun processCreation(driver: Driver): Response<String> {
         validatorService.validateForCreation(driver)

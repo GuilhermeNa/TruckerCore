@@ -1,5 +1,6 @@
 package com.example.truckercore.unit.modules.employee.driver.use_cases
 
+import androidx.core.app.ActivityCompat.PermissionCompatDelegate
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
@@ -40,7 +41,7 @@ class DeleteDriverUseCaseImplTest {
         permissionService = mockk(relaxed = true)
         checkExistence = mockk(relaxed = true)
         repository = mockk(relaxed = true)
-        useCase = DeleteDriverUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeleteDriverUseCaseImpl(repository, checkExistence, permissionService, Permission.DELETE_DRIVER)
     }
 
     @Test

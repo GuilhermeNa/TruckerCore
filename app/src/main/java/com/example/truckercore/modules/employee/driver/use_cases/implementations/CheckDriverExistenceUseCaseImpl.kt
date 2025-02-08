@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.single
 
 internal class CheckDriverExistenceUseCaseImpl(
     private val repository: DriverRepository,
-    private val permissionService: PermissionService
-) : UseCase(), CheckDriverExistenceUseCase {
+    override val permissionService: PermissionService, override val requiredPermission: Permission
+) : UseCase(permissionService), CheckDriverExistenceUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Unit>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -32,12 +32,9 @@ internal class CheckDriverExistenceUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
-
     private suspend fun verifyExistence(id: String): Response<Unit> =
         when (val response = repository.entityExists(id).single()) {
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
             else -> response
         }
 

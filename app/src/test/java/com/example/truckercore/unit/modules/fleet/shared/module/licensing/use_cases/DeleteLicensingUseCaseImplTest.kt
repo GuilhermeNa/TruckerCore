@@ -35,7 +35,7 @@ class DeleteLicensingUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = DeleteLicensingUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeleteLicensingUseCaseImpl(repository, checkExistence, permissionService, Permission.DELETE_LICENSING)
     }
 
     @Test

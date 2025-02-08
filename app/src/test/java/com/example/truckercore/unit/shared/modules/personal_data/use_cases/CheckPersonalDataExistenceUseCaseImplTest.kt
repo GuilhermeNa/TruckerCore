@@ -30,13 +30,22 @@ class CheckPersonalDataExistenceUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckPersonalDataExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckPersonalDataExistenceUseCaseImpl(
+            repository,
+            permissionService,
+            Permission.VIEW_PERSONAL_DATA
+        )
     }
 
     @Test
     fun `should return success when user has permission and object exists`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.VIEW_PERSONAL_DATA
+            )
+        } returns true
         coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
         // Call
@@ -49,7 +58,12 @@ class CheckPersonalDataExistenceUseCaseImplTest {
     @Test
     fun `should return empty when object does not exist`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.VIEW_PERSONAL_DATA
+            )
+        } returns true
         coEvery { repository.entityExists(id) } returns flowOf(Response.Empty)
 
         // Call
@@ -62,7 +76,12 @@ class CheckPersonalDataExistenceUseCaseImplTest {
     @Test
     fun `should return error when user does not have permission`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns false
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.VIEW_PERSONAL_DATA
+            )
+        } returns false
 
         // Call
         val result = useCase.execute(user, id).single()
@@ -74,7 +93,12 @@ class CheckPersonalDataExistenceUseCaseImplTest {
     @Test
     fun `should return error when database returns an error`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.VIEW_PERSONAL_DATA
+            )
+        } returns true
         coEvery { repository.entityExists(id) } returns flowOf(Response.Error(NullPointerException()))
 
         // Call

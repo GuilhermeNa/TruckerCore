@@ -5,15 +5,12 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.errors.UserMappingException
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.GetUserByIdUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.GetUserByIdUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import com.google.common.base.Verify.verify
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every
@@ -42,7 +39,13 @@ class GetUserByIdUseCaseImplTest {
     fun setup() {
         mockStaticLog()
         useCase =
-            GetUserByIdUseCaseImpl(repository, permissionService, validatorService, mapper)
+            GetUserByIdUseCaseImpl(
+                repository,
+                validatorService,
+                mapper,
+                permissionService,
+                Permission.VIEW_USER
+            )
     }
 
     @Test

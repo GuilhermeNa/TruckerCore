@@ -1,7 +1,6 @@
 package com.example.truckercore.modules.fleet.truck.validator
 
 import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.modules.fleet.truck.dto.TruckDto
 import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
@@ -69,7 +68,7 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
             !TruckBrand.enumExists(dto.brand)
         ) invalidFields.add(Field.BRAND.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -83,7 +82,7 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
         if (entity.color.isBlank()) invalidFields.add(Field.COLOR.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -102,10 +101,10 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
 
         if (entity.color.isEmpty()) invalidFields.add(Field.COLOR.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
-    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
+    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
         val message = "Invalid ${obj.simpleName}." +
                 " Missing or invalid fields: ${fields.joinToString(", ")}."
         logError("${this.javaClass.simpleName}: $message")

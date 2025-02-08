@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.abstractions
 
-import com.example.truckercore.shared.errors.MappingException
+import com.example.truckercore.shared.errors.abstractions.MappingException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.MapperI
@@ -21,13 +21,13 @@ internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
     override fun toEntity(dto: D): E = try {
         handleDtoMapping(dto)
     } catch (e: Exception) {
-        handleMappingError(e, dto)
+        handleMappingError(dto, e)
     }
 
     override fun toDto(entity: E): D = try {
         handleEntityMapping(entity)
     } catch (e: Exception) {
-        handleMappingError(e, entity)
+        handleMappingError(entity, e)
     }
 
     /**
@@ -56,11 +56,11 @@ internal abstract class Mapper<E : Entity, D : Dto> : MapperI<E, D> {
      * This method is called whenever an exception is thrown during the conversion of an entity to a DTO or vice versa.
      * It allows the caller to decide which exception will be thrown, enabling specific exceptions to be thrown instead of a generic one.
      *
-     * @param receivedException The exception that was thrown during the mapping operation.
+     * @param cause The exception that was thrown during the mapping operation.
      * @param obj The object ([Entity] or [Dto]) that caused the exception.
      *
      * @throws [MappingException]
      */
-    protected abstract fun handleMappingError(receivedException: Exception, obj: Any): Nothing
+    protected abstract fun handleMappingError(obj: Any, cause: Exception): Nothing
 
 }

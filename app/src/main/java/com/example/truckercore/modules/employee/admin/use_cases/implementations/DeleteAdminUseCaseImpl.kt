@@ -18,8 +18,9 @@ import kotlinx.coroutines.flow.single
 internal class DeleteAdminUseCaseImpl(
     private val repository: AdminRepository,
     private val checkExistence: CheckAdminExistenceUseCase,
-    private val permissionService: PermissionService
-) : UseCase(), DeleteAdminUseCase {
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), DeleteAdminUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Unit>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -34,16 +35,13 @@ internal class DeleteAdminUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.DELETE_ADMIN)
-
     private suspend fun continueForExistenceCheckage(user: User, id: String) =
         when (
             val existenceResponse = checkExistence.execute(user, id).single()
         ) {
             is Response.Success -> deleteAdmin(id)
             is Response.Empty -> handleNonExistentObject(id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun deleteAdmin(id: String): Response<Unit> {

@@ -18,6 +18,6 @@ interface UpdateLicensingUseCase {
      * - [Response.Success] when the object is successfully updated.
      * - [Response.Error] when the object update fails.
      */
-    suspend fun execute(user: User, licensing: Licensing): Flow<Response<Unit>>
+    fun execute(user: User, licensing: Licensing): Flow<Response<Unit>>
 
 }

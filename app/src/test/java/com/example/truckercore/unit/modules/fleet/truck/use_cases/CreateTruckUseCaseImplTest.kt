@@ -39,7 +39,7 @@ class CreateTruckUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CreateTruckUseCaseImpl(repository, validatorService, permissionService, mapper)
+        useCase = CreateTruckUseCaseImpl(repository, validatorService, permissionService, mapper, Permission.CREATE_TRUCK)
     }
 
     @Test

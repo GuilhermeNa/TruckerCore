@@ -31,7 +31,7 @@ class CheckAdminExistenceUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckAdminExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckAdminExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_ADMIN)
     }
 
     @Test

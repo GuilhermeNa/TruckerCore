@@ -19,10 +19,11 @@ import kotlinx.coroutines.flow.single
 internal class UpdateTruckUseCaseImpl(
     private val repository: TruckRepository,
     private val checkExistence: CheckTruckExistenceUseCase,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: TruckMapper
-) : UseCase(), UpdateTruckUseCase {
+    private val mapper: TruckMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), UpdateTruckUseCase {
 
     override suspend fun execute(user: User, truck: Truck): Flow<Response<Unit>> = flow {
         val result =
@@ -35,14 +36,11 @@ internal class UpdateTruckUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-
     private suspend fun verifyExistence(user: User, truck: Truck): Response<Unit> =
         when (val existenceResponse = checkExistence.execute(user, truck.id!!).single()) {
             is Response.Success -> processUpdate(truck)
             is Response.Empty -> handleNonExistentObject(truck.id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun processUpdate(truckToUpdate: Truck): Response<Unit> {

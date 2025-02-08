@@ -19,7 +19,7 @@ interface NewFireBaseRepository {
      * - [Response.Success] when the object is successfully created.
      * - [Response.Error] when the object creation fails.
      */
-    suspend fun create(collection: Collection, dto: Dto): Flow<Response<String>>
+    fun create(collection: Collection, dto: Dto): Flow<Response<String>>
 
     /**
      * Updates an existing document in the specified Firestore collection with the provided DTO.
@@ -30,7 +30,7 @@ interface NewFireBaseRepository {
      * - [Response.Success] when the object is successfully updated.
      * - [Response.Error] when the object update fails.
      */
-    suspend fun update(collection: Collection, dto: Dto): Flow<Response<Unit>>
+    fun update(collection: Collection, dto: Dto): Flow<Response<Unit>>
 
     /**
      * Deletes a document from the specified Firestore collection by ID.
@@ -41,7 +41,7 @@ interface NewFireBaseRepository {
      * - [Response.Success] when the object is successfully deleted.
      * - [Response.Error] when the object delete fails.
      */
-    suspend fun delete(collection: Collection, id: String): Flow<Response<Unit>>
+    fun delete(collection: Collection, id: String): Flow<Response<Unit>>
 
     /**
      * Checks whether an entity exists in the specified Firestore collection based on its ID.
@@ -53,11 +53,11 @@ interface NewFireBaseRepository {
      * - [Response.Empty] when the object does not exist.
      * - [Response.Error] when any error occurs.
      */
-    suspend fun entityExists(collection: Collection, id: String): Flow<Response<Unit>>
+    fun entityExists(collection: Collection, id: String): Flow<Response<Unit>>
 
-    suspend fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>>
+    fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>>
 
-    suspend fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>>
+    fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>>
 
 /*    *//**
      * Fetches a single document from the specified Firestore collection by ID.

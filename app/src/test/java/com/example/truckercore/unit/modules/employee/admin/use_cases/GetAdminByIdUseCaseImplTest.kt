@@ -38,7 +38,7 @@ class GetAdminByIdUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = GetAdminByIdUseCaseImpl(repository, permissionService, validatorService, mapper)
+        useCase = GetAdminByIdUseCaseImpl(repository, permissionService, validatorService, mapper, Permission.VIEW_ADMIN)
     }
 
     @Test

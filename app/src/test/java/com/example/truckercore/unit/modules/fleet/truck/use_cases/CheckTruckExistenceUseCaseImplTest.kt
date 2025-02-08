@@ -32,7 +32,7 @@ class CheckTruckExistenceUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckTruckExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckTruckExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_TRUCK)
     }
 
     @Test

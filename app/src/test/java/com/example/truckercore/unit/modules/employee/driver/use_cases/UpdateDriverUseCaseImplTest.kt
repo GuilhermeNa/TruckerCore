@@ -47,9 +47,10 @@ class UpdateDriverUseCaseImplTest {
         useCase = UpdateDriverUseCaseImpl(
             repository,
             checkExistence,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.UPDATE_DRIVER
         )
     }
 

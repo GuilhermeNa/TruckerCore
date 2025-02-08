@@ -67,7 +67,7 @@ internal class PersonalDataValidationStrategy : ValidatorStrategy() {
 
         if (dto.emissionDate == null) invalidFields.add(Field.EMISSION_DATE.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -88,7 +88,7 @@ internal class PersonalDataValidationStrategy : ValidatorStrategy() {
 
         if (entity.number.isBlank()) invalidFields.add(Field.NUMBER.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -109,10 +109,10 @@ internal class PersonalDataValidationStrategy : ValidatorStrategy() {
 
         if (entity.number.isBlank()) invalidFields.add(Field.NUMBER.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
-    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
+    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
         val message = "Invalid ${obj.simpleName}." +
                 " Missing or invalid fields: ${fields.joinToString(", ")}."
         logError("${this.javaClass.simpleName}: $message")

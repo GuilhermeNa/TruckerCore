@@ -20,10 +20,11 @@ import kotlinx.coroutines.flow.single
 
 internal class GetPersonalDataByIdUseCaseImpl(
     private val repository: PersonalDataRepository,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: PersonalDataMapper
-) : UseCase(), GetPersonalDataByIdUseCase {
+    private val mapper: PersonalDataMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), GetPersonalDataByIdUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<PersonalData>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -38,13 +39,10 @@ internal class GetPersonalDataByIdUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
-
     private suspend fun fetchById(id: String): Response<PersonalData> =
         when (val response = repository.fetchById(id).single()) {
             is Response.Success -> processResponse(response)
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
             is Response.Empty -> response
         }
 

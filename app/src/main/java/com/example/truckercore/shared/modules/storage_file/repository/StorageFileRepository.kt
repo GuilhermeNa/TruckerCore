@@ -23,8 +23,8 @@ import kotlinx.coroutines.flow.Flow
  */
 internal interface StorageFileRepository : NewRepository {
 
-    override suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<StorageFileDto>>
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<StorageFileDto>>
 
-    override suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<StorageFileDto>>>
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<StorageFileDto>>>
 
 }

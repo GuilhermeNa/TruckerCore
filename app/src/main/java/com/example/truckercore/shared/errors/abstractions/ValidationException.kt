@@ -8,4 +8,4 @@ package com.example.truckercore.shared.errors.abstractions
  *
  * @property message An optional message that provides more details about the validation error.
  */
-abstract class ValidationException(message: String? = null): Exception(message)
+abstract class ValidationException : Exception()

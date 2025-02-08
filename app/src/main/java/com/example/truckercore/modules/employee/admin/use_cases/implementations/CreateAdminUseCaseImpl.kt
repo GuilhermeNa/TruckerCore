@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.single
 internal class CreateAdminUseCaseImpl(
     private val repository: AdminRepository,
     private val validatorService: ValidatorService,
-    private val permissionService: PermissionService,
-    private val mapper: AdminMapper
-) : UseCase(), CreateAdminUseCase {
+    private val mapper: AdminMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CreateAdminUseCase {
 
     override suspend fun execute(user: User, admin: Admin): Flow<Response<String>> = flow {
         val result =
@@ -32,9 +33,6 @@ internal class CreateAdminUseCaseImpl(
     }.catch {
         emit(handleUnexpectedError(it))
     }
-
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.CREATE_ADMIN)
 
     private suspend fun processCreation(admin: Admin): Response<String> {
         validatorService.validateForCreation(admin)

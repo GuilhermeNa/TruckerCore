@@ -1,5 +1,6 @@
 package com.example.truckercore.configs.di
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.repository.AdminRepositoryImpl
@@ -21,10 +22,20 @@ val adminModule = module {
 
     //--
 
-    single<CreateAdminUseCase> { CreateAdminUseCaseImpl(get(), get(), get(), get()) }
-    single<UpdateAdminUseCase> { UpdateAdminUseCaseImpl(get(), get(), get(), get(), get()) }
-    single<CheckAdminExistenceUseCase> { CheckAdminExistenceUseCaseImpl(get(), get()) }
-    single<GetAdminByIdUseCase> { GetAdminByIdUseCaseImpl(get(), get(), get(), get()) }
-    single<DeleteAdminUseCase> { DeleteAdminUseCaseImpl(get(), get(), get()) }
+    single<CreateAdminUseCase> {
+        CreateAdminUseCaseImpl(get(), get(), get(), get(), Permission.CREATE_ADMIN)
+    }
+    single<UpdateAdminUseCase> {
+        UpdateAdminUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_ADMIN)
+    }
+    single<CheckAdminExistenceUseCase> {
+        CheckAdminExistenceUseCaseImpl(get(), get(), Permission.VIEW_ADMIN)
+    }
+    single<GetAdminByIdUseCase> {
+        GetAdminByIdUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_ADMIN)
+    }
+    single<DeleteAdminUseCase> {
+        DeleteAdminUseCaseImpl(get(), get(), get(), Permission.DELETE_ADMIN)
+    }
 
 }

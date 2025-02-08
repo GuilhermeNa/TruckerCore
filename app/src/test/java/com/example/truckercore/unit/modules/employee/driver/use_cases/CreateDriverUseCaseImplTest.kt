@@ -51,7 +51,7 @@ class CreateDriverUseCaseImplTest {
         validatorService = mockk()
         permissionService = mockk()
         mapper = mockk()
-        useCase = CreateDriverUseCaseImpl(repository, validatorService, permissionService, mapper)
+        useCase = CreateDriverUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.CREATE_DRIVER)
     }
 
     @Test

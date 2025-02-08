@@ -30,7 +30,7 @@ class CheckLicensingExistenceUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckLicensingExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckLicensingExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_LICENSING)
     }
 
     @Test

@@ -22,6 +22,6 @@ interface DeleteLicensingUseCase {
      * - [Response.Success] when the object is successfully deleted.
      * - [Response.Error] when the object deletion fails.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

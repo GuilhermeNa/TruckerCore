@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.single
 internal class CreateTrailerUseCaseImpl(
     private val repository: TrailerRepository,
     private val validatorService: ValidatorService,
-    private val permissionService: PermissionService,
-    private val mapper: TrailerMapper
-) : UseCase(), CreateTrailerUseCase {
+    override val permissionService: PermissionService,
+    private val mapper: TrailerMapper,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CreateTrailerUseCase {
 
     override suspend fun execute(user: User, trailer: Trailer): Flow<Response<String>> = flow {
         val result =
@@ -32,9 +33,6 @@ internal class CreateTrailerUseCaseImpl(
     }.catch {
         emit(handleUnexpectedError(it))
     }
-
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.CREATE_TRAILER)
 
     private suspend fun processCreation(trailer: Trailer): Response<String> {
         validatorService.validateForCreation(trailer)

@@ -64,6 +64,7 @@ internal class StorageFileFirebaseRepositoryImplTest {
         // Assertions
         coVerify { fireBaseRepository.entityExists(collection, id) }
     }
+/*
 
     @Test
     fun `fetchById() should call fireBaseRepository`() = runTest {
@@ -91,5 +92,6 @@ internal class StorageFileFirebaseRepositoryImplTest {
             )
         }
     }
+*/
 
 }

@@ -37,7 +37,7 @@ class CheckBusinessCentralExistenceUseCaseImplTest {
         mockStaticLog()
         permissionService = PermissionServiceImpl()
         repository = mockk<BusinessCentralRepository>()
-        useCase = CheckBusinessCentralExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckBusinessCentralExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_BUSINESS_CENTRAL)
         userWithPermission =
             TestUserDataProvider.getBaseEntity()
                 .copy(permissions = setOf(Permission.VIEW_BUSINESS_CENTRAL))

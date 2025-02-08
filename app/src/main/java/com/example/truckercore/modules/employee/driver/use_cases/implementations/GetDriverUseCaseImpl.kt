@@ -20,10 +20,11 @@ import kotlinx.coroutines.flow.single
 
 internal class GetDriverUseCaseImpl(
     private val repository: DriverRepository,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: DriverMapper
-) : UseCase(), GetDriverUseCase {
+    private val mapper: DriverMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), GetDriverUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Driver>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -38,13 +39,10 @@ internal class GetDriverUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
-
     private suspend fun fetchDriverById(id: String): Response<Driver> =
         when (val response = repository.fetchById(id).single()) {
             is Response.Success -> processResponse(response)
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
             is Response.Empty -> response
         }
 

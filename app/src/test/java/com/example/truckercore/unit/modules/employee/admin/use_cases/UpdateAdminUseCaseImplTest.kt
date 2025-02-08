@@ -46,7 +46,8 @@ class UpdateAdminUseCaseImplTest {
             checkExistence,
             permissionService,
             validatorService,
-            mapper
+            mapper,
+            Permission.UPDATE_ADMIN
         )
     }
 

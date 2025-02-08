@@ -17,8 +17,9 @@ import kotlinx.coroutines.flow.single
 
 internal class CheckStorageFileExistenceUseCaseImpl(
     private val repository: StorageFileRepository,
-    private val permissionService: PermissionService
-) : UseCase(), CheckStorageFileExistenceUseCase {
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CheckStorageFileExistenceUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Unit>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -33,12 +34,9 @@ internal class CheckStorageFileExistenceUseCaseImpl(
         emit(it.handleUnexpectedError())
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_STORAGE_FILE)
-
     private suspend fun verifyExistence(id: String): Response<Unit> =
         when (val response = repository.entityExists(id).single()) {
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
             else -> response
         }
 

@@ -40,7 +40,7 @@ class CreateLicensingUseCaseImplTest {
     fun setup() {
         mockStaticLog()
         useCase =
-            CreateLicensingUseCaseImpl(repository, validatorService, permissionService, mapper)
+            CreateLicensingUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.CREATE_LICENSING)
     }
 
     @Test

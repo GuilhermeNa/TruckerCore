@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.modules.personal_data.errors
 
-import com.example.truckercore.shared.errors.MappingException
+import com.example.truckercore.shared.errors.abstractions.MappingException
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 
 /**

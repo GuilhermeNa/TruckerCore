@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.user.errors
 
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.MappingException
+import com.example.truckercore.shared.errors.abstractions.MappingException
 
 /**
  * Custom exception for errors related to mapping in [User].

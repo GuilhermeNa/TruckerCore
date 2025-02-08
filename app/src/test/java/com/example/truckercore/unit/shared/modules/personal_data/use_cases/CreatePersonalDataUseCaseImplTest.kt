@@ -10,8 +10,8 @@ import com.example.truckercore.shared.modules.personal_data.mapper.PersonalDataM
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.CreatePersonalDataUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CreatePersonalDataUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every
@@ -39,13 +39,24 @@ class CreatePersonalDataUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CreatePersonalDataUseCaseImpl(repository, validatorService, permissionService, mapper)
+        useCase = CreatePersonalDataUseCaseImpl(
+            repository,
+            validatorService,
+            permissionService,
+            mapper,
+            Permission.CREATE_PERSONAL_DATA
+        )
     }
 
     @Test
     fun `should create entity when user has permission and data is valid`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.CREATE_PERSONAL_DATA
+            )
+        } returns true
         every { validatorService.validateForCreation(personalData) } returns Unit
         every { mapper.toDto(personalData) } returns dto
         coEvery { repository.create(dto) } returns flowOf(Response.Success(id))
@@ -66,7 +77,12 @@ class CreatePersonalDataUseCaseImplTest {
     @Test
     fun `should return error when user does not have permission for creation`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_PERSONAL_DATA) } returns false
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.CREATE_PERSONAL_DATA
+            )
+        } returns false
 
         // Call
         val result = useCase.execute(user, personalData).single()
@@ -98,7 +114,12 @@ class CreatePersonalDataUseCaseImplTest {
     @Test
     fun `should return error when database returns an error`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.CREATE_PERSONAL_DATA
+            )
+        } returns true
         every { validatorService.validateForCreation(personalData) } returns Unit
         every { mapper.toDto(personalData) } returns dto
         coEvery { repository.create(dto) } returns flowOf(Response.Error(NullPointerException()))

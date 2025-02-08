@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.modules.storage_file.errors
 
-import com.example.truckercore.shared.errors.MappingException
+import com.example.truckercore.shared.errors.abstractions.MappingException
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 
 /**

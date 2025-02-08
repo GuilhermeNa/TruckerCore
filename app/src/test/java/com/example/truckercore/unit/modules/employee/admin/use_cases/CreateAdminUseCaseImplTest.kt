@@ -39,7 +39,13 @@ class CreateAdminUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CreateAdminUseCaseImpl(repository, validatorService, permissionService, mapper)
+        useCase = CreateAdminUseCaseImpl(
+            repository,
+            validatorService,
+            mapper,
+            permissionService,
+            Permission.CREATE_ADMIN
+        )
     }
 
     @Test

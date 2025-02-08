@@ -19,8 +19,9 @@ import kotlinx.coroutines.flow.single
 internal class DeleteStorageFileUseCaseImpl(
     private val repository: StorageFileRepository,
     private val checkExistence: CheckStorageFileExistenceUseCase,
-    private val permissionService: PermissionService
-) : UseCase(), DeleteStorageFileUseCase {
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), DeleteStorageFileUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Unit>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -35,14 +36,11 @@ internal class DeleteStorageFileUseCaseImpl(
         emit(it.handleUnexpectedError())
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.DELETE_STORAGE_FILE)
-
     private suspend fun verifyExistence(user: User, id: String): Response<Unit> =
         when (val existenceResponse = checkExistence.execute(user, id).single()) {
             is Response.Success -> deleteFile(id)
             is Response.Empty -> handleNonExistentObject(id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun deleteFile(id: String): Response<Unit> {

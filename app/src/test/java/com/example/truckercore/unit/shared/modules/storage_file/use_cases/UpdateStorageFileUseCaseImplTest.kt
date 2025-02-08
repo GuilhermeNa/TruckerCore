@@ -44,9 +44,10 @@ class UpdateStorageFileUseCaseImplTest {
         useCase = UpdateStorageFileUseCaseImpl(
             repository,
             checkExistence,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.UPDATE_STORAGE_FILE
         )
     }
 

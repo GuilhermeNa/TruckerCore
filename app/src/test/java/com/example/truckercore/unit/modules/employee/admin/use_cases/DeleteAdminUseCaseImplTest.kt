@@ -34,7 +34,7 @@ class DeleteAdminUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = DeleteAdminUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeleteAdminUseCaseImpl(repository, checkExistence, permissionService, Permission.DELETE_ADMIN)
     }
 
     @Test

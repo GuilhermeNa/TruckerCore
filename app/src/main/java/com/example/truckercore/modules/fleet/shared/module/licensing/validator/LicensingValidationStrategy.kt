@@ -3,14 +3,11 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.errors.LicensingValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import kotlin.reflect.KClass
 
 internal class LicensingValidationStrategy : ValidatorStrategy() {
 
@@ -18,8 +15,8 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
         if (input.dto is LicensingDto) {
             processDtoValidationRules(input.dto)
         } else handleUnexpectedInputError(
-            expectedClass = LicensingDto::class,
-            inputClass = input.dto::class
+            expected = LicensingDto::class,
+            received = input.dto::class
         )
     }
 
@@ -27,8 +24,8 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
         if (input.entity is Licensing) {
             processEntityValidationRules(input.entity)
         } else handleUnexpectedInputError(
-            expectedClass = Licensing::class,
-            inputClass = input.entity::class
+            expected = Licensing::class,
+            received = input.entity::class
         )
     }
 
@@ -36,8 +33,8 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
         if (input.entity is Licensing) {
             processEntityCreationRules(input.entity)
         } else handleUnexpectedInputError(
-            expectedClass = Licensing::class,
-            inputClass = input.entity::class
+            expected = Licensing::class,
+            received = input.entity::class
         )
     }
 
@@ -72,7 +69,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (dto.exercise == null) invalidFields.add(Field.EXERCISE.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -97,7 +94,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -116,17 +113,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
-    }
-
-    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
-        val message = "Invalid ${obj.simpleName}." +
-                " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logWarn(
-            context = javaClass,
-            message = message
-        )
-        throw LicensingValidationException(message)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
 }

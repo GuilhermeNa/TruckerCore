@@ -1,5 +1,8 @@
 package com.example.truckercore.infrastructure.security.permissions.errors
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.modules.user.entity.User
+
 /**
  * Exception thrown when an unauthorized action is attempted by a user or service.
  *
@@ -10,4 +13,4 @@ package com.example.truckercore.infrastructure.security.permissions.errors
  * @param message An optional message providing more details about the exception. If no message is
  *                provided, the default message from the superclass (`Exception`) will be used.
  */
-class UnauthorizedAccessException(message: String? = null): Exception(message)
+class UnauthorizedAccessException(user: User, permission: Permission) : Exception()

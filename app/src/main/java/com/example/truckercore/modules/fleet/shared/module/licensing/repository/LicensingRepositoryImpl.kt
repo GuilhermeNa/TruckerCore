@@ -17,23 +17,23 @@ internal class LicensingRepositoryImpl(
     private val collection: Collection
 ) : Repository(), LicensingRepository {
 
-    override suspend fun <T : Dto> create(dto: T): Flow<Response<String>> =
+    override fun <T : Dto> create(dto: T): Flow<Response<String>> =
         firebaseRepository.create(collection, dto)
 
-    override suspend fun <T : Dto> update(dto: T): Flow<Response<Unit>> =
+    override fun <T : Dto> update(dto: T): Flow<Response<Unit>> =
         firebaseRepository.update(collection, dto)
 
-    override suspend fun delete(id: String): Flow<Response<Unit>> =
+    override fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(collection, id)
 
-    override suspend fun entityExists(id: String): Flow<Response<Unit>> =
+    override fun entityExists(id: String): Flow<Response<Unit>> =
         firebaseRepository.entityExists(collection, id)
 
-    override suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<LicensingDto>> =
-        firebaseRepository.documentFetch(createFirestoreRequest(params))
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<LicensingDto>> =
+        firebaseRepository.documentFetch(createFirestoreRequest(documentParams))
 
-    override suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<LicensingDto>>> =
-        firebaseRepository.queryFetch(createFirestoreRequest(params))
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<LicensingDto>>> =
+        firebaseRepository.queryFetch(createFirestoreRequest(queryParams))
 
     override fun createFirestoreRequest(params: SearchParameters) =
         FirebaseRequest.create(LicensingDto::class.java)

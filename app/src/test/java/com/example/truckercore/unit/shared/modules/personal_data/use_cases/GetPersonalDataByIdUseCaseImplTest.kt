@@ -40,7 +40,13 @@ class GetPersonalDataByIdUseCaseImplTest {
     fun setup() {
         mockStaticLog()
         useCase =
-            GetPersonalDataByIdUseCaseImpl(repository, permissionService, validatorService, mapper)
+            GetPersonalDataByIdUseCaseImpl(
+                repository,
+                validatorService,
+                mapper,
+                permissionService,
+                Permission.VIEW_PERSONAL_DATA
+            )
     }
 
     @Test

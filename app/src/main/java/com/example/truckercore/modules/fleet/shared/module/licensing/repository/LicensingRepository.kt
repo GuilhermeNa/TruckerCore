@@ -22,8 +22,8 @@ import kotlinx.coroutines.flow.Flow
  */
 internal interface LicensingRepository : NewRepository {
 
-    override suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<LicensingDto>>
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<LicensingDto>>
 
-    override suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<LicensingDto>>>
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<LicensingDto>>>
 
 }

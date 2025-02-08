@@ -23,10 +23,11 @@ import kotlinx.coroutines.flow.single
 
 internal class GetTrailerByTruckIdUseCaseImpl(
     private val repository: TrailerRepository,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: TrailerMapper
-) : UseCase(), GetTrailerByTruckIdUseCase {
+    private val mapper: TrailerMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), GetTrailerByTruckIdUseCase {
 
     override suspend fun execute(user: User, truckId: String): Flow<Response<List<Trailer>>> =
         flow {
@@ -42,13 +43,10 @@ internal class GetTrailerByTruckIdUseCaseImpl(
             emit(handleUnexpectedError(it))
         }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_TRAILER)
-
     private suspend fun fetchByTruckId(truckId: String): Response<List<Trailer>> =
         when (val response = repository.fetchByTruckId(truckId).single()) {
             is Success -> processResponse(response)
-            is Error -> handleFailureResponse(response)
+            is Error -> logAndReturnResponse(response)
             is Empty -> response
         }
 

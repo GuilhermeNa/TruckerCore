@@ -1,5 +1,6 @@
 package com.example.truckercore.configs.di
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepositoryImpl
@@ -22,13 +23,17 @@ val businessCentralModule = module {
 
     //--
 
-    single<CreateBusinessCentralUseCase> { CreateBusinessCentralUseCaseImpl(get(), get(), get()) }
-    single<DeleteBusinessCentralUseCase> { DeleteBusinessCentralUseCaseImpl(get(), get(), get()) }
+    single<CreateBusinessCentralUseCase> {
+        CreateBusinessCentralUseCaseImpl(get(), get(), get())
+    }
+    single<DeleteBusinessCentralUseCase> {
+        DeleteBusinessCentralUseCaseImpl(get(), get(), get(),Permission.DELETE_BUSINESS_CENTRAL)
+    }
     single<UpdateBusinessCentralUseCase> {
-        UpdateBusinessCentralUseCaseImpl(get(), get(), get(), get(), get())
+        UpdateBusinessCentralUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_BUSINESS_CENTRAL)
     }
     single<CheckBusinessCentralExistenceUseCase> {
-        CheckBusinessCentralExistenceUseCaseImpl(get(), get())
+        CheckBusinessCentralExistenceUseCaseImpl(get(), get(), Permission.VIEW_BUSINESS_CENTRAL)
     }
     single<GetBusinessCentralByIdUseCase> {
         GetBusinessCentralByIdUseCaseImpl(get(), get(), get(), get())

@@ -19,10 +19,11 @@ import kotlinx.coroutines.flow.single
 internal class UpdateBusinessCentralUseCaseImpl(
     private val repository: BusinessCentralRepository,
     private val checkExistence: CheckBusinessCentralExistenceUseCase,
-    private val permissionService: PermissionService,
+    override val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: BusinessCentralMapper
-) : UseCase(), UpdateBusinessCentralUseCase {
+    private val mapper: BusinessCentralMapper,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), UpdateBusinessCentralUseCase {
 
     override suspend fun execute(user: User, entity: BusinessCentral): Flow<Response<Unit>> = flow {
         val result =
@@ -35,14 +36,11 @@ internal class UpdateBusinessCentralUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-
     private suspend fun continueForExistenceCheckage(user: User, entity: BusinessCentral) =
         when (val response = checkExistence.execute(user, entity.id!!).single()) {
             is Response.Success -> processUpdate(entity)
             is Response.Empty -> handleNonExistentObject(entity.id)
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
         }
 
     private suspend fun processUpdate(entity: BusinessCentral): Response<Unit> {

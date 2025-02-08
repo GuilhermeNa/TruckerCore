@@ -19,9 +19,10 @@ import kotlinx.coroutines.flow.single
 internal class CreateStorageFileUseCaseImpl(
     private val repository: StorageFileRepository,
     private val validatorService: ValidatorService,
-    private val permissionService: PermissionService,
-    private val mapper: StorageFileMapper
-) : UseCase(), CreateStorageFileUseCase {
+    override val permissionService: PermissionService,
+    private val mapper: StorageFileMapper,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CreateStorageFileUseCase {
 
     override suspend fun execute(user: User, file: StorageFile): Flow<Response<String>> =
         flow {
@@ -34,9 +35,6 @@ internal class CreateStorageFileUseCaseImpl(
         }.catch {
             emit(it.handleUnexpectedError())
         }
-
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.CREATE_STORAGE_FILE)
 
     private suspend fun processCreation(file: StorageFile): Response<String> {
         validatorService.validateForCreation(file)

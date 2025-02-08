@@ -44,9 +44,10 @@ class UpdateLicensingUseCaseImplTest {
         useCase = UpdateLicensingUseCaseImpl(
             repository,
             checkExistence,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.UPDATE_LICENSING
         )
     }
 

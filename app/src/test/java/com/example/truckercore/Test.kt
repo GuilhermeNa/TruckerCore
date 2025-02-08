@@ -2,33 +2,23 @@ package com.example.truckercore
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseQueryBuilderImpl
-import com.example.truckercore.infrastructure.database.firebase.implementations.NewFireBaseRepositoryImpl
-import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
-import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
-import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
+import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.service.LicensingService
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.parameters.QuerySettings
-import com.example.truckercore.shared.utils.sealeds.Response
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
+import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
+import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
@@ -48,25 +38,57 @@ internal class Test {
 
     private val firestore: FirebaseFirestore = mockk()
     private val builder = FirebaseQueryBuilderImpl(firestore)
+    private lateinit var mapper: LicensingMap
 
     @Test
-    fun testar() = runBlocking {
-        println("Início do programa")
+    fun testar() {
 
-        coroutineScope {
-            println("Início coroutine")
-            launch {
-                delay(1000L)  // Simula uma operação assíncrona
-                println("Corrotina 1 concluída")
-            }
-            launch {
-                delay(500L)  // Simula outra operação assíncrona
-                println("Corrotina 2 concluída")
-            }
+
+    }
+
+    fun testando(mapeador: FileMap) {
+        val entity = Licensing
+        val t = runBlock<LicensingDto>(entity)
+    }
+
+    private inline fun <reified T> runBlock(entity: Entity): T {
+        return mapper.toDto(entity) as T
+    }
+
+
+
+    interface TestMap {
+
+        fun toDto(entity: Entity): Dto
+
+        fun toEntity(dto: Dto): Entity
+
+    }
+
+    class LicensingMap() : TestMap {
+
+        override fun toDto(entity: Entity): LicensingDto {
+            TODO("Not yet implemented")
         }
 
-        println("Fim do programa")
+        override fun toEntity(dto: Dto): Licensing {
+            TODO("Not yet implemented")
+        }
+
     }
+
+    class FileMap() : TestMap {
+
+        override fun toDto(entity: Entity): StorageFileDto {
+            TODO("Not yet implemented")
+        }
+
+        override fun toEntity(dto: Dto): StorageFile {
+            TODO("Not yet implemented")
+        }
+
+    }
+
 
 
 }

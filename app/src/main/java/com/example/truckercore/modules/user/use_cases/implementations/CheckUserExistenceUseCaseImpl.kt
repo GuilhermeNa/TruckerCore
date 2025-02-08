@@ -16,8 +16,9 @@ import kotlinx.coroutines.flow.single
 
 internal class CheckUserExistenceUseCaseImpl(
     private val repository: UserRepository,
-    private val permissionService: PermissionService
-) : UseCase(), CheckUserExistenceUseCase {
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CheckUserExistenceUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Unit>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -32,12 +33,9 @@ internal class CheckUserExistenceUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_USER)
-
     private suspend fun verifyExistence(id: String) =
         when (val response = repository.entityExists(id).single()) {
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
             else -> response
         }
 

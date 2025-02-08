@@ -19,10 +19,11 @@ import kotlinx.coroutines.flow.single
 internal class UpdatePersonalDataUseCaseImpl(
     private val repository: PersonalDataRepository,
     private val checkExistence: CheckPersonalDataExistenceUseCase,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: PersonalDataMapper
-) : UseCase(), UpdatePersonalDataUseCase {
+    private val mapper: PersonalDataMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), UpdatePersonalDataUseCase {
 
     override suspend fun execute(user: User, pData: PersonalData): Flow<Response<Unit>> = flow {
         val result =
@@ -35,14 +36,11 @@ internal class UpdatePersonalDataUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_PERSONAL_DATA)
-
     private suspend fun verifyExistence(user: User, pData: PersonalData): Response<Unit> =
         when (val existenceResponse = checkExistence.execute(user, pData.id!!).single()) {
             is Response.Success -> processUpdate(pData)
             is Response.Empty -> handleNonExistentObject(pData.id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun processUpdate(pData: PersonalData): Response<Unit> {

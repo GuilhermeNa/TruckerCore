@@ -10,8 +10,8 @@ import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.UpdateUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every
@@ -35,19 +35,30 @@ class UpdateUserUseCaseImplTest {
 
     private val user = TestUserDataProvider.getBaseEntity()
     private val userToUpdate = TestUserDataProvider.getBaseEntity().copy(id = "toUpdate")
-    private val dto =  TestUserDataProvider.getBaseDto().copy(id = "toUpdate")
+    private val dto = TestUserDataProvider.getBaseDto().copy(id = "toUpdate")
 
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        updateUserUseCase = UpdateUserUseCaseImpl(repository, checkExistence, permissionService, validatorService, mapper)
+        updateUserUseCase = UpdateUserUseCaseImpl(
+            repository,
+            checkExistence,
+            validatorService,
+            mapper,
+            permissionService,
+            Permission.UPDATE_USER
+        )
     }
 
     @Test
     fun `should update user successfully if user exists and has permission`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.UPDATE_USER) } returns true
-        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(Unit))
+        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(
+            Response.Success(
+                Unit
+            )
+        )
         every { validatorService.validateEntity(userToUpdate) } returns Unit
         every { mapper.toDto(userToUpdate) } returns dto
         coEvery { repository.update(dto) } returns flowOf(Response.Success(Unit))
@@ -100,7 +111,11 @@ class UpdateUserUseCaseImplTest {
     fun `should handle failure in existence check`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.UPDATE_USER) } returns true
-        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Error(Exception("Existence check failed")))
+        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(
+            Response.Error(
+                Exception("Existence check failed")
+            )
+        )
 
         // Act
         val result = updateUserUseCase.execute(user, userToUpdate).single()
@@ -117,8 +132,12 @@ class UpdateUserUseCaseImplTest {
     fun `should handle unexpected error during update`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.UPDATE_USER) } returns true
-        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(Response.Success(Unit))
-       every { validatorService.validateEntity(userToUpdate) } throws NullPointerException()
+        coEvery { checkExistence.execute(user, userToUpdate.id!!) } returns flowOf(
+            Response.Success(
+                Unit
+            )
+        )
+        every { validatorService.validateEntity(userToUpdate) } throws NullPointerException()
 
         // Act
         val result = updateUserUseCase.execute(user, userToUpdate).single()

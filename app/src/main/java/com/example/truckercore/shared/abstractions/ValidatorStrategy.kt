@@ -1,10 +1,10 @@
 package com.example.truckercore.shared.abstractions
 
+import com.example.truckercore.shared.errors.InvalidObjectException
 import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.ValidatorStrategyI
-import com.example.truckercore.shared.utils.expressions.logError
 import kotlin.reflect.KClass
 
 /**
@@ -39,28 +39,33 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
     protected abstract fun processEntityCreationRules(entity: Entity)
 
     /**
-     * Handles errors related to invalid fields during validation.
+     * Handles an error scenario where the input received is not of the expected type.
+     * This method is used to throw an exception when there is a mismatch between the expected
+     * and received types during validation.
      *
-     * @param obj The class type of the object being validated (either [Dto] or [Entity]).
-     * @param fields The list of invalid fields.
+     * This is an internal helper method that is used when validation encounters a type mismatch.
+     *
+     * @param expected The expected class type that the input should adhere to.
+     * @param received The class type of the actual input that was received.
+     * @throws UnexpectedValidatorInputException Thrown when there is a type mismatch.
      */
-    protected abstract fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>)
+    protected fun handleUnexpectedInputError(expected: KClass<*>, received: KClass<*>) {
+        throw UnexpectedValidatorInputException(expected = expected, received = received)
+    }
 
     /**
-     * Handles unexpected input errors when the input type does not match the expected type.
+     * Handles validation errors by throwing an exception that contains the list of invalid fields.
+     * This method is invoked when an object fails validation due to one or more invalid fields.
      *
-     * @param expectedClass The expected class type (either [Dto] or [Entity]).
-     * @param inputClass The actual class type of the input.
-     * @throws UnexpectedValidatorInputException if the input type is not what was expected.
+     * This method helps encapsulate error reporting and ensures that invalid fields are properly listed
+     * when the validation fails.
+     *
+     * @param obj The class type of the object being validated (either [Dto] or [Entity]).
+     * @param fields The list of invalid fields that failed the validation. This will contain the names of the fields that caused the error.
+     * @throws InvalidObjectException Thrown when validation errors are found on the object.
      */
-    protected fun <E : KClass<*>, I : KClass<*>> handleUnexpectedInputError(
-        expectedClass: E,
-        inputClass: I
-    ) {
-        val message = "Awaited input was ${expectedClass.simpleName}, " +
-                "and received ${inputClass.simpleName}."
-        logError("${this.javaClass.simpleName}: $message")
-        throw UnexpectedValidatorInputException(message)
+    protected fun handleValidationErrors(obj: KClass<*>, fields: List<String>) {
+        throw InvalidObjectException(obj = obj, invalidFields = fields)
     }
 
 }

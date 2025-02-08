@@ -41,9 +41,10 @@ class GetPersonalDataByParentIdUseCaseImplTest {
         mockStaticLog()
         useCase = GetPersonalDataByParentIdUseCaseImpl(
             repository,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.VIEW_PERSONAL_DATA
         )
     }
 

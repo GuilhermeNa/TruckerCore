@@ -3,6 +3,7 @@ package com.example.truckercore.unit.modules.fleet.trailer.use_cases
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
+import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
@@ -39,7 +40,7 @@ class CreateTrailerUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CreateTrailerUseCaseImpl(repository, validatorService, permissionService, mapper)
+        useCase = CreateTrailerUseCaseImpl(repository, validatorService, permissionService, mapper, Permission.CREATE_TRAILER)
     }
 
     @Test

@@ -44,9 +44,10 @@ class UpdatePersonalDataUseCaseImplTest {
         useCase = UpdatePersonalDataUseCaseImpl(
             repository,
             checkExistence,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.UPDATE_PERSONAL_DATA
         )
     }
 

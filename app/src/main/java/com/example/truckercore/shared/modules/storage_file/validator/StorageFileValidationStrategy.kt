@@ -65,7 +65,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
         if (dto.isUpdating == null) invalidFields.add(Field.IS_UPDATING.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -84,7 +84,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
         if (entity.url.isBlank()) invalidFields.add(Field.URL.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -103,10 +103,10 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
         if (entity.url.isBlank()) invalidFields.add(Field.URL.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
-    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
+    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
         val message = "Invalid ${obj.simpleName}." +
                 " Missing or invalid fields: ${fields.joinToString(", ")}."
         logWarn(

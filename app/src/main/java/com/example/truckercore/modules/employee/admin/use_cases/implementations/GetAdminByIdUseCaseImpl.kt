@@ -20,10 +20,11 @@ import kotlinx.coroutines.flow.single
 
 internal class GetAdminByIdUseCaseImpl(
     private val repository: AdminRepository,
-    private val permissionService: PermissionService,
+    override val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: AdminMapper
-) : UseCase(), GetAdminByIdUseCase {
+    private val mapper: AdminMapper,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), GetAdminByIdUseCase {
 
     override suspend fun execute(user: User, id: String): Flow<Response<Admin>> = flow {
         id.validateIsNotBlank(Field.ID.name)
@@ -38,13 +39,10 @@ internal class GetAdminByIdUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
-
     private suspend fun fetchAdminById(id: String): Response<Admin> =
         when (val response = repository.fetchById(id).single()) {
             is Response.Success -> processResponse(response)
-            is Response.Error -> handleFailureResponse(response)
+            is Response.Error -> logAndReturnResponse(response)
             is Response.Empty -> response
         }
 

@@ -40,7 +40,7 @@ class CreateStorageFileUseCaseImplTest {
     fun setup() {
         mockStaticLog()
         useCase =
-            CreateStorageFileUseCaseImpl(repository, validatorService, permissionService, mapper)
+            CreateStorageFileUseCaseImpl(repository, validatorService, permissionService, mapper, Permission.CREATE_STORAGE_FILE)
     }
 
     @Test

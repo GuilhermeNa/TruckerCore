@@ -3,53 +3,46 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
+import com.example.truckercore.modules.fleet.shared.module.licensing.errors.LicensingNotFoundException
+import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.NewLicensingMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.UpdateLicensingUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
 import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdateLicensingUseCaseImpl(
     private val repository: LicensingRepository,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission,
     private val checkExistence: CheckLicensingExistenceUseCase,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: LicensingMapper
-) : UseCase(), UpdateLicensingUseCase {
+    private val mapper: NewLicensingMapper
+) : UseCase(permissionService), UpdateLicensingUseCase {
 
-    override suspend fun execute(user: User, licensing: Licensing): Flow<Response<Unit>> = flow {
-        val result =
-            if (userHasPermission(user)) verifyExistence(user, licensing)
-            else handleUnauthorizedPermission(user, licensing.id!!)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun execute(user: User, licensing: Licensing): Flow<Response<Unit>> {
+        val id = licensing.id ?: throw NullPointerException("Null licensing id while updating.")
 
-        emit(result)
-
-    }.catch {
-        emit(it.handleUnexpectedError())
+        return checkExistence.execute(user, id).flatMapConcat { response ->
+            if (response !is Response.Success) {
+                throw LicensingNotFoundException(
+                    "Attempting to update a Licensing that was not found for id: $id."
+                )
+            }
+            user.runIfPermitted { processUpdate(licensing) }
+        }
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_LICENSING)
-
-    private suspend fun verifyExistence(user: User, licensing: Licensing): Response<Unit> =
-        when (val existenceResponse = checkExistence.execute(user, licensing.id!!).single()) {
-            is Response.Success -> processUpdate(licensing)
-            is Response.Empty -> handleNonExistentObject(licensing.id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
-        }
-
-    private suspend fun processUpdate(licensingToUpdate: Licensing): Response<Unit> {
-        validatorService.validateEntity(licensingToUpdate)
-        val dto = mapper.toDto(licensingToUpdate)
-        return repository.update(dto).single()
+    private fun processUpdate(licensing: Licensing): Flow<Response<Unit>> {
+        validatorService.validateEntity(licensing)
+        val dto = mapper.toDto(licensing)
+        return repository.update(dto)
     }
 
 }

@@ -35,7 +35,12 @@ class DeleteUserUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        deleteUserUseCase = DeleteUserUseCaseImpl(repository, checkExistence, permissionService)
+        deleteUserUseCase = DeleteUserUseCaseImpl(
+            repository,
+            checkExistence,
+            permissionService,
+            Permission.DELETE_USER
+        )
     }
 
     @Test
@@ -95,7 +100,12 @@ class DeleteUserUseCaseImplTest {
     fun `should handle failure in existence check`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.DELETE_USER) } returns true
-        coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Error(Exception("Existence check failed")))
+        coEvery {
+            checkExistence.execute(
+                user,
+                id
+            )
+        } returns flowOf(Response.Error(Exception("Existence check failed")))
 
         // Act
         val result = deleteUserUseCase.execute(user, id).single()

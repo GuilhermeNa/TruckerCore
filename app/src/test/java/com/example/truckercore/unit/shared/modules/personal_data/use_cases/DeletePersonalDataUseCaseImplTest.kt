@@ -11,7 +11,6 @@ import com.example.truckercore.shared.modules.personal_data.use_cases.implementa
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.DeletePersonalDataUseCase
 import com.example.truckercore.shared.utils.sealeds.Response
-import com.google.common.base.Verify.verify
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every
@@ -36,13 +35,23 @@ class DeletePersonalDataUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = DeletePersonalDataUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeletePersonalDataUseCaseImpl(
+            repository,
+            checkExistence,
+            permissionService,
+            Permission.DELETE_PERSONAL_DATA
+        )
     }
 
     @Test
     fun `should delete entity when user has permission and data exists`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_PERSONAL_DATA
+            )
+        } returns true
         coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(Unit))
         coEvery { repository.delete(id) } returns flowOf(Response.Success(Unit))
 
@@ -61,7 +70,12 @@ class DeletePersonalDataUseCaseImplTest {
     @Test
     fun `should return error when user does not have permission for delete`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_PERSONAL_DATA) } returns false
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_PERSONAL_DATA
+            )
+        } returns false
 
         // Call
         val result = useCase.execute(user, id).single()
@@ -93,7 +107,12 @@ class DeletePersonalDataUseCaseImplTest {
     @Test
     fun `should return error when database returns an error`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_PERSONAL_DATA
+            )
+        } returns true
         coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Success(Unit))
         coEvery { repository.delete(id) } returns flowOf(Response.Error(NullPointerException()))
 
@@ -112,7 +131,12 @@ class DeletePersonalDataUseCaseImplTest {
     @Test
     fun `should return error when entity does not exist`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_PERSONAL_DATA
+            )
+        } returns true
         coEvery { checkExistence.execute(user, id) } returns flowOf(Response.Empty)
 
         // Call
@@ -129,7 +153,12 @@ class DeletePersonalDataUseCaseImplTest {
     @Test
     fun `should return error when existence check failed`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.DELETE_PERSONAL_DATA) } returns true
+        every {
+            permissionService.canPerformAction(
+                user,
+                Permission.DELETE_PERSONAL_DATA
+            )
+        } returns true
         coEvery {
             checkExistence.execute(user, id)
         } returns flowOf(Response.Error(NullPointerException()))

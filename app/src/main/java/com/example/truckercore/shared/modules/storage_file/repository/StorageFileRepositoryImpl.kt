@@ -17,23 +17,23 @@ internal class StorageFileRepositoryImpl(
     private val collection: Collection
 ) : Repository(), StorageFileRepository {
 
-    override suspend fun <T : Dto> create(dto: T): Flow<Response<String>> =
+    override fun <T : Dto> create(dto: T): Flow<Response<String>> =
         firebaseRepository.create(collection, dto)
 
-    override suspend fun <T : Dto> update(dto: T): Flow<Response<Unit>> =
+    override fun <T : Dto> update(dto: T): Flow<Response<Unit>> =
         firebaseRepository.update(collection, dto)
 
-    override suspend fun delete(id: String): Flow<Response<Unit>> =
+    override fun delete(id: String): Flow<Response<Unit>> =
         firebaseRepository.delete(collection, id)
 
-    override suspend fun entityExists(id: String) =
+    override fun entityExists(id: String) =
         firebaseRepository.entityExists(collection, id)
 
-    override suspend fun fetchByDocument(params: DocumentParameters): Flow<Response<StorageFileDto>> =
-        firebaseRepository.documentFetch(createFirestoreRequest(params))
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<StorageFileDto>> =
+        firebaseRepository.documentFetch(createFirestoreRequest(documentParams))
 
-    override suspend fun fetchByQuery(params: QueryParameters): Flow<Response<List<StorageFileDto>>> =
-        firebaseRepository.queryFetch(createFirestoreRequest(params))
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<StorageFileDto>>> =
+        firebaseRepository.queryFetch(createFirestoreRequest(queryParams))
 
     override fun createFirestoreRequest(params: SearchParameters) =
         FirebaseRequest.create(StorageFileDto::class.java)

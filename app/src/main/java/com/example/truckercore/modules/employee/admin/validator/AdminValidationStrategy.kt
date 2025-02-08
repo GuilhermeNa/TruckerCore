@@ -74,7 +74,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
             !EmployeeStatus.enumExists(dto.employeeStatus)
         ) invalidFields.add(Field.EMPLOYEE_STATUS.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -88,7 +88,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (entity.name.isBlank()) invalidFields.add(Field.NAME.getName())
         if (entity.email.isBlank()) invalidFields.add(Field.EMAIL.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -102,11 +102,11 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (entity.name.isEmpty()) invalidFields.add(Field.NAME.getName())
         if (entity.email.isEmpty()) invalidFields.add(Field.EMAIL.getName())
 
-        if (invalidFields.isNotEmpty()) handleInvalidFieldsErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
 
     }
 
-    override fun <T : KClass<*>> handleInvalidFieldsErrors(obj: T, fields: List<String>) {
+    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
         val message =
             "Invalid ${obj.simpleName}. Missing or invalid fields: ${fields.joinToString(", ")}."
         logError("${this.javaClass.simpleName}: $message")

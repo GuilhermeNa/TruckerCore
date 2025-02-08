@@ -1,6 +1,6 @@
 package com.example.truckercore.modules.business_central.errors
 
-import com.example.truckercore.shared.errors.MappingException
+import com.example.truckercore.shared.errors.abstractions.MappingException
 
 /**
  * Custom exception for errors related to mapping in BusinessCentral.

@@ -41,7 +41,7 @@ class DeleteBusinessCentralUseCaseImplTest {
         repository = mockk<BusinessCentralRepository>(relaxed = true)
         checkExistence = mockk<CheckBusinessCentralExistenceUseCase>(relaxed = true)
         permissionService = PermissionServiceImpl()
-        useCase = DeleteBusinessCentralUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeleteBusinessCentralUseCaseImpl(repository, checkExistence, permissionService, Permission.DELETE_BUSINESS_CENTRAL)
         userWithPermission = TestUserDataProvider.getBaseEntity()
             .copy(permissions = setOf(Permission.DELETE_BUSINESS_CENTRAL))
         userWithoutPermission = TestUserDataProvider.getBaseEntity()

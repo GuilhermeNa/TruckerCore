@@ -24,7 +24,7 @@ interface LicensingService {
      * @param documentParam The document parameters to filter the licensing records.
      * @return A [Flow] containing a [Response] with the [Licensing] record.
      */
-    suspend fun fetchLicensing(documentParam: DocumentParameters): Flow<Response<Licensing>>
+    fun fetchLicensing(documentParam: DocumentParameters): Flow<Response<Licensing>>
 
     /**
      * Fetches a list of licensing records based on query parameters.
@@ -32,7 +32,7 @@ interface LicensingService {
      * @param queryParam The query parameters to filter the licensing records.
      * @return A [Flow] containing a [Response] with a list of [Licensing] records.
      */
-    suspend fun fetchLicensing(queryParam: QueryParameters): Flow<Response<List<Licensing>>>
+    fun fetchLicensing(queryParam: QueryParameters): Flow<Response<List<Licensing>>>
 
     /**
      * Fetches a single licensing record along with its associated files based on document parameters.
@@ -40,7 +40,7 @@ interface LicensingService {
      * @param documentParam The document parameters to filter the licensing records with files.
      * @return A [Flow] containing a [Response] with the [LicensingWithFile] record.
      */
-    suspend fun fetchLicensingWithFiles(documentParam: DocumentParameters): Flow<Response<LicensingWithFile>>
+    fun fetchLicensingWithFiles(documentParam: DocumentParameters): Flow<Response<LicensingWithFile>>
 
     /**
      * Fetches a list of licensing records along with their associated files based on query parameters.
@@ -48,6 +48,6 @@ interface LicensingService {
      * @param queryParam The query parameters to filter the licensing records with files.
      * @return A [Flow] containing a [Response] with a list of [LicensingWithFile] records.
      */
-    suspend fun fetchLicensingWithFiles(queryParam: QueryParameters): Flow<Response<List<LicensingWithFile>>>
+    fun fetchLicensingWithFiles(queryParam: QueryParameters): Flow<Response<List<LicensingWithFile>>>
 
 }

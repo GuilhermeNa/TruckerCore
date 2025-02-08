@@ -44,9 +44,10 @@ class UpdateTrailerUseCaseImplTest {
         useCase = UpdateTrailerUseCaseImpl(
             repository,
             checkExistence,
-            permissionService,
             validatorService,
-            mapper
+            mapper,
+            permissionService,
+            Permission.UPDATE_TRAILER
         )
     }
 

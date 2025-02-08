@@ -19,10 +19,11 @@ import kotlinx.coroutines.flow.single
 internal class UpdateDriverUseCaseImpl(
     private val repository: DriverRepository,
     private val checkExistence: CheckDriverExistenceUseCase,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: DriverMapper
-) : UseCase(), UpdateDriverUseCase {
+    private val mapper: DriverMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), UpdateDriverUseCase {
 
     override suspend fun execute(user: User, driver: Driver): Flow<Response<Unit>> = flow {
         val result =
@@ -35,14 +36,11 @@ internal class UpdateDriverUseCaseImpl(
         emit(handleUnexpectedError(it))
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_DRIVER)
-
     private suspend fun continueForExistenceCheckage(user: User, driver: Driver) =
         when (val existenceResponse = checkExistence.execute(user, driver.id!!).single()) {
             is Response.Success -> processUpdate(driver)
             is Response.Empty -> handleNonExistentObject(driver.id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun processUpdate(driverToUpdate: Driver): Response<Unit> {

@@ -53,7 +53,8 @@ class UpdateBusinessCentralUseCaseImplTest {
             checkExistence,
             permissionService,
             validatorService,
-            mapper
+            mapper,
+            Permission.UPDATE_BUSINESS_CENTRAL
         )
         user = TestUserDataProvider.getBaseEntity()
             .copy(permissions = setOf(Permission.UPDATE_BUSINESS_CENTRAL))

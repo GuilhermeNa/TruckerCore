@@ -35,7 +35,7 @@ class DeleteTruckUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = DeleteTruckUseCaseImpl(repository, checkExistence, permissionService)
+        useCase = DeleteTruckUseCaseImpl(repository, checkExistence, permissionService, Permission.DELETE_TRUCK)
     }
 
     @Test

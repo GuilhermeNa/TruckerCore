@@ -18,9 +18,10 @@ import kotlinx.coroutines.flow.single
 internal class CreatePersonalDataUseCaseImpl(
     private val repository: PersonalDataRepository,
     private val validatorService: ValidatorService,
-    private val permissionService: PermissionService,
-    private val mapper: PersonalDataMapper
-) : UseCase(), CreatePersonalDataUseCase {
+    override val permissionService: PermissionService,
+    private val mapper: PersonalDataMapper,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), CreatePersonalDataUseCase {
 
     override suspend fun execute(user: User, pData: PersonalData): Flow<Response<String>> = flow {
         val result =
@@ -32,9 +33,6 @@ internal class CreatePersonalDataUseCaseImpl(
     }.catch {
         emit(handleUnexpectedError(it))
     }
-
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.CREATE_PERSONAL_DATA)
 
     private suspend fun processCreation(pData: PersonalData): Response<String> {
         validatorService.validateForCreation(pData)

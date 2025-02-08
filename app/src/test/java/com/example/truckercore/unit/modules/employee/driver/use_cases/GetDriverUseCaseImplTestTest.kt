@@ -1,5 +1,6 @@
 package com.example.truckercore.unit.modules.employee.driver.use_cases
 
+import android.content.pm.PermissionGroupInfo
 import com.example.truckercore._test_data_provider.TestDriverDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
@@ -41,7 +42,7 @@ class GetDriverUseCaseImplTestTest {
         permissionService = mockk(relaxed = true)
         validatorService = mockk(relaxed = true)
         mapper = mockk(relaxed = true)
-        useCase = GetDriverUseCaseImpl(repository, permissionService, validatorService, mapper)
+        useCase = GetDriverUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.VIEW_DRIVER)
         user = mockk(relaxed = true)
     }
 

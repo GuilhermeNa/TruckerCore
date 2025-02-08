@@ -1,5 +1,6 @@
 package com.example.truckercore.configs.di
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.modules.employee.driver.repository.DriverRepository
 import com.example.truckercore.modules.employee.driver.repository.DriverRepositoryImpl
@@ -21,10 +22,20 @@ val driverModule = module {
 
     //--
 
-    single<CreateDriverUseCase> { CreateDriverUseCaseImpl(get(), get(), get(), get()) }
-    single<UpdateDriverUseCase> { UpdateDriverUseCaseImpl(get(), get(), get(), get(), get()) }
-    single<CheckDriverExistenceUseCase> { CheckDriverExistenceUseCaseImpl(get(), get()) }
-    single<GetDriverUseCase> { GetDriverUseCaseImpl(get(), get(), get(), get()) }
-    single<DeleteDriverUseCase> { DeleteDriverUseCaseImpl(get(), get(), get()) }
+    single<CreateDriverUseCase> {
+        CreateDriverUseCaseImpl(get(), get(), get(), get(), Permission.CREATE_DRIVER)
+    }
+    single<UpdateDriverUseCase> {
+        UpdateDriverUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_DRIVER)
+    }
+    single<CheckDriverExistenceUseCase> {
+        CheckDriverExistenceUseCaseImpl(get(), get(), Permission.VIEW_DRIVER)
+    }
+    single<GetDriverUseCase> {
+        GetDriverUseCaseImpl(get(), get(), get(), get(), Permission.UPDATE_DRIVER)
+    }
+    single<DeleteDriverUseCase> {
+        DeleteDriverUseCaseImpl(get(), get(), get(), Permission.UPDATE_DRIVER)
+    }
 
 }

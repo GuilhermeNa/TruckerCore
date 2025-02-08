@@ -9,9 +9,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import kotlin.reflect.full.companionObject
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.declaredMembers
 
 class DocumentSearchParametersTest {
 
@@ -34,13 +31,13 @@ class DocumentSearchParametersTest {
         // Call
         val documentParameters = DocumentParameters.create(user)
             .setId(id)
-            .setLiveObserver(liveObserver)
+            .setStream(liveObserver)
             .build()
 
         // Assertions
         assertNotNull(documentParameters)
         assertEquals(id, documentParameters.id)
-        assertEquals(liveObserver, documentParameters.liveObserver)
+        assertEquals(liveObserver, documentParameters.shouldStream)
         assertEquals(user, documentParameters.user)
     }
 
@@ -52,13 +49,13 @@ class DocumentSearchParametersTest {
         // Call
         val exception = assertThrows<IllegalArgumentException> {
             DocumentParameters.create(user)
-                .setLiveObserver(liveObserver)
+                .setStream(liveObserver)
                 .build()
         }
 
         // Assertions
         assertEquals(
-            DocumentParameters.ERROR_MESSAGE,
+            DocumentParameters.BLANK_ID_ERROR_MESSAGE,
             exception.message
         )
     }
@@ -74,7 +71,7 @@ class DocumentSearchParametersTest {
 
         // Assertions
         assertEquals(
-            DocumentParameters.ERROR_MESSAGE,
+            DocumentParameters.BLANK_ID_ERROR_MESSAGE,
             exception.message
         )
     }
@@ -84,11 +81,11 @@ class DocumentSearchParametersTest {
         // Call
         val documentParameters = DocumentParameters.create(user)
             .setId("123")
-            .setLiveObserver(true)
+            .setStream(true)
             .build()
 
         // Assertions
-        assertTrue(documentParameters.liveObserver)
+        assertTrue(documentParameters.shouldStream)
     }
 
     @Test
@@ -96,11 +93,11 @@ class DocumentSearchParametersTest {
         // Call
         val documentParameters = DocumentParameters.create(user)
             .setId("123")
-            .setLiveObserver(false)
+            .setStream(false)
             .build()
 
         // Assertions
-        assertFalse(documentParameters.liveObserver)
+        assertFalse(documentParameters.shouldStream)
     }
 
     @Test
@@ -111,7 +108,7 @@ class DocumentSearchParametersTest {
             .build()
 
         // Assertions
-        assertFalse(documentParameters.liveObserver)
+        assertFalse(documentParameters.shouldStream)
     }
 
 }

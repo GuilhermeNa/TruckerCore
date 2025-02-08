@@ -20,10 +20,11 @@ import kotlinx.coroutines.flow.single
 internal class UpdateStorageFileUseCaseImpl(
     private val repository: StorageFileRepository,
     private val checkExistence: CheckStorageFileExistenceUseCase,
-    private val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: StorageFileMapper
-) : UseCase(), UpdateStorageFileUseCase {
+    private val mapper: StorageFileMapper,
+    override val permissionService: PermissionService,
+    override val requiredPermission: Permission
+) : UseCase(permissionService), UpdateStorageFileUseCase {
 
     override suspend fun execute(user: User, file: StorageFile): Flow<Response<Unit>> = flow {
         val result =
@@ -36,14 +37,11 @@ internal class UpdateStorageFileUseCaseImpl(
         emit(it.handleUnexpectedError())
     }
 
-    private fun userHasPermission(user: User): Boolean =
-        permissionService.canPerformAction(user, Permission.UPDATE_STORAGE_FILE)
-
     private suspend fun verifyExistence(user: User, file: StorageFile): Response<Unit> =
         when (val existenceResponse = checkExistence.execute(user, file.id!!).single()) {
             is Response.Success -> processUpdate(file)
             is Response.Empty -> handleNonExistentObject(file.id)
-            is Response.Error -> handleFailureResponse(existenceResponse)
+            is Response.Error -> logAndReturnResponse(existenceResponse)
         }
 
     private suspend fun processUpdate(file: StorageFile): Response<Unit> {

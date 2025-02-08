@@ -1,6 +1,7 @@
 package com.example.truckercore.configs.di
 
 import com.example.truckercore.configs.app_constants.Collection
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
@@ -11,8 +12,6 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.i
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.CreateLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.DeleteLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.GetLicensingUseCaseImpl
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.ListLicensingWithFileUseCase
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.SingleLicensingWithFileUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.UpdateLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase
@@ -24,31 +23,28 @@ import org.koin.dsl.module
 
 val licensingModule = module {
     single<LicensingRepository> { LicensingRepositoryImpl(get(), Collection.LICENSING) }
-    single<LicensingService> { LicensingServiceImpl(get(), get()) }
+    single<LicensingService> { LicensingServiceImpl(get(), get(), get()) }
     single { LicensingMapper() }
 
     //--
-
-    single { SingleLicensingWithFileUseCase(get(), get()) }
-    single { ListLicensingWithFileUseCase(get(), get()) }
 
     single<AggregateLicensingWithFilesUseCase> {
         AggregateLicensingWithFilesUseCaseImpl(get(), get())
     }
     single<CheckLicensingExistenceUseCase> {
-        CheckLicensingExistenceUseCaseImpl(get(), get())
+        CheckLicensingExistenceUseCaseImpl(get(), get(), Permission.VIEW_LICENSING)
     }
     single<CreateLicensingUseCase> {
-        CreateLicensingUseCaseImpl(get(), get(), get(), get())
+        CreateLicensingUseCaseImpl(get(), get(), get(), get(), Permission.CREATE_LICENSING)
     }
     single<DeleteLicensingUseCase> {
-        DeleteLicensingUseCaseImpl(get(), get(), get())
+        DeleteLicensingUseCaseImpl(get(), get(), get(), Permission.DELETE_LICENSING)
     }
     single<GetLicensingUseCase> {
         GetLicensingUseCaseImpl(get(), get(), get(), get())
     }
     single<UpdateLicensingUseCase> {
-        UpdateLicensingUseCaseImpl(get(), get(), get(), get(), get())
+        UpdateLicensingUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_LICENSING)
     }
 
 }

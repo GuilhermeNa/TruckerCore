@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.fleet.trailer.errors
 
 import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.shared.errors.MappingException
+import com.example.truckercore.shared.errors.abstractions.MappingException
 
 /**
  * Custom exception for errors related to mapping in [Trailer].

@@ -30,7 +30,7 @@ class CheckStorageFileExistenceUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = CheckStorageFileExistenceUseCaseImpl(repository, permissionService)
+        useCase = CheckStorageFileExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_STORAGE_FILE)
     }
 
     @Test

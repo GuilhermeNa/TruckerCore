@@ -24,7 +24,7 @@ internal interface GetLicensingUseCase {
      * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if no licensing record exists with the given ID.
      */
-    suspend fun execute(documentParams: DocumentParameters): Flow<Response<Licensing>>
+    fun execute(documentParams: DocumentParameters): Flow<Response<Licensing>>
 
     /**
      * Fetches a list of licensing records based on the provided query settings.
@@ -36,6 +36,6 @@ internal interface GetLicensingUseCase {
      * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if no licensing records match the query criteria.
      */
-    suspend fun execute(queryParams: QueryParameters): Flow<Response<List<Licensing>>>
+    fun execute(queryParams: QueryParameters): Flow<Response<List<Licensing>>>
 
 }
