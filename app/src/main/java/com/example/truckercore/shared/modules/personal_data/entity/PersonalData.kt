@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.modules.personal_data.entity
 
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Entity
 import java.time.LocalDateTime
@@ -15,7 +14,6 @@ import java.time.LocalDateTime
  * @property number The number associated with the document (e.g., CPF number, RG number, or driver's license number).
  * @property emissionDate The date when the document was issued or emitted.
  * @property expirationDate The expiration date of the document, indicating when the document will expire.
- * @property file The file that contains the image data of the document.
  */
 data class PersonalData(
     override val businessCentralId: String,
@@ -28,11 +26,5 @@ data class PersonalData(
     val name: String,
     val number: String,
     val emissionDate: LocalDateTime,
-    val expirationDate: LocalDateTime? = null,
-    val file: StorageFile? = null
-) : Entity {
-
-
-
-
-}
+    val expirationDate: LocalDateTime? = null
+) : Entity

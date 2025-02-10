@@ -8,8 +8,8 @@ import com.example.truckercore.infrastructure.security.permissions.errors.Unauth
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.shared.modules.personal_data.mapper.PersonalDataMapper
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
-import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataByParentIdUseCaseImpl
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataByParentIdUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataUseCaseImpl
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
@@ -24,9 +24,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class GetPersonalDataByParentIdUseCaseImplTest {
+class GetPersonalDataUseCaseImplTest {
 
-    private lateinit var useCase: GetPersonalDataByParentIdUseCase
+    private lateinit var useCase: GetPersonalDataUseCase
     private var repository: PersonalDataRepository = mockk()
     private var permissionService: PermissionService = mockk()
     private var validatorService: ValidatorService = mockk()
@@ -39,7 +39,7 @@ class GetPersonalDataByParentIdUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = GetPersonalDataByParentIdUseCaseImpl(
+        useCase = GetPersonalDataUseCaseImpl(
             repository,
             validatorService,
             mapper,

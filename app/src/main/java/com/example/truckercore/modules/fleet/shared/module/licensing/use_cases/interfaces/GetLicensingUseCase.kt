@@ -21,7 +21,6 @@ internal interface GetLicensingUseCase {
      * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of:
      * - [Response.Success] containing the [Licensing] object if the licensing record was found.
-     * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if no licensing record exists with the given ID.
      */
     fun execute(documentParams: DocumentParameters): Flow<Response<Licensing>>
@@ -33,7 +32,6 @@ internal interface GetLicensingUseCase {
      * @param queryParams The query parameters to filter the licensing records.
      * @return A [Flow] of:
      * - [Response.Success] containing a list of [Licensing] objects that match the query.
-     * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if no licensing records match the query criteria.
      */
     fun execute(queryParams: QueryParameters): Flow<Response<List<Licensing>>>

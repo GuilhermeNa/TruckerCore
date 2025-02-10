@@ -18,8 +18,7 @@ internal interface CheckStorageFileExistenceUseCase {
      * @return A [Flow] of:
      * - [Response.Success] when the object exists.
      * - [Response.Empty] when the object does not exist.
-     * - [Response.Error] when any error occurs.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

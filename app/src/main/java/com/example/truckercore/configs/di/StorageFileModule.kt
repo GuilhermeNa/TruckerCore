@@ -2,7 +2,6 @@ package com.example.truckercore.configs.di
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepositoryImpl
@@ -32,7 +31,7 @@ val storageFileModule = module {
         DeleteStorageFileUseCaseImpl(get(), get(), get(), Permission.DELETE_STORAGE_FILE)
     }
     single<GetStorageFileUseCase> {
-        GetStorageFileUseCaseImpl(get(), get(), get(), get())
+        GetStorageFileUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_STORAGE_FILE)
     }
     single<UpdateStorageFileUseCase> {
         UpdateStorageFileUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_STORAGE_FILE)

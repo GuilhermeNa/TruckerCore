@@ -10,6 +10,7 @@ import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
+/*
 internal class AdminMapper : Mapper<Admin, AdminDto>() {
 
     override fun handleEntityMapping(entity: Admin) = AdminDto(
@@ -44,4 +45,4 @@ internal class AdminMapper : Mapper<Admin, AdminDto>() {
         throw AdminMappingException(message = "$message Obj: $obj", receivedException)
     }
 
-}
+}*/

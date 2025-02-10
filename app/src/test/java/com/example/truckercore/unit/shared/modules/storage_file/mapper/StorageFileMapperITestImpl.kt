@@ -8,7 +8,6 @@ import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
 import com.example.truckercore.shared.errors.InvalidUrlFormatException
 import com.example.truckercore.shared.errors.MissingFieldException
 import com.example.truckercore.shared.errors.UnknownErrorException
-import com.example.truckercore.shared.modules.storage_file.errors.StorageFileMappingException
 import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime

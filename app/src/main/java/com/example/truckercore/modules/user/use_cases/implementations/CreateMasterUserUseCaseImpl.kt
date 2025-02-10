@@ -6,13 +6,9 @@ import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateMasterUserUseCase
 import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.expressions.logError
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreateMasterUserUseCaseImpl(
     private val repository: UserRepository,
@@ -20,33 +16,21 @@ internal class CreateMasterUserUseCaseImpl(
     private val mapper: UserMapper
 ) : CreateMasterUserUseCase {
 
-    override suspend fun execute(masterUser: User): Flow<Response<String>> = flow {
-        val response =
-            if (isUserInCorrectLevel(masterUser)) processCreation(masterUser)
-            else handleWrongLevel(masterUser.level)
-
-        emit(response)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
+    override fun execute(masterUser: User): Flow<Response<String>> {
+        validateState(masterUser)
+        return processCreation(masterUser)
     }
 
-    private suspend fun processCreation(masterUser: User): Response<String> {
+    private fun validateState(masterUser: User) {
+        if (masterUser.level == Level.MASTER) throw InvalidStateException(
+            "The first user of the system should have the Master level, but received level: ${masterUser.level}"
+        )
+    }
+
+    private fun processCreation(masterUser: User): Flow<Response<String>> {
         validatorService.validateForCreation(masterUser)
         val dto = mapper.toDto(masterUser)
-        return repository.create(dto).single()
-    }
-
-    private fun handleWrongLevel(receivedLevel: Level) = Response.Error(
-        InvalidStateException("MasterUser level should be ${Level.MASTER.name} and received: $receivedLevel")
-    )
-
-    private fun isUserInCorrectLevel(masterUser: User): Boolean =
-        masterUser.level == Level.MASTER
-
-    private fun handleUnexpectedError(throwable: Throwable): Response.Error {
-        logError("${this.javaClass.simpleName}: An unexpected error occurred during execution: $throwable")
-        return Response.Error(exception = throwable as Exception)
+        return repository.create(dto)
     }
 
 }

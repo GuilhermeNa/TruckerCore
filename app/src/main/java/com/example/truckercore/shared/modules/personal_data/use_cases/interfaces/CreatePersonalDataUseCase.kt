@@ -20,7 +20,6 @@ internal interface CreatePersonalDataUseCase {
      * @param pData The [PersonalData] entity to be created. This object contains the data to be stored in the system.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully created.
-     * - [Response.Error] when the object creation fails.
      */
     suspend fun execute(user: User, pData: PersonalData): Flow<Response<String>>
 

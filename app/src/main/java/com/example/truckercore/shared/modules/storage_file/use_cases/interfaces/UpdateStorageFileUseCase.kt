@@ -1,6 +1,7 @@
 package com.example.truckercore.shared.modules.storage_file.use_cases.interfaces
 
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
  * @see StorageFile
  * @see Response
  */
-interface UpdateStorageFileUseCase {
+internal interface UpdateStorageFileUseCase {
 
     /**
      * Executes the use case to update an existing [StorageFile] entity.
@@ -20,7 +21,7 @@ interface UpdateStorageFileUseCase {
      * @param file The [StorageFile] entity that is being updated.
      * @return A [Flow] of [Response<Unit>] that will emit:
      * - [Response.Success] if the update was successful.
-     * - [Response.Error] if there was any error during the update.
+     * @throws ObjectNotFoundException if the object to be updated is not found.
      */
     suspend fun execute(user: User, file: StorageFile): Flow<Response<Unit>>
 

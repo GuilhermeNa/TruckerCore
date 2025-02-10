@@ -7,8 +7,8 @@ import com.example.truckercore.infrastructure.security.permissions.errors.Unauth
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
-import com.example.truckercore.modules.user.use_cases.implementations.GetUserByIdUseCaseImpl
-import com.example.truckercore.modules.user.use_cases.interfaces.GetUserByIdUseCase
+import com.example.truckercore.modules.user.use_cases.implementations.GetUserUseCaseImpl
+import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.coEvery
@@ -23,9 +23,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class GetUserByIdUseCaseImplTest {
+class GetUserUseCaseImplTest {
 
-    private lateinit var useCase: GetUserByIdUseCase
+    private lateinit var useCase: GetUserUseCase
     private val repository: UserRepository = mockk()
     private val permissionService: PermissionService = mockk()
     private val validatorService: ValidatorService = mockk()
@@ -39,7 +39,7 @@ class GetUserByIdUseCaseImplTest {
     fun setup() {
         mockStaticLog()
         useCase =
-            GetUserByIdUseCaseImpl(
+            GetUserUseCaseImpl(
                 repository,
                 validatorService,
                 mapper,

@@ -8,12 +8,9 @@ import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.mapper.PersonalDataMapper
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CreatePersonalDataUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreatePersonalDataUseCaseImpl(
     private val repository: PersonalDataRepository,
@@ -23,21 +20,13 @@ internal class CreatePersonalDataUseCaseImpl(
     override val requiredPermission: Permission
 ) : UseCase(permissionService), CreatePersonalDataUseCase {
 
-    override suspend fun execute(user: User, pData: PersonalData): Flow<Response<String>> = flow {
-        val result =
-            if (userHasPermission(user)) processCreation(pData)
-            else handleUnauthorizedPermission(user, pData.id!!)
+    override suspend fun execute(user: User, pData: PersonalData): Flow<Response<String>> =
+        user.runIfPermitted { processCreation(pData) }
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    private suspend fun processCreation(pData: PersonalData): Response<String> {
+    private fun processCreation(pData: PersonalData): Flow<Response<String>> {
         validatorService.validateForCreation(pData)
         val pDataDto = mapper.toDto(pData)
-        return repository.create(pDataDto).single()
+        return repository.create(pDataDto)
     }
 
 }

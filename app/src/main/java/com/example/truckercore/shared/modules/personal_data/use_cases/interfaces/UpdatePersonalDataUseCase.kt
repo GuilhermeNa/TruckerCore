@@ -23,7 +23,7 @@ internal interface UpdatePersonalDataUseCase {
      * @param pData The [PersonalData] entity that is being updated.
      * @return A [Flow] of [Response<Unit>] that will emit:
      * - [Response.Success] if the update was successful.
-     * - [Response.Error] if there was any error during the update.
+     * @throws ObjectNotFoundException if the object to be updated is not found.
      */
     suspend fun execute(user: User, pData: PersonalData): Flow<Response<Unit>>
 

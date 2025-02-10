@@ -9,12 +9,8 @@ import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMap
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.CreateStorageFileUseCase
 import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.expressions.handleUnexpectedError
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreateStorageFileUseCaseImpl(
     private val repository: StorageFileRepository,
@@ -24,22 +20,13 @@ internal class CreateStorageFileUseCaseImpl(
     override val requiredPermission: Permission
 ) : UseCase(permissionService), CreateStorageFileUseCase {
 
-    override suspend fun execute(user: User, file: StorageFile): Flow<Response<String>> =
-        flow {
-            val result =
-                if (userHasPermission(user)) processCreation(file)
-                else handleUnauthorizedPermission(user, file.id!!)
+    override fun execute(user: User, file: StorageFile): Flow<Response<String>> =
+        user.runIfPermitted { processCreation(file) }
 
-            emit(result)
-
-        }.catch {
-            emit(it.handleUnexpectedError())
-        }
-
-    private suspend fun processCreation(file: StorageFile): Response<String> {
+    private fun processCreation(file: StorageFile): Flow<Response<String>> {
         validatorService.validateForCreation(file)
         val fileDto = mapper.toDto(file)
-        return repository.create(fileDto).single()
+        return repository.create(fileDto)
     }
 
 }

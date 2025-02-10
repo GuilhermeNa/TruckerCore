@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
  * and interacting with the persistence layer (e.g., database). This use case is specifically used for authenticating
  * and creating the first user of a new account.
  */
-interface CreateMasterUserUseCase {
+internal interface CreateMasterUserUseCase {
 
     /**
      * Executes the use case to create the first [User] entity for a new account.
@@ -20,6 +20,6 @@ interface CreateMasterUserUseCase {
      * @param masterUser The User entity to be created. This object contains the data to be stored in the system.
      * @return A [Response] string representing the unique identifier of the newly created User entity.
      */
-    suspend fun execute(masterUser: User): Flow<Response<String>>
+    fun execute(masterUser: User): Flow<Response<String>>
 
 }

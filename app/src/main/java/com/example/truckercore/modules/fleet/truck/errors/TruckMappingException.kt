@@ -13,4 +13,4 @@ import com.example.truckercore.shared.errors.abstractions.MappingException
  * @property cause The underlying exception that caused this exception to be thrown.
  */
 class TruckMappingException(message: String? = null, cause: Exception) :
-    MappingException(message, cause)
+    MappingException()

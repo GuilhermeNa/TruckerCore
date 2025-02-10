@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Interface representing the use case for updating a [Licensing] entity.
  */
-interface UpdateLicensingUseCase {
+internal interface UpdateLicensingUseCase {
 
     /**
      * Executes the use case to update a [Licensing] entity.
@@ -16,7 +16,6 @@ interface UpdateLicensingUseCase {
      * @param licensing The [Licensing] entity that is being updated. This contains the data to be modified.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully updated.
-     * - [Response.Error] when the object update fails.
      */
     fun execute(user: User, licensing: Licensing): Flow<Response<Unit>>
 

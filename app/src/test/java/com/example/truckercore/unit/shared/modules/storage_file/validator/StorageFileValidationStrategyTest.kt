@@ -3,10 +3,9 @@ package com.example.truckercore.unit.shared.modules.storage_file.validator
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.modules.storage_file.errors.StorageFileValidationException
 import com.example.truckercore.shared.modules.storage_file.validator.StorageFileValidationStrategy
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
@@ -113,7 +112,7 @@ internal class StorageFileValidationStrategyTest {
         }
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
 
@@ -162,7 +161,7 @@ internal class StorageFileValidationStrategyTest {
         }
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 
@@ -211,7 +210,7 @@ internal class StorageFileValidationStrategyTest {
         }
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
 

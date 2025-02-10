@@ -1,23 +1,23 @@
 # Módulo de Gestão de Arquivos de Armazenamento
-
+  
 ## Índice
-
+    
 1. [Visão Geral](#1-visão-geral)
 2. [Funcionalidades](#2-funcionalidades)
 3. [Fluxo de Dados](#3-fluxo-de-dados)
 4. [Estrutura](#4-estrutura)
-
+    
 ---
-
+    
 ## 1. **Visão Geral**
-
+    
 Este módulo gerencia o armazenamento de arquivos em Firebase Storage. Ele facilita a interação com
 os arquivos armazenados, incluindo operações como criação, leitura, atualização, exclusão e
 verificação de existência. O módulo também oferece suporte para mapear os dados entre a camada de
 persistência e os objetos de transferência de dados (DTOs).
 
 ### Modelo de Dados
-
+    
 - **StorageFile**: Representa um arquivo armazenado no Firebase Storage. Inclui metadados como o
   `parentId`, `url` do arquivo, e o status de atualização (`isUpdating`).
 - **StorageFileDto**: Um DTO (Data Transfer Object) usado para transferir dados entre o banco de
@@ -79,7 +79,6 @@ modules/
 └── storage_file/
     ├── dto/
     ├── entity/
-    ├── errors/
     ├── mappers/
     ├── repository/
     ├── use_cases/

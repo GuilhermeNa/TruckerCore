@@ -1,6 +1,8 @@
 package com.example.truckercore.infrastructure.security.permissions.enums
 
 import com.example.truckercore.shared.errors.InvalidEnumParameterException
+import com.example.truckercore.shared.errors.InvalidStateException
+import java.security.InvalidParameterException
 
 /**
  * Enum class representing different roles or permission levels within the system.

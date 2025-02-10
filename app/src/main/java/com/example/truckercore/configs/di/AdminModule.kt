@@ -7,12 +7,12 @@ import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.CheckAdminExistenceUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.CreateAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.DeleteAdminUseCaseImpl
-import com.example.truckercore.modules.employee.admin.use_cases.implementations.GetAdminByIdUseCaseImpl
+import com.example.truckercore.modules.employee.admin.use_cases.implementations.GetAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.UpdateAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CheckAdminExistenceUseCase
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CreateAdminUseCase
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.DeleteAdminUseCase
-import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminByIdUseCase
+import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.UpdateAdminUseCase
 import org.koin.dsl.module
 
@@ -31,8 +31,8 @@ val adminModule = module {
     single<CheckAdminExistenceUseCase> {
         CheckAdminExistenceUseCaseImpl(get(), get(), Permission.VIEW_ADMIN)
     }
-    single<GetAdminByIdUseCase> {
-        GetAdminByIdUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_ADMIN)
+    single<GetAdminUseCase> {
+        GetAdminUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_ADMIN)
     }
     single<DeleteAdminUseCase> {
         DeleteAdminUseCaseImpl(get(), get(), get(), Permission.DELETE_ADMIN)

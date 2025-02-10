@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
  * @see Admin
  * @see Response
  */
-interface GetAdminByIdUseCase {
+interface GetAdminUseCase {
 
     /**
      * Executes the use case to retrieve an [Admin] entity by its ID.

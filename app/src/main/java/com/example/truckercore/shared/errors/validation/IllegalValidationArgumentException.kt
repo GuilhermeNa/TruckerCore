@@ -1,7 +1,6 @@
-package com.example.truckercore.shared.errors
+package com.example.truckercore.shared.errors.validation
 
 import com.example.truckercore.shared.errors.abstractions.ValidationException
-import kotlin.reflect.KClass
 
 /**
  * A custom exception that is thrown when an unexpected input is encountered during the validation process.
@@ -12,5 +11,12 @@ import kotlin.reflect.KClass
  *
  * @param message The detail message for the exception, explaining the cause of the error. This message is optional and can be null.
  */
-class UnexpectedValidatorInputException(expected: KClass<*>, received: KClass<*>)
-    : ValidationException()
+class IllegalValidationArgumentException(
+    private val expected: Any,
+    private val received: Any
+) : ValidationException() {
+
+    fun getMessage(): String = "Expected a ${expected::class.simpleName} " +
+            "for validation but received: ${received::class.simpleName}."
+
+}

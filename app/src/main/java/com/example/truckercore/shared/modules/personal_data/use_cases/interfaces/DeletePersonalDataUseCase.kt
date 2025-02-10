@@ -1,6 +1,7 @@
 package com.example.truckercore.shared.modules.personal_data.use_cases.interfaces
 
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +21,7 @@ internal interface DeletePersonalDataUseCase {
      * @param id The ID of the [PersonalData] entity to be deleted.
      * @return A [Flow] response:
      * - [Response.Success] if the data was successfully deleted.
-     * - [Response.Error] if there was any error during the deletion process.
+     * @throws ObjectNotFoundException if the object to be updated is not found.
      */
     suspend fun execute(user: User, id: String): Flow<Response<Unit>>
 

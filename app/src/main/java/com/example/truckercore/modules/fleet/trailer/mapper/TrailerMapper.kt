@@ -11,6 +11,7 @@ import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
+/*
 internal class TrailerMapper : Mapper<Trailer, TrailerDto>() {
 
     override fun handleEntityMapping(entity: Trailer) = TrailerDto(
@@ -47,4 +48,4 @@ internal class TrailerMapper : Mapper<Trailer, TrailerDto>() {
         throw TrailerMappingException(message = "$message Obj: $obj", receivedException)
     }
 
-}
+}*/

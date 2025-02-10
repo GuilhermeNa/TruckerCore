@@ -15,3 +15,4 @@ fun String.validateIsNotBlank(fieldName: String? = "string") {
         throw IllegalArgumentException("The provided $fieldName is invalid: it cannot be blank.")
     }
 }
+

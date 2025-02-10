@@ -4,7 +4,7 @@ import com.example.truckercore.shared.errors.abstractions.ValidationException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 
-class ObjectValidationException : ValidationException {
+class InvalidObjectException : ValidationException {
 
     constructor(entity: Entity, fields: List<String>) : super() {
         _entity = entity

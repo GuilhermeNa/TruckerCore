@@ -5,38 +5,37 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.errors.UserValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.utils.expressions.logError
-import kotlin.reflect.KClass
 
 internal class UserValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
         if (input.dto is UserDto) {
             processDtoValidationRules(input.dto)
-        } else handleUnexpectedInputError(
-            expectedClass = UserDto::class, inputClass = input.dto::class
+        } else throw IllegalValidationArgumentException(
+            expected = UserDto::class, received = input.dto
         )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
         if (input.entity is User) {
             processEntityValidationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = User::class, inputClass = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = User::class, received = input.entity
         )
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
         if (input.entity is User) {
             processEntityCreationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = User::class, inputClass = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = User::class, received = input.entity
         )
     }
 
@@ -67,14 +66,14 @@ internal class UserValidationStrategy : ValidatorStrategy() {
             dto.permissions.any { !Permission.enumExists(it) }
         ) invalidFields.add(Field.PERMISSIONS.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
         entity as User
         val invalidFields = mutableListOf<String>()
 
-        if(entity.businessCentralId.isNotEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
+        if (entity.businessCentralId.isNotEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
 
         if (entity.id.isNullOrBlank()) invalidFields.add(Field.ID.getName())
 
@@ -84,7 +83,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
 
         if (entity.permissions.isEmpty()) invalidFields.add(Field.PERMISSIONS.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -101,14 +100,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
 
         if (entity.permissions.isEmpty()) invalidFields.add(Field.PERMISSIONS.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
-    }
-
-    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
-        val message = "Invalid ${obj.simpleName}." +
-                " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
-        throw UserValidationException(message)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
 }

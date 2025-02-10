@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.Flow
  * storage (e.g., database, external service, etc.).
  *
  * @see Repository
- * @see LicensingDto
  */
 internal interface LicensingRepository : NewRepository {
 

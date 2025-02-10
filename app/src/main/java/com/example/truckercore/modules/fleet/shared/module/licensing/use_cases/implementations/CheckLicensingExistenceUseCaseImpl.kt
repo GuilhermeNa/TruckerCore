@@ -10,9 +10,9 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CheckLicensingExistenceUseCaseImpl(
+    override val requiredPermission: Permission,
     private val repository: LicensingRepository,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    override val permissionService: PermissionService
 ) : UseCase(permissionService), CheckLicensingExistenceUseCase {
 
     override fun execute(user: User, id: String): Flow<Response<Unit>> =

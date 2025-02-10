@@ -4,7 +4,7 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Permiss
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.NewLicensingMapper
+import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.shared.abstractions.UseCase
@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class GetLicensingUseCaseImpl(
+    override val requiredPermission: Permission,
     private val repository: LicensingRepository,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission,
     private val validatorService: ValidatorService,
-    private val mapper: NewLicensingMapper
+    private val mapper: LicensingMapper
 ) : UseCase(permissionService), GetLicensingUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Licensing>> =

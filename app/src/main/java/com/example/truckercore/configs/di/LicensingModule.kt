@@ -32,19 +32,19 @@ val licensingModule = module {
         AggregateLicensingWithFilesUseCaseImpl(get(), get())
     }
     single<CheckLicensingExistenceUseCase> {
-        CheckLicensingExistenceUseCaseImpl(get(), get(), Permission.VIEW_LICENSING)
+        CheckLicensingExistenceUseCaseImpl(Permission.VIEW_LICENSING, get(), get())
     }
     single<CreateLicensingUseCase> {
-        CreateLicensingUseCaseImpl(get(), get(), get(), get(), Permission.CREATE_LICENSING)
+        CreateLicensingUseCaseImpl(Permission.CREATE_LICENSING, get(), get(), get(), get())
     }
     single<DeleteLicensingUseCase> {
-        DeleteLicensingUseCaseImpl(get(), get(), get(), Permission.DELETE_LICENSING)
+        DeleteLicensingUseCaseImpl(Permission.DELETE_LICENSING, get(), get(), get())
     }
     single<GetLicensingUseCase> {
-        GetLicensingUseCaseImpl(get(), get(), get(), get())
+        GetLicensingUseCaseImpl(Permission.VIEW_LICENSING, get(), get(), get(), get())
     }
     single<UpdateLicensingUseCase> {
-        UpdateLicensingUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_LICENSING)
+        UpdateLicensingUseCaseImpl(Permission.UPDATE_LICENSING, get(), get(), get(), get(), get())
     }
 
 }

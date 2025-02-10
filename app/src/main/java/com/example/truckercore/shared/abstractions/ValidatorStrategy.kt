@@ -1,11 +1,8 @@
 package com.example.truckercore.shared.abstractions
 
-import com.example.truckercore.shared.errors.InvalidObjectException
-import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.ValidatorStrategyI
-import kotlin.reflect.KClass
 
 /**
  * This abstract class implements the [ValidatorStrategyI] interface and provides some common functionality for validation strategies.
@@ -37,35 +34,5 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
      * @param entity The [Entity] object to be validated for creation.
      */
     protected abstract fun processEntityCreationRules(entity: Entity)
-
-    /**
-     * Handles an error scenario where the input received is not of the expected type.
-     * This method is used to throw an exception when there is a mismatch between the expected
-     * and received types during validation.
-     *
-     * This is an internal helper method that is used when validation encounters a type mismatch.
-     *
-     * @param expected The expected class type that the input should adhere to.
-     * @param received The class type of the actual input that was received.
-     * @throws UnexpectedValidatorInputException Thrown when there is a type mismatch.
-     */
-    protected fun handleUnexpectedInputError(expected: KClass<*>, received: KClass<*>) {
-        throw UnexpectedValidatorInputException(expected = expected, received = received)
-    }
-
-    /**
-     * Handles validation errors by throwing an exception that contains the list of invalid fields.
-     * This method is invoked when an object fails validation due to one or more invalid fields.
-     *
-     * This method helps encapsulate error reporting and ensures that invalid fields are properly listed
-     * when the validation fails.
-     *
-     * @param obj The class type of the object being validated (either [Dto] or [Entity]).
-     * @param fields The list of invalid fields that failed the validation. This will contain the names of the fields that caused the error.
-     * @throws InvalidObjectException Thrown when validation errors are found on the object.
-     */
-    protected fun handleValidationErrors(obj: KClass<*>, fields: List<String>) {
-        throw InvalidObjectException(obj = obj, invalidFields = fields)
-    }
 
 }

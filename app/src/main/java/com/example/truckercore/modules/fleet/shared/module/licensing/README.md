@@ -28,13 +28,6 @@ transferir dados entre camadas da aplicação.
 - **LicensingDto**: Um DTO (Data Transfer Object) usado para transferir dados de licenciamento entre
   as camadas de aplicação e persistência.
 
-### Exceções Personalizadas
-
-- **LicensingMappingException**: Lançada quando ocorre um erro ao mapear entre o objeto `Licensing`
-  e o `LicensingDto`.
-- **LicensingValidationException**: Lançada quando há falhas nas validações aplicadas aos dados de
-  `Licensing`.
-
 ### Mapeadores
 
 O módulo usa um padrão de mapeamento para converter entre as representações de dados `Licensing` e
@@ -93,11 +86,12 @@ As operações no sistema retornam um tipo de `Response`, que pode ser:
 modules/
 │
 └── licensing/
+    ├── aggregations/
     ├── dto/
     ├── entity/
-    ├── errors/
     ├── mappers/
     ├── repository/
+    ├── service/
     ├── use_cases/
     ├── validator/
     └── README.md

@@ -1,7 +1,10 @@
 package com.example.truckercore.shared.modules.personal_data.repository
 
+import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -17,17 +20,10 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see PersonalDataDto
  */
-internal interface PersonalDataRepository : Repository<PersonalDataDto> {
+internal interface PersonalDataRepository : NewRepository {
 
-    /**
-     * Fetches a list of [PersonalDataDto] entities by their parent ID.
-     *
-     * @param parentId The unique identifier of parent.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object's are successfully found.
-     * - [Response.Error] when any error occurs.
-     * - [Response.Empty] when the data was not found.
-     */
-    suspend fun fetchByParentId(parentId: String): Flow<Response<List<PersonalDataDto>>>
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<PersonalDataDto>>
+
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<PersonalDataDto>>>
 
 }

@@ -9,8 +9,6 @@ import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMap
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileUseCase
 import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.expressions.logAndReturnEmpty
-import com.example.truckercore.shared.utils.expressions.logAndReturnError
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
@@ -21,30 +19,21 @@ internal class GetStorageFileUseCaseImpl(
     private val repository: StorageFileRepository,
     override val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: StorageFileMapper
+    private val mapper: StorageFileMapper,
+    override val requiredPermission: Permission
 ) : UseCase(permissionService), GetStorageFileUseCase {
 
-    override val requiredPermission: Permission = Permission.VIEW_STORAGE_FILE
-
     override fun execute(documentParams: DocumentParameters): Flow<Response<StorageFile>> =
-        fetchData(
-            documentParams = documentParams,
-            operation = this::getMappedFileFlow
-        )
-
-    private fun getMappedFileFlow(documentParams: DocumentParameters) =
-        repository.fetchByDocument(documentParams).map { response ->
-            when (response) {
-                is Response.Success -> response.processFiles()
-                is Response.Empty -> response.logAndReturnEmpty()
-                is Response.Error -> response.logAndReturnError()
-            }
+        with(documentParams) {
+            user.runIfPermitted { getMappedFileFlow(this) }
         }
 
-    private fun Response.Success<StorageFileDto>.processFiles(): Response<StorageFile> {
-        val entity = validateAndMapToEntity(this.data)
-        return Response.Success(entity)
-    }
+    private fun getMappedFileFlow(documentParams: DocumentParameters): Flow<Response<StorageFile>> =
+        repository.fetchByDocument(documentParams).map { response ->
+            if (response is Response.Success) {
+                Response.Success(validateAndMapToEntity(response.data))
+            } else Response.Empty
+        }
 
     private fun validateAndMapToEntity(dto: StorageFileDto): StorageFile {
         validatorService.validateDto(dto)
@@ -54,24 +43,16 @@ internal class GetStorageFileUseCaseImpl(
     //----------------------------------------------------------------------------------------------
 
     override fun execute(queryParams: QueryParameters): Flow<Response<List<StorageFile>>> =
-        fetchData(
-            queryParams = queryParams,
-            operation = this::getMappedFilesListFLow
-        )
-
-    private fun getMappedFilesListFLow(queryParams: QueryParameters) =
-        repository.fetchByQuery(queryParams).map { response ->
-            when (response) {
-                is Response.Success -> response.processFilesList()
-                is Response.Empty -> response.logAndReturnEmpty()
-                is Response.Error -> response.logAndReturnError()
-            }
+        with(queryParams) {
+            user.runIfPermitted { getMappedFilesListFLow(queryParams) }
         }
 
-    private fun Response.Success<List<StorageFileDto>>.processFilesList(): Response<List<StorageFile>> {
-        val entities = this.data.map { validateAndMapToEntity(it) }
-        return Response.Success(entities)
-    }
+    private fun getMappedFilesListFLow(queryParams: QueryParameters): Flow<Response<List<StorageFile>>> =
+        repository.fetchByQuery(queryParams).map { response ->
+            if (response is Response.Success) {
+                Response.Success(response.data.map { validateAndMapToEntity(it) })
+            } else Response.Empty
+        }
 
 }
 

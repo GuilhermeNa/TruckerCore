@@ -7,8 +7,8 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Permiss
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.modules.employee.admin.repository.AdminRepository
-import com.example.truckercore.modules.employee.admin.use_cases.implementations.GetAdminByIdUseCaseImpl
-import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminByIdUseCase
+import com.example.truckercore.modules.employee.admin.use_cases.implementations.GetAdminUseCaseImpl
+import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
@@ -23,9 +23,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class GetAdminByIdUseCaseImplTest {
+class GetAdminUseCaseImplTest {
 
-    private lateinit var useCase: GetAdminByIdUseCase
+    private lateinit var useCase: GetAdminUseCase
     private var repository: AdminRepository = mockk()
     private var permissionService: PermissionService = mockk()
     private var validatorService: ValidatorService = mockk()
@@ -38,7 +38,7 @@ class GetAdminByIdUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = GetAdminByIdUseCaseImpl(repository, permissionService, validatorService, mapper, Permission.VIEW_ADMIN)
+        useCase = GetAdminUseCaseImpl(repository, permissionService, validatorService, mapper, Permission.VIEW_ADMIN)
     }
 
     @Test

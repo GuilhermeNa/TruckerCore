@@ -6,10 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the use case for creating a new [User] entity.
- *
- * This interface defines the contract for a use case responsible for creating a new User entity. It handles
- * the logic required to insert a new entity into the system, such as validating data, applying business rules, and
- * interacting with the persistence layer (e.g., database).
  */
 interface CreateUserUseCase {
 
@@ -20,6 +16,6 @@ interface CreateUserUseCase {
      * @param newUser The User entity to be created. This object contains the data to be stored in the system.
      * @return A [Response] string representing the unique identifier of the newly created User entity.
      */
-    suspend fun execute(user: User, newUser: User): Flow<Response<String>>
+    fun execute(user: User, newUser: User): Flow<Response<String>>
 
 }

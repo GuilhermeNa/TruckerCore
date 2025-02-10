@@ -9,6 +9,7 @@ import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
+/*
 internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDto>() {
 
     override fun toDto(entity: BusinessCentral): BusinessCentralDto = try {
@@ -52,4 +53,8 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
         throw BusinessCentralMappingException(message = "$message Obj: $obj", receivedException)
     }
 
-}
+    override fun handleMappingError(obj: Any, cause: Exception): Nothing {
+        TODO("Not yet implemented")
+    }
+
+}*/

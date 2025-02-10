@@ -15,30 +15,30 @@ import kotlin.reflect.KClass
 internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
-        if (input.dto is BusinessCentralDto) {
+       /* if (input.dto is BusinessCentralDto) {
             processDtoValidationRules(input.dto)
         } else handleUnexpectedInputError(
             expectedClass = BusinessCentralDto::class,
             inputClass = input.dto::class
-        )
+        )*/
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
-        if (input.entity is BusinessCentral) {
+   /*     if (input.entity is BusinessCentral) {
             processEntityValidationRules(input.entity)
         } else handleUnexpectedInputError(
             expectedClass = BusinessCentral::class,
             inputClass = input.entity::class
-        )
+        )*/
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
-        if (input.entity is BusinessCentral) {
+      /*  if (input.entity is BusinessCentral) {
             processEntityCreationRules(input.entity)
         } else handleUnexpectedInputError(
             expectedClass = BusinessCentral::class,
             inputClass = input.entity::class
-        )
+        )*/
     }
 
     //----------------------------------------------------------------------------------------------
@@ -100,11 +100,11 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
     }
 
-    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
+  /*  override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
         val message = "Invalid ${obj.simpleName}." +
                 " Missing or invalid fields: ${fields.joinToString(", ")}."
         logError("${this.javaClass.simpleName}: $message")
         throw BusinessCentralValidationException(message)
-    }
+    }*/
 
 }

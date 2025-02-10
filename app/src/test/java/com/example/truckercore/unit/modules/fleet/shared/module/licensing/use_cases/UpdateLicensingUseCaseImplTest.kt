@@ -6,7 +6,6 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.UpdateLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase

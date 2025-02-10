@@ -1,7 +1,8 @@
 package com.example.truckercore.shared.modules.personal_data.use_cases.interfaces
 
-import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -14,19 +15,27 @@ import kotlinx.coroutines.flow.Flow
  * @see PersonalData
  * @see Response
  */
-internal interface GetPersonalDataByParentIdUseCase {
+internal interface GetPersonalDataUseCase {
 
     /**
      * Executes the use case to retrieve an [PersonalData] entity by its parentID.
      *
-     * @param user The [User] who is requesting the retrieval. This is used to check if the user has the necessary permissions.
-     * @param parentId The ID of the related parent entity.
-     *
+     * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of [Response<List<PersonalData>>] that will emit:
      * - [Response.Success] if the data was found and retrieved.
-     * - [Response.Error] if there was any error during the retrieval process.
      * - [Response.Empty] if the data with the provided parentId does not exist.
      */
-    suspend fun execute(user: User, parentId: String): Flow<Response<List<PersonalData>>>
+    fun execute(documentParams: DocumentParameters): Flow<Response<PersonalData>>
+
+    /**
+     * Fetches a list of personal data from the storage based on the provided query settings.
+     * This method allows filtering the files using a list of query settings.
+     *
+     * @param queryParams The query parameters to filter the licensing records.
+     * @return A [Flow] of:
+     * - [Response.Success] containing a list of [PersonalData] objects that match the query.
+     * - [Response.Empty] if no files match the query criteria.
+     */
+    fun execute(queryParams: QueryParameters): Flow<Response<List<PersonalData>>>
 
 }

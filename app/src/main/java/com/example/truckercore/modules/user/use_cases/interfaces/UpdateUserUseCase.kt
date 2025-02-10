@@ -6,19 +6,16 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the use case for updating a [User] entity.
- *
- * This interface defines the contract for a use case that is responsible for updating a User entity.
- * It encapsulates the logic for updating the entity, which might include validation, business logic, and persistence operations.
- * The operation is asynchronous and uses Kotlin's [suspend] function to allow it to be executed in a coroutine.
  */
-interface UpdateUserUseCase {
+internal interface UpdateUserUseCase {
 
     /**
      * Executes the use case to update a [User] entity.
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
      * @param userToUpdate The [User] entity that is being updated. This contains the data to be modified.
-     * @return A [Flow] of [Response] that contains the result of the operation.
+     * @return A [Flow] of:
+     * - [Response.Success] when the object is successfully updated.
      */
-    suspend fun execute(user: User, userToUpdate: User): Flow<Response<Unit>>
+    fun execute(user: User, userToUpdate: User): Flow<Response<Unit>>
 
 }

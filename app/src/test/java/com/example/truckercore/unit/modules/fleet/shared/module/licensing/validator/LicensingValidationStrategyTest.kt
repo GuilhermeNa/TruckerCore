@@ -4,7 +4,7 @@ import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
@@ -119,7 +119,7 @@ class LicensingValidationStrategyTest {
         }
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
 
@@ -176,7 +176,7 @@ class LicensingValidationStrategyTest {
         }
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 
@@ -233,7 +233,7 @@ class LicensingValidationStrategyTest {
         }
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
 

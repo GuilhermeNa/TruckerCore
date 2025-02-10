@@ -13,6 +13,7 @@ import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import com.example.truckercore.shared.utils.expressions.logError
 import kotlin.reflect.KClass
 
+/*
 internal class AdminValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
@@ -113,4 +114,4 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         throw AdminValidationException(message)
     }
 
-}
+}*/

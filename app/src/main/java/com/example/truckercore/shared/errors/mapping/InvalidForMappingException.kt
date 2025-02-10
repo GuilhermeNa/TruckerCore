@@ -14,7 +14,7 @@ import com.example.truckercore.shared.interfaces.Entity
  * @param obj The [Entity] or [Dto] related to the error.
  * @property cause The underlying exception that caused this exception to be thrown.
  */
-class ObjectMappingException : MappingException {
+class InvalidForMappingException : MappingException {
 
     constructor(dto: Dto, cause: Exception) : super() {
         _dto = dto

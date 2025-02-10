@@ -1,47 +1,56 @@
 package com.example.truckercore.shared.modules.storage_file.mapper
 
-import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
+import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.interfaces.NewMapper
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.example.truckercore.shared.modules.storage_file.errors.StorageFileMappingException
-import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal class StorageFileMapper : Mapper<StorageFile, StorageFileDto>() {
+internal class StorageFileMapper : NewMapper {
 
-    override fun handleEntityMapping(entity: StorageFile) = StorageFileDto(
-        businessCentralId = entity.businessCentralId,
-        id = entity.id,
-        lastModifierId = entity.lastModifierId,
-        creationDate = entity.creationDate.toDate(),
-        lastUpdate = entity.lastUpdate.toDate(),
-        persistenceStatus = entity.persistenceStatus.name,
-        parentId = entity.parentId,
-        url = entity.url,
-        isUpdating = entity.isUpdating
-    )
+    override fun toEntity(dto: Dto): StorageFile =
+        if (dto is StorageFileDto) convertToEntity(dto)
+        else throw IllegalMappingArgumentException(expected = StorageFileDto::class, received = dto)
 
-    override fun handleDtoMapping(dto: StorageFileDto) = StorageFile(
-        businessCentralId = dto.businessCentralId!!,
-        id = dto.id!!,
-        lastModifierId = dto.lastModifierId!!,
-        creationDate = dto.creationDate!!.toLocalDateTime(),
-        lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
-        persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!),
-        parentId = dto.parentId!!,
-        url = dto.url!!,
-        isUpdating = dto.isUpdating!!
-    )
+    override fun toDto(entity: Entity): StorageFileDto =
+        if (entity is StorageFile) convertToDto(entity)
+        else throw IllegalMappingArgumentException(expected = StorageFile::class, received = entity)
 
-    override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
-        val message = "Error while mapping a ${obj::class.simpleName} object."
-        logWarn(
-            context = javaClass,
-            message = message
+    private fun convertToEntity(dto: StorageFileDto) = try {
+        StorageFile(
+            businessCentralId = dto.businessCentralId!!,
+            id = dto.id!!,
+            lastModifierId = dto.lastModifierId!!,
+            creationDate = dto.creationDate!!.toLocalDateTime(),
+            lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
+            persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!),
+            parentId = dto.parentId!!,
+            url = dto.url!!,
+            isUpdating = dto.isUpdating!!
         )
-        throw StorageFileMappingException(message, receivedException)
+    } catch (error: Exception) {
+        throw InvalidForMappingException(dto, error)
+    }
+
+    private fun convertToDto(entity: StorageFile) = try {
+        StorageFileDto(
+            businessCentralId = entity.businessCentralId,
+            id = entity.id,
+            lastModifierId = entity.lastModifierId,
+            creationDate = entity.creationDate.toDate(),
+            lastUpdate = entity.lastUpdate.toDate(),
+            persistenceStatus = entity.persistenceStatus.name,
+            parentId = entity.parentId,
+            url = entity.url,
+            isUpdating = entity.isUpdating
+        )
+    } catch (error: Exception) {
+        throw InvalidForMappingException(entity, error)
     }
 
 }

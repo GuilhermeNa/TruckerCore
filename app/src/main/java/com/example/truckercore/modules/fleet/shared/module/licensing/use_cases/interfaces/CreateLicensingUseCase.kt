@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
  * It handles the logic required to insert a new entity into the system, such as validating data, applying business rules, and
  * interacting with the persistence layer (e.g., database).
  */
-interface CreateLicensingUseCase {
+internal interface CreateLicensingUseCase {
 
     /**
      * Executes the use case to create a new [Licensing] entity.
@@ -20,7 +20,6 @@ interface CreateLicensingUseCase {
      * @param licensing The [Licensing] entity to be created. This object contains the data to be stored in the system.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully created.
-     * - [Response.Error] when the object creation fails.
      */
     suspend fun execute(user: User, licensing: Licensing): Flow<Response<String>>
 

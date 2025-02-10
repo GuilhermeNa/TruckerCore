@@ -8,13 +8,13 @@ import com.example.truckercore.modules.user.use_cases.implementations.CheckUserE
 import com.example.truckercore.modules.user.use_cases.implementations.CreateMasterUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.CreateUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.DeleteUserUseCaseImpl
-import com.example.truckercore.modules.user.use_cases.implementations.GetUserByIdUseCaseImpl
+import com.example.truckercore.modules.user.use_cases.implementations.GetUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.UpdateUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateMasterUserUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateUserUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.DeleteUserUseCase
-import com.example.truckercore.modules.user.use_cases.interfaces.GetUserByIdUseCase
+import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.UpdateUserUseCase
 import org.koin.dsl.module
 
@@ -29,8 +29,8 @@ val userModule = module {
     single<DeleteUserUseCase> {
         DeleteUserUseCaseImpl(get(), get(), get(), Permission.DELETE_USER)
     }
-    single<GetUserByIdUseCase> {
-        GetUserByIdUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_USER)
+    single<GetUserUseCase> {
+        GetUserUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_USER)
     }
     single<UpdateUserUseCase> {
         UpdateUserUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_USER)

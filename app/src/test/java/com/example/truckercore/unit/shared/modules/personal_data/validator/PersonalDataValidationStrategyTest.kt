@@ -3,10 +3,9 @@ package com.example.truckercore.unit.shared.modules.personal_data.validator
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.UnexpectedValidatorInputException
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.modules.personal_data.errors.PersonalDataValidationException
 import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
@@ -121,7 +120,7 @@ class PersonalDataValidationStrategyTest {
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
         // Call
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
 
@@ -184,7 +183,7 @@ class PersonalDataValidationStrategyTest {
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 
@@ -247,7 +246,7 @@ class PersonalDataValidationStrategyTest {
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-        val exception = assertThrows<UnexpectedValidatorInputException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
 

@@ -20,7 +20,7 @@ internal interface CreateStorageFileUseCase {
      * @param file The [StorageFile] entity to be created. This object contains the data to be stored in the system.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully created.
-     * - [Response.Error] when the object creation fails.
      */
-    suspend fun execute(user: User, file: StorageFile): Flow<Response<String>>
+    fun execute(user: User, file: StorageFile): Flow<Response<String>>
+
 }

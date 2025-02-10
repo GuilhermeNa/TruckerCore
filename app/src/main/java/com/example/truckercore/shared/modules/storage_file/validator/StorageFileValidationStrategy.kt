@@ -3,38 +3,37 @@ package com.example.truckercore.shared.modules.storage_file.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.example.truckercore.shared.modules.storage_file.errors.StorageFileValidationException
-import com.example.truckercore.shared.utils.expressions.logWarn
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import kotlin.reflect.KClass
 
 internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
         if (input.dto is StorageFileDto) {
             processDtoValidationRules(input.dto)
-        } else handleUnexpectedInputError(
-            expectedClass = StorageFileDto::class, inputClass = input.dto::class
+        } else throw IllegalValidationArgumentException(
+            expected = StorageFileDto::class, received = input.dto::class
         )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
         if (input.entity is StorageFile) {
             processEntityValidationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = StorageFile::class, inputClass = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = StorageFile::class, received = input.entity::class
         )
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
         if (input.entity is StorageFile) {
             processEntityCreationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = StorageFile::class, inputClass = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = StorageFile::class, received = input.entity::class
         )
     }
 
@@ -65,7 +64,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
         if (dto.isUpdating == null) invalidFields.add(Field.IS_UPDATING.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -84,7 +83,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
         if (entity.url.isBlank()) invalidFields.add(Field.URL.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -103,17 +102,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
 
         if (entity.url.isBlank()) invalidFields.add(Field.URL.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
-    }
-
-    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
-        val message = "Invalid ${obj.simpleName}." +
-                " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logWarn(
-            context = javaClass,
-            message = message
-        )
-        throw StorageFileValidationException(message)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
 }

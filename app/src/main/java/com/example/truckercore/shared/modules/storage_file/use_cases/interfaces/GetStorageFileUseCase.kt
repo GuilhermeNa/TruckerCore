@@ -21,7 +21,6 @@ internal interface GetStorageFileUseCase {
      * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of:
      * - [Response.Success] containing the [StorageFile] object if the file was found.
-     * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if the file with the given ID does not exist.
      */
     fun execute(documentParams: DocumentParameters): Flow<Response<StorageFile>>
@@ -33,7 +32,6 @@ internal interface GetStorageFileUseCase {
      * @param queryParams The query parameters to filter the licensing records.
      * @return A [Flow] of:
      * - [Response.Success] containing a list of [StorageFile] objects that match the query.
-     * - [Response.Error] if an error occurs during the fetch.
      * - [Response.Empty] if no files match the query criteria.
      */
     fun execute(queryParams: QueryParameters): Flow<Response<List<StorageFile>>>

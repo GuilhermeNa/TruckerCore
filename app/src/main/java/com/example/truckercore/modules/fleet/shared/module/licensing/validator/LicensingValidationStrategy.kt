@@ -3,9 +3,10 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.shared.errors.validation.ObjectValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
@@ -15,27 +16,24 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
     override fun validateDto(input: ValidatorInput.DtoInput) {
         if (input.dto is LicensingDto) {
             processDtoValidationRules(input.dto)
-        } else handleUnexpectedInputError(
-            expected = LicensingDto::class,
-            received = input.dto::class
+        } else throw IllegalValidationArgumentException(
+            expected = LicensingDto::class, received = input.dto
         )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
         if (input.entity is Licensing) {
             processEntityValidationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expected = Licensing::class,
-            received = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = Licensing::class, received = input.entity
         )
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
         if (input.entity is Licensing) {
             processEntityCreationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expected = Licensing::class,
-            received = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = Licensing::class, received = input.entity
         )
     }
 
@@ -70,7 +68,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (dto.exercise == null) invalidFields.add(Field.EXERCISE.getName())
 
-        if (invalidFields.isNotEmpty()) throw ObjectValidationException(dto, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -95,7 +93,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
 
-        if (invalidFields.isNotEmpty())  throw ObjectValidationException(entity, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -114,7 +112,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
 
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
 
-        if (invalidFields.isNotEmpty()) throw ObjectValidationException(entity, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
 }

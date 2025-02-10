@@ -1,6 +1,7 @@
 package com.example.truckercore.shared.modules.storage_file.use_cases.interfaces
 
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +21,8 @@ internal interface DeleteStorageFileUseCase {
      * @param id The ID of the [StorageFile] entity to be deleted.
      * @return A [Flow] response:
      * - [Response.Success] if the data was successfully deleted.
-     * - [Response.Error] if there was any error during the deletion process.
+     * @throws ObjectNotFoundException if the object to be updated is not found.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

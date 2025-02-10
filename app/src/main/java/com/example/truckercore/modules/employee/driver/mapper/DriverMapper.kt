@@ -10,6 +10,7 @@ import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
+/*
 internal class DriverMapper : Mapper<Driver, DriverDto>() {
 
     override fun handleEntityMapping(entity: Driver) = DriverDto(
@@ -44,4 +45,4 @@ internal class DriverMapper : Mapper<Driver, DriverDto>() {
         throw DriverMappingException(message = "$message Obj: $obj", receivedException)
     }
 
-}
+}*/
