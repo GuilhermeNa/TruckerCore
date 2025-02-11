@@ -17,8 +17,6 @@ data class Driver(
     override val userId: String?,
     override val name: String,
     override val email: String,
-    override val photo: StorageFile? = null,
-    override val personalData: List<PersonalData>? = null,
     override val employeeStatus: EmployeeStatus
 ) : Employee(employeeStatus = employeeStatus) {
 

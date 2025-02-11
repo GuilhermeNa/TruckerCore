@@ -3,12 +3,18 @@ package com.example.truckercore.modules.user.use_cases.implementations
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.GetDriverUseCase
 import com.example.truckercore.modules.user.aggregations.UserWithPerson
+import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.modules.user.enums.PersonCategory
 import com.example.truckercore.modules.user.use_cases.interfaces.AggregateUserWithPersonUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
+import com.example.truckercore.shared.abstractions.Person
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 internal class AggregateUserWithPersonUseCaseImpl(
     private val getUser: GetUserUseCase,
@@ -16,11 +22,42 @@ internal class AggregateUserWithPersonUseCaseImpl(
     private val getAdminUseCase: GetAdminUseCase
 ) : AggregateUserWithPersonUseCase {
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(userId: String, shouldStream: Boolean): Flow<Response<UserWithPerson>> =
-        getSingleUserWithPersonFlow(userId, shouldStream)
+        getUser.execute(userId, shouldStream).flatMapConcat { response ->
+            if (response !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+            val user = response.data
+            val docParams = getDocumentParams(user, shouldStream)
 
-    private fun getSingleUserWithPersonFlow(userId: String, shouldStream: Boolean) =
-        get
+            return@flatMapConcat when (user.personFLag) {
+                PersonCategory.DRIVER -> getUserWithDriverFlow(docParams)
+                PersonCategory.ADMIN -> getUserWithAdminFlow(docParams)
+            }
+        }
 
+    private fun getUserWithDriverFlow(documentParams: DocumentParameters): Flow<Response<UserWithPerson>> =
+        getDriver.execute(documentParams).map { response ->
+            if (response !is Response.Success) return@map Response.Empty
+            val driver = response.data
+            getResponse(documentParams.user, driver)
+        }
+
+    private fun getUserWithAdminFlow(documentParams: DocumentParameters): Flow<Response<UserWithPerson>> =
+        getAdminUseCase.execute(documentParams).map { response ->
+            if (response !is Response.Success) return@map Response.Empty
+            val driver = response.data
+            getResponse(documentParams.user, driver)
+        }
+
+    private fun getDocumentParams(user: User, shouldStream: Boolean): DocumentParameters {
+        val id = user.id ?: throw NullPointerException("Null User id while retrieving data.")
+        return DocumentParameters.create(user)
+            .setStream(shouldStream)
+            .setId(id)
+            .build()
+    }
+
+    private fun getResponse(user: User, person: Person): Response<UserWithPerson> =
+        Response.Success(UserWithPerson(user, person))
 
 }

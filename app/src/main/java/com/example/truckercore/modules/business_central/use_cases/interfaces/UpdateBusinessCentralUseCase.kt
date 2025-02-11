@@ -17,8 +17,9 @@ internal interface UpdateBusinessCentralUseCase {
     /**
      * Executes the use case to update a [BusinessCentral] entity.
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
-     * @param entity The [BusinessCentral] entity that is being updated. This contains the data to be modified.
+     * @param bCentral The [BusinessCentral] entity that is being updated. This contains the data to be modified.
+     * @return A [Flow] of [Response.Success] when the object is successfully updated.
      */
-    suspend fun execute(user: User, entity: BusinessCentral): Flow<Response<Unit>>
+    fun execute(user: User, bCentral: BusinessCentral): Flow<Response<Unit>>
 
 }

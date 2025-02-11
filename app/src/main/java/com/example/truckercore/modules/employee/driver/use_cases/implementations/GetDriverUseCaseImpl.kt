@@ -1,6 +1,5 @@
 package com.example.truckercore.modules.employee.driver.use_cases.implementations
 
-import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
@@ -8,15 +7,12 @@ import com.example.truckercore.modules.employee.driver.entity.Driver
 import com.example.truckercore.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.modules.employee.driver.repository.DriverRepository
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.GetDriverUseCase
-import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.expressions.validateIsNotBlank
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.map
 
 internal class GetDriverUseCaseImpl(
     private val repository: DriverRepository,
@@ -26,30 +22,21 @@ internal class GetDriverUseCaseImpl(
     override val requiredPermission: Permission
 ) : UseCase(permissionService), GetDriverUseCase {
 
-    override suspend fun execute(user: User, id: String): Flow<Response<Driver>> = flow {
-        id.validateIsNotBlank(Field.ID.name)
-
-        val result =
-            if (userHasPermission(user)) fetchDriverById(id)
-            else handleUnauthorizedPermission(user, id)
-
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    private suspend fun fetchDriverById(id: String): Response<Driver> =
-        when (val response = repository.fetchById(id).single()) {
-            is Response.Success -> processResponse(response)
-            is Response.Error -> logAndReturnResponse(response)
-            is Response.Empty -> response
+    override fun execute(documentParams: DocumentParameters): Flow<Response<Driver>> =
+        with(documentParams) {
+            user.runIfPermitted { getMappedDriverFlow(this) }
         }
 
-    private fun processResponse(response: Response.Success<DriverDto>): Response<Driver> {
-        validatorService.validateDto(response.data)
-        val entity = mapper.toEntity(response.data)
-        return Response.Success(entity)
+    private fun getMappedDriverFlow(documentParams: DocumentParameters): Flow<Response<Driver>> =
+        repository.fetchByDocument(documentParams).map { response ->
+            if (response is Response.Success) {
+                Response.Success(validateAndMapToEntity(response.data))
+            } else Response.Empty
+        }
+
+    private fun validateAndMapToEntity(dto: DriverDto): Driver {
+        validatorService.validateDto(dto)
+        return mapper.toEntity(dto)
     }
 
 }

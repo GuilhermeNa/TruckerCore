@@ -18,8 +18,7 @@ internal interface DeleteLicensingUseCase {
      *
      * @param user The [User] who is requesting the deletion. This parameter might be used for permission checks or tracking.
      * @param id The ID of the [Licensing] entity to be deleted.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully deleted.
+     * @return A [Flow] of [Response.Success] when the object is successfully deleted.
      */
     fun execute(user: User, id: String): Flow<Response<Unit>>
 

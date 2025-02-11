@@ -5,38 +5,37 @@ import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
 import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerCategory
-import com.example.truckercore.modules.fleet.trailer.errors.TrailerValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.utils.expressions.logError
-import kotlin.reflect.KClass
 
 internal class TrailerValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
         if (input.dto is TrailerDto) {
             processDtoValidationRules(input.dto)
-        } else handleUnexpectedInputError(
-            expectedClass = TrailerDto::class, inputClass = input.dto::class
+        } else throw IllegalValidationArgumentException(
+            expected = TrailerDto::class, received = input.dto
         )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
         if (input.entity is Trailer) {
             processEntityValidationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = Trailer::class, inputClass = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = Trailer::class, received = input.entity
         )
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
         if (input.entity is Trailer) {
             processEntityCreationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = Trailer::class, inputClass = input.entity::class
+        } else throw IllegalValidationArgumentException(
+            expected = Trailer::class, received = input.entity
         )
     }
 
@@ -73,7 +72,7 @@ internal class TrailerValidationStrategy : ValidatorStrategy() {
             !TrailerCategory.enumExists(dto.category)
         ) invalidFields.add(Field.CATEGORY.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -87,7 +86,7 @@ internal class TrailerValidationStrategy : ValidatorStrategy() {
         if (entity.plate.isBlank()) invalidFields.add(Field.PLATE.getName())
         if (entity.color.isBlank()) invalidFields.add(Field.COLOR.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -106,14 +105,7 @@ internal class TrailerValidationStrategy : ValidatorStrategy() {
 
         if (entity.color.isEmpty()) invalidFields.add(Field.COLOR.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
-    }
-
-    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
-        val message = "Invalid ${obj.simpleName}." +
-                " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
-        throw TrailerValidationException(message)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
 }

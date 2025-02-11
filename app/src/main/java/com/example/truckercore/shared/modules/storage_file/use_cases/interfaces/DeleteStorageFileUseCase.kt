@@ -19,8 +19,7 @@ internal interface DeleteStorageFileUseCase {
      *
      * @param user The [User] who is requesting the deletion. This is used to check if the user has the necessary permissions.
      * @param id The ID of the [StorageFile] entity to be deleted.
-     * @return A [Flow] response:
-     * - [Response.Success] if the data was successfully deleted.
+     * @return A [Flow] of [Response.Success] if the data was successfully deleted.
      * @throws ObjectNotFoundException if the object to be updated is not found.
      */
     fun execute(user: User, id: String): Flow<Response<Unit>>

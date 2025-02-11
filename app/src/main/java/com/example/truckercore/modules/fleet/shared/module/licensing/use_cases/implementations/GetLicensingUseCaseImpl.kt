@@ -28,7 +28,7 @@ internal class GetLicensingUseCaseImpl(
             user.runIfPermitted { getMappedLicensingFlow(this) }
         }
 
-    private fun getMappedLicensingFlow(documentParams: DocumentParameters): Flow<Response<Licensing>> =
+    private fun getMappedLicensingFlow(documentParams: DocumentParameters) =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Response.Success) {
                 Response.Success(validateAndMapToEntity(response.data))
@@ -47,7 +47,7 @@ internal class GetLicensingUseCaseImpl(
             user.runIfPermitted { getMappedLicensingListFlow(queryParams) }
         }
 
-    private fun getMappedLicensingListFlow(queryParams: QueryParameters): Flow<Response<List<Licensing>>> =
+    private fun getMappedLicensingListFlow(queryParams: QueryParameters) =
         repository.fetchByQuery(queryParams).map { response ->
             if (response is Response.Success) {
                 Response.Success(response.data.map { validateAndMapToEntity(it) })

@@ -29,6 +29,9 @@ internal class UserRepositoryImpl(
     override fun entityExists(id: String): Flow<Response<Unit>> =
         firebaseRepository.entityExists(collection, id)
 
+    override fun fetchLoggedUser(userId: String, shouldStream: Boolean): Flow<Response<UserDto>> =
+        firebaseRepository.fetchLoggedUser(userId, shouldStream)
+
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<UserDto>> =
         firebaseRepository.documentFetch(createFirestoreRequest(documentParams))
 

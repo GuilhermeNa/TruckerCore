@@ -9,44 +9,40 @@ import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.CheckT
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.UpdateTrailerUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdateTrailerUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: TrailerRepository,
     private val checkExistence: CheckTrailerExistenceUseCase,
     private val validatorService: ValidatorService,
-    private val mapper: TrailerMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: TrailerMapper
 ) : UseCase(permissionService), UpdateTrailerUseCase {
 
-    override suspend fun execute(user: User, trailer: Trailer): Flow<Response<Unit>> = flow {
-        val result =
-            if (userHasPermission(user)) verifyExistence(user, trailer)
-            else handleUnauthorizedPermission(user, trailer.id!!)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun execute(user: User, trailer: Trailer): Flow<Response<Unit>> {
+        val id = trailer.id ?: throw NullPointerException("Null Trailer id while updating.")
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
+        return checkExistence.execute(user, id).flatMapConcat { response ->
+            if (response !is Response.Success) {
+                throw ObjectNotFoundException(
+                    "Attempting to update a Trailer that was not found for id: $id."
+                )
+            }
+            user.runIfPermitted { processUpdate(trailer) }
+        }
     }
 
-    private suspend fun verifyExistence(user: User, trailer: Trailer): Response<Unit> =
-        when (val existenceResponse = checkExistence.execute(user, trailer.id!!).single()) {
-            is Response.Success -> processUpdate(trailer)
-            is Response.Empty -> handleNonExistentObject(trailer.id)
-            is Response.Error -> logAndReturnResponse(existenceResponse)
-        }
-
-    private suspend fun processUpdate(trailerToUpdate: Trailer): Response<Unit> {
-        validatorService.validateEntity(trailerToUpdate)
-        val dto = mapper.toDto(trailerToUpdate)
-        return repository.update(dto).single()
+    private fun processUpdate(trailer: Trailer): Flow<Response<Unit>> {
+        validatorService.validateEntity(trailer)
+        val dto = mapper.toDto(trailer)
+        return repository.update(dto)
     }
 
 }

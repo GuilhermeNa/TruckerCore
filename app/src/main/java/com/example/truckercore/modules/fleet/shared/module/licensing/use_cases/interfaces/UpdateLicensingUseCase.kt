@@ -14,8 +14,7 @@ internal interface UpdateLicensingUseCase {
      * Executes the use case to update a [Licensing] entity.
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
      * @param licensing The [Licensing] entity that is being updated. This contains the data to be modified.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully updated.
+     * @return A [Flow] of [Response.Success] when the object is successfully updated.
      */
     fun execute(user: User, licensing: Licensing): Flow<Response<Unit>>
 

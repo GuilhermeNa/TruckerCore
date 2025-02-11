@@ -20,7 +20,7 @@ internal class CreateLicensingUseCaseImpl(
     private val mapper: LicensingMapper
 ) : UseCase(permissionService), CreateLicensingUseCase {
 
-    override suspend fun execute(user: User, licensing: Licensing): Flow<Response<String>> =
+    override fun execute(user: User, licensing: Licensing): Flow<Response<String>> =
         user.runIfPermitted { processCreation(licensing) }
 
     private fun processCreation(licensing: Licensing): Flow<Response<String>> {

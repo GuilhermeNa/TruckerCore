@@ -13,11 +13,11 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateStorageFileUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: StorageFileRepository,
     private val validatorService: ValidatorService,
-    override val permissionService: PermissionService,
-    private val mapper: StorageFileMapper,
-    override val requiredPermission: Permission
+    private val mapper: StorageFileMapper
 ) : UseCase(permissionService), CreateStorageFileUseCase {
 
     override fun execute(user: User, file: StorageFile): Flow<Response<String>> =

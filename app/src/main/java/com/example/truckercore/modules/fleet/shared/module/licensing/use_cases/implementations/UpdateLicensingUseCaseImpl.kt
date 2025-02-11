@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdateLicensingUseCaseImpl(
     override val requiredPermission: Permission,
-    private val repository: LicensingRepository,
     override val permissionService: PermissionService,
+    private val repository: LicensingRepository,
     private val checkExistence: CheckLicensingExistenceUseCase,
     private val validatorService: ValidatorService,
     private val mapper: LicensingMapper

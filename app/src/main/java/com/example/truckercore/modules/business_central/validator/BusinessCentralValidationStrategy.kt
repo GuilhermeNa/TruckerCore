@@ -3,42 +3,38 @@ package com.example.truckercore.modules.business_central.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.utils.expressions.logError
-import kotlin.reflect.KClass
 
 internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
-       /* if (input.dto is BusinessCentralDto) {
+        if (input.dto is BusinessCentralDto) {
             processDtoValidationRules(input.dto)
-        } else handleUnexpectedInputError(
-            expectedClass = BusinessCentralDto::class,
-            inputClass = input.dto::class
-        )*/
+        } else throw IllegalValidationArgumentException(
+            expected = BusinessCentralDto::class, received = input.dto
+        )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
-   /*     if (input.entity is BusinessCentral) {
+        if (input.entity is BusinessCentral) {
             processEntityValidationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = BusinessCentral::class,
-            inputClass = input.entity::class
-        )*/
+        } else throw IllegalValidationArgumentException(
+            expected = BusinessCentral::class, received = input.entity
+        )
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
-      /*  if (input.entity is BusinessCentral) {
+        if (input.entity is BusinessCentral) {
             processEntityCreationRules(input.entity)
-        } else handleUnexpectedInputError(
-            expectedClass = BusinessCentral::class,
-            inputClass = input.entity::class
-        )*/
+        } else throw IllegalValidationArgumentException(
+            expected = BusinessCentral::class, received = input.entity
+        )
     }
 
     //----------------------------------------------------------------------------------------------
@@ -65,7 +61,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
             invalidFields.add(Field.PERSISTENCE_STATUS.getName())
         }
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -81,7 +77,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
             invalidFields.add(Field.PERSISTENCE_STATUS.getName())
         }
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -97,14 +93,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
             invalidFields.add(Field.PERSISTENCE_STATUS.getName())
         }
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
-
-  /*  override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
-        val message = "Invalid ${obj.simpleName}." +
-                " Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
-        throw BusinessCentralValidationException(message)
-    }*/
 
 }

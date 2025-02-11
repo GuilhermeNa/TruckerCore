@@ -1,7 +1,8 @@
 package com.example.truckercore.modules.business_central.use_cases.interfaces
 
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -15,12 +16,24 @@ import kotlinx.coroutines.flow.Flow
 internal interface GetBusinessCentralByIdUseCase {
 
     /**
-     * Executes the use case to retrieve a [BusinessCentral] entity by its ID.
+     * Fetches a single [BusinessCentral] entity based on the provided document parameters.
+     * This method retrieves the details of the business central as a [BusinessCentral] object.
      *
-     * @param user The [User] making the request. This parameter might be used for permission checks or tracking.
-     * @param id The ID of the [BusinessCentral] entity to be retrieved.
-     * @return A [Flow] of [Response] that contains the result of the operation, either a success containing the entity or an error.
+     * @param documentParams The document parameters to filter the business central records.
+     * @return A [Flow] of:
+     * - [Response.Success] containing the [BusinessCentral] object if the entity was found.
+     * - [Response.Empty] if no business central entity exists with the given document parameters.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<BusinessCentral>>
+    fun execute(documentParams: DocumentParameters): Flow<Response<BusinessCentral>>
+
+    /**
+     * Fetches a list of [BusinessCentral] based on the provided query parameters.
+     *
+     * @param queryParams The query parameters to filter the business central.
+     * @return A [Flow] of:
+     * - [Response.Success] containing a list of [BusinessCentral] objects that match the query.
+     * - [Response.Empty] if no records are found for the given business central.
+     */
+    fun execute(queryParams: QueryParameters): Flow<Response<List<BusinessCentral>>>
 
 }

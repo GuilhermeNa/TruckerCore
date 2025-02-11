@@ -23,12 +23,9 @@ internal class DeleteStorageFileUseCaseImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(user: User, id: String): Flow<Response<Unit>> =
         checkExistence.execute(user, id).flatMapConcat { response ->
-            if (response.isEmpty()) {
-                throw ObjectNotFoundException(
-                    "Attempting to delete a StorageFile that was not found for id: $id."
-                )
-            }
-
+            if (response.isEmpty()) throw ObjectNotFoundException(
+                "Attempting to delete a StorageFile that was not found for id: $id."
+            )
             user.runIfPermitted { repository.delete(id) }
         }
 

@@ -11,17 +11,15 @@ import kotlinx.coroutines.flow.Flow
  * The deletion operation might involve checks such as verifying the user's permissions and ensuring
  * that the entity is eligible for deletion.
  */
-interface DeleteTrailerUseCase {
+internal interface DeleteTrailerUseCase {
 
     /**
      * Executes the use case to delete a [Trailer] entity by its ID.
      *
      * @param user The [User] who is requesting the deletion. This parameter might be used for permission checks or tracking.
      * @param id The ID of the [Trailer] entity to be deleted.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully deleted.
-     * - [Response.Error] when the object deletion fails.
+     * @return A [Flow] of [Response.Success] when the object is successfully deleted.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

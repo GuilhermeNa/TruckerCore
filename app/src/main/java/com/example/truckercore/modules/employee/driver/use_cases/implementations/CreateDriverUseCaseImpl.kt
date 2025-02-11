@@ -8,36 +8,25 @@ import com.example.truckercore.modules.employee.driver.repository.DriverReposito
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.CreateDriverUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreateDriverUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: DriverRepository,
     private val validatorService: ValidatorService,
-    private val mapper: DriverMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: DriverMapper
 ) : UseCase(permissionService), CreateDriverUseCase {
 
-    override suspend fun execute(user: User, driver: Driver): Flow<Response<String>> = flow {
-        val result =
-            if (userHasPermission(user)) processCreation(driver)
-            else handleUnauthorizedPermission(user, driver.id!!)
+    override fun execute(user: User, driver: Driver): Flow<Response<String>> =
+        user.runIfPermitted { processCreation(driver) }
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    private suspend fun processCreation(driver: Driver): Response<String> {
+    private fun processCreation(driver: Driver): Flow<Response<String>> {
         validatorService.validateForCreation(driver)
         val dto = mapper.toDto(driver)
-        return repository.create(dto).single()
+        return repository.create(dto)
     }
 
 }

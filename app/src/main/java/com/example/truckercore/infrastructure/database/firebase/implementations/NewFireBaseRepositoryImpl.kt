@@ -4,6 +4,7 @@ import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.errors.UnsuccessfulTaskException
 import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.cancel
@@ -104,6 +105,12 @@ internal class NewFireBaseRepositoryImpl(
         )
     }
 
+    override fun fetchLoggedUser(userId: String, shouldStream: Boolean): Flow<Response<UserDto>> =
+        when (shouldStream) {
+            true -> getLoggedUser(userId)
+            false -> streamLoggedUser(userId)
+        }
+
     override fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>> {
         return when (firebaseRequest.shouldObserve()) {
             true -> streamDocument(firebaseRequest)
@@ -120,14 +127,43 @@ internal class NewFireBaseRepositoryImpl(
 
     //----------------------------------------------------------------------------------------------
 
+    private fun getLoggedUser(userId: String) = flow {
+        val documentReference = queryBuilder.getDocument(Collection.USER, userId)
+        val docSnap = documentReference.get().await()
+
+        val result =
+            docSnap?.let { dss ->
+                converter.processDocumentSnapShot(dss, UserDto::class.java)
+            } ?: Response.Empty
+
+        emit(result)
+    }
+
+    private fun streamLoggedUser(userId: String) = callbackFlow {
+        val documentReference = queryBuilder.getDocument(Collection.USER, userId)
+
+        documentReference.addSnapshotListener { nDocSnap, nError ->
+            nError?.let { error ->
+                this.close(error)
+                throw error
+            }
+            nDocSnap?.let { docSnap ->
+                val result = converter.processDocumentSnapShot(docSnap, UserDto::class.java)
+                this.trySend(result)
+            }
+        }
+
+        awaitClose { this.cancel() }
+    }
+
     private fun <T : Dto> getDocument(firebaseRequest: FirebaseRequest<T>) = flow {
         val params = firebaseRequest.getDocumentParams()
 
         val documentRef = queryBuilder.getDocument(firebaseRequest.collection, params.id)
-        val querySnapshot = documentRef.get().await()
+        val docSnap = documentRef.get().await()
 
-        val response = querySnapshot?.let { qss ->
-            converter.processDocumentSnapShot(qss, firebaseRequest.clazz)
+        val response = docSnap?.let { dss ->
+            converter.processDocumentSnapShot(dss, firebaseRequest.clazz)
         } ?: Response.Empty
 
         emit(response)

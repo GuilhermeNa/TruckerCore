@@ -3,47 +3,39 @@ package com.example.truckercore.modules.employee.admin.validator
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.admin.entity.Admin
-import com.example.truckercore.modules.employee.admin.errors.AdminValidationException
 import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.utils.expressions.logError
-import kotlin.reflect.KClass
 
-/*
 internal class AdminValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
         if (input.dto is AdminDto) {
             processDtoValidationRules(input.dto)
-        } else {
-            handleUnexpectedInputError(
-                expectedClass = AdminDto::class, inputClass = input.dto::class
-            )
-        }
+        } else throw IllegalValidationArgumentException(
+            expected = AdminDto::class, received = input.dto
+        )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
         if (input.entity is Admin) {
             processEntityValidationRules(input.entity)
-        } else {
-            handleUnexpectedInputError(
-                expectedClass = Admin::class, inputClass = input.entity::class
-            )
-        }
+        } else throw IllegalValidationArgumentException(
+            expected = Admin::class, received = input.entity
+        )
     }
 
     override fun validateForCreation(input: ValidatorInput.EntityInput) {
         if (input.entity is Admin) {
             processEntityCreationRules(input.entity)
-        } else {
-            handleUnexpectedInputError(
-                expectedClass = Admin::class, inputClass = input.entity::class
-            )
-        }
+        } else throw IllegalValidationArgumentException(
+            expected = Admin::class, received = input.entity
+        )
     }
 
     //----------------------------------------------------------------------------------------------
@@ -75,7 +67,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
             !EmployeeStatus.enumExists(dto.employeeStatus)
         ) invalidFields.add(Field.EMPLOYEE_STATUS.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(dto::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }
 
     override fun processEntityValidationRules(entity: Entity) {
@@ -89,7 +81,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (entity.name.isBlank()) invalidFields.add(Field.NAME.getName())
         if (entity.email.isBlank()) invalidFields.add(Field.EMAIL.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
     override fun processEntityCreationRules(entity: Entity) {
@@ -103,15 +95,8 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (entity.name.isEmpty()) invalidFields.add(Field.NAME.getName())
         if (entity.email.isEmpty()) invalidFields.add(Field.EMAIL.getName())
 
-        if (invalidFields.isNotEmpty()) handleValidationErrors(entity::class, invalidFields)
+        if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
 
     }
 
-    override fun <T : KClass<*>> handleValidationErrors(obj: T, fields: List<String>) {
-        val message =
-            "Invalid ${obj.simpleName}. Missing or invalid fields: ${fields.joinToString(", ")}."
-        logError("${this.javaClass.simpleName}: $message")
-        throw AdminValidationException(message)
-    }
-
-}*/
+}

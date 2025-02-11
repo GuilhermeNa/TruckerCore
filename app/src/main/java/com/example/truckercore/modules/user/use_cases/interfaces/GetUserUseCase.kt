@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.Flow
  */
 internal interface GetUserUseCase {
 
+    fun execute(userId: String, shouldStream: Boolean): Flow<Response<User>>
+
     /**
      * Fetches a single user record based on the provided ID.
      * This method retrieves the user details as a [User] object.

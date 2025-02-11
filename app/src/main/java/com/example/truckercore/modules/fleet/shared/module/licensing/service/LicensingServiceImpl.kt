@@ -17,16 +17,24 @@ internal class LicensingServiceImpl(
     private val getLicensingWithFile: AggregateLicensingWithFilesUseCase
 ) : Service(exceptionHandler), LicensingService {
 
-    override fun fetchLicensing(documentParam: DocumentParameters): Flow<Response<Licensing>> =
+    override fun fetchLicensing(
+        documentParam: DocumentParameters
+    ): Flow<Response<Licensing>> =
         runSafe { getLicensing.execute(documentParam) }
 
-    override fun fetchLicensing(queryParam: QueryParameters): Flow<Response<List<Licensing>>> =
+    override fun fetchLicensing(
+        queryParam: QueryParameters
+    ): Flow<Response<List<Licensing>>> =
         runSafe { getLicensing.execute(queryParam) }
 
-    override fun fetchLicensingWithFiles(documentParam: DocumentParameters): Flow<Response<LicensingWithFile>> =
+    override fun fetchLicensingWithFiles(
+        documentParam: DocumentParameters
+    ): Flow<Response<LicensingWithFile>> =
         runSafe { getLicensingWithFile.execute(documentParam) }
 
-    override fun fetchLicensingWithFiles(queryParam: QueryParameters): Flow<Response<List<LicensingWithFile>>> =
+    override fun fetchLicensingWithFiles(
+        queryParam: QueryParameters
+    ): Flow<Response<List<LicensingWithFile>>> =
         runSafe { getLicensingWithFile.execute(queryParam) }
 
 }

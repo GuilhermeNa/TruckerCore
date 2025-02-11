@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Interface representing the use case for checking the existence of a [Driver] entity by its ID.
  */
-interface CheckDriverExistenceUseCase {
+internal interface CheckDriverExistenceUseCase {
 
     /**
      * Executes the use case to check if a [Driver] entity exists by its ID.
@@ -18,8 +18,7 @@ interface CheckDriverExistenceUseCase {
      * @return A [Flow] of:
      * - [Response.Success] when the object exists.
      * - [Response.Empty] when the object does not exist.
-     * - [Response.Error] when any error occurs.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

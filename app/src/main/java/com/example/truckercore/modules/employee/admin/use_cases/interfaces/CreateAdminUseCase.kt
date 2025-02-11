@@ -14,17 +14,15 @@ import kotlinx.coroutines.flow.Flow
  * @see Admin
  * @see Response
  */
-interface CreateAdminUseCase {
+internal interface CreateAdminUseCase {
 
     /**
      * Executes the use case to create a new [Admin] entity.
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param admin The [Admin] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully created.
-     * - [Response.Error] when the object creation fails.
+     * @return A [Flow] of [Response.Success] when the object is successfully created.
      */
-    suspend fun execute(user: User, admin: Admin): Flow<Response<String>>
+    fun execute(user: User, admin: Admin): Flow<Response<String>>
 
 }

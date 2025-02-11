@@ -8,9 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the use case for updating an [StorageFile] entity.
- *
- * @see StorageFile
- * @see Response
  */
 internal interface UpdateStorageFileUseCase {
 
@@ -19,8 +16,7 @@ internal interface UpdateStorageFileUseCase {
      *
      * @param user The [User] performing the update. This is used to check if the user has the necessary permissions.
      * @param file The [StorageFile] entity that is being updated.
-     * @return A [Flow] of [Response<Unit>] that will emit:
-     * - [Response.Success] if the update was successful.
+     * @return A [Flow] of [Response.Success] if the update was successful.
      * @throws ObjectNotFoundException if the object to be updated is not found.
      */
     suspend fun execute(user: User, file: StorageFile): Flow<Response<Unit>>

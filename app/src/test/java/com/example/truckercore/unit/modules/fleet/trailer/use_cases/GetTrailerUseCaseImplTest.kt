@@ -8,8 +8,8 @@ import com.example.truckercore.infrastructure.security.permissions.errors.Unauth
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.fleet.trailer.mapper.TrailerMapper
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
-import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.GetTrailerByIdUseCaseImpl
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerByIdUseCase
+import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.GetTrailerUseCaseImpl
+import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
 import io.mockk.coEvery
@@ -24,9 +24,9 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class GetTrailerByIdUseCaseImplTest {
+class GetTrailerUseCaseImplTest {
 
-    private lateinit var useCase: GetTrailerByIdUseCase
+    private lateinit var useCase: GetTrailerUseCase
     private var repository: TrailerRepository = mockk()
     private var permissionService: PermissionService = mockk()
     private var validatorService: ValidatorService = mockk()
@@ -39,7 +39,7 @@ class GetTrailerByIdUseCaseImplTest {
     @BeforeEach
     fun setup() {
         mockStaticLog()
-        useCase = GetTrailerByIdUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.VIEW_TRAILER)
+        useCase = GetTrailerUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.VIEW_TRAILER)
     }
 
     @Test

@@ -8,36 +8,25 @@ import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CreateAdminUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreateAdminUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: AdminRepository,
     private val validatorService: ValidatorService,
     private val mapper: AdminMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
 ) : UseCase(permissionService), CreateAdminUseCase {
 
-    override suspend fun execute(user: User, admin: Admin): Flow<Response<String>> = flow {
-        val result =
-            if (userHasPermission(user)) processCreation(admin)
-            else handleUnauthorizedPermission(user, admin.id!!)
+    override fun execute(user: User, admin: Admin): Flow<Response<String>> =
+        user.runIfPermitted { processCreation(admin) }
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    private suspend fun processCreation(admin: Admin): Response<String> {
+    private fun processCreation(admin: Admin): Flow<Response<String>> {
         validatorService.validateForCreation(admin)
         val adminDto = mapper.toDto(admin)
-        return repository.create(adminDto).single()
+        return repository.create(adminDto)
     }
 
 }

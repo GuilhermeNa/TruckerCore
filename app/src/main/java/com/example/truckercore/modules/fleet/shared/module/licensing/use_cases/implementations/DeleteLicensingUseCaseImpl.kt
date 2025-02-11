@@ -23,11 +23,9 @@ internal class DeleteLicensingUseCaseImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(user: User, id: String): Flow<Response<Unit>> =
         checkExistence.execute(user, id).flatMapConcat { response ->
-            if (response !is Response.Success) {
-                throw ObjectNotFoundException(
-                    "Attempting to delete a Licensing that was not found for id: $id."
-                )
-            }
+            if (response !is Response.Success) throw ObjectNotFoundException(
+                "Attempting to delete a Licensing that was not found for id: $id."
+            )
             user.runIfPermitted { repository.delete(id) }
         }
 

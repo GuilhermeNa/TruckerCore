@@ -1,7 +1,12 @@
 package com.example.truckercore.modules.employee.admin.repository
 
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the repository for managing [AdminDto] data.
@@ -15,4 +20,10 @@ import com.example.truckercore.shared.interfaces.Repository
  * @see Repository
  * @see AdminDto
  */
-internal interface AdminRepository : Repository<AdminDto>
+internal interface AdminRepository : NewRepository {
+
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<AdminDto>>
+
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<AdminDto>>>
+
+}

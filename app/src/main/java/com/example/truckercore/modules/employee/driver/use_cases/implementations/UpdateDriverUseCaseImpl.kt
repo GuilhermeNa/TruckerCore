@@ -9,44 +9,38 @@ import com.example.truckercore.modules.employee.driver.use_cases.interfaces.Chec
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.UpdateDriverUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdateDriverUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: DriverRepository,
     private val checkExistence: CheckDriverExistenceUseCase,
     private val validatorService: ValidatorService,
-    private val mapper: DriverMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: DriverMapper
 ) : UseCase(permissionService), UpdateDriverUseCase {
 
-    override suspend fun execute(user: User, driver: Driver): Flow<Response<Unit>> = flow {
-        val result =
-            if (userHasPermission(user)) continueForExistenceCheckage(user, driver)
-            else handleUnauthorizedPermission(user, driver.id!!)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun execute(user: User, driver: Driver): Flow<Response<Unit>> {
+        val id = driver.id ?: throw NullPointerException("Null Driver id while updating.")
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
+        return checkExistence.execute(user, id).flatMapConcat { response ->
+            if (response.isEmpty()) throw ObjectNotFoundException(
+                "Attempting to update a Driver that was not found for id: $id."
+            )
+            user.runIfPermitted { processUpdate(driver) }
+        }
     }
 
-    private suspend fun continueForExistenceCheckage(user: User, driver: Driver) =
-        when (val existenceResponse = checkExistence.execute(user, driver.id!!).single()) {
-            is Response.Success -> processUpdate(driver)
-            is Response.Empty -> handleNonExistentObject(driver.id)
-            is Response.Error -> logAndReturnResponse(existenceResponse)
-        }
-
-    private suspend fun processUpdate(driverToUpdate: Driver): Response<Unit> {
+    private fun processUpdate(driverToUpdate: Driver): Flow<Response<Unit>> {
         validatorService.validateEntity(driverToUpdate)
         val dto = mapper.toDto(driverToUpdate)
-        return repository.update(dto).single()
+        return repository.update(dto)
     }
 
 }

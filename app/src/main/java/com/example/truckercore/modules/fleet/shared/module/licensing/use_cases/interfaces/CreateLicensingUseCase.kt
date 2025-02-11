@@ -18,9 +18,8 @@ internal interface CreateLicensingUseCase {
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param licensing The [Licensing] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully created.
+     * @return A [Flow] of [Response.Success] when the object is successfully created.
      */
-    suspend fun execute(user: User, licensing: Licensing): Flow<Response<String>>
+    fun execute(user: User, licensing: Licensing): Flow<Response<String>>
 
 }

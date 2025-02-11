@@ -9,44 +9,40 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Che
 import com.example.truckercore.modules.business_central.use_cases.interfaces.UpdateBusinessCentralUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdateBusinessCentralUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: BusinessCentralRepository,
     private val checkExistence: CheckBusinessCentralExistenceUseCase,
-    override val permissionService: PermissionService,
     private val validatorService: ValidatorService,
-    private val mapper: BusinessCentralMapper,
-    override val requiredPermission: Permission
+    private val mapper: BusinessCentralMapper
 ) : UseCase(permissionService), UpdateBusinessCentralUseCase {
 
-    override suspend fun execute(user: User, entity: BusinessCentral): Flow<Response<Unit>> = flow {
-        val result =
-            if (userHasPermission(user)) continueForExistenceCheckage(user, entity)
-            else handleUnauthorizedPermission(user, entity.id!!)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun execute(user: User, bCentral: BusinessCentral): Flow<Response<Unit>> {
+        val id = bCentral.id ?: throw NullPointerException(
+            "Null Business Central id while updating."
+        )
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
+        return checkExistence.execute(user, id).flatMapConcat { response ->
+            if (response !is Response.Success) throw ObjectNotFoundException(
+                "Attempting to update a Business Central that was not found for id: $id."
+            )
+            user.runIfPermitted { processUpdate(bCentral) }
+        }
     }
 
-    private suspend fun continueForExistenceCheckage(user: User, entity: BusinessCentral) =
-        when (val response = checkExistence.execute(user, entity.id!!).single()) {
-            is Response.Success -> processUpdate(entity)
-            is Response.Empty -> handleNonExistentObject(entity.id)
-            is Response.Error -> logAndReturnResponse(response)
-        }
-
-    private suspend fun processUpdate(entity: BusinessCentral): Response<Unit> {
+    private fun processUpdate(entity: BusinessCentral): Flow<Response<Unit>> {
         validatorService.validateEntity(entity)
         val dto = mapper.toDto(entity)
-        return repository.update(dto).single()
+        return repository.update(dto)
     }
 
 }

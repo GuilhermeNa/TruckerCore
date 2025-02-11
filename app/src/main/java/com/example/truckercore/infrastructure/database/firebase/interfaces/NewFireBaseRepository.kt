@@ -2,12 +2,12 @@ package com.example.truckercore.infrastructure.database.firebase.interfaces
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.utils.parameters.QuerySettings
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
-interface NewFireBaseRepository {
+internal interface NewFireBaseRepository {
 
     /**
      * Creates a new document in the specified Firestore collection using the provided DTO.
@@ -55,11 +55,14 @@ interface NewFireBaseRepository {
      */
     fun entityExists(collection: Collection, id: String): Flow<Response<Unit>>
 
+    fun fetchLoggedUser(userId: String, shouldStream: Boolean): Flow<Response<UserDto>>
+
     fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>>
 
     fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>>
 
-/*    *//**
+    /*    */
+    /**
      * Fetches a single document from the specified Firestore collection by ID.
      *
      * @param collection The Firestore collection to fetch the document from.
@@ -76,7 +79,8 @@ interface NewFireBaseRepository {
         id: String
     ): Flow<Response<T>>*/
 
-/*    *//**
+    /*    */
+    /**
      * Fetches a list of documents from the specified Firestore collection based on a query using the provided query settings.
      *
      * @param collection The Firestore collection to query.

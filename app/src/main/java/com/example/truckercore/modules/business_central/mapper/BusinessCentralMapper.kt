@@ -2,31 +2,45 @@ package com.example.truckercore.modules.business_central.mapper
 
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.business_central.errors.BusinessCentralMappingException
-import com.example.truckercore.shared.abstractions.Mapper
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.utils.expressions.logError
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
+import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.interfaces.NewMapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-/*
-internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDto>() {
+internal class BusinessCentralMapper : NewMapper {
 
-    override fun toDto(entity: BusinessCentral): BusinessCentralDto = try {
-        handleEntityMapping(entity)
-    } catch (e: Exception) {
-        handleMappingError(e, entity)
+    override fun toEntity(dto: Dto): BusinessCentral =
+        if (dto is BusinessCentralDto) convertToEntity(dto)
+        else throw IllegalMappingArgumentException(
+            expected = BusinessCentralDto::class,
+            received = dto
+        )
+
+    override fun toDto(entity: Entity): BusinessCentralDto =
+        if (entity is BusinessCentral) convertToDto(entity)
+        else throw IllegalMappingArgumentException(
+            expected = BusinessCentral::class,
+            received = entity
+        )
+
+    private fun convertToEntity(dto: BusinessCentralDto) = try {
+        BusinessCentral(
+            businessCentralId = dto.businessCentralId!!,
+            id = dto.id!!,
+            lastModifierId = dto.lastModifierId!!,
+            creationDate = dto.creationDate!!.toLocalDateTime(),
+            lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
+            persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!)
+        )
+    } catch (error: Exception) {
+        throw InvalidForMappingException(dto, error)
     }
 
-    override fun toEntity(dto: BusinessCentralDto): BusinessCentral = try {
-        handleDtoMapping(dto)
-    } catch (e: Exception) {
-        handleMappingError(e, dto)
-    }
-
-    //----------------------------------------------------------------------------------------------
-
-    override fun handleEntityMapping(entity: BusinessCentral) =
+    private fun convertToDto(entity: BusinessCentral) = try {
         BusinessCentralDto(
             businessCentralId = entity.businessCentralId,
             id = entity.id,
@@ -35,26 +49,8 @@ internal class BusinessCentralMapper : Mapper<BusinessCentral, BusinessCentralDt
             lastUpdate = entity.lastUpdate.toDate(),
             persistenceStatus = entity.persistenceStatus.name
         )
-
-    override fun handleDtoMapping(dto: BusinessCentralDto): BusinessCentral {
-        return BusinessCentral(
-            businessCentralId = dto.businessCentralId!!,
-            id = dto.id!!,
-            lastModifierId = dto.lastModifierId!!,
-            creationDate = dto.creationDate!!.toLocalDateTime(),
-            lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
-            persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!)
-        )
+    } catch (error: Exception) {
+        throw InvalidForMappingException(entity, error)
     }
 
-    override fun handleMappingError(receivedException: Exception, obj: Any): Nothing {
-        val message = "Error while mapping a ${obj::class.simpleName} object."
-        logError(message)
-        throw BusinessCentralMappingException(message = "$message Obj: $obj", receivedException)
-    }
-
-    override fun handleMappingError(obj: Any, cause: Exception): Nothing {
-        TODO("Not yet implemented")
-    }
-
-}*/
+}

@@ -17,7 +17,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
         if (input.dto is StorageFileDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = StorageFileDto::class, received = input.dto::class
+            expected = StorageFileDto::class, received = input.dto
         )
     }
 
@@ -25,7 +25,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
         if (input.entity is StorageFile) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = StorageFile::class, received = input.entity::class
+            expected = StorageFile::class, received = input.entity
         )
     }
 
@@ -33,7 +33,7 @@ internal class StorageFileValidationStrategy : ValidatorStrategy() {
         if (input.entity is StorageFile) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = StorageFile::class, received = input.entity::class
+            expected = StorageFile::class, received = input.entity
         )
     }
 

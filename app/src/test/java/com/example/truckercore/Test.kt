@@ -1,28 +1,27 @@
 package com.example.truckercore
 
-import com.example.truckercore._test_data_provider.TestUserDataProvider
+import com.example.truckercore._test_data_provider.TestDriverDataProvider
+import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.database.firebase.implementations.FirebaseQueryBuilderImpl
-import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.service.LicensingService
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.google.firebase.firestore.FirebaseFirestore
-import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
+import com.example.truckercore.modules.employee.admin.entity.Admin
+import com.example.truckercore.modules.employee.admin.aggregations.AdminWithDetails
+import com.example.truckercore.modules.employee.admin.use_cases.interfaces.AggregateAdminWithDetails
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.flow.first
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 internal class Test {
+
+    private lateinit var aggregUseCase: AggregateAdminWithDetails
+    private lateinit var docParams : DocumentParameters
+
+    val t = AdminWithDetails(
+        TestDriverDataProvider.getBaseEntity(),
+        TestStorageFileDataProvider.getBaseEntity(),
+        emptySet()
+    )
 
     companion object {
         @JvmStatic
@@ -32,62 +31,19 @@ internal class Test {
         }
     }
 
-
-    val user = TestUserDataProvider.getBaseEntity()
-    val service: LicensingService = mockk()
-
-    private val firestore: FirebaseFirestore = mockk()
-    private val builder = FirebaseQueryBuilderImpl(firestore)
-    private lateinit var mapper: LicensingMap
-
     @Test
     fun testar() {
+        val a = aggregUseCase.execute<Admin>(docParams)
+        val b = a.first()
 
-
-    }
-
-    fun testando(mapeador: FileMap) {
-        val entity = Licensing
-        val t = runBlock<LicensingDto>(entity)
-    }
-
-    private inline fun <reified T> runBlock(entity: Entity): T {
-        return mapper.toDto(entity) as T
+        (b as Response.Success).data.employee
     }
 
 
 
-    interface TestMap {
 
-        fun toDto(entity: Entity): Dto
 
-        fun toEntity(dto: Dto): Entity
 
-    }
-
-    class LicensingMap() : TestMap {
-
-        override fun toDto(entity: Entity): LicensingDto {
-            TODO("Not yet implemented")
-        }
-
-        override fun toEntity(dto: Dto): Licensing {
-            TODO("Not yet implemented")
-        }
-
-    }
-
-    class FileMap() : TestMap {
-
-        override fun toDto(entity: Entity): StorageFileDto {
-            TODO("Not yet implemented")
-        }
-
-        override fun toEntity(dto: Dto): StorageFile {
-            TODO("Not yet implemented")
-        }
-
-    }
 
 
 

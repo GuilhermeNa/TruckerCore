@@ -18,8 +18,7 @@ internal interface CreateStorageFileUseCase {
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param file The [StorageFile] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully created.
+     * @return A [Flow] of [Response.Success] when the object is successfully created.
      */
     fun execute(user: User, file: StorageFile): Flow<Response<String>>
 

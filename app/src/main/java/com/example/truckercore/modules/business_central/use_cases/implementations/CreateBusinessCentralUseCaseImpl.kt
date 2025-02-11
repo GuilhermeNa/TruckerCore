@@ -1,34 +1,42 @@
 package com.example.truckercore.modules.business_central.use_cases.implementations
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
+import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.abstractions.UseCase
+import com.example.truckercore.shared.errors.InvalidStateException
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.sealeds.Response
-import com.example.truckercore.shared.utils.expressions.logError
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreateBusinessCentralUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: BusinessCentralRepository,
     private val validatorService: ValidatorService,
-    private val mapper: BusinessCentralMapper
-) : CreateBusinessCentralUseCase {
+    private val mapper: BusinessCentralMapper,
+) : UseCase(permissionService), CreateBusinessCentralUseCase {
 
-    override suspend fun execute(entity: BusinessCentral): Flow<Response<String>> = flow {
-        validatorService.validateForCreation(entity)
-        val dto = mapper.toDto(entity)
-        emit(repository.create(dto).single())
-    }.catch {
-        emit(handleUnexpectedError(it))
+    override suspend fun execute(user: User, bCentral: BusinessCentral): Flow<Response<String>> {
+        validateUser(user)
+        return user.runIfPermitted { processCreation(bCentral) }
     }
 
-    private fun handleUnexpectedError(throwable: Throwable): Response.Error {
-        logError("${this.javaClass.simpleName}: An unexpected error occurred during execution: $throwable")
-        return Response.Error(exception = throwable as Exception)
+    private fun validateUser(user: User) {
+        if (user.level != Level.MASTER) throw InvalidStateException(
+            "The user should have Master leve for create a new Business Central."
+        )
+    }
+
+    private fun processCreation(bCentral: BusinessCentral): Flow<Response<String>> {
+        validatorService.validateForCreation(bCentral)
+        val dto = mapper.toDto(bCentral)
+        return repository.create(dto)
     }
 
 }

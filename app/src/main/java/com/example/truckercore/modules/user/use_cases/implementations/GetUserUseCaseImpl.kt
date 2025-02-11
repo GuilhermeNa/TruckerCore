@@ -23,6 +23,20 @@ internal class GetUserUseCaseImpl(
     private val mapper: UserMapper
 ) : UseCase(permissionService), GetUserUseCase {
 
+    override fun execute(userId: String, shouldStream: Boolean): Flow<Response<User>> =
+        repository.fetchLoggedUser(userId, shouldStream).map { response ->
+            if (response is Response.Success) {
+                Response.Success(validateAndMapToEntity(response.data))
+            } else return@map Response.Empty
+        }
+
+    private fun validateAndMapToEntity(dto: UserDto): User {
+        validatorService.validateDto(dto)
+        return mapper.toEntity(dto)
+    }
+
+    //----------------------------------------------------------------------------------------------
+
     override fun execute(documentParams: DocumentParameters): Flow<Response<User>> =
         with(documentParams) {
             user.runIfPermitted { getMappedUserFlow(documentParams) }
@@ -34,11 +48,6 @@ internal class GetUserUseCaseImpl(
                 Response.Success(validateAndMapToEntity(response.data))
             } else Response.Empty
         }
-
-    private fun validateAndMapToEntity(dto: UserDto): User {
-        validatorService.validateDto(dto)
-        return mapper.toEntity(dto)
-    }
 
     //----------------------------------------------------------------------------------------------
 

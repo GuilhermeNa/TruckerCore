@@ -3,7 +3,6 @@ package com.example.truckercore.modules.fleet.truck.service
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerByTruckIdUseCase
 import com.example.truckercore.modules.fleet.truck.configs.TruckFetchConfig
 import com.example.truckercore.modules.fleet.truck.configs.TruckWithDetails
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.GetTruckByIdUseCase

@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.employee.driver.use_cases.interfaces
 
 import com.example.truckercore.modules.employee.driver.entity.Driver
-import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -13,13 +13,11 @@ interface GetDriverUseCase {
     /**
      * Executes the use case to retrieve a [Driver] entity by its ID.
      *
-     * @param user The [User] making the request. This parameter might be used for permission checks or tracking.
-     * @param id The ID of the [Driver] entity to be retrieved.
+     * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully found.
-     * - [Response.Error] when any error occurs.
-     * - [Response.Empty] when the data was not found.
+     * - [Response.Success] containing the [Driver] object if the driver record was found.
+     * - [Response.Empty] if no driver record exists with the given ID.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Driver>>
+    fun execute(documentParams: DocumentParameters): Flow<Response<Driver>>
 
 }
