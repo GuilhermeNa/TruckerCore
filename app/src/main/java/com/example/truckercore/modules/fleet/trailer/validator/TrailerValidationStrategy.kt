@@ -19,7 +19,7 @@ internal class TrailerValidationStrategy : ValidatorStrategy() {
         if (input.dto is TrailerDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = TrailerDto::class, received = input.dto
+            expected = TrailerDto::class, received = input.dto::class
         )
     }
 
@@ -27,7 +27,7 @@ internal class TrailerValidationStrategy : ValidatorStrategy() {
         if (input.entity is Trailer) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Trailer::class, received = input.entity
+            expected = Trailer::class, received = input.entity::class
         )
     }
 
@@ -35,7 +35,7 @@ internal class TrailerValidationStrategy : ValidatorStrategy() {
         if (input.entity is Trailer) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Trailer::class, received = input.entity
+            expected = Trailer::class, received = input.entity::class
         )
     }
 

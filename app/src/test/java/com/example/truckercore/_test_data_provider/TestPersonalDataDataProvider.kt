@@ -36,6 +36,10 @@ internal object TestPersonalDataDataProvider {
         expirationDate = Date()
     )
 
+    fun getDtoToSave() = getBaseDto().copy(
+        id = null, persistenceStatus = PersistenceStatus.PENDING.name
+    )
+
     fun arrInvalidDtos() = arrayOf(
         getBaseDto().copy(businessCentralId = null),
         getBaseDto().copy(id = null),

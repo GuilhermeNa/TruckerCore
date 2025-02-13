@@ -18,7 +18,7 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
         if (input.dto is TruckDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = TruckDto::class, received = input.dto
+            expected = TruckDto::class, received = input.dto::class
         )
     }
 
@@ -26,7 +26,7 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
         if (input.entity is Truck) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Truck::class, received = input.entity
+            expected = Truck::class, received = input.entity::class
         )
     }
 
@@ -34,7 +34,7 @@ internal class TruckValidationStrategy : ValidatorStrategy() {
         if (input.entity is Truck) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Truck::class, received = input.entity
+            expected = Truck::class, received = input.entity::class
         )
     }
 

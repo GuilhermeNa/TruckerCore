@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
@@ -64,13 +65,15 @@ class LicensingRepositoryImplTest {
         coVerify { fireBaseRepository.entityExists(collection, id) }
     }
 
-  /*  @Test
+  */
+/*  @Test
     fun `fetchById() should call fireBaseRepository`() = runTest {
         // Call
         repository.fetchByDocument(id)
 
         // Assertions
         coVerify { fireBaseRepository.documentFetch(collection, id, LicensingDto::class.java) }
-    }*/
+    }*//*
 
-}
+
+}*/

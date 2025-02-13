@@ -6,21 +6,29 @@ import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
-import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class FirebaseConverterTest {
+class FirebaseConverterTest : KoinTest {
 
-    private val converterSpy: FirebaseConverter = spyk(recordPrivateCalls = true)
+    private val converter: FirebaseConverter by inject()
+    private val converterSpy = spyk(converter, recordPrivateCalls = true)
     private val docSnap: DocumentSnapshot = mockk(relaxed = true)
     private val querySnap: QuerySnapshot = mockk(relaxed = true)
     private val clazz = User::class.java
+
 
     @Test
     fun `processQuerySnapShot() should return success when snapShot is populated and class is valid`() {
@@ -91,6 +99,25 @@ class FirebaseConverterTest {
         // Assertions
         assertEquals(expectedResult, result)
         verify { docSnap.exists() }
+    }
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single { FirebaseConverter() }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
 }

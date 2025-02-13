@@ -1,37 +1,57 @@
-/*
 package com.example.truckercore.unit.modules.employee.admin.validator
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
+import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.employee.admin.errors.AdminValidationException
+import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
-import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.LocalDateTime
-import java.util.Date
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class AdminValidationStrategyTest {
+internal class AdminValidationStrategyTest : KoinTest {
 
-    private val validator = AdminValidationStrategy()
+    private val validator: AdminValidationStrategy by inject()
 
     companion object {
 
-        @BeforeEach
+        @JvmStatic
+        @BeforeAll
         fun setup() {
             mockStaticLog()
+
+            startKoin {
+                modules(
+                    module {
+                        single { AdminValidationStrategy() }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
 
         @JvmStatic
         fun arrValidDtosForValidationRules() =
@@ -90,46 +110,29 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw AdminValidationException when there is any invalid field`(
+    fun `validateDto() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        // Call
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateDto(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.dto is AdminDto)
     }
 
     @Test
     fun `validateDto() should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
-        val unexpectedDto = object : Dto {
-            override val businessCentralId: String? = null
-            override val id: String? = null
-            override val lastModifierId: String? = null
-            override val creationDate: Date? = null
-            override val lastUpdate: Date? = null
-            override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto {
-                TODO()
-            }
-        }
+        val unexpectedDto = TestBusinessCentralDataProvider.getBaseDto()
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
         val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assertTrue(exception.received == BusinessCentralDto::class)
+        assertTrue(exception.expected == AdminDto::class)
     }
 
     @ParameterizedTest
@@ -150,43 +153,28 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw AdminValidationException when there is any invalid field`(
+    fun `validateEntity() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateEntity(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        assertTrue(exception.entity is Admin)
+
     }
 
     @Test
-    fun `validateEntity() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+    fun `validateEntity() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        val unexpectedEntity = TestPersonalDataDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assertTrue(exception.expected == Admin::class)
+        assertTrue(exception.received == PersonalData::class)
     }
 
     @ParameterizedTest
@@ -207,43 +195,27 @@ class AdminValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() should throw AdminValidationException when there is any invalid field`(
+    fun `validateForCreation() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<AdminValidationException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateForCreation(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        assertTrue(exception.entity is Admin)
     }
 
     @Test
-    fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+    fun `validateForCreation() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        val unexpectedEntity = TestBusinessCentralDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assertTrue(exception.received == BusinessCentral::class)
+        assertTrue(exception.expected == Admin::class)
     }
 
-}*/
+}

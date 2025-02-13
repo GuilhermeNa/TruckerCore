@@ -11,20 +11,27 @@ import com.google.firebase.firestore.Query
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class FirebaseQueryBuilderTest {
+internal class FirebaseQueryBuilderTest : KoinTest {
 
-    private val firestore: FirebaseFirestore = mockk(relaxed = true)
-    private val queryBuilder = FirebaseQueryBuilder(firestore)
+    private val firestore: FirebaseFirestore by inject()
+    private val queryBuilder: FirebaseQueryBuilder by inject()
 
     private val docReference: DocumentReference = mockk(relaxed = true)
     private val query: Query = mockk(relaxed = true)
     private val collectionName = Collection.USER
 
     @Test
-    fun `newDocument() should call document from firestore`() {
+    fun `newDocument() should get a document from firestore`() {
         // Arrange
         every {
             firestore.collection(collectionName.getName()).document()
@@ -41,7 +48,7 @@ internal class FirebaseQueryBuilderTest {
     }
 
     @Test
-    fun `getDocumentReference() should call correct document`() {
+    fun `getDocumentReference() should get a specific document from firestore`() {
         // Arrange
         val id = "id"
 
@@ -99,5 +106,26 @@ internal class FirebaseQueryBuilderTest {
             firestore.collection(collectionName.getName()).whereIn(field.getName(), value)
         }
     }
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single<FirebaseFirestore> { mockk(relaxed = true) }
+                        single { FirebaseQueryBuilder(get()) }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
+    }
+
 
 }

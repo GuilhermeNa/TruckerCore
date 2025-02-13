@@ -18,7 +18,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (input.dto is AdminDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = AdminDto::class, received = input.dto
+            expected = AdminDto::class, received = input.dto::class
         )
     }
 
@@ -26,7 +26,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (input.entity is Admin) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Admin::class, received = input.entity
+            expected = Admin::class, received = input.entity::class
         )
     }
 
@@ -34,7 +34,7 @@ internal class AdminValidationStrategy : ValidatorStrategy() {
         if (input.entity is Admin) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Admin::class, received = input.entity
+            expected = Admin::class, received = input.entity::class
         )
     }
 

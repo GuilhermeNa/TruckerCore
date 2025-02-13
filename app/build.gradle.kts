@@ -54,6 +54,7 @@ dependencies {
 
     implementation(kotlin("reflect"))
     implementation(libs.koin)
+    implementation(libs.koin.test)
     implementation(platform(libs.google.bom))
     implementation(libs.google.firebase)
     implementation(libs.google.analytics)

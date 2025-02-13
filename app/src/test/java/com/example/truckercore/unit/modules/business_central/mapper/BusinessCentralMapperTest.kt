@@ -13,6 +13,7 @@ import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentExcep
 import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
@@ -20,19 +21,38 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class BusinessCentralMapperTest {
+internal class BusinessCentralMapperTest : KoinTest {
 
-    private val mapper = BusinessCentralMapper()
+    private val mapper: BusinessCentralMapper by inject()
+
     private val entity = TestBusinessCentralDataProvider.getBaseEntity()
     private val dto = TestBusinessCentralDataProvider.getBaseDto()
 
     companion object {
+
         @JvmStatic
         @BeforeAll
         fun setup() {
             mockStaticLog()
+
+            startKoin {
+                modules(
+                    module {
+                        single { BusinessCentralMapper() }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
 
         @JvmStatic
         fun getInvalidDtos(): Array<BusinessCentralDto> =
@@ -72,7 +92,7 @@ internal class BusinessCentralMapperTest {
     }
 
     @Test
-    fun `toEntity()  should throw IllegalMappingArgumentException when the dto is wrong`() {
+    fun `toEntity() should throw IllegalMappingArgumentException when the dto is wrong`() {
         // Arrange
         val wrongDto = TestUserDataProvider.getBaseDto()
 
@@ -82,9 +102,8 @@ internal class BusinessCentralMapperTest {
         }
 
         // Assertions
-        assertTrue(exception.expected is BusinessCentralDto)
-        assertTrue(exception.received is UserDto)
-
+        assertTrue(exception.expected == BusinessCentralDto::class)
+        assertTrue(exception.received == UserDto::class)
     }
 
     @Test
@@ -98,8 +117,8 @@ internal class BusinessCentralMapperTest {
         }
 
         // Assertions
-        assertTrue(exception.expected is BusinessCentral)
-        assertTrue(exception.received is User)
+        assertTrue(exception.expected == BusinessCentral::class)
+        assertTrue(exception.received == User::class)
 
     }
 
@@ -108,9 +127,11 @@ internal class BusinessCentralMapperTest {
     fun `toEntity() should throw InvalidForMappingException when there are errors`(
         pDto: BusinessCentralDto
     ) {
-        assertThrows<InvalidForMappingException> {
+        val exception = assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
+
+        assertTrue(exception.dto is BusinessCentralDto)
     }
 
 }

@@ -1,44 +1,69 @@
-/*
 package com.example.truckercore.unit.modules.employee.driver.mapper
 
 import com.example.truckercore._test_data_provider.TestDriverDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
+import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
 import com.example.truckercore.modules.employee.driver.entity.Driver
-import com.example.truckercore.modules.employee.driver.errors.DriverMappingException
 import com.example.truckercore.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 import io.mockk.every
 import io.mockk.spyk
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class DriverMapperTest {
+internal class DriverMapperTest : KoinTest {
 
-    private lateinit var mapper: DriverMapper
-    private lateinit var entity: Driver
-    private lateinit var dto: DriverDto
+    private val mapper: DriverMapper by inject()
+
+    private val entity = TestDriverDataProvider.getBaseEntity()
+    private val dto = TestDriverDataProvider.getBaseDto()
 
     companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+
+            startKoin {
+                modules(
+                    module {
+                        single { DriverMapper() }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
         @JvmStatic
         fun getInvalidDtos(): Array<DriverDto> {
             return TestDriverDataProvider.arrInvalidDtos()
         }
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        mapper = DriverMapper()
-        entity = TestDriverDataProvider.getBaseEntity()
-        dto = TestDriverDataProvider.getBaseDto()
     }
 
     @Test
@@ -84,27 +109,30 @@ internal class DriverMapperTest {
     }
 
     @Test
-    fun `toDto() should throw DriverMappingException when there are errors`() {
-        // Object
-        val mockk = spyk(mapper, recordPrivateCalls = true)
-
-        // Behavior
-        every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
+    fun `toDto() should throw IllegalMappingArgumentException when the entity is wrong`() {
+        // Arrange
+        val wrongEntity = TestUserDataProvider.getBaseEntity()
 
         // Call
-        assertThrows<DriverMappingException> {
-            mockk.toDto(entity)
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toDto(wrongEntity)
         }
+
+        // Assertions
+        assertTrue(exception.expected == Driver::class)
+        assertTrue(exception.received == User::class)
+
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw DriverMappingException when there are errors`(
+    fun `toEntity() should throw InvalidForMappingException when there are errors`(
         pDto: DriverDto
     ) {
-        assertThrows<DriverMappingException> {
+        val exception = assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
+        assertTrue(exception.dto is DriverDto)
     }
 
-}*/
+}

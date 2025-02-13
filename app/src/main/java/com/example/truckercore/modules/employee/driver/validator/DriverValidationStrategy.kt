@@ -18,7 +18,7 @@ internal class DriverValidationStrategy : ValidatorStrategy() {
         if (input.dto is DriverDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = DriverDto::class, received = input.dto
+            expected = DriverDto::class, received = input.dto::class
         )
     }
 
@@ -26,7 +26,7 @@ internal class DriverValidationStrategy : ValidatorStrategy() {
         if (input.entity is Driver) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Driver::class, received = input.entity
+            expected = Driver::class, received = input.entity::class
         )
     }
 
@@ -34,7 +34,7 @@ internal class DriverValidationStrategy : ValidatorStrategy() {
         if (input.entity is Driver) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Driver::class, received = input.entity
+            expected = Driver::class, received = input.entity::class
         )
     }
 

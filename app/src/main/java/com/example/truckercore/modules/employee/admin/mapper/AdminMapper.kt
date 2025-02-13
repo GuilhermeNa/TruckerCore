@@ -8,19 +8,25 @@ import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentExcep
 import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.NewMapper
+import com.example.truckercore.shared.interfaces.Mapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal class AdminMapper : NewMapper {
+internal class AdminMapper : Mapper {
 
     override fun toEntity(dto: Dto): Admin =
         if (dto is AdminDto) convertToEntity(dto)
-        else throw IllegalMappingArgumentException(expected = AdminDto::class, received = dto)
+        else throw IllegalMappingArgumentException(
+            expected = AdminDto::class,
+            received = dto::class
+        )
 
     override fun toDto(entity: Entity): AdminDto =
         if (entity is Admin) convertToDto(entity)
-        else throw IllegalMappingArgumentException(expected = Admin::class, received = entity)
+        else throw IllegalMappingArgumentException(
+            expected = Admin::class,
+            received = entity::class
+        )
 
     private fun convertToEntity(dto: AdminDto) = try {
         Admin(
@@ -35,7 +41,6 @@ internal class AdminMapper : NewMapper {
             email = dto.email!!,
             employeeStatus = EmployeeStatus.convertString(dto.employeeStatus)
         )
-
     } catch (error: Exception) {
         throw InvalidForMappingException(dto, error)
     }

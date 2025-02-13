@@ -19,7 +19,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         if (input.dto is UserDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = UserDto::class, received = input.dto
+            expected = UserDto::class, received = input.dto::class
         )
     }
 
@@ -27,7 +27,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         if (input.entity is User) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = User::class, received = input.entity
+            expected = User::class, received = input.entity::class
         )
     }
 
@@ -35,7 +35,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         if (input.entity is User) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = User::class, received = input.entity
+            expected = User::class, received = input.entity::class
         )
     }
 

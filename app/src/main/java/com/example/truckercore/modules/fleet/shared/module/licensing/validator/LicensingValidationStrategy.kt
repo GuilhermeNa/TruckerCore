@@ -17,7 +17,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
         if (input.dto is LicensingDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = LicensingDto::class, received = input.dto
+            expected = LicensingDto::class, received = input.dto::class
         )
     }
 
@@ -25,7 +25,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
         if (input.entity is Licensing) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Licensing::class, received = input.entity
+            expected = Licensing::class, received = input.entity::class
         )
     }
 
@@ -33,7 +33,7 @@ internal class LicensingValidationStrategy : ValidatorStrategy() {
         if (input.entity is Licensing) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = Licensing::class, received = input.entity
+            expected = Licensing::class, received = input.entity::class
         )
     }
 

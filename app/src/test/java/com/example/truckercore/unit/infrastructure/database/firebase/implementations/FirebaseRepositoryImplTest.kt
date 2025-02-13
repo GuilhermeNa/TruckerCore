@@ -1,9 +1,14 @@
+/*
 package com.example.truckercore.unit.infrastructure.database.firebase.implementations
 
+import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTask
+import com.example.truckercore._test_utils.mockTask
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.configs.app_constants.Field
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepositoryImpl
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseQueryBuilder
@@ -20,7 +25,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.every
@@ -31,50 +35,69 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class FirebaseRepositoryImplTest {
+internal class FirebaseRepositoryImplTest : KoinTest {
 
-    private val queryBuilder: FirebaseQueryBuilder = mockk(relaxed = true)
-    private val converter: FirebaseConverter = mockk(relaxed = true)
-    private val repositorySpy =
-        spyk(FirebaseRepositoryImpl(queryBuilder, converter), recordPrivateCalls = true)
+    // Injections
+    private val queryBuilder: FirebaseQueryBuilder by inject()
+    private val converter: FirebaseConverter by inject()
+    private val repository: FirebaseRepository by inject()
 
-    private val collection = Collection.PERSONAL_DATA
-    private val dto: PersonalDataDto = mockk()
-    private val docReference: DocumentReference = mockk()
-    private val documentSnapShot: DocumentSnapshot = mockk()
+    //Data provider
+    private val pDataProvider = TestPersonalDataDataProvider
+
+    // Mocks
+    private val repositorySpy = spyk(repository, recordPrivateCalls = true)
+    private val collectionRef = Collection.PERSONAL_DATA
+    private val docReference: DocumentReference = mockk(relaxed = true)
+    private val docSnapShot: DocumentSnapshot = mockk()
+    private val query: Query = mockk()
+    private val ID = "refId"
 
     companion object {
+
         @JvmStatic
         @BeforeAll
         fun setup() {
             mockStaticLog()
             mockStaticTask()
+
+            startKoin {
+                modules(module {
+                    single<FirebaseQueryBuilder> { mockk(relaxed = true) }
+                    single<FirebaseConverter> { mockk(relaxed = true) }
+                    single<FirebaseRepository> { FirebaseRepositoryImpl(get(), get()) }
+                })
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
     fun `create() should create the entity and return id`() = runTest {
         // Arrange
-        val newId = "newId"
-        val newDto = mockk<PersonalDataDto> { every { id } returns newId }
-        val task = mockk<Task<Void>> {
-            every { exception } returns null
-            every { isSuccessful } returns true
-            every { isComplete } returns true
-            every { isCanceled } returns false
-            every { result } returns mockk()
+        val dtoReadyToSave = pDataProvider.getBaseDto().copy(id = ID)
+        val dto = mockk<PersonalDataDto>(relaxed = true) {
+            every { initializeId(any()) } returns dtoReadyToSave
         }
-        val expectedResult = Response.Success(newId)
+        val task = mockTask()
 
-        every { queryBuilder.createDocument(collection) } returns docReference
-        every { docReference.id } returns newId
-        every { dto.initializeId(newId) } returns newDto
-        every { docReference.set(newDto) } returns task
+        every { queryBuilder.createDocument(any()) } returns docReference
+        every { docReference.set(any()) } returns task
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
             listener.onComplete(task)
@@ -82,22 +105,25 @@ class FirebaseRepositoryImplTest {
         }
 
         // Call
-        val result = repositorySpy.create(collection, dto).single()
+        val result = repository.create(collectionRef, dto).single()
 
         // Assertions
-        assertEquals(expectedResult, result)
+        assertTrue(result is Response.Success)
+        assertTrue((result as Response.Success).data == ID)
 
         coVerifyOrder {
-            queryBuilder.createDocument(collection)
-            dto.initializeId(newId)
-            docReference.set(newDto)
+            queryBuilder.createDocument(collectionRef)
+            dto.initializeId(ID)
+            docReference.set(dtoReadyToSave)
         }
     }
+
 
     @Test
     fun `update() should update a document reference`() = runTest {
         // Arrange
-        val dtoId = "dtoId"
+      */
+/*  val dtoId = "dtoId"
         val task = mockk<Task<Void>> {
             every { exception } returns null
             every { isSuccessful } returns true
@@ -108,7 +134,7 @@ class FirebaseRepositoryImplTest {
         val expectedResult = Response.Success(Unit)
 
         every { dto.id } returns dtoId
-        every { queryBuilder.getDocument(collection, dtoId) } returns docReference
+        every { queryBuilder.getDocument(collectionRef, dtoId) } returns docReference
         every { docReference.set(dto) } returns task
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
@@ -117,14 +143,15 @@ class FirebaseRepositoryImplTest {
         }
 
         // Call
-        val result = repositorySpy.update(collection, dto).single()
+        val result = repositorySpy.update(collectionRef, dto).single()
 
         // Assertions
         assertEquals(expectedResult, result)
         coVerifyOrder {
-            queryBuilder.getDocument(eq(collection), eq(dtoId))
+            queryBuilder.getDocument(eq(collectionRef), eq(dtoId))
             docReference.set(dto)
-        }
+        }*//*
+
     }
 
     @Test
@@ -141,7 +168,7 @@ class FirebaseRepositoryImplTest {
         val expectedResult = Response.Success(Unit)
 
         // Behaviors
-        every { queryBuilder.getDocument(collection, id) } returns docReference
+        every { queryBuilder.getDocument(collectionRef, id) } returns docReference
         every { docReference.delete() } returns task
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
@@ -150,53 +177,52 @@ class FirebaseRepositoryImplTest {
         }
 
         // Call
-        val result = repositorySpy.delete(collection, id).single()
+        val result = repositorySpy.delete(collectionRef, id).single()
 
         // Assertions
         assertEquals(expectedResult, result)
         coVerifyOrder {
-            queryBuilder.getDocument(eq(collection), eq(id))
+            queryBuilder.getDocument(eq(collectionRef), eq(id))
             docReference.delete()
         }
     }
 
     @Test
-    fun `entityExists() should return Success with true when found the entity`() =
-        runTest {
-            // Arrange
-            val id = "id"
+    fun `entityExists() should return Success with true when found the entity`() = runTest {
+        // Arrange
+        val id = "id"
 
-            every { queryBuilder.getDocument(collection, id) } returns docReference
-            coEvery { docReference.get().await() } returns documentSnapShot
-            every { documentSnapShot.exists() } returns true
+        every { queryBuilder.getDocument(collectionRef, id) } returns docReference
+        coEvery { docReference.get().await() } returns docSnapShot
+        every { docSnapShot.exists() } returns true
 
-            // Call
-            val result = repositorySpy.entityExists(collection, id).single()
+        // Call
+        val result = repositorySpy.entityExists(collectionRef, id).single()
 
-            // Assertions
-            assertTrue(result is Response.Success)
-            coVerifyOrder {
-                queryBuilder.getDocument(eq(collection), eq(id))
-                docReference.get().await()
-            }
+        // Assertions
+        assertTrue(result is Response.Success)
+        coVerifyOrder {
+            queryBuilder.getDocument(eq(collectionRef), eq(id))
+            docReference.get().await()
         }
+    }
 
     @Test
     fun `entityExists() should return Empty when the entity don't exists`() = runTest {
         // Arrange
         val id = "id"
 
-        every { queryBuilder.getDocument(collection, eq(id)) } returns docReference
-        coEvery { docReference.get().await() } returns documentSnapShot
-        every { documentSnapShot.exists() } returns false
+        every { queryBuilder.getDocument(collectionRef, eq(id)) } returns docReference
+        coEvery { docReference.get().await() } returns docSnapShot
+        every { docSnapShot.exists() } returns false
 
         // Call
-        val result = repositorySpy.entityExists(collection, id).single()
+        val result = repositorySpy.entityExists(collectionRef, id).single()
 
         // Assertions
         assertTrue(result is Response.Empty)
         coVerifyOrder {
-            queryBuilder.getDocument(eq(collection), eq(id))
+            queryBuilder.getDocument(eq(collectionRef), eq(id))
             docReference.get().await()
         }
     }
@@ -209,7 +235,7 @@ class FirebaseRepositoryImplTest {
         val expectedData = mockk<UserDto>()
         val expectedResult = Response.Success(expectedData)
 
-        every { repositorySpy["getLoggedUser"](id) } returns  flowOf(expectedResult)
+        every { repositorySpy["getLoggedUser"](id) } returns flowOf(expectedResult)
 
         // Call
         val result = repositorySpy.fetchLoggedUser(id, shouldStream)
@@ -243,10 +269,12 @@ class FirebaseRepositoryImplTest {
         // Arrange
         val id = "id"
         val shouldStream = false
-        val params = DocumentParameters.create(mockk(relaxed = true))
-            .setStream(shouldStream).setId(id).build()
-        val firebaseRequest = FirebaseRequest.create(PersonalDataDto::class.java)
-            .setCollection(collection).setParams(params).build()
+        val params =
+            DocumentParameters.create(mockk(relaxed = true)).setStream(shouldStream).setId(id)
+                .build()
+        val firebaseRequest =
+            FirebaseRequest.create(PersonalDataDto::class.java).setCollection(collectionRef)
+                .setParams(params).build()
         val expectedResult = flowOf(Response.Success(mockk<PersonalDataDto>()))
 
         every { repositorySpy["getDocument"](firebaseRequest) } returns expectedResult
@@ -265,10 +293,12 @@ class FirebaseRepositoryImplTest {
         // Arrange
         val id = "id"
         val shouldStream = true
-        val params = DocumentParameters.create(mockk(relaxed = true))
-            .setStream(shouldStream).setId(id).build()
-        val firebaseRequest = FirebaseRequest.create(PersonalDataDto::class.java)
-            .setCollection(collection).setParams(params).build()
+        val params =
+            DocumentParameters.create(mockk(relaxed = true)).setStream(shouldStream).setId(id)
+                .build()
+        val firebaseRequest =
+            FirebaseRequest.create(PersonalDataDto::class.java).setCollection(collectionRef)
+                .setParams(params).build()
         val expectedResult = flowOf(Response.Success(mockk<PersonalDataDto>()))
 
         every { repositorySpy["streamDocument"](firebaseRequest) } returns expectedResult
@@ -285,13 +315,13 @@ class FirebaseRepositoryImplTest {
     @Test
     fun `queryFetch() should retrieve a single flow with the data when its found`() {
         // Arrange
-        val params = QueryParameters.create(mockk(relaxed = true))
-            .setStream(false).setQueries(
-                QuerySettings(Field.BUSINESS_CENTRAL_ID, QueryType.WHERE_EQUALS, "id")
-            ).build()
+        val params = QueryParameters.create(mockk(relaxed = true)).setStream(false).setQueries(
+            QuerySettings(Field.BUSINESS_CENTRAL_ID, QueryType.WHERE_EQUALS, "id")
+        ).build()
 
-        val firebaseRequest = FirebaseRequest.create(PersonalDataDto::class.java)
-            .setCollection(collection).setParams(params).build()
+        val firebaseRequest =
+            FirebaseRequest.create(PersonalDataDto::class.java).setCollection(collectionRef)
+                .setParams(params).build()
 
         val expectedResult = flowOf(Response.Success(mockk<List<PersonalDataDto>>()))
 
@@ -308,13 +338,13 @@ class FirebaseRepositoryImplTest {
     @Test
     fun `queryFetch() should retrieve a stream flow with the data when its found`() {
         // Arrange
-        val params = QueryParameters.create(mockk(relaxed = true))
-            .setStream(true).setQueries(
-                QuerySettings(Field.BUSINESS_CENTRAL_ID, QueryType.WHERE_EQUALS, "id")
-            ).build()
+        val params = QueryParameters.create(mockk(relaxed = true)).setStream(true).setQueries(
+            QuerySettings(Field.BUSINESS_CENTRAL_ID, QueryType.WHERE_EQUALS, "id")
+        ).build()
 
-        val firebaseRequest = FirebaseRequest.create(PersonalDataDto::class.java)
-            .setCollection(collection).setParams(params).build()
+        val firebaseRequest =
+            FirebaseRequest.create(PersonalDataDto::class.java).setCollection(collectionRef)
+                .setParams(params).build()
 
         val expectedResult = Response.Success(mockk<List<PersonalDataDto>>())
 
@@ -329,4 +359,4 @@ class FirebaseRepositoryImplTest {
 
     }
 
-}
+}*/

@@ -38,7 +38,7 @@ internal class FirebaseRepositoryImpl(
                 dto = dto,
                 collection = collection
             )
-        }.await()
+        }
 
         awaitClose { this.cancel() }
     }

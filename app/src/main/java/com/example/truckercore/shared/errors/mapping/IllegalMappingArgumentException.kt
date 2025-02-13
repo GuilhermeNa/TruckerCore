@@ -1,10 +1,11 @@
 package com.example.truckercore.shared.errors.mapping
 
 import com.example.truckercore.shared.errors.abstractions.MappingException
+import kotlin.reflect.KClass
 
 class IllegalMappingArgumentException(
-    val expected: Any,
-    val received: Any
+    val expected: KClass<*>,
+    val received: KClass<*>
 ) : MappingException() {
 
     fun message(): String = "Expected a ${expected::class.simpleName} " +

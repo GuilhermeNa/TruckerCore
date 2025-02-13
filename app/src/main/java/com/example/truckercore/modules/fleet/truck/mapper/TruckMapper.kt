@@ -8,19 +8,19 @@ import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentExcep
 import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.NewMapper
+import com.example.truckercore.shared.interfaces.Mapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal class TruckMapper : NewMapper {
+internal class TruckMapper : Mapper {
 
     override fun toEntity(dto: Dto): Truck =
         if (dto is TruckDto) convertToEntity(dto)
-        else throw IllegalMappingArgumentException(expected = TruckDto::class, received = dto)
+        else throw IllegalMappingArgumentException(expected = TruckDto::class, received = dto::class)
 
     override fun toDto(entity: Entity): TruckDto =
         if (entity is Truck) convertToDto(entity)
-        else throw IllegalMappingArgumentException(expected = Truck::class, received = entity)
+        else throw IllegalMappingArgumentException(expected = Truck::class, received = entity::class)
 
     private fun convertToEntity(dto: TruckDto) = try {
         Truck(

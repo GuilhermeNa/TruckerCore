@@ -1,8 +1,15 @@
 package com.example.truckercore.unit.modules.business_central.validator
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
+import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
+import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.employee.admin.entity.Admin
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
 import com.example.truckercore.shared.errors.validation.InvalidObjectException
@@ -11,21 +18,46 @@ import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 import java.time.LocalDateTime
 import java.util.Date
 
-internal class BusinessCentralValidationStrategyTestImpl {
+internal class BusinessCentralValidationStrategyTest: KoinTest {
 
-    private lateinit var validator: BusinessCentralValidationStrategy
+    private val validator: BusinessCentralValidationStrategy by inject()
 
     companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+
+            startKoin {
+                modules(
+                    module {
+                        single { BusinessCentralValidationStrategy() }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
         @JvmStatic
         fun arrValidDtosForValidationRules() =
             TestBusinessCentralDataProvider.arrValidDtosForValidationRules().map {
@@ -64,12 +96,6 @@ internal class BusinessCentralValidationStrategyTestImpl {
 
     }
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        validator = BusinessCentralValidationStrategy()
-    }
-
     @ParameterizedTest
     @MethodSource("arrValidDtosForValidationRules")
     fun `validateDto() should call processDtoValidationRules() and don't throw exception`(
@@ -96,32 +122,27 @@ internal class BusinessCentralValidationStrategyTestImpl {
         input: ValidatorInput.DtoInput
     ) {
         // Call
-        assertThrows<InvalidObjectException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateDto(input)
         }
+
+        // Assertions
+        assertTrue(exception.dto is BusinessCentralDto)
     }
 
     @Test
     fun `validateDto() should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
         // Object
-        val unexpectedDto = object : Dto {
-            override val businessCentralId: String? = null
-            override val id: String? = null
-            override val lastModifierId: String? = null
-            override val creationDate: Date? = null
-            override val lastUpdate: Date? = null
-            override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto {
-                TODO()
-            }
-        }
+        val unexpectedDto = TestUserDataProvider.getBaseDto()
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
         // Call
-        assertThrows<IllegalValidationArgumentException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
 
+        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == BusinessCentralDto::class)
     }
 
     @ParameterizedTest
@@ -150,30 +171,26 @@ internal class BusinessCentralValidationStrategyTestImpl {
         input: ValidatorInput.EntityInput
     ) {
         // Call
-        assertThrows<InvalidObjectException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateEntity(input)
         }
 
+        assertTrue(exception.entity is BusinessCentral )
     }
 
     @Test
     fun `validateEntity () should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
         // Object
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+        val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-       assertThrows<IllegalValidationArgumentException> {
+       val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 
+        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == BusinessCentral::class)
     }
 
     @ParameterizedTest
@@ -202,29 +219,29 @@ internal class BusinessCentralValidationStrategyTestImpl {
         input: ValidatorInput.EntityInput
     ) {
         // Call
-        assertThrows<InvalidObjectException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateForCreation(input)
         }
+
+        // Assertions
+        assertTrue(exception.entity is BusinessCentral)
 
     }
 
     @Test
     fun `validateForCreation() should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
         // Object
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+        val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-        assertThrows<IllegalValidationArgumentException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
+
+        // Arrange
+        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == BusinessCentral::class)
     }
 
 }

@@ -3,8 +3,6 @@ package com.example.truckercore.modules.employee.admin.entity
 import com.example.truckercore.modules.employee.shared.abstractions.Employee
 import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import java.time.LocalDateTime
 
 data class Admin(
@@ -18,8 +16,4 @@ data class Admin(
     override val name: String,
     override val email: String,
     override val employeeStatus: EmployeeStatus
-) : Employee(employeeStatus = employeeStatus) {
-
-
-
-}
+) : Employee(employeeStatus = employeeStatus)

@@ -5,21 +5,27 @@ import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentExcep
 import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.NewMapper
+import com.example.truckercore.shared.interfaces.Mapper
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 
-internal class StorageFileMapper : NewMapper {
+internal class StorageFileMapper : Mapper {
 
     override fun toEntity(dto: Dto): StorageFile =
         if (dto is StorageFileDto) convertToEntity(dto)
-        else throw IllegalMappingArgumentException(expected = StorageFileDto::class, received = dto)
+        else throw IllegalMappingArgumentException(
+            expected = StorageFileDto::class,
+            received = dto::class
+        )
 
     override fun toDto(entity: Entity): StorageFileDto =
         if (entity is StorageFile) convertToDto(entity)
-        else throw IllegalMappingArgumentException(expected = StorageFile::class, received = entity)
+        else throw IllegalMappingArgumentException(
+            expected = StorageFile::class,
+            received = entity::class
+        )
 
     private fun convertToEntity(dto: StorageFileDto) = try {
         StorageFile(

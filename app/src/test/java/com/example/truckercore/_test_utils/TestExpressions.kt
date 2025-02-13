@@ -1,7 +1,10 @@
 package com.example.truckercore._test_utils
 
 import android.util.Log
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 
 fun mockStaticLog() {
@@ -16,3 +19,11 @@ fun mockStaticTask() {
     mockkStatic("kotlinx.coroutines.tasks.TasksKt")
 }
 
+fun mockTask() = mockk<Task<Void>> {
+    every { exception } returns null
+    every { isSuccessful } returns true
+    every { isComplete } returns true
+    every { isCanceled } returns false
+    every { result } returns mockk()
+
+}

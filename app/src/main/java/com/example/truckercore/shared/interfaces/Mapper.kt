@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.interfaces
 
-internal interface NewMapper {
+internal interface Mapper {
 
     fun toEntity(dto: Dto): Entity
 

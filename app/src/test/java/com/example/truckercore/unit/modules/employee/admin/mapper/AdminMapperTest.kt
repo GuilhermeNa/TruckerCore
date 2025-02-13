@@ -1,27 +1,36 @@
-/*
 package com.example.truckercore.unit.modules.employee.admin.mapper
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.employee.admin.errors.AdminMappingException
+import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
-import io.mockk.every
-import io.mockk.spyk
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class AdminMapperTest {
+internal class AdminMapperTest : KoinTest {
 
-    private val mapper = AdminMapper()
+    private val mapper: AdminMapper by inject()
+
     private val entity = TestAdminDataProvider.getBaseEntity()
     private val dto = TestAdminDataProvider.getBaseDto()
 
@@ -31,7 +40,19 @@ internal class AdminMapperTest {
         @JvmStatic
         fun setup() {
             mockStaticLog()
+
+            startKoin {
+                modules(
+                    module {
+                        single { AdminMapper() }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
 
         @JvmStatic
         fun getInvalidDtos(): Array<AdminDto> {
@@ -83,17 +104,19 @@ internal class AdminMapperTest {
     }
 
     @Test
-    fun `toDto() should throw DriverMappingException when there are errors`() {
-        // Object
-        val mockk = spyk(mapper, recordPrivateCalls = true)
-
-        // Behavior
-        every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
+    fun `toDto()  should throw IllegalMappingArgumentException when the entity is wrong`() {
+        // Arrange
+        val wrongEntity = TestUserDataProvider.getBaseEntity()
 
         // Call
-        assertThrows<AdminMappingException> {
-            mockk.toDto(entity)
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toDto(wrongEntity)
         }
+
+        // Assertions
+        assertTrue(exception.expected == Admin::class)
+        assertTrue(exception.received == User::class)
+
     }
 
     @ParameterizedTest
@@ -101,9 +124,9 @@ internal class AdminMapperTest {
     fun `toEntity() should throw DriverMappingException when there are errors`(
         pDto: AdminDto
     ) {
-        assertThrows<AdminMappingException> {
+        assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
     }
 
-}*/
+}

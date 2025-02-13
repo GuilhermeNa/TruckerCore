@@ -8,7 +8,7 @@ junit5 = "5.8.2"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-koin = "3.3.0"
+koin = "3.4.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
 kotlinxCoTest = "1.8.1"
@@ -28,6 +28,7 @@ junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-para
 kotlinx-co-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoTest" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 google-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "googleBom" }
 google-firebase = { group = "com.google.firebase", name = "firebase-firestore" }
 google-analytics = { group = "com.google.firebase", name = "firebase-analytics" }

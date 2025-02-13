@@ -17,7 +17,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         if (input.dto is BusinessCentralDto) {
             processDtoValidationRules(input.dto)
         } else throw IllegalValidationArgumentException(
-            expected = BusinessCentralDto::class, received = input.dto
+            expected = BusinessCentralDto::class, received = input.dto::class
         )
     }
 
@@ -25,7 +25,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         if (input.entity is BusinessCentral) {
             processEntityValidationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = BusinessCentral::class, received = input.entity
+            expected = BusinessCentral::class, received = input.entity::class
         )
     }
 
@@ -33,7 +33,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         if (input.entity is BusinessCentral) {
             processEntityCreationRules(input.entity)
         } else throw IllegalValidationArgumentException(
-            expected = BusinessCentral::class, received = input.entity
+            expected = BusinessCentral::class, received = input.entity::class
         )
     }
 
