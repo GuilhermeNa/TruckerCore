@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 
 internal class DeleteBusinessCentralUseCaseImpl(
-    private val repository: BusinessCentralRepository,
-    private val checkExistence: CheckBusinessCentralExistenceUseCase,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: BusinessCentralRepository,
+    private val checkExistence: CheckBusinessCentralExistenceUseCase
 ) : UseCase(permissionService), DeleteBusinessCentralUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)

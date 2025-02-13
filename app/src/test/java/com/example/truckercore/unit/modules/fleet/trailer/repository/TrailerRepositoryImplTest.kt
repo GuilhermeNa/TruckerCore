@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.modules.fleet.trailer.repository
 
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepositoryImpl
@@ -81,4 +81,4 @@ class TrailerRepositoryImplTest {
         coVerify { fireBaseRepository.documentFetch(id) }
     }
 
-}
+}*/

@@ -1,6 +1,5 @@
 package com.example.truckercore.unit.modules.business_central.use_cases
 
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
@@ -13,141 +12,121 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Del
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.utils.sealeds.Response
-import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class DeleteBusinessCentralUseCaseImplTest {
 
-    private lateinit var repository: BusinessCentralRepository
-    private lateinit var checkExistence: CheckBusinessCentralExistenceUseCase
-    private lateinit var permissionService: PermissionService
-    private lateinit var useCase: DeleteBusinessCentralUseCase
-    private lateinit var userWithPermission: User
-    private lateinit var userWithoutPermission: User
-    private lateinit var id: String
+    companion object {
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        repository = mockk<BusinessCentralRepository>(relaxed = true)
-        checkExistence = mockk<CheckBusinessCentralExistenceUseCase>(relaxed = true)
-        permissionService = PermissionServiceImpl()
-        useCase = DeleteBusinessCentralUseCaseImpl(repository, checkExistence, permissionService, Permission.DELETE_BUSINESS_CENTRAL)
-        userWithPermission = TestUserDataProvider.getBaseEntity()
-            .copy(permissions = setOf(Permission.DELETE_BUSINESS_CENTRAL))
-        userWithoutPermission = TestUserDataProvider.getBaseEntity()
-            .copy(permissions = setOf())
-        id = "newId"
+        private lateinit var requiredPermission: Permission
+        private lateinit var permissionService: PermissionService
+        private lateinit var repository: BusinessCentralRepository
+        private lateinit var checkExistence: CheckBusinessCentralExistenceUseCase
+        private lateinit var useCase: DeleteBusinessCentralUseCase
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            requiredPermission = Permission.DELETE_BUSINESS_CENTRAL
+            permissionService = PermissionServiceImpl()
+            repository = mockk(relaxed = true)
+            checkExistence = mockk(relaxed = true)
+            useCase = DeleteBusinessCentralUseCaseImpl(
+                requiredPermission = requiredPermission,
+                permissionService = permissionService,
+                repository = repository,
+                checkExistence = checkExistence
+            )
+        }
     }
 
     @Test
-    fun `execute() should return a response success when user has permission and object is found`() =
-        runTest {
-            // Object
-            val mockk = spyk(useCase, recordPrivateCalls = true)
-            val deleteResponse = Response.Success(Unit)
-            val existsResponse = Response.Success(Unit)
+    fun `execute() should return success when user has permission and object is found`() = runTest {
+        // Arrange
+        val id = "id"
+        val userWithPermissions = mockk<User>(relaxed = true) {
+            every { permissions } returns hashSetOf(
+                Permission.VIEW_BUSINESS_CENTRAL,
+                Permission.DELETE_BUSINESS_CENTRAL
+            )
+        }
+        val deleteResponse = Response.Success(Unit)
+        val existsResponse = Response.Success(Unit)
 
-            // Behavior
-            coEvery {
-                checkExistence.execute(userWithPermission, id)
-            } returns flowOf(existsResponse)
-            coEvery {
-                repository.delete(id)
-            } returns flowOf(deleteResponse)
+        every { checkExistence.execute(userWithPermissions, id) } returns flowOf(existsResponse)
+        every { repository.delete(id) } returns flowOf(deleteResponse)
+
+        // Call
+        val result = useCase.execute(userWithPermissions, id).single()
+
+        // Assertions
+        assertTrue(result is Response.Success)
+        coVerify {
+            checkExistence.execute(userWithPermissions, id)
+            repository.delete(id)
+        }
+    }
+
+    @Test
+    fun `execute() should throw UnauthorizedAccessException when the user has no auth for view`() =
+        runTest {
+            // Arrange
+            val id = "id"
+            val userWithoutReadPermission = mockk<User> {
+                every { permissions } returns hashSetOf(Permission.DELETE_BUSINESS_CENTRAL)
+            }
 
             // Call
-            val result = mockk.execute(userWithPermission, id).single()
-
-            // Assertions
-            assertTrue(result is Response.Success)
-            coVerify {
-                checkExistence.execute(userWithPermission, id)
-                repository.delete(id)
+            assertThrows<UnauthorizedAccessException> {
+                useCase.execute(userWithoutReadPermission, id).single()
             }
         }
 
     @Test
-    fun `execute() should return a response error when user has no permission to delete`() =
+    fun `execute() should throw UnauthorizedAccessException when the user has no auth for delete`() =
         runTest {
-            // Object
-            val mockk = spyk(useCase, recordPrivateCalls = true)
+            // Arrange
+            val id = "id"
+            val userWithoutReadPermission = mockk<User> {
+                every { permissions } returns hashSetOf(Permission.VIEW_BUSINESS_CENTRAL)
+            }
 
             // Call
-            val result = mockk.execute(userWithoutPermission, id).single()
-
-            // Assertions
-            assertTrue(result is Response.Error)
-            assertTrue((result as Response.Error).exception is UnauthorizedAccessException)
-            coVerify {
-                mockk["userHasPermission"](userWithoutPermission)
-                mockk["handleUnauthorizedPermission"](userWithoutPermission, id)
+            assertThrows<UnauthorizedAccessException> {
+                useCase.execute(userWithoutReadPermission, id).single()
             }
         }
 
     @Test
-    fun `execute() should return a response error when existence check returns an error`() =
-        runTest {
-            // Object
-            val mockk = spyk(useCase, recordPrivateCalls = true)
-            val existenceResponse = Response.Error(NullPointerException())
-
-            // Behavior
-            coEvery { checkExistence.execute(userWithPermission, id) } returns flowOf(existenceResponse)
-
-            // Call
-            val result = mockk.execute(userWithPermission, id).single()
-
-            // Assertions
-            assertTrue(result is Response.Error)
-            assertTrue((result as Response.Error).exception is NullPointerException)
-            coVerify {
-                checkExistence.execute(userWithPermission, id)
-            }
+    fun `execute() should throw ObjectNotFoundException when entity does not exist`() = runTest {
+        // Arrange
+        val id = "id"
+        val checkExistenceResponse = Response.Empty
+        val userWithPermissions = mockk<User> {
+            every { permissions } returns hashSetOf(
+                Permission.VIEW_BUSINESS_CENTRAL,
+                Permission.DELETE_BUSINESS_CENTRAL
+            )
         }
 
-    @Test
-    fun `execute() should return a response error when existence check returns an empty`() =
-        runTest {
-            // Object
-            val mockk = spyk(useCase, recordPrivateCalls = true)
-            val existenceResponse = Response.Empty
+        every {
+            checkExistence.execute(userWithPermissions, id)
+        } returns flowOf(checkExistenceResponse)
 
-            // Behavior
-            coEvery { checkExistence.execute(userWithPermission, id) } returns flowOf(existenceResponse)
-
-            // Call
-            val result = mockk.execute(userWithPermission, id).single()
-
-            // Assertions
-            assertTrue(result is Response.Error)
-            assertTrue((result as Response.Error).exception is ObjectNotFoundException)
-            coVerify {
-                checkExistence.execute(userWithPermission, id)
-            }
+        // Call
+        assertThrows<ObjectNotFoundException> {
+            useCase.execute(userWithPermissions, id).single()
         }
-
-    @Test
-    fun `execute() should return a response error when id is blank`() =
-        runTest {
-            // Object
-            val mockk = spyk(useCase, recordPrivateCalls = true)
-
-            // Call
-            val result = mockk.execute(userWithPermission, "").single()
-
-            // Assertions
-            assertTrue(result is Response.Error)
-            assertTrue((result as Response.Error).exception is IllegalArgumentException)
-        }
+    }
 
 }

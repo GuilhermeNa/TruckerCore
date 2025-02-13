@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  * The retrieval is asynchronous and returns a [Flow] of [Response] which allows the caller to collect the result reactively.
  * It may include operations like validation, permission checks, and data fetching from a repository or database.
  */
-internal interface GetBusinessCentralByIdUseCase {
+internal interface GetBusinessCentralUseCase {
 
     /**
      * Fetches a single [BusinessCentral] entity based on the provided document parameters.

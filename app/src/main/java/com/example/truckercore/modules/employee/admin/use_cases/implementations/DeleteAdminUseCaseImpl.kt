@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 
 internal class DeleteAdminUseCaseImpl(
-    private val repository: AdminRepository,
-    private val checkExistence: CheckAdminExistenceUseCase,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: AdminRepository,
+    private val checkExistence: CheckAdminExistenceUseCase
 ) : UseCase(permissionService), DeleteAdminUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)

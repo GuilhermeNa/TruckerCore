@@ -87,6 +87,8 @@ enum class Permission {
      */
     VIEW_DRIVER,
 
+    CREATE_BUSINESS_CENTRAL,
+
     /**
      * Permission to update a business central resource.
      */

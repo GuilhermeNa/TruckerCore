@@ -1,20 +1,29 @@
 package com.example.truckercore.unit.modules.business_central.repository
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
+import com.example.truckercore.configs.app_constants.Collection
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepositoryImpl
-import io.mockk.coVerify
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 internal class BusinessCentralRepositoryImplTest {
 
-    private val fireBaseRepository = mockk<FirebaseRepository<BusinessCentralDto>>(relaxed = true)
-    private val repository = BusinessCentralRepositoryImpl(fireBaseRepository)
+    private val fireBaseRepository: FirebaseRepository = mockk(relaxed = true)
+    private val collection = Collection.CENTRAL
+    private val repository = BusinessCentralRepositoryImpl(fireBaseRepository, collection)
+
     private val dto = TestBusinessCentralDataProvider.getBaseDto()
     private val id = "testId"
+
 
     @Test
     fun `create() should call fireBaseRepository`() = runTest {
@@ -22,7 +31,7 @@ internal class BusinessCentralRepositoryImplTest {
         repository.create(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.create(dto) }
+        verify { fireBaseRepository.create(collection, dto) }
     }
 
     @Test
@@ -31,7 +40,7 @@ internal class BusinessCentralRepositoryImplTest {
         repository.update(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.update(dto) }
+        verify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
@@ -40,7 +49,7 @@ internal class BusinessCentralRepositoryImplTest {
         repository.delete(id)
 
         // Assertions
-        coVerify { fireBaseRepository.delete(id) }
+        verify { fireBaseRepository.delete(collection, id) }
     }
 
     @Test
@@ -49,16 +58,39 @@ internal class BusinessCentralRepositoryImplTest {
         repository.entityExists(id)
 
         // Assertions
-        coVerify { fireBaseRepository.entityExists(id) }
+        verify { fireBaseRepository.entityExists(collection, id) }
     }
 
     @Test
-    fun `fetchById() should call fireBaseRepository`() = runTest {
+    fun `fetchByDocument() should call fireBaseRepository`() = runTest {
+        // Arrange
+        val params = mockk<DocumentParameters>()
+        val request = mockk<FirebaseRequest<BusinessCentralDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
         // Call
-        repository.fetchById(id)
+        repositorySpy.fetchByDocument(params)
 
         // Assertions
-        coVerify { fireBaseRepository.documentFetch(id) }
+        verify { fireBaseRepository.documentFetch(request) }
+    }
+
+    @Test
+    fun `fetchByQuery() should call fireBaseRepository`() = runTest {
+        // Arrange
+        val params = mockk<QueryParameters>()
+        val request = mockk<FirebaseRequest<BusinessCentralDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
+        // Call
+        repositorySpy.fetchByQuery(params)
+
+        // Assertions
+        verify { fireBaseRepository.documentFetch(request) }
     }
 
 }

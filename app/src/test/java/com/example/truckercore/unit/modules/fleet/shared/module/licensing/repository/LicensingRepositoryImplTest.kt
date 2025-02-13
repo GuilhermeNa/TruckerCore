@@ -2,7 +2,7 @@ package com.example.truckercore.unit.modules.fleet.shared.module.licensing.repos
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 class LicensingRepositoryImplTest {
 
-    private val fireBaseRepository: NewFireBaseRepository = mockk(relaxed = true)
+    private val fireBaseRepository: FirebaseRepository = mockk(relaxed = true)
     private val collection = Collection.LICENSING
     private lateinit var repository: LicensingRepository
 

@@ -8,36 +8,25 @@ import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.CreateTruckUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
 
 internal class CreateTruckUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: TruckRepository,
     private val validatorService: ValidatorService,
-    override val permissionService: PermissionService,
-    private val mapper: TruckMapper,
-    override val requiredPermission: Permission
+    private val mapper: TruckMapper
 ) : UseCase(permissionService), CreateTruckUseCase {
 
-    override suspend fun execute(user: User, truck: Truck): Flow<Response<String>> = flow {
-        val result =
-            if (userHasPermission(user)) processCreation(truck)
-            else handleUnauthorizedPermission(user, truck.id!!)
+    override fun execute(user: User, truck: Truck): Flow<Response<String>> =
+        user.runIfPermitted { processCreation(truck) }
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
-    }
-
-    private suspend fun processCreation(truck: Truck): Response<String> {
+    private fun processCreation(truck: Truck): Flow<Response<String>> {
         validatorService.validateForCreation(truck)
         val dto = mapper.toDto(truck)
-        return repository.create(dto).single()
+        return repository.create(dto)
     }
 
 }

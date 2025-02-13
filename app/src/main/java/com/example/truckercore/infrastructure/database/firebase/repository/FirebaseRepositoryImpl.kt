@@ -1,8 +1,9 @@
-package com.example.truckercore.infrastructure.database.firebase.implementations
+package com.example.truckercore.infrastructure.database.firebase.repository
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.errors.UnsuccessfulTaskException
-import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseConverter
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseQueryBuilder
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.shared.interfaces.Dto
@@ -14,30 +15,30 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
-internal class NewFireBaseRepositoryImpl(
-    private val queryBuilder: NewFirebaseQueryBuilder,
-    private val converter: NewFirebaseConverter
-) : NewFireBaseRepository {
+internal class FirebaseRepositoryImpl(
+    private val queryBuilder: FirebaseQueryBuilder,
+    private val converter: FirebaseConverter
+) : FirebaseRepository {
 
     override fun create(
         collection: Collection,
         dto: Dto
     ): Flow<Response<String>> = callbackFlow {
-        val document = queryBuilder.createDocument(collection)
-        val newDto = dto.initializeId(document.id)
+        val docReference = queryBuilder.createDocument(collection)
+        val newDto = dto.initializeId(docReference.id)
 
-        document.set(newDto).addOnCompleteListener { task ->
+        docReference.set(newDto).addOnCompleteListener { task ->
             task.exception?.let { error ->
                 this.close(error)
                 throw error
             }
-            if (task.isSuccessful) trySend(Response.Success(document.id))
+            if (task.isSuccessful) trySend(Response.Success(docReference.id))
             else throw UnsuccessfulTaskException(
                 message = "Failed while creating an entity.",
                 dto = dto,
                 collection = collection
             )
-        }
+        }.await()
 
         awaitClose { this.cancel() }
     }
@@ -59,7 +60,7 @@ internal class NewFireBaseRepositoryImpl(
                 dto = dto,
                 collection = collection
             )
-        }
+        }.await()
 
         awaitClose { this.cancel() }
     }
@@ -81,7 +82,7 @@ internal class NewFireBaseRepositoryImpl(
                 id = id,
                 collection = collection
             )
-        }
+        }.await()
 
         awaitClose { this.cancel() }
     }
@@ -90,10 +91,10 @@ internal class NewFireBaseRepositoryImpl(
         collection: Collection,
         id: String
     ): Flow<Response<Unit>> = flow {
-        val document = queryBuilder.getDocument(collection, id)
-        val documentSnap = document.get().await()
+        val docReference = queryBuilder.getDocument(collection, id)
+        val nDocSnap = docReference.get().await()
 
-        documentSnap?.let { dss ->
+        nDocSnap?.let { dss ->
             val result =
                 if (dss.exists()) Response.Success(Unit)
                 else Response.Empty
@@ -128,21 +129,23 @@ internal class NewFireBaseRepositoryImpl(
     //----------------------------------------------------------------------------------------------
 
     private fun getLoggedUser(userId: String) = flow {
-        val documentReference = queryBuilder.getDocument(Collection.USER, userId)
-        val docSnap = documentReference.get().await()
+        val docReference = queryBuilder.getDocument(Collection.USER, userId)
+        val nDocSnap = docReference.get().await()
 
-        val result =
-            docSnap?.let { dss ->
-                converter.processDocumentSnapShot(dss, UserDto::class.java)
-            } ?: Response.Empty
-
-        emit(result)
+        nDocSnap?.let { dss ->
+            val result = converter.processDocumentSnapShot(dss, UserDto::class.java)
+            emit(result)
+        } ?: throw UnsuccessfulTaskException(
+            message = "Failed while searching the logged user.",
+            id = userId,
+            collection = Collection.USER
+        )
     }
 
     private fun streamLoggedUser(userId: String) = callbackFlow {
-        val documentReference = queryBuilder.getDocument(Collection.USER, userId)
+        val docReference = queryBuilder.getDocument(Collection.USER, userId)
 
-        documentReference.addSnapshotListener { nDocSnap, nError ->
+        docReference.addSnapshotListener { nDocSnap, nError ->
             nError?.let { error ->
                 this.close(error)
                 throw error
@@ -150,7 +153,11 @@ internal class NewFireBaseRepositoryImpl(
             nDocSnap?.let { docSnap ->
                 val result = converter.processDocumentSnapShot(docSnap, UserDto::class.java)
                 this.trySend(result)
-            }
+            } ?: throw UnsuccessfulTaskException(
+                message = "Failed while streaming the logged user.",
+                id = userId,
+                collection = Collection.USER
+            )
         }
 
         awaitClose { this.cancel() }
@@ -162,11 +169,14 @@ internal class NewFireBaseRepositoryImpl(
         val documentRef = queryBuilder.getDocument(firebaseRequest.collection, params.id)
         val docSnap = documentRef.get().await()
 
-        val response = docSnap?.let { dss ->
-            converter.processDocumentSnapShot(dss, firebaseRequest.clazz)
-        } ?: Response.Empty
-
-        emit(response)
+        docSnap?.let { dss ->
+            val result = converter.processDocumentSnapShot(dss, firebaseRequest.clazz)
+            emit(result)
+        } ?: throw UnsuccessfulTaskException(
+            message = "Failed while searching a document.",
+            id = params.id,
+            collection = firebaseRequest.collection
+        )
     }
 
     private fun <T : Dto> streamDocument(firebaseRequest: FirebaseRequest<T>) = callbackFlow {
@@ -182,7 +192,11 @@ internal class NewFireBaseRepositoryImpl(
             nDocSnap?.let { docSnap ->
                 val result = converter.processDocumentSnapShot(docSnap, firebaseRequest.clazz)
                 this.trySend(result)
-            }
+            } ?: throw UnsuccessfulTaskException(
+                message = "Failed while streaming a document.",
+                id = params.id,
+                collection = firebaseRequest.collection
+            )
         }
 
         awaitClose { this.cancel() }
@@ -194,11 +208,13 @@ internal class NewFireBaseRepositoryImpl(
         val query = queryBuilder.getQuery(firebaseRequest.collection, *params.queries)
         val querySnapshot = query.get().await()
 
-        val response = querySnapshot?.let { qss ->
-            converter.processQuerySnapShot(qss, firebaseRequest.clazz)
-        } ?: Response.Empty
-
-        emit(response)
+        querySnapshot?.let { qss ->
+            val result = converter.processQuerySnapShot(qss, firebaseRequest.clazz)
+            emit(result)
+        } ?: throw UnsuccessfulTaskException(
+            message = "Failed while searching a query.",
+            collection = firebaseRequest.collection
+        )
     }
 
     private fun <T : Dto> streamQuery(firebaseRequest: FirebaseRequest<T>) = callbackFlow {
@@ -214,7 +230,10 @@ internal class NewFireBaseRepositoryImpl(
             nSnapShot?.let { snapShot ->
                 val result = converter.processQuerySnapShot(snapShot, firebaseRequest.clazz)
                 this.trySend(result)
-            }
+            } ?: throw UnsuccessfulTaskException(
+                message = "Failed while streaming a query.",
+                collection = firebaseRequest.collection
+            )
         }
 
         awaitClose { this.cancel() }

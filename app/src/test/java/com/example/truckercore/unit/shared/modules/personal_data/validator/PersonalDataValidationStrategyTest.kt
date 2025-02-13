@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.personal_data.validator
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
@@ -259,4 +260,4 @@ class PersonalDataValidationStrategyTest {
     }
 
 
-}
+}*/

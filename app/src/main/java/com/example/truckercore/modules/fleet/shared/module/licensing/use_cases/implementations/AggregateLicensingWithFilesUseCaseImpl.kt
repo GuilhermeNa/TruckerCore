@@ -26,7 +26,7 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
 
     private fun getSingleLicensingWithFilesFlow(documentParams: DocumentParameters) = combine(
         getLicensing.execute(documentParams),
-        getFile.execute(getDocumentParams(documentParams))
+        getFile.execute(getQueryParams(documentParams))
     ) { licensingResponse, fileResponse ->
 
         if (licensingResponse !is Response.Success) return@combine Response.Empty
@@ -37,7 +37,7 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
         Response.Success(LicensingWithFile(licensing, files))
     }
 
-    private fun getDocumentParams(documentParams: DocumentParameters) =
+    private fun getQueryParams(documentParams: DocumentParameters) =
         QueryParameters.create(documentParams.user)
             .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, documentParams.id))
             .setStream(documentParams.shouldStream)

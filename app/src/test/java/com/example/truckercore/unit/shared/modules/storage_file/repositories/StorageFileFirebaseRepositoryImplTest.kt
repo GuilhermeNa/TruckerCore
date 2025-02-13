@@ -2,13 +2,9 @@ package com.example.truckercore.unit.shared.modules.storage_file.repositories
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
 import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
-import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepository
 import com.example.truckercore.shared.modules.storage_file.repository.StorageFileRepositoryImpl
-import com.example.truckercore.shared.utils.parameters.QuerySettings
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -17,7 +13,7 @@ import org.junit.jupiter.api.Test
 
 internal class StorageFileFirebaseRepositoryImplTest {
 
-    private val fireBaseRepository: NewFireBaseRepository = mockk(relaxed = true)
+    private val fireBaseRepository: FirebaseRepository = mockk(relaxed = true)
     private val collection = Collection.FILE
     private lateinit var repository: StorageFileRepository
 

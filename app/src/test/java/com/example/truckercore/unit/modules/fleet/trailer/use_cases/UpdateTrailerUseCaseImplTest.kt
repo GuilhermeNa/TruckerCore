@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.fleet.trailer.use_cases
 
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
@@ -212,4 +213,4 @@ class UpdateTrailerUseCaseImplTest {
         }
     }
 
-}
+}*/

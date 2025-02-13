@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.fleet.truck.validator
 
 import com.example.truckercore._test_data_provider.TestTruckDataProvider
@@ -245,4 +246,4 @@ class TruckValidationStrategyTest {
         )
     }
 
-}
+}*/

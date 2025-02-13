@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.user.mapper
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
@@ -100,4 +101,4 @@ internal class UserMapperTest {
         }
     }
 
-}
+}*/

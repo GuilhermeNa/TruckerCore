@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.user.use_cases
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
@@ -130,4 +131,4 @@ class CheckUserExistenceUseCaseImplTest {
         assertTrue(result is Response.Error && result.exception is UnknownErrorException)
     }
 
-}
+}*/

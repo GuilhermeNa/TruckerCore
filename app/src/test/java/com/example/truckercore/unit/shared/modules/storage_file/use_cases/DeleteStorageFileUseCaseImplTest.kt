@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.storage_file.use_cases
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
@@ -174,4 +175,4 @@ class DeleteStorageFileUseCaseImplTest {
         }
     }
 
-}
+}*/

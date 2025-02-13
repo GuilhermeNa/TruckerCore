@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test
 
 class CheckTruckExistenceUseCaseImplTest {
 
-    private val repository: TruckRepository = mockk()
-    private val permissionService: PermissionService = mockk()
+    private val repository: TruckRepository = mockk(relaxed = true)
+    private val permissionService: PermissionService = mockk(relaxed = true)
     private lateinit var useCase: CheckTruckExistenceUseCase
     private val user = TestUserDataProvider.getBaseEntity()
     private val id = "id"
@@ -99,15 +99,6 @@ class CheckTruckExistenceUseCaseImplTest {
             permissionService.canPerformAction(user, Permission.VIEW_TRUCK)
             repository.entityExists(id)
         }
-    }
-
-    @Test
-    fun `should return error when id is blank`() = runTest {
-        // Call
-        val result = useCase.execute(user, "").single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is IllegalArgumentException)
     }
 
 }

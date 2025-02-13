@@ -22,19 +22,19 @@ val storageFileModule = module {
     single { StorageFileMapper() }
 
     single<CheckStorageFileExistenceUseCase> {
-        CheckStorageFileExistenceUseCaseImpl(get(), get(), Permission.VIEW_STORAGE_FILE)
+        CheckStorageFileExistenceUseCaseImpl(Permission.VIEW_STORAGE_FILE, get(), get())
     }
     single<CreateStorageFileUseCase> {
-        CreateStorageFileUseCaseImpl(get(), get(), get(), get(), Permission.CREATE_STORAGE_FILE)
+        CreateStorageFileUseCaseImpl(Permission.CREATE_STORAGE_FILE, get(), get(), get(), get())
     }
     single<DeleteStorageFileUseCase> {
-        DeleteStorageFileUseCaseImpl(get(), get(), get(), Permission.DELETE_STORAGE_FILE)
+        DeleteStorageFileUseCaseImpl(Permission.DELETE_STORAGE_FILE, get(), get(), get())
     }
     single<GetStorageFileUseCase> {
-        GetStorageFileUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_STORAGE_FILE)
+        GetStorageFileUseCaseImpl(Permission.VIEW_STORAGE_FILE, get(), get(), get(), get())
     }
     single<UpdateStorageFileUseCase> {
-        UpdateStorageFileUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_STORAGE_FILE)
+        UpdateStorageFileUseCaseImpl(Permission.UPDATE_STORAGE_FILE, get(), get(), get(), get(), get())
     }
 
 }

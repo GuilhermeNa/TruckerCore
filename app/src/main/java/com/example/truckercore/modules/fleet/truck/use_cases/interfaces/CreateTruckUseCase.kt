@@ -11,17 +11,15 @@ import kotlinx.coroutines.flow.Flow
  * It handles the logic required to insert a new entity into the system, such as validating data, applying business rules, and
  * interacting with the persistence layer (e.g., database).
  */
-interface CreateTruckUseCase {
+internal interface CreateTruckUseCase {
 
     /**
      * Executes the use case to create a new [Truck] entity.
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param truck The [Truck] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully created.
-     * - [Response.Error] when the object creation fails.
+     * @return A [Flow] of [Response.Success] when the object is successfully created.
      */
-    suspend fun execute(user: User, truck: Truck): Flow<Response<String>>
+    fun execute(user: User, truck: Truck): Flow<Response<String>>
 
 }

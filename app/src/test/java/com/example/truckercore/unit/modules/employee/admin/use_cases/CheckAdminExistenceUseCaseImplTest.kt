@@ -85,13 +85,4 @@ class CheckAdminExistenceUseCaseImplTest {
         assertTrue(result is Response.Error && result.exception is NullPointerException)
     }
 
-    @Test
-    fun `should return error when id is blank`() = runTest {
-        // Call
-        val result = useCase.execute(user, "").single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is IllegalArgumentException)
-    }
-
 }

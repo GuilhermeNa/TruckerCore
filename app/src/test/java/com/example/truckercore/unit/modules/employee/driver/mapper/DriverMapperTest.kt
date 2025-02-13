@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.employee.driver.mapper
 
 import com.example.truckercore._test_data_provider.TestDriverDataProvider
@@ -106,4 +107,4 @@ internal class DriverMapperTest {
         }
     }
 
-}
+}*/

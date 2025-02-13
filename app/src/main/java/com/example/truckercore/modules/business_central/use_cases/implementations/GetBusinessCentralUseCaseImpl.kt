@@ -6,7 +6,7 @@ import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
-import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralByIdUseCase
+import com.example.truckercore.modules.business_central.use_cases.interfaces.GetBusinessCentralUseCase
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
@@ -15,13 +15,13 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-internal class GetBusinessCentralByIdUseCaseImpl(
+internal class GetBusinessCentralUseCaseImpl(
     override val requiredPermission: Permission,
     override val permissionService: PermissionService,
     private val repository: BusinessCentralRepository,
     private val validatorService: ValidatorService,
     private val mapper: BusinessCentralMapper,
-) : UseCase(permissionService), GetBusinessCentralByIdUseCase {
+) : UseCase(permissionService), GetBusinessCentralUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<BusinessCentral>> =
         with(documentParams) {

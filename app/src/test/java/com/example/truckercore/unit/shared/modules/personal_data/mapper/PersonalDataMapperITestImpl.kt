@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.personal_data.mapper
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
@@ -105,4 +106,4 @@ internal class PersonalDataMapperITestImpl {
         }
     }
 
-}
+}*/

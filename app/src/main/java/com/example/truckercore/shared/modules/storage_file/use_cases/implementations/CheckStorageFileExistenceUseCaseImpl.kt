@@ -10,9 +10,9 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CheckStorageFileExistenceUseCaseImpl(
-    private val repository: StorageFileRepository,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: StorageFileRepository
 ) : UseCase(permissionService), CheckStorageFileExistenceUseCase {
 
     override fun execute(user: User, id: String): Flow<Response<Unit>> =

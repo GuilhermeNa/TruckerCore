@@ -9,6 +9,7 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Permiss
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.fleet.shared.module.licensing.service.LicensingService
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.modules.user.enums.PersonCategory
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.enums.QueryType
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
@@ -39,14 +40,14 @@ internal class MyViewModel(
         lastUpdate = LocalDateTime.now(),
         persistenceStatus = PersistenceStatus.PERSISTED,
         level = Level.MASTER,
-        person = null,
-        permissions = setOf(
+        permissions = hashSetOf(
             Permission.UPDATE_BUSINESS_CENTRAL,
             Permission.VIEW_BUSINESS_CENTRAL,
             Permission.DELETE_BUSINESS_CENTRAL,
             Permission.VIEW_LICENSING,
             Permission.VIEW_STORAGE_FILE
-        )
+        ),
+        personFLag = PersonCategory.DRIVER
     )
 
     fun execute() {

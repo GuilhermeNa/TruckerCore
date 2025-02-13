@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 
 internal class DeleteStorageFileUseCaseImpl(
-    private val repository: StorageFileRepository,
-    private val checkExistence: CheckStorageFileExistenceUseCase,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: StorageFileRepository,
+    private val checkExistence: CheckStorageFileExistenceUseCase
 ) : UseCase(permissionService), DeleteStorageFileUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)

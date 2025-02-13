@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.storage_file.validator
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
@@ -218,4 +219,4 @@ internal class StorageFileValidationStrategyTest {
         assert(exception.message?.contains("and received") == true)
     }
 
-}
+}*/

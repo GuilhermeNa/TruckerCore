@@ -1,4 +1,4 @@
-package com.example.truckercore.infrastructure.database.firebase.implementations
+package com.example.truckercore.infrastructure.database.firebase.util
 
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.shared.enums.QueryType
@@ -11,15 +11,11 @@ import com.google.firebase.firestore.Query
  * Helper class that facilitates the creation and management of Firestore queries and document references.
  * It provides methods to create new Firestore document references, retrieve existing documents, and
  * build Firestore queries by applying various query settings (e.g., filters).
- *
- * This class abstracts the interaction with Firestore by simplifying the operations on collections and
- * documents, enabling developers to easily perform common tasks like querying, creating, or accessing documents.
- *
  * @property firestore The Firestore instance that is used to interact with the Firestore database.
  */
-internal class NewFirebaseQueryBuilder(private val firestore: FirebaseFirestore) {
+internal class FirebaseQueryBuilder(private val firestore: FirebaseFirestore) {
 
-    /**
+     /**
      * Creates a new Firestore document reference in the specified collection.
      * This method returns a new [DocumentReference], which can be used to perform various operations
      * on the document such as set, update, and delete.
@@ -27,8 +23,7 @@ internal class NewFirebaseQueryBuilder(private val firestore: FirebaseFirestore)
      * @param collectionRef The name of the Firestore collection where the new document will be created.
      * @return A [DocumentReference] pointing to the newly created document in the specified collection.
      */
-    fun createDocument(collectionRef: Collection) =
-        collection(collectionRef).document()
+    fun createDocument(collectionRef: Collection) = collection(collectionRef).document()
 
     /**
      * Fetches a Firestore document reference based on the collection name and document ID.
@@ -38,8 +33,7 @@ internal class NewFirebaseQueryBuilder(private val firestore: FirebaseFirestore)
      * @param id The ID of the document to reference.
      * @return A [DocumentReference] instance that can be used to access the document in Firestore.
      */
-    fun getDocument(collectionRef: Collection, id: String) =
-        collection(collectionRef).document(id)
+    fun getDocument(collectionRef: Collection, id: String) = collection(collectionRef).document(id)
 
     /**
      * Constructs a Firestore query based on the collection name and a list of query settings.

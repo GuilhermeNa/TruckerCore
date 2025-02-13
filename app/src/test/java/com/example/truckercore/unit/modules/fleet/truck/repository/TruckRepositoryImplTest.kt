@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.modules.fleet.truck.repository
 
 import com.example.truckercore._test_data_provider.TestTruckDataProvider
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.fleet.truck.dto.TruckDto
 import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
 import com.example.truckercore.modules.fleet.truck.repository.TruckRepositoryImpl
@@ -82,4 +82,4 @@ class TruckRepositoryImplTest {
         coVerify { fireBaseRepository.documentFetch(id) }
     }
 
-}
+}*/

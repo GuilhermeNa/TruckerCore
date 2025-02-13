@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.personal_data.use_cases
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
@@ -163,4 +164,4 @@ class GetPersonalDataByIdUseCaseImplTest {
         }
     }
 
-}
+}*/

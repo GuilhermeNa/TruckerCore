@@ -8,16 +8,14 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Interface representing the use case for updating a [Truck] entity.
  */
-interface UpdateTruckUseCase {
+internal interface UpdateTruckUseCase {
 
     /**
      * Executes the use case to update a [Truck] entity.
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
      * @param truck The [Truck] entity that is being updated. This contains the data to be modified.
-     * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully updated.
-     * - [Response.Error] when the object update fails.
+     * @return A [Flow] of [Response.Success] when the object is successfully updated.
      */
-    suspend fun execute(user: User, truck: Truck): Flow<Response<Unit>>
+    fun execute(user: User, truck: Truck): Flow<Response<Unit>>
 
 }

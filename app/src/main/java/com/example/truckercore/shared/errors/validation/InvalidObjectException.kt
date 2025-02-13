@@ -24,7 +24,7 @@ class InvalidObjectException : ValidationException {
     private var _dto: Dto? = null
     val dto get() = _dto
 
-    fun getMessage(): String {
+    fun message(): String {
         val objectName =
             if (dto != null) dto!!.javaClass.simpleName
             else entity!!.javaClass.simpleName

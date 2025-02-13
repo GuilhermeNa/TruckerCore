@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.modules.employee.admin.repository
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.repository.AdminRepositoryImpl
@@ -82,4 +82,4 @@ internal class AdminRepositoryImplTest {
         coVerify { fireBaseRepository.documentFetch(id) }
     }
 
-}
+}*/

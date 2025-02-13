@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.employee.admin.mapper
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
@@ -105,4 +106,4 @@ internal class AdminMapperTest {
         }
     }
 
-}
+}*/

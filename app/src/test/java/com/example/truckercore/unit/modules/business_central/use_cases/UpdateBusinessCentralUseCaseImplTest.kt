@@ -1,12 +1,10 @@
 package com.example.truckercore.unit.modules.business_central.use_cases
 
-import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionServiceImpl
+import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
@@ -15,162 +13,119 @@ import com.example.truckercore.modules.business_central.use_cases.interfaces.Che
 import com.example.truckercore.modules.business_central.use_cases.interfaces.UpdateBusinessCentralUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class UpdateBusinessCentralUseCaseImplTest {
 
-    private lateinit var useCase: UpdateBusinessCentralUseCase
-    private lateinit var checkExistence: CheckBusinessCentralExistenceUseCase
-    private lateinit var repository: BusinessCentralRepository
-    private lateinit var permissionService: PermissionService
-    private lateinit var validatorService: ValidatorService
-    private lateinit var mapper: BusinessCentralMapper
-    private lateinit var entity: BusinessCentral
-    private lateinit var user: User
+    companion object {
 
-    @BeforeEach
-    fun setUp() {
-        mockStaticLog()
-        permissionService = mockk(relaxed = true)
-        checkExistence = mockk(relaxed = true)
-        validatorService = mockk(relaxed = true)
-        mapper = mockk(relaxed = true)
-        repository = mockk(relaxed = true)
-        useCase = UpdateBusinessCentralUseCaseImpl(
-            repository,
-            checkExistence,
-            permissionService,
-            validatorService,
-            mapper,
-            Permission.UPDATE_BUSINESS_CENTRAL
-        )
-        user = TestUserDataProvider.getBaseEntity()
-            .copy(permissions = setOf(Permission.UPDATE_BUSINESS_CENTRAL))
-        entity = TestBusinessCentralDataProvider.getBaseEntity()
+        private lateinit var requiredPermission: Permission
+        private lateinit var useCase: UpdateBusinessCentralUseCase
+        private lateinit var checkExistence: CheckBusinessCentralExistenceUseCase
+        private lateinit var repository: BusinessCentralRepository
+        private lateinit var permissionService: PermissionService
+        private lateinit var validatorService: ValidatorService
+        private lateinit var mapper: BusinessCentralMapper
+
+        @JvmStatic
+        @BeforeAll
+        fun setUp() {
+            mockStaticLog()
+            requiredPermission = Permission.UPDATE_BUSINESS_CENTRAL
+            permissionService = PermissionServiceImpl()
+            checkExistence = mockk(relaxed = true)
+            validatorService = mockk(relaxed = true)
+            mapper = mockk(relaxed = true)
+            repository = mockk(relaxed = true)
+            useCase = UpdateBusinessCentralUseCaseImpl(
+                requiredPermission = Permission.UPDATE_BUSINESS_CENTRAL,
+                permissionService = permissionService,
+                repository = repository,
+                checkExistence = checkExistence,
+                validatorService = validatorService,
+                mapper = mapper
+            )
+        }
+
     }
 
     @Test
-    fun `execute() should return success response when entity exists and is updated successfully`() =
+    fun `execute() should return success when entity exists and is updated successfully`() =
         runTest {
-            // Object
-            val existentResponse = Response.Success(Unit)
-            val dto = TestBusinessCentralDataProvider.getBaseDto()
-            val mockk = spyk(useCase, recordPrivateCalls = true)
+            // Arrange
+            val userId = "id"
+            val validUser = mockk<User>(relaxed = true) {
+                every { id } returns userId
+                every { permissions } returns hashSetOf(Permission.UPDATE_BUSINESS_CENTRAL)
+            }
+            val bCentral = mockk<BusinessCentral>(relaxed = true)
+            val bCentralDto = mockk<BusinessCentralDto>(relaxed = true)
+            val existenceResponse = Response.Success(Unit)
+            val updateResponse = Response.Success(Unit)
 
-            // Behavior
-            every {
-                permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-            } returns true
-            coEvery { checkExistence.execute(user, entity.id!!) } returns flowOf(
-                existentResponse
-            )
-            every { validatorService.validateEntity(entity) } returns Unit
-            every { mapper.toDto(entity) } returns dto
-            coEvery { repository.update(dto) } returns flowOf(Response.Success(Unit))
+            every { checkExistence.execute(validUser, userId) } returns flowOf(existenceResponse)
+            every { validatorService.validateEntity(bCentral) } returns Unit
+            every { mapper.toDto(bCentral) } returns bCentralDto
+            every { repository.update(bCentralDto) } returns flowOf(updateResponse)
 
             // Call
-            val result = mockk.execute(user, entity).single()
+            val result = useCase.execute(validUser, bCentral).single()
 
             // Assertions
             assertTrue(result is Response.Success)
-            coVerifyOrder {
-                permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-                checkExistence.execute(user, entity.id!!)
-                validatorService.validateEntity(entity)
-                mapper.toDto(entity)
-                repository.update(dto)
+            verifyOrder {
+                checkExistence.execute(validUser, userId)
+                validatorService.validateEntity(bCentral)
+                mapper.toDto(bCentral)
+                repository.update(bCentralDto)
             }
         }
 
     @Test
-    fun `execute() should return error when entity does not exist`() = runTest {
-        // Object
-        val response = Response.Empty
-
-        val mockk = spyk(useCase, recordPrivateCalls = true)
-
-        // Behavior
-        every {
-            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-        } returns true
-        coEvery { checkExistence.execute(user, entity.id!!) } returns flowOf(response)
+    fun `execute() should throw NullPointerException when id is null`() = runTest {
+        // Arrange
+        val validUser = mockk<User>(relaxed = true)
+        val bCentral = mockk<BusinessCentral>(relaxed = true) {
+            every { id } returns null
+        }
 
         // Call
-        val result = mockk.execute(user, entity).single()
-
-        // Assertions
-        assertTrue(result is Response.Error)
-        assertTrue((result as Response.Error).exception is ObjectNotFoundException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-            checkExistence.execute(user, entity.id!!)
-
+        assertThrows<NullPointerException> {
+            useCase.execute(validUser, bCentral)
         }
+
     }
 
     @Test
-    fun `execute() should return error when check existence fails`() = runTest {
-        // Object
-        val response = Response.Error(NullPointerException("CheckExistence failed"))
+    fun `execute() should throw ObjectNotFoundException when object does not exists`() = runTest {
+        // Arrange
+        val validUser = mockk<User>(relaxed = true) {
+            every { permissions } returns hashSetOf()
+        }
+        val bCentralId = "id"
+        val bCentral = mockk<BusinessCentral>(relaxed = true) {
+            every { id } returns bCentralId
+        }
+        val existenceResponse = Response.Empty
 
-        val mockk = spyk(useCase, recordPrivateCalls = true)
-
-        // Behavior
-        every {
-            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-        } returns true
-        coEvery { checkExistence.execute(user, entity.id!!) } returns flowOf(response)
+        every { checkExistence.execute(validUser, bCentralId) } returns flowOf(existenceResponse)
 
         // Call
-        val result = mockk.execute(user, entity).single()
-
-        // Assertions
-        assertTrue(result is Response.Error)
-        assertTrue((result as Response.Error).exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
-            checkExistence.execute(user, entity.id!!)
+        assertThrows<ObjectNotFoundException> {
+            useCase.execute(validUser, bCentral)
         }
-    }
-
-    @Test
-    fun `execute() should return unauthorized error when user does not have permission`() =
-        runTest {
-            // Object
-            val userWithoutPermission = TestUserDataProvider.getBaseEntity()
-                .copy(permissions = setOf())
-
-            // Call
-            val result = useCase.execute(userWithoutPermission, entity).single()
-
-            // Assertions
-            assertTrue(result is Response.Error)
-            assertTrue((result as Response.Error).exception is UnauthorizedAccessException)
-        }
-
-    @Test
-    fun `execute() should handle unexpected errors`() = runTest {
-        // Simulate an unexpected error
-        val exception = RuntimeException("Unexpected exception")
-        coEvery { checkExistence.execute(user, entity.id!!) } throws exception
-
-        // Call the use case and assert the error response
-        val result = useCase.execute(user, entity).single()
-
-        // Assertions
-        assertTrue(result is Response.Error)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.truckercore.configs.di
 
+import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
@@ -19,20 +20,27 @@ import com.example.truckercore.modules.user.use_cases.interfaces.UpdateUserUseCa
 import org.koin.dsl.module
 
 val userModule = module {
-    single<UserRepository> { UserRepositoryImpl(get()) }
-    single<UserMapper> { UserMapper() }
-    single<CheckUserExistenceUseCase> {
-        CheckUserExistenceUseCaseImpl(get(), get(), Permission.VIEW_USER)
+    single<UserRepository> { UserRepositoryImpl(get(), Collection.USER) }
+    single { UserMapper() }
+
+    //--
+
+    single<CreateMasterUserUseCase> {
+        CreateMasterUserUseCaseImpl(get(), get(), get())
     }
-    single<CreateMasterUserUseCase> { CreateMasterUserUseCaseImpl(get(), get(), get()) }
-    single<CreateUserUseCase> { CreateUserUseCaseImpl(get(), get(), get(), get()) }
+    single<CheckUserExistenceUseCase> {
+        CheckUserExistenceUseCaseImpl(Permission.VIEW_USER, get(), get())
+    }
+    single<CreateUserUseCase> {
+        CreateUserUseCaseImpl(Permission.CREATE_USER, get(), get(), get(), get())
+    }
     single<DeleteUserUseCase> {
-        DeleteUserUseCaseImpl(get(), get(), get(), Permission.DELETE_USER)
+        DeleteUserUseCaseImpl(Permission.DELETE_USER, get(), get(), get())
     }
     single<GetUserUseCase> {
-        GetUserUseCaseImpl(get(), get(), get(), get(), Permission.VIEW_USER)
+        GetUserUseCaseImpl(Permission.VIEW_USER, get(), get(), get(), get())
     }
     single<UpdateUserUseCase> {
-        UpdateUserUseCaseImpl(get(), get(), get(), get(), get(), Permission.UPDATE_USER)
+        UpdateUserUseCaseImpl(Permission.UPDATE_USER, get(), get(), get(), get(), get())
     }
 }

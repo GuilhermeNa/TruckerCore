@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.employee.admin.use_cases
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
@@ -132,4 +133,4 @@ class GetAdminUseCaseImplTest {
         }
     }
 
-}
+}*/

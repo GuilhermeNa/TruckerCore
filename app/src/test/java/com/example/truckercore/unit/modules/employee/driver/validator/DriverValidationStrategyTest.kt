@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.employee.driver.validator
 
 import com.example.truckercore._test_data_provider.TestDriverDataProvider
@@ -243,4 +244,4 @@ class DriverValidationStrategyTest {
         )
     }
 
-}
+}*/

@@ -9,44 +9,40 @@ import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.CheckTru
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.UpdateTruckUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.shared.utils.sealeds.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdateTruckUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: TruckRepository,
     private val checkExistence: CheckTruckExistenceUseCase,
     private val validatorService: ValidatorService,
-    private val mapper: TruckMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: TruckMapper
 ) : UseCase(permissionService), UpdateTruckUseCase {
 
-    override suspend fun execute(user: User, truck: Truck): Flow<Response<Unit>> = flow {
-        val result =
-            if (userHasPermission(user)) verifyExistence(user, truck)
-            else handleUnauthorizedPermission(user, truck.id!!)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun execute(user: User, truck: Truck): Flow<Response<Unit>> {
+        val id = truck.id ?: throw NullPointerException("Null Truck id while updating.")
 
-        emit(result)
-
-    }.catch {
-        emit(handleUnexpectedError(it))
+        return checkExistence.execute(user, id).flatMapConcat { response ->
+            if (response !is Response.Success) {
+                throw ObjectNotFoundException(
+                    "Attempting to update a Truck that was not found for id: $id."
+                )
+            }
+            user.runIfPermitted { processUpdate(truck) }
+        }
     }
 
-    private suspend fun verifyExistence(user: User, truck: Truck): Response<Unit> =
-        when (val existenceResponse = checkExistence.execute(user, truck.id!!).single()) {
-            is Response.Success -> processUpdate(truck)
-            is Response.Empty -> handleNonExistentObject(truck.id)
-            is Response.Error -> logAndReturnResponse(existenceResponse)
-        }
-
-    private suspend fun processUpdate(truckToUpdate: Truck): Response<Unit> {
+    private fun processUpdate(truckToUpdate: Truck): Flow<Response<Unit>> {
         validatorService.validateEntity(truckToUpdate)
         val dto = mapper.toDto(truckToUpdate)
-        return repository.update(dto).single()
+        return repository.update(dto)
     }
 
 }

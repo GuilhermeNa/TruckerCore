@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.employee.driver.repository
 
 import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.interfaces.NewFireBaseRepository
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
 import com.example.truckercore.shared.abstractions.Repository
@@ -13,7 +13,7 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class DriverRepositoryImpl(
-    private val firebaseRepository: NewFireBaseRepository,
+    private val firebaseRepository: FirebaseRepository,
     private val collection: Collection
 ) : Repository(), DriverRepository {
 

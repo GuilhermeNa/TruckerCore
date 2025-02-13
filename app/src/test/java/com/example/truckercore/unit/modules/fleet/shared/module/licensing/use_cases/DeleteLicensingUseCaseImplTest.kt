@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.use_cases
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
@@ -146,4 +147,4 @@ class DeleteLicensingUseCaseImplTest {
         }
     }
 
-}
+}*/

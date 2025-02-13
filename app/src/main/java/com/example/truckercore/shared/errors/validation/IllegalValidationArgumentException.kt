@@ -16,7 +16,7 @@ class IllegalValidationArgumentException(
     private val received: Any
 ) : ValidationException() {
 
-    fun getMessage(): String = "Expected a ${expected::class.simpleName} " +
+    fun message(): String = "Expected a ${expected::class.simpleName} " +
             "for validation but received: ${received::class.simpleName}."
 
 }

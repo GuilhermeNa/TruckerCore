@@ -37,7 +37,7 @@ class InvalidForMappingException : MappingException {
 
     fun getObject() = dto ?: entity
 
-    fun getMessage() =
+    fun message() =
         if (dto != null) {
             "Some error occurred while mapping a dto to entity for dto: $dto"
         } else {

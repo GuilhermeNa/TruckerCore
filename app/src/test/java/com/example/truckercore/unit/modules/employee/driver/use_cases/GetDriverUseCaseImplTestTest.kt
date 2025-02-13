@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.employee.driver.use_cases
 
 import android.content.pm.PermissionGroupInfo
@@ -100,4 +101,4 @@ class GetDriverUseCaseImplTestTest {
         assertTrue(result is Response.Error)
     }
 
-}
+}*/

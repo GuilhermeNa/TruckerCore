@@ -49,6 +49,12 @@ class UnsuccessfulTaskException : FirebaseException {
 
     }
 
+    constructor(message: String, collection: Collection) : super() {
+        this.message = message
+        this.collection = collection
+
+    }
+
     /**
      * Returns detailed information about the task failure, either with the associated DTO or ID.
      *

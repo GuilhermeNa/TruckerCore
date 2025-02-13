@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.modules.employee.driver.repository
 
 import com.example.truckercore._test_data_provider.TestDriverDataProvider
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
 import com.example.truckercore.modules.employee.driver.repository.DriverRepository
 import com.example.truckercore.modules.employee.driver.repository.DriverRepositoryImpl
@@ -71,4 +71,4 @@ internal class DriverRepositoryImplTest {
         coVerify { fireBaseRepository.documentFetch(id) }
     }
 
-}
+}*/

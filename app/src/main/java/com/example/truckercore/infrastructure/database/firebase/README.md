@@ -3,13 +3,13 @@
 1. [ Visão Geral ](#1-visão-geral)
 2. [ Estrutura ](#2-estrutura)
 3. [ Erros ](#3-erros)
-4. [ Interfaces ](#4-interfaces)
+4. [ Repository ](#4-repository)
 5. [ Fluxo de dados ](#5-fluxo-de-dados)
 
 ### 1. **Visão Geral**
 
 Este módulo fornece a integração com o Firestore, utilizando o Firebase SDK para realizar operações
-de banco de dados. Ele abrange funcionalidades como a criação, leitura, atualização e exclusão 
+de banco de dados. Ele abrange funcionalidades como a criação, leitura, atualização e exclusão
 (CRUD)de documentos no Firestore, bem como o processamento de dados usando DTOs
 (Data Transfer Objects).
 
@@ -18,36 +18,39 @@ de banco de dados. Ele abrange funcionalidades como a criação, leitura, atuali
 database/
 │
 └── firebase/            
-    ├── errors/
-    │── implementations/
-    │── interfaces/
-    │── util/
-    └── README
+├── errors/
+│── repository/
+│── util/
+└── README
 
 ### 3. **Erros**
 
-# `FirebaseConversionException`
-A classe `FirebaseConversionException` é uma exceção personalizada que indica erros durante a 
-conversão de dados entre documentos do Firestore e os DTOs. Isso pode ocorrer quando há falha 
-na conversão dos dados de Firestore para os objetos do sistema.
+`FirebaseConversionException`: Indica erros durante a conversão de dados entre documentos do
+Firestore e os DTOs. Isso pode ocorrer quando há falha na conversão dos dados de Firestore para os
+objetos do sistema.
 
-### 4. **Interfaces**
+`FirebaseRequestException`: Indica erros que ocorrem durante a criação ou processamento de uma
+requisição do Firestore, especificamente quando os parâmetros esperados não são atendidos ou quando
+ocorre uma falha no manuseio da coleção e parâmetros fornecidos.
 
-# `FirebaseConverter<T>`
-A interface `FirebaseConverter` é responsável por converter os dados entre os documentos do 
+`UnsuccessfulTaskException`: Indica que uma tarefa do Firestore falhou ao ser executada. Essa
+exceção é gerada quando uma operação, como uma consulta ou escrita no Firestore, não consegue ser
+concluída com sucesso.
+
+### 4. **Repository**
+
+`FirebaseRepository`: oferece métodos para realizar operações de CRUD
+(Create, Read, Update, Delete) em documentos no Firestore.
+
+`FirebaseConverter`: é responsável por converter os dados entre os documentos do
 Firestore e os DTOs utilizados no sistema.
 
-# `FirebaseQueryBuilder`
-A interface `FirebaseQueryBuilder` é responsável pela construção de consultas (queries) e 
+`FirebaseQueryBuilder`: é responsável pela construção de consultas (queries) e
 referências de documentos no Firestore.
-
-# `FirebaseRepository<T : Dto>`
-A interface `FirebaseRepository` oferece métodos para realizar operações de CRUD
-(Create, Read, Update, Delete) em documentos no Firestore.
 
 ### 5. **Fluxo de Dados**
 
 As operações no Firestore retornam um tipo `Response`, que pode ser:
-- **`Response.Success<T>`**: Quando a operação é bem-sucedida.
-- **`Response.Error`**: Quando ocorre um erro durante a operação.
-- **`Response.Empty`**: Quando o dado não é encontrado ou não há resultado para a operação.
+
+`Response.Success<T>`: Quando a operação é bem-sucedida.
+`Response.Empty`: Quando o dado não é encontrado ou não há resultado para a operação.

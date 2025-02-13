@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class GetStorageFileUseCaseImpl(
-    private val repository: StorageFileRepository,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
+    private val repository: StorageFileRepository,
     private val validatorService: ValidatorService,
-    private val mapper: StorageFileMapper,
-    override val requiredPermission: Permission
+    private val mapper: StorageFileMapper
 ) : UseCase(permissionService), GetStorageFileUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<StorageFile>> =

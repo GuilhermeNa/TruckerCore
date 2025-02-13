@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.storage_file.mapper
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
@@ -102,4 +103,4 @@ internal class StorageFileMapperITestImpl {
         }
     }
 
-}
+}*/

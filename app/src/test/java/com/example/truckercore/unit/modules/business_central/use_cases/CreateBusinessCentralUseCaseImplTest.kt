@@ -1,71 +1,82 @@
 package com.example.truckercore.unit.modules.business_central.use_cases
 
-import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
+import com.example.truckercore.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.use_cases.implementations.CreateBusinessCentralUseCaseImpl
 import com.example.truckercore.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.abstractions.ValidationException
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.InvalidStateException
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class CreateBusinessCentralUseCaseImplTest {
 
-    private lateinit var repository: BusinessCentralRepository
-    private lateinit var validatorService: ValidatorService
-    private lateinit var mapper: BusinessCentralMapper
-    private lateinit var useCase: CreateBusinessCentralUseCase
-    private lateinit var entity: BusinessCentral
-    private lateinit var dto: BusinessCentralDto
-    private lateinit var id: String
+    companion object {
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        repository = mockk<BusinessCentralRepository>(relaxed = true)
-        validatorService = mockk<ValidatorService>(relaxed = true)
-        validatorService = mockk<ValidatorService>(relaxed = true)
-        mapper = mockk<BusinessCentralMapper>(relaxed = true)
-        useCase = CreateBusinessCentralUseCaseImpl(repository, validatorService, mapper)
-        entity = TestBusinessCentralDataProvider.getBaseEntity()
-        dto = TestBusinessCentralDataProvider.getBaseDto()
-        id = "newId"
+        private lateinit var requirePermission: Permission
+        private lateinit var permissionService: PermissionService
+        private lateinit var repository: BusinessCentralRepository
+        private lateinit var validatorService: ValidatorService
+        private lateinit var mapper: BusinessCentralMapper
+        private lateinit var useCase: CreateBusinessCentralUseCase
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            requirePermission = Permission.CREATE_BUSINESS_CENTRAL
+            permissionService = mockk(relaxed = true)
+            repository = mockk(relaxed = true)
+            validatorService = mockk(relaxed = true)
+            mapper = mockk(relaxed = true)
+            useCase = CreateBusinessCentralUseCaseImpl(
+                requirePermission, permissionService, repository, validatorService, mapper
+            )
+        }
     }
 
     @Test
-    fun `execute() should return response success data is valid`() = runTest {
-        // Behavior
+    fun `execute() should return success when data correctly created`() = runTest {
+        // Arrange
+        val newId = "id"
+        val validUser = mockk<User> {
+            every { level } returns Level.MASTER
+            every { permissions } returns hashSetOf(Permission.CREATE_BUSINESS_CENTRAL)
+        }
+        val entity = mockk<BusinessCentral>(relaxed = true)
+        val dto = mockk<BusinessCentralDto>(relaxed = true) {
+            every { id } returns newId
+        }
+
         every { validatorService.validateForCreation(entity) } returns Unit
         every { mapper.toDto(entity) } returns dto
-        coEvery { repository.create(dto) } returns flowOf(Response.Success(id))
+        every { repository.create(dto) } returns flowOf(Response.Success(newId))
 
         // Call
-        val result = useCase.execute(entity).single()
+        val result = useCase.execute(validUser, entity).single()
 
         // Behavior
         assertTrue(result is Response.Success)
-        assertEquals(id, (result as Response.Success).data)
+        assertEquals(newId, (result as Response.Success).data)
 
-        coVerifyOrder {
+        verifyOrder {
             validatorService.validateForCreation(entity)
             mapper.toDto(entity)
             repository.create(dto)
@@ -73,22 +84,17 @@ class CreateBusinessCentralUseCaseImplTest {
     }
 
     @Test
-    fun `execute() should return an error when any error occurs in the flow`() =
-        runTest {
-            // Object
-            val exception = BusinessCentralValidationException()
-
-            // Behavior
-            every { validatorService.validateForCreation(entity) } throws exception
-
-            // Call
-            val result = useCase.execute(entity).single()
-
-            // Behavior
-            assertTrue(result is Response.Error)
-            assertTrue((result as Response.Error).exception is BusinessCentralValidationException)
-
+    fun `execute() should throw InvalidStateException when user is wrong state`() = runTest {
+        // Arrange
+        val invalidUser = mockk<User> {
+            every { level } returns Level.DRIVER
         }
+        val entity = mockk<BusinessCentral>(relaxed = true)
 
+        // Call
+        assertThrows<InvalidStateException> {
+            useCase.execute(invalidUser, entity).single()
+        }
+    }
 
 }

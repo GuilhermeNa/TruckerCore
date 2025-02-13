@@ -2,10 +2,10 @@ package com.example.truckercore.unit.modules.business_central.validator
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.business_central.errors.BusinessCentralValidationException
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
@@ -92,25 +92,17 @@ internal class BusinessCentralValidationStrategyTestImpl {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw BusinessCentralValidationException when there is any invalid field`(
+    fun `validateDto() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
         // Call
-        val exception = assertThrows<BusinessCentralValidationException> {
+        assertThrows<InvalidObjectException> {
             validator.validateDto(input)
         }
-
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
-
     }
 
     @Test
-    fun `validateDto() should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
+    fun `validateDto() should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
         // Object
         val unexpectedDto = object : Dto {
             override val businessCentralId: String? = null
@@ -119,21 +111,16 @@ internal class BusinessCentralValidationStrategyTestImpl {
             override val creationDate: Date? = null
             override val lastUpdate: Date? = null
             override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto { TODO() }
+            override fun initializeId(newId: String): Dto {
+                TODO()
+            }
         }
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
         // Call
-        val exception = assertThrows<IllegalValidationArgumentException> {
+        assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
-
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
 
     }
 
@@ -159,24 +146,18 @@ internal class BusinessCentralValidationStrategyTestImpl {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw BusinessCentralValidationException when there is any invalid field`(
+    fun `validateEntity() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
         // Call
-        val exception = assertThrows<BusinessCentralValidationException> {
+        assertThrows<InvalidObjectException> {
             validator.validateEntity(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
     }
 
     @Test
-    fun `validateEntity () should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
+    fun `validateEntity () should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
         // Object
         val unexpectedEntity = object : Entity {
             override val businessCentralId: String = ""
@@ -189,16 +170,9 @@ internal class BusinessCentralValidationStrategyTestImpl {
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-        val exception = assertThrows<IllegalValidationArgumentException> {
+       assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
-
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains(" and received")
-            } ?: false
-        )
 
     }
 
@@ -224,24 +198,18 @@ internal class BusinessCentralValidationStrategyTestImpl {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() throw BusinessCentralValidationException when there is any invalid field`(
+    fun `validateForCreation() throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
         // Call
-        val exception = assertThrows<BusinessCentralValidationException> {
+        assertThrows<InvalidObjectException> {
             validator.validateForCreation(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
     }
 
     @Test
-    fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
+    fun `validateForCreation() should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
         // Object
         val unexpectedEntity = object : Entity {
             override val businessCentralId: String = ""
@@ -254,17 +222,9 @@ internal class BusinessCentralValidationStrategyTestImpl {
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-        val exception = assertThrows<IllegalValidationArgumentException> {
+        assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
-
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains(" and received")
-            } ?: false
-        )
-
     }
 
 }

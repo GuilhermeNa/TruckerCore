@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.use_cases
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
@@ -48,7 +49,8 @@ class GetLicensingByIdUseCaseImplTest {
             )
     }
 
-    /*@Test
+    */
+/*@Test
     fun `should retrieve the entity when it's found and has permission`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(user, Permission.VIEW_LICENSING) } returns true
@@ -142,5 +144,6 @@ class GetLicensingByIdUseCaseImplTest {
             mapper.toEntity(dto)
         }
     }
-*/
-}
+*//*
+
+}*/

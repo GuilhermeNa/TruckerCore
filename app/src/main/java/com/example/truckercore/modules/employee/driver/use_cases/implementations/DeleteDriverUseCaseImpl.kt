@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 
 internal class DeleteDriverUseCaseImpl(
-    private val repository: DriverRepository,
-    private val checkExistence: CheckUserExistenceUseCase,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: DriverRepository,
+    private val checkExistence: CheckUserExistenceUseCase
 ) : UseCase(permissionService), DeleteDriverUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)

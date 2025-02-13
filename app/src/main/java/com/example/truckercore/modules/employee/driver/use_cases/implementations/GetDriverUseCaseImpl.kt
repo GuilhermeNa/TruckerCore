@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class GetDriverUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: DriverRepository,
     private val validatorService: ValidatorService,
-    private val mapper: DriverMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: DriverMapper
 ) : UseCase(permissionService), GetDriverUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Driver>> =

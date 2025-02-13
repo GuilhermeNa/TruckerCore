@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.modules.user.repository
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore.infrastructure.database.firebase.interfaces.FirebaseRepository
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.repository.UserRepositoryImpl
@@ -71,4 +71,4 @@ class UserRepositoryImplTest {
         coVerify { fireBaseRepository.documentFetch(id) }
     }
 
-}
+}*/

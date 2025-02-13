@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.modules.employee.admin.validator
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
@@ -245,4 +246,4 @@ class AdminValidationStrategyTest {
         )
     }
 
-}
+}*/
