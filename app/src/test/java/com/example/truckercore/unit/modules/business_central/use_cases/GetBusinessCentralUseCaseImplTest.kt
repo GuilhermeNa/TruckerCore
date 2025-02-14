@@ -4,7 +4,6 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionServiceImpl
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
@@ -18,72 +17,110 @@ import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class GetBusinessCentralUseCaseImplTest {
+class GetBusinessCentralUseCaseImplTest : KoinTest {
+
+    private val requirePermission = Permission.VIEW_BUSINESS_CENTRAL
+    private val permissionService: PermissionService by inject()
+    private val repository: BusinessCentralRepository by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: BusinessCentralMapper by inject()
+    private val useCase: GetBusinessCentralUseCase by inject()
+
+    private val user: User = mockk(relaxed = true)
+    private val docParams: DocumentParameters = mockk(relaxed = true) {
+        every { user } returns this@GetBusinessCentralUseCaseImplTest.user
+    }
+    private val queryParams: QueryParameters = mockk(relaxed = true) {
+        every { user } returns this@GetBusinessCentralUseCaseImplTest.user
+    }
 
     companion object {
 
-        private lateinit var requirePermission: Permission
-        private lateinit var permissionService: PermissionService
-        private lateinit var repository: BusinessCentralRepository
-        private lateinit var validatorService: ValidatorService
-        private lateinit var mapper: BusinessCentralMapper
-        private lateinit var useCase: GetBusinessCentralUseCase
-
         @JvmStatic
         @BeforeAll
-        fun setUp() {
+        fun setup() {
             mockStaticLog()
-            requirePermission = Permission.VIEW_BUSINESS_CENTRAL
-            permissionService = PermissionServiceImpl()
-            repository = mockk(relaxed = true)
-            validatorService = mockk(relaxed = true)
-            mapper = mockk(relaxed = true)
-            useCase = GetBusinessCentralUseCaseImpl(
-                requiredPermission = requirePermission,
-                permissionService = permissionService,
-                repository = repository,
-                validatorService = validatorService,
-                mapper = mapper
-            )
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<BusinessCentralRepository> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<BusinessCentralMapper> { mockk() }
+                        single<GetBusinessCentralUseCase> {
+                            GetBusinessCentralUseCaseImpl(
+                                Permission.VIEW_BUSINESS_CENTRAL,
+                                get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
     fun `execute(DocumentParameters) should return Success when user has auth and data exists`() =
         runTest {
             // Arrange
-            val user = mockk<User> {
-                every { permissions } returns hashSetOf(Permission.VIEW_BUSINESS_CENTRAL)
-            }
-            val dto = mockk<BusinessCentralDto>()
-            val entity = mockk<BusinessCentral>()
-            val repositoryResponse = Response.Success(dto)
-            val params = DocumentParameters.create(user)
-                .setStream(false).setId("id").build()
-            val expectedResult = Response.Success(entity)
+            val dto: BusinessCentralDto = mockk(relaxed = true)
+            val entity: BusinessCentral = mockk(relaxed = true)
 
-            every { repository.fetchByDocument(params) } returns flowOf(repositoryResponse)
-            every { validatorService.validateDto(dto) } returns Unit
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByDocument(any()) } returns flowOf(Response.Success(dto))
+            every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
             // Call
-            val result = useCase.execute(params).single()
+            val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertEquals(expectedResult, result)
+            assertEquals(entity, (result as Response.Success).data)
             verifyOrder {
-                repository.fetchByDocument(params)
-                validatorService.validateDto(repositoryResponse.data)
-                mapper.toEntity(repositoryResponse.data)
+                permissionService.canPerformAction(user, requirePermission)
+                repository.fetchByDocument(docParams)
+                validatorService.validateDto(dto)
+                mapper.toEntity(dto)
+            }
+        }
+
+    @Test
+    fun `execute(DocumentParameters) should return Empty when the repository don't found data`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByDocument(any()) } returns flowOf(Response.Empty)
+
+            // Call
+            val result = useCase.execute(docParams).single()
+
+            // Assertions
+            assertTrue(result is Response.Empty)
+            verifyOrder {
+                permissionService.canPerformAction(user, requirePermission)
+                repository.fetchByDocument(docParams)
             }
         }
 
@@ -91,54 +128,61 @@ class GetBusinessCentralUseCaseImplTest {
     fun `execute(DocumentParameters) should throw UnauthorizedAccessException when the user has no auth`() =
         runTest {
             // Arrange
-            val userWithoutPermission = mockk<User> {
-                every { permissions } returns hashSetOf()
-            }
-            val params = mockk<DocumentParameters>(relaxed = true) {
-                every { user } returns userWithoutPermission
-
-            }
+            every { permissionService.canPerformAction(any(), any()) } returns false
 
             // Call
             assertThrows<UnauthorizedAccessException> {
-                useCase.execute(params).single()
+                useCase.execute(docParams).single()
             }
 
+            // Assertions
+            verify {
+                permissionService.canPerformAction(user, requirePermission)
+            }
         }
 
     @Test
     fun `execute(QueryParameters) should return Success when user has auth and data exists`() =
         runTest {
             // Arrange
-            val validUser = mockk<User>(relaxed = true) {
-                every { permissions } returns hashSetOf(Permission.VIEW_BUSINESS_CENTRAL)
-            }
-            val entity = mockk<BusinessCentral>(relaxed = true)
-            val dto = mockk<BusinessCentralDto>(relaxed = true)
-
+            val dto: BusinessCentralDto = mockk(relaxed = true)
+            val entity: BusinessCentral = mockk(relaxed = true)
             val dtoList = listOf(dto)
             val entityList = listOf(entity)
 
-            val params = mockk<QueryParameters>(relaxed = true) {
-                every { user } returns validUser
-            }
-
-            val repositoryResponse = Response.Success(dtoList)
-            val expectedResult = Response.Success(entityList)
-
-            every { repository.fetchByQuery(params) } returns flowOf(repositoryResponse)
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByQuery(any()) } returns flowOf(Response.Success(dtoList))
             every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
             // Call
-            val result = useCase.execute(params).single()
+            val result = useCase.execute(queryParams).single()
 
             // Assertions
-            assertEquals(expectedResult, result)
+            assertEquals(entityList, (result as Response.Success).data)
             verifyOrder {
-                repository.fetchByQuery(params)
+                permissionService.canPerformAction(user, Permission.VIEW_BUSINESS_CENTRAL)
+                repository.fetchByQuery(queryParams)
                 validatorService.validateDto(dto)
                 mapper.toEntity(dto)
+            }
+        }
+
+    @Test
+    fun `execute(QueryParameters) should return Empty when the repository don't found data`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByQuery(any()) } returns flowOf(Response.Empty)
+
+            // Call
+            val result = useCase.execute(queryParams).single()
+
+            // Assertions
+            assertTrue(result is Response.Empty)
+            verifyOrder {
+                permissionService.canPerformAction(user, requirePermission)
+                repository.fetchByQuery(queryParams)
             }
         }
 
@@ -146,18 +190,18 @@ class GetBusinessCentralUseCaseImplTest {
     fun `execute(QueryParameters) should throw UnauthorizedAccessException when the user has no auth`() =
         runTest {
             // Arrange
-            val userWithoutPermission = mockk<User> {
-                every { permissions } returns hashSetOf()
-            }
-            val params = mockk<QueryParameters>(relaxed = true) {
-                every { user } returns userWithoutPermission
-            }
+            every { permissionService.canPerformAction(any(), any()) } returns false
 
             // Call
             assertThrows<UnauthorizedAccessException> {
-                useCase.execute(params).single()
+                useCase.execute(queryParams).single()
             }
 
+            // Assertions
+            verify {
+                permissionService.canPerformAction(user, requirePermission)
+            }
         }
+
 
 }

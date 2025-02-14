@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.modules.personal_data.repository
 
-import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see PersonalDataDto
  */
-internal interface PersonalDataRepository : NewRepository {
+internal interface PersonalDataRepository : Repository {
 
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<PersonalDataDto>>
 

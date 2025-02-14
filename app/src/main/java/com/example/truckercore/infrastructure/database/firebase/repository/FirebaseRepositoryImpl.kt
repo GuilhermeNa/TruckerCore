@@ -60,7 +60,7 @@ internal class FirebaseRepositoryImpl(
                 dto = dto,
                 collection = collection
             )
-        }.await()
+        }
 
         awaitClose { this.cancel() }
     }
@@ -82,7 +82,7 @@ internal class FirebaseRepositoryImpl(
                 id = id,
                 collection = collection
             )
-        }.await()
+        }
 
         awaitClose { this.cancel() }
     }

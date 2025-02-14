@@ -3,7 +3,6 @@ package com.example.truckercore.unit.modules.business_central.use_cases
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionServiceImpl
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
@@ -17,47 +16,64 @@ import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class UpdateBusinessCentralUseCaseImplTest {
+class UpdateBusinessCentralUseCaseImplTest : KoinTest {
+
+    private val permissionService: PermissionService by inject()
+    private val repository: BusinessCentralRepository by inject()
+    private val checkExistence: CheckBusinessCentralExistenceUseCase by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: BusinessCentralMapper by inject()
+    private val useCase: UpdateBusinessCentralUseCase by inject()
+
+    private val id = "objId"
+    private val bCentral: BusinessCentral = mockk()
+    private val dto: BusinessCentralDto = mockk()
+    private val user: User = mockk()
 
     companion object {
 
-        private lateinit var requiredPermission: Permission
-        private lateinit var useCase: UpdateBusinessCentralUseCase
-        private lateinit var checkExistence: CheckBusinessCentralExistenceUseCase
-        private lateinit var repository: BusinessCentralRepository
-        private lateinit var permissionService: PermissionService
-        private lateinit var validatorService: ValidatorService
-        private lateinit var mapper: BusinessCentralMapper
-
         @JvmStatic
         @BeforeAll
-        fun setUp() {
+        fun setup() {
             mockStaticLog()
-            requiredPermission = Permission.UPDATE_BUSINESS_CENTRAL
-            permissionService = PermissionServiceImpl()
-            checkExistence = mockk(relaxed = true)
-            validatorService = mockk(relaxed = true)
-            mapper = mockk(relaxed = true)
-            repository = mockk(relaxed = true)
-            useCase = UpdateBusinessCentralUseCaseImpl(
-                requiredPermission = Permission.UPDATE_BUSINESS_CENTRAL,
-                permissionService = permissionService,
-                repository = repository,
-                checkExistence = checkExistence,
-                validatorService = validatorService,
-                mapper = mapper
-            )
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<BusinessCentralRepository> { mockk() }
+                        single<CheckBusinessCentralExistenceUseCase> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<BusinessCentralMapper> { mockk() }
+                        single<UpdateBusinessCentralUseCase> {
+                            UpdateBusinessCentralUseCaseImpl(
+                                Permission.UPDATE_BUSINESS_CENTRAL,
+                                get(), get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
 
     }
 
@@ -65,67 +81,62 @@ class UpdateBusinessCentralUseCaseImplTest {
     fun `execute() should return success when entity exists and is updated successfully`() =
         runTest {
             // Arrange
-            val userId = "id"
-            val validUser = mockk<User>(relaxed = true) {
-                every { id } returns userId
-                every { permissions } returns hashSetOf(Permission.UPDATE_BUSINESS_CENTRAL)
-            }
-            val bCentral = mockk<BusinessCentral>(relaxed = true)
-            val bCentralDto = mockk<BusinessCentralDto>(relaxed = true)
-            val existenceResponse = Response.Success(Unit)
-            val updateResponse = Response.Success(Unit)
-
-            every { checkExistence.execute(validUser, userId) } returns flowOf(existenceResponse)
-            every { validatorService.validateEntity(bCentral) } returns Unit
-            every { mapper.toDto(bCentral) } returns bCentralDto
-            every { repository.update(bCentralDto) } returns flowOf(updateResponse)
+            every { bCentral.id } returns id
+            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { validatorService.validateEntity(any()) } returns Unit
+            every { mapper.toDto(any()) } returns dto
+            every { repository.update(any()) } returns flowOf(Response.Success(Unit))
 
             // Call
-            val result = useCase.execute(validUser, bCentral).single()
+            val result = useCase.execute(user, bCentral).single()
 
             // Assertions
             assertTrue(result is Response.Success)
             verifyOrder {
-                checkExistence.execute(validUser, userId)
+                bCentral.id
+                checkExistence.execute(user, id)
+                permissionService.canPerformAction(user, Permission.UPDATE_BUSINESS_CENTRAL)
                 validatorService.validateEntity(bCentral)
                 mapper.toDto(bCentral)
-                repository.update(bCentralDto)
+                repository.update(dto)
             }
         }
 
     @Test
-    fun `execute() should throw NullPointerException when id is null`() = runTest {
-        // Arrange
-        val validUser = mockk<User>(relaxed = true)
-        val bCentral = mockk<BusinessCentral>(relaxed = true) {
-            every { id } returns null
-        }
+    fun `execute() should throw NullPointerException when the BusinessCentral id is null`() =
+        runTest {
+            // Arrange
+            every { bCentral.id } returns null
 
-        // Call
-        assertThrows<NullPointerException> {
-            useCase.execute(validUser, bCentral)
-        }
+            // Call
+            assertThrows<NullPointerException> {
+                useCase.execute(user, bCentral).single()
+            }
 
-    }
+            // Assertions
+            verify {
+                bCentral.id
+            }
+        }
 
     @Test
-    fun `execute() should throw ObjectNotFoundException when object does not exists`() = runTest {
-        // Arrange
-        val validUser = mockk<User>(relaxed = true) {
-            every { permissions } returns hashSetOf()
-        }
-        val bCentralId = "id"
-        val bCentral = mockk<BusinessCentral>(relaxed = true) {
-            every { id } returns bCentralId
-        }
-        val existenceResponse = Response.Empty
+    fun `execute() should throw ObjectNotFoundException checkExistence returns Empty`() =
+        runTest {
+            // Arrange
+            every { bCentral.id } returns id
+            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Empty)
 
-        every { checkExistence.execute(validUser, bCentralId) } returns flowOf(existenceResponse)
+            // Call
+            assertThrows<ObjectNotFoundException> {
+                useCase.execute(user, bCentral).single()
+            }
 
-        // Call
-        assertThrows<ObjectNotFoundException> {
-            useCase.execute(validUser, bCentral)
+            // Assertions
+            verifyOrder {
+                bCentral.id
+                checkExistence.execute(user, id)
+            }
         }
-    }
 
 }

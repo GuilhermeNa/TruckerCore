@@ -1,7 +1,6 @@
 package com.example.truckercore.modules.business_central.repository
 
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -20,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see BusinessCentralDto
  */
-internal interface BusinessCentralRepository : NewRepository {
+internal interface BusinessCentralRepository : Repository {
 
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<BusinessCentralDto>>
 

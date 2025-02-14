@@ -1,8 +1,6 @@
 package com.example.truckercore.modules.employee.driver.repository
 
-import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.driver.dto.DriverDto
-import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -21,7 +19,7 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see DriverDto
  */
-internal interface DriverRepository : NewRepository {
+internal interface DriverRepository : Repository {
 
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<DriverDto>>
 

@@ -22,7 +22,9 @@ enum class Collection(private val collectionName: String) {
     PAYROLL("payroll"),
     ADMIN("admin"),
     DRIVER("driver"),
+    TRUCK("truck"),
     USER("user"),
+    TRAILER("trailer"),
     LICENSING("licensing");
 
     // Função para acessar o nome da coleção

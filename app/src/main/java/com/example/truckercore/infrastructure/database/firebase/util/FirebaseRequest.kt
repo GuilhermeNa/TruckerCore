@@ -81,7 +81,7 @@ internal class FirebaseRequest<T : Dto> private constructor(
          * @throws IllegalArgumentException If no parameters are provided.
          */
         private fun checkParams(): SearchParameters =
-            params ?: throw IllegalArgumentException("You must provide a Search Parameter.")
+            params ?: throw FirebaseRequestException("You must provide a Search Parameter.")
 
         /**
          * Validates that the collection is set. If not, throws an [IllegalArgumentException].
@@ -90,7 +90,7 @@ internal class FirebaseRequest<T : Dto> private constructor(
          * @throws IllegalArgumentException If no collection is provided.
          */
         private fun checkCollection(): Collection =
-            collection ?: throw IllegalArgumentException("You must provide a Collection reference.")
+            collection ?: throw FirebaseRequestException("You must provide a Collection reference.")
     }
 
     /**

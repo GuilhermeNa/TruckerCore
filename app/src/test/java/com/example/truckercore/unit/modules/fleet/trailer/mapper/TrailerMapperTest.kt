@@ -1,28 +1,38 @@
-/*
 package com.example.truckercore.unit.modules.fleet.trailer.mapper
 
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
+import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.modules.fleet.trailer.enums.TrailerCategory
-import com.example.truckercore.modules.fleet.trailer.errors.TrailerMappingException
 import com.example.truckercore.modules.fleet.trailer.mapper.TrailerMapper
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
-import io.mockk.every
-import io.mockk.spyk
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class TrailerMapperTest {
+class TrailerMapperTest : KoinTest {
 
-    private val mapper = TrailerMapper()
+    private val mapper: TrailerMapper by inject()
+
     private val entity = TestTrailerDataProvider.getBaseEntity()
     private val dto = TestTrailerDataProvider.getBaseDto()
 
@@ -31,7 +41,19 @@ class TrailerMapperTest {
         @JvmStatic
         fun setup() {
             mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single { TrailerMapper() }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
         @JvmStatic
         fun getInvalidDtos(): Array<TrailerDto> {
             return TestTrailerDataProvider.arrInvalidDtos()
@@ -86,27 +108,44 @@ class TrailerMapperTest {
     }
 
     @Test
-    fun `toDto() should throw TrailerMappingException when there are errors`() {
+    fun `toDto() should throw IllegalMappingArgumentException when the dto is wrong`() {
         // Object
-        val mockk = spyk(mapper, recordPrivateCalls = true)
-
-        // Behavior
-        every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
+        val wrongDto = TestUserDataProvider.getBaseDto()
 
         // Call
-        assertThrows<TrailerMappingException> {
-            mockk.toDto(entity)
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toEntity(wrongDto)
         }
+
+        // Assertions
+        assertTrue(exception.expected == TrailerDto::class)
+        assertTrue(exception.received == UserDto::class)
+    }
+
+    @Test
+    fun `toEntity() should throw IllegalMappingArgumentException when the entity is wrong`() {
+        // Arrange
+        val wrongEntity = TestUserDataProvider.getBaseEntity()
+
+        // Call
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toDto(wrongEntity)
+        }
+
+        // Assertions
+        assertTrue(exception.expected == Trailer::class)
+        assertTrue(exception.received == User::class)
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw TrailerMappingException when there are errors`(
+    fun `toEntity() should throw InvalidForMappingException when there are errors`(
         pDto: TrailerDto
     ) {
-        assertThrows<TrailerMappingException> {
+        val exception = assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
+        assertTrue(exception.dto is TrailerDto)
     }
 
-}*/
+}

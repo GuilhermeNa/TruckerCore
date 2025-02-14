@@ -5,6 +5,7 @@ import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.modules.business_central.repository.BusinessCentralRepositoryImpl
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -12,18 +13,48 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class BusinessCentralRepositoryImplTest {
+internal class BusinessCentralRepositoryImplTest : KoinTest {
 
-    private val fireBaseRepository: FirebaseRepository = mockk(relaxed = true)
+    private val fireBaseRepository: FirebaseRepository by inject()
+    private val repository: BusinessCentralRepository by inject()
+
     private val collection = Collection.CENTRAL
-    private val repository = BusinessCentralRepositoryImpl(fireBaseRepository, collection)
-
     private val dto = TestBusinessCentralDataProvider.getBaseDto()
     private val id = "testId"
 
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single<FirebaseRepository> { mockk(relaxed = true) }
+                        single<BusinessCentralRepository> {
+                            BusinessCentralRepositoryImpl(get(), collection = Collection.CENTRAL)
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
+    }
 
     @Test
     fun `create() should call fireBaseRepository`() = runTest {
@@ -74,7 +105,10 @@ internal class BusinessCentralRepositoryImplTest {
         repositorySpy.fetchByDocument(params)
 
         // Assertions
-        verify { fireBaseRepository.documentFetch(request) }
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.documentFetch(request)
+        }
     }
 
     @Test
@@ -90,7 +124,10 @@ internal class BusinessCentralRepositoryImplTest {
         repositorySpy.fetchByQuery(params)
 
         // Assertions
-        verify { fireBaseRepository.documentFetch(request) }
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.queryFetch(request)
+        }
     }
 
 }

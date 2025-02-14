@@ -35,6 +35,10 @@ internal object TestUserDataProvider {
         personFLag = PersonCategory.ADMIN.name
     )
 
+    fun getUserWithPermission(vararg permission: Permission): User {
+        return getBaseEntity().copy(permissions = hashSetOf(*permission))
+    }
+
     fun arrInvalidDtos() = arrayOf(
         getBaseDto().copy(businessCentralId = null),
         getBaseDto().copy(id = null),
@@ -44,6 +48,7 @@ internal object TestUserDataProvider {
         getBaseDto().copy(persistenceStatus = null),
         getBaseDto().copy(level = null),
         getBaseDto().copy(permissions = null),
+        getBaseDto().copy(personFLag = null)
     )
 
     fun arrValidDtosForValidationRules() = arrayOf(
@@ -71,7 +76,9 @@ internal object TestUserDataProvider {
         getBaseDto().copy(level = "INVALID"),
         getBaseDto().copy(permissions = null),
         getBaseDto().copy(permissions = emptyList()),
-        getBaseDto().copy(permissions = listOf("INVALID_VALUE"))
+        getBaseDto().copy(permissions = listOf("INVALID_VALUE")),
+        getBaseDto().copy(personFLag = null),
+        getBaseDto().copy(personFLag = "INVALID")
     )
 
     fun arrValidEntitiesForValidationRules() = arrayOf(

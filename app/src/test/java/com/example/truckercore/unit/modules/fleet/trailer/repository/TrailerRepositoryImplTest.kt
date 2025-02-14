@@ -1,84 +1,133 @@
-/*
 package com.example.truckercore.unit.modules.fleet.trailer.repository
 
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
+import com.example.truckercore.configs.app_constants.Collection
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepositoryImpl
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.spyk
+import io.mockk.verify
+import io.mockk.verifyOrder
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class TrailerRepositoryImplTest {
+class TrailerRepositoryImplTest : KoinTest {
 
-    private lateinit var repository: TrailerRepository
-    private val fireBaseRepository: FirebaseRepository<TrailerDto> = mockk(relaxed = true)
+    private val fireBaseRepository: FirebaseRepository by inject()
+    private val repository: TrailerRepository by inject()
 
-    @BeforeEach
-    fun setup() {
-        repository = TrailerRepositoryImpl(fireBaseRepository)
+    private val collection = Collection.TRAILER
+    private val dto = TestTrailerDataProvider.getBaseDto()
+    private val id = "testId"
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single<FirebaseRepository> { mockk(relaxed = true) }
+                        single<TrailerRepository> {
+                            TrailerRepositoryImpl(get(), collection = Collection.TRAILER)
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `should call fireBase repository create`() = runTest {
-        // Arrange
-        val dto = TestTrailerDataProvider.getBaseDto()
-
+    fun `should call fireBase repository create`() {
         // Call
         repository.create(dto)
 
         // Assertion
-        coVerify { fireBaseRepository.create(dto) }
+        verify { fireBaseRepository.create(collection, dto) }
     }
 
     @Test
-    fun `should call fireBase repository update`() = runTest {
-        // Arrange
-        val dto = TestTrailerDataProvider.getBaseDto()
-
+    fun `should call fireBase repository update`() {
         // Call
         repository.update(dto)
 
         // Assertion
-        coVerify { fireBaseRepository.update(dto) }
+        verify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
-    fun `should call fireBase repository delete`() = runTest {
-        // Arrange
-        val id = "id"
-
+    fun `should call fireBase repository delete`() {
         // Call
         repository.delete(id)
 
         // Assertion
-        coVerify { fireBaseRepository.delete(id) }
+        coVerify { fireBaseRepository.delete(collection, id) }
     }
 
     @Test
-    fun `should call fireBase repository exists`() = runTest {
-        // Arrange
-        val id = "id"
-
+    fun `should call fireBase repository exists`() {
         // Call
         repository.entityExists(id)
 
         // Assertion
-        coVerify { fireBaseRepository.entityExists(id) }
+        coVerify { fireBaseRepository.entityExists(collection, id) }
     }
 
     @Test
-    fun `should call fireBase repository simpleDocumentFetch`() = runTest {
+    fun `fetchByDocument() should call fireBaseRepository`() {
         // Arrange
-        val id = "id"
+        val params = mockk<DocumentParameters>()
+        val request = mockk<FirebaseRequest<TrailerDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
 
         // Call
-        repository.fetchById(id)
+        repositorySpy.fetchByDocument(params)
 
-        // Assertion
-        coVerify { fireBaseRepository.documentFetch(id) }
+        // Assertions
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.documentFetch(request)
+        }
     }
 
-}*/
+    @Test
+    fun `fetchByQuery() should call fireBaseRepository`() {
+        // Arrange
+        val params = mockk<QueryParameters>()
+        val request = mockk<FirebaseRequest<TrailerDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
+        // Call
+        repositorySpy.fetchByQuery(params)
+
+        // Assertions
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.queryFetch(request)
+        }
+    }
+
+}

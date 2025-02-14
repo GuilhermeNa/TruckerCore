@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.shared.modules.storage_file.use_cases
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class GetStorageFileUseCaseImplTest {
+*/
 /*
 
     private var repository: StorageFileRepository = mockk()
@@ -269,6 +271,7 @@ class GetStorageFileUseCaseImplTest {
             mapper.toEntity(dto)
         }
     }
-*/
+*//*
 
-}
+
+}*/

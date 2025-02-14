@@ -25,5 +25,4 @@ fun mockTask() = mockk<Task<Void>> {
     every { isComplete } returns true
     every { isCanceled } returns false
     every { result } returns mockk()
-
 }

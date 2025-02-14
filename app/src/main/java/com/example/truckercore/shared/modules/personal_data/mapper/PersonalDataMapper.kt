@@ -21,10 +21,10 @@ internal class PersonalDataMapper : Mapper {
             received = dto::class
         )
 
-    override fun toDto(entity: Entity): Dto =
+    override fun toDto(entity: Entity): PersonalDataDto =
         if (entity is PersonalData) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = StorageFile::class,
+            expected = PersonalData::class,
             received = entity::class
         )
 

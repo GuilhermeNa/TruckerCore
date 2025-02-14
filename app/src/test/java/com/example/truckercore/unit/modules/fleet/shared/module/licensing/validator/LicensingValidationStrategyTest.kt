@@ -3,19 +3,13 @@ package com.example.truckercore.unit.modules.fleet.shared.module.licensing.valid
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
 import com.example.truckercore.shared.errors.validation.InvalidObjectException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
@@ -32,10 +26,8 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import java.time.LocalDateTime
-import java.util.Date
 
-class LicensingValidationStrategyTest: KoinTest {
+class LicensingValidationStrategyTest : KoinTest {
 
     private val validator: LicensingValidationStrategy by inject()
 
@@ -45,7 +37,6 @@ class LicensingValidationStrategyTest: KoinTest {
         @BeforeAll
         fun setup() {
             mockStaticLog()
-
             startKoin {
                 modules(
                     module {
@@ -119,6 +110,7 @@ class LicensingValidationStrategyTest: KoinTest {
     fun `validateDto() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
+        // Call
         val exception = assertThrows<InvalidObjectException> {
             validator.validateDto(input)
         }
@@ -145,12 +137,15 @@ class LicensingValidationStrategyTest: KoinTest {
     fun `validateEntity() should call processEntityValidationRules() and don't throw exception`(
         input: ValidatorInput.EntityInput
     ) {
+        // Arrange
         val mock = spyk(validator, recordPrivateCalls = true)
 
+        // Call
         assertDoesNotThrow {
             mock.validateEntity(input)
         }
 
+        // Assertion
         verify {
             mock["processEntityValidationRules"](input.entity)
         }
@@ -161,10 +156,12 @@ class LicensingValidationStrategyTest: KoinTest {
     fun `validateEntity() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
+        // Call
         val exception = assertThrows<InvalidObjectException> {
             validator.validateEntity(input)
         }
 
+        // Arrange
         assertTrue(exception.entity is Licensing)
     }
 
@@ -188,12 +185,15 @@ class LicensingValidationStrategyTest: KoinTest {
     fun `validateForCreation() should call processEntityCreationRules() and don't throw exception`(
         input: ValidatorInput.EntityInput
     ) {
+        // Arrange
         val mock = spyk(validator, recordPrivateCalls = true)
 
+        // Call
         assertDoesNotThrow {
             mock.validateForCreation(input)
         }
 
+        // Assertion
         verify {
             mock["processEntityCreationRules"](input.entity)
         }
@@ -204,6 +204,7 @@ class LicensingValidationStrategyTest: KoinTest {
     fun `validateForCreation() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
+        // Call
         val exception = assertThrows<InvalidObjectException> {
             validator.validateForCreation(input)
         }
@@ -213,8 +214,8 @@ class LicensingValidationStrategyTest: KoinTest {
     }
 
     @Test
-    fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        // Object
+    fun `validateForCreation() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        // Arrange
         val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
@@ -223,7 +224,7 @@ class LicensingValidationStrategyTest: KoinTest {
             validator.validateForCreation(unexpectedEntityInput)
         }
 
-        // Arrange
+        // Assertions
         assertTrue(exception.received == User::class)
         assertTrue(exception.expected == Licensing::class)
     }

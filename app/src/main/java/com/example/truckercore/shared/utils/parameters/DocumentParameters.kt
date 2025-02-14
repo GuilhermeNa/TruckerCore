@@ -1,6 +1,7 @@
 package com.example.truckercore.shared.utils.parameters
 
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.validation.IllegalDocumentParametersException
 import com.example.truckercore.shared.utils.expressions.logWarn
 
 class DocumentParameters private constructor(
@@ -10,16 +11,14 @@ class DocumentParameters private constructor(
 ) : SearchParameters {
 
     init {
-        if (id.isBlank()) {
-            logWarn(javaClass, BLANK_ID_ERROR_MESSAGE)
-            throw IllegalArgumentException(BLANK_ID_ERROR_MESSAGE)
-        }
+        if (id.isBlank()) throw IllegalDocumentParametersException(
+            "You must provide the ID before build a DocumentParameter."
+        )
+
     }
 
     companion object {
         fun create(user: User) = Builder(user)
-        internal const val BLANK_ID_ERROR_MESSAGE =
-            "You must provide the ID before build a DocumentParameter."
     }
 
     class Builder(val user: User) {

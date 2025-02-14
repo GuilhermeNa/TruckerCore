@@ -1,79 +1,139 @@
-/*
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.employee.admin.repository.AdminRepository
+import com.example.truckercore.modules.employee.admin.repository.AdminRepositoryImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.google.common.base.Verify.verify
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class LicensingRepositoryImplTest {
+class LicensingRepositoryImplTest : KoinTest {
 
-    private val fireBaseRepository: FirebaseRepository = mockk(relaxed = true)
+    private val fireBaseRepository: FirebaseRepository by inject()
+    private val repository: LicensingRepository by inject()
+
     private val collection = Collection.LICENSING
-    private lateinit var repository: LicensingRepository
+    private val dto = TestLicensingDataProvider.getBaseDto()
+    private val id = "testId"
 
-    private lateinit var dto: LicensingDto
-    private lateinit var id: String
+    companion object {
 
-    @BeforeEach
-    fun setup() {
-        repository = LicensingRepositoryImpl(fireBaseRepository, collection)
-        dto = TestLicensingDataProvider.getBaseDto()
-        id = "testId"
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single<FirebaseRepository> { mockk(relaxed = true) }
+                        single<LicensingRepository> {
+                            LicensingRepositoryImpl(get(), collection = Collection.LICENSING)
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `create() should call fireBaseRepository`() = runTest {
+    fun `create() should call fireBaseRepository`() {
         // Call
         repository.create(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.create(collection, dto) }
+        verify { fireBaseRepository.create(collection, dto) }
     }
 
     @Test
-    fun `update() should call fireBaseRepository`() = runTest {
+    fun `update() should call fireBaseRepository`() {
         // Call
         repository.update(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.update(collection, dto) }
+        verify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
-    fun `delete() should call fireBaseRepository`() = runTest {
+    fun `delete() should call fireBaseRepository`() {
         // Call
         repository.delete(id)
 
         // Assertions
-        coVerify { fireBaseRepository.delete(collection, id) }
+        verify { fireBaseRepository.delete(collection, id) }
     }
 
     @Test
-    fun `entityExists() should call fireBaseRepository`() = runTest {
+    fun `entityExists() should call fireBaseRepository`() {
         // Call
         repository.entityExists(id)
 
         // Assertions
-        coVerify { fireBaseRepository.entityExists(collection, id) }
+        verify { fireBaseRepository.entityExists(collection, id) }
     }
 
-  */
-/*  @Test
-    fun `fetchById() should call fireBaseRepository`() = runTest {
+    @Test
+    fun `fetchByDocument() should call fireBaseRepository`() {
+        // Arrange
+        val params = mockk<DocumentParameters>()
+        val request = mockk<FirebaseRequest<AdminDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
         // Call
-        repository.fetchByDocument(id)
+        repositorySpy.fetchByDocument(params)
 
         // Assertions
-        coVerify { fireBaseRepository.documentFetch(collection, id, LicensingDto::class.java) }
-    }*//*
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.documentFetch(request)
+        }
+    }
 
+    @Test
+    fun `fetchByQuery() should call fireBaseRepository`() {
+        // Arrange
+        val params = mockk<QueryParameters>()
+        val request = mockk<FirebaseRequest<AdminDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
 
-}*/
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
+        // Call
+        repositorySpy.fetchByQuery(params)
+
+        // Assertions
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.queryFetch(request)
+        }
+    }
+
+}

@@ -1,65 +1,73 @@
 package com.example.truckercore.shared.interfaces
 
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
-internal interface Repository<T : Dto> {
+internal interface Repository {
 
     /**
-     * Creates a new entity entity in the database.
+     * Creates a new entity in the repository using the provided DTO.
+     * The DTO will be saved, and a new ID will be generated for it.
      *
-     * @param dto The data transfer object (DTO) containing the entity information to be created.
-     * This method generates an ID for the entity and stores it in the database.
+     * @param dto The DTO containing the data to create the new entity.
      * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully created.
-     * - [Response.Error] when the object creation fails.
+     * - [Response.Success] containing the generated ID if the entity was successfully created.
      */
-    suspend fun create(dto: T): Flow<Response<String>>
+    fun <T : Dto> create(dto: T): Flow<Response<String>>
 
     /**
-     * Updates an existing Entity in the database.
+     * Updates an existing entity in the repository with the provided DTO.
+     * The DTO contains the updated data for the entity.
      *
-     * @param dto The data transfer object (DTO) containing the updated information.
+     * @param dto The DTO containing the updated data for the entity.
      * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully updated.
-     * - [Response.Error] when the object update fails.
+     * - [Response.Success] when the entity was successfully updated.
      */
-    suspend fun update(dto: T): Flow<Response<Unit>>
+    fun <T : Dto> update(dto: T): Flow<Response<Unit>>
 
     /**
-     * Deletes an Entity entity from the database by its ID.
+     * Deletes an entity from the repository by its ID.
      *
-     * @param id The unique identifier (ID) of the entity to be deleted.
+     * @param id The ID of the entity to delete.
      * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully deleted.
-     * - [Response.Error] when the object delete fails.
+     * - [Response.Success] when the entity was successfully deleted.
+     * - [Response.Error] if an error occurs during the deletion.
      */
-    suspend fun delete(id: String): Flow<Response<Unit>>
+    fun delete(id: String): Flow<Response<Unit>>
 
     /**
-     * Checks if an Entity exists in the database by its ID.
+     * Checks whether an entity exists in the repository by its ID.
      *
-     * This method queries the database to check whether an entity with the given ID
-     * exists or not. It returns a boolean response wrapped in a [Flow]. If the entity
-     * exists, the response will emit `true`; otherwise, it will emit `false`.
-     *
-     * @param id The unique identifier (ID) of the entity to check for existence.
+     * @param id The ID of the entity to check for existence.
      * @return A [Flow] of:
-     * - [Response.Success] when the object exists.
-     * - [Response.Empty] when the object does not exist.
-     * - [Response.Error] when any error occurs.
+     * - [Response.Success] if the entity exists.
+     * - [Response.Empty] if the entity does not exist.
      */
-    suspend fun entityExists(id: String): Flow<Response<Unit>>
+    fun entityExists(id: String): Flow<Response<Unit>>
 
     /**
-     * Fetches an Entity by its ID.
+     * Fetches an entity from the repository by its ID.
+     * Returns the data as a generic object in the response.
      *
-     * @param id The unique identifier (ID) of the entity to be fetched.
+     * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of:
-     * - [Response.Success] when the object is successfully found.
-     * - [Response.Error] when any error occurs.
-     * - [Response.Empty] when the data was not found.
+     * - [Response.Success] containing the entity data.
+     * - [Response.Empty] if no entity is found for the given ID.
      */
-    suspend fun fetchById(id: String): Flow<Response<T>>
+    fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<*>>
+
+    /**
+     * Fetches a list of entities from the repository based on a query.
+     * The query is constructed using the provided query settings.
+     *
+     * @param queryParams The query parameters to filter the licensing records.
+     * @return A [Flow] of:
+     * - [Response.Success] containing a list of entities that match the query.
+     * - [Response.Error] if an error occurs during the query.
+     * - [Response.Empty] if no entities match the query.
+     */
+    fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<*>>>
 
 }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
  * @see User
  */
 internal abstract class UseCase(
-    open val permissionService: PermissionService,
+    open val permissionService: PermissionService
 ) {
 
     protected abstract val requiredPermission: Permission

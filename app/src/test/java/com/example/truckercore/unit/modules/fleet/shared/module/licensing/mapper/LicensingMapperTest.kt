@@ -3,20 +3,16 @@ package com.example.truckercore.unit.modules.fleet.shared.module.licensing.mappe
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
-import io.mockk.every
-import io.mockk.spyk
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -31,7 +27,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-internal class LicensingMapperTest: KoinTest {
+internal class LicensingMapperTest : KoinTest {
 
     private val mapper: LicensingMapper by inject()
 
@@ -134,14 +130,17 @@ internal class LicensingMapperTest: KoinTest {
         assertTrue(exception.expected == Licensing::class)
         assertTrue(exception.received == User::class)
     }
+
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw LicensingMappingException when there are errors`(
+    fun `toEntity() should throw InvalidForMappingException when there are errors`(
         pDto: LicensingDto
     ) {
+        // Call
         val exception = assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
+        // Assertions
         assertTrue(exception.dto is LicensingDto)
     }
 

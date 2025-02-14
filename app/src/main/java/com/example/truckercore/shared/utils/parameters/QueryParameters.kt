@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.utils.parameters
 
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.utils.expressions.logWarn
+import com.example.truckercore.shared.errors.IllegalQueryParametersException
 
 class QueryParameters private constructor(
     override val user: User,
@@ -11,9 +11,9 @@ class QueryParameters private constructor(
 
     init {
         if (queries.isEmpty()) {
-            val message = "You must provide at least one query before build a QueryParameter."
-            logWarn(javaClass, message)
-            throw IllegalArgumentException(message)
+            throw IllegalQueryParametersException(
+                "You must provide at least one query before build a QueryParameter."
+            )
         }
     }
 

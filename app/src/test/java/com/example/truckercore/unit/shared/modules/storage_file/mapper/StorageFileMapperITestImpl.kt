@@ -1,39 +1,57 @@
-/*
 package com.example.truckercore.unit.shared.modules.storage_file.mapper
 
 import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
-import com.example.truckercore.shared.errors.InvalidPersistenceStatusException
-import com.example.truckercore.shared.errors.InvalidUrlFormatException
-import com.example.truckercore.shared.errors.MissingFieldException
-import com.example.truckercore.shared.errors.UnknownErrorException
+import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.modules.storage_file.mapper.StorageFileMapper
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
-import io.mockk.every
-import io.mockk.spyk
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class StorageFileMapperITestImpl {
+internal class StorageFileMapperITestImpl : KoinTest {
 
-    private val mapper = StorageFileMapper()
+    private val mapper: StorageFileMapper by inject()
+
     private val entity = TestStorageFileDataProvider.getBaseEntity()
     private val dto = TestStorageFileDataProvider.getBaseDto()
 
     companion object {
 
-        @BeforeAll
         @JvmStatic
+        @BeforeAll
         fun setup() {
             mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single { StorageFileMapper() }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
 
         @JvmStatic
         fun getInvalidDtos(): Array<StorageFileDto> {
@@ -80,27 +98,46 @@ internal class StorageFileMapperITestImpl {
     }
 
     @Test
-    fun `toDto() should throw StorageFileMappingException when there are errors`() {
-        // Object
-        val mockk = spyk(mapper, recordPrivateCalls = true)
-
-        // Behavior
-        every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
+    fun `toDto() should throw IllegalMappingArgumentException when the dto is wrong`() {
+        // Arrange
+        val wrongDto = TestUserDataProvider.getBaseDto()
 
         // Call
-        assertThrows<StorageFileMappingException> {
-            mockk.toDto(entity)
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toEntity(wrongDto)
         }
+
+        // Assertions
+        assertTrue(exception.expected == StorageFileDto::class)
+        assertTrue(exception.received == UserDto::class)
+    }
+
+    @Test
+    fun `toEntity() should throw IllegalMappingArgumentException when the entity is wrong`() {
+        // Arrange
+        val wrongEntity = TestUserDataProvider.getBaseEntity()
+
+        // Call
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toDto(wrongEntity)
+        }
+
+        // Assertions
+        assertTrue(exception.expected == StorageFile::class)
+        assertTrue(exception.received == User::class)
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw StorageFileMappingException when there are errors`(
+    fun `toEntity() should throw InvalidForMappingException when there are errors`(
         pDto: StorageFileDto
     ) {
-        assertThrows<StorageFileMappingException> {
+        // Call
+        val exception = assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
+        // Assertions
+        assertTrue(exception.dto is StorageFileDto)
     }
 
-}*/
+}

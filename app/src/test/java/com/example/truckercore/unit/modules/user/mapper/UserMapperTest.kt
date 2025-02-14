@@ -1,45 +1,66 @@
-/*
 package com.example.truckercore.unit.modules.user.mapper
 
+import com.example.truckercore._test_data_provider.TestTruckDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.errors.UserMappingException
+import com.example.truckercore.modules.user.enums.PersonCategory
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
-import io.mockk.every
-import io.mockk.spyk
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class UserMapperTest {
+internal class UserMapperTest : KoinTest {
 
-    private lateinit var mapper: UserMapper
-    private lateinit var entity: User
-    private lateinit var dto: UserDto
+    private val mapper: UserMapper by inject()
+
+    private val entity: User = TestUserDataProvider.getBaseEntity()
+    private val dto: UserDto = TestUserDataProvider.getBaseDto()
 
     companion object {
+
+        @BeforeAll
+        @JvmStatic
+        fun setup() {
+            mockStaticLog()
+
+            startKoin {
+                modules(
+                    module {
+                        single { UserMapper() }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
         @JvmStatic
         fun getInvalidDtos(): Array<UserDto> {
             return TestUserDataProvider.arrInvalidDtos()
         }
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        mapper = UserMapper()
-        entity = TestUserDataProvider.getBaseEntity()
-        dto = TestUserDataProvider.getBaseDto()
     }
 
     @Test
@@ -56,6 +77,7 @@ internal class UserMapperTest {
         assertEquals(entity.persistenceStatus.name, createdDto.persistenceStatus)
         assertEquals(entity.level.name, createdDto.level)
         assertEquals(entity.permissions.map { it.name }, createdDto.permissions)
+        assertEquals(entity.personFLag.name, createdDto.personFLag)
     }
 
     @Test
@@ -74,31 +96,57 @@ internal class UserMapperTest {
             createdEntity.persistenceStatus
         )
         assertEquals(Level.convertString(dto.level), createdEntity.level)
-        assertEquals(dto.permissions?.map { Permission.convertString(it) }?.toSet(), createdEntity.permissions)
+        assertEquals(
+            dto.permissions?.map { Permission.convertString(it) }?.toSet(),
+            createdEntity.permissions
+        )
+        assertEquals(
+            dto.personFLag?.let { PersonCategory.valueOf(it) },
+            createdEntity.personFLag
+        )
     }
 
     @Test
-    fun `toDto() should throw UserMappingException when there are errors`() {
-        // Object
-        val mockk = spyk(mapper, recordPrivateCalls = true)
-
-        // Behavior
-        every { mockk["handleEntityMapping"](entity) } throws NullPointerException("Simulated exception")
+    fun `toDto() should throw IllegalMappingArgumentException when the dto is wrong`() {
+        // Arrange
+        val wrongDto = TestTruckDataProvider.getBaseDto()
 
         // Call
-        assertThrows<UserMappingException> {
-            mockk.toDto(entity)
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toEntity(wrongDto)
         }
+
+        // Assertions
+        assertTrue(exception.expected == UserDto::class)
+        assertTrue(exception.received == TruckDto::class)
+    }
+
+    @Test
+    fun `toEntity() should throw IllegalMappingArgumentException when the entity is wrong`() {
+        // Arrange
+        val wrongEntity = TestTruckDataProvider.getBaseEntity()
+
+        // Call
+        val exception = assertThrows<IllegalMappingArgumentException> {
+            mapper.toDto(wrongEntity)
+        }
+
+        // Assertions
+        assertTrue(exception.expected == User::class)
+        assertTrue(exception.received == Truck::class)
     }
 
     @ParameterizedTest
     @MethodSource("getInvalidDtos")
-    fun `toEntity() should throw UserMappingException when there are errors`(
+    fun `toEntity() should throw InvalidForMappingException when there are errors`(
         pDto: UserDto
     ) {
-        assertThrows<UserMappingException> {
+        // Call
+        val exception = assertThrows<InvalidForMappingException> {
             mapper.toEntity(pDto)
         }
+        // Assertions
+        assertTrue(exception.dto is UserDto)
     }
 
-}*/
+}

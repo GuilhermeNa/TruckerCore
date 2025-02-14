@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.modules.storage_file.repository
 
-import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
 import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
@@ -21,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
  * @see Repository
  * @see StorageFile
  */
-internal interface StorageFileRepository : NewRepository {
+internal interface StorageFileRepository : Repository {
 
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<StorageFileDto>>
 

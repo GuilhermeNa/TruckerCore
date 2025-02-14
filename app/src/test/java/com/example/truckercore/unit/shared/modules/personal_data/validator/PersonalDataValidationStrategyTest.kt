@@ -1,31 +1,55 @@
-/*
 package com.example.truckercore.unit.shared.modules.personal_data.validator
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.LocalDateTime
-import java.util.Date
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class PersonalDataValidationStrategyTest {
+class PersonalDataValidationStrategyTest : KoinTest {
 
-    private lateinit var validator: PersonalDataValidationStrategy
+    private val validator: PersonalDataValidationStrategy by inject()
 
     companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single { PersonalDataValidationStrategy() }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
         @JvmStatic
         fun arrValidDtosForValidationRules() =
             TestPersonalDataDataProvider.arrValidDtosForValidationRules().map {
@@ -63,12 +87,6 @@ class PersonalDataValidationStrategyTest {
             }
     }
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        validator = PersonalDataValidationStrategy()
-    }
-
     @ParameterizedTest
     @MethodSource("arrValidDtosForValidationRules")
     fun `validateDto() should call processDtoValidationRules() and don't throw exception`(
@@ -90,34 +108,22 @@ class PersonalDataValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw PersonalDataValidationException when there is any invalid field`(
+    fun `validateDto() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
         // Call
-        val exception = assertThrows<PersonalDataValidationException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateDto(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.dto is PersonalDataDto)
     }
 
     @Test
     fun `validateDto() should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
         // Object
-        val unexpectedDto = object : Dto {
-            override val businessCentralId: String? = null
-            override val id: String? = null
-            override val lastModifierId: String? = null
-            override val creationDate: Date? = null
-            override val lastUpdate: Date? = null
-            override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto { TODO() }
-        }
+        val unexpectedDto = TestUserDataProvider.getBaseDto()
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
         // Call
@@ -125,12 +131,8 @@ class PersonalDataValidationStrategyTest {
             validator.validateDto(unexpectedDtoInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == PersonalDataDto::class)
     }
 
     @ParameterizedTest
@@ -138,7 +140,7 @@ class PersonalDataValidationStrategyTest {
     fun `validateEntity() should call processEntityValidationRules() and don't throw exception`(
         input: ValidatorInput.EntityInput
     ) {
-        // Object
+        // Arrange
         val mock = spyk(validator, recordPrivateCalls = true)
 
         // Call
@@ -154,33 +156,22 @@ class PersonalDataValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw PersonalDataValidationException when there is any invalid field`(
+    fun `validateEntity() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
         // Call
-        val exception = assertThrows<PersonalDataValidationException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateEntity(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        // Arrange
+        assertTrue(exception.entity is PersonalData)
     }
 
     @Test
-    fun `validateEntity() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        // Object
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+    fun `validateEntity() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        // Arrange
+        val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
@@ -188,12 +179,9 @@ class PersonalDataValidationStrategyTest {
             validator.validateEntity(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == PersonalData::class)
     }
 
     @ParameterizedTest
@@ -201,7 +189,7 @@ class PersonalDataValidationStrategyTest {
     fun `validateForCreation() should call processEntityCreationRules() and don't throw exception`(
         input: ValidatorInput.EntityInput
     ) {
-        // Object
+        // Arrange
         val mock = spyk(validator, recordPrivateCalls = true)
 
         // Call
@@ -217,33 +205,22 @@ class PersonalDataValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() should throw PersonalDataValidationException when there is any invalid field`(
+    fun `validateForCreation() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
         // Call
-        val exception = assertThrows<PersonalDataValidationException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateForCreation(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.entity is PersonalData)
     }
 
     @Test
-    fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        // Object
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+    fun `validateForCreation() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        // Arrange
+        val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
@@ -251,13 +228,9 @@ class PersonalDataValidationStrategyTest {
             validator.validateForCreation(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == PersonalData::class)
     }
 
-
-}*/
+}

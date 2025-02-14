@@ -1,82 +1,133 @@
-/*
 package com.example.truckercore.unit.shared.modules.personal_data.repositories
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
-import com.example.truckercore.configs.app_constants.Field
+import com.example.truckercore.configs.app_constants.Collection
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepositoryImpl
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
+import io.mockk.spyk
+import io.mockk.verify
+import io.mockk.verifyOrder
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class PersonalDataFirebaseRepositoryImplTestImpl {
+internal class PersonalDataFirebaseRepositoryImplTestImpl : KoinTest {
 
-    private val fireBaseRepository: FirebaseRepository<PersonalDataDto> = mockk(relaxed = true)
-    private lateinit var repository: PersonalDataRepository
+    private val fireBaseRepository: FirebaseRepository by inject()
+    private val repository: PersonalDataRepository by inject()
+
+    private val collection = Collection.PERSONAL_DATA
     private val dto = TestPersonalDataDataProvider.getBaseDto()
     private val id = "testId"
-    private val parentId = "testParentId"
 
-    @BeforeEach
-    fun setup() {
-        repository = PersonalDataRepositoryImpl(fireBaseRepository)
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single<FirebaseRepository> { mockk(relaxed = true) }
+                        single<PersonalDataRepository> {
+                            PersonalDataRepositoryImpl(get(), collection = Collection.PERSONAL_DATA)
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `create() should call fireBaseRepository`() = runTest {
+    fun `create() should call fireBaseRepository`() {
         // Call
         repository.create(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.create(dto) }
+        verify { fireBaseRepository.create(collection, dto) }
     }
 
     @Test
-    fun `update() should call fireBaseRepository`() = runTest {
+    fun `update() should call fireBaseRepository`() {
         // Call
         repository.update(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.update(dto) }
+        coVerify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
-    fun `delete() should call fireBaseRepository`() = runTest {
+    fun `delete() should call fireBaseRepository`() {
         // Call
         repository.delete(id)
 
         // Assertions
-        coVerify { fireBaseRepository.delete(id) }
+        verify { fireBaseRepository.delete(collection, id) }
     }
 
     @Test
-    fun `entityExists() should call fireBaseRepository`() = runTest {
+    fun `entityExists() should call fireBaseRepository`() {
         // Call
         repository.entityExists(id)
 
         // Assertions
-        coVerify { fireBaseRepository.entityExists(id) }
+        verify { fireBaseRepository.entityExists(collection, id) }
     }
 
     @Test
-    fun `fetchById() should call fireBaseRepository`() = runTest {
+    fun `fetchByDocument() should call fireBaseRepository`() {
+        // Arrange
+        val params = mockk<DocumentParameters>()
+        val request = mockk<FirebaseRequest<PersonalDataDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
         // Call
-        repository.fetchById(id)
+        repositorySpy.fetchByDocument(params)
 
         // Assertions
-        coVerify { fireBaseRepository.documentFetch(id) }
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.documentFetch(request)
+        }
     }
 
     @Test
-    fun `fetchByParentId() should call fireBaseRepository`() = runTest {
+    fun `fetchByQuery() should call fireBaseRepository`() {
+        // Arrange
+        val params = mockk<QueryParameters>()
+        val request = mockk<FirebaseRequest<PersonalDataDto>>()
+        val repositorySpy = spyk(repository, recordPrivateCalls = true)
+
+        every { repositorySpy["createFirestoreRequest"](params) } returns request
+
         // Call
-        repository.fetchByParentId(parentId)
+        repositorySpy.fetchByQuery(params)
 
         // Assertions
-        coVerify { fireBaseRepository.simpleQueryFetch(Field.PARENT_ID, parentId) }
+        verifyOrder {
+            repositorySpy["createFirestoreRequest"](params)
+            fireBaseRepository.queryFetch(request)
+        }
     }
 
-}*/
+}

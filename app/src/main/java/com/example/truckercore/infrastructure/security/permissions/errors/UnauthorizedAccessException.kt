@@ -13,4 +13,4 @@ import com.example.truckercore.modules.user.entity.User
  * @param message An optional message providing more details about the exception. If no message is
  *                provided, the default message from the superclass (`Exception`) will be used.
  */
-class UnauthorizedAccessException(user: User, permission: Permission) : Exception()
+class UnauthorizedAccessException(val user: User, val permission: Permission) : Exception()

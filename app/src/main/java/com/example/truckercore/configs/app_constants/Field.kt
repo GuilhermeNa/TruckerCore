@@ -33,6 +33,7 @@ enum class Field(private val fieldName: String) {
     EMISSION_DATE("emissionDate"),
     EXPIRATION_DATE("expirationDate"),
     LEVEL("level"),
+    PERSON_FLAG("personFlag"),
     PERMISSIONS("permissions"),
     PERSISTENCE_STATUS("persistenceStatus"),
     EMPLOYEE_STATUS("employeeStatus");

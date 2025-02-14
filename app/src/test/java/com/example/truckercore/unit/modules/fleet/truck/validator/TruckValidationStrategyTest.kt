@@ -1,17 +1,20 @@
-/*
 package com.example.truckercore.unit.modules.fleet.truck.validator
 
 import com.example.truckercore._test_data_provider.TestTruckDataProvider
+import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.fleet.truck.errors.TruckValidationException
+import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.fleet.truck.validator.TruckValidationStrategy
-import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.shared.errors.validation.InvalidObjectException
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -19,19 +22,34 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.LocalDateTime
-import java.util.Date
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class TruckValidationStrategyTest {
+class TruckValidationStrategyTest : KoinTest {
 
-    private val validator = TruckValidationStrategy()
+    private val validator: TruckValidationStrategy by inject()
 
     companion object {
+
         @JvmStatic
         @BeforeAll
         fun setup() {
             mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single { TruckValidationStrategy() }
+                    }
+                )
+            }
         }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
 
         @JvmStatic
         fun arrValidDtosForValidationRules() =
@@ -90,46 +108,29 @@ class TruckValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidDtosForValidationRules")
-    fun `validateDto() should throw TruckValidationException when there is any invalid field`(
+    fun `validateDto() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.DtoInput
     ) {
-        val exception = assertThrows<TruckValidationException> {
+        // Call
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateDto(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.dto is TruckDto)
     }
 
     @Test
-    fun `validateDto() should throw UnexpectedValidatorInputException when receive an unexpected dto class`() {
-        val unexpectedDto = object : Dto {
-            override val businessCentralId: String? = null
-            override val id: String? = null
-            override val lastModifierId: String? = null
-            override val creationDate: Date? = null
-            override val lastUpdate: Date? = null
-            override val persistenceStatus: String? = null
-            override fun initializeId(newId: String): Dto {
-                TODO()
-            }
-        }
+    fun `validateDto() should throw IllegalValidationArgumentException when receive an unexpected dto class`() {
+        val unexpectedDto = TestUserDataProvider.getBaseDto()
         val unexpectedDtoInput = ValidatorInput.DtoInput(unexpectedDto)
 
         val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateDto(unexpectedDtoInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == TruckDto::class)
     }
 
     @ParameterizedTest
@@ -150,43 +151,27 @@ class TruckValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForValidationRules")
-    fun `validateEntity() should throw TruckValidationException when there is any invalid field`(
+    fun `validateEntity() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<TruckValidationException> {
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateEntity(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        assertTrue(exception.entity is Truck)
     }
 
     @Test
-    fun `validateEntity() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+    fun `validateEntity() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == Truck::class)
     }
 
     @ParameterizedTest
@@ -207,43 +192,32 @@ class TruckValidationStrategyTest {
 
     @ParameterizedTest
     @MethodSource("arrInvalidEntitiesForCreationRules")
-    fun `validateForCreation() should throw TruckValidationException when there is any invalid field`(
+    fun `validateForCreation() should throw InvalidObjectException when there is any invalid field`(
         input: ValidatorInput.EntityInput
     ) {
-        val exception = assertThrows<TruckValidationException> {
+        // Call
+        val exception = assertThrows<InvalidObjectException> {
             validator.validateForCreation(input)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Invalid") &&
-                        contains("Missing or invalid fields")
-            } ?: false
-        )
+        // Assertions
+        assertTrue(exception.entity is Truck)
     }
 
     @Test
-    fun `validateForCreation() should throw UnexpectedValidatorInputException when receive an unexpected entity class`() {
-        val unexpectedEntity = object : Entity {
-            override val businessCentralId: String = ""
-            override val id: String = ""
-            override val lastModifierId = ""
-            override val creationDate = LocalDateTime.now()
-            override val lastUpdate = LocalDateTime.now()
-            override val persistenceStatus = PersistenceStatus.PERSISTED
-        }
+    fun `validateForCreation() should throw IllegalValidationArgumentException when receive an unexpected entity class`() {
+        // Arrange
+        val unexpectedEntity = TestUserDataProvider.getBaseEntity()
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
+        // Call
         val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateForCreation(unexpectedEntityInput)
         }
 
-        assertTrue(
-            exception.message?.run {
-                contains("Awaited input was") &&
-                        contains("and received")
-            } ?: false
-        )
+        // Arrange
+        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == Truck::class)
     }
 
-}*/
+}

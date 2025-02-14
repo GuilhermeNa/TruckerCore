@@ -1,7 +1,6 @@
 package com.example.truckercore.modules.user.repository
 
 import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -19,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see Repository
  */
-internal interface UserRepository : NewRepository {
+internal interface UserRepository : Repository {
 
     /**
      * Retrieves the data of the logged-in user based on their unique identifier (ID).

@@ -1,7 +1,6 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
-import com.example.truckercore.shared.interfaces.NewRepository
 import com.example.truckercore.shared.interfaces.Repository
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -19,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see Repository
  */
-internal interface LicensingRepository : NewRepository {
+internal interface LicensingRepository : Repository {
 
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<LicensingDto>>
 
