@@ -1,196 +1,142 @@
-/*
 package com.example.truckercore.unit.modules.fleet.truck.use_cases
 
-import com.example.truckercore._test_data_provider.TestTruckDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.fleet.truck.mapper.TruckMapper
 import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
 import com.example.truckercore.modules.fleet.truck.use_cases.implementations.UpdateTruckUseCaseImpl
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.CheckTruckExistenceUseCase
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.UpdateTruckUseCase
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class UpdateTruckUseCaseImplTest {
+class UpdateTruckUseCaseImplTest : KoinTest {
 
-    private val repository: TruckRepository = mockk()
-    private val checkExistence: CheckTruckExistenceUseCase = mockk()
-    private val permissionService: PermissionService = mockk()
-    private val validatorService: ValidatorService = mockk()
-    private val mapper: TruckMapper = mockk()
-    private lateinit var useCase: UpdateTruckUseCase
+    private val permissionService: PermissionService by inject()
+    private val repository: TruckRepository by inject()
+    private val checkExistence: CheckTruckExistenceUseCase by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: TruckMapper by inject()
+    private val useCase: UpdateTruckUseCase by inject()
 
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val truck = TestTruckDataProvider.getBaseEntity()
-    private val dto = TestTruckDataProvider.getBaseDto()
+    private val id = "truckId"
+    private val truck: Truck = mockk()
+    private val dto: TruckDto = mockk()
+    private val user: User = mockk()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = UpdateTruckUseCaseImpl(
-            repository,
-            checkExistence,
-            validatorService,
-            mapper,
-            permissionService,
-            Permission.UPDATE_TRUCK
-        )
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<TruckRepository> { mockk() }
+                        single<CheckTruckExistenceUseCase> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<TruckMapper> { mockk() }
+                        single<UpdateTruckUseCase> {
+                            UpdateTruckUseCaseImpl(
+                                Permission.UPDATE_TRUCK,
+                                get(), get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `should update entity when have permission and data exists`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns true
-        coEvery { checkExistence.execute(user, truck.id!!) } returns flowOf(Response.Success(Unit))
-        every { validatorService.validateEntity(truck) } returns Unit
-        every { mapper.toDto(truck) } returns dto
-        coEvery { repository.update(dto) } returns flowOf(Response.Success(Unit))
+    fun `execute() should return success when truck exists and is updated successfully`() =
+        runTest {
+            // Arrange
+            every { truck.id } returns id
+            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { validatorService.validateEntity(any()) } returns Unit
+            every { mapper.toDto(any()) } returns dto
+            every { repository.update(any()) } returns flowOf(Response.Success(Unit))
 
-        // Call
-        val result = useCase.execute(user, truck).single()
+            // Call
+            val result = useCase.execute(user, truck).single()
 
-        // Assertions
-        assertTrue(result is Response.Success)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-            checkExistence.execute(user, truck.id!!)
-            validatorService.validateEntity(truck)
-            mapper.toDto(truck)
-            repository.update(dto)
+            // Assertions
+            assertTrue(result is Response.Success)
+            verifyOrder {
+                truck.id
+                checkExistence.execute(user, id)
+                permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
+                validatorService.validateEntity(truck)
+                mapper.toDto(truck)
+                repository.update(dto)
+            }
         }
-    }
 
     @Test
-    fun `should return error when user does not have permission for update`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns false
+    fun `execute() should throw NullPointerException when the Truck id is null`() =
+        runTest {
+            // Arrange
+            every { truck.id } returns null
 
-        // Call
-        val result = useCase.execute(user, truck).single()
+            // Call
+            assertThrows<NullPointerException> {
+                useCase.execute(user, truck).single()
+            }
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
+            // Assertions
+            verify {
+                truck.id
+            }
         }
-    }
 
     @Test
-    fun `should return error when truck check returns error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns true
-        coEvery { checkExistence.execute(user, truck.id!!) } returns flowOf(
-            Response.Error(NullPointerException())
-        )
+    fun `execute() should throw ObjectNotFoundException when checkExistence returns Empty`() =
+        runTest {
+            // Arrange
+            every { truck.id } returns id
+            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Empty)
 
-        // Call
-        val result = useCase.execute(user, truck).single()
+            // Call
+            assertThrows<ObjectNotFoundException> {
+                useCase.execute(user, truck).single()
+            }
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-            checkExistence.execute(user, truck.id!!)
+            // Assertions
+            verifyOrder {
+                truck.id
+                checkExistence.execute(user, id)
+            }
         }
-    }
 
-    @Test
-    fun `should return error when truck existence check returns empty`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns true
-        coEvery { checkExistence.execute(user, truck.id!!) } returns flowOf(Response.Empty)
-
-        // Call
-        val result = useCase.execute(user, truck).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is ObjectNotFoundException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-            checkExistence.execute(user, truck.id!!)
-        }
-    }
-
-    @Test
-    fun `should return error when repository returns an error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns true
-        coEvery { checkExistence.execute(user, truck.id!!) } returns flowOf(Response.Success(Unit))
-        every { validatorService.validateEntity(truck) } returns Unit
-        every { mapper.toDto(truck) } returns dto
-        coEvery { repository.update(dto) } returns flowOf(Response.Error(NullPointerException()))
-
-        // Call
-        val result = useCase.execute(user, truck).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-            checkExistence.execute(user, truck.id!!)
-            validatorService.validateEntity(truck)
-            mapper.toDto(truck)
-            repository.update(dto)
-        }
-    }
-
-    @Test
-    fun `should return empty when repository returns an empty`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns true
-        coEvery { checkExistence.execute(user, truck.id!!) } returns flowOf(Response.Success(Unit))
-        every { validatorService.validateEntity(truck) } returns Unit
-        every { mapper.toDto(truck) } returns dto
-        coEvery { repository.update(dto) } returns flowOf(Response.Empty)
-
-        // Call
-        val result = useCase.execute(user, truck).single()
-
-        // Assertions
-        assertTrue(result is Response.Empty)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-            checkExistence.execute(user, truck.id!!)
-            validatorService.validateEntity(truck)
-            mapper.toDto(truck)
-            repository.update(dto)
-        }
-    }
-
-    @Test
-    fun `should return error when any error in flow occurs`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_TRUCK) } returns true
-        coEvery { checkExistence.execute(user, truck.id!!) } returns flowOf(Response.Success(Unit))
-        every { validatorService.validateEntity(truck) } returns Unit
-        every { mapper.toDto(truck) } throws NullPointerException()
-
-        // Call
-        val result = useCase.execute(user, truck).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.UPDATE_TRUCK)
-            checkExistence.execute(user, truck.id!!)
-            validatorService.validateEntity(truck)
-            mapper.toDto(truck)
-        }
-    }
-
-}*/
+}

@@ -18,7 +18,7 @@ data class TrailerDto(
     val truckId: String? = null
 ) : Dto {
 
-    override fun initializeId(newId: String): Dto = this.copy(
+    override fun initializeId(newId: String): TrailerDto = this.copy(
         id = newId,
         persistenceStatus = PersistenceStatus.PERSISTED.name
     )

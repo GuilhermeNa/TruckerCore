@@ -8,7 +8,6 @@ import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.interfaces.Mapper
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import com.example.truckercore.shared.utils.expressions.toDate
 import com.example.truckercore.shared.utils.expressions.toLocalDateTime
 

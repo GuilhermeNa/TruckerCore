@@ -5,11 +5,15 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Permiss
 import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.repository.AdminRepositoryImpl
+import com.example.truckercore.modules.employee.admin.service.AdminService
+import com.example.truckercore.modules.employee.admin.service.AdminServiceImpl
+import com.example.truckercore.modules.employee.admin.use_cases.implementations.AggregateAdminWithDetailsImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.CheckAdminExistenceUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.CreateAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.DeleteAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.GetAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.UpdateAdminUseCaseImpl
+import com.example.truckercore.modules.employee.admin.use_cases.interfaces.AggregateAdminWithDetails
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CheckAdminExistenceUseCase
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.CreateAdminUseCase
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.DeleteAdminUseCase
@@ -19,10 +23,14 @@ import org.koin.dsl.module
 
 val adminModule = module {
     single<AdminRepository> { AdminRepositoryImpl(get(), Collection.ADMIN) }
+    single<AdminService> { AdminServiceImpl(get(), get(), get()) }
     single { AdminMapper() }
 
     //--
 
+    single<AggregateAdminWithDetails> {
+        AggregateAdminWithDetailsImpl(get(), get(), get())
+    }
     single<CreateAdminUseCase> {
         CreateAdminUseCaseImpl(Permission.CREATE_ADMIN, get(), get(), get(), get())
     }
@@ -30,7 +38,7 @@ val adminModule = module {
         UpdateAdminUseCaseImpl(Permission.UPDATE_ADMIN, get(), get(), get(), get(), get())
     }
     single<CheckAdminExistenceUseCase> {
-        CheckAdminExistenceUseCaseImpl(get(), get(), Permission.VIEW_ADMIN)
+        CheckAdminExistenceUseCaseImpl(Permission.VIEW_ADMIN, get(), get())
     }
     single<GetAdminUseCase> {
         GetAdminUseCaseImpl(Permission.VIEW_ADMIN, get(), get(), get(), get())

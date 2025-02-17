@@ -1,7 +1,5 @@
-/*
 package com.example.truckercore.unit.modules.fleet.trailer.use_cases
 
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
@@ -9,105 +7,113 @@ import com.example.truckercore.infrastructure.security.permissions.service.Permi
 import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
 import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.CheckTrailerExistenceUseCaseImpl
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.CheckTrailerExistenceUseCase
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.utils.sealeds.Response
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class CheckTrailerExistenceUseCaseImplTest {
+class CheckTrailerExistenceUseCaseImplTest : KoinTest {
 
-    private val repository: TrailerRepository = mockk()
-    private val permissionService: PermissionService = mockk()
-    private lateinit var useCase: CheckTrailerExistenceUseCase
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val id = "id"
+    private val permissionService: PermissionService by inject()
+    private val repository: TrailerRepository by inject()
+    private val useCase: CheckTrailerExistenceUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = CheckTrailerExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_TRAILER)
+    private val requiredPermission = Permission.VIEW_TRAILER
+    private val user = mockk<User>(relaxed = true)
+    private val id = "testTrailerId"
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<TrailerRepository> { mockk() }
+                        single<CheckTrailerExistenceUseCase> {
+                            CheckTrailerExistenceUseCaseImpl(
+                                Permission.VIEW_TRAILER,
+                                get(),
+                                get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
     }
 
     @Test
-    fun `should return success when user has permission and trailer exists`() = runTest {
+    fun `execute() should return a response success when trailer object is found`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_TRAILER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
         // Call
-        val result = useCase.execute(user, id).single()
+        val response = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Success)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_TRAILER)
+        assertTrue(response is Response.Success)
+
+        verifyOrder {
+            permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)
         }
     }
 
     @Test
-    fun `should return empty when trailer does not exist`() = runTest {
+    fun `execute() should throw UnauthorizedAccessException when user has no auth`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_TRAILER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Empty)
+        every { permissionService.canPerformAction(any(), any()) } returns false
 
         // Call
-        val result = useCase.execute(user, id).single()
+        val exception = assertThrows<UnauthorizedAccessException> {
+            useCase.execute(user, id).single()
+        }
 
         // Assertions
-        assertTrue(result is Response.Empty)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_TRAILER)
-            repository.entityExists(id)
+        assertTrue(exception.permission == Permission.VIEW_TRAILER)
+        verify {
+            permissionService.canPerformAction(user, requiredPermission)
         }
     }
 
     @Test
-    fun `should return error when user does not have permission`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_TRAILER) } returns false
+    fun `execute() should return empty when the trailer object is not found`() = runTest {
+        // Behavior
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { repository.entityExists(id) } returns flowOf(Response.Empty)
 
         // Call
-        val result = useCase.execute(user, id).single()
+        val response = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
-        verify { permissionService.canPerformAction(user, Permission.VIEW_TRAILER) }
-    }
-
-    @Test
-    fun `should return error when database returns an error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_TRAILER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Error(NullPointerException()))
-
-        // Call
-        val result = useCase.execute(user, id).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_TRAILER)
+        assertTrue(response is Response.Empty)
+        verifyOrder {
+            permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)
         }
     }
 
-    @Test
-    fun `should return error when id is blank`() = runTest {
-        // Call
-        val result = useCase.execute(user, "").single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is IllegalArgumentException)
-    }
-
-}*/
+}

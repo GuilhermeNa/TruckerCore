@@ -17,9 +17,9 @@ import com.example.truckercore.shared.errors.StrategyNotFoundException
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
-import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
-import com.example.truckercore.shared.modules.storage_file.validator.StorageFileValidationStrategy
+import com.example.truckercore.shared.modules.file.dto.FileDto
+import com.example.truckercore.shared.modules.file.entity.File
+import com.example.truckercore.shared.modules.file.validator.StorageFileValidationStrategy
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 
 /**
@@ -40,8 +40,8 @@ internal class ValidatorStrategyResolver {
         Pair(AdminDto::class.java, AdminValidationStrategy()),
         Pair(PersonalData::class.java, PersonalDataValidationStrategy()),
         Pair(PersonalDataDto::class.java, PersonalDataValidationStrategy()),
-        Pair(StorageFile::class.java, StorageFileValidationStrategy()),
-        Pair(StorageFileDto::class.java, StorageFileValidationStrategy()),
+        Pair(File::class.java, StorageFileValidationStrategy()),
+        Pair(FileDto::class.java, StorageFileValidationStrategy()),
         Pair(Licensing::class.java, LicensingValidationStrategy()),
         Pair(LicensingDto::class.java, LicensingValidationStrategy()),
 

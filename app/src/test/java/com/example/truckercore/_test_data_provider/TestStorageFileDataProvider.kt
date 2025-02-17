@@ -1,14 +1,14 @@
 package com.example.truckercore._test_data_provider
 
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.modules.storage_file.dto.StorageFileDto
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
+import com.example.truckercore.shared.modules.file.dto.FileDto
+import com.example.truckercore.shared.modules.file.entity.File
 import java.time.LocalDateTime
 import java.util.Date
 
 internal object TestStorageFileDataProvider {
 
-    fun getBaseEntity() = StorageFile(
+    fun getBaseEntity() = File(
         businessCentralId = "masterUid",
         id = "id",
         lastModifierId = "lastModifierId",
@@ -20,7 +20,7 @@ internal object TestStorageFileDataProvider {
         isUpdating = false
     )
 
-    fun getBaseDto() = StorageFileDto(
+    fun getBaseDto() = FileDto(
         businessCentralId = "masterUid",
         id = "id",
         lastModifierId = "id",

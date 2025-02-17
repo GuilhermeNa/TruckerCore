@@ -1,134 +1,119 @@
-/*
 package com.example.truckercore.unit.modules.user.use_cases
 
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.CheckUserExistenceUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
-import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.errors.UnknownErrorException
 import com.example.truckercore.shared.utils.sealeds.Response
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifySequence
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class CheckUserExistenceUseCaseImplTest {
+class CheckUserExistenceUseCaseImplTest : KoinTest {
 
-    private lateinit var useCase: CheckUserExistenceUseCase
-    private val repository: UserRepository = mockk()
-    private val permissionService: PermissionService = mockk()
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val id = "id"
+    private val permissionService: PermissionService by inject()
+    private val repository: UserRepository by inject()
+    private val useCase: CheckUserExistenceUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = CheckUserExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_USER)
-    }
+    private val requiredPermission = Permission.VIEW_USER
+    private val user = mockk<User>(relaxed = true)
+    private val id = "testUserId"
 
-    @Test
-    fun `execute() should call canPerformAction and entityExists in the correct order when user has permission`() =
-        runTest {
-            // Arrange
-            coEvery { permissionService.canPerformAction(user, Permission.VIEW_USER) } returns true
-            coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
-
-            // Act
-            val result = useCase.execute(user, id).first()
-
-            // Assert
-            coVerifySequence {
-                permissionService.canPerformAction(user, Permission.VIEW_USER)
-                repository.entityExists(id)
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<UserRepository> { mockk() }
+                        single<CheckUserExistenceUseCase> {
+                            CheckUserExistenceUseCaseImpl(
+                                Permission.VIEW_USER,
+                                get(),
+                                get()
+                            )
+                        }
+                    }
+                )
             }
-
-            assertTrue(result is Response.Success)
         }
 
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+    }
+
     @Test
-    fun `execute() should call handleUnauthorizedPermission when user does not have permission`() =
-        runTest {
-            // Arrange
-            coEvery { permissionService.canPerformAction(user, Permission.VIEW_USER) } returns false
+    fun `execute() should return a response success when user object is found`() = runTest {
+        // Arrange
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
-            // Act
-            val result = useCase.execute(user, id).first()
+        // Call
+        val response = useCase.execute(user, id).single()
 
-            // Assert
-            coVerify {
-                permissionService.canPerformAction(user, Permission.VIEW_USER) // First call
-            }
-            assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
+        // Assertions
+        assertTrue(response is Response.Success)
+
+        verifyOrder {
+            permissionService.canPerformAction(user, requiredPermission)
+            repository.entityExists(id)
+        }
+    }
+
+    @Test
+    fun `execute() should throw UnauthorizedAccessException when user has no auth`() = runTest {
+        // Arrange
+        every { permissionService.canPerformAction(any(), any()) } returns false
+
+        // Call
+        val exception = assertThrows<UnauthorizedAccessException> {
+            useCase.execute(user, id).single()
         }
 
-    @Test
-    fun `execute() should handle blank id and return error`() = runTest {
-        // Arrange
-        val blankId = ""
-
-        // Act
-        val result = useCase.execute(user, blankId).first()
-
-        // Assert
-        assertTrue(result is Response.Error && result.exception is IllegalArgumentException)
+        // Assertions
+        assertTrue(exception.permission == Permission.VIEW_USER)
+        verify {
+            permissionService.canPerformAction(user, requiredPermission)
+        }
     }
 
     @Test
-    fun `execute() should handle user not found in repository`() = runTest {
-        // Arrange
-        coEvery { permissionService.canPerformAction(user, Permission.VIEW_USER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(
-            Response.Error(
-                ObjectNotFoundException()
-            )
-        )
+    fun `execute() should return empty when the user object is not found`() = runTest {
+        // Behavior
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { repository.entityExists(id) } returns flowOf(Response.Empty)
 
-        // Act
-        val result = useCase.execute(user, id).first()
+        // Call
+        val response = useCase.execute(user, id).single()
 
-        // Assert
-        assertTrue(result is Response.Error && result.exception is ObjectNotFoundException)
+        // Assertions
+        assertTrue(response is Response.Empty)
+        verifyOrder {
+            permissionService.canPerformAction(user, requiredPermission)
+            repository.entityExists(id)
+        }
     }
 
-    @Test
-    fun `execute() should handle empty response from repository`() = runTest {
-        // Arrange
-        coEvery { permissionService.canPerformAction(user, Permission.VIEW_USER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(
-            Response.Error(
-                ObjectNotFoundException()
-            )
-        )
-
-        // Act
-        val result = useCase.execute(user, id).first()
-
-        // Assert
-        assertTrue(result is Response.Error && result.exception is ObjectNotFoundException)
-    }
-
-    @Test
-    fun `execute() should handle unexpected error`() = runTest {
-        // Arrange
-        coEvery { permissionService.canPerformAction(user, Permission.VIEW_USER) } returns true
-        coEvery { repository.entityExists(id) } throws UnknownErrorException("Unexpected error")
-
-        // Act
-        val result = useCase.execute(user, id).first()
-
-        // Assert
-        assertTrue(result is Response.Error && result.exception is UnknownErrorException)
-    }
-
-}*/
+}

@@ -1,136 +1,140 @@
-/*
 package com.example.truckercore.unit.modules.employee.admin.use_cases
 
-import com.example.truckercore._test_data_provider.TestAdminDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.modules.employee.admin.repository.AdminRepository
 import com.example.truckercore.modules.employee.admin.use_cases.implementations.GetAdminUseCaseImpl
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class GetAdminUseCaseImplTest {
+class GetAdminUseCaseImplTest : KoinTest {
 
-    private lateinit var useCase: GetAdminUseCase
-    private var repository: AdminRepository = mockk()
-    private var permissionService: PermissionService = mockk()
-    private var validatorService: ValidatorService = mockk()
-    private var mapper: AdminMapper = mockk()
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val id = "id"
-    private val admin = TestAdminDataProvider.getBaseEntity()
-    private val dto = TestAdminDataProvider.getBaseDto()
+    private val requiredPermission = Permission.VIEW_ADMIN
+    private val permissionService: PermissionService by inject()
+    private val repository: AdminRepository by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: AdminMapper by inject()
+    private val useCase: GetAdminUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = GetAdminUseCaseImpl(repository, permissionService, validatorService, mapper, Permission.VIEW_ADMIN)
+    private val user: User = mockk(relaxed = true)
+    private val docParams: DocumentParameters = mockk(relaxed = true) {
+        every { user } returns this@GetAdminUseCaseImplTest.user
+    }
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<AdminRepository> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<AdminMapper> { mockk() }
+                        single<GetAdminUseCase> {
+                            GetAdminUseCaseImpl(
+                                Permission.VIEW_ADMIN,
+                                get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `should retrieve the entity when it's found and has permission`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Success(dto))
-        every { validatorService.validateDto(dto) } returns Unit
-        every { mapper.toEntity(dto) } returns admin
+    fun `execute(DocumentParameters) should return Success when user has auth and data exists`() =
+        runTest {
+            // Arrange
+            val dto: AdminDto = mockk(relaxed = true)
+            val entity: Admin = mockk(relaxed = true)
 
-        // Call
-        val result = useCase.execute(user, id).single()
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByDocument(any()) } returns flowOf(Response.Success(dto))
+            every { validatorService.validateDto(any()) } returns Unit
+            every { mapper.toEntity(dto) } returns entity
 
-        // Assertions
-        assertTrue(result is Response.Success && result.data == admin)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
-            repository.fetchById(id)
-            validatorService.validateDto(dto)
-            mapper.toEntity(dto)
+            // Call
+            val result = useCase.execute(docParams).single()
+
+            // Assertions
+            assertEquals(entity, (result as Response.Success).data)
+            verifyOrder {
+                permissionService.canPerformAction(user, requiredPermission)
+                repository.fetchByDocument(docParams)
+                validatorService.validateDto(dto)
+                mapper.toEntity(dto)
+            }
         }
-    }
 
     @Test
-    fun `should return an error when the user does not have auth`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns false
+    fun `execute(DocumentParameters) should return Empty when the repository doesn't find data`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByDocument(any()) } returns flowOf(Response.Empty)
 
-        // Call
-        val result = useCase.execute(user, id).single()
+            // Call
+            val result = useCase.execute(docParams).single()
 
-        // Assertions
-        assertTrue(result is Response.Error)
-        coVerify {
-            permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
+            // Assertions
+            assertTrue(result is Response.Empty)
+            verifyOrder {
+                permissionService.canPerformAction(user, requiredPermission)
+                repository.fetchByDocument(docParams)
+            }
         }
-    }
 
     @Test
-    fun `should return an error when the repository returns an error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Error(NullPointerException()))
+    fun `execute(DocumentParameters) should throw UnauthorizedAccessException when the user has no auth`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns false
 
-        // Call
-        val result = useCase.execute(user, id).single()
+            // Call
+            assertThrows<UnauthorizedAccessException> {
+                useCase.execute(docParams).single()
+            }
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
-            repository.fetchById(id)
+            // Assertions
+            verify {
+                permissionService.canPerformAction(user, requiredPermission)
+            }
         }
-    }
 
-    @Test
-    fun `should return empty when the repository returns empty`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Empty)
-
-        // Call
-        val result = useCase.execute(user, id).single()
-
-        // Assertions
-        assertTrue(result is Response.Empty)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
-            repository.fetchById(id)
-        }
-    }
-
-    @Test
-    fun `should return error when any error in flow occurs`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_ADMIN) } returns true
-        coEvery { repository.fetchById(id) } returns flowOf(Response.Success(dto))
-        every { validatorService.validateDto(dto) } returns Unit
-        every { mapper.toEntity(dto) } throws NullPointerException()
-
-        // Call
-        val result = useCase.execute(user, id).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_ADMIN)
-            repository.fetchById(id)
-            validatorService.validateDto(dto)
-            mapper.toEntity(dto)
-        }
-    }
-
-}*/
+}

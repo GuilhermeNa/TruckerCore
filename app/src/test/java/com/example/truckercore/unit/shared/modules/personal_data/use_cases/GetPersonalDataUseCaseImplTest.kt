@@ -1,174 +1,206 @@
-/*
 package com.example.truckercore.unit.shared.modules.personal_data.use_cases
 
-import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.mapper.PersonalDataMapper
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
+import kotlin.test.Test
 
-class GetPersonalDataUseCaseImplTest {
+class GetPersonalDataUseCaseImplTest : KoinTest {
 
-    private lateinit var useCase: GetPersonalDataUseCase
-    private var repository: PersonalDataRepository = mockk()
-    private var permissionService: PermissionService = mockk()
-    private var validatorService: ValidatorService = mockk()
-    private var mapper: PersonalDataMapper = mockk()
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val parentId = "parentId"
-    private val personalData = TestPersonalDataDataProvider.getBaseEntity()
-    private val dto = TestPersonalDataDataProvider.getBaseDto()
+    private val requiredPermission = Permission.VIEW_PERSONAL_DATA
+    private val permissionService: PermissionService by inject()
+    private val repository: PersonalDataRepository by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: PersonalDataMapper by inject()
+    private val useCase: GetPersonalDataUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = GetPersonalDataUseCaseImpl(
-            repository,
-            validatorService,
-            mapper,
-            permissionService,
-            Permission.VIEW_PERSONAL_DATA
-        )
+    private val user: User = mockk(relaxed = true)
+    private val docParams: DocumentParameters = mockk(relaxed = true) {
+        every { user } returns this@GetPersonalDataUseCaseImplTest.user
+    }
+    private val queryParams: QueryParameters = mockk(relaxed = true) {
+        every { user } returns this@GetPersonalDataUseCaseImplTest.user
+    }
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<PersonalDataRepository> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<PersonalDataMapper> { mockk() }
+                        single<GetPersonalDataUseCase> {
+                            GetPersonalDataUseCaseImpl(
+                                Permission.VIEW_PERSONAL_DATA,
+                                get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `should retrieve the list of personal data when user has permission and data exists`() =
+    fun `execute(documentParams) should return Success when user has auth and personal data exists`() =
         runTest {
             // Arrange
-            val dtoList = listOf(dto) // Lista com o dto
-            val personalDataList = listOf(personalData) // Lista com a entidade convertida
-            every {
-                permissionService.canPerformAction(
-                    user,
-                    Permission.VIEW_PERSONAL_DATA
-                )
-            } returns true
-            coEvery { repository.fetchByParentId(parentId) } returns flowOf(Response.Success(dtoList))
-            every { validatorService.validateDto(dto) } returns Unit
-            every { mapper.toEntity(dto) } returns personalData
+            val dto: PersonalDataDto = mockk(relaxed = true)
+            val entity: PersonalData = mockk(relaxed = true)
+
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByDocument(any()) } returns flowOf(Response.Success(dto))
+            every { validatorService.validateDto(any()) } returns Unit
+            every { mapper.toEntity(dto) } returns entity
 
             // Call
-            val result = useCase.execute(user, parentId).single()
+            val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Success && result.data == personalDataList)
-            coVerifyOrder {
-                permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
-                repository.fetchByParentId(parentId)
+            assertEquals(entity, (result as Response.Success).data)
+            verifyOrder {
+                permissionService.canPerformAction(user, requiredPermission)
+                repository.fetchByDocument(docParams)
                 validatorService.validateDto(dto)
                 mapper.toEntity(dto)
             }
         }
 
     @Test
-    fun `should return an error when the user does not have permission`() = runTest {
-        // Arrange
-        every {
-            permissionService.canPerformAction(
-                user,
-                Permission.VIEW_PERSONAL_DATA
-            )
-        } returns false
+    fun `execute(documentParams) should return Empty when the repository doesn't find data`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByDocument(any()) } returns flowOf(Response.Empty)
 
-        // Call
-        val result = useCase.execute(user, parentId).single()
+            // Call
+            val result = useCase.execute(docParams).single()
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
-        coVerify {
-            permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
+            // Assertions
+            assertTrue(result is Response.Empty)
+            verifyOrder {
+                permissionService.canPerformAction(user, requiredPermission)
+                repository.fetchByDocument(docParams)
+            }
         }
-    }
 
     @Test
-    fun `should return an error when the repository returns an error`() = runTest {
-        // Arrange
-        every {
-            permissionService.canPerformAction(
-                user,
-                Permission.VIEW_PERSONAL_DATA
-            )
-        } returns true
-        coEvery { repository.fetchByParentId(parentId) } returns flowOf(
-            Response.Error(
-                NullPointerException()
-            )
-        )
+    fun `execute(documentParams) should throw UnauthorizedAccessException when the user has no auth`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns false
 
-        // Call
-        val result = useCase.execute(user, parentId).single()
+            // Call
+            assertThrows<UnauthorizedAccessException> {
+                useCase.execute(docParams).single()
+            }
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
-            repository.fetchByParentId(parentId)
+            // Assertions
+            verify {
+                permissionService.canPerformAction(user, requiredPermission)
+            }
         }
-    }
 
     @Test
-    fun `should return empty when no personal data is found for parent id`() = runTest {
-        // Arrange
-        every {
-            permissionService.canPerformAction(
-                user,
-                Permission.VIEW_PERSONAL_DATA
-            )
-        } returns true
-        coEvery { repository.fetchByParentId(parentId) } returns flowOf(Response.Empty)
+    fun `execute(queryParams) should return Success when user has auth and personal data exists`() =
+        runTest {
+            // Arrange
+            val dto: PersonalDataDto = mockk(relaxed = true)
+            val entity: PersonalData = mockk(relaxed = true)
+            val dtoList = listOf(dto)
+            val entityList = listOf(entity)
 
-        // Call
-        val result = useCase.execute(user, parentId).single()
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByQuery(any()) } returns flowOf(Response.Success(dtoList))
+            every { validatorService.validateDto(any()) } returns Unit
+            every { mapper.toEntity(dto) } returns entity
 
-        // Assertions
-        assertTrue(result is Response.Empty)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
-            repository.fetchByParentId(parentId)
+            // Call
+            val result = useCase.execute(queryParams).single()
+
+            // Assertions
+            assertEquals(entityList, (result as Response.Success).data)
+            verifyOrder {
+                permissionService.canPerformAction(user, requiredPermission)
+                repository.fetchByQuery(queryParams)
+                validatorService.validateDto(dto)
+                mapper.toEntity(dto)
+            }
         }
-    }
 
     @Test
-    fun `should return error when any error occurs during dto validation or mapping`() = runTest {
-        // Arrange
-        every {
-            permissionService.canPerformAction(
-                user,
-                Permission.VIEW_PERSONAL_DATA
-            )
-        } returns true
-        val dtoList = listOf(dto)
-        coEvery { repository.fetchByParentId(parentId) } returns flowOf(Response.Success(dtoList))
-        every { validatorService.validateDto(dto) } throws NullPointerException()
+    fun `execute(queryParams) should return Empty when the repository doesn't find data`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { repository.fetchByQuery(any()) } returns flowOf(Response.Empty)
 
-        // Call
-        val result = useCase.execute(user, parentId).single()
+            // Call
+            val result = useCase.execute(queryParams).single()
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_PERSONAL_DATA)
-            repository.fetchByParentId(parentId)
-            validatorService.validateDto(dto)
+            // Assertions
+            assertTrue(result is Response.Empty)
+            verifyOrder {
+                permissionService.canPerformAction(user, requiredPermission)
+                repository.fetchByQuery(queryParams)
+            }
         }
-    }
 
-}*/
+    @Test
+    fun `execute(queryParams) should throw UnauthorizedAccessException when the user has no auth`() =
+        runTest {
+            // Arrange
+            every { permissionService.canPerformAction(any(), any()) } returns false
+
+            // Call
+            assertThrows<UnauthorizedAccessException> {
+                useCase.execute(queryParams).single()
+            }
+
+            // Assertions
+            verify {
+                permissionService.canPerformAction(user, requiredPermission)
+            }
+        }
+
+}

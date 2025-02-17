@@ -5,8 +5,8 @@ import com.example.truckercore.modules.employee.admin.aggregations.AdminWithDeta
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.AggregateAdminWithDetails
 import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
 import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
-import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileUseCase
+import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.combine
 
 internal class AggregateAdminWithDetailsImpl(
     private val getAdmin: GetAdminUseCase,
-    private val getFile: GetStorageFileUseCase,
-    private val getPersonalData: GetPersonalDataUseCase
+    private val getFile: GetFileUseCase,
+    private val getPersonalDataWithFile: AggregatePersonalDataWithFilesUseCase
 ) : AggregateAdminWithDetails {
 
     override fun execute(
@@ -25,19 +25,19 @@ internal class AggregateAdminWithDetailsImpl(
     ): Flow<Response<AdminWithDetails>> =
         combine(
             getAdmin.execute(documentParams),
-            getFile.execute(getAggregateParams(documentParams)),
-            getPersonalData.execute(getAggregateParams(documentParams))
+            getFile.execute(getQueryParams(documentParams)),
+            getPersonalDataWithFile.execute(getQueryParams(documentParams))
         ) { adminResult, fileResult, pDataResult ->
             if (adminResult !is Response.Success) return@combine Response.Empty
 
             val admin = adminResult.data
-            val file = if (fileResult is Response.Success) fileResult.data[0] else null
-            val pData = if (pDataResult is Response.Success) pDataResult.data else null
+            val file = if (fileResult is Response.Success) fileResult.data.firstOrNull() else null
+            val pData = if (pDataResult is Response.Success) pDataResult.data else emptyList()
 
-            Response.Success(AdminWithDetails(admin, file, pData?.toHashSet()))
+            Response.Success(AdminWithDetails(admin, file, pData.toHashSet()))
         }
 
-    private fun getAggregateParams(adminParams: DocumentParameters) =
+    private fun getQueryParams(adminParams: DocumentParameters) =
         QueryParameters.create(adminParams.user)
             .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, adminParams.id))
             .setStream(adminParams.shouldStream)

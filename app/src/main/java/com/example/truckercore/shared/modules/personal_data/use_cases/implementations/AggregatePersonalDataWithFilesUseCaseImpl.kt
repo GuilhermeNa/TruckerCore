@@ -5,7 +5,7 @@ import com.example.truckercore.shared.enums.QueryType
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
-import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileUseCase
+import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.map
 
 internal class AggregatePersonalDataWithFilesUseCaseImpl(
     private val getPersonalData: GetPersonalDataUseCase,
-    private val getFile: GetStorageFileUseCase
+    private val getFile: GetFileUseCase
 ) : AggregatePersonalDataWithFilesUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<PersonalDataWithFile>> =

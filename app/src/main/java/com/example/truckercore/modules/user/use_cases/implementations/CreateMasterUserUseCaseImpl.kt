@@ -22,7 +22,7 @@ internal class CreateMasterUserUseCaseImpl(
     }
 
     private fun validateState(masterUser: User) {
-        if (masterUser.level == Level.MASTER) throw InvalidStateException(
+        if (masterUser.level != Level.MASTER) throw InvalidStateException(
             "The first user of the system should have the Master level, but received level: ${masterUser.level}"
         )
     }

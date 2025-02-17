@@ -15,7 +15,7 @@ internal data class AdminDto(
     val name: String? = null,
     val email: String? = null,
     val employeeStatus: String? = null
-): Dto {
+) : Dto {
 
     override fun initializeId(newId: String) = this.copy(
         id = newId,

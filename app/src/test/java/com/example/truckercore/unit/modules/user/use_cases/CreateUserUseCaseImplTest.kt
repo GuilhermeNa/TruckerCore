@@ -1,168 +1,113 @@
-/*
 package com.example.truckercore.unit.modules.user.use_cases
 
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.user.dto.UserDto
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.use_cases.implementations.CreateUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateUserUseCase
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class CreateUserUseCaseImplTest {
+class CreateUserUseCaseImplTest : KoinTest {
 
-    private val repository: UserRepository = mockk()
-    private val validatorService: ValidatorService = mockk()
-    private val mapper: UserMapper = mockk()
-    private val permissionService: PermissionService = mockk()
-    private lateinit var useCase: CreateUserUseCase
+    private val requirePermission: Permission = Permission.CREATE_USER
+    private val permissionService: PermissionService by inject()
+    private val repository: UserRepository by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: UserMapper by inject()
+    private val useCase: CreateUserUseCase by inject()
 
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val newUser = TestUserDataProvider.getBaseEntity()
-        .copy(id = null, persistenceStatus = PersistenceStatus.PENDING)
-    private val dto = TestUserDataProvider.getBaseDto()
-        .copy(id = null, persistenceStatus = PersistenceStatus.PENDING.name)
+    private val user = mockk<User>()
+    private val newUser = mockk<User>()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = CreateUserUseCaseImpl(repository, validatorService, permissionService, mapper)
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<UserRepository> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<UserMapper> { mockk() }
+                        single<CreateUserUseCase> {
+                            CreateUserUseCaseImpl(
+                                Permission.CREATE_USER,
+                                get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
     }
 
     @Test
-    fun `execute() should successfully create user and emit response`() = runTest {
+    fun `execute() should return success when user is correctly created`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_USER) } returns true
-        every { validatorService.validateForCreation(newUser) } returns Unit
-        every { mapper.toDto(newUser) } returns dto
-        coEvery { repository.create(any()) } returns flowOf(Response.Success("userId"))
+        val dto = mockk<UserDto>()
+        val id = "newUserObjectId"
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { validatorService.validateForCreation(any()) } returns Unit
+        every { mapper.toDto(any()) } returns dto
+        every { repository.create(any()) } returns flowOf(Response.Success(id))
 
-        // Act
-        val result = useCase.execute(user, newUser).first()
+        // Call
+        val result = useCase.execute(user, newUser).single()
 
-        // Assert
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_USER)
+        // Assertions
+        assertEquals(id, (result as Response.Success).data)
+        verifyOrder {
+            permissionService.canPerformAction(user, requirePermission)
             validatorService.validateForCreation(newUser)
             mapper.toDto(newUser)
             repository.create(dto)
         }
-
-        assertTrue(result is Response.Success && result.data == "userId")
     }
 
     @Test
-    fun `execute() should handle unexpected error from repository`() = runTest {
+    fun `execute() should throw UnauthorizedAccessException when user has no auth`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_USER) } returns true
-        coEvery { validatorService.validateForCreation(newUser) } returns Unit
-        coEvery { mapper.toDto(newUser) } returns dto
-        coEvery { repository.create(any()) } returns flowOf(Response.Error(NullPointerException()))
+        every { permissionService.canPerformAction(any(), any()) } returns false
 
-        // Act
-        val result = useCase.execute(user, newUser).first()
-
-        // Assert
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_USER)
-            validatorService.validateForCreation(newUser) // 1st call
-            mapper.toDto(newUser) // 2nd call
-            repository.create(dto) // 3rd call
+        // Call
+        assertThrows<UnauthorizedAccessException> {
+            useCase.execute(user, newUser).single()
         }
 
-        assertTrue(result is Response.Error)
-    }
-
-    @Test
-    fun `execute() should handle empty response from repository`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_USER) } returns true
-        every { validatorService.validateForCreation(newUser) } returns Unit
-        every { mapper.toDto(newUser) } returns dto
-        coEvery { repository.create(any()) } returns flowOf(Response.Empty)
-
-        // Act
-        val result = useCase.execute(user, newUser).first()
-
-        // Assert
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_USER)
-            validatorService.validateForCreation(newUser) // 1st call
-            mapper.toDto(newUser) // 2nd call
-            repository.create(dto) // 3rd call
+        // Assertions
+        verify {
+            permissionService.canPerformAction(user, requirePermission)
         }
-
-        assertTrue(result is Response.Empty)
     }
 
-    @Test
-    fun `execute() should handle validation error during creation`() = runTest {
-        // Arrange
-        val validationException = IllegalArgumentException("Validation failed")
-        every { permissionService.canPerformAction(user, Permission.CREATE_USER) } returns true
-        coEvery { validatorService.validateForCreation(newUser) } throws validationException
-
-        // Act
-        val result = useCase.execute(user, newUser).first()
-
-        // Assert
-        verifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_USER)
-            validatorService.validateForCreation(newUser)
-        }
-
-        assertTrue(result is Response.Error && result.exception is IllegalArgumentException)
-    }
-
-    @Test
-    fun `execute() should handle unexpected error during mapping to DTO`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_USER) } returns true
-        every { validatorService.validateForCreation(newUser) } returns Unit
-        every { mapper.toDto(newUser) } throws NullPointerException()
-
-        // Act
-        val result = useCase.execute(user, newUser).first()
-
-        // Assert
-        verifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_USER)
-            validatorService.validateForCreation(newUser)
-            mapper.toDto(newUser)
-        }
-
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-    }
-
-    @Test
-    fun `execute() should handle unauthorized permission`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_USER) } returns false
-
-        // Act
-        val result = useCase.execute(user, newUser).first()
-
-        // Assert
-        verify { permissionService.canPerformAction(user, Permission.CREATE_USER) }
-
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
-    }
-
-}*/
+}

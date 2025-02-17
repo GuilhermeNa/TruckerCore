@@ -2,9 +2,8 @@
 
 1. [ Visão Geral ](#1-visão-geral)
 2. [ Estrutura ](#2-estrutura)
-3. [ Erros ](#3-erros)
-4. [ UseCases ](#4-use-cases)
-5. [ Fluxo de Dados ](#5-fluxo-de-dados)
+3. [ UseCases ](#3-use-cases)
+4. [ Fluxo de Dados ](#4-fluxo-de-dados)
 
 ### 1. **Visão Geral**
 
@@ -29,35 +28,20 @@ modules/
 └── business_central/            
     ├── dto/
     │── entity/
-    │── errors/
     │── mapper/
     │── repository
     │── use_cases
     │── validator
     └── README.md
 
-### 3. **Erros**
-
-# `BusinessCentralMappingException`
-
-A classe BusinessCentralMappingException é uma exceção personalizada lançada quando ocorre uma falha
-na conversão de dados entre a entidade BusinessCentral e o DTO BusinessCentralDto. Isso pode
-acontecer devido a dados inválidos ou erros na configuração de mapeamento.
-
-# `BusinessCentralValidationException`
-
-A classe BusinessCentralValidationException é uma exceção personalizada utilizada para erros de
-validação nos dados da entidade BusinessCentral ou BusinessCentralDto. É acionada quando os dados
-não atendem aos critérios de validação definidos.
-
-### 4. **Use cases**
+### 3. **Use cases**
 
 As interfaces de casos de uso (por exemplo, CreateBusinessCentralUseCase,
 UpdateBusinessCentralUseCase, DeleteBusinessCentralUseCase, GetBusinessCentralByIdUseCase) são
 responsáveis por encapsular a lógica de negócios para cada operação. Cada caso de uso é implementado
 com a lógica de persistência e validação correspondente.
 
-### 5. **Fluxo de Dados**
+### 4. **Fluxo de Dados**
 
 As operações no sistema retornam um tipo Response, que pode ser:
 

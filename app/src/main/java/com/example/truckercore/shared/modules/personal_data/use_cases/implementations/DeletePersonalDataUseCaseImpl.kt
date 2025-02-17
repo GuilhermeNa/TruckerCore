@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 
 internal class DeletePersonalDataUseCaseImpl(
-    private val repository: PersonalDataRepository,
-    private val checkExistence: CheckPersonalDataExistenceUseCase,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: PersonalDataRepository,
+    private val checkExistence: CheckPersonalDataExistenceUseCase
 ) : UseCase(permissionService), DeletePersonalDataUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)

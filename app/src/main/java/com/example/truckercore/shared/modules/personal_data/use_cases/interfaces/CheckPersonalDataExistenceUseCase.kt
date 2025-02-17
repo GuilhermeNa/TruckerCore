@@ -19,6 +19,6 @@ internal interface CheckPersonalDataExistenceUseCase {
      * - [Response.Success] when the object exists.
      * - [Response.Empty] when the object does not exist.
      */
-    suspend fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<Response<Unit>>
 
 }

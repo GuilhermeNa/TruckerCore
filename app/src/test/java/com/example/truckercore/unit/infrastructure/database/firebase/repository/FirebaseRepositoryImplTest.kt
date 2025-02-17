@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.infrastructure.database.firebase.implementations
+package com.example.truckercore.unit.infrastructure.database.firebase.repository
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
@@ -9,16 +9,22 @@ import com.example.truckercore.infrastructure.database.firebase.repository.Fireb
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseConverter
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseQueryBuilder
 import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.spyk
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -32,7 +38,7 @@ import kotlin.test.assertNotNull
 
 internal class FirebaseRepositoryImplTest : KoinTest {
 
-  /*  // Injections
+    // Injections
     private val queryBuilder: FirebaseQueryBuilder by inject()
     private val converter: FirebaseConverter by inject()
     private val repository: FirebaseRepository by inject()
@@ -46,7 +52,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
     private val docReference: DocumentReference = mockk(relaxed = true)
     private val docSnapShot: DocumentSnapshot = mockk()
     private val query: Query = mockk()
-    private val ID = "refId"
+    private val id = "refId"
 
     companion object {
 
@@ -71,31 +77,33 @@ internal class FirebaseRepositoryImplTest : KoinTest {
 
     }
 
+/*
     @Test
     fun `create() should create the entity and return id`() = runTest {
         // Arrange
-        val dtoReadyToSave = pDataProvider.getBaseDto().copy(id = ID)
+        val dtoReadyToSave = pDataProvider.getBaseDto().copy(id = id)
         val dtoSent = mockk<PersonalDataDto>(relaxed = true) {
             every { initializeId(any()) } returns dtoReadyToSave
         }
-
-        every { queryBuilder.createDocument(any()) } returns docReference
-        every { docReference.id } returns ID
-        coEvery { docReference.set(any()) }.answers {
-            val callback = firstArg<(Task<Void>) -> Unit>()
-            val task = mockk<Task<Void>>(relaxed = true) {
-                every { exception } returns null
-                every { isSuccessful } returns true
-            }
-            callback(task)
-            task
+        val mockFlow = callbackFlow<Response<String>> {
+            trySend(Response.Success(id))
+            awaitClose {  }
         }
 
+        every { queryBuilder.createDocument(any()) } returns docReference
+        every { docReference.id } returns id
+        coEvery { docReference.set(any()).addOnCompleteListener(mockk()) } returns mockk()
+
+        // Call
         val result = repository.create(collectionRef, dtoSent).single()
 
+        // Assertions
         assertNotNull(result)
     }
+
+
 */
+
     /*
 
         @Test

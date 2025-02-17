@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.modules.personal_data.aggregations
 
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
+import com.example.truckercore.shared.modules.file.entity.File
 
 /**
  * Represents a personal data record along with associated files.
@@ -12,5 +12,5 @@ import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
  */
 data class PersonalDataWithFile(
     val pData: PersonalData,
-    val files: List<StorageFile> = emptyList()
+    val files: List<File> = emptyList()
 )

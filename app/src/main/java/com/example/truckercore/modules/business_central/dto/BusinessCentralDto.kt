@@ -11,9 +11,9 @@ internal data class BusinessCentralDto(
     override val creationDate: Date? = null,
     override val lastUpdate: Date? = null,
     override val persistenceStatus: String? = null
-): Dto {
+) : Dto {
 
-    override fun initializeId(newId: String): Dto {
+    override fun initializeId(newId: String): BusinessCentralDto {
         return this.copy(id = newId, persistenceStatus = PersistenceStatus.PERSISTED.name)
     }
 

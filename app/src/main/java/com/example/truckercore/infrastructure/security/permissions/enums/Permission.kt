@@ -30,22 +30,22 @@ enum class Permission {
     /**
      * Permission to update a storage file.
      */
-    UPDATE_STORAGE_FILE,
+    UPDATE_FILE,
 
     /**
      * Permission to create a new storage file.
      */
-    CREATE_STORAGE_FILE,
+    CREATE_FILE,
 
     /**
      * Permission to view a storage file.
      */
-    VIEW_STORAGE_FILE,
+    VIEW_FILE,
 
     /**
      * Permission to delete a storage file.
      */
-    DELETE_STORAGE_FILE,
+    DELETE_FILE,
 
     /**
      * Permission to create a new admin.

@@ -38,7 +38,6 @@ enum class Field(private val fieldName: String) {
     PERSISTENCE_STATUS("persistenceStatus"),
     EMPLOYEE_STATUS("employeeStatus");
 
-
     fun getName(): String = fieldName
 
 }

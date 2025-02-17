@@ -45,7 +45,7 @@ internal class MyViewModel(
             Permission.VIEW_BUSINESS_CENTRAL,
             Permission.DELETE_BUSINESS_CENTRAL,
             Permission.VIEW_LICENSING,
-            Permission.VIEW_STORAGE_FILE
+            Permission.VIEW_FILE
         ),
         personFLag = PersonCategory.DRIVER
     )

@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.aggregations
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
+import com.example.truckercore.shared.modules.file.entity.File
 
 /**
  * Represents a licensing record along with associated files.
@@ -12,5 +12,5 @@ import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
  */
 data class LicensingWithFile(
     val licensing: Licensing,
-    val files: List<StorageFile> = emptyList()
+    val files: List<File> = emptyList()
 )

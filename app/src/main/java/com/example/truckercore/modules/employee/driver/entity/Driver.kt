@@ -3,8 +3,6 @@ package com.example.truckercore.modules.employee.driver.entity
 import com.example.truckercore.modules.employee.shared.abstractions.Employee
 import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.storage_file.entity.StorageFile
 import java.time.LocalDateTime
 
 data class Driver(

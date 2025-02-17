@@ -10,9 +10,9 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CheckAdminExistenceUseCaseImpl(
-    private val repository: AdminRepository,
+    override val requiredPermission: Permission,
     override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val repository: AdminRepository
 ) : UseCase(permissionService), CheckAdminExistenceUseCase {
 
     override fun execute(user: User, id: String): Flow<Response<Unit>> =

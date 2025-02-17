@@ -13,11 +13,11 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CreatePersonalDataUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: PersonalDataRepository,
     private val validatorService: ValidatorService,
-    override val permissionService: PermissionService,
-    private val mapper: PersonalDataMapper,
-    override val requiredPermission: Permission
+    private val mapper: PersonalDataMapper
 ) : UseCase(permissionService), CreatePersonalDataUseCase {
 
     override suspend fun execute(user: User, pData: PersonalData): Flow<Response<String>> =

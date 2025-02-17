@@ -1,7 +1,5 @@
-/*
 package com.example.truckercore.unit.modules.employee.driver.use_cases
 
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
@@ -11,112 +9,111 @@ import com.example.truckercore.modules.employee.driver.use_cases.implementations
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.CheckDriverExistenceUseCase
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.utils.sealeds.Response
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-internal class CheckDriverExistenceUseCaseImplTest {
+internal class CheckDriverExistenceUseCaseImplTest : KoinTest {
 
-    private lateinit var repository: DriverRepository
-    private lateinit var permissionService: PermissionService
-    private lateinit var useCase: CheckDriverExistenceUseCase
-    private lateinit var user: User
-    private val id = "id"
+    private val permissionService: PermissionService by inject()
+    private val repository: DriverRepository by inject()
+    private val useCase: CheckDriverExistenceUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        repository = mockk(relaxed = true)
-        permissionService = mockk(relaxed = true)
-        useCase = CheckDriverExistenceUseCaseImpl(repository, permissionService, Permission.VIEW_DRIVER)
-        user = TestUserDataProvider.getBaseEntity()
+    private val requiredPermission = Permission.VIEW_DRIVER
+    private val user = mockk<User>(relaxed = true)
+    private val id = "testDriverId"
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<DriverRepository> { mockk() }
+                        single<CheckDriverExistenceUseCase> {
+                            CheckDriverExistenceUseCaseImpl(
+                                Permission.VIEW_DRIVER,
+                                get(),
+                                get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
     }
 
     @Test
-    fun`should execute correctly when data correspond the expected`() = runTest {
+    fun `execute() should return a response success when driver object is found`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_DRIVER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
 
         // Call
-        val result = useCase.execute(user, id).single()
+        val response = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Success)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
+        assertTrue(response is Response.Success)
+
+        verifyOrder {
+            permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)
         }
     }
 
     @Test
-    fun`should return an error when user has no auth`() = runTest {
+    fun `execute() should throw UnauthorizedAccessException when user has no auth`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_DRIVER) } returns false
+        every { permissionService.canPerformAction(any(), any()) } returns false
 
         // Call
-        val result = useCase.execute(user, id).single()
+        val exception = assertThrows<UnauthorizedAccessException> {
+            useCase.execute(user, id).single()
+        }
 
         // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
-        coVerify {
-            permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
+        assertTrue(exception.permission == Permission.VIEW_DRIVER)
+        verify {
+            permissionService.canPerformAction(user, requiredPermission)
         }
     }
 
     @Test
-    fun`should return a false response when entity is not found`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_DRIVER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Empty)
+    fun `execute() should return empty when the driver object is not found`() = runTest {
+        // Behavior
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { repository.entityExists(id) } returns flowOf(Response.Empty)
 
         // Call
-        val result = useCase.execute(user, id).single()
+        val response = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Empty)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
+        assertTrue(response is Response.Empty)
+        verifyOrder {
+            permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)
         }
     }
 
-    @Test
-    fun`should return error when receive an error from database`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.VIEW_DRIVER) } returns true
-        coEvery { repository.entityExists(id) } returns flowOf(Response.Error(Exception()))
-
-        // Call
-        val result = useCase.execute(user, id).single()
-
-        // Assertions
-        assertTrue(result is Response.Error)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.VIEW_DRIVER)
-            repository.entityExists(id)
-        }
-    }
-
-    @Test
-    fun`should return error when any unexpected error occurs`() = runTest {
-        // Arrange
-        val blankId = ""
-
-        // Call
-        val result = useCase.execute(user, blankId).single()
-
-        // Assertions
-        assertTrue(result is Response.Error)
-    }
-
-}*/
+}

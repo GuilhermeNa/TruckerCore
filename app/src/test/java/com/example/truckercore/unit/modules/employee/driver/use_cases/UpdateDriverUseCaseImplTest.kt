@@ -1,130 +1,142 @@
-/*
 package com.example.truckercore.unit.modules.employee.driver.use_cases
 
-import com.example.truckercore._test_data_provider.TestDriverDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.employee.driver.dto.DriverDto
+import com.example.truckercore.modules.employee.driver.entity.Driver
 import com.example.truckercore.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.modules.employee.driver.repository.DriverRepository
 import com.example.truckercore.modules.employee.driver.use_cases.implementations.UpdateDriverUseCaseImpl
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.CheckDriverExistenceUseCase
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.UpdateDriverUseCase
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.utils.sealeds.Response
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
+import kotlin.test.Test
 
-class UpdateDriverUseCaseImplTest {
+class UpdateDriverUseCaseImplTest : KoinTest {
 
-    private lateinit var repository: DriverRepository
-    private lateinit var  checkExistence: CheckDriverExistenceUseCase
-    private lateinit var  permissionService: PermissionService
-    private lateinit var  validatorService: ValidatorService
-    private lateinit var  mapper: DriverMapper
-    private lateinit var useCase: UpdateDriverUseCase
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val driver = TestDriverDataProvider.getBaseEntity()
-    private val dto = TestDriverDataProvider.getBaseDto()
+    private val permissionService: PermissionService by inject()
+    private val repository: DriverRepository by inject()
+    private val checkExistence: CheckDriverExistenceUseCase by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: DriverMapper by inject()
+    private val useCase: UpdateDriverUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        permissionService = mockk(relaxed = true)
-        checkExistence = mockk(relaxed = true)
-        validatorService = mockk(relaxed = true)
-        mapper = mockk(relaxed = true)
-        repository = mockk(relaxed = true)
-        useCase = UpdateDriverUseCaseImpl(
-            repository,
-            checkExistence,
-            validatorService,
-            mapper,
-            permissionService,
-            Permission.UPDATE_DRIVER
-        )
+    private val id = "driverId"
+    private val driver: Driver = mockk()
+    private val dto: DriverDto = mockk()
+    private val user: User = mockk()
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<DriverRepository> { mockk() }
+                        single<CheckDriverExistenceUseCase> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<DriverMapper> { mockk() }
+                        single<UpdateDriverUseCase> {
+                            UpdateDriverUseCaseImpl(
+                                Permission.UPDATE_DRIVER,
+                                get(), get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
     }
 
     @Test
-    fun `should return success when driver is updated successfully`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_DRIVER) } returns true
-        coEvery { checkExistence.execute(user, driver.id!!) } returns flowOf(Response.Success(Unit))
-        every { validatorService.validateEntity(driver) } returns Unit
-        every { mapper.toDto(driver) } returns dto
-        coEvery { repository.update(dto) } returns flowOf(Response.Success(Unit))
+    fun `execute() should return success when driver exists and is updated successfully`() =
+        runTest {
+            // Arrange
+            every { driver.id } returns id
+            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+            every { permissionService.canPerformAction(any(), any()) } returns true
+            every { validatorService.validateEntity(any()) } returns Unit
+            every { mapper.toDto(any()) } returns dto
+            every { repository.update(any()) } returns flowOf(Response.Success(Unit))
 
-        // Call
-        val result = useCase.execute(user, driver).single()
+            // Call
+            val result = useCase.execute(user, driver).single()
 
-        // Assertions
-        assertTrue(result is Response.Success)
-    }
-
-    @Test
-    fun `should return error when user does not have authorization`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_DRIVER) } returns false
-
-        // Call
-        val result = useCase.execute(user, driver).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
-    }
+            // Assertions
+            assertTrue(result is Response.Success)
+            verifyOrder {
+                driver.id
+                checkExistence.execute(user, id)
+                permissionService.canPerformAction(user, Permission.UPDATE_DRIVER)
+                validatorService.validateEntity(driver)
+                mapper.toDto(driver)
+                repository.update(dto)
+            }
+        }
 
     @Test
-    fun `should return error when driver does not exist`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_DRIVER) } returns true
-        coEvery { checkExistence.execute(user, driver.id!!) } returns flowOf(Response.Empty)
+    fun `execute() should throw NullPointerException when the Driver id is null`() =
+        runTest {
+            // Arrange
+            every { driver.id } returns null
 
-        // Call
-        val result = useCase.execute(user, driver).single()
+            // Call
+            assertThrows<NullPointerException> {
+                useCase.execute(user, driver).single()
+            }
 
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is ObjectNotFoundException)
-    }
-
-    @Test
-    fun `should return error when there is a failure in the existence check`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_DRIVER) } returns true
-        coEvery {
-            checkExistence.execute(user, "driverId")
-        } returns flowOf(Response.Error(Exception("Error occurred")))
-
-        // Call
-        val result = useCase.execute(user, driver).single()
-
-        // Assertions
-        assertTrue(result is Response.Error)
-    }
+            // Assertions
+            verify {
+                driver.id
+            }
+        }
 
     @Test
-    fun `should return error when update fails due to unexpected error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.UPDATE_DRIVER) } returns true
-        coEvery {
-            checkExistence.execute(user, "driverId")
-        } returns flowOf(Response.Success(mockk()))
-        coEvery { repository.update(any()) } throws Exception("Unexpected error")
+    fun `execute() should throw ObjectNotFoundException when checkExistence returns Empty`() =
+        runTest {
+            // Arrange
+            every { driver.id } returns id
+            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Empty)
 
-        // Call
-        val result = useCase.execute(user, driver).single()
+            // Call
+            assertThrows<ObjectNotFoundException> {
+                useCase.execute(user, driver).single()
+            }
 
-        // Assertions
-        assertTrue(result is Response.Error)
-    }
+            // Assertions
+            verifyOrder {
+                driver.id
+                checkExistence.execute(user, id)
+            }
+        }
 
-}*/
+}

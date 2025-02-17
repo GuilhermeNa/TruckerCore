@@ -5,7 +5,7 @@ import com.example.truckercore.modules.fleet.shared.module.licensing.aggregation
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.modules.storage_file.use_cases.interfaces.GetStorageFileUseCase
+import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.map
 
 internal class AggregateLicensingWithFilesUseCaseImpl(
     private val getLicensing: GetLicensingUseCase,
-    private val getFile: GetStorageFileUseCase
+    private val getFile: GetFileUseCase
 ) : AggregateLicensingWithFilesUseCase {
 
     override fun execute(documentParams: DocumentParameters) =
@@ -28,7 +28,6 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
         getLicensing.execute(documentParams),
         getFile.execute(getQueryParams(documentParams))
     ) { licensingResponse, fileResponse ->
-
         if (licensingResponse !is Response.Success) return@combine Response.Empty
 
         val files = if (fileResponse is Response.Success) fileResponse.data else emptyList()

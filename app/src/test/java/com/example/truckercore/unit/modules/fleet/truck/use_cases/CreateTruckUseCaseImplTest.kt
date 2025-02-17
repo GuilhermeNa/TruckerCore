@@ -1,63 +1,94 @@
-/*
 package com.example.truckercore.unit.modules.fleet.truck.use_cases
 
-import com.example.truckercore._test_data_provider.TestTruckDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.fleet.truck.mapper.TruckMapper
 import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
 import com.example.truckercore.modules.fleet.truck.use_cases.implementations.CreateTruckUseCaseImpl
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.CreateTruckUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class CreateTruckUseCaseImplTest {
+class CreateTruckUseCaseImplTest : KoinTest {
 
-    private val repository: TruckRepository = mockk()
-    private val validatorService: ValidatorService = mockk()
-    private val permissionService: PermissionService = mockk()
-    private val mapper: TruckMapper = mockk()
-    private lateinit var useCase: CreateTruckUseCase
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val truck = TestTruckDataProvider.getBaseEntity()
-    private val dto = TestTruckDataProvider.getBaseDto()
-    private val id = "id"
+    private val requirePermission: Permission = Permission.CREATE_TRUCK
+    private val permissionService: PermissionService by inject()
+    private val repository: TruckRepository by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: TruckMapper by inject()
+    private val useCase: CreateTruckUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase = CreateTruckUseCaseImpl(repository, validatorService, permissionService, mapper, Permission.CREATE_TRUCK)
+    private val user = mockk<User>()
+    private val truck = mockk<Truck>()
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<TruckRepository> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<TruckMapper> { mockk() }
+                        single<CreateTruckUseCase> {
+                            CreateTruckUseCaseImpl(
+                                Permission.CREATE_TRUCK,
+                                get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
     }
 
     @Test
-    fun `should create truck when user has permission and data is valid`() = runTest {
+    fun `execute() should return success when truck is correctly created`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_TRUCK) } returns true
-        every { validatorService.validateForCreation(truck) } returns Unit
-        every { mapper.toDto(truck) } returns dto
-        coEvery { repository.create(dto) } returns flowOf(Response.Success(id))
+        val dto = mockk<TruckDto>()
+        val id = "newTruckObjectId"
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { validatorService.validateForCreation(any()) } returns Unit
+        every { mapper.toDto(any()) } returns dto
+        every { repository.create(any()) } returns flowOf(Response.Success(id))
 
         // Call
         val result = useCase.execute(user, truck).single()
 
         // Assertions
-        assertTrue(result is Response.Success && result.data == id)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_TRUCK)
+        assertEquals(id, (result as Response.Success).data)
+        verifyOrder {
+            permissionService.canPerformAction(user, requirePermission)
             validatorService.validateForCreation(truck)
             mapper.toDto(truck)
             repository.create(dto)
@@ -65,56 +96,19 @@ class CreateTruckUseCaseImplTest {
     }
 
     @Test
-    fun `should return error when user does not have permission for creation`() = runTest {
+    fun `execute() should throw UnauthorizedAccessException when user has no auth`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_TRUCK) } returns false
+        every { permissionService.canPerformAction(any(), any()) } returns false
 
         // Call
-        val result = useCase.execute(user, truck).single()
+        assertThrows<UnauthorizedAccessException> {
+            useCase.execute(user, truck).single()
+        }
 
         // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
         verify {
-            permissionService.canPerformAction(user, Permission.CREATE_TRUCK)
+            permissionService.canPerformAction(user, requirePermission)
         }
     }
 
-    @Test
-    fun `should return error when any unexpected exception occurs`() = runTest {
-        // Arrange
-        every {
-            permissionService.canPerformAction(user, Permission.CREATE_TRUCK)
-        } throws NullPointerException()
-
-        // Call
-        val result = useCase.execute(user, truck).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        verify {
-            permissionService.canPerformAction(user, Permission.CREATE_TRUCK)
-        }
-    }
-
-    @Test
-    fun `should return error when database returns an error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_TRUCK) } returns true
-        every { validatorService.validateForCreation(truck) } returns Unit
-        every { mapper.toDto(truck) } returns dto
-        coEvery { repository.create(dto) } returns flowOf(Response.Error(NullPointerException()))
-
-        // Call
-        val result = useCase.execute(user, truck).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_TRUCK)
-            validatorService.validateForCreation(truck)
-            mapper.toDto(truck)
-            repository.create(dto)
-        }
-    }
-
-}*/
+}

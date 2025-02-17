@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class GetTrailerUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: TrailerRepository,
     private val validatorService: ValidatorService,
-    private val mapper: TrailerMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: TrailerMapper
 ) : UseCase(permissionService), GetTrailerUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Trailer>> =

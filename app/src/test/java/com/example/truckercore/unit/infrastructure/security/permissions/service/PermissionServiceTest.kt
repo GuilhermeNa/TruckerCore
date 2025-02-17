@@ -22,8 +22,26 @@ import org.koin.test.inject
 class PermissionServiceTest : KoinTest {
 
     private val service: PermissionService by inject()
-
     private val userWithViewPermission = getUserWithViewPermission()
+
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { PermissionServiceImpl() }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
+
+    }
 
     private fun getUserWithViewPermission() =
         TestUserDataProvider.getBaseEntity().copy(permissions = hashSetOf(Permission.VIEW_USER))
@@ -47,23 +65,5 @@ class PermissionServiceTest : KoinTest {
         assertFalse(result)
     }
 
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun setup() {
-            startKoin {
-                modules(
-                    module {
-                        single<PermissionService> { PermissionServiceImpl() }
-                    }
-                )
-            }
-        }
-
-        @JvmStatic
-        @AfterAll
-        fun tearDown() = stopKoin()
-
-    }
 
 }

@@ -1,63 +1,94 @@
-/*
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.use_cases
 
-import com.example.truckercore._test_data_provider.TestLicensingDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.CreateLicensingUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CreateLicensingUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.services.ValidatorService
-import io.mockk.coEvery
-import io.mockk.coVerifyOrder
+import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.GlobalContext.stopKoin
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.inject
 
-class CreateLicensingUseCaseImplTest {
+class CreateLicensingUseCaseImplTest : KoinTest {
 
-    private val repository: LicensingRepository = mockk()
-    private val validatorService: ValidatorService = mockk()
-    private val permissionService: PermissionService = mockk()
-    private val mapper: LicensingMapper = mockk()
-    private lateinit var useCase: CreateLicensingUseCase
-    private val user = TestUserDataProvider.getBaseEntity()
-    private val licensing = TestLicensingDataProvider.getBaseEntity()
-    private val dto = TestLicensingDataProvider.getBaseDto()
-    private val id = "id"
+    private val requirePermission: Permission = Permission.CREATE_LICENSING
+    private val permissionService: PermissionService by inject()
+    private val repository: LicensingRepository by inject()
+    private val validatorService: ValidatorService by inject()
+    private val mapper: LicensingMapper by inject()
+    private val useCase: CreateLicensingUseCase by inject()
 
-    @BeforeEach
-    fun setup() {
-        mockStaticLog()
-        useCase =
-            CreateLicensingUseCaseImpl(repository, validatorService, mapper, permissionService, Permission.CREATE_LICENSING)
+    private val user = mockk<User>()
+    private val licensing = mockk<Licensing>()
+
+    companion object {
+
+        @JvmStatic
+        @BeforeAll
+        fun setup() {
+            mockStaticLog()
+            startKoin {
+                modules(
+                    module {
+                        single<PermissionService> { mockk() }
+                        single<LicensingRepository> { mockk() }
+                        single<ValidatorService> { mockk() }
+                        single<LicensingMapper> { mockk() }
+                        single<CreateLicensingUseCase> {
+                            CreateLicensingUseCaseImpl(
+                                Permission.CREATE_LICENSING,
+                                get(), get(), get(), get()
+                            )
+                        }
+                    }
+                )
+            }
+        }
+
+        @JvmStatic
+        @AfterAll
+        fun tearDown() = stopKoin()
     }
 
     @Test
-    fun `should create entity when have permission and data is valid`() = runTest {
+    fun `execute() should return success when licensing is correctly created`() = runTest {
         // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_LICENSING) } returns true
-        every { validatorService.validateForCreation(licensing) } returns Unit
-        every { mapper.toDto(licensing) } returns dto
-        coEvery { repository.create(dto) } returns flowOf(Response.Success(id))
+        val dto = mockk<LicensingDto>()
+        val id = "newLicensingObjectId"
+        every { permissionService.canPerformAction(any(), any()) } returns true
+        every { validatorService.validateForCreation(any()) } returns Unit
+        every { mapper.toDto(any()) } returns dto
+        every { repository.create(any()) } returns flowOf(Response.Success(id))
 
         // Call
         val result = useCase.execute(user, licensing).single()
 
         // Assertions
-        assertTrue(result is Response.Success && result.data == id)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_LICENSING)
+        assertEquals(id, (result as Response.Success).data)
+        verifyOrder {
+            permissionService.canPerformAction(user, requirePermission)
             validatorService.validateForCreation(licensing)
             mapper.toDto(licensing)
             repository.create(dto)
@@ -65,64 +96,19 @@ class CreateLicensingUseCaseImplTest {
     }
 
     @Test
-    fun `should return error when user does not have permission for creation`() = runTest {
+    fun `execute() should throw UnauthorizedAccessException when user has no auth`() = runTest {
         // Arrange
-        every {
-            permissionService.canPerformAction(
-                user,
-                Permission.CREATE_LICENSING
-            )
-        } returns false
+        every { permissionService.canPerformAction(any(), any()) } returns false
 
         // Call
-        val result = useCase.execute(user, licensing).single()
+        assertThrows<UnauthorizedAccessException> {
+            useCase.execute(user, licensing).single()
+        }
 
         // Assertions
-        assertTrue(result is Response.Error && result.exception is UnauthorizedAccessException)
         verify {
-            permissionService.canPerformAction(user, Permission.CREATE_LICENSING)
+            permissionService.canPerformAction(user, requirePermission)
         }
     }
 
-    @Test
-    fun `should return error when any unexpected exception occurs`() = runTest {
-        // Arrange
-        every {
-            permissionService.canPerformAction(
-                user,
-                Permission.CREATE_LICENSING
-            )
-        } throws NullPointerException()
-
-        // Call
-        val result = useCase.execute(user, licensing).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        verify {
-            permissionService.canPerformAction(user, Permission.CREATE_LICENSING)
-        }
-    }
-
-    @Test
-    fun `should return error when database returns an error`() = runTest {
-        // Arrange
-        every { permissionService.canPerformAction(user, Permission.CREATE_LICENSING) } returns true
-        every { validatorService.validateForCreation(licensing) } returns Unit
-        every { mapper.toDto(licensing) } returns dto
-        coEvery { repository.create(dto) } returns flowOf(Response.Error(NullPointerException()))
-
-        // Call
-        val result = useCase.execute(user, licensing).single()
-
-        // Assertions
-        assertTrue(result is Response.Error && result.exception is NullPointerException)
-        coVerifyOrder {
-            permissionService.canPerformAction(user, Permission.CREATE_LICENSING)
-            validatorService.validateForCreation(licensing)
-            mapper.toDto(licensing)
-            repository.create(dto)
-        }
-    }
-
-}*/
+}
