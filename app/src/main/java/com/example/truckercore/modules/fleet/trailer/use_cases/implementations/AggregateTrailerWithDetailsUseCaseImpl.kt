@@ -1,8 +1,10 @@
 package com.example.truckercore.modules.fleet.trailer.use_cases.implementations
 
 import com.example.truckercore.configs.app_constants.Field
+import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
 import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
+import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
 import com.example.truckercore.shared.enums.QueryType
@@ -23,20 +25,22 @@ internal class AggregateTrailerWithDetailsUseCaseImpl(
 
     override fun execute(documentParams: DocumentParameters) = combine(
         getTrailer.execute(documentParams),
-        getLicensingWithFiles.execute(getDocumentParams(documentParams))
+        getLicensingWithFiles.execute(getLicensingWithFilesQueryParams(documentParams))
     ) { trailerResponse, licensingWithFilesResponse ->
-
         if (trailerResponse !is Response.Success) return@combine Response.Empty
+
         val trailer = trailerResponse.data
+        val licensingWithFiles = licensingWithFilesResponse.extractList()
+        val result = TrailerWithDetails(trailer, licensingWithFiles)
 
-        val licensingWithFiles =
-            if (licensingWithFilesResponse is Response.Success) licensingWithFilesResponse.data
-            else emptyList()
-
-        Response.Success(TrailerWithDetails(trailer, licensingWithFiles))
+        Response.Success(result)
     }
 
-    private fun getDocumentParams(documentParams: DocumentParameters) =
+    private fun Response<List<LicensingWithFile>>.extractList() =
+        if (this is Response.Success) this.data
+        else emptyList()
+
+    private fun getLicensingWithFilesQueryParams(documentParams: DocumentParameters) =
         QueryParameters.create(documentParams.user)
             .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, documentParams.id))
             .setStream(documentParams.shouldStream)
@@ -48,32 +52,40 @@ internal class AggregateTrailerWithDetailsUseCaseImpl(
     override fun execute(queryParams: QueryParameters) =
         getTrailer.execute(queryParams).flatMapConcat { trailerResponse ->
             if (trailerResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+
             val trailerList = trailerResponse.data
+            val licensingQueryParams = getLicensingQueryParams(queryParams, trailerList)
 
-            getLicensingWithFiles.execute(
-                getLicensingQueryParams(queryParams, trailerList.mapNotNull { it.id })
-            ).map { licensingWithFilesResponse ->
-                val licensingWithFilesMap =
-                    if (licensingWithFilesResponse is Response.Success) {
-                        licensingWithFilesResponse.data.groupBy { it.licensing.parentId }
-                    } else emptyMap()
-
-                val result = trailerList.map { trailer ->
-                    TrailerWithDetails(
-                        trailer = trailer,
-                        licensingWithFiles = licensingWithFilesMap[trailer.id] ?: emptyList()
-                    )
-                }
-
+            getLicensingWithFiles.execute(licensingQueryParams).map { licensingWithFilesResponse ->
+                val licensingWithFilesMap = licensingWithFilesResponse.groupByParentId()
+                val result = getResult(trailerList, licensingWithFilesMap)
                 Response.Success(result)
             }
-
         }
 
-    private fun getLicensingQueryParams(queryParams: QueryParameters, trailerIds: List<String>) =
-        QueryParameters.create(queryParams.user)
+    private fun getResult(
+        trailerList: List<Trailer>,
+        licensingWithFilesMap: Map<String, List<LicensingWithFile>>
+    ): List<TrailerWithDetails> = trailerList.map { trailer ->
+        TrailerWithDetails(
+            trailer = trailer,
+            licensingWithFiles = licensingWithFilesMap[trailer.id] ?: emptyList()
+        )
+    }
+
+    private fun Response<List<LicensingWithFile>>.groupByParentId(): Map<String, List<LicensingWithFile>> =
+        if (this is Response.Success) this.data.groupBy { it.licensing.parentId }
+        else emptyMap()
+
+    private fun getLicensingQueryParams(
+        queryParams: QueryParameters,
+        trailers: List<Trailer>
+    ): QueryParameters {
+        val trailerIds = trailers.mapNotNull { it.id }
+        return QueryParameters.create(queryParams.user)
             .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_IN, trailerIds))
             .setStream(queryParams.shouldStream)
             .build()
+    }
 
 }

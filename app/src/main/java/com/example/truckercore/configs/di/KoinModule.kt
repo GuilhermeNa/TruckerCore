@@ -8,6 +8,7 @@ val koinModules = listOf(
     userModule,
     driverModule,
     adminModule,
+    personalDataModule,
     storageFileModule,
     travelModule,
     serviceModule,

@@ -2,10 +2,12 @@ package com.example.truckercore.shared.modules.personal_data.use_cases.implement
 
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.shared.enums.QueryType
+import com.example.truckercore.shared.modules.file.entity.File
+import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
-import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -23,22 +25,23 @@ internal class AggregatePersonalDataWithFilesUseCaseImpl(
 ) : AggregatePersonalDataWithFilesUseCase {
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<PersonalDataWithFile>> =
-        getSinglePersonalDataWithFilesFlow(documentParams)
+        combine(
+            getPersonalData.execute(documentParams),
+            getFile.execute(getFileQueryParams(documentParams))
+        ) { pDataResponse, fileResponse ->
+            if (pDataResponse !is Response.Success) return@combine Response.Empty
 
-    private fun getSinglePersonalDataWithFilesFlow(documentParams: DocumentParameters) = combine(
-        getPersonalData.execute(documentParams),
-        getFile.execute(getDocumentParams(documentParams))
-    ) { pDataResponse, fileResponse ->
+            val files = fileResponse.extractFiles()
+            val pData = pDataResponse.data
+            val result = PersonalDataWithFile(pData, files)
 
-        if (pDataResponse !is Response.Success) return@combine Response.Empty
+            Response.Success(result)
+        }
 
-        val files = if (fileResponse is Response.Success) fileResponse.data else emptyList()
-        val pData = pDataResponse.data
+    private fun Response<List<File>>.extractFiles() =
+        if (this is Response.Success) this.data else emptyList()
 
-        Response.Success(PersonalDataWithFile(pData, files))
-    }
-
-    private fun getDocumentParams(documentParams: DocumentParameters) =
+    private fun getFileQueryParams(documentParams: DocumentParameters) =
         QueryParameters.create(documentParams.user)
             .setQueries(QuerySettings(Field.PARENT_ID, QueryType.WHERE_EQUALS, documentParams.id))
             .setStream(documentParams.shouldStream)
@@ -46,29 +49,35 @@ internal class AggregatePersonalDataWithFilesUseCaseImpl(
 
     //----------------------------------------------------------------------------------------------
 
-    override fun execute(queryParams: QueryParameters): Flow<Response<List<PersonalDataWithFile>>> =
-        getListOfPersonalDataWithFilesFlow(queryParams)
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getListOfPersonalDataWithFilesFlow(queryParams: QueryParameters) =
+    override fun execute(queryParams: QueryParameters): Flow<Response<List<PersonalDataWithFile>>> =
         getPersonalData.execute(queryParams).flatMapConcat { pDataResponse ->
             if (pDataResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+
             val pData = pDataResponse.data
 
             getFile.execute(
                 getFilesQueryParams(queryParams, pData.mapNotNull { it.id })
             ).map { filesResponse ->
-                val filesMap = if (filesResponse is Response.Success) {
-                    filesResponse.data.groupBy { it.parentId }
-                } else emptyMap()
-
-                val result = pData.map { lic ->
-                    PersonalDataWithFile(pData = lic, files = filesMap[lic.id] ?: emptyList())
-                }
-
+                val filesMap = filesResponse.groupFiles()
+                val result = getResult(pData, filesMap)
                 Response.Success(result)
             }
         }
+
+    private fun getResult(
+        pData: List<PersonalData>,
+        filesMap: Map<String, List<File>>
+    ): List<PersonalDataWithFile> {
+        val result = pData.map { lic ->
+            PersonalDataWithFile(pData = lic, files = filesMap[lic.id] ?: emptyList())
+        }
+        return result
+    }
+
+    private fun Response<List<File>>.groupFiles(): Map<String, List<File>> =
+        if (this is Response.Success) this.data.groupBy { it.parentId }
+        else emptyMap()
 
     private fun getFilesQueryParams(queryParams: QueryParameters, pDataIds: List<String>) =
         QueryParameters.create(queryParams.user)

@@ -26,28 +26,24 @@ internal class AggregateUserWithPersonUseCaseImpl(
     override fun execute(userId: String, shouldStream: Boolean): Flow<Response<UserWithPerson>> =
         getUser.execute(userId, shouldStream).flatMapConcat { response ->
             if (response !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+
             val user = response.data
             val docParams = getDocumentParams(user, shouldStream)
 
-            return@flatMapConcat when (user.personFLag) {
-                PersonCategory.DRIVER -> getUserWithDriverFlow(docParams)
-                PersonCategory.ADMIN -> getUserWithAdminFlow(docParams)
+            getPersonFlow(docParams).map { personResult ->
+                if (personResult !is Response.Success) return@map Response.Empty
+                val person = personResult.data
+                getResult(docParams.user, person)
             }
         }
 
-    private fun getUserWithDriverFlow(documentParams: DocumentParameters): Flow<Response<UserWithPerson>> =
-        getDriver.execute(documentParams).map { response ->
-            if (response !is Response.Success) return@map Response.Empty
-            val driver = response.data
-            getResponse(documentParams.user, driver)
+    private fun getPersonFlow(docParams: DocumentParameters): Flow<Response<Person>> {
+        val personFlag = docParams.user.personFLag
+        return when (personFlag) {
+            PersonCategory.DRIVER -> getDriver.execute(docParams)
+            PersonCategory.ADMIN -> getAdminUseCase.execute(docParams)
         }
-
-    private fun getUserWithAdminFlow(documentParams: DocumentParameters): Flow<Response<UserWithPerson>> =
-        getAdminUseCase.execute(documentParams).map { response ->
-            if (response !is Response.Success) return@map Response.Empty
-            val driver = response.data
-            getResponse(documentParams.user, driver)
-        }
+    }
 
     private fun getDocumentParams(user: User, shouldStream: Boolean): DocumentParameters {
         val id = user.id ?: throw NullPointerException("Null User id while retrieving data.")
@@ -57,7 +53,7 @@ internal class AggregateUserWithPersonUseCaseImpl(
             .build()
     }
 
-    private fun getResponse(user: User, person: Person): Response<UserWithPerson> =
+    private fun getResult(user: User, person: Person): Response<UserWithPerson> =
         Response.Success(UserWithPerson(user, person))
 
 }

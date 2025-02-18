@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 
 internal class UpdatePersonalDataUseCaseImpl(
+    override val requiredPermission: Permission,
+    override val permissionService: PermissionService,
     private val repository: PersonalDataRepository,
     private val checkExistence: CheckPersonalDataExistenceUseCase,
     private val validatorService: ValidatorService,
-    private val mapper: PersonalDataMapper,
-    override val permissionService: PermissionService,
-    override val requiredPermission: Permission
+    private val mapper: PersonalDataMapper
 ) : UseCase(permissionService), UpdatePersonalDataUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)

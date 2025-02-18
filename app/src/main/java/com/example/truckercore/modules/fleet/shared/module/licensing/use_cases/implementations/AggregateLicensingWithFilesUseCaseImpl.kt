@@ -2,9 +2,11 @@ package com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.
 
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.shared.enums.QueryType
+import com.example.truckercore.shared.modules.file.entity.File
 import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -21,10 +23,7 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
     private val getFile: GetFileUseCase
 ) : AggregateLicensingWithFilesUseCase {
 
-    override fun execute(documentParams: DocumentParameters) =
-        getSingleLicensingWithFilesFlow(documentParams)
-
-    private fun getSingleLicensingWithFilesFlow(documentParams: DocumentParameters) = combine(
+    override fun execute(documentParams: DocumentParameters) = combine(
         getLicensing.execute(documentParams),
         getFile.execute(getQueryParams(documentParams))
     ) { licensingResponse, fileResponse ->
@@ -44,29 +43,32 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
 
     //----------------------------------------------------------------------------------------------
 
-    override fun execute(queryParams: QueryParameters) =
-        getListOfLicensingWithFilesFlow(queryParams)
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getListOfLicensingWithFilesFlow(queryParams: QueryParameters) =
+    override fun execute(queryParams: QueryParameters) =
         getLicensing.execute(queryParams).flatMapConcat { licensingResponse ->
             if (licensingResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+
             val licensing = licensingResponse.data
+            val licensingIds = licensing.mapNotNull { it.id }
+            val filesQueryParams = getFilesQueryParams(queryParams, licensingIds)
 
-            getFile.execute(
-                getFilesQueryParams(queryParams, licensing.mapNotNull { it.id })
-            ).map { filesResponse ->
-                val filesMap = if (filesResponse is Response.Success) {
-                    filesResponse.data.groupBy { it.parentId }
-                } else emptyMap()
-
-                val result = licensing.map { lic ->
-                    LicensingWithFile(licensing = lic, files = filesMap[lic.id] ?: emptyList())
-                }
-
+            getFile.execute(filesQueryParams).map { filesResponse ->
+                val filesMap = getFilesMap(filesResponse)
+                val result = getResult(licensing, filesMap)
                 Response.Success(result)
             }
         }
+
+    private fun getResult(
+        licensing: List<Licensing>, filesMap: Map<String, List<File>>
+    ) = licensing.map { lic ->
+        LicensingWithFile(licensing = lic, files = filesMap[lic.id] ?: emptyList())
+    }
+
+    private fun getFilesMap(filesResponse: Response<List<File>>) =
+        if (filesResponse is Response.Success) {
+            filesResponse.data.groupBy { it.parentId }
+        } else emptyMap()
 
     private fun getFilesQueryParams(queryParams: QueryParameters, licensingIds: List<String>) =
         QueryParameters.create(queryParams.user)

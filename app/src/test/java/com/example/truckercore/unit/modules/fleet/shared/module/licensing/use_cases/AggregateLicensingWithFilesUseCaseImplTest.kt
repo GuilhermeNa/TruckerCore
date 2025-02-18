@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.modules.fleet.shared.module.licensing.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.configs.di.travelModule
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.AggregateLicensingWithFilesUseCaseImpl
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
@@ -20,12 +20,12 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import org.junit.jupiter.api.Test
 
 class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
 
@@ -36,17 +36,8 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
     private val docParams: DocumentParameters = mockk(relaxed = true)
     private val queryParams: QueryParameters = mockk(relaxed = true)
 
-    private val licensing: Licensing = mockk()
-    private val licensingSingleResult = Response.Success(licensing)
-    private val licensingListResult = Response.Success(listOf(licensing))
-
-    private val file: File = mockk()
-    private val fileSingleResult = Response.Success(file)
-    private val fileListResult = Response.Success(listOf(file))
-    private val licensingWithFile: LicensingWithFile = mockk()
-
-
-
+    private val licensing: Licensing = mockk(relaxed = true)
+    private val file: File = mockk(relaxed = true)
 
     companion object {
 
@@ -74,13 +65,15 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
     }
 
     @Test
-    fun `execute() should return LicensingWithFile when both results are successful`() =
+    fun `execute(DocumentParameters) should return LicensingWithFile when both results are successful`() =
         runTest {
             // Arrange
             every { getLicensing.execute(any() as DocumentParameters) } returns flowOf(
-                Response.Success
+                Response.Success(licensing)
             )
-            every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
+            every { getFile.execute(any() as QueryParameters) } returns flowOf(
+                Response.Success(listOf(file))
+            )
 
             // Call
             val result = aggregateLicensingWithFilesUseCase.execute(docParams).single()
@@ -93,11 +86,13 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
         }
 
     @Test
-    fun `execute() should return Empty when Licensing result is not successful`() =
+    fun `execute(DocumentParameters) should return Empty when Licensing result is not successful`() =
         runTest {
             // Arrange
-            every { getLicensing.execute(any()) } returns flowOf(Response.Empty)
-            every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
+            every { getLicensing.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
+            every { getFile.execute(any() as QueryParameters) } returns flowOf(
+                Response.Success(listOf(file))
+            )
 
             // Call
             val result = aggregateLicensingWithFilesUseCase.execute(docParams).single()
@@ -107,10 +102,12 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
         }
 
     @Test
-    fun `execute() should return LicensingWithFile with empty files when File result is not successful`() =
+    fun `execute(DocumentParameters) should return LicensingWithFile with empty files when File result is not successful`() =
         runTest {
             // Arrange
-            every { getLicensing.execute(any()) } returns flowOf(licensingResult)
+            every { getLicensing.execute(any() as DocumentParameters) } returns flowOf(
+                Response.Success(licensing)
+            )
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
 
             // Call
@@ -124,10 +121,10 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
         }
 
     @Test
-    fun `execute() should return LicensingWithFile with empty files when both results are not successful`() =
+    fun `execute(DocumentParameters) should return LicensingWithFile with empty files when both results are not successful`() =
         runTest {
             // Arrange
-            every { getLicensing.execute(any()) } returns flowOf(Response.Empty)
+            every { getLicensing.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
 
             // Call
@@ -138,12 +135,15 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
         }
 
     @Test
-    fun `execute() should return a list of LicensingWithFile for multiple licensing results`() =
+    fun `execute(QueryParameters) should return a list of LicensingWithFile for multiple licensing results`() =
         runTest {
             // Arrange
-            val licensingList = listOf(licensing, mockk<Licensing>())
-            every { getLicensing.execute(any()) } returns flowOf(Response.Success(licensingList))
-            every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
+            every { getLicensing.execute(any() as QueryParameters) } returns flowOf(
+                Response.Success(listOf(licensing))
+            )
+            every { getFile.execute(any() as QueryParameters) } returns flowOf(
+                Response.Success(listOf(file))
+            )
 
             // Call
             val result = aggregateLicensingWithFilesUseCase.execute(queryParams).single()
@@ -151,8 +151,40 @@ class AggregateLicensingWithFilesUseCaseImplTest : KoinTest {
             // Assertions
             assertTrue(result is Response.Success)
             val successData = (result as Response.Success).data
-            assertEquals(licensingList.size, successData.size)
+            assertEquals(1, successData.size)
             assertEquals(file, successData.first().files.firstOrNull())
+        }
+
+    @Test
+    fun `execute(QueryParameters) should return Empty when Licensing result is not successful`() =
+        runTest {
+            // Arrange
+            every { getLicensing.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
+
+            // Call
+            val result = aggregateLicensingWithFilesUseCase.execute(queryParams).single()
+
+            // Assertions
+            assertTrue(result is Response.Empty)
+        }
+
+    @Test
+    fun `execute(QueryParameters) should return LicensingWithFile with empty files when File result is not successful`() =
+        runTest {
+            // Arrange
+            every { getLicensing.execute(any() as QueryParameters) } returns flowOf(
+                Response.Success(listOf(licensing))
+            )
+            every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
+
+            // Call
+            val result = aggregateLicensingWithFilesUseCase.execute(queryParams).single()
+
+            // Assertions
+            assertTrue(result is Response.Success)
+            val successData = (result as Response.Success).data
+            assertEquals(licensing, successData.first().licensing)
+            assertTrue(successData.first().files.isEmpty())
         }
 
 }

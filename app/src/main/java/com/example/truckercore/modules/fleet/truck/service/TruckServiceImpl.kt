@@ -33,5 +33,4 @@ internal class TruckServiceImpl(
     ): Flow<Response<List<TruckWithDetails>>> =
         runSafe { getTruckWithDetailsUseCase.execute(queryParam) }
 
-
 }

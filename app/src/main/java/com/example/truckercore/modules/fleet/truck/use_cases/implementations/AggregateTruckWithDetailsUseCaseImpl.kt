@@ -1,9 +1,12 @@
 package com.example.truckercore.modules.fleet.truck.use_cases.implementations
 
 import com.example.truckercore.configs.app_constants.Field
+import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
+import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase
 import com.example.truckercore.modules.fleet.truck.aggregation.TruckWithDetails
+import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.AggregateTruckWithDetailsUseCase
 import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
 import com.example.truckercore.shared.enums.QueryType
@@ -22,10 +25,7 @@ internal class AggregateTruckWithDetailsUseCaseImpl(
     private val getLicensingWithFiles: AggregateLicensingWithFilesUseCase
 ) : AggregateTruckWithDetailsUseCase {
 
-    override fun execute(documentParams: DocumentParameters) =
-        getSingleTruckWithDetailsFLow(documentParams)
-
-    private fun getSingleTruckWithDetailsFLow(documentParams: DocumentParameters) = combine(
+    override fun execute(documentParams: DocumentParameters) = combine(
         getTruck.execute(documentParams),
         getTrailerWithDetails.execute(getTrailerQueryParams(documentParams)),
         getLicensingWithFiles.execute(getLicensingQueryParams(documentParams))
@@ -33,22 +33,29 @@ internal class AggregateTruckWithDetailsUseCaseImpl(
         if (truckResponse !is Response.Success) return@combine Response.Empty
 
         val truck = truckResponse.data
+        val trailersWithDetails = getTrailersWithDetails(trailerWithDetailsResponse)
+        val licensingWithFiles = getLicensingWithFiles(licensingWithFilesResponse)
+        val result = TruckWithDetails(
+            truck = truck,
+            trailersWithDetails = trailersWithDetails,
+            licensingWithFiles = licensingWithFiles
+        )
 
-        val trailersWithDetails =
-            if (trailerWithDetailsResponse is Response.Success) trailerWithDetailsResponse.data
-            else emptyList()
+        Response.Success(result)
+    }
 
+    private fun getLicensingWithFiles(licensingWithFilesResponse: Response<List<LicensingWithFile>>): List<LicensingWithFile> {
         val licensingWithFiles =
             if (licensingWithFilesResponse is Response.Success) licensingWithFilesResponse.data
             else emptyList()
+        return licensingWithFiles
+    }
 
-        Response.Success(
-            TruckWithDetails(
-                truck = truck,
-                trailersWithDetails = trailersWithDetails,
-                licensingWithFiles = licensingWithFiles
-            )
-        )
+    private fun getTrailersWithDetails(trailerWithDetailsResponse: Response<List<TrailerWithDetails>>): List<TrailerWithDetails> {
+        val trailersWithDetails =
+            if (trailerWithDetailsResponse is Response.Success) trailerWithDetailsResponse.data
+            else emptyList()
+        return trailersWithDetails
     }
 
     private fun getLicensingQueryParams(documentParams: DocumentParameters) =
@@ -65,11 +72,8 @@ internal class AggregateTruckWithDetailsUseCaseImpl(
 
     //----------------------------------------------------------------------------------------------
 
-    override fun execute(queryParams: QueryParameters) =
-        getListOfTruckWithDetailsFlow(queryParams)
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun getListOfTruckWithDetailsFlow(queryParams: QueryParameters) =
+    override fun execute(queryParams: QueryParameters) =
         getTruck.execute(queryParams).flatMapConcat { truckResponse ->
             if (truckResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
             val truckList = truckResponse.data
@@ -79,28 +83,40 @@ internal class AggregateTruckWithDetailsUseCaseImpl(
                 getTrailerWithDetails.execute(getTrailerQueryParams(queryParams, truckIds)),
                 getLicensingWithFiles.execute(getLicensingQueryParams(queryParams, truckIds))
             ) { trailerWithDetailsResponse, licensingWithFilesResponse ->
-                val trailersWithDetails =
-                    if (trailerWithDetailsResponse is Response.Success) {
-                        trailerWithDetailsResponse.data.groupBy { it.trailer.truckId }
-                    } else emptyMap()
 
-                val licensingWithFiles =
-                    if (licensingWithFilesResponse is Response.Success) {
-                        licensingWithFilesResponse.data.groupBy { it.licensing.parentId }
-                    } else emptyMap()
-
-                val result = truckList.map { truck ->
-                    TruckWithDetails(
-                        truck = truck,
-                        trailersWithDetails = trailersWithDetails[truck.id] ?: emptyList(),
-                        licensingWithFiles = licensingWithFiles[truck.id] ?: emptyList()
-                    )
-                }
+                val trailersWithDetailsMap = trailerWithDetailsResponse.groupTrailersByTruckId()
+                val licensingWithFiles = licensingWithFilesResponse.groupLicensingByTruckId()
+                val result = getResult(truckList, trailersWithDetailsMap, licensingWithFiles)
 
                 Response.Success(result)
             }
 
         }
+
+    private fun getResult(
+        truckList: List<Truck>,
+        trailersWithDetailsMap: Map<String?, List<TrailerWithDetails>>,
+        licensingWithFiles: Map<String, List<LicensingWithFile>>
+    ): List<TruckWithDetails> {
+        val result = truckList.map { truck ->
+            TruckWithDetails(
+                truck = truck,
+                trailersWithDetails = trailersWithDetailsMap[truck.id] ?: emptyList(),
+                licensingWithFiles = licensingWithFiles[truck.id] ?: emptyList()
+            )
+        }
+        return result
+    }
+
+    private fun Response<List<LicensingWithFile>>.groupLicensingByTruckId() =
+        if (this is Response.Success) {
+            this.data.groupBy { it.licensing.parentId }
+        } else emptyMap()
+
+    private fun Response<List<TrailerWithDetails>>.groupTrailersByTruckId() =
+        if (this is Response.Success) {
+            this.data.groupBy { it.trailer.truckId }
+        } else emptyMap()
 
     private fun getLicensingQueryParams(
         queryParams: QueryParameters,
@@ -114,7 +130,7 @@ internal class AggregateTruckWithDetailsUseCaseImpl(
         queryParams: QueryParameters,
         truckIds: List<String>
     ) = QueryParameters.create(queryParams.user)
-        .setQueries(QuerySettings(Field.TRUCK_ID, QueryType.WHERE_EQUALS, truckIds))
+        .setQueries(QuerySettings(Field.TRUCK_ID, QueryType.WHERE_IN, truckIds))
         .setStream(queryParams.shouldStream)
         .build()
 

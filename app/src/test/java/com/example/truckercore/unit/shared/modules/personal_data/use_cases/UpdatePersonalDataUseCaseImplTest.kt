@@ -62,7 +62,7 @@ class UpdatePersonalDataUseCaseImplTest : KoinTest {
                         single<PersonalDataMapper> { mockk() }
                         single<UpdatePersonalDataUseCase> {
                             UpdatePersonalDataUseCaseImpl(
-                                get(), get(), get(), get(), get(), Permission.UPDATE_PERSONAL_DATA
+                                Permission.UPDATE_PERSONAL_DATA, get(), get(), get(), get(), get()
                             )
                         }
                     }
