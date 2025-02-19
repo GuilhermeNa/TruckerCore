@@ -1,4 +1,4 @@
-package com.example.truckercore.infrastructure.security.auth.expressions
+package com.example.truckercore.infrastructure.security.authentication.expressions
 
 import java.security.MessageDigest
 

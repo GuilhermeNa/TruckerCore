@@ -1,4 +1,4 @@
-package com.example.truckercore.infrastructure.api
+package com.example.truckercore.shared.abstractions
 
 import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
 import com.example.truckercore.shared.utils.sealeds.Response

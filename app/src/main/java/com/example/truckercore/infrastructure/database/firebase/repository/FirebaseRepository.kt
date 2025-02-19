@@ -3,7 +3,7 @@ package com.example.truckercore.infrastructure.database.firebase.repository
 import com.example.truckercore.configs.app_constants.Collection
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseRequestException
-import com.example.truckercore.infrastructure.database.firebase.errors.UnsuccessfulTaskException
+import com.example.truckercore.infrastructure.database.firebase.errors.IncompleteTaskException
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.shared.interfaces.Dto
@@ -25,7 +25,7 @@ internal interface FirebaseRepository {
      * @param dto The DTO to be saved. The DTO will have its ID assigned during the creation.
      * @return A [Flow] that emits a [Response.Success] when the document is successfully created,
      *         containing the ID of the created document.
-     * @throws UnsuccessfulTaskException If the task of creating the document is not successful.
+     * @throws IncompleteTaskException If the task of creating the document is not successful.
      */
     fun create(collection: Collection, dto: Dto): Flow<Response<String>>
 
@@ -35,7 +35,7 @@ internal interface FirebaseRepository {
      * @param collection The Firestore collection where the document will be updated.
      * @param dto The DTO containing the data to update the document.
      * @return A [Flow] that emits a [Response.Success] when the document is successfully updated.
-     * @throws UnsuccessfulTaskException If the task of updating the document is not successful.
+     * @throws IncompleteTaskException If the task of updating the document is not successful.
      */
     fun update(collection: Collection, dto: Dto): Flow<Response<Unit>>
 
@@ -45,7 +45,7 @@ internal interface FirebaseRepository {
      * @param collection The Firestore collection from which the document will be deleted.
      * @param id The ID of the document to delete.
      * @return A [Flow] that emits a [Response.Success] when the document is successfully deleted.
-     * @throws UnsuccessfulTaskException If the task of deleting the document is not successful.
+     * @throws IncompleteTaskException If the task of deleting the document is not successful.
      */
     fun delete(collection: Collection, id: String): Flow<Response<Unit>>
 
@@ -57,7 +57,7 @@ internal interface FirebaseRepository {
      * @return A [Flow] that emits:
      * - [Response.Success] if the document exists.
      * - [Response.Empty] if the document does not exist.
-     * @throws UnsuccessfulTaskException If the task of checking existence fails or the operation is unsuccessful.
+     * @throws IncompleteTaskException If the task of checking existence fails or the operation is unsuccessful.
      */
     fun entityExists(collection: Collection, id: String): Flow<Response<Unit>>
 
@@ -69,7 +69,7 @@ internal interface FirebaseRepository {
      * @return A [Flow] of:
      *  - [Response.Success] representing the fetched user data.
      *  - [Response.Empty] if the document does not exist.
-     * @throws UnsuccessfulTaskException If the task of fetching the logged user data is unsuccessful.
+     * @throws IncompleteTaskException If the task of fetching the logged user data is unsuccessful.
      * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun fetchLoggedUser(userId: String, shouldStream: Boolean): Flow<Response<UserDto>>
@@ -82,7 +82,7 @@ internal interface FirebaseRepository {
      *  - [Response.Success] that represents the fetched document.
      *  - [Response.Empty] if the document does not exist.
      * @throws FirebaseRequestException If the Firebase request is invalid or malformed.
-     * @throws UnsuccessfulTaskException If the task of fetching the document fails.
+     * @throws IncompleteTaskException If the task of fetching the document fails.
      * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>>
@@ -96,7 +96,7 @@ internal interface FirebaseRepository {
      *  - [Response.Success] representing the list of fetched documents.
      * - [Response.Empty] if the document does not exist.
      * @throws FirebaseRequestException If the Firebase request is invalid or malformed.
-     * @throws UnsuccessfulTaskException If the task of fetching the query fails.
+     * @throws IncompleteTaskException If the task of fetching the query fails.
      * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>>

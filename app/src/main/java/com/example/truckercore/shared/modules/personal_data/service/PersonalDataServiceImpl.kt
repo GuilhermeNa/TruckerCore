@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.modules.personal_data.service
 
-import com.example.truckercore.infrastructure.api.Service
+import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
