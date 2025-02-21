@@ -16,7 +16,7 @@ internal object DefaultPermissions {
      * @param user The user whose permissions will be retrieved.
      * @return A set of permissions granted to the user based on their level.
      */
-    fun get(level: Level): Set<Permission> {
+    fun get(level: Level): HashSet<Permission> {
         return when (level) {
             Level.MASTER -> masterPermissions
             Level.MANAGER -> adminPermissions
@@ -25,7 +25,7 @@ internal object DefaultPermissions {
         }
     }
 
-    private val masterPermissions = setOf(
+    private val masterPermissions = hashSetOf(
         Permission.CREATE_USER, Permission.UPDATE_USER, Permission.VIEW_USER,
         Permission.ARCHIVE_USER, Permission.DELETE_USER,
         Permission.CREATE_PERSONAL_DATA, Permission.UPDATE_PERSONAL_DATA,
@@ -33,7 +33,7 @@ internal object DefaultPermissions {
         Permission.VIEW_PERSONAL_DATA
     )
 
-    private val adminPermissions = setOf(
+    private val adminPermissions = hashSetOf(
         Permission.CREATE_USER, Permission.UPDATE_USER, Permission.VIEW_USER,
         Permission.ARCHIVE_USER, Permission.DELETE_USER,
         Permission.CREATE_PERSONAL_DATA, Permission.UPDATE_PERSONAL_DATA,
@@ -41,9 +41,8 @@ internal object DefaultPermissions {
         Permission.VIEW_PERSONAL_DATA
     )
 
+    private val moderatorPermissions = hashSetOf(Permission.VIEW_USER)
 
-    private val moderatorPermissions = setOf(Permission.VIEW_USER)
-
-    private val userPermissions = setOf(Permission.VIEW_PERSONAL_DATA)
+    private val userPermissions = hashSetOf(Permission.VIEW_PERSONAL_DATA)
 
 }

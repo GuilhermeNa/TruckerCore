@@ -99,8 +99,6 @@ internal class UserValidationStrategy : ValidatorStrategy() {
         entity as User
         val invalidFields = mutableListOf<String>()
 
-        if (entity.businessCentralId.isNotEmpty()) invalidFields.add(Field.BUSINESS_CENTRAL_ID.getName())
-
         if (entity.id != null) invalidFields.add(Field.ID.getName())
 
         if (entity.lastModifierId.isBlank()) invalidFields.add(Field.LAST_MODIFIER_ID.getName())

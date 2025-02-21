@@ -8,6 +8,8 @@ import com.example.truckercore.infrastructure.database.firebase.util.FirebaseReq
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.sealeds.Response
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -16,6 +18,10 @@ import kotlinx.coroutines.flow.Flow
  * querying capabilities, including streaming, for Firestore collections and documents.
  */
 internal interface FirebaseRepository {
+
+    fun runTransaction(transactionOperation: (transaction: Transaction) -> Unit): Flow<Response<Unit>>
+
+    fun createDocument(collection: Collection): DocumentReference
 
     /**
      * Creates a new document in the specified Firestore collection using the provided DTO.

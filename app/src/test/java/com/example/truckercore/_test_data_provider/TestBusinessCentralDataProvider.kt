@@ -14,7 +14,8 @@ internal object TestBusinessCentralDataProvider {
         lastModifierId = "lastModifierId",
         creationDate = LocalDateTime.now(),
         lastUpdate = LocalDateTime.now(),
-        persistenceStatus = PersistenceStatus.PERSISTED
+        persistenceStatus = PersistenceStatus.PERSISTED,
+        keys = 1
     )
 
     fun getBaseDto() = BusinessCentralDto(
@@ -23,7 +24,8 @@ internal object TestBusinessCentralDataProvider {
         lastModifierId = "lastModifierId",
         creationDate = Date(),
         lastUpdate = Date(),
-        persistenceStatus = PersistenceStatus.PERSISTED.name
+        persistenceStatus = PersistenceStatus.PERSISTED.name,
+        keys = 1
     )
 
     fun arrValidDtosForValidationRules() = arrayOf(
@@ -43,7 +45,8 @@ internal object TestBusinessCentralDataProvider {
         getBaseDto().copy(persistenceStatus = null),
         getBaseDto().copy(persistenceStatus = ""),
         getBaseDto().copy(persistenceStatus = " "),
-        getBaseDto().copy(persistenceStatus = PersistenceStatus.PENDING.name)
+        getBaseDto().copy(persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(keys = null),
     )
 
     fun arrInvalidEntitiesForValidationRules() = arrayOf(
@@ -80,7 +83,8 @@ internal object TestBusinessCentralDataProvider {
         getBaseDto().copy(creationDate = null),
         getBaseDto().copy(lastUpdate = null),
         getBaseDto().copy(persistenceStatus = null),
-        getBaseDto().copy(persistenceStatus = "INVALID")
+        getBaseDto().copy(persistenceStatus = "INVALID"),
+        getBaseDto().copy(keys = null)
     )
 
 }

@@ -6,15 +6,10 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.modules.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
 import com.example.truckercore.shared.errors.validation.InvalidObjectException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 import io.mockk.spyk
 import io.mockk.verify
@@ -31,10 +26,8 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import java.time.LocalDateTime
-import java.util.Date
 
-internal class BusinessCentralValidationStrategyTest: KoinTest {
+internal class BusinessCentralValidationStrategyTest : KoinTest {
 
     private val validator: BusinessCentralValidationStrategy by inject()
 
@@ -175,7 +168,7 @@ internal class BusinessCentralValidationStrategyTest: KoinTest {
             validator.validateEntity(input)
         }
 
-        assertTrue(exception.entity is BusinessCentral )
+        assertTrue(exception.entity is BusinessCentral)
     }
 
     @Test
@@ -185,7 +178,7 @@ internal class BusinessCentralValidationStrategyTest: KoinTest {
         val unexpectedEntityInput = ValidatorInput.EntityInput(unexpectedEntity)
 
         // Call
-       val exception = assertThrows<IllegalValidationArgumentException> {
+        val exception = assertThrows<IllegalValidationArgumentException> {
             validator.validateEntity(unexpectedEntityInput)
         }
 

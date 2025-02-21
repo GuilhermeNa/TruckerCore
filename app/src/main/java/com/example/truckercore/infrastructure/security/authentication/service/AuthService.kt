@@ -1,6 +1,7 @@
 package com.example.truckercore.infrastructure.security.authentication.service
 
 import com.example.truckercore.infrastructure.security.authentication.entity.Credentials
+import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,6 @@ interface AuthService {
 
     fun getCurrentUser(): FirebaseUser?
 
-    fun registerNewSystemAccess()
+    fun createNewSystemAccess(requirements: NewAccessRequirements): Flow<Response<Unit>>
 
 }

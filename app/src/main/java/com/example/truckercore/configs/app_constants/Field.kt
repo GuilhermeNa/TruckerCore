@@ -32,6 +32,7 @@ enum class Field(private val fieldName: String) {
     NUMBER("number"),
     EMISSION_DATE("emissionDate"),
     EXPIRATION_DATE("expirationDate"),
+    KEYS("keys"),
     LEVEL("level"),
     IS_VIP("isVip"),
     VIP_START("vipStart"),

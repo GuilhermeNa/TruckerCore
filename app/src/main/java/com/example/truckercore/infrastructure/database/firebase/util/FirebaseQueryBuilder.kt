@@ -13,7 +13,7 @@ import com.google.firebase.firestore.Query
  * build Firestore queries by applying various query settings (e.g., filters).
  * @property firestore The Firestore instance that is used to interact with the Firestore database.
  */
-internal class FirebaseQueryBuilder(private val firestore: FirebaseFirestore) {
+internal class FirebaseQueryBuilder(val firestore: FirebaseFirestore) {
 
      /**
      * Creates a new Firestore document reference in the specified collection.

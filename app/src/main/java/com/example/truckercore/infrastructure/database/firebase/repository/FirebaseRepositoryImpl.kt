@@ -8,6 +8,8 @@ import com.example.truckercore.infrastructure.database.firebase.util.FirebaseReq
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.utils.sealeds.Response
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +21,28 @@ internal class FirebaseRepositoryImpl(
     private val queryBuilder: FirebaseQueryBuilder,
     private val converter: FirebaseConverter
 ) : FirebaseRepository {
+
+    override fun runTransaction(transactionOperation: (transaction: Transaction) -> Unit): Flow<Response<Unit>> =
+        callbackFlow {
+            queryBuilder.firestore.runTransaction { transaction ->
+                transactionOperation(transaction)
+            }.addOnSuccessListener {
+                trySend(Response.Success(Unit))
+            }.addOnFailureListener { error ->
+                close(error)
+                throw error
+            }
+
+            awaitClose { this.cancel() }
+        }
+
+    override fun createDocument(collection: Collection): DocumentReference {
+        return queryBuilder.createDocument(collection)
+    }
+
+
+
+    //----------------------------------------------------------------------------------------------
 
     override fun create(
         collection: Collection,

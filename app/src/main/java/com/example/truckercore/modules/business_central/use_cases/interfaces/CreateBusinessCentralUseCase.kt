@@ -1,7 +1,6 @@
 package com.example.truckercore.modules.business_central.use_cases.interfaces
 
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -17,11 +16,10 @@ internal interface CreateBusinessCentralUseCase {
     /**
      * Executes the use case to create a new [BusinessCentral] entity.
      *
-     * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
-     * @param entity The [BusinessCentral] entity to be created. This object contains the data to be stored in the system.
+     * @param bCentral The [BusinessCentral] entity to be created. This object contains the data to be stored in the system.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully created.
      */
-    suspend fun execute(user: User, bCentral: BusinessCentral): Flow<Response<String>>
+    fun execute(bCentral: BusinessCentral): Flow<Response<String>>
 
 }

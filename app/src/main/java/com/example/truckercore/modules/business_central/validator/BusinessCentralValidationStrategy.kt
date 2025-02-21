@@ -40,6 +40,7 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
     //----------------------------------------------------------------------------------------------
 
     override fun processDtoValidationRules(dto: Dto) {
+        dto as BusinessCentralDto
         val invalidFields = mutableListOf<String>()
 
         if (dto.id.isNullOrBlank()) {
@@ -59,6 +60,10 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
             !PersistenceStatus.enumExists(dto.persistenceStatus!!)
         ) {
             invalidFields.add(Field.PERSISTENCE_STATUS.getName())
+        }
+
+        if (dto.keys == null) {
+            invalidFields.add(Field.KEYS.getName())
         }
 
         if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)

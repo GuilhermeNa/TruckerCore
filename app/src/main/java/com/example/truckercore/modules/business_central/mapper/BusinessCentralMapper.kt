@@ -34,7 +34,8 @@ internal class BusinessCentralMapper : Mapper {
             lastModifierId = dto.lastModifierId!!,
             creationDate = dto.creationDate!!.toLocalDateTime(),
             lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
-            persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!)
+            persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!),
+            keys = dto.keys!!
         )
     } catch (error: Exception) {
         throw InvalidForMappingException(dto, error)
@@ -47,7 +48,8 @@ internal class BusinessCentralMapper : Mapper {
             lastModifierId = entity.lastModifierId,
             creationDate = entity.creationDate.toDate(),
             lastUpdate = entity.lastUpdate.toDate(),
-            persistenceStatus = entity.persistenceStatus.name
+            persistenceStatus = entity.persistenceStatus.name,
+            keys = entity.keys
         )
     } catch (error: Exception) {
         throw InvalidForMappingException(entity, error)

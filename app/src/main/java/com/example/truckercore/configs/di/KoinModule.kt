@@ -3,6 +3,7 @@ package com.example.truckercore.configs.di
 val koinModules = listOf(
     viewModelModule,
     firebaseModule,
+    authModule,
     securityModule,
     businessCentralModule,
     userModule,

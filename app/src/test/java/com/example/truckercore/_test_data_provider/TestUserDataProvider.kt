@@ -53,8 +53,6 @@ internal object TestUserDataProvider {
         getBaseDto().copy(lastUpdate = null),
         getBaseDto().copy(persistenceStatus = null),
         getBaseDto().copy(isVip = null),
-        getBaseDto().copy(vipStart = null),
-        getBaseDto().copy(vipEnd = null),
         getBaseDto().copy(level = null),
         getBaseDto().copy(permissions = null),
         getBaseDto().copy(personFLag = null)

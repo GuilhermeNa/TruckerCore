@@ -10,7 +10,8 @@ internal data class BusinessCentralDto(
     override val lastModifierId: String? = null,
     override val creationDate: Date? = null,
     override val lastUpdate: Date? = null,
-    override val persistenceStatus: String? = null
+    override val persistenceStatus: String? = null,
+    val keys: Int? = null
 ) : Dto {
 
     override fun initializeId(newId: String): BusinessCentralDto {
