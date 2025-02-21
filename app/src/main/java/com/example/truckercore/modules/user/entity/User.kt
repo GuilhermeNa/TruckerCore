@@ -14,6 +14,9 @@ data class User(
     override val creationDate: LocalDateTime,
     override val lastUpdate: LocalDateTime,
     override val persistenceStatus: PersistenceStatus,
+    val isVip: Boolean,
+    val vipStart: LocalDateTime,
+    val vipEnd: LocalDateTime,
     val level: Level,
     val permissions: HashSet<Permission> = hashSetOf(),
     val personFLag: PersonCategory
@@ -21,6 +24,11 @@ data class User(
 
     fun hasPermission(permission: Permission): Boolean {
         return permissions.contains(permission)
+    }
+
+    fun isVipActive(): Boolean {
+        val now = LocalDateTime.now()
+        return isVip && vipEnd.isAfter(now)
     }
 
 }

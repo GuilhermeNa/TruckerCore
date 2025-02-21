@@ -11,4 +11,4 @@ data class BusinessCentral(
     override val creationDate: LocalDateTime,
     override val lastUpdate: LocalDateTime,
     override val persistenceStatus: PersistenceStatus
-): Entity
+): Entity 

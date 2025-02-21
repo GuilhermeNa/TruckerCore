@@ -34,9 +34,7 @@ internal class FirebaseRepositoryImpl(
             }
             if (task.isSuccessful) trySend(Response.Success(docReference.id))
             else throw IncompleteTaskException(
-                message = "Failed while creating an entity.",
-                dto = dto,
-                collection = collection
+                "Failed while creating an entity: ${dto::class.simpleName}."
             )
         }
 
@@ -56,9 +54,7 @@ internal class FirebaseRepositoryImpl(
             }
             if (task.isSuccessful) trySend(Response.Success(Unit))
             else throw IncompleteTaskException(
-                message = "Failed while updating an entity.",
-                dto = dto,
-                collection = collection
+                "Failed while updating an entity ${dto::class.simpleName}.",
             )
         }
 
@@ -78,9 +74,7 @@ internal class FirebaseRepositoryImpl(
             }
             if (task.isSuccessful) trySend(Response.Success(Unit))
             else throw IncompleteTaskException(
-                message = "Failed while deleting an entity.",
-                id = id,
-                collection = collection
+                "Failed while deleting an entity for id: $id."
             )
         }
 
@@ -100,9 +94,7 @@ internal class FirebaseRepositoryImpl(
                 else Response.Empty
             emit(result)
         } ?: throw IncompleteTaskException(
-            message = "Failed while verifying an entity existence.",
-            id = id,
-            collection = collection
+            "Failed while verifying an entity existence for id: $id."
         )
     }
 
@@ -136,9 +128,7 @@ internal class FirebaseRepositoryImpl(
             val result = converter.processDocumentSnapShot(dss, UserDto::class.java)
             emit(result)
         } ?: throw IncompleteTaskException(
-            message = "Failed while searching the logged user.",
-            id = userId,
-            collection = Collection.USER
+            "Failed while searching the logged user for userId: $userId."
         )
     }
 
@@ -154,10 +144,9 @@ internal class FirebaseRepositoryImpl(
                 val result = converter.processDocumentSnapShot(docSnap, UserDto::class.java)
                 this.trySend(result)
             } ?: throw IncompleteTaskException(
-                message = "Failed while streaming the logged user.",
-                id = userId,
-                collection = Collection.USER
-            )
+                "Failed while streaming the logged user with id: $userId.",
+
+                )
         }
 
         awaitClose { this.cancel() }
@@ -173,9 +162,7 @@ internal class FirebaseRepositoryImpl(
             val result = converter.processDocumentSnapShot(dss, firebaseRequest.clazz)
             emit(result)
         } ?: throw IncompleteTaskException(
-            message = "Failed while searching a document.",
-            id = params.id,
-            collection = firebaseRequest.collection
+            "Failed while searching a document with id: ${params.id}."
         )
     }
 
@@ -193,9 +180,7 @@ internal class FirebaseRepositoryImpl(
                 val result = converter.processDocumentSnapShot(docSnap, firebaseRequest.clazz)
                 this.trySend(result)
             } ?: throw IncompleteTaskException(
-                message = "Failed while streaming a document.",
-                id = params.id,
-                collection = firebaseRequest.collection
+                "Failed while streaming a document with id: ${params.id}.",
             )
         }
 
@@ -211,10 +196,7 @@ internal class FirebaseRepositoryImpl(
         querySnapshot?.let { qss ->
             val result = converter.processQuerySnapShot(qss, firebaseRequest.clazz)
             emit(result)
-        } ?: throw IncompleteTaskException(
-            message = "Failed while searching a query.",
-            collection = firebaseRequest.collection
-        )
+        } ?: throw IncompleteTaskException("Failed while searching a query.")
     }
 
     private fun <T : Dto> streamQuery(firebaseRequest: FirebaseRequest<T>) = callbackFlow {
@@ -230,10 +212,7 @@ internal class FirebaseRepositoryImpl(
             nSnapShot?.let { snapShot ->
                 val result = converter.processQuerySnapShot(snapShot, firebaseRequest.clazz)
                 this.trySend(result)
-            } ?: throw IncompleteTaskException(
-                message = "Failed while streaming a query.",
-                collection = firebaseRequest.collection
-            )
+            } ?: throw IncompleteTaskException("Failed while streaming a query.")
         }
 
         awaitClose { this.cancel() }

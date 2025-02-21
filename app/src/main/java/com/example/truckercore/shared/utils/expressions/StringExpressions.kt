@@ -21,7 +21,7 @@ fun String.validateIsNotBlank(fieldName: String? = "string") {
  * @receiver String The string to capitalize.
  * @return The string with the first letter capitalized and the rest in lowercase.
  */
-fun String.capitalizeFirst(): String =
+fun String.capitalizeFirstChar(): String =
     this.lowercase().replaceFirstChar { it.uppercase() }
 
 /**

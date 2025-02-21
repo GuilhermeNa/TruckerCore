@@ -24,6 +24,9 @@ internal class UserDtoTest {
         assertEquals(dto.lastModifierId, updatedDto.lastModifierId)
         assertEquals(dto.creationDate, updatedDto.creationDate)
         assertEquals(dto.lastUpdate, updatedDto.lastUpdate)
+        assertEquals(dto.isVip, updatedDto.isVip)
+        assertEquals(dto.vipStart, updatedDto.vipStart)
+        assertEquals(dto.vipEnd, updatedDto.vipEnd)
 
         assertEquals(dto.level, updatedDto.level)
         assertEquals(dto.permissions, updatedDto.permissions)

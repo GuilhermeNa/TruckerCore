@@ -32,6 +32,9 @@ internal class UserMapper : Mapper {
             creationDate = dto.creationDate!!.toLocalDateTime(),
             lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
             persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus),
+            isVip = dto.isVip!!,
+            vipStart = dto.vipStart!!.toLocalDateTime(),
+            vipEnd = dto.vipEnd!!.toLocalDateTime(),
             level = Level.convertString(dto.level),
             permissions = dto.permissions!!.map { Permission.convertString(it) }.toHashSet(),
             personFLag = PersonCategory.convertString(dto.personFLag)
@@ -48,6 +51,9 @@ internal class UserMapper : Mapper {
             creationDate = entity.creationDate.toDate(),
             lastUpdate = entity.lastUpdate.toDate(),
             persistenceStatus = entity.persistenceStatus.name,
+            isVip = entity.isVip,
+            vipStart = entity.vipStart.toDate(),
+            vipEnd = entity.vipEnd.toDate(),
             level = entity.level.name,
             permissions = entity.permissions.map { it.name },
             personFLag = entity.personFLag.name

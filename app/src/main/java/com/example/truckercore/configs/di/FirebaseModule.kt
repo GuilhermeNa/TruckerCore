@@ -1,5 +1,7 @@
 package com.example.truckercore.configs.di
 
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseAuthRepository
+import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseAuthRepositoryImpl
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepositoryImpl
 import com.example.truckercore.infrastructure.database.firebase.util.FirebaseConverter
@@ -17,6 +19,7 @@ val firebaseModule = module {
     single { FirebaseConverter() }
     single { FirebaseQueryBuilder(get()) }
     single<FirebaseRepository> { FirebaseRepositoryImpl(get(), get()) }
+    single<FirebaseAuthRepository> { FirebaseAuthRepositoryImpl(get()) }
 }
 
 

@@ -39,6 +39,9 @@ internal class MyViewModel(
         creationDate = LocalDateTime.now(),
         lastUpdate = LocalDateTime.now(),
         persistenceStatus = PersistenceStatus.PERSISTED,
+        isVip = true,
+        vipStart = LocalDateTime.now(),
+        vipEnd = LocalDateTime.now(),
         level = Level.MASTER,
         permissions = hashSetOf(
             Permission.UPDATE_BUSINESS_CENTRAL,

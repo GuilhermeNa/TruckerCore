@@ -17,17 +17,15 @@ import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 internal class UserValidationStrategy : ValidatorStrategy() {
 
     override fun validateDto(input: ValidatorInput.DtoInput) {
-        if (input.dto is UserDto) {
-            processDtoValidationRules(input.dto)
-        } else throw IllegalValidationArgumentException(
+        if (input.dto is UserDto) processDtoValidationRules(input.dto)
+        else throw IllegalValidationArgumentException(
             expected = UserDto::class, received = input.dto::class
         )
     }
 
     override fun validateEntity(input: ValidatorInput.EntityInput) {
-        if (input.entity is User) {
-            processEntityValidationRules(input.entity)
-        } else throw IllegalValidationArgumentException(
+        if (input.entity is User) processEntityValidationRules(input.entity)
+        else throw IllegalValidationArgumentException(
             expected = User::class, received = input.entity::class
         )
     }
@@ -59,6 +57,12 @@ internal class UserValidationStrategy : ValidatorStrategy() {
             !PersistenceStatus.enumExists(dto.persistenceStatus!!)
         ) invalidFields.add(Field.PERSISTENCE_STATUS.getName())
 
+        if (dto.isVip == null) invalidFields.add(Field.IS_VIP.getName())
+
+        if (dto.vipStart == null) invalidFields.add(Field.VIP_START.getName())
+
+        if (dto.vipEnd == null) invalidFields.add(Field.VIP_END.getName())
+
         if (dto.level.isNullOrBlank() ||
             !Level.enumExists(dto.level)
         ) invalidFields.add(Field.LEVEL.getName())
@@ -67,7 +71,7 @@ internal class UserValidationStrategy : ValidatorStrategy() {
             dto.permissions.any { !Permission.enumExists(it) }
         ) invalidFields.add(Field.PERMISSIONS.getName())
 
-        if(dto.personFLag.isNullOrBlank() ||
+        if (dto.personFLag.isNullOrBlank() ||
             !PersonCategory.enumExists(dto.personFLag)
         ) invalidFields.add(Field.PERSON_FLAG.getName())
 
