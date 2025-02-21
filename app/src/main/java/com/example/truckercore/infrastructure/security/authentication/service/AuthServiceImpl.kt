@@ -23,7 +23,7 @@ internal class AuthServiceImpl(
     override fun getCurrentUser(): FirebaseUser? = firebaseAuthRepository.getCurrentUser()
 
     override fun registerNewSystemAccess() {
-        TODO("Not yet implemented")
+
     }
 
 }
