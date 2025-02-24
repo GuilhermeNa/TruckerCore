@@ -8,7 +8,9 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.modules.user.use_cases.interfaces.CreateUserUseCase
+import com.example.truckercore.modules.user.service.UserService
+import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
+import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.utils.expressions.logError
 import com.example.truckercore.shared.utils.expressions.logWarn
@@ -18,7 +20,7 @@ import java.time.LocalDateTime
 
 internal class MyViewModel(
     private val service: AuthService,
-    private val createUserUseCase: CreateUserUseCase
+    private val userService: UserService
 ) : ViewModel() {
 
     private val user = User(
@@ -63,11 +65,17 @@ internal class MyViewModel(
 
             )
 
-             service.createNewSystemAccess(requirements).collect { response ->
-                 if (response is Response.Success)
-                     logWarn(response.toString())
-                 else logError(response.toString())
-             }
+            userService.fetchLoggedUserWithPerson("00E2QPDDE6mHvDfOI7dx", false).collect { response ->
+                if (response is Response.Success)
+                    logWarn(response.toString())
+                else logError(response.toString())
+            }
+
+            service.createNewSystemAccess(requirements).collect { response ->
+                if (response is Response.Success)
+                    logWarn(response.toString())
+                else logError(response.toString())
+            }
         }
     }
 

@@ -5,12 +5,16 @@ import com.example.truckercore.infrastructure.security.permissions.enums.Permiss
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.modules.user.repository.UserRepository
 import com.example.truckercore.modules.user.repository.UserRepositoryImpl
+import com.example.truckercore.modules.user.service.UserService
+import com.example.truckercore.modules.user.service.UserServiceImpl
+import com.example.truckercore.modules.user.use_cases.implementations.AggregateUserWithPersonUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.CheckUserExistenceUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.CreateMasterUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.CreateUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.DeleteUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.GetUserUseCaseImpl
 import com.example.truckercore.modules.user.use_cases.implementations.UpdateUserUseCaseImpl
+import com.example.truckercore.modules.user.use_cases.interfaces.AggregateUserWithPersonUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateMasterUserUseCase
 import com.example.truckercore.modules.user.use_cases.interfaces.CreateUserUseCase
@@ -21,10 +25,13 @@ import org.koin.dsl.module
 
 val userModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), Collection.USER) }
+    single<UserService> { UserServiceImpl(get(), get()) }
     single { UserMapper() }
 
     //--
-
+    single<AggregateUserWithPersonUseCase> {
+        AggregateUserWithPersonUseCaseImpl(get(), get(), get())
+    }
     single<CreateMasterUserUseCase> {
         CreateMasterUserUseCaseImpl(get(), get(), get())
     }
@@ -43,4 +50,5 @@ val userModule = module {
     single<UpdateUserUseCase> {
         UpdateUserUseCaseImpl(Permission.UPDATE_USER, get(), get(), get(), get(), get())
     }
+
 }

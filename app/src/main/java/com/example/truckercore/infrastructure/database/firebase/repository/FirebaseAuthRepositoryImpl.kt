@@ -17,16 +17,19 @@ internal class FirebaseAuthRepositoryImpl(
             .addOnCompleteListener { task ->
                 task.exception?.let { error ->
                     this.close(error)
-                    throw error
                 }
 
                 task.result.user?.let { user ->
                     val result = Response.Success(user.uid)
                     trySend(result)
-                } ?: throw IncompleteTaskException(
-                    "The task did not complete successfully." +
-                            " User authentication failed."
-                )
+                } ?: {
+                    val error = IncompleteTaskException(
+                        "The task did not complete successfully." +
+                                " User authentication failed."
+                    )
+                    close(error)
+                }
+
             }
 
         awaitClose { this.cancel() }
@@ -37,15 +40,10 @@ internal class FirebaseAuthRepositoryImpl(
             .addOnCompleteListener { task ->
                 task.exception?.let { error ->
                     this.close(error)
-                    throw error
                 }
 
-                val result = when (task.isSuccessful) {
-                    true -> Response.Success(Unit)
-                    false -> Response.Empty
-                }
-
-                trySend(result)
+                if(task.isSuccessful) trySend(Response.Success(Unit))
+                else close(IncompleteTaskException("Failure when trying to login."))
             }
 
         awaitClose { this.cancel() }

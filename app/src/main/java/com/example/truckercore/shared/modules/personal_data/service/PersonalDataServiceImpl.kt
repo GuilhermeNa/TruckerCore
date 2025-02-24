@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.modules.personal_data.service
 
 import com.example.truckercore.shared.abstractions.Service
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase

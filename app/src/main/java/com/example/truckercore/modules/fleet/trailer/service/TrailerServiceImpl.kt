@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.fleet.trailer.service
 
 import com.example.truckercore.shared.abstractions.Service
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
 import com.example.truckercore.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase

@@ -14,16 +14,16 @@ funcionários, frota, viagens, entre outros.
 Padrão DTO (Data Transfer Object) para a manipulação de dados entre a camada de
 persistência e a aplicação, garantindo uma comunicação eficiente e estruturada.
 
-Padrão Srategy para a validação de dados de acordo com os critérios e regras estabelecidos 
+Padrão Srategy para a validação de dados de acordo com os critérios e regras estabelecidos
 para este tipo de dado.
-    
+
 O módulo oferece funcionalidades como criação, atualização, exclusão e validação de dados.
 Também é responsável pelo tratamento de exceções personalizadas e validações específicas
 para garantir a integridade e a consistência dos dados.
 
 ### 2. **Estrutura**
 
-modules/
+`modules/
 │
 └── business_central/            
     ├── dto/
@@ -32,7 +32,7 @@ modules/
     │── repository
     │── use_cases
     │── validator
-    └── README.md
+    └── README.md`
 
 ### 3. **Use cases**
 

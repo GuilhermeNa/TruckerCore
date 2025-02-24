@@ -43,6 +43,10 @@ class FieldTest {
         assertEquals("permissions", Field.PERMISSIONS.getName())
         assertEquals("persistenceStatus", Field.PERSISTENCE_STATUS.getName())
         assertEquals("employeeStatus", Field.EMPLOYEE_STATUS.getName())
+        assertEquals("keys", Field.KEYS.getName())
+        assertEquals("isVip", Field.IS_VIP.getName())
+        assertEquals("vipStart", Field.VIP_START.getName())
+        assertEquals("vipEnd", Field.VIP_END.getName())
     }
 
 }

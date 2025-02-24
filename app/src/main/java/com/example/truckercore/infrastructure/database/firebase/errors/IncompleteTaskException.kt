@@ -6,6 +6,4 @@ package com.example.truckercore.infrastructure.database.firebase.errors
  * This exception is used when a task related to Firebase (such as a database operation) fails and don't
  * throw any exception.
  */
-class IncompleteTaskException(message: String) : FirebaseException() {
-
-}
+class IncompleteTaskException(message: String) : FirebaseException(message)

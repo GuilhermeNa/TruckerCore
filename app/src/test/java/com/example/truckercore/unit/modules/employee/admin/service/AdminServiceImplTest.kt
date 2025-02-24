@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.modules.employee.admin.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.modules.employee.admin.aggregations.AdminWithDetails
 import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.employee.admin.service.AdminService

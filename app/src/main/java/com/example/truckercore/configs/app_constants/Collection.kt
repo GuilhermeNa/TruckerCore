@@ -1,5 +1,9 @@
 package com.example.truckercore.configs.app_constants
 
+/**
+ * Enum class representing different collections in the system.
+ * Each constant corresponds to a collection with a specific name.
+ */
 enum class Collection(private val collectionName: String) {
     CENTRAL("business_central"),
     CARGO("cargo"),
@@ -27,6 +31,11 @@ enum class Collection(private val collectionName: String) {
     TRAILER("trailer"),
     LICENSING("licensing");
 
-    // Função para acessar o nome da coleção
+    /**
+     * Gets the name of the collection.
+     *
+     * @return The name of the collection.
+     */
     fun getName(): String = collectionName
+
 }

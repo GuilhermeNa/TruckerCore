@@ -59,10 +59,6 @@ internal class UserValidationStrategy : ValidatorStrategy() {
 
         if (dto.isVip == null) invalidFields.add(Field.IS_VIP.getName())
 
-        if (dto.vipStart == null) invalidFields.add(Field.VIP_START.getName())
-
-        if (dto.vipEnd == null) invalidFields.add(Field.VIP_END.getName())
-
         if (dto.level.isNullOrBlank() ||
             !Level.enumExists(dto.level)
         ) invalidFields.add(Field.LEVEL.getName())

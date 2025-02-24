@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.employee.driver.service
 
 import com.example.truckercore.shared.abstractions.Service
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.modules.employee.driver.aggregations.DriverWithDetails
 import com.example.truckercore.modules.employee.driver.entity.Driver
 import com.example.truckercore.modules.employee.driver.use_cases.interfaces.AggregateDriverWithDetails

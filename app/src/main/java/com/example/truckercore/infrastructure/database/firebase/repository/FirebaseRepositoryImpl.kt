@@ -30,7 +30,6 @@ internal class FirebaseRepositoryImpl(
                 trySend(Response.Success(Unit))
             }.addOnFailureListener { error ->
                 close(error)
-                throw error
             }
 
             awaitClose { this.cancel() }
@@ -39,8 +38,6 @@ internal class FirebaseRepositoryImpl(
     override fun createDocument(collection: Collection): DocumentReference {
         return queryBuilder.createDocument(collection)
     }
-
-
 
     //----------------------------------------------------------------------------------------------
 
@@ -54,12 +51,16 @@ internal class FirebaseRepositoryImpl(
         docReference.set(newDto).addOnCompleteListener { task ->
             task.exception?.let { error ->
                 this.close(error)
-                throw error
             }
+
             if (task.isSuccessful) trySend(Response.Success(docReference.id))
-            else throw IncompleteTaskException(
-                "Failed while creating an entity: ${dto::class.simpleName}."
-            )
+            else {
+                val error = IncompleteTaskException(
+                    "Failed while creating an entity: ${dto::class.simpleName}."
+                )
+                this.close(error)
+            }
+
         }
 
         awaitClose { this.cancel() }
@@ -74,12 +75,16 @@ internal class FirebaseRepositoryImpl(
         document.set(dto).addOnCompleteListener { task ->
             task.exception?.let { error ->
                 this.close(error)
-                throw error
             }
-            if (task.isSuccessful) trySend(Response.Success(Unit))
-            else throw IncompleteTaskException(
-                "Failed while updating an entity ${dto::class.simpleName}.",
-            )
+
+            if (task.isSuccessful) this.trySend(Response.Success(Unit))
+            else {
+                val error = IncompleteTaskException(
+                    "Failed while updating an entity ${dto::class.simpleName}.",
+                )
+                this.close(error)
+            }
+
         }
 
         awaitClose { this.cancel() }
@@ -94,12 +99,16 @@ internal class FirebaseRepositoryImpl(
         document.delete().addOnCompleteListener { task ->
             task.exception?.let { error ->
                 this.close(error)
-                throw error
             }
-            if (task.isSuccessful) trySend(Response.Success(Unit))
-            else throw IncompleteTaskException(
-                "Failed while deleting an entity for id: $id."
-            )
+
+            if (task.isSuccessful) this.trySend(Response.Success(Unit))
+            else {
+                val error = IncompleteTaskException(
+                    "Failed while deleting an entity for id: $id."
+                )
+                this.close(error)
+            }
+
         }
 
         awaitClose { this.cancel() }
@@ -162,15 +171,17 @@ internal class FirebaseRepositoryImpl(
         docReference.addSnapshotListener { nDocSnap, nError ->
             nError?.let { error ->
                 this.close(error)
-                throw error
             }
+
             nDocSnap?.let { docSnap ->
                 val result = converter.processDocumentSnapShot(docSnap, UserDto::class.java)
                 this.trySend(result)
-            } ?: throw IncompleteTaskException(
-                "Failed while streaming the logged user with id: $userId.",
-
+            } ?: {
+                val error = IncompleteTaskException(
+                    "Failed while streaming the logged user with id: $userId."
                 )
+                this.close(error)
+            }
         }
 
         awaitClose { this.cancel() }
@@ -198,14 +209,17 @@ internal class FirebaseRepositoryImpl(
         documentReference.addSnapshotListener { nDocSnap, nError ->
             nError?.let { error ->
                 this.close(error)
-                throw error
             }
+
             nDocSnap?.let { docSnap ->
                 val result = converter.processDocumentSnapShot(docSnap, firebaseRequest.clazz)
                 this.trySend(result)
-            } ?: throw IncompleteTaskException(
-                "Failed while streaming a document with id: ${params.id}.",
-            )
+            } ?: {
+                val error = IncompleteTaskException(
+                    "Failed while streaming a document with id: ${params.id}.",
+                )
+                this.close(error)
+            }
         }
 
         awaitClose { this.cancel() }
@@ -231,12 +245,16 @@ internal class FirebaseRepositoryImpl(
         query.addSnapshotListener { nSnapShot, nError ->
             nError?.let { error ->
                 this.close(error)
-                throw error
             }
+
             nSnapShot?.let { snapShot ->
                 val result = converter.processQuerySnapShot(snapShot, firebaseRequest.clazz)
                 this.trySend(result)
-            } ?: throw IncompleteTaskException("Failed while streaming a query.")
+            } ?: {
+                val error = IncompleteTaskException("Failed while streaming a query.")
+                this.close(error)
+            }
+
         }
 
         awaitClose { this.cancel() }

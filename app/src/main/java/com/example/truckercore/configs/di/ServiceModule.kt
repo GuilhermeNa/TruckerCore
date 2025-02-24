@@ -1,8 +1,7 @@
 package com.example.truckercore.configs.di
 
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.modules.user.validator.UserValidationStrategy
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
 import com.example.truckercore.shared.services.ValidatorService

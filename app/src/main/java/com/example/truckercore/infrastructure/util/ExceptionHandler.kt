@@ -1,4 +1,4 @@
-package com.example.truckercore.infrastructure.exceptions
+package com.example.truckercore.infrastructure.util
 
 import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseConversionException
 import com.example.truckercore.shared.utils.expressions.logError
@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 internal class ExceptionHandler {
 
     fun catch(throwable: Throwable): Response.Error {
-
         return Response.Error(NullPointerException())
     }
 

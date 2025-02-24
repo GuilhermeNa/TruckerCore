@@ -8,4 +8,4 @@ package com.example.truckercore.infrastructure.database.firebase.errors
  *
  * @param message The error message that describes the failure in detail.
  */
-class FirebaseRequestException(message: String): FirebaseException()
+class FirebaseRequestException(message: String): FirebaseException(message)

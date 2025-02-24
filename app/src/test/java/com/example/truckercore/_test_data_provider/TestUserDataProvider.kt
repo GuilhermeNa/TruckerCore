@@ -78,8 +78,6 @@ internal object TestUserDataProvider {
         getBaseDto().copy(persistenceStatus = "INVALID_VALUE"),
         getBaseDto().copy(persistenceStatus = "PENDING"),
         getBaseDto().copy(isVip = null),
-        getBaseDto().copy(vipStart = null),
-        getBaseDto().copy(vipEnd = null),
         getBaseDto().copy(level = null),
         getBaseDto().copy(level = ""),
         getBaseDto().copy(level = " "),

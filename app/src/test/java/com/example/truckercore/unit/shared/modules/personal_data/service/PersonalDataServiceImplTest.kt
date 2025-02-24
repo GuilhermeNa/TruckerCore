@@ -1,16 +1,13 @@
 package com.example.truckercore.unit.shared.modules.personal_data.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.shared.modules.personal_data.service.PersonalDataService
 import com.example.truckercore.shared.modules.personal_data.service.PersonalDataServiceImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -25,7 +22,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import kotlin.test.assertTrue
 
 class PersonalDataServiceImplTest : KoinTest {
 

@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.fleet.shared.module.licensing.service
 
 import com.example.truckercore.shared.abstractions.Service
-import com.example.truckercore.infrastructure.exceptions.ExceptionHandler
+import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase

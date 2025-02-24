@@ -10,7 +10,7 @@ import java.util.Locale
  * It ensures that the user's name, surname, email, and password meet specific criteria. It also formats
  * and cleans input values such as capitalizing the first letter of names and removing blank spaces.
  */
-class Credentials() {
+class Credentials private constructor() {
 
     private lateinit var _email: String
     private lateinit var _password: String

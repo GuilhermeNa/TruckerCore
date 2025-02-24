@@ -1,5 +1,9 @@
 package com.example.truckercore.configs.app_constants
 
+/**
+ * Enum class representing various fields in the system.
+ * Each constant corresponds to a specific field name used within the system.
+ */
 enum class Field(private val fieldName: String) {
 
     BUSINESS_CENTRAL_ID("centralId"),
@@ -42,6 +46,11 @@ enum class Field(private val fieldName: String) {
     PERSISTENCE_STATUS("persistenceStatus"),
     EMPLOYEE_STATUS("employeeStatus");
 
+    /**
+     * Gets the name of the field.
+     *
+     * @return The name of the field.
+     */
     fun getName(): String = fieldName
 
 }

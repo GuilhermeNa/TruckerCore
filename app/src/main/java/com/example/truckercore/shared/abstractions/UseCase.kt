@@ -6,6 +6,8 @@ import com.example.truckercore.infrastructure.security.permissions.service.Permi
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
 
 /**
  * Abstract class representing a base use case.
@@ -16,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
  * @see Response
  * @see User
  */
-internal abstract class UseCase(
+internal abstract class  UseCase(
     open val permissionService: PermissionService
 ) {
 

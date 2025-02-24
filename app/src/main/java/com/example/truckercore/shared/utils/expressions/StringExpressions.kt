@@ -29,7 +29,7 @@ fun String.capitalizeFirstChar(): String =
  * @receiver String The string to check.
  * @return True if the string contains only alphabetic characters.
  */
-fun String.isNameFormat(): Boolean = this.matches("[a-zA-z]+".toRegex())
+fun String.isNameFormat(): Boolean = this.matches("[\\p{L}]+".toRegex())
 
 fun String.isEmailFormat(): Boolean {
     val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
