@@ -110,4 +110,17 @@ internal class UserTest {
         assertFalse(result)
     }
 
+    @Test
+    fun `isVipActive() should return false if the end date is null`() {
+        // Arrange
+        val entity = provider.getBaseEntity()
+            .copy(isVip = true, vipEnd = null)
+
+        // Call
+        val result = entity.isVipActive()
+
+        // Assertion
+        assertFalse(result)
+    }
+
 }

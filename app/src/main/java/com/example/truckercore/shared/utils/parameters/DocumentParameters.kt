@@ -1,8 +1,7 @@
 package com.example.truckercore.shared.utils.parameters
 
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.validation.IllegalDocumentParametersException
-import com.example.truckercore.shared.utils.expressions.logWarn
+import com.example.truckercore.shared.errors.search_params.IllegalDocumentParametersException
 
 class DocumentParameters private constructor(
     override val user: User,

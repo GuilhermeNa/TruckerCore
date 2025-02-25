@@ -1,7 +1,7 @@
 package com.example.truckercore.shared.utils.parameters
 
 import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.IllegalQueryParametersException
+import com.example.truckercore.shared.errors.search_params.IllegalQueryParametersException
 
 class QueryParameters private constructor(
     override val user: User,

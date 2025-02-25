@@ -4,7 +4,7 @@ import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.configs.app_constants.Field
 import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.errors.IllegalQueryParametersException
+import com.example.truckercore.shared.errors.search_params.IllegalQueryParametersException
 import com.example.truckercore.shared.errors.InvalidQuerySettingsException
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings

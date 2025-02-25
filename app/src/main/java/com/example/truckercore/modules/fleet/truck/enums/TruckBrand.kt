@@ -2,8 +2,13 @@ package com.example.truckercore.modules.fleet.truck.enums
 
 import com.example.truckercore.shared.errors.InvalidEnumParameterException
 
+/**
+ * Represents the brand of a truck in the system. This enum defines the available truck brands.
+ * It also provides utility functions for converting strings to corresponding enum values and checking if a given string is a valid brand.
+ */
 enum class TruckBrand {
-    SCANIA, VOLVO;
+    SCANIA,
+    VOLVO;
 
     companion object {
 

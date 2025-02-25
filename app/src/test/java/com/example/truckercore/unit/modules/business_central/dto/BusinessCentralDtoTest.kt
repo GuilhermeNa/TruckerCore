@@ -2,7 +2,8 @@ package com.example.truckercore.unit.modules.business_central.dto
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
 import org.junit.jupiter.api.Assertions.assertEquals
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
+
 
 internal class BusinessCentralDtoTest {
 
@@ -24,6 +25,7 @@ internal class BusinessCentralDtoTest {
         assertEquals(dto.lastModifierId, updatedDto.lastModifierId)
         assertEquals(dto.creationDate, updatedDto.creationDate)
         assertEquals(dto.lastUpdate, updatedDto.lastUpdate)
+        assertEquals(dto.keys, updatedDto.keys)
 
     }
 

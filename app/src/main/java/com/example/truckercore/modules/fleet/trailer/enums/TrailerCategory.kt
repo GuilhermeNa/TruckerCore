@@ -2,6 +2,13 @@ package com.example.truckercore.modules.fleet.trailer.enums
 
 import com.example.truckercore.shared.errors.InvalidEnumParameterException
 
+/**
+ * Enum class representing different trailer categories within the system.
+ *
+ * This enum defines various categories of trailers used in the system, each representing
+ * different configurations and uses of trailers. These categories are essential for managing
+ * and classifying trailers in the fleet.
+ */
 enum class TrailerCategory {
     THREE_AXIS,
     FOUR_AXIS,

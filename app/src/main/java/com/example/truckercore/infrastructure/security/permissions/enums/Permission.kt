@@ -27,131 +27,36 @@ enum class Permission {
     DELETE_TRUCK,
     UPDATE_TRUCK,
 
-    /**
-     * Permission to update a storage file.
-     */
     UPDATE_FILE,
-
-    /**
-     * Permission to create a new storage file.
-     */
     CREATE_FILE,
-
-    /**
-     * Permission to view a storage file.
-     */
     VIEW_FILE,
-
-    /**
-     * Permission to delete a storage file.
-     */
     DELETE_FILE,
 
-    /**
-     * Permission to create a new admin.
-     */
     CREATE_ADMIN,
-
-    /**
-     * Permission to update a admin.
-     */
     UPDATE_ADMIN,
-
-    /**
-     * Permission to delete a admin.
-     */
     DELETE_ADMIN,
-
-    /**
-     * Permission to view a admin.
-     */
     VIEW_ADMIN,
 
-    /**
-     * Permission to create a new driver.
-     */
     CREATE_DRIVER,
-
-    /**
-     * Permission to update a driver.
-     */
     UPDATE_DRIVER,
-
-    /**
-     * Permission to delete a driver.
-     */
     DELETE_DRIVER,
-
-    /**
-     * Permission to view a driver.
-     */
     VIEW_DRIVER,
 
     CREATE_BUSINESS_CENTRAL,
-
-    /**
-     * Permission to update a business central resource.
-     */
     UPDATE_BUSINESS_CENTRAL,
-
-    /**
-     * Permission to delete a business central resource.
-     */
     DELETE_BUSINESS_CENTRAL,
-
-    /**
-     * Permission to view a business central resource.
-     */
     VIEW_BUSINESS_CENTRAL,
 
-    /**
-     * Permission to create a new user.
-     */
     CREATE_USER,
-
-    /**
-     * Permission to update an existing user.
-     */
     UPDATE_USER,
-
-    /**
-     * Permission to archive a user (typically, marking the user as inactive or removed).
-     */
     ARCHIVE_USER,
-
-    /**
-     * Permission to delete a user from the system.
-     */
     DELETE_USER,
-
-    /**
-     * Permission to view user details.
-     */
     VIEW_USER,
 
-    /**
-     * Permission to create personal data records.
-     */
     CREATE_PERSONAL_DATA,
-
-    /**
-     * Permission to update personal data records.
-     */
     UPDATE_PERSONAL_DATA,
-
-    /**
-     * Permission to archive personal data (e.g., mark as inactive).
-     */
     ARCHIVE_PERSONAL_DATA,
-
-    /**
-     * Permission to delete personal data records.
-     */
     DELETE_PERSONAL_DATA,
-
-    /**
-     * Permission to view personal data records.
-     */
     VIEW_PERSONAL_DATA;
 
     companion object {

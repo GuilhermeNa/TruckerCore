@@ -2,6 +2,10 @@ package com.example.truckercore.modules.fleet.trailer.enums
 
 import com.example.truckercore.shared.errors.InvalidEnumParameterException
 
+/**
+ * Enum class representing different trailer brands within the system.
+ * This enum defines the brands of trailers that can be used in the system.
+ */
 enum class TrailerBrand {
     RANDOM,
     LIBRELATO;

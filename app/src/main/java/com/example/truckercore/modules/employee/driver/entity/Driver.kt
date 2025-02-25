@@ -5,6 +5,11 @@ import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 
+/**
+ * Represents a Driver entity within a Business Central. A Driver is an employee responsible for handling
+ * transportation and logistics tasks within the business central, such as managing and operating vehicles,
+ * trailers, or cargo.
+ */
 data class Driver(
     override val businessCentralId: String,
     override val id: String?,
@@ -16,8 +21,4 @@ data class Driver(
     override val name: String,
     override val email: String,
     override val employeeStatus: EmployeeStatus
-) : Employee(employeeStatus = employeeStatus) {
-
-
-
-}
+) : Employee(employeeStatus = employeeStatus)

@@ -98,11 +98,13 @@ uma busca não retorna resultados).
 modules/
 │
 └── user/
+    ├── aggregations/
     ├── dto/
     ├── entity/
-    ├── errors/
+    ├── enums/
     ├── mappers/
     ├── repository/
+    ├── service/
     ├── use_cases/
     ├── validator/
     └── README.md

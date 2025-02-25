@@ -10,12 +10,6 @@ import java.time.LocalDateTime
  * This data class holds details about a license, including issuance and expiration dates, plate information,
  * and timestamps for creation and last modification.
  *
- * @property businessCentralId Unique identifier for the business central system.
- * @property id Optional unique identifier for the licensing record.
- * @property lastModifierId ID of the person who last modified the record.
- * @property creationDate Timestamp when the record was created.
- * @property lastUpdate Timestamp when the record was last updated.
- * @property persistenceStatus Current status of the record in the persistence layer.
  * @property parentId The ID of the parent entity associated with the licensing record.
  * @property emissionDate Timestamp when the license was issued.
  * @property expirationDate Timestamp when the license expires.
