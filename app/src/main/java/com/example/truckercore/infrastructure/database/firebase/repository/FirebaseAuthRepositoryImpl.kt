@@ -23,11 +23,12 @@ internal class FirebaseAuthRepositoryImpl(
                     val result = Response.Success(user.uid)
                     trySend(result)
                 } ?: {
-                    val error = IncompleteTaskException(
-                        "The task did not complete successfully." +
-                                " User authentication failed."
+                    close(
+                        IncompleteTaskException(
+                            "The task did not complete successfully." +
+                                    " User authentication failed."
+                        )
                     )
-                    close(error)
                 }
 
             }
@@ -42,7 +43,7 @@ internal class FirebaseAuthRepositoryImpl(
                     this.close(error)
                 }
 
-                if(task.isSuccessful) trySend(Response.Success(Unit))
+                if (task.isSuccessful) trySend(Response.Success(Unit))
                 else close(IncompleteTaskException("Failure when trying to login."))
             }
 

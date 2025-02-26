@@ -13,8 +13,6 @@ import java.time.LocalDateTime
  * @property url The URL pointing to the location of the file in Firebase Storage.
  * @property isUpdating A flag indicating whether the file is currently being updated in Firebase Storage.
  * Defaults to `false`.
- *
- * @throws IllegalArgumentException if the URL provided is not valid.
  */
 data class File(
     override val businessCentralId: String,

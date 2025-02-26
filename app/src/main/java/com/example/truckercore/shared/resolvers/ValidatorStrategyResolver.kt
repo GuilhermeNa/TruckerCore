@@ -6,6 +6,9 @@ import com.example.truckercore.modules.business_central.validator.BusinessCentra
 import com.example.truckercore.modules.employee.admin.dto.AdminDto
 import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
+import com.example.truckercore.modules.employee.driver.dto.DriverDto
+import com.example.truckercore.modules.employee.driver.entity.Driver
+import com.example.truckercore.modules.employee.driver.validator.DriverValidationStrategy
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
@@ -13,13 +16,13 @@ import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
-import com.example.truckercore.shared.errors.StrategyNotFoundException
-import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
-import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
+import com.example.truckercore.shared.errors.strategy.StrategyNotFoundException
 import com.example.truckercore.shared.modules.file.dto.FileDto
 import com.example.truckercore.shared.modules.file.entity.File
 import com.example.truckercore.shared.modules.file.validator.StorageFileValidationStrategy
+import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
+import com.example.truckercore.shared.modules.personal_data.validator.PersonalDataValidationStrategy
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
 
 /**
@@ -38,14 +41,15 @@ internal class ValidatorStrategyResolver {
         Pair(UserDto::class.java, UserValidationStrategy()),
         Pair(Admin::class.java, AdminValidationStrategy()),
         Pair(AdminDto::class.java, AdminValidationStrategy()),
+        Pair(Driver::class.java, DriverValidationStrategy()),
+        Pair(DriverDto::class.java, DriverValidationStrategy()),
         Pair(PersonalData::class.java, PersonalDataValidationStrategy()),
         Pair(PersonalDataDto::class.java, PersonalDataValidationStrategy()),
         Pair(File::class.java, StorageFileValidationStrategy()),
         Pair(FileDto::class.java, StorageFileValidationStrategy()),
         Pair(Licensing::class.java, LicensingValidationStrategy()),
-        Pair(LicensingDto::class.java, LicensingValidationStrategy()),
-
-        )
+        Pair(LicensingDto::class.java, LicensingValidationStrategy())
+    )
 
     /**
      * Resolves and returns the appropriate [ValidatorStrategy] based on the provided [ValidatorInput].

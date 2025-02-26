@@ -24,13 +24,14 @@ internal class GetAdminUseCaseImpl(
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Admin>> =
         with(documentParams) {
-            user.runIfPermitted { getMappedAdminFlow(this) }
+            user.runIfPermitted { getAdminFlow(this) }
         }
 
-    private fun getMappedAdminFlow(documentParams: DocumentParameters): Flow<Response<Admin>> =
+    private fun getAdminFlow(documentParams: DocumentParameters): Flow<Response<Admin>> =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
+                val result = validateAndMapToEntity(response.data)
+                Response.Success(result)
             } else Response.Empty
         }
 

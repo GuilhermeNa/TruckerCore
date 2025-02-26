@@ -22,7 +22,10 @@ interface LicensingService {
      * Fetches a single licensing record based on document parameters.
      *
      * @param documentParam The document parameters to filter the licensing records.
-     * @return A [Flow] containing a [Response] with the [Licensing] record.
+     * @return A [Flow] containing:
+     * - [Response.Success] with the [Licensing] record if found.
+     * - [Response.Empty] if no licensing record is found.
+     * - [Response.Error] if an error occurs during the operation.
      */
     fun fetchLicensing(documentParam: DocumentParameters): Flow<Response<Licensing>>
 
@@ -30,7 +33,10 @@ interface LicensingService {
      * Fetches a list of licensing records based on query parameters.
      *
      * @param queryParam The query parameters to filter the licensing records.
-     * @return A [Flow] containing a [Response] with a list of [Licensing] records.
+     * @return A [Flow] containing:
+     * - [Response.Success] with a list of [Licensing] records if found.
+     * - [Response.Empty] if no licensing records are found.
+     * - [Response.Error] if an error occurs during the operation.
      */
     fun fetchLicensing(queryParam: QueryParameters): Flow<Response<List<Licensing>>>
 
@@ -38,7 +44,10 @@ interface LicensingService {
      * Fetches a single licensing record along with its associated files based on document parameters.
      *
      * @param documentParam The document parameters to filter the licensing records with files.
-     * @return A [Flow] containing a [Response] with the [LicensingWithFile] record.
+     * @return A [Flow] containing:
+     * - [Response.Success] with the [LicensingWithFile] record if found.
+     * - [Response.Empty] if no licensing record with files is found.
+     * - [Response.Error] if an error occurs during the operation.
      */
     fun fetchLicensingWithFiles(documentParam: DocumentParameters): Flow<Response<LicensingWithFile>>
 
@@ -46,7 +55,10 @@ interface LicensingService {
      * Fetches a list of licensing records along with their associated files based on query parameters.
      *
      * @param queryParam The query parameters to filter the licensing records with files.
-     * @return A [Flow] containing a [Response] with a list of [LicensingWithFile] records.
+     * @return A [Flow] containing:
+     * - [Response.Success] with a list of [LicensingWithFile] records if found.
+     * - [Response.Empty] if no licensing records with files are found.
+     * - [Response.Error] if an error occurs during the operation.
      */
     fun fetchLicensingWithFiles(queryParam: QueryParameters): Flow<Response<List<LicensingWithFile>>>
 

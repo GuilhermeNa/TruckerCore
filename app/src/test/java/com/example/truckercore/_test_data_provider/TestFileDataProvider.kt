@@ -6,7 +6,7 @@ import com.example.truckercore.shared.modules.file.entity.File
 import java.time.LocalDateTime
 import java.util.Date
 
-internal object TestStorageFileDataProvider {
+internal object TestFileDataProvider {
 
     fun getBaseEntity() = File(
         businessCentralId = "masterUid",

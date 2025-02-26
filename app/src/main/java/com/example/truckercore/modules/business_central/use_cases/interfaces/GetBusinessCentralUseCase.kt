@@ -17,22 +17,28 @@ internal interface GetBusinessCentralUseCase {
 
     /**
      * Fetches a single [BusinessCentral] entity based on the provided document parameters.
-     * This method retrieves the details of the business central as a [BusinessCentral] object.
      *
-     * @param documentParams The document parameters to filter the business central records.
-     * @return A [Flow] of:
-     * - [Response.Success] containing the [BusinessCentral] object if the entity was found.
-     * - [Response.Empty] if no business central entity exists with the given document parameters.
+     * This method retrieves a [BusinessCentral] entity by filtering it based on the provided document parameters.
+     * It involves fetching the data from a repository, validating it, and mapping it to a [BusinessCentral] entity.
+     *
+     * @param documentParams The document parameters used to filter the business central records.
+     * @return A [Flow] that emits:
+     * - [Response.Success] containing the [BusinessCentral] object if the entity is found.
+     * - [Response.Empty] if no entity is found matching the provided document parameters.
      */
     fun execute(documentParams: DocumentParameters): Flow<Response<BusinessCentral>>
 
     /**
-     * Fetches a list of [BusinessCentral] based on the provided query parameters.
+     * Fetches a list of [BusinessCentral] entities based on the provided query parameters.
      *
-     * @param queryParams The query parameters to filter the business central.
-     * @return A [Flow] of:
-     * - [Response.Success] containing a list of [BusinessCentral] objects that match the query.
-     * - [Response.Empty] if no records are found for the given business central.
+     * This method retrieves multiple [BusinessCentral] entities by filtering them based on the provided query parameters.
+     * It retrieves a list of matching entities from the repository, validates and maps them to [BusinessCentral] objects.
+     * The result is returned as a [Flow] of [Response.Success] or [Response.Empty].
+     *
+     * @param queryParams The query parameters used to filter the business central records.
+     * @return A [Flow] that emits:
+     * - [Response.Success] containing a list of [BusinessCentral] objects if any entities match the query.
+     * - [Response.Empty] if no entities match the query parameters.
      */
     fun execute(queryParams: QueryParameters): Flow<Response<List<BusinessCentral>>>
 

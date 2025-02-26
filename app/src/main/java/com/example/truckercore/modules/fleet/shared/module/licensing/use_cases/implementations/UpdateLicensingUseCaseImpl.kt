@@ -24,7 +24,7 @@ internal class UpdateLicensingUseCaseImpl(
     private val validatorService: ValidatorService,
     private val mapper: LicensingMapper
 ) : UseCase(permissionService), UpdateLicensingUseCase {
-
+    
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(user: User, licensing: Licensing): Flow<Response<Unit>> {
         val id = licensing.id ?: throw NullPointerException("Null Licensing id while updating.")

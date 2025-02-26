@@ -1,8 +1,8 @@
 package com.example.truckercore.shared.services
 
 import com.example.truckercore.shared.abstractions.ValidatorStrategy
-import com.example.truckercore.shared.errors.StrategyNotFoundException
-import com.example.truckercore.shared.errors.abstractions.ValidationException
+import com.example.truckercore.shared.errors.strategy.StrategyNotFoundException
+import com.example.truckercore.shared.errors.validation.ValidationException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver

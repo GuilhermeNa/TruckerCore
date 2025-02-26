@@ -10,6 +10,29 @@ import kotlin.test.assertFailsWith
 
 class TrailerBrandTest {
 
+    private val expectedEnums = arrayOf(TrailerBrand.LIBRELATO, TrailerBrand.RANDOM)
+
+    @Test
+    fun `should have the expected enums`() {
+        // Arrange
+        val actualEnums = TrailerBrand.entries.toTypedArray()
+
+        // Act && Arrange
+        actualEnums.forEach { enum ->
+            assertTrue(expectedEnums.contains(enum))
+        }
+    }
+
+    @Test
+    fun `should have the expected size`() {
+        // Arrange
+        val expectedSize = expectedEnums.size
+        val actualSize = TrailerBrand.entries.size
+
+        // Assertion
+        assertEquals(expectedSize, actualSize)
+    }
+
     @Test
     fun `should convert string to TrailerBrand successfully`() {
         // Arrange

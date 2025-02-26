@@ -24,13 +24,14 @@ internal class GetDriverUseCaseImpl(
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Driver>> =
         with(documentParams) {
-            user.runIfPermitted { getMappedDriverFlow(this) }
+            user.runIfPermitted { getDriverFlow(this) }
         }
 
-    private fun getMappedDriverFlow(documentParams: DocumentParameters): Flow<Response<Driver>> =
+    private fun getDriverFlow(documentParams: DocumentParameters): Flow<Response<Driver>> =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
+                val result = validateAndMapToEntity(response.data)
+                Response.Success(result)
             } else Response.Empty
         }
 

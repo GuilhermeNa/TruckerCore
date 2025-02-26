@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.shared.modules.file.validator
 
-import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
+import com.example.truckercore._test_data_provider.TestFileDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.user.dto.UserDto
@@ -52,37 +52,37 @@ internal class FileValidationStrategyTest : KoinTest {
 
         @JvmStatic
         fun arrValidDtosForValidationRules() =
-            TestStorageFileDataProvider.arrValidDtosForValidationRules().map {
+            TestFileDataProvider.arrValidDtosForValidationRules().map {
                 ValidatorInput.DtoInput(it)
             }
 
         @JvmStatic
         fun arrInvalidDtosForValidationRules() =
-            TestStorageFileDataProvider.arrInvalidDtosForValidationRules().map {
+            TestFileDataProvider.arrInvalidDtosForValidationRules().map {
                 ValidatorInput.DtoInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForValidationRules() =
-            TestStorageFileDataProvider.arrValidEntitiesForValidationRules().map {
+            TestFileDataProvider.arrValidEntitiesForValidationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrInvalidEntitiesForValidationRules() =
-            TestStorageFileDataProvider.arrInvalidEntitiesForValidationRules().map {
+            TestFileDataProvider.arrInvalidEntitiesForValidationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrValidEntitiesForCreationRules() =
-            TestStorageFileDataProvider.arrValidEntitiesForCreationRules().map {
+            TestFileDataProvider.arrValidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
 
         @JvmStatic
         fun arrInvalidEntitiesForCreationRules() =
-            TestStorageFileDataProvider.arrInvalidEntitiesForCreationRules().map {
+            TestFileDataProvider.arrInvalidEntitiesForCreationRules().map {
                 ValidatorInput.EntityInput(it)
             }
     }

@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.shared.modules.file.mapper
 
-import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
+import com.example.truckercore._test_data_provider.TestFileDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.modules.user.dto.UserDto
@@ -27,12 +27,12 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-internal class FileMapperITestImpl : KoinTest {
+internal class FileMapperTest : KoinTest {
 
     private val mapper: FileMapper by inject()
 
-    private val entity = TestStorageFileDataProvider.getBaseEntity()
-    private val dto = TestStorageFileDataProvider.getBaseDto()
+    private val entity = TestFileDataProvider.getBaseEntity()
+    private val dto = TestFileDataProvider.getBaseDto()
 
     companion object {
 
@@ -55,7 +55,7 @@ internal class FileMapperITestImpl : KoinTest {
 
         @JvmStatic
         fun getInvalidDtos(): Array<FileDto> {
-            return TestStorageFileDataProvider.arrInvalidDtos()
+            return TestFileDataProvider.arrInvalidDtos()
         }
 
     }

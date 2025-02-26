@@ -1,6 +1,5 @@
 package com.example.truckercore.shared.errors.mapping
 
-import com.example.truckercore.shared.errors.abstractions.MappingException
 import kotlin.reflect.KClass
 
 /**

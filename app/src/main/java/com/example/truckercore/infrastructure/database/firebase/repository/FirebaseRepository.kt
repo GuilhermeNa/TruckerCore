@@ -19,8 +19,26 @@ import kotlinx.coroutines.flow.Flow
  */
 internal interface FirebaseRepository {
 
+    /**
+     * Runs a Firebase transaction operation.
+     *
+     * This method allows you to perform a series of operations in a transaction on Firebase Firestore.
+     * A transaction ensures that a series of reads and writes to Firestore are atomic; if one operation
+     * fails, the entire transaction will be rolled back.
+     *
+     * @param transactionOperation The operation that will be executed within the transaction.
+     * @return A [Flow] emitting a [Response] containing the result of the operation (successful or failed).
+     */
     fun runTransaction(transactionOperation: (transaction: Transaction) -> Unit): Flow<Response<Unit>>
 
+    /**
+     * Creates a new document in the specified Firestore collection.
+     *
+     * This method creates a document in a Firestore collection and returns the reference to the newly created document.
+     *
+     * @param collection The collection in which the document should be created.
+     * @return A [DocumentReference] representing the created document in Firestore.
+     */
     fun createDocument(collection: Collection): DocumentReference
 
     /**

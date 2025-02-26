@@ -13,4 +13,8 @@ import com.example.truckercore.shared.modules.file.entity.File
 data class PersonalDataWithFile(
     val pData: PersonalData,
     val files: List<File> = emptyList()
-)
+) {
+
+    val parentId get() = pData.parentId
+
+}

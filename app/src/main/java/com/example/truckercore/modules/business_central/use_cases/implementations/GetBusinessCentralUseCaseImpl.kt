@@ -25,13 +25,14 @@ internal class GetBusinessCentralUseCaseImpl(
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<BusinessCentral>> =
         with(documentParams) {
-            user.runIfPermitted { getMappedBusinessCentralFlow(this) }
+            user.runIfPermitted { getBusinessCentralFlow(this) }
         }
 
-    private fun getMappedBusinessCentralFlow(documentParams: DocumentParameters) =
+    private fun getBusinessCentralFlow(documentParams: DocumentParameters) =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
+                val result = validateAndMapToEntity(response.data)
+                Response.Success(result)
             } else Response.Empty
         }
 
@@ -44,13 +45,14 @@ internal class GetBusinessCentralUseCaseImpl(
 
     override fun execute(queryParams: QueryParameters): Flow<Response<List<BusinessCentral>>> =
         with(queryParams) {
-            user.runIfPermitted { getMappedBusinessCentralListFlow(queryParams) }
+            user.runIfPermitted { getBusinessCentralListFlow(queryParams) }
         }
 
-    private fun getMappedBusinessCentralListFlow(queryParams: QueryParameters) =
+    private fun getBusinessCentralListFlow(queryParams: QueryParameters) =
         repository.fetchByQuery(queryParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(response.data.map { validateAndMapToEntity(it) })
+                val result = response.data.map { validateAndMapToEntity(it) }
+                Response.Success(result)
             } else Response.Empty
         }
 

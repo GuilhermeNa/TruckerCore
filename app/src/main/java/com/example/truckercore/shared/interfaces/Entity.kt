@@ -39,12 +39,4 @@ interface Entity {
      */
     val persistenceStatus: PersistenceStatus
 
-    /**
-     * Checks whether the identifier (id) has been initialized and is valid.
-     * An identifier is considered valid if it is not null or empty.
-     *
-     * @return true if the id is not null or empty, indicating the id is valid; false otherwise.
-     */
-    fun hasValidId() = !id.isNullOrEmpty()
-
 }

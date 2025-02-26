@@ -2,7 +2,7 @@ package com.example.truckercore.unit.shared.validators
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.shared.errors.StrategyNotFoundException
+import com.example.truckercore.shared.errors.strategy.StrategyNotFoundException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput

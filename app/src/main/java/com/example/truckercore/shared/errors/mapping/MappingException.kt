@@ -1,4 +1,4 @@
-package com.example.truckercore.shared.errors.abstractions
+package com.example.truckercore.shared.errors.mapping
 
 /**
  * Custom exception class used for mapping errors.

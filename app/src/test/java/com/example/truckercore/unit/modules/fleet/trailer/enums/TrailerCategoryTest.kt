@@ -10,6 +10,35 @@ import org.junit.jupiter.api.assertThrows
 
 class TrailerCategoryTest {
 
+    private val expectedEnums = arrayOf(
+        TrailerCategory.THREE_AXIS, TrailerCategory.FOUR_AXIS, TrailerCategory.ROAD_TRAIN_FRONT,
+        TrailerCategory.ROAD_TRAIN_REAR, TrailerCategory.DOLLY, TrailerCategory.BI_TRUCK_FRONT,
+        TrailerCategory.BI_TRUCK_REAR
+    )
+
+    @Test
+    fun `should contain the expected enums`() {
+        // Arrange
+        val actualEnums = TrailerCategory.entries.toTypedArray()
+
+        // Act && Assertion
+        actualEnums.forEach { enum ->
+            assertTrue(expectedEnums.contains(enum))
+        }
+
+    }
+
+    @Test
+    fun `should contain the expected size`() {
+        // Arrange
+        val expectedSize = expectedEnums.size
+        val actualSize = TrailerCategory.entries.size
+
+        // Assert
+        assertEquals(expectedSize, actualSize)
+
+    }
+
     @Test
     fun `test valid enum conversion`() {
         // Valid values for each TrailerCategory

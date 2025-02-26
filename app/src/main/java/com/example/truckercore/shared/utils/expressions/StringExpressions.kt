@@ -1,24 +1,10 @@
 package com.example.truckercore.shared.utils.expressions
 
 /**
- * Extension function to validate that a String is not blank.
- *
- * This function checks if the string is empty or contains only spaces and
- * throws an IllegalArgumentException if the string is invalid.
- *
- * @param fieldName The name of the field being validated (default is "string").
- *                  This will be included in the exception message to indicate which field is invalid.
- * @throws IllegalArgumentException if the string is blank (empty or only spaces).
- */
-fun String.validateIsNotBlank(fieldName: String? = "string") {
-    if (isBlank()) {
-        throw IllegalArgumentException("The provided $fieldName is invalid: it cannot be blank.")
-    }
-}
-
-/**
  * Extension function that capitalizes the first letter of the string and makes the rest lowercase.
+ *
  * @receiver String The string to capitalize.
+ *
  * @return The string with the first letter capitalized and the rest in lowercase.
  */
 fun String.capitalizeFirstChar(): String =
@@ -26,11 +12,25 @@ fun String.capitalizeFirstChar(): String =
 
 /**
  * Extension function to check if the string is in a valid name format (only alphabetic characters).
+ *
+ * This function returns `true` if the string consists only of alphabetic characters (letters),
+ * and `false` if it contains anything other than alphabetic characters.
+ *
  * @receiver String The string to check.
- * @return True if the string contains only alphabetic characters.
+ * @return `true` if the string contains only alphabetic characters; `false` otherwise.
  */
 fun String.isNameFormat(): Boolean = this.matches("[\\p{L}]+".toRegex())
 
+/**
+ * Extension function to check if the string is in a valid email format.
+ *
+ * This function checks whether the string matches the pattern of a valid email address.
+ * The pattern allows for alphanumeric characters, periods, and special characters like `+` or `%`
+ * before the `@` symbol, followed by a valid domain.
+ *
+ * @receiver String The string to check.
+ * @return `true` if the string matches a valid email format; `false` otherwise.
+ */
 fun String.isEmailFormat(): Boolean {
     val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
     return this.matches(emailRegex)

@@ -18,12 +18,15 @@ import kotlinx.coroutines.flow.Flow
 internal interface UpdateAdminUseCase {
 
     /**
-     * Executes the use case to update an existing [Admin] entity.
+     * Executes the use case to update an existing [Admin] entity in the system.
+     * This method checks the existence of the admin, validates its data, and applies the necessary business rules
+     * before updating the admin in the repository.
      *
-     * @param user The [User] performing the update. This is used to check if the user has the necessary permissions.
-     * @param admin The [Admin] entity that is being updated.
-     * @return A [Flow] of [Response.Success] if the update was successful.
-     * @throws ObjectNotFoundException if the object to be updated is not found.
+     * @param user The [User] performing the update. The user must have the required permissions for the operation.
+     * @param admin The [Admin] entity to be updated.
+     * @return A [Flow] of [Response.Success] when the update is successful.
+     * @throws NullPointerException if the admin entity's ID is null during the update process.
+     * @throws ObjectNotFoundException if the admin entity to be updated is not found in the system.
      */
     fun execute(user: User, admin: Admin): Flow<Response<Unit>>
 

@@ -2,6 +2,7 @@ package com.example.truckercore.modules.business_central.use_cases.interfaces
 
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -17,9 +18,14 @@ internal interface DeleteBusinessCentralUseCase {
     /**
      * Executes the use case to delete a [BusinessCentral] entity by its ID.
      *
+     * This method encapsulates the logic for deleting a [BusinessCentral] entity from the system by its ID.
+     * It ensures that the entity exists before attempting to delete it, checks user permissions, and proceeds with
+     * the deletion if all conditions are met.
+     *
      * @param user The [User] who is requesting the deletion. This parameter might be used for permission checks or tracking.
-     * @param id The ID of the [BusinessCentral] entity to be deleted.
-     * @return [Response.Success] when the object is successfully deleted.
+     * @param id The ID of the [BusinessCentral] entity to be deleted. This ID is used to locate the entity in the system.
+     * @return A [Flow] that emits a [Response.Success] when the entity is successfully deleted, or an error response if the operation fails.
+     * @throws ObjectNotFoundException If the entity with the specified ID does not exist in the system.
      */
     suspend fun execute(user: User, id: String): Flow<Response<Unit>>
 

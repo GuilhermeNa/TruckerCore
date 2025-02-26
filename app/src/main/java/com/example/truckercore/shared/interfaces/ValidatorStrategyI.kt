@@ -1,8 +1,7 @@
 package com.example.truckercore.shared.interfaces
 
-import com.example.truckercore.shared.errors.abstractions.ValidationException
+import com.example.truckercore.shared.errors.validation.ValidationException
 import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.services.ValidatorService
 
 /**
  * This interface defines the contract for validating both [Entity] and [Dto] objects.

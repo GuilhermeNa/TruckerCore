@@ -26,10 +26,10 @@ internal class GetTrailerUseCaseImpl(
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Trailer>> =
         with(documentParams) {
-            user.runIfPermitted { getMappedTrailerFlow(this) }
+            user.runIfPermitted { getTrailerFlow(this) }
         }
 
-    private fun getMappedTrailerFlow(documentParams: DocumentParameters) =
+    private fun getTrailerFlow(documentParams: DocumentParameters) =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Success) {
                 Success(validateAndMapToEntity(response.data))
@@ -45,10 +45,10 @@ internal class GetTrailerUseCaseImpl(
 
     override fun execute(queryParams: QueryParameters): Flow<Response<List<Trailer>>> =
         with(queryParams) {
-            user.runIfPermitted { getMappedTrailerListFlow(queryParams) }
+            user.runIfPermitted { getTrailerListFlow(queryParams) }
         }
 
-    private fun getMappedTrailerListFlow(queryParams: QueryParameters) =
+    private fun getTrailerListFlow(queryParams: QueryParameters) =
         repository.fetchByQuery(queryParams).map { response ->
             if (response is Success) {
                 Success(response.data.map { validateAndMapToEntity(it) })

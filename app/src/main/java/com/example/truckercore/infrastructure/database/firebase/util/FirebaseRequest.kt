@@ -23,6 +23,7 @@ internal class FirebaseRequest<T : Dto> private constructor(
 ) {
 
     companion object {
+
         /**
          * Factory method to create a new [Builder] instance.
          *
@@ -30,6 +31,7 @@ internal class FirebaseRequest<T : Dto> private constructor(
          * @return [Builder] A new instance of the builder to construct the [FirebaseRequest].
          */
         fun <T : Dto> create(clazz: Class<T>) = Builder(clazz)
+
     }
 
     /**
@@ -91,6 +93,7 @@ internal class FirebaseRequest<T : Dto> private constructor(
          */
         private fun checkCollection(): Collection =
             collection ?: throw FirebaseRequestException("You must provide a Collection reference.")
+
     }
 
     /**

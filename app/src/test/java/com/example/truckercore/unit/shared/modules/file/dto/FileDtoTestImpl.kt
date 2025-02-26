@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.shared.modules.file.dto
 
-import com.example.truckercore._test_data_provider.TestStorageFileDataProvider
+import com.example.truckercore._test_data_provider.TestFileDataProvider
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -9,7 +9,7 @@ class FileDtoTestImpl {
     @Test
     fun `initializeId() should initialize id and update persistence status`() {
         // Object
-        val dto = TestStorageFileDataProvider.getBaseDto()
+        val dto = TestFileDataProvider.getBaseDto()
 
         // Call
         val updatedDto = dto.initializeId("newId")

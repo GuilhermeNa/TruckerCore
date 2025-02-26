@@ -10,13 +10,43 @@ import org.junit.jupiter.api.assertThrows
 
 class EmployeeStatusTest {
 
+    private val expectedEnums = hashSetOf(
+        EmployeeStatus.WORKING, EmployeeStatus.VACATION, EmployeeStatus.ON_LEAVE
+    )
+
+    @Test
+    fun `should have the expected enums`() {
+        // Arrange
+        val actualEnums = EmployeeStatus.entries.toHashSet()
+
+        // Act && Assert
+        actualEnums.forEach { enum ->
+            assertTrue(expectedEnums.contains(enum))
+        }
+
+    }
+
+    @Test
+    fun `should have the expected size of enums`() {
+        // Arrange
+        val expectedSize = expectedEnums.size
+        val actualSize = EmployeeStatus.entries.size
+
+        // Assertion
+        assertEquals(expectedSize, actualSize)
+    }
+
     @Test
     fun testConvertString_ValidEnum() {
-        val workingStatus = EmployeeStatus.convertString("WORKING")
-        val vacationStatus = EmployeeStatus.convertString("VACATION")
-
-        assertEquals(EmployeeStatus.WORKING, workingStatus)
-        assertEquals(EmployeeStatus.VACATION, vacationStatus)
+        // Act && Assert
+        assertEquals(
+            EmployeeStatus.WORKING,
+            EmployeeStatus.convertString("WORKING")
+        )
+        assertEquals(
+            EmployeeStatus.VACATION,
+            EmployeeStatus.convertString("VACATION")
+        )
     }
 
     @Test

@@ -1,7 +1,6 @@
 package com.example.truckercore.shared.errors.mapping
 
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.shared.errors.abstractions.MappingException
 import com.example.truckercore.shared.interfaces.Dto
 import com.example.truckercore.shared.interfaces.Entity
 

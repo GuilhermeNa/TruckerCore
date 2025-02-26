@@ -26,7 +26,6 @@ sealed class Response<out T> {
      */
     data object Empty: Response<Nothing>()
 
-
     fun isSuccess() = this is Success
 
     fun isEmpty() = this is Empty

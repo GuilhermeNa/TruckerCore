@@ -29,7 +29,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class AggregateDriverWithDetailsImplTest : KoinTest {
+class AggregateDriverWithDetailsTestImplTest : KoinTest {
 
     private val getDriver: GetDriverUseCase by inject()
     private val getFile: GetFileUseCase by inject()

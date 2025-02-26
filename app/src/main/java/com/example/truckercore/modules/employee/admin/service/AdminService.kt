@@ -7,19 +7,32 @@ import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Interface for the Admin Service, responsible for communicating with the backend
- * to fetch and manage Admin data. This service acts as an intermediary layer that
- * allows applications to interact with the backend for interacting with Admin records.
+ * Interface representing the contract for services interacting with Admin data.
+ * The [AdminService] interface defines methods for fetching basic admin records and admin records with
+ * associated details like photos and personal data. This service acts as an intermediary layer between the
+ * application and the backend system, encapsulating the logic for retrieving Admin information.
  */
 interface AdminService {
 
+    /**
+     * Fetches a basic admin record based on document parameters.
+     *
+     * @param documentParam The parameters used to filter the admin records.
+     * @return A [Flow] of [Response] containing the [Admin] record:
+     * - [Response.Success] if the admin is found and retrieved successfully.
+     * - [Response.Empty] if no admin record is found.
+     * - [Response.Error] if an error occurs during the process.
+     */
     fun fetchAdmin(documentParam: DocumentParameters): Flow<Response<Admin>>
 
     /**
-     * Fetches a single admin record along with its associated files based on document parameters.
+     * Fetches an admin record along with its associated details (like personal data, photo, etc.).
      *
-     * @param documentParam The document parameters to filter the admin records with files.
-     * @return A [Flow] containing a [Response] with the [AdminWithDetails] record.
+     * @param documentParam The parameters used to filter the admin records and fetch related details.
+     * @return A [Flow] of [Response] containing the [AdminWithDetails] record.
+     * - [Response.Success] if the admin and details are found and retrieved successfully.
+     * - [Response.Empty] if no admin with the requested details is found.
+     * - [Response.Error] if an error occurs during the process.
      */
     fun fetchAdminWithDetails(documentParam: DocumentParameters): Flow<Response<AdminWithDetails>>
 
