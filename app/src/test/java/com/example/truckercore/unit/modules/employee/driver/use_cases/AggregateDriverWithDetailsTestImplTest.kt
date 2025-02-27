@@ -37,9 +37,9 @@ class AggregateDriverWithDetailsTestImplTest : KoinTest {
     private val useCase: AggregateDriverWithDetails by inject()
 
     private val docParams: DocumentParameters = mockk(relaxed = true)
-    private val driver: Driver = mockk()
-    private val file: File = mockk()
-    private val pDataWithFile: PersonalDataWithFile = mockk()
+    private val driver: Driver = mockk(relaxed = true)
+    private val file: File = mockk(relaxed = true)
+    private val pDataWithFile: PersonalDataWithFile = mockk(relaxed = true)
     private val driverResult = Response.Success(driver)
     private val fileResult = Response.Success(listOf(file))
     private val pDataResult = Response.Success(listOf(pDataWithFile))

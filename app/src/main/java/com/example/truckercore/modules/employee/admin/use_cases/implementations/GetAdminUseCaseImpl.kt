@@ -10,6 +10,7 @@ import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAd
 import com.example.truckercore.shared.abstractions.UseCase
 import com.example.truckercore.shared.services.ValidatorService
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -39,5 +40,20 @@ internal class GetAdminUseCaseImpl(
         validatorService.validateDto(dto)
         return mapper.toEntity(dto)
     }
+
+    //----------------------------------------------------------------------------------------------
+
+    override fun execute(queryParams: QueryParameters): Flow<Response<List<Admin>>> =
+        with(queryParams) {
+            user.runIfPermitted { getAdminListFlow(this) }
+        }
+
+    private fun getAdminListFlow(queryParams: QueryParameters): Flow<Response<List<Admin>>> =
+        repository.fetchByQuery(queryParams).map { response ->
+            if (response is Response.Success) {
+                val result = response.data.map { validateAndMapToEntity(it) }
+                Response.Success(result)
+            } else Response.Empty
+        }
 
 }

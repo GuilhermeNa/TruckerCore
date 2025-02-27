@@ -24,7 +24,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-internal class PersonalDataFirebaseRepositoryImplTestImpl : KoinTest {
+internal class PersonalDataFirebaseRepositoryImplTest : KoinTest {
 
     private val fireBaseRepository: FirebaseRepository by inject()
     private val repository: PersonalDataRepository by inject()

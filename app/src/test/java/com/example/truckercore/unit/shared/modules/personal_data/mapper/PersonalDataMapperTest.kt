@@ -27,7 +27,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-internal class PersonalDataMapperITestImpl : KoinTest {
+internal class PersonalDataMapperTest : KoinTest {
 
     private val mapper: PersonalDataMapper by inject()
 

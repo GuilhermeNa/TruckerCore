@@ -1,6 +1,8 @@
 package com.example.truckercore.modules.user.use_cases.interfaces
 
+import com.example.truckercore.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.InvalidStateException
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -19,6 +21,7 @@ internal interface CreateMasterUserUseCase {
      *
      * @param masterUser The User entity to be created. This object contains the data to be stored in the system.
      * @return A [Response] string representing the unique identifier of the newly created User entity.
+     * @throws InvalidStateException when the user is not in [Level.MASTER]
      */
     fun execute(masterUser: User): Flow<Response<String>>
 

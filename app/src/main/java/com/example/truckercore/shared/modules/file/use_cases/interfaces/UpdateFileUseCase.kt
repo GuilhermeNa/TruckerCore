@@ -17,6 +17,7 @@ internal interface UpdateFileUseCase {
      * @param user The [User] performing the update. This is used to check if the user has the necessary permissions.
      * @param file The [File] entity that is being updated.
      * @return A [Flow] of [Response.Success] if the update was successful.
+     * @throws NullPointerException if the [file] id is null.
      * @throws ObjectNotFoundException if the object to be updated is not found.
      */
     suspend fun execute(user: User, file: File): Flow<Response<Unit>>

@@ -1,9 +1,10 @@
 package com.example.truckercore.infrastructure.security.authentication.service
 
 import com.example.truckercore.infrastructure.security.authentication.entity.Credentials
+import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
 import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.shared.utils.sealeds.Response
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -44,13 +45,14 @@ interface AuthService {
     fun signOut()
 
     /**
-     * Retrieves the current authenticated user.
+     * Checks if there is a currently logged-in user.
      *
-     * This method returns the current authenticated [FirebaseUser] if a user is signed in, or null if no user is authenticated.
+     * This method verifies whether a user is logged into the system and returns a boolean indicating
+     * the presence of a logged-in user. It checks if the `FirebaseUser` object is non-null.
      *
-     * @return The current authenticated [FirebaseUser], or null if no user is signed in.
+     * @return `true` if there is a logged-in user, `false` otherwise.
      */
-    fun getCurrentUser(): FirebaseUser?
+    fun thereIsLoggedUser(): Boolean
 
     /**
      * Creates a new system access based on the provided access requirements.
@@ -62,5 +64,13 @@ interface AuthService {
      * @return A [Flow] emitting the [Response] containing [Unit] on success, or an error response if access creation fails.
      */
     fun createNewSystemAccess(requirements: NewAccessRequirements): Flow<Response<Unit>>
+
+    /**
+     * Retrieves the logged-in user along with their associated person details.
+     *
+     * @return A [Flow] emitting a [Response] containing [LoggedUserDetails] if successful, or an error response if the user is not logged in.
+     * @throws NullFirebaseUserException if there is no session in firebase.
+     */
+    fun getLoggedUserDetails(): Flow<Response<LoggedUserDetails>>
 
 }

@@ -2,6 +2,7 @@ package com.example.truckercore.modules.employee.admin.use_cases.interfaces
 
 import com.example.truckercore.modules.employee.admin.entity.Admin
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -25,5 +26,7 @@ interface GetAdminUseCase {
      * - [Response.Empty] if no admin record exists with the given ID.
      */
      fun execute(documentParams: DocumentParameters): Flow<Response<Admin>>
+
+     fun execute(queryParams: QueryParameters): Flow<Response<List<Admin>>>
 
 }

@@ -23,10 +23,11 @@ internal class GetUserUseCaseImpl(
     private val mapper: UserMapper
 ) : UseCase(permissionService), GetUserUseCase {
 
-    override fun execute(userId: String, shouldStream: Boolean): Flow<Response<User>> =
-        repository.fetchLoggedUser(userId, shouldStream).map { response ->
+    override fun execute(firebaseUid: String, shouldStream: Boolean): Flow<Response<User>> =
+        repository.fetchLoggedUser(firebaseUid, shouldStream).map { response ->
             if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
+                val result = validateAndMapToEntity(response.data)
+                Response.Success(result)
             } else return@map Response.Empty
         }
 
@@ -45,7 +46,8 @@ internal class GetUserUseCaseImpl(
     private fun getMappedUserFlow(documentParams: DocumentParameters): Flow<Response<User>> =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
+                val result = validateAndMapToEntity(response.data)
+                Response.Success(result)
             } else Response.Empty
         }
 
@@ -59,7 +61,8 @@ internal class GetUserUseCaseImpl(
     private fun getMappedLicensingListFlow(queryParams: QueryParameters): Flow<Response<List<User>>> =
         repository.fetchByQuery(queryParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(response.data.map { validateAndMapToEntity(it) })
+                val result = response.data.map { validateAndMapToEntity(it) }
+                Response.Success(result)
             } else Response.Empty
         }
 

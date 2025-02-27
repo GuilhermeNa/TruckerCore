@@ -38,7 +38,6 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
     private val queryParams: QueryParameters = mockk(relaxed = true)
     private val personalData: PersonalData = mockk(relaxed = true)
     private val file: File = mockk(relaxed = true)
-    private val personalDataWithFile: PersonalDataWithFile = mockk()
 
     companion object {
         @JvmStatic

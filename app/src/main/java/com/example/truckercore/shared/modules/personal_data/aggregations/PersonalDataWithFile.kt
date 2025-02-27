@@ -1,7 +1,8 @@
 package com.example.truckercore.shared.modules.personal_data.aggregations
 
-import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
+import com.example.truckercore.shared.errors.InvalidStateException
 import com.example.truckercore.shared.modules.file.entity.File
+import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
 
 /**
  * Represents a personal data record along with associated files.
@@ -14,6 +15,12 @@ data class PersonalDataWithFile(
     val pData: PersonalData,
     val files: List<File> = emptyList()
 ) {
+
+    init {
+        if (files.any { it.parentId != pData.id }) {
+            throw InvalidStateException("File does not belong to the provided Personal Data.")
+        }
+    }
 
     val parentId get() = pData.parentId
 

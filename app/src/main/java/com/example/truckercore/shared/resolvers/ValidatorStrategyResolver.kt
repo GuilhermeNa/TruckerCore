@@ -12,6 +12,12 @@ import com.example.truckercore.modules.employee.driver.validator.DriverValidatio
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
+import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
+import com.example.truckercore.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.modules.fleet.trailer.validator.TrailerValidationStrategy
+import com.example.truckercore.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.modules.fleet.truck.entity.Truck
+import com.example.truckercore.modules.fleet.truck.validator.TruckValidationStrategy
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy
@@ -48,7 +54,11 @@ internal class ValidatorStrategyResolver {
         Pair(File::class.java, StorageFileValidationStrategy()),
         Pair(FileDto::class.java, StorageFileValidationStrategy()),
         Pair(Licensing::class.java, LicensingValidationStrategy()),
-        Pair(LicensingDto::class.java, LicensingValidationStrategy())
+        Pair(LicensingDto::class.java, LicensingValidationStrategy()),
+        Pair(Trailer::class.java, TrailerValidationStrategy()),
+        Pair(TrailerDto::class.java, TrailerValidationStrategy()),
+        Pair(Truck::class.java, TruckValidationStrategy()),
+        Pair(TruckDto::class.java, TruckValidationStrategy())
     )
 
     /**

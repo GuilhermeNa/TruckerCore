@@ -3,33 +3,40 @@ package com.example.truckercore.unit.infrastructure.security.authentication.serv
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.infrastructure.security.authentication.entity.Credentials
+import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
 import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.infrastructure.security.authentication.service.AuthServiceImpl
 import com.example.truckercore.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
+import com.example.truckercore.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
 import com.example.truckercore.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class AuthServiceImplTest : KoinTest {
 
     private val authRepo: FirebaseAuthRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
+    private val getLoggedUser: GetLoggedUserDetailsUseCase by inject()
     private val service: AuthService by inject()
 
     companion object {
@@ -41,9 +48,10 @@ class AuthServiceImplTest : KoinTest {
             startKoin {
                 modules(
                     module {
+                        single<GetLoggedUserDetailsUseCase> { mockk() }
                         single<FirebaseAuthRepository> { mockk() }
                         single<CreateNewSystemAccessUseCase> { mockk() }
-                        single<AuthService> { AuthServiceImpl(mockk(), get(), get()) }
+                        single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get()) }
                     }
                 )
             }
@@ -108,18 +116,28 @@ class AuthServiceImplTest : KoinTest {
     }
 
     @Test
-    fun `should call auth repository for get current user`() {
+    fun `should return true when the firebase user was found`() {
         // Arrange
-        val fbUser: FirebaseUser = mockk()
-
+        val fbUser: FirebaseUser = mockk(relaxed = true)
         every { authRepo.getCurrentUser() } returns fbUser
 
-        // Call
-        val result = service.getCurrentUser()
+        // Act
+        val result = service.thereIsLoggedUser()
 
-        // Assertions
-        assertEquals(fbUser, result)
-        verify { authRepo.getCurrentUser() }
+        // Assert
+        assertTrue(result)
+    }
+
+    @Test
+    fun `should return false when the firebase user was found`() {
+        // Arrange
+        every { authRepo.getCurrentUser() } returns null
+
+        // Act
+        val result = service.thereIsLoggedUser()
+
+        // Assert
+        assertFalse(result)
     }
 
     @Test
@@ -136,5 +154,38 @@ class AuthServiceImplTest : KoinTest {
         assertTrue(result is Response.Success)
 
     }
+
+    @Test
+    fun `should get the logged user details`() = runTest {
+        // Arrange
+        val fbUser: FirebaseUser = mockk { every { uid } returns "uid" }
+        val response: Response.Success<LoggedUserDetails> = mockk()
+
+        every { authRepo.getCurrentUser() } returns fbUser
+        every { getLoggedUser.execute(any()) } returns flowOf(response)
+
+        // Act
+        val result = service.getLoggedUserDetails().single()
+
+        // Assert
+        assertEquals(result, response)
+        verifyOrder {
+            authRepo.getCurrentUser()
+            getLoggedUser.execute(fbUser.uid)
+        }
+    }
+
+    @Test
+    fun `should throw NullFirebaseUserException when the firebase User was not found`() = runTest {
+        // Arrange
+        every { authRepo.getCurrentUser() } returns null
+
+        // Act && Assert
+        assertThrows<NullFirebaseUserException> {
+            service.getLoggedUserDetails().single()
+        }
+
+    }
+
 
 }

@@ -10,6 +10,29 @@ import org.junit.jupiter.api.assertThrows
 
 class TruckBrandTest {
 
+    private val expectedEnums = listOf(TruckBrand.SCANIA, TruckBrand.VOLVO)
+
+    @Test
+    fun `should have the expected enums`() {
+        // Arrange
+        val actualEnums = TruckBrand.entries.toTypedArray()
+
+        // Act && Assert
+        actualEnums.forEach { enum ->
+            assertTrue(expectedEnums.contains(enum))
+        }
+    }
+
+    @Test
+    fun `should have the expected size`() {
+        // Arrange
+        val expectedSize = expectedEnums.size
+        val actualSize = TruckBrand.entries.size
+
+        // Assert
+        assertEquals(expectedSize, actualSize)
+    }
+
     @Test
     fun testConvertStringValidEnum() {
         val validString1 = "SCANIA"

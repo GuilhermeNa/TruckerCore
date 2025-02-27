@@ -25,13 +25,14 @@ internal class GetTruckUseCaseImpl(
 
     override fun execute(documentParams: DocumentParameters): Flow<Response<Truck>> =
         with(documentParams) {
-            user.runIfPermitted { getMappedTruckFlow(this) }
+            user.runIfPermitted { getTruckFlow(this) }
         }
 
-    private fun getMappedTruckFlow(documentParams: DocumentParameters) =
+    private fun getTruckFlow(documentParams: DocumentParameters) =
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
+                val result = validateAndMapToEntity(response.data)
+                Response.Success(result)
             } else Response.Empty
         }
 
@@ -44,13 +45,14 @@ internal class GetTruckUseCaseImpl(
 
     override fun execute(queryParams: QueryParameters): Flow<Response<List<Truck>>> =
         with(queryParams) {
-            user.runIfPermitted { getMappedTruckListFlow(queryParams) }
+            user.runIfPermitted { getTruckListFlow(queryParams) }
         }
 
-    private fun getMappedTruckListFlow(queryParams: QueryParameters) =
+    private fun getTruckListFlow(queryParams: QueryParameters) =
         repository.fetchByQuery(queryParams).map { response ->
             if (response is Response.Success) {
-                Response.Success(response.data.map { validateAndMapToEntity(it) })
+                val result = response.data.map { validateAndMapToEntity(it) }
+                Response.Success(result)
             } else Response.Empty
         }
 

@@ -2,18 +2,22 @@ package com.example.truckercore.infrastructure.security.authentication.service
 
 import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.infrastructure.security.authentication.entity.Credentials
+import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
 import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
+import com.example.truckercore.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
 import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.shared.utils.sealeds.Response
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 internal class AuthServiceImpl(
     override val exceptionHandler: ExceptionHandler,
     private val firebaseAuthRepository: FirebaseAuthRepository,
-    private val createSystemAccess: CreateNewSystemAccessUseCase
+    private val createSystemAccess: CreateNewSystemAccessUseCase,
+    private val getLoggedUser: GetLoggedUserDetailsUseCase
 ) : Service(exceptionHandler), AuthService {
 
     override fun authenticateCredentials(credentials: Credentials): Flow<Response<String>> =
@@ -28,9 +32,21 @@ internal class AuthServiceImpl(
         firebaseAuthRepository.signOut()
     }
 
-    override fun getCurrentUser(): FirebaseUser? = firebaseAuthRepository.getCurrentUser()
+    override fun thereIsLoggedUser(): Boolean {
+        return firebaseAuthRepository.getCurrentUser() != null
+    }
 
     override fun createNewSystemAccess(requirements: NewAccessRequirements) =
         runSafe { createSystemAccess.execute(requirements) }
+
+    override fun getLoggedUserDetails(): Flow<Response<LoggedUserDetails>> = runSafe {
+        firebaseAuthRepository.getCurrentUser()?.let { fbUser ->
+            getLoggedUser.execute(fbUser.uid)
+        } ?: firebaseUserErrorFlow()
+    }
+
+    private fun firebaseUserErrorFlow() = flowOf(
+        Response.Error(NullFirebaseUserException("Firebase returned a null FirebaseUser."))
+    )
 
 }

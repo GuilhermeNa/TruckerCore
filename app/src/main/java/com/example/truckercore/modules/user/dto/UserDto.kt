@@ -2,7 +2,6 @@ package com.example.truckercore.modules.user.dto
 
 import com.example.truckercore.shared.enums.PersistenceStatus
 import com.example.truckercore.shared.interfaces.Dto
-import java.time.LocalDateTime
 import java.util.Date
 
 internal data class UserDto(

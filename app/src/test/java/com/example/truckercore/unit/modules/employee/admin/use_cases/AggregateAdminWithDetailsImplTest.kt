@@ -37,14 +37,16 @@ class AggregateAdminWithDetailsImplTest : KoinTest {
     private val useCase: AggregateAdminWithDetails by inject()
 
     private val docParams: DocumentParameters = mockk(relaxed = true)
-    private val admin: Admin = mockk()
-    private val file: File = mockk()
-    private val pDataWithFile: PersonalDataWithFile = mockk()
+    private val admin: Admin = mockk(relaxed = true)
+    private val file: File = mockk(relaxed = true)
+    private val pDataWithFile: PersonalDataWithFile = mockk(relaxed = true)
     private val adminResult = Response.Success(admin)
     private val fileResult = Response.Success(listOf(file))
     private val pDataResult = Response.Success(listOf(pDataWithFile))
 
     companion object {
+
+        private const val ADMIN_ID = "adminId"
 
         @JvmStatic
         @BeforeAll

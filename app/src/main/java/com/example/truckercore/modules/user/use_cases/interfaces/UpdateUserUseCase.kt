@@ -1,6 +1,7 @@
 package com.example.truckercore.modules.user.use_cases.interfaces
 
 import com.example.truckercore.modules.user.entity.User
+import com.example.truckercore.shared.errors.ObjectNotFoundException
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +16,8 @@ internal interface UpdateUserUseCase {
      * @param userToUpdate The [User] entity that is being updated. This contains the data to be modified.
      * @return A [Flow] of:
      * - [Response.Success] when the object is successfully updated.
+     * @throws NullPointerException when [userToUpdate] id is null.
+     * @throws ObjectNotFoundException when the user was not found.
      */
     fun execute(user: User, userToUpdate: User): Flow<Response<Unit>>
 
