@@ -79,7 +79,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Arrange
             every { getUser.execute(userId, shouldStream) } returns flowOf(Response.Success(user))
             every { user.personFLag } returns PersonCategory.DRIVER
-            every { getDriver.execute(any()) } returns flowOf(Response.Success(driver))
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(Response.Success(driver))
 
             // Call
             val result = aggregateUserWithPersonUseCase.execute(userId, shouldStream).single()
@@ -88,7 +88,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             assertTrue(result is Response.Success)
             assertEquals(UserWithPerson(user, driver), (result as Response.Success).data)
             verify { getUser.execute(userId, shouldStream) }
-            verify { getDriver.execute(any()) }
+            verify { getDriver.execute(any() as DocumentParameters) }
         }
 
     @Test
@@ -97,7 +97,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Arrange
             every { getUser.execute(userId, shouldStream) } returns flowOf(Response.Success(user))
             every { user.personFLag } returns PersonCategory.ADMIN
-            every { getAdminUseCase.execute(any()) } returns flowOf(Response.Success(admin))
+            every { getAdminUseCase.execute(any() as DocumentParameters) } returns flowOf(Response.Success(admin))
 
             // Call
             val result = aggregateUserWithPersonUseCase.execute(userId, shouldStream).single()
@@ -106,7 +106,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             assertTrue(result is Response.Success)
             assertEquals(UserWithPerson(user, admin), (result as Response.Success).data)
             verify { getUser.execute(userId, shouldStream) }
-            verify { getAdminUseCase.execute(any()) }
+            verify { getAdminUseCase.execute(any() as DocumentParameters) }
         }
 
     @Test
@@ -121,8 +121,8 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Assertions
             assertTrue(result is Response.Empty)
             verify { getUser.execute(userId, shouldStream) }
-            verify { getDriver.execute(any()) }
-            verify { getAdminUseCase.execute(any()) }
+            verify { getDriver.execute(any() as DocumentParameters) }
+            verify { getAdminUseCase.execute(any() as DocumentParameters) }
         }
 
     @Test
@@ -131,7 +131,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Arrange
             every { getUser.execute(userId, shouldStream) } returns flowOf(Response.Success(user))
             every { user.personFLag } returns PersonCategory.DRIVER
-            every { getDriver.execute(any()) } returns flowOf(Response.Empty)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
 
             // Call
             val result = aggregateUserWithPersonUseCase.execute(userId, shouldStream).single()
@@ -139,7 +139,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Assertions
             assertTrue(result is Response.Empty)
             verify { getUser.execute(userId, shouldStream) }
-            verify { getDriver.execute(any()) }
+            verify { getDriver.execute(any() as DocumentParameters) }
         }
 
     @Test
@@ -148,7 +148,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Arrange
             every { getUser.execute(userId, shouldStream) } returns flowOf(Response.Success(user))
             every { user.personFLag } returns PersonCategory.ADMIN
-            every { getAdminUseCase.execute(any()) } returns flowOf(Response.Empty)
+            every { getAdminUseCase.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
 
             // Call
             val result = aggregateUserWithPersonUseCase.execute(userId, shouldStream).single()
@@ -156,7 +156,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Assertions
             assertTrue(result is Response.Empty)
             verify { getUser.execute(userId, shouldStream) }
-            verify { getAdminUseCase.execute(any()) }
+            verify { getAdminUseCase.execute(any() as DocumentParameters) }
         }
 
 }

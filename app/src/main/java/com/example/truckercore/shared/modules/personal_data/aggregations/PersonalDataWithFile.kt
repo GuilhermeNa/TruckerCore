@@ -22,6 +22,11 @@ data class PersonalDataWithFile(
         }
     }
 
+    /**
+     * Returns the parent ID associated with the personal data object. This value is retrieved from the `pData.parentId` property.
+     *
+     * This getter is used to obtain the unique identifier of the parent object to which the personal data (and associated files) is linked.
+     */
     val parentId get() = pData.parentId
 
 }

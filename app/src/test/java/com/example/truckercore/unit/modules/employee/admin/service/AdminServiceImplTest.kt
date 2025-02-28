@@ -63,7 +63,7 @@ class AdminServiceImplTest : KoinTest {
     fun `fetchAdmin() should call getAdmin execute`() =
         runTest {
             // Arrange
-            every { getAdmin.execute(any()) } returns flowOf(Response.Success(admin))
+            every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(Response.Success(admin))
 
             // Call
             adminService.fetchAdmin(docParams).single()

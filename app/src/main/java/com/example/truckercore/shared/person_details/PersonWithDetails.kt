@@ -31,15 +31,21 @@ data class PersonWithDetails(
 
         // Validate PDataWF
         pDataWFSet.forEach { pDataWF ->
-            if (pDataWF.pData.parentId != person.id)
+            if (pDataWF.parentId != person.id)
                 throw InvalidStateException("Personal data does not belong to the provided person.")
         }
 
     }
 
+    /**
+     * Returns the user ID associated with the person object. This value is retrieved from the `person.userId` property.
+     *
+     * If the `userId` is null, a `NullPointerException` will be thrown, indicating that the user ID is missing
+     * for the person object with the specified ID.
+     */
     val userId
         get() = person.userId ?: throw NullPointerException(
-                "Person User id is null for ${person::class.java} with id: ${person.id}."
-            )
+            "Person User id is null for ${person::class.java} with id: ${person.id}."
+        )
 
 }

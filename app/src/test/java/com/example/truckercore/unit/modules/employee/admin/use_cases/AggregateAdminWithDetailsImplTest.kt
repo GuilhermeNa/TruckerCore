@@ -76,7 +76,7 @@ class AggregateAdminWithDetailsImplTest : KoinTest {
     fun `execute() should return AdminWithDetails when all results are successful`() =
         runTest {
             // Arrange
-            every { getAdmin.execute(any()) } returns flowOf(adminResult)
+            every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(adminResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 pDataResult
@@ -97,7 +97,7 @@ class AggregateAdminWithDetailsImplTest : KoinTest {
     fun `execute() should return Empty when Admin result is not successful`() =
         runTest {
             // Arrange
-            every { getAdmin.execute(any()) } returns flowOf(Response.Empty)
+            every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 pDataResult
@@ -114,7 +114,7 @@ class AggregateAdminWithDetailsImplTest : KoinTest {
     fun `execute() should return AdminWithDetails with null file when File result is not successful`() =
         runTest {
             // Arrange
-            every { getAdmin.execute(any()) } returns flowOf(adminResult)
+            every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(adminResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 pDataResult
@@ -135,7 +135,7 @@ class AggregateAdminWithDetailsImplTest : KoinTest {
     fun `execute() should return AdminWithDetails with null personalData when PersonalData result is not successful`() =
         runTest {
             // Arrange
-            every { getAdmin.execute(any()) } returns flowOf(adminResult)
+            every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(adminResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 Response.Empty
@@ -156,7 +156,7 @@ class AggregateAdminWithDetailsImplTest : KoinTest {
     fun `execute() should return AdminWithDetails with null file and personalData when both results are not successful`() =
         runTest {
             // Arrange
-            every { getAdmin.execute(any()) } returns flowOf(adminResult)
+            every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(adminResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 Response.Empty

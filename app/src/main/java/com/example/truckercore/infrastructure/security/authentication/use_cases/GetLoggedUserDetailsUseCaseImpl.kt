@@ -31,7 +31,7 @@ internal class GetLoggedUserDetailsUseCaseImpl(
 
         }
 
-    private fun Response<PersonWithDetails>.extractPersonDetails() =
+    private fun Response<PersonWithDetails>.extractPersonDetails(): PersonWithDetails =
         if (this is Response.Success) data
         else throw ObjectNotFoundException("Person Data was not found.")
 

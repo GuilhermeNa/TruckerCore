@@ -5,7 +5,7 @@ import com.example.truckercore.shared.errors.InvalidStateException
 import com.example.truckercore.shared.modules.file.entity.File
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
 
-/**
+ /**
  * Represents an administrator along with additional details such as their photo and personal data.
  *
  * This data class is designed to hold information about an admin user and optionally include additional details

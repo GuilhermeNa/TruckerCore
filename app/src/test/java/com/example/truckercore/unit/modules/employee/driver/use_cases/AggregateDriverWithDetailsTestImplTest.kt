@@ -74,7 +74,7 @@ class AggregateDriverWithDetailsTestImplTest : KoinTest {
     fun `execute() should return DriverWithDetails when all results are successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(driverResult)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(driverResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 pDataResult
@@ -95,7 +95,7 @@ class AggregateDriverWithDetailsTestImplTest : KoinTest {
     fun `execute() should return Empty when Driver result is not successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(Response.Empty)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 pDataResult
@@ -112,7 +112,7 @@ class AggregateDriverWithDetailsTestImplTest : KoinTest {
     fun `execute() should return DriverWithDetails with null file when File result is not successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(driverResult)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(driverResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 pDataResult
@@ -133,7 +133,7 @@ class AggregateDriverWithDetailsTestImplTest : KoinTest {
     fun `execute() should return DriverWithDetails with null personalData when PersonalData result is not successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(driverResult)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(driverResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(fileResult)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 Response.Empty
@@ -154,7 +154,7 @@ class AggregateDriverWithDetailsTestImplTest : KoinTest {
     fun `execute() should return DriverWithDetails with null file and personalData when both results are not successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(driverResult)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(driverResult)
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
             every { getPersonalDataWithFile.execute(any() as QueryParameters) } returns flowOf(
                 Response.Empty

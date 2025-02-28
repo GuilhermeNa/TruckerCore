@@ -62,7 +62,7 @@ class DriverServiceImplTest : KoinTest {
     fun `fetchDriver() should return Driver when the result is successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(Response.Success(driver))
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(Response.Success(driver))
 
             // Call
             val result = driverService.fetchDriver(docParams).single()
@@ -76,7 +76,7 @@ class DriverServiceImplTest : KoinTest {
     fun `fetchDriver() should return Empty when the result is not successful`() =
         runTest {
             // Arrange
-            every { getDriver.execute(any()) } returns flowOf(Response.Empty)
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(Response.Empty)
 
             // Call
             val result = driverService.fetchDriver(docParams).single()
