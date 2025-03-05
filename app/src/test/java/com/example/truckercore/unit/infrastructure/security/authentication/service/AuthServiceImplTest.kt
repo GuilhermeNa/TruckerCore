@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -158,32 +157,35 @@ class AuthServiceImplTest : KoinTest {
     @Test
     fun `should get the logged user details`() = runTest {
         // Arrange
-        val fbUser: FirebaseUser = mockk { every { uid } returns "uid" }
-        val response: Response.Success<LoggedUserDetails> = mockk()
+        val fbUid = "uid"
+        val fbUser: FirebaseUser = mockk { every { uid } returns fbUid }
+        val loggedUser: LoggedUserDetails = mockk()
 
         every { authRepo.getCurrentUser() } returns fbUser
-        every { getLoggedUser.execute(any()) } returns flowOf(response)
+        every { getLoggedUser.execute(any()) } returns flowOf(Response.Success(loggedUser))
 
         // Act
         val result = service.getLoggedUserDetails().single()
 
         // Assert
-        assertEquals(result, response)
+        assertTrue(result is Response.Success)
         verifyOrder {
             authRepo.getCurrentUser()
-            getLoggedUser.execute(fbUser.uid)
+            getLoggedUser.execute(fbUid)
         }
     }
 
     @Test
-    fun `should throw NullFirebaseUserException when the firebase User was not found`() = runTest {
+    fun `should return an Response Error when the firebase User was not found`() = runTest {
         // Arrange
         every { authRepo.getCurrentUser() } returns null
 
-        // Act && Assert
-        assertThrows<NullFirebaseUserException> {
-            service.getLoggedUserDetails().single()
-        }
+        // Act
+        val result = service.getLoggedUserDetails().single()
+
+        // Assert
+        assertTrue(result is Response.Error)
+        assertTrue(result.exception is NullFirebaseUserException)
 
     }
 

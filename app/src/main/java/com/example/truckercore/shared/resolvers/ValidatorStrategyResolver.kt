@@ -3,12 +3,6 @@ package com.example.truckercore.shared.resolvers
 import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.modules.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.employee.admin.entity.Admin
-import com.example.truckercore.modules.employee.admin.validator.AdminValidationStrategy
-import com.example.truckercore.modules.employee.driver.dto.DriverDto
-import com.example.truckercore.modules.employee.driver.entity.Driver
-import com.example.truckercore.modules.employee.driver.validator.DriverValidationStrategy
 import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
@@ -18,6 +12,12 @@ import com.example.truckercore.modules.fleet.trailer.validator.TrailerValidation
 import com.example.truckercore.modules.fleet.truck.dto.TruckDto
 import com.example.truckercore.modules.fleet.truck.entity.Truck
 import com.example.truckercore.modules.fleet.truck.validator.TruckValidationStrategy
+import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.modules.person.employee.admin.validator.AdminValidationStrategy
+import com.example.truckercore.modules.person.employee.driver.dto.DriverDto
+import com.example.truckercore.modules.person.employee.driver.entity.Driver
+import com.example.truckercore.modules.person.employee.driver.validator.DriverValidationStrategy
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy

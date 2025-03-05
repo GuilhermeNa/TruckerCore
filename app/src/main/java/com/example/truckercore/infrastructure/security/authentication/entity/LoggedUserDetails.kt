@@ -2,7 +2,7 @@ package com.example.truckercore.infrastructure.security.authentication.entity
 
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.person_details.PersonWithDetails
+import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
 
 /**
  * Represents the details of a logged-in user, including both user information and additional personal details.

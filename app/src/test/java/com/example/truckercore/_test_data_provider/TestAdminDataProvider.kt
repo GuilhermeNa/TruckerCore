@@ -1,8 +1,8 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.modules.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.employee.admin.entity.Admin
-import com.example.truckercore.modules.employee.shared.enums.EmployeeStatus
+import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.modules.person.employee.shared.enums.EmployeeStatus
 import com.example.truckercore.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date

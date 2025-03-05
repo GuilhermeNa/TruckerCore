@@ -6,8 +6,8 @@ import com.example.truckercore.infrastructure.security.authentication.entity.New
 import com.example.truckercore.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCaseImpl
 import com.example.truckercore.modules.business_central.mapper.BusinessCentralMapper
-import com.example.truckercore.modules.employee.admin.mapper.AdminMapper
-import com.example.truckercore.modules.employee.driver.mapper.DriverMapper
+import com.example.truckercore.modules.person.employee.admin.mapper.AdminMapper
+import com.example.truckercore.modules.person.employee.driver.mapper.DriverMapper
 import com.example.truckercore.modules.user.enums.PersonCategory
 import com.example.truckercore.modules.user.mapper.UserMapper
 import com.example.truckercore.shared.services.ValidatorService

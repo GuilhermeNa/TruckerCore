@@ -4,9 +4,9 @@ import com.example.truckercore._test_data_provider.TestDriverDataProvider
 import com.example.truckercore._test_data_provider.TestTruckDataProvider
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.employee.driver.entity.Driver
 import com.example.truckercore.modules.fleet.truck.dto.TruckDto
 import com.example.truckercore.modules.fleet.truck.entity.Truck
+import com.example.truckercore.modules.person.employee.driver.entity.Driver
 import com.example.truckercore.modules.user.dto.UserDto
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.validator.UserValidationStrategy

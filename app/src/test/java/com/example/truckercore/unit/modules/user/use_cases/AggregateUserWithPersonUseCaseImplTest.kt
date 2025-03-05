@@ -1,10 +1,10 @@
 package com.example.truckercore.unit.modules.user.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.employee.admin.entity.Admin
-import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
-import com.example.truckercore.modules.employee.driver.entity.Driver
-import com.example.truckercore.modules.employee.driver.use_cases.interfaces.GetDriverUseCase
+import com.example.truckercore.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.GetAdminUseCase
+import com.example.truckercore.modules.person.employee.driver.entity.Driver
+import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.GetDriverUseCase
 import com.example.truckercore.modules.user.aggregations.UserWithPerson
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.enums.PersonCategory
@@ -39,7 +39,7 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
 
     private val userId: String = "userId"
     private val shouldStream: Boolean = true
-    private val user: User = mockk(relaxed = true) { every { id } returns userId}
+    private val user: User = mockk(relaxed = true) { every { id } returns userId }
     private val driver: Driver = mockk()
     private val admin: Admin = mockk()
 
@@ -79,7 +79,11 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Arrange
             every { getUser.execute(userId, shouldStream) } returns flowOf(Response.Success(user))
             every { user.personFLag } returns PersonCategory.DRIVER
-            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(Response.Success(driver))
+            every { getDriver.execute(any() as DocumentParameters) } returns flowOf(
+                Response.Success(
+                    driver
+                )
+            )
 
             // Call
             val result = aggregateUserWithPersonUseCase.execute(userId, shouldStream).single()
@@ -97,7 +101,11 @@ class AggregateUserWithPersonUseCaseImplTest : KoinTest {
             // Arrange
             every { getUser.execute(userId, shouldStream) } returns flowOf(Response.Success(user))
             every { user.personFLag } returns PersonCategory.ADMIN
-            every { getAdminUseCase.execute(any() as DocumentParameters) } returns flowOf(Response.Success(admin))
+            every { getAdminUseCase.execute(any() as DocumentParameters) } returns flowOf(
+                Response.Success(
+                    admin
+                )
+            )
 
             // Call
             val result = aggregateUserWithPersonUseCase.execute(userId, shouldStream).single()

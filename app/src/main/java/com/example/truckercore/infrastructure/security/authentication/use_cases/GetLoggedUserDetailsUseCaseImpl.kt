@@ -1,10 +1,10 @@
 package com.example.truckercore.infrastructure.security.authentication.use_cases
 
 import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
+import com.example.truckercore.modules.person.shared.person_details.GetPersonWithDetailsUseCase
+import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.person_details.GetPersonWithDetailsUseCase
-import com.example.truckercore.shared.person_details.PersonWithDetails
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +20,11 @@ internal class GetLoggedUserDetailsUseCaseImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(firebaseUid: String): Flow<Response<LoggedUserDetails>> =
         getUser.execute(firebaseUid).flatMapConcat { userResponse ->
-            if (userResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
-            val user = userResponse.data
+
+            val user = when (userResponse) {
+                is Response.Success -> userResponse.data
+                else -> return@flatMapConcat flowOf(Response.Empty)
+            }
 
             getPersonDetails.execute(user).map { personWDResponse ->
                 val personWD = personWDResponse.extractPersonDetails()

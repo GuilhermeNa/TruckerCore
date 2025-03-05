@@ -3,7 +3,6 @@ package com.example.truckercore.infrastructure.security.authentication.service
 import com.example.truckercore.infrastructure.security.authentication.entity.Credentials
 import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
 import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
@@ -68,8 +67,9 @@ interface AuthService {
     /**
      * Retrieves the logged-in user along with their associated person details.
      *
-     * @return A [Flow] emitting a [Response] containing [LoggedUserDetails] if successful, or an error response if the user is not logged in.
-     * @throws NullFirebaseUserException if there is no session in firebase.
+     * @return A [Flow] emitting:
+     * - [Response.Success] containing [LoggedUserDetails] if successful, or an error response if the user is not logged in.
+     * - [Response.Error] if any error occurs.
      */
     fun getLoggedUserDetails(): Flow<Response<LoggedUserDetails>>
 

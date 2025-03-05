@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.user.use_cases.implementations
 
-import com.example.truckercore.modules.employee.admin.use_cases.interfaces.GetAdminUseCase
-import com.example.truckercore.modules.employee.driver.use_cases.interfaces.GetDriverUseCase
+import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.GetAdminUseCase
+import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.GetDriverUseCase
 import com.example.truckercore.modules.user.aggregations.UserWithPerson
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.enums.PersonCategory

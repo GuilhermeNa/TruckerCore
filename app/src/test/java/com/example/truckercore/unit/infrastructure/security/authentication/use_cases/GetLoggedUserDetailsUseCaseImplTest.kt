@@ -6,8 +6,8 @@ import com.example.truckercore.infrastructure.security.authentication.use_cases.
 import com.example.truckercore.modules.user.entity.User
 import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
 import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.person_details.GetPersonWithDetailsUseCase
-import com.example.truckercore.shared.person_details.PersonWithDetails
+import com.example.truckercore.modules.person.shared.person_details.GetPersonWithDetailsUseCase
+import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
