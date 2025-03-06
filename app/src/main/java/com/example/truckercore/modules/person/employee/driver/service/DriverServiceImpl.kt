@@ -1,10 +1,11 @@
 package com.example.truckercore.modules.person.employee.driver.service
 
 import com.example.truckercore.infrastructure.util.ExceptionHandler
-import com.example.truckercore.modules.person.employee.driver.aggregations.DriverWithDetails
 import com.example.truckercore.modules.person.employee.driver.entity.Driver
-import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.AggregateDriverWithDetails
 import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.GetDriverUseCase
+import com.example.truckercore.modules.person.shared.person_details.GetPersonWithDetailsUseCase
+import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
+import com.example.truckercore.modules.user.enums.PersonCategory
 import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.sealeds.Response
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 internal class DriverServiceImpl(
     override val exceptionHandler: ExceptionHandler,
     private val getDriver: GetDriverUseCase,
-    private val getDriverWithDetails: AggregateDriverWithDetails
+    private val getPersonWD: GetPersonWithDetailsUseCase
 ) : Service(exceptionHandler), DriverService {
 
     override fun fetchDriver(
@@ -23,7 +24,7 @@ internal class DriverServiceImpl(
 
     override fun fetchDriverWithDetails(
         documentParam: DocumentParameters
-    ): Flow<Response<DriverWithDetails>> =
-        runSafe { getDriverWithDetails.execute(documentParam) }
+    ): Flow<Response<PersonWithDetails>> =
+        runSafe { getPersonWD.execute(documentParam, PersonCategory.DRIVER) }
 
 }

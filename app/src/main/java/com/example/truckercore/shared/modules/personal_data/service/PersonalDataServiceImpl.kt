@@ -1,11 +1,11 @@
 package com.example.truckercore.shared.modules.personal_data.service
 
-import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.infrastructure.util.ExceptionHandler
+import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.sealeds.Response
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 internal class PersonalDataServiceImpl(
     override val exceptionHandler: ExceptionHandler,
     private val getPersonalData: GetPersonalDataUseCase,
-    private val getPersonalDataWithFile: AggregatePersonalDataWithFilesUseCase
+    private val getPDataWF: GetPersonalDataWithFilesUseCase
 ) : Service(exceptionHandler), PersonalDataService {
 
     override fun fetchPersonalData(documentParam: DocumentParameters): Flow<Response<PersonalData>> =
@@ -24,9 +24,9 @@ internal class PersonalDataServiceImpl(
         runSafe { getPersonalData.execute(queryParam) }
 
     override fun fetchPersonalDataWithDetails(documentParam: DocumentParameters): Flow<Response<PersonalDataWithFile>> =
-        runSafe { getPersonalDataWithFile.execute(documentParam) }
+        runSafe { getPDataWF.execute(documentParam) }
 
     override fun fetchPersonalDataWithDetails(queryParam: QueryParameters): Flow<Response<List<PersonalDataWithFile>>> =
-        runSafe { getPersonalDataWithFile.execute(queryParam) }
+        runSafe { getPDataWF.execute(queryParam) }
 
 }

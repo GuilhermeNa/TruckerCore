@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 
 internal class ExceptionHandler {
 
-    fun catch(throwable: Throwable): Response.Error {
+    fun run(throwable: Throwable): Response.Error {
         return Response.Error(NullPointerException())
     }
 

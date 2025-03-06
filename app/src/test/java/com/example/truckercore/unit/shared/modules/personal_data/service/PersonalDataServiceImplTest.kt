@@ -4,7 +4,7 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.infrastructure.util.ExceptionHandler
 import com.example.truckercore.shared.modules.personal_data.service.PersonalDataService
 import com.example.truckercore.shared.modules.personal_data.service.PersonalDataServiceImpl
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -26,7 +26,7 @@ import org.koin.test.inject
 class PersonalDataServiceImplTest : KoinTest {
 
     private val getPersonalData: GetPersonalDataUseCase by inject()
-    private val getPersonalDataWithFile: AggregatePersonalDataWithFilesUseCase by inject()
+    private val getPersonalDataWithFile: GetPersonalDataWithFilesUseCase by inject()
     private val personalDataService: PersonalDataService by inject()
 
     private val documentParams: DocumentParameters = mockk(relaxed = true)
@@ -42,7 +42,7 @@ class PersonalDataServiceImplTest : KoinTest {
                     module {
                         single<ExceptionHandler> { mockk() }
                         single<GetPersonalDataUseCase> { mockk() }
-                        single<AggregatePersonalDataWithFilesUseCase> { mockk() }
+                        single<GetPersonalDataWithFilesUseCase> { mockk() }
                         single<PersonalDataService> { PersonalDataServiceImpl(get(), get(), get()) }
                     }
                 )

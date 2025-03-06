@@ -7,13 +7,13 @@ import com.example.truckercore.shared.modules.personal_data.repository.PersonalD
 import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepositoryImpl
 import com.example.truckercore.shared.modules.personal_data.service.PersonalDataService
 import com.example.truckercore.shared.modules.personal_data.service.PersonalDataServiceImpl
-import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.AggregatePersonalDataWithFilesUseCaseImpl
+import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataWithFilesUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.CheckPersonalDataExistenceUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.CreatePersonalDataUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.DeletePersonalDataUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataUseCaseImpl
 import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.UpdatePersonalDataUseCaseImpl
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.CreatePersonalDataUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.DeletePersonalDataUseCase
@@ -28,8 +28,8 @@ val personalDataModule = module {
 
     //--
 
-    single<AggregatePersonalDataWithFilesUseCase> {
-        AggregatePersonalDataWithFilesUseCaseImpl(get(), get())
+    single<GetPersonalDataWithFilesUseCase> {
+        GetPersonalDataWithFilesUseCaseImpl(get(), get())
     }
     single<CheckPersonalDataExistenceUseCase> {
         CheckPersonalDataExistenceUseCaseImpl(

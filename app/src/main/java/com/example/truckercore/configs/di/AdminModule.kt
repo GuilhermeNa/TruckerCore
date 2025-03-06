@@ -7,13 +7,11 @@ import com.example.truckercore.modules.person.employee.admin.repository.AdminRep
 import com.example.truckercore.modules.person.employee.admin.repository.AdminRepositoryImpl
 import com.example.truckercore.modules.person.employee.admin.service.AdminService
 import com.example.truckercore.modules.person.employee.admin.service.AdminServiceImpl
-import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.AggregateAdminWithDetailsImpl
 import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.CheckAdminExistenceUseCaseImpl
 import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.CreateAdminUseCaseImpl
 import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.DeleteAdminUseCaseImpl
 import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.GetAdminUseCaseImpl
 import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.UpdateAdminUseCaseImpl
-import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.AggregateAdminWithDetails
 import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.CheckAdminExistenceUseCase
 import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.CreateAdminUseCase
 import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.DeleteAdminUseCase
@@ -28,9 +26,6 @@ val adminModule = module {
 
     //--
 
-    single<AggregateAdminWithDetails> {
-        AggregateAdminWithDetailsImpl(get(), get(), get())
-    }
     single<CreateAdminUseCase> {
         CreateAdminUseCaseImpl(Permission.CREATE_ADMIN, get(), get(), get(), get())
     }

@@ -7,13 +7,11 @@ import com.example.truckercore.modules.person.employee.driver.repository.DriverR
 import com.example.truckercore.modules.person.employee.driver.repository.DriverRepositoryImpl
 import com.example.truckercore.modules.person.employee.driver.service.DriverService
 import com.example.truckercore.modules.person.employee.driver.service.DriverServiceImpl
-import com.example.truckercore.modules.person.employee.driver.use_cases.implementations.AggregateDriverWithDetailsImpl
 import com.example.truckercore.modules.person.employee.driver.use_cases.implementations.CheckDriverExistenceUseCaseImpl
 import com.example.truckercore.modules.person.employee.driver.use_cases.implementations.CreateDriverUseCaseImpl
 import com.example.truckercore.modules.person.employee.driver.use_cases.implementations.DeleteDriverUseCaseImpl
 import com.example.truckercore.modules.person.employee.driver.use_cases.implementations.GetDriverUseCaseImpl
 import com.example.truckercore.modules.person.employee.driver.use_cases.implementations.UpdateDriverUseCaseImpl
-import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.AggregateDriverWithDetails
 import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.CheckDriverExistenceUseCase
 import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.CreateDriverUseCase
 import com.example.truckercore.modules.person.employee.driver.use_cases.interfaces.DeleteDriverUseCase
@@ -28,9 +26,6 @@ val driverModule = module {
 
     //--
 
-    single<AggregateDriverWithDetails> {
-        AggregateDriverWithDetailsImpl(get(), get(), get())
-    }
     single<CreateDriverUseCase> {
         CreateDriverUseCaseImpl(Permission.CREATE_DRIVER, get(), get(), get(), get())
     }

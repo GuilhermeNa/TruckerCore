@@ -5,8 +5,8 @@ import com.example.truckercore.shared.modules.file.entity.File
 import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import com.example.truckercore.shared.modules.personal_data.entity.PersonalData
-import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.AggregatePersonalDataWithFilesUseCaseImpl
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.implementations.GetPersonalDataWithFilesUseCaseImpl
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
@@ -28,11 +28,11 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
+class GetPersonalDataWithFilesUseCaseImplTest : KoinTest {
 
     private val getPersonalData: GetPersonalDataUseCase by inject()
     private val getFile: GetFileUseCase by inject()
-    private val aggregatePersonalDataWithFilesUseCase: AggregatePersonalDataWithFilesUseCase by inject()
+    private val getPersonalDataWithFilesUseCase: GetPersonalDataWithFilesUseCase by inject()
 
     private val documentParams: DocumentParameters = mockk(relaxed = true)
     private val queryParams: QueryParameters = mockk(relaxed = true)
@@ -49,8 +49,8 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
                     module {
                         single<GetPersonalDataUseCase> { mockk() }
                         single<GetFileUseCase> { mockk() }
-                        single<AggregatePersonalDataWithFilesUseCase> {
-                            AggregatePersonalDataWithFilesUseCaseImpl(
+                        single<GetPersonalDataWithFilesUseCase> {
+                            GetPersonalDataWithFilesUseCaseImpl(
                                 get(),
                                 get()
                             )
@@ -77,7 +77,7 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
             )
 
             // Call
-            val result = aggregatePersonalDataWithFilesUseCase.execute(documentParams).single()
+            val result = getPersonalDataWithFilesUseCase.execute(documentParams).single()
 
             // Assertions
             assertTrue(result is Response.Success)
@@ -99,7 +99,7 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
             )
 
             // Call
-            val result = aggregatePersonalDataWithFilesUseCase.execute(documentParams).single()
+            val result = getPersonalDataWithFilesUseCase.execute(documentParams).single()
 
             // Assertions
             assertTrue(result is Response.Empty)
@@ -117,7 +117,7 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
 
             // Call
-            val result = aggregatePersonalDataWithFilesUseCase.execute(documentParams).single()
+            val result = getPersonalDataWithFilesUseCase.execute(documentParams).single()
 
             // Assertions
             assertTrue(result is Response.Success)
@@ -144,7 +144,7 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
             )
 
             // Call
-            val result = aggregatePersonalDataWithFilesUseCase.execute(queryParams).single()
+            val result = getPersonalDataWithFilesUseCase.execute(queryParams).single()
 
             // Assertions
             assertTrue(result is Response.Success)
@@ -163,7 +163,7 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
             every { getPersonalData.execute(queryParams) } returns flowOf(Response.Empty)
 
             // Call
-            val result = aggregatePersonalDataWithFilesUseCase.execute(queryParams).single()
+            val result = getPersonalDataWithFilesUseCase.execute(queryParams).single()
 
             // Assertions
             assertTrue(result is Response.Empty)
@@ -180,7 +180,7 @@ class AggregatePersonalDataWithFilesUseCaseImplTest : KoinTest {
             every { getFile.execute(any() as QueryParameters) } returns flowOf(Response.Empty)
 
             // Call
-            val result = aggregatePersonalDataWithFilesUseCase.execute(queryParams).single()
+            val result = getPersonalDataWithFilesUseCase.execute(queryParams).single()
 
             // Assertions
             assertTrue(result is Response.Success)

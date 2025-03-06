@@ -10,7 +10,7 @@ import com.example.truckercore.shared.enums.QueryType
 import com.example.truckercore.shared.modules.file.entity.File
 import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.AggregatePersonalDataWithFilesUseCase
+import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.parameters.QueryParameters
 import com.example.truckercore.shared.utils.parameters.QuerySettings
@@ -25,7 +25,7 @@ internal class GetPersonWithDetailsUseCaseImpl(
     private val getAdmin: GetAdminUseCase,
     private val getDriver: GetDriverUseCase,
     private val getFile: GetFileUseCase,
-    private val getPDataWF: AggregatePersonalDataWithFilesUseCase
+    private val getPDataWF: GetPersonalDataWithFilesUseCase
 ) : GetPersonWithDetailsUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -33,9 +33,13 @@ internal class GetPersonWithDetailsUseCaseImpl(
         val params = getQueryParamsForLoggedUser(user)
 
         return getPersonListFlow(user.personFLag, params).flatMapConcat { personResponse ->
-            val person = when (personResponse) {
-                is Response.Success -> personResponse.data.first()
-                else -> return@flatMapConcat flowOf(Response.Empty)
+            val person = when {
+                personResponse is Response.Success && personResponse.data.isNotEmpty() -> {
+                    personResponse.data.first()
+                }
+                else -> {
+                    return@flatMapConcat flowOf(Response.Empty)
+                }
             }
             combinePhotoAndPersonalDataWFFlow(user, person)
         }

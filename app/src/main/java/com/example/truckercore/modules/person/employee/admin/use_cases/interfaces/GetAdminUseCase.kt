@@ -27,6 +27,18 @@ interface GetAdminUseCase {
      */
     fun execute(documentParams: DocumentParameters): Flow<Response<Admin>>
 
+    /**
+     * Executes the use case to retrieve a list of [Admin] entities based on the provided query parameters.
+     *
+     * This method allows searching for multiple admins using [QueryParameters], which may include
+     * different filters and pagination options.
+     *
+     * @param queryParams The query parameters to filter and search for the admin records. This may
+     *                    include various filters such as name, role, status, etc.
+     * @return A [Flow] of:
+     * - [Response.Success] containing a list of [Admin] objects if admins were found.
+     * - [Response.Empty] if no admins match the given query criteria.
+     */
     fun execute(queryParams: QueryParameters): Flow<Response<List<Admin>>>
 
 }

@@ -1,7 +1,7 @@
 package com.example.truckercore.modules.person.employee.admin.service
 
-import com.example.truckercore.modules.person.employee.admin.aggregations.AdminWithDetails
 import com.example.truckercore.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -29,11 +29,11 @@ interface AdminService {
      * Fetches an admin record along with its associated details (like personal data, photo, etc.).
      *
      * @param documentParam The parameters used to filter the admin records and fetch related details.
-     * @return A [Flow] of [Response] containing the [AdminWithDetails] record.
+     * @return A [Flow] of [Response] containing the [PersonWithDetails] record.
      * - [Response.Success] if the admin and details are found and retrieved successfully.
      * - [Response.Empty] if no admin with the requested details is found.
      * - [Response.Error] if an error occurs during the process.
      */
-    fun fetchAdminWithDetails(documentParam: DocumentParameters): Flow<Response<AdminWithDetails>>
+    fun fetchAdminWithDetails(documentParam: DocumentParameters): Flow<Response<PersonWithDetails>>
 
 }

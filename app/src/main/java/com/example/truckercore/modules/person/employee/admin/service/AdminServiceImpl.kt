@@ -1,11 +1,12 @@
 package com.example.truckercore.modules.person.employee.admin.service
 
-import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.infrastructure.util.ExceptionHandler
-import com.example.truckercore.modules.person.employee.admin.aggregations.AdminWithDetails
 import com.example.truckercore.modules.person.employee.admin.entity.Admin
-import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.AggregateAdminWithDetails
 import com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.GetAdminUseCase
+import com.example.truckercore.modules.person.shared.person_details.GetPersonWithDetailsUseCase
+import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
+import com.example.truckercore.modules.user.enums.PersonCategory
+import com.example.truckercore.shared.abstractions.Service
 import com.example.truckercore.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -13,8 +14,8 @@ import kotlinx.coroutines.flow.Flow
 internal class AdminServiceImpl(
     override val exceptionHandler: ExceptionHandler,
     private val getAdmin: GetAdminUseCase,
-    private val getAdminWithDetails: AggregateAdminWithDetails
-): Service(exceptionHandler), AdminService {
+    private val getPersonWithDetails: GetPersonWithDetailsUseCase
+) : Service(exceptionHandler), AdminService {
 
     override fun fetchAdmin(
         documentParam: DocumentParameters
@@ -22,6 +23,8 @@ internal class AdminServiceImpl(
 
     override fun fetchAdminWithDetails(
         documentParam: DocumentParameters
-    ): Flow<Response<AdminWithDetails>> = runSafe { getAdminWithDetails.execute(documentParam) }
+    ): Flow<Response<PersonWithDetails>> = runSafe {
+        getPersonWithDetails.execute(documentParam, PersonCategory.ADMIN)
+    }
 
 }

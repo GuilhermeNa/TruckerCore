@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
  * @see File
  * @see Response
  */
-internal interface AggregatePersonalDataWithFilesUseCase {
+internal interface GetPersonalDataWithFilesUseCase {
 
     /**
      * Fetches a single personal data record along with its associated files based on the provided ID.

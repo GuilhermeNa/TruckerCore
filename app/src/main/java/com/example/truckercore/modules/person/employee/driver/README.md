@@ -26,13 +26,6 @@ funcionalidades para validar, atualizar e excluir registros de motoristas.
 - **DriverDto**: Um DTO (Data Transfer Object) utilizado para transferir dados entre a camada de
   persistência e a aplicação.
 
-### Exceções Personalizadas
-
-- **DriverMappingException**: Lançada quando ocorre uma falha ao mapear entre o objeto `Driver` e
-  `DriverDto`.
-- **DriverValidationException**: Lançada quando há falhas nas validações aplicadas aos dados do
-  `Driver`.
-
 ### Mapeadores
 
 O módulo utiliza um padrão de mapeamento para converter entre as representações de dados de **Driver

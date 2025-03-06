@@ -25,14 +25,7 @@ disso, oferece funcionalidades para validar, atualizar e excluir registros de ad
   dados pessoais, informações de acesso e status de funcionário.
 - **AdminDto**: Um DTO (Data Transfer Object) utilizado para transferir dados entre a camada de
   persistência e a aplicação.
-  
-### Exceções Personalizadas
-  
-- **AdminMappingException**: Lançada quando ocorre uma falha ao mapear entre o objeto `Admin` e
-  `AdminDto`.
-- **AdminValidationException**: Lançada quando há falhas nas validações aplicadas aos dados do
-  `Admin`.
-  
+
 ### Mapeadores
   
 O módulo utiliza um padrão de mapeamento para converter entre as representações de dados de **Admin

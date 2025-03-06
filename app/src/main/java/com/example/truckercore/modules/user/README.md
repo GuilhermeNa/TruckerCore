@@ -29,12 +29,6 @@ acesso de qualquer novo usuário.
 - **UserDto**: Um DTO (Data Transfer Object) utilizado para transferir dados entre a camada de
   persistência e a aplicação.
 
-### Exceções Personalizadas
-
-- **UserMappingException**: Lançada quando ocorre uma falha na conversão entre o objeto `User` e
-  `UserDto`.
-- **UserValidationException**: Lançada quando falham as validações aplicadas aos dados do `User`.
-
 ### Mapeadores
 
 O módulo utiliza um padrão de mapeamento para converter entre as representações de dados de usuários
@@ -104,7 +98,6 @@ modules/
     ├── enums/
     ├── mappers/
     ├── repository/
-    ├── service/
     ├── use_cases/
     ├── validator/
     └── README.md
