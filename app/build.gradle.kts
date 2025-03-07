@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.crashlytics)
+    `maven-publish`
 }
 
 android {
@@ -62,6 +63,19 @@ dependencies {
     implementation(libs.google.auth)
     implementation(libs.google.storage)
 
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/GuilhermeNa/TruckerCore")  // Substitua OWNER e REPOSITORY pelos valores reais
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+            }
+        }
+    }
 }
 
 tasks.withType<Test> {
