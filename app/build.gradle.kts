@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.crashlytics)
     `maven-publish`
-
 }
 
 android {

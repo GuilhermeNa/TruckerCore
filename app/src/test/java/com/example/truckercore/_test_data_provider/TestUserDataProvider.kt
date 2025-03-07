@@ -1,11 +1,11 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.user.dto.UserDto
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.user.enums.PersonCategory
+import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 

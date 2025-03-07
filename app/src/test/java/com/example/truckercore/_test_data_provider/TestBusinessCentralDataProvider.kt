@@ -1,8 +1,8 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 

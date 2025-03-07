@@ -1,10 +1,10 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
-import com.example.truckercore.modules.fleet.trailer.enums.TrailerCategory
-import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.model.modules.fleet.trailer.dto.TrailerDto
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.modules.fleet.trailer.enums.TrailerBrand
+import com.example.truckercore.model.modules.fleet.trailer.enums.TrailerCategory
+import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 

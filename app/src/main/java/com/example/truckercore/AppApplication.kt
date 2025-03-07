@@ -1,7 +1,7 @@
 package com.example.truckercore
 
 import android.app.Application
-import com.example.truckercore.configs.di.koinModules
+import com.example.truckercore.model.configs.di.koinModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
