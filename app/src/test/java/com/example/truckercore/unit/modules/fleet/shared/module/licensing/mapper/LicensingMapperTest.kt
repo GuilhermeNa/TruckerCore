@@ -112,8 +112,8 @@ internal class LicensingMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == LicensingDto::class)
-        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == LicensingDto::class.simpleName)
+        assertTrue(exception.received == UserDto::class.simpleName)
     }
 
     @Test
@@ -127,8 +127,8 @@ internal class LicensingMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == Licensing::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == Licensing::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
     }
 
     @ParameterizedTest

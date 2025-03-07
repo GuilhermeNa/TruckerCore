@@ -16,15 +16,15 @@ internal class LicensingMapper : Mapper {
     override fun toEntity(dto: Dto): Licensing =
         if (dto is LicensingDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected = LicensingDto::class,
-            received = dto::class
+            expected = LicensingDto::class.simpleName,
+            received = dto::class.simpleName
         )
 
     override fun toDto(entity: Entity): LicensingDto =
         if (entity is Licensing) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = Licensing::class,
-            received = entity::class
+            expected = Licensing::class.simpleName,
+            received = entity::class.simpleName
         )
 
     private fun convertToEntity(dto: LicensingDto) = try {

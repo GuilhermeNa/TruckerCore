@@ -18,15 +18,15 @@ internal class TrailerMapper : Mapper {
     override fun toEntity(dto: Dto): Trailer =
         if (dto is TrailerDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected = TrailerDto::class,
-            received = dto::class
+            expected = TrailerDto::class.simpleName,
+            received = dto::class.simpleName
         )
 
     override fun toDto(entity: Entity): TrailerDto =
         if (entity is Trailer) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = Trailer::class,
-            received = entity::class
+            expected = Trailer::class.simpleName,
+            received = entity::class.simpleName
         )
 
     private fun convertToEntity(dto: TrailerDto) = try {

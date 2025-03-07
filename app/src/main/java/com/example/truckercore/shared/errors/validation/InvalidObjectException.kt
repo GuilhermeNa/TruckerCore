@@ -41,22 +41,11 @@ class InvalidObjectException private constructor() : ValidationException() {
         invalidFields.addAll(fields)
     }
 
-    /**
-     * Returns a message describing the validation failure.
-     *
-     * The message will indicate which object (either entity or DTO) failed validation and which fields
-     * are invalid.
-     *
-     * @return A string message detailing the validation error.
-     */
-    fun message(): String {
-        val objectName =
-            if (dto != null) dto!!.javaClass.simpleName
-            else entity!!.javaClass.simpleName
+    private fun getObjectName() = dto?.javaClass?.simpleName ?: entity!!.javaClass.simpleName
 
-        return "Some error occurred while validating an object: " +
-                "[$objectName] -> invalid field $invalidFields."
-    }
+    override val message: String
+        get() = "Some error occurred while validating an object: " +
+                "[${getObjectName()}] -> invalid field $invalidFields."
 
 }
 

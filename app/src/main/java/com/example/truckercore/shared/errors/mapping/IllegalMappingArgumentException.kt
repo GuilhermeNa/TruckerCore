@@ -1,6 +1,6 @@
 package com.example.truckercore.shared.errors.mapping
 
-import kotlin.reflect.KClass
+import kotlin.reflect.KProperty0
 
 /**
  * Custom exception class used to handle errors related to invalid arguments passed during the mapping process.
@@ -11,17 +11,10 @@ import kotlin.reflect.KClass
  *
  */
 class IllegalMappingArgumentException(
-    val expected: KClass<*>,
-    val received: KClass<*>
+    val expected: String?,
+    val received: String?
 ) : MappingException() {
 
-    /**
-     * Generates an error message that describes the mismatch between the expected and received class types.
-     * This message helps in understanding the mapping issue, specifically which types were expected and received.
-     *
-     * @return A message describing the mismatch between the expected and received classes for mapping.
-     */
-    fun message(): String = "Expected a ${expected::class.simpleName} " +
-            "for mapping but received: ${received::class.simpleName}."
+    override val message = "Expected a $expected for mapping but received: $received."
 
 }

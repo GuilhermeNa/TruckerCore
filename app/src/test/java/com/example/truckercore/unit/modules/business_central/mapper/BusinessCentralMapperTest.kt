@@ -104,8 +104,8 @@ internal class BusinessCentralMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == BusinessCentralDto::class)
-        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == BusinessCentralDto::class.simpleName)
+        assertTrue(exception.received == UserDto::class.simpleName)
     }
 
     @Test
@@ -119,8 +119,8 @@ internal class BusinessCentralMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == BusinessCentral::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == BusinessCentral::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
 
     }
 

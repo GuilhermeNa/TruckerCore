@@ -34,14 +34,13 @@ internal abstract class Service(
      * @return A [Flow] that represents the result of the operation, potentially wrapped in
      *         a safe context with exception handling.
      */
-    fun <T> runSafe(block: () -> Flow<Response<T>>): Flow<Response<T>> =
-        try {
-            block()
-                .flowOn(Dispatchers.IO)
-                .catch { emit(exceptionHandler.run(it)) }
+    fun <T> runSafe(block: () -> Flow<Response<T>>): Flow<Response<T>> = try {
+        block()
+            .flowOn(Dispatchers.IO)
+            .catch { emit(exceptionHandler.run(it)) }
 
-        } catch (e: Exception) {
-            flow { emit(exceptionHandler.run(e)) }
-        }
+    } catch (e: Exception) {
+        flow { emit(exceptionHandler.run(e)) }
+    }
 
 }

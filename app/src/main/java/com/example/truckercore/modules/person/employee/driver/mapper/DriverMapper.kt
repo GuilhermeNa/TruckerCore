@@ -17,15 +17,15 @@ internal class DriverMapper : Mapper {
     override fun toEntity(dto: Dto): Driver =
         if (dto is DriverDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected = DriverDto::class,
-            received = dto::class
+            expected = DriverDto::class.simpleName,
+            received = dto::class.simpleName
         )
 
     override fun toDto(entity: Entity): DriverDto =
         if (entity is Driver) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = Driver::class,
-            received = entity::class
+            expected = Driver::class.simpleName,
+            received = entity::class.simpleName
         )
 
     private fun convertToEntity(dto: DriverDto) = try {

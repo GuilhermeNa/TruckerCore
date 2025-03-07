@@ -16,15 +16,15 @@ internal class FileMapper : Mapper {
     override fun toEntity(dto: Dto): File =
         if (dto is FileDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected = FileDto::class,
-            received = dto::class
+            expected = FileDto::class.simpleName,
+            received = dto::class.simpleName
         )
 
     override fun toDto(entity: Entity): FileDto =
         if (entity is File) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = File::class,
-            received = entity::class
+            expected = File::class.simpleName,
+            received = entity::class.simpleName
         )
 
     private fun convertToEntity(dto: FileDto) = try {

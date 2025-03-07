@@ -7,4 +7,4 @@ package com.example.truckercore.shared.errors
  *
  * @param message An optional message that describes the cause of the exception.
  */
-class InvalidEnumParameterException(message: String? = null) : Exception(message)
+class InvalidEnumParameterException(message: String) : Exception(message)

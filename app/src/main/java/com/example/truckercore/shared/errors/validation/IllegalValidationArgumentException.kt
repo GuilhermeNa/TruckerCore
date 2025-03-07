@@ -9,12 +9,11 @@ import kotlin.reflect.KClass
  * @param expected The expected class type for validation.
  * @param received The class type that was actually received.
  */
-class IllegalValidationArgumentException(
-    val expected: KClass<*>,
-    val received: KClass<*>
-) : ValidationException() {
+class IllegalValidationArgumentException(val expected: KClass<*>, val received: KClass<*>) :
+    ValidationException() {
 
-    fun message(): String = "Expected a ${expected.simpleName} " +
-            "for validation but received: ${received.simpleName}."
+    override val message: String
+        get() = "Expected a ${expected.simpleName} " +
+                "for validation but received: ${received.simpleName}."
 
 }

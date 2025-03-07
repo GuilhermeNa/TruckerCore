@@ -117,8 +117,8 @@ internal class UserMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == UserDto::class)
-        assertTrue(exception.received == TruckDto::class)
+        assertTrue(exception.expected == UserDto::class.simpleName)
+        assertTrue(exception.received == TruckDto::class.simpleName)
     }
 
     @Test
@@ -132,8 +132,8 @@ internal class UserMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == User::class)
-        assertTrue(exception.received == Truck::class)
+        assertTrue(exception.expected == User::class.simpleName)
+        assertTrue(exception.received == Truck::class.simpleName)
     }
 
     @ParameterizedTest

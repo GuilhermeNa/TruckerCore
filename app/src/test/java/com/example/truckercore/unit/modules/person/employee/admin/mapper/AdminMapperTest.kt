@@ -114,8 +114,8 @@ internal class AdminMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == Admin::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == Admin::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
 
     }
 

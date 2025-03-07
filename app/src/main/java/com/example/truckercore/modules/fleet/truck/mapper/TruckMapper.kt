@@ -16,11 +16,17 @@ internal class TruckMapper : Mapper {
 
     override fun toEntity(dto: Dto): Truck =
         if (dto is TruckDto) convertToEntity(dto)
-        else throw IllegalMappingArgumentException(expected = TruckDto::class, received = dto::class)
+        else throw IllegalMappingArgumentException(
+            expected = TruckDto::class.simpleName,
+            received = dto::class.simpleName
+        )
 
     override fun toDto(entity: Entity): TruckDto =
         if (entity is Truck) convertToDto(entity)
-        else throw IllegalMappingArgumentException(expected = Truck::class, received = entity::class)
+        else throw IllegalMappingArgumentException(
+            expected = Truck::class.simpleName,
+            received = entity::class.simpleName
+        )
 
     private fun convertToEntity(dto: TruckDto) = try {
         Truck(

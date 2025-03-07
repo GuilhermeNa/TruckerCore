@@ -8,4 +8,4 @@ package com.example.truckercore.shared.errors
  *
  * @param message An optional error message providing details about the specific issue. Defaults to null.
  */
-class InvalidStateException(message: String? = null) : Exception(message)
+class InvalidStateException(message: String) : Exception(message)

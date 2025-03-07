@@ -16,15 +16,15 @@ internal class PersonalDataMapper : Mapper {
     override fun toEntity(dto: Dto): PersonalData =
         if (dto is PersonalDataDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected = PersonalDataDto::class,
-            received = dto::class
+            expected = PersonalDataDto::class.simpleName,
+            received = dto::class.simpleName
         )
 
     override fun toDto(entity: Entity): PersonalDataDto =
         if (entity is PersonalData) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = PersonalData::class,
-            received = entity::class
+            expected = PersonalData::class.simpleName,
+            received = entity::class.simpleName
         )
 
     private fun convertToEntity(dto: PersonalDataDto) = try {

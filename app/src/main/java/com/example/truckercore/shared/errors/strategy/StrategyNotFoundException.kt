@@ -10,4 +10,4 @@ import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
  *
  * @param message The message describing the error.
  */
-class StrategyNotFoundException(message: String? = null) : Exception(message)
+class StrategyNotFoundException(message: String) : Exception(message)

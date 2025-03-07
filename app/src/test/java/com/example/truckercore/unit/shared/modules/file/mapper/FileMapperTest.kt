@@ -108,8 +108,8 @@ internal class FileMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == FileDto::class)
-        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == FileDto::class.simpleName)
+        assertTrue(exception.received == UserDto::class.simpleName)
     }
 
     @Test
@@ -123,8 +123,8 @@ internal class FileMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == File::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == File::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
     }
 
     @ParameterizedTest

@@ -112,8 +112,8 @@ internal class PersonalDataMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == PersonalDataDto::class)
-        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == PersonalDataDto::class.simpleName)
+        assertTrue(exception.received == UserDto::class.simpleName)
     }
 
     @Test
@@ -127,8 +127,8 @@ internal class PersonalDataMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == PersonalData::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == PersonalData::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
     }
 
     @ParameterizedTest

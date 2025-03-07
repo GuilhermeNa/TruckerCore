@@ -118,8 +118,8 @@ class TrailerMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == TrailerDto::class)
-        assertTrue(exception.received == UserDto::class)
+        assertTrue(exception.expected == TrailerDto::class.simpleName)
+        assertTrue(exception.received == UserDto::class.simpleName)
     }
 
     @Test
@@ -133,8 +133,8 @@ class TrailerMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == Trailer::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == Trailer::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
     }
 
     @ParameterizedTest

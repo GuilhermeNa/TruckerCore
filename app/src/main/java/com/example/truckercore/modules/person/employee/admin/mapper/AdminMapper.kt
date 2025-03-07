@@ -17,15 +17,15 @@ internal class AdminMapper : Mapper {
     override fun toEntity(dto: Dto): Admin =
         if (dto is AdminDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected = AdminDto::class,
-            received = dto::class
+            expected = AdminDto::class.simpleName,
+            received = dto::class.simpleName
         )
 
     override fun toDto(entity: Entity): AdminDto =
         if (entity is Admin) convertToDto(entity)
         else throw IllegalMappingArgumentException(
-            expected = Admin::class,
-            received = entity::class
+            expected = Admin::class.simpleName,
+            received = entity::class.simpleName
         )
 
     private fun convertToEntity(dto: AdminDto) = try {

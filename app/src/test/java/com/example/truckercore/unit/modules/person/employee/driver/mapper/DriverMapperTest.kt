@@ -113,8 +113,8 @@ internal class DriverMapperTest : KoinTest {
         }
 
         // Assertions
-        assertTrue(exception.expected == Driver::class)
-        assertTrue(exception.received == User::class)
+        assertTrue(exception.expected == Driver::class.simpleName)
+        assertTrue(exception.received == User::class.simpleName)
 
     }
 

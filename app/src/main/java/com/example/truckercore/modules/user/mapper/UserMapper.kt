@@ -18,11 +18,17 @@ internal class UserMapper : Mapper {
 
     override fun toEntity(dto: Dto): User =
         if (dto is UserDto) convertToEntity(dto)
-        else throw IllegalMappingArgumentException(expected = UserDto::class, received = dto::class)
+        else throw IllegalMappingArgumentException(
+            expected = UserDto::class.simpleName,
+            received = dto::class.simpleName
+        )
 
     override fun toDto(entity: Entity): UserDto =
         if (entity is User) convertToDto(entity)
-        else throw IllegalMappingArgumentException(expected = User::class, received = entity::class)
+        else throw IllegalMappingArgumentException(
+            expected = User::class.simpleName,
+            received = entity::class.simpleName
+        )
 
     private fun convertToEntity(dto: UserDto) = try {
         User(

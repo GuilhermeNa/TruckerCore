@@ -1,5 +1,7 @@
 package com.example.truckercore.infrastructure.security.authentication.entity
 
+import com.example.truckercore.infrastructure.security.authentication.errors.InvalidEmailException
+import com.example.truckercore.infrastructure.security.authentication.errors.InvalidPasswordException
 import com.example.truckercore.shared.errors.InvalidStateException
 import com.example.truckercore.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.shared.utils.expressions.removeBlank
@@ -36,12 +38,12 @@ class Credentials private constructor() {
      * - Ensures the email is in a valid format (sample@mail.com).
      * @param email The email address to validate.
      * @return The validated email.
-     * @throws InvalidStateException if the email format is invalid.
+     * @throws InvalidEmailException if the email format is invalid.
      */
     private fun validateEmail(email: String): String {
         val trimmedEmail = email.removeBlank().lowercase(Locale.ROOT)
 
-        if (!trimmedEmail.isEmailFormat()) throw InvalidStateException(
+        if (!trimmedEmail.isEmailFormat()) throw InvalidEmailException(
             "Invalid email. The email must be in sample@mail.com."
         )
 
@@ -59,7 +61,7 @@ class Credentials private constructor() {
     private fun validatePassword(password: String): String {
         val trimmedPass = password.removeBlank()
 
-        if (trimmedPass.length < 6) throw InvalidStateException(
+        if (trimmedPass.length < 6) throw InvalidPasswordException(
             "Password must have at least 6 characters."
         )
 
