@@ -1,19 +1,19 @@
 package com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.fleet.shared.module.licensing.dto.LicensingDto
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.mapper.LicensingMapper
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.dto.LicensingDto
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.mapper.LicensingMapper
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepository
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.UpdateLicensingUseCaseImpl
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.UpdateLicensingUseCase
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.implementations.UpdateLicensingUseCaseImpl
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.CheckLicensingExistenceUseCase
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.UpdateLicensingUseCase
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -35,7 +35,7 @@ import org.koin.test.inject
 class UpdateLicensingUseCaseImplTest : KoinTest {
 
     private val permissionService: PermissionService by inject()
-    private val repository: com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepository by inject()
+    private val repository: LicensingRepository by inject()
     private val checkExistence: CheckLicensingExistenceUseCase by inject()
     private val validatorService: ValidatorService by inject()
     private val mapper: LicensingMapper by inject()
@@ -56,7 +56,7 @@ class UpdateLicensingUseCaseImplTest : KoinTest {
                 modules(
                     module {
                         single<PermissionService> { mockk() }
-                        single<com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepository> { mockk() }
+                        single<LicensingRepository> { mockk() }
                         single<CheckLicensingExistenceUseCase> { mockk() }
                         single<ValidatorService> { mockk() }
                         single<LicensingMapper> { mockk() }

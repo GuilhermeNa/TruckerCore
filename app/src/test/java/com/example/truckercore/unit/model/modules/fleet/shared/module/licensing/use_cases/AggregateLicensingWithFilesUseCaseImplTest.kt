@@ -1,16 +1,16 @@
 package com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.configs.di.travelModule
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.implementations.AggregateLicensingWithFilesUseCaseImpl
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
-import com.example.truckercore.shared.modules.file.entity.File
-import com.example.truckercore.shared.modules.file.use_cases.interfaces.GetFileUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.configs.di.travelModule
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.implementations.AggregateLicensingWithFilesUseCaseImpl
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
+import com.example.truckercore.model.shared.modules.file.entity.File
+import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.GetFileUseCase
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

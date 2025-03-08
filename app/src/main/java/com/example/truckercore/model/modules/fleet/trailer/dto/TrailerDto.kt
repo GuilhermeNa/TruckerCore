@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.fleet.trailer.dto
 
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.interfaces.Dto
 import java.util.Date
 
 data class TrailerDto(

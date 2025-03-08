@@ -1,14 +1,14 @@
 package com.example.truckercore.model.modules.fleet.truck.use_cases.implementations
 
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.fleet.truck.repository.TruckRepository
-import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.CheckTruckExistenceUseCase
-import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.DeleteTruckUseCase
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.fleet.truck.repository.TruckRepository
+import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.CheckTruckExistenceUseCase
+import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.DeleteTruckUseCase
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.abstractions.UseCase
+import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

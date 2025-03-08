@@ -1,8 +1,7 @@
 package com.example.truckercore.unit.model.shared.enums
 
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.errors.InvalidEnumParameterException
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

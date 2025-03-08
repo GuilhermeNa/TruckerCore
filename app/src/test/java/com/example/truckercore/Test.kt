@@ -1,7 +1,7 @@
 package com.example.truckercore
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 

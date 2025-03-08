@@ -1,15 +1,15 @@
 package com.example.truckercore.model.shared.modules.file.validator
 
-import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.shared.abstractions.ValidatorStrategy
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
-import com.example.truckercore.shared.errors.validation.InvalidObjectException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.modules.file.dto.FileDto
-import com.example.truckercore.shared.modules.file.entity.File
-import com.example.truckercore.shared.utils.sealeds.ValidatorInput
+import com.example.truckercore.model.configs.app_constants.Field
+import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.model.shared.errors.validation.InvalidObjectException
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.interfaces.Entity
+import com.example.truckercore.model.shared.modules.file.dto.FileDto
+import com.example.truckercore.model.shared.modules.file.entity.File
+import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 
 internal class StorageFileValidationStrategy : ValidatorStrategy() {
 

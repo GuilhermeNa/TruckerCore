@@ -2,12 +2,12 @@ package com.example.truckercore.unit.model.shared.utils.parameters
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.shared.enums.QueryType
-import com.example.truckercore.shared.errors.search_params.IllegalQueryParametersException
-import com.example.truckercore.shared.errors.search_params.InvalidQuerySettingsException
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.parameters.QuerySettings
+import com.example.truckercore.model.configs.app_constants.Field
+import com.example.truckercore.model.shared.enums.QueryType
+import com.example.truckercore.model.shared.errors.search_params.IllegalQueryParametersException
+import com.example.truckercore.model.shared.errors.search_params.InvalidQuerySettingsException
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.parameters.QuerySettings
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

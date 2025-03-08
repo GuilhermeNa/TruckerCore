@@ -1,11 +1,11 @@
 package com.example.truckercore.model.shared.modules.file.repository
 
-import com.example.truckercore.shared.interfaces.Repository
-import com.example.truckercore.shared.modules.file.dto.FileDto
-import com.example.truckercore.shared.modules.file.entity.File
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.interfaces.Repository
+import com.example.truckercore.model.shared.modules.file.dto.FileDto
+import com.example.truckercore.model.shared.modules.file.entity.File
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**

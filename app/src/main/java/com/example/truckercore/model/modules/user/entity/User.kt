@@ -1,11 +1,12 @@
 package com.example.truckercore.model.modules.user.entity
 
-import com.example.truckercore.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.user.enums.PersonCategory
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.interfaces.Entity
 import java.time.LocalDateTime
+
 /**
  * Represents a user in the system. This entity contains information about the user's
  * membership status (VIP), their access permissions, level, and personal category.

@@ -1,15 +1,15 @@
 package com.example.truckercore.unit.model.modules.fleet.truck.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.fleet.truck.aggregation.TruckWithDetails
-import com.example.truckercore.modules.fleet.truck.entity.Truck
-import com.example.truckercore.modules.fleet.truck.service.TruckService
-import com.example.truckercore.modules.fleet.truck.service.TruckServiceImpl
-import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.AggregateTruckWithDetailsUseCase
-import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.fleet.truck.aggregation.TruckWithDetails
+import com.example.truckercore.model.modules.fleet.truck.entity.Truck
+import com.example.truckercore.model.modules.fleet.truck.service.TruckService
+import com.example.truckercore.model.modules.fleet.truck.service.TruckServiceImpl
+import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.AggregateTruckWithDetailsUseCase
+import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

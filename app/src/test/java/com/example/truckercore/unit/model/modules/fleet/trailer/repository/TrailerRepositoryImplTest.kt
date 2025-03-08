@@ -1,14 +1,14 @@
 package com.example.truckercore.unit.model.modules.fleet.trailer.repository
 
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
-import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
-import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
-import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepositoryImpl
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.modules.fleet.trailer.dto.TrailerDto
+import com.example.truckercore.model.modules.fleet.trailer.repository.TrailerRepository
+import com.example.truckercore.model.modules.fleet.trailer.repository.TrailerRepositoryImpl
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk

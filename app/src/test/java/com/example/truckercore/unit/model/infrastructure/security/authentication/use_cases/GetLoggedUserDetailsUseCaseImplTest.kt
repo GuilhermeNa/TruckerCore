@@ -1,14 +1,14 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.use_cases
 
-import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
-import com.example.truckercore.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
-import com.example.truckercore.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCaseImpl
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.use_cases.interfaces.GetUserUseCase
-import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.modules.person.shared.person_details.GetPersonWithDetailsUseCase
-import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUserDetails
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCaseImpl
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.user.use_cases.interfaces.GetUserUseCase
+import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.modules.person.shared.person_details.GetPersonWithDetailsUseCase
+import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

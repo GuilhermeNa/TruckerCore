@@ -1,16 +1,16 @@
 package com.example.truckercore.model.modules.person.employee.driver.validator
 
-import com.example.truckercore.configs.app_constants.Field
-import com.example.truckercore.modules.person.employee.driver.dto.DriverDto
-import com.example.truckercore.modules.person.employee.driver.entity.Driver
-import com.example.truckercore.modules.person.employee.shared.enums.EmployeeStatus
-import com.example.truckercore.shared.abstractions.ValidatorStrategy
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
-import com.example.truckercore.shared.errors.validation.InvalidObjectException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.utils.sealeds.ValidatorInput
+import com.example.truckercore.model.configs.app_constants.Field
+import com.example.truckercore.model.modules.person.employee.driver.dto.DriverDto
+import com.example.truckercore.model.modules.person.employee.driver.entity.Driver
+import com.example.truckercore.model.modules.person.employee.shared.enums.EmployeeStatus
+import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.model.shared.errors.validation.InvalidObjectException
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.interfaces.Entity
+import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 
 internal class DriverValidationStrategy : ValidatorStrategy() {
 

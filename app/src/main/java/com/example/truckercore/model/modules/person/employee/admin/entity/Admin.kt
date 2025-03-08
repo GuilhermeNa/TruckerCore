@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.person.employee.admin.entity
 
-import com.example.truckercore.modules.person.employee.shared.abstractions.Employee
-import com.example.truckercore.modules.person.employee.shared.enums.EmployeeStatus
-import com.example.truckercore.shared.enums.PersistenceStatus
+import com.example.truckercore.model.modules.person.employee.shared.abstractions.Employee
+import com.example.truckercore.model.modules.person.employee.shared.enums.EmployeeStatus
+import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 
 /**

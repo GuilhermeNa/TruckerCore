@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.shared.utils.expressions
 
 import android.util.Log
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.configs.app_constants.Tag
-import com.example.truckercore.shared.utils.expressions.logError
+import com.example.truckercore.model.configs.app_constants.Tag
+import com.example.truckercore.model.shared.utils.expressions.logError
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

@@ -1,15 +1,15 @@
 package com.example.truckercore.model.modules.person.employee.admin.repository
 
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
-import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
-import com.example.truckercore.shared.abstractions.Repository
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.parameters.SearchParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.model.shared.abstractions.Repository
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.parameters.SearchParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class AdminRepositoryImpl(

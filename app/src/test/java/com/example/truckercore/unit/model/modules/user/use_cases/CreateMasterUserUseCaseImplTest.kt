@@ -1,18 +1,17 @@
 package com.example.truckercore.unit.model.modules.user.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.mapper.UserMapper
-import com.example.truckercore.modules.user.repository.UserRepository
-import com.example.truckercore.modules.user.use_cases.implementations.CreateMasterUserUseCaseImpl
-import com.example.truckercore.modules.user.use_cases.interfaces.CreateMasterUserUseCase
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.sealeds.Response
-import com.google.common.base.Verify.verify
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.user.dto.UserDto
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.user.mapper.UserMapper
+import com.example.truckercore.model.modules.user.repository.UserRepository
+import com.example.truckercore.model.modules.user.use_cases.implementations.CreateMasterUserUseCaseImpl
+import com.example.truckercore.model.modules.user.use_cases.interfaces.CreateMasterUserUseCase
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -92,18 +91,19 @@ class CreateMasterUserUseCaseImplTest : KoinTest {
     }
 
     @Test
-    fun `execute() should throw InvalidStateException when master user level is MASTER`() = runTest {
-        // Arrange
-        every { masterUser.level } returns Level.MODERATOR
+    fun `execute() should throw InvalidStateException when master user level is MASTER`() =
+        runTest {
+            // Arrange
+            every { masterUser.level } returns Level.MODERATOR
 
-        // Call
-        assertThrows<InvalidStateException> {
-            useCase.execute(masterUser).single()
+            // Call
+            assertThrows<InvalidStateException> {
+                useCase.execute(masterUser).single()
+            }
+
+            // Assertions
+            verify { masterUser.level }
         }
-
-        // Assertions
-        verify { masterUser.level }
-    }
 
 
 }

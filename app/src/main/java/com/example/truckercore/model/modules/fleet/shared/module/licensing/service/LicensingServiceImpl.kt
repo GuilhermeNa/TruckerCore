@@ -1,14 +1,14 @@
 package com.example.truckercore.model.modules.fleet.shared.module.licensing.service
 
-import com.example.truckercore.shared.abstractions.Service
-import com.example.truckercore.infrastructure.util.ExceptionHandler
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.abstractions.Service
+import com.example.truckercore.model.infrastructure.util.ExceptionHandler
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class LicensingServiceImpl(

@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.user.enums
 
-import com.example.truckercore.shared.errors.InvalidEnumParameterException
+import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
 
 /**
  * Enum class representing different categories of persons in the system.

@@ -1,14 +1,14 @@
 package com.example.truckercore.unit.model.modules.user.repository
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.repository.UserRepository
-import com.example.truckercore.modules.user.repository.UserRepositoryImpl
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.modules.user.dto.UserDto
+import com.example.truckercore.model.modules.user.repository.UserRepository
+import com.example.truckercore.model.modules.user.repository.UserRepositoryImpl
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk

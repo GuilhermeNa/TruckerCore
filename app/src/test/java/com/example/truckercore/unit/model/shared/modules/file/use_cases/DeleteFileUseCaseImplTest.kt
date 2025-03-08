@@ -1,16 +1,16 @@
 package com.example.truckercore.unit.model.shared.modules.file.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.modules.file.repository.FileRepository
-import com.example.truckercore.shared.modules.file.use_cases.implementations.DeleteStorageFileUseCaseImpl
-import com.example.truckercore.shared.modules.file.use_cases.interfaces.CheckFileExistenceUseCase
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.errors.UnauthorizedAccessException
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.shared.modules.file.repository.FileRepository
+import com.example.truckercore.model.shared.modules.file.use_cases.implementations.DeleteStorageFileUseCaseImpl
+import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.CheckFileExistenceUseCase
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.DeleteStorageFileUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -35,7 +35,7 @@ class DeleteFileUseCaseImplTest : KoinTest {
     private val permissionService: PermissionService by inject()
     private val repository: FileRepository by inject()
     private val checkExistence: CheckFileExistenceUseCase by inject()
-    private val useCase: com.example.truckercore.model.shared.modules.file.use_cases.interfaces.DeleteStorageFileUseCase by inject()
+    private val useCase: DeleteStorageFileUseCase by inject()
 
     val user: User = mockk(relaxed = true)
     val id = "idToDelete"
@@ -52,7 +52,7 @@ class DeleteFileUseCaseImplTest : KoinTest {
                         single<PermissionService> { mockk() }
                         single<FileRepository> { mockk() }
                         single<CheckFileExistenceUseCase> { mockk() }
-                        single<com.example.truckercore.model.shared.modules.file.use_cases.interfaces.DeleteStorageFileUseCase> {
+                        single<DeleteStorageFileUseCase> {
                             DeleteStorageFileUseCaseImpl(
                                 Permission.DELETE_FILE,
                                 get(), get(), get()

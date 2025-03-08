@@ -1,13 +1,13 @@
 package com.example.truckercore.unit.model.shared.modules.personal_data.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.util.ExceptionHandler
-import com.example.truckercore.shared.modules.personal_data.service.PersonalDataService
-import com.example.truckercore.shared.modules.personal_data.service.PersonalDataServiceImpl
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
-import com.example.truckercore.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.infrastructure.util.ExceptionHandler
+import com.example.truckercore.model.shared.modules.personal_data.service.PersonalDataService
+import com.example.truckercore.model.shared.modules.personal_data.service.PersonalDataServiceImpl
+import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataUseCase
+import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

@@ -1,22 +1,22 @@
 package com.example.truckercore.model.modules.business_central.mapper
 
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
-import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.Mapper
-import com.example.truckercore.shared.utils.expressions.toDate
-import com.example.truckercore.shared.utils.expressions.toLocalDateTime
+import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.model.shared.errors.mapping.InvalidForMappingException
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.interfaces.Entity
+import com.example.truckercore.model.shared.interfaces.Mapper
+import com.example.truckercore.model.shared.utils.expressions.toDate
+import com.example.truckercore.model.shared.utils.expressions.toLocalDateTime
 
 internal class BusinessCentralMapper : Mapper {
 
     override fun toEntity(dto: Dto): BusinessCentral =
         if (dto is BusinessCentralDto) convertToEntity(dto)
         else throw IllegalMappingArgumentException(
-            expected =  BusinessCentralDto::class.simpleName,
+            expected = BusinessCentralDto::class.simpleName,
             received = dto::class.simpleName
         )
 

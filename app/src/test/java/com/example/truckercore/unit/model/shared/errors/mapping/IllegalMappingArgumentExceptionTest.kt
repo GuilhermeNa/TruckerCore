@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.shared.errors.mapping
 
-import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
-import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
-import com.example.truckercore.shared.modules.file.dto.FileDto
+import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.model.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.model.shared.modules.file.dto.FileDto
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

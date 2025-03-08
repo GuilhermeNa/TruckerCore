@@ -1,10 +1,10 @@
 package com.example.truckercore.model.infrastructure.security.authentication.entity
 
-import com.example.truckercore.infrastructure.security.authentication.errors.InvalidEmailException
-import com.example.truckercore.infrastructure.security.authentication.errors.InvalidPasswordException
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.utils.expressions.isEmailFormat
-import com.example.truckercore.shared.utils.expressions.removeBlank
+import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidEmailException
+import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidPasswordException
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
+import com.example.truckercore.model.shared.utils.expressions.removeBlank
 import java.util.Locale
 
 /**

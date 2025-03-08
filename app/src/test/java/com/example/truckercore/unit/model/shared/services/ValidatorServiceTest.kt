@@ -1,17 +1,15 @@
 package com.example.truckercore.unit.model.shared.services
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
-import com.example.truckercore.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.shared.abstractions.ValidatorStrategy
-import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
-import com.example.truckercore.shared.utils.sealeds.ValidatorInput
-import com.example.truckercore.shared.services.ValidatorService
+import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
+import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
+import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

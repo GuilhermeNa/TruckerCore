@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.shared.enums
 
-import com.example.truckercore.shared.enums.QueryType
+import com.example.truckercore.model.shared.enums.QueryType
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

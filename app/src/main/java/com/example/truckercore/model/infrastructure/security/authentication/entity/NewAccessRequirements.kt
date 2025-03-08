@@ -1,11 +1,11 @@
 package com.example.truckercore.model.infrastructure.security.authentication.entity
 
-import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.utils.expressions.capitalizeFirstChar
-import com.example.truckercore.shared.utils.expressions.isEmailFormat
-import com.example.truckercore.shared.utils.expressions.isNameFormat
-import com.example.truckercore.shared.utils.expressions.removeBlank
+import com.example.truckercore.model.modules.user.enums.PersonCategory
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.utils.expressions.capitalizeFirstChar
+import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
+import com.example.truckercore.model.shared.utils.expressions.isNameFormat
+import com.example.truckercore.model.shared.utils.expressions.removeBlank
 import java.util.Locale
 
 // Data class for storing user access requirements
@@ -37,6 +37,7 @@ class NewAccessRequirements private constructor() {
         _email = validateEmail(email)
         _personFlag = personFlag
     }
+
     /**
      * Validates the user's email.
      * - Strips leading and trailing spaces.

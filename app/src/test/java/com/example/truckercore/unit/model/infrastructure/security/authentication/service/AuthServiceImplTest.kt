@@ -1,16 +1,16 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseAuthRepository
-import com.example.truckercore.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
-import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.infrastructure.security.authentication.errors.NullFirebaseUserException
-import com.example.truckercore.infrastructure.security.authentication.service.AuthService
-import com.example.truckercore.infrastructure.security.authentication.service.AuthServiceImpl
-import com.example.truckercore.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
-import com.example.truckercore.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
+import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
+import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUserDetails
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
+import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.every
 import io.mockk.mockk

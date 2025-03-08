@@ -1,9 +1,8 @@
 package com.example.truckercore.model.modules.fleet.trailer.aggregations
 
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.shared.errors.InvalidStateException
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.shared.errors.InvalidStateException
 
 /**
  * Represents a trailer along with its associated licensing records and files.

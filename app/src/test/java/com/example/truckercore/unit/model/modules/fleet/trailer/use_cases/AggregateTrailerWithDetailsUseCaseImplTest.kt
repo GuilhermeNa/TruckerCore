@@ -1,15 +1,15 @@
 package com.example.truckercore.unit.model.modules.fleet.trailer.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.modules.fleet.trailer.use_cases.implementations.AggregateTrailerWithDetailsUseCaseImpl
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.AggregateLicensingWithFilesUseCase
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.implementations.AggregateTrailerWithDetailsUseCaseImpl
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.modules.user.enums
 
-import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.shared.errors.InvalidEnumParameterException
+import com.example.truckercore.model.modules.user.enums.PersonCategory
+import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

@@ -1,20 +1,20 @@
 package com.example.truckercore.unit.model.modules.fleet.trailer.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.fleet.trailer.dto.TrailerDto
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.modules.fleet.trailer.mapper.TrailerMapper
-import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.errors.UnauthorizedAccessException
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.fleet.trailer.dto.TrailerDto
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.modules.fleet.trailer.mapper.TrailerMapper
+import com.example.truckercore.model.modules.fleet.trailer.repository.TrailerRepository
 import com.example.truckercore.model.modules.fleet.trailer.use_cases.implementations.GetTrailerUseCaseImpl
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -65,7 +65,7 @@ class GetTrailerUseCaseImplTest : KoinTest {
                         single<ValidatorService> { mockk() }
                         single<TrailerMapper> { mockk() }
                         single<GetTrailerUseCase> {
-                            com.example.truckercore.model.modules.fleet.trailer.use_cases.implementations.GetTrailerUseCaseImpl(
+                            GetTrailerUseCaseImpl(
                                 Permission.VIEW_TRAILER,
                                 get(), get(), get(), get()
                             )

@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations
 
-import com.example.truckercore.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.modules.file.entity.File
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.modules.file.entity.File
 
 /**
  * Represents a licensing record along with associated files.

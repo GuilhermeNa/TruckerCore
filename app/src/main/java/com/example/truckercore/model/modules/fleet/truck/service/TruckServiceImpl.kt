@@ -1,14 +1,14 @@
 package com.example.truckercore.model.modules.fleet.truck.service
 
-import com.example.truckercore.shared.abstractions.Service
-import com.example.truckercore.infrastructure.util.ExceptionHandler
-import com.example.truckercore.modules.fleet.truck.aggregation.TruckWithDetails
-import com.example.truckercore.modules.fleet.truck.entity.Truck
-import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.AggregateTruckWithDetailsUseCase
-import com.example.truckercore.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.util.ExceptionHandler
+import com.example.truckercore.model.modules.fleet.truck.aggregation.TruckWithDetails
+import com.example.truckercore.model.modules.fleet.truck.entity.Truck
+import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.AggregateTruckWithDetailsUseCase
+import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
+import com.example.truckercore.model.shared.abstractions.Service
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class TruckServiceImpl(

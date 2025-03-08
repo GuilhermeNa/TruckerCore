@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.shared.modules.personal_data.aggregat
 
 import com.example.truckercore._test_data_provider.TestFileDataProvider
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals

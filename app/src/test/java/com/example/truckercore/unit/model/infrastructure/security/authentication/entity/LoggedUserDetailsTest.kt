@@ -1,9 +1,9 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.entity
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore.infrastructure.security.authentication.entity.LoggedUserDetails
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
+import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUserDetails
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test

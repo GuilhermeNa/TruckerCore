@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.modules.user.entity
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import kotlin.test.assertFalse

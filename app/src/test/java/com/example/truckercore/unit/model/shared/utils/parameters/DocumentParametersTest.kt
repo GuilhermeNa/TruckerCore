@@ -1,9 +1,9 @@
 package com.example.truckercore.unit.model.shared.utils.parameters
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.search_params.IllegalDocumentParametersException
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.errors.search_params.IllegalDocumentParametersException
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

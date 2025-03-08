@@ -3,11 +3,11 @@ package com.example.truckercore.unit.model.modules.person.person_details
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
 import com.example.truckercore._test_data_provider.TestDriverDataProvider
 import com.example.truckercore._test_data_provider.TestFileDataProvider
-import com.example.truckercore.modules.person.employee.admin.entity.Admin
-import com.example.truckercore.modules.person.employee.driver.entity.Driver
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.modules.personal_data.aggregations.PersonalDataWithFile
-import com.example.truckercore.modules.person.shared.person_details.PersonWithDetails
+import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.model.modules.person.employee.driver.entity.Driver
+import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.modules.personal_data.aggregations.PersonalDataWithFile
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
@@ -25,9 +25,11 @@ class PersonWithDetailsTest {
     @Test
     fun `should create when the person is Admin and all data is provided`() {
         // Arrange
-        val admin = adminProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
-        val file = fileProvider.getBaseEntity().copy(parentId = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
-        every { pDataWF.parentId } returns com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID
+        val admin = adminProvider.getBaseEntity()
+            .copy(id = PERSON_ID)
+        val file = fileProvider.getBaseEntity()
+            .copy(parentId = PERSON_ID)
+        every { pDataWF.parentId } returns PERSON_ID
 
         // Act
         val result = PersonWithDetails(
@@ -45,9 +47,11 @@ class PersonWithDetailsTest {
     @Test
     fun `should create when the person is Driver and all data is provided`() {
         // Arrange
-        val driver = driverProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
-        val file = fileProvider.getBaseEntity().copy(parentId = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
-        every { pDataWF.parentId } returns com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID
+        val driver = driverProvider.getBaseEntity()
+            .copy(id = PERSON_ID)
+        val file = fileProvider.getBaseEntity()
+            .copy(parentId = PERSON_ID)
+        every { pDataWF.parentId } returns PERSON_ID
 
         // Act
         val result = PersonWithDetails(
@@ -66,9 +70,13 @@ class PersonWithDetailsTest {
     fun `should return the userId associated with user`() {
         // Arrange
         val userId = "userId"
-        val driver = driverProvider.getBaseEntity().copy(userId = userId, id = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
-        val file = fileProvider.getBaseEntity().copy(parentId = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
-        every { pDataWF.parentId } returns com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID
+        val driver = driverProvider.getBaseEntity().copy(
+            userId = userId,
+            id = PERSON_ID
+        )
+        val file = fileProvider.getBaseEntity()
+            .copy(parentId = PERSON_ID)
+        every { pDataWF.parentId } returns PERSON_ID
 
         // Act
         val result = PersonWithDetails(
@@ -84,7 +92,8 @@ class PersonWithDetailsTest {
     @Test
     fun `should throw InvalidStateException when the photo does not belong to the provided person`() {
         // Arrange
-        val person = driverProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
+        val person = driverProvider.getBaseEntity()
+            .copy(id = PERSON_ID)
         val photo = fileProvider.getBaseEntity().copy(parentId = "WRONG_ID")
 
         // Act && Assert
@@ -101,7 +110,8 @@ class PersonWithDetailsTest {
     @Test
     fun `should throw InvalidStateException when the PersonDetails parentId does not belong to the provided person`() {
         // Arrange
-        val person = driverProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.person.person_details.PersonWithDetailsTest.Companion.PERSON_ID)
+        val person = driverProvider.getBaseEntity()
+            .copy(id = PERSON_ID)
 
         // Act && Assert
         assertThrows<InvalidStateException> {

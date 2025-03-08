@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.business_central.dto
 
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.interfaces.Dto
 import java.util.Date
 
 internal data class BusinessCentralDto(

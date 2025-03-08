@@ -1,15 +1,15 @@
 package com.example.truckercore.unit.model.modules.fleet.trailer.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.modules.fleet.trailer.service.TrailerService
-import com.example.truckercore.modules.fleet.trailer.service.TrailerServiceImpl
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.fleet.trailer.aggregations.TrailerWithDetails
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.modules.fleet.trailer.service.TrailerService
+import com.example.truckercore.model.modules.fleet.trailer.service.TrailerServiceImpl
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.AggregateTrailerWithDetailsUseCase
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.GetTrailerUseCase
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

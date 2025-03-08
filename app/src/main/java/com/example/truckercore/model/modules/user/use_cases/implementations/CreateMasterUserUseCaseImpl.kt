@@ -1,13 +1,13 @@
 package com.example.truckercore.model.modules.user.use_cases.implementations
 
-import com.example.truckercore.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.mapper.UserMapper
-import com.example.truckercore.modules.user.repository.UserRepository
-import com.example.truckercore.modules.user.use_cases.interfaces.CreateMasterUserUseCase
-import com.example.truckercore.shared.errors.InvalidStateException
-import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.user.mapper.UserMapper
+import com.example.truckercore.model.modules.user.repository.UserRepository
+import com.example.truckercore.model.modules.user.use_cases.interfaces.CreateMasterUserUseCase
+import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateMasterUserUseCaseImpl(

@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.shared.errors.validation
 
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.validation.InvalidObjectException
+import com.example.truckercore.model.modules.user.dto.UserDto
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.errors.validation.InvalidObjectException
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

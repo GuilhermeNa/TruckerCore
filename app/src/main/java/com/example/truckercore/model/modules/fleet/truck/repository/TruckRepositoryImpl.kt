@@ -1,14 +1,14 @@
 package com.example.truckercore.model.modules.fleet.truck.repository
 
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
-import com.example.truckercore.modules.fleet.truck.dto.TruckDto
-import com.example.truckercore.shared.abstractions.Repository
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.parameters.SearchParameters
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.model.shared.abstractions.Repository
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.parameters.SearchParameters
 
 internal class TruckRepositoryImpl(
     private val firebaseRepository: FirebaseRepository,

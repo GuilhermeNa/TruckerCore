@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.modules.fleet.shared.module.licensing
 
 import com.example.truckercore._test_data_provider.TestFileDataProvider
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.shared.errors.InvalidStateException
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.model.shared.errors.InvalidStateException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -17,9 +17,12 @@ class LicensingWithFileTest {
     @Test
     fun `should create LicensingWithFile when files belong to the licensing`() {
         // Arrange
-        val licensing = licensingProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
-        val file1 = fileProvider.getBaseEntity().copy(parentId = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
-        val file2 = fileProvider.getBaseEntity().copy(parentId = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
+        val licensing = licensingProvider.getBaseEntity()
+            .copy(id = LICENSING_ID)
+        val file1 = fileProvider.getBaseEntity()
+            .copy(parentId = LICENSING_ID)
+        val file2 = fileProvider.getBaseEntity()
+            .copy(parentId = LICENSING_ID)
 
         // Act
         val licensingWithFile = LicensingWithFile(
@@ -38,7 +41,8 @@ class LicensingWithFileTest {
     @Test
     fun `should throw InvalidStateException when file parentId does not match licensing id`() {
         // Arrange
-        val licensing = licensingProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
+        val licensing = licensingProvider.getBaseEntity()
+            .copy(id = LICENSING_ID)
         val file = fileProvider.getBaseEntity().copy(parentId = "wrongLicensingId")
 
         // Act & Assert
@@ -53,7 +57,8 @@ class LicensingWithFileTest {
     @Test
     fun `should create LicensingWithFile with empty files`() {
         // Arrange
-        val licensing = licensingProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
+        val licensing = licensingProvider.getBaseEntity()
+            .copy(id = LICENSING_ID)
 
         // Act
         val licensingWithFile = LicensingWithFile(
@@ -68,8 +73,10 @@ class LicensingWithFileTest {
     @Test
     fun `parentId should return the licensing parent id`() {
         // Arrange
-        val licensing = licensingProvider.getBaseEntity().copy(id = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
-        val file1 = fileProvider.getBaseEntity().copy(parentId = com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFileTest.Companion.LICENSING_ID)
+        val licensing = licensingProvider.getBaseEntity()
+            .copy(id = LICENSING_ID)
+        val file1 = fileProvider.getBaseEntity()
+            .copy(parentId = LICENSING_ID)
 
         // Act
         val licensingWF = LicensingWithFile(

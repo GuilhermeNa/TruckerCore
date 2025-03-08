@@ -3,10 +3,10 @@ package com.example.truckercore.unit.model.modules.fleet.truck.aggregations
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore._test_data_provider.TestTrailerDataProvider
 import com.example.truckercore._test_data_provider.TestTruckDataProvider
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
-import com.example.truckercore.modules.fleet.truck.aggregation.TruckWithDetails
-import com.example.truckercore.shared.errors.InvalidStateException
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.model.modules.fleet.trailer.aggregations.TrailerWithDetails
+import com.example.truckercore.model.modules.fleet.truck.aggregation.TruckWithDetails
+import com.example.truckercore.model.shared.errors.InvalidStateException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

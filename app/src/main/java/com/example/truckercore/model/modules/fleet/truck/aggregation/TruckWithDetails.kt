@@ -1,9 +1,9 @@
 package com.example.truckercore.model.modules.fleet.truck.aggregation
 
-import com.example.truckercore.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
-import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
-import com.example.truckercore.modules.fleet.truck.entity.Truck
-import com.example.truckercore.shared.errors.InvalidStateException
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.aggregations.LicensingWithFile
+import com.example.truckercore.model.modules.fleet.trailer.aggregations.TrailerWithDetails
+import com.example.truckercore.model.modules.fleet.truck.entity.Truck
+import com.example.truckercore.model.shared.errors.InvalidStateException
 
 /**
  * Represents a truck along with its associated trailers and licensing records.

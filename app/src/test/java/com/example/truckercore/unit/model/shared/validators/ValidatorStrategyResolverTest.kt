@@ -1,11 +1,11 @@
 package com.example.truckercore.unit.model.shared.validators
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
-import com.example.truckercore.modules.business_central.validator.BusinessCentralValidationStrategy
-import com.example.truckercore.shared.errors.strategy.StrategyNotFoundException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.resolvers.ValidatorStrategyResolver
-import com.example.truckercore.shared.utils.sealeds.ValidatorInput
+import com.example.truckercore.model.modules.business_central.validator.BusinessCentralValidationStrategy
+import com.example.truckercore.model.shared.errors.strategy.StrategyNotFoundException
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
+import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -13,16 +13,15 @@ import java.util.Date
 
 internal class ValidatorStrategyResolverTest {
 
-    private val dtoInput = ValidatorInput.DtoInput(
-        TestBusinessCentralDataProvider.getBaseDto()
-    )
-    private val entityInput = ValidatorInput.EntityInput(
-        TestBusinessCentralDataProvider.getBaseEntity()
-    )
     private val resolver = ValidatorStrategyResolver()
 
     @Test
     fun `execute() should resolve the correct strategy for DtoInput`() {
+        // Arrange
+        val dtoInput = ValidatorInput.DtoInput(
+            TestBusinessCentralDataProvider.getBaseDto()
+        )
+
         // Call
         val strategy = resolver.execute(dtoInput)
 
@@ -32,6 +31,11 @@ internal class ValidatorStrategyResolverTest {
 
     @Test
     fun `execute() should resolve the correct strategy for EntityInput`() {
+        // Arrange
+        val entityInput = ValidatorInput.EntityInput(
+            TestBusinessCentralDataProvider.getBaseEntity()
+        )
+
         // Act
         val strategy = resolver.execute(entityInput)
 

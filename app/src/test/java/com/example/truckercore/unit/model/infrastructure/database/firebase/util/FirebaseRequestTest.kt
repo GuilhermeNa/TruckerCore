@@ -1,19 +1,19 @@
 package com.example.truckercore.unit.model.infrastructure.database.firebase.util
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.errors.FirebaseRequestException
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.parameters.SearchParameters
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.errors.FirebaseRequestException
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.modules.user.dto.UserDto
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.parameters.SearchParameters
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class FirebaseRequestTest {
 

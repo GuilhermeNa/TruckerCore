@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.infrastructure.util
 
 import android.util.Log
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.util.ExceptionHandler
-import com.example.truckercore.shared.errors.UnknownErrorException
+import com.example.truckercore.model.infrastructure.util.ExceptionHandler
+import com.example.truckercore.model.shared.errors.UnknownErrorException
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

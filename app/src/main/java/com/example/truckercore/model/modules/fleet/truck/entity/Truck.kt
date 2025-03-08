@@ -1,9 +1,9 @@
 package com.example.truckercore.model.modules.fleet.truck.entity
 
-import com.example.truckercore.modules.fleet.shared.interfaces.Fleet
-import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.model.modules.fleet.shared.interfaces.Fleet
+import com.example.truckercore.model.modules.fleet.truck.enums.TruckBrand
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.interfaces.Entity
 import java.time.LocalDateTime
 
 /**

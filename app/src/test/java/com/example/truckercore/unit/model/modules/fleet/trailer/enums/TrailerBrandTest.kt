@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.modules.fleet.trailer.enums
 
-import com.example.truckercore.modules.fleet.trailer.enums.TrailerBrand
-import com.example.truckercore.shared.errors.InvalidEnumParameterException
+import com.example.truckercore.model.modules.fleet.trailer.enums.TrailerBrand
+import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

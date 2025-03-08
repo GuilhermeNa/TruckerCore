@@ -1,13 +1,13 @@
 package com.example.truckercore.unit.model.shared.abstractions
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionServiceImpl
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.errors.UnauthorizedAccessException
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionServiceImpl
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.abstractions.UseCase
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single

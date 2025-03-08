@@ -1,16 +1,16 @@
 package com.example.truckercore.model.modules.fleet.truck.mapper
 
-import com.example.truckercore.modules.fleet.truck.dto.TruckDto
-import com.example.truckercore.modules.fleet.truck.entity.Truck
-import com.example.truckercore.modules.fleet.truck.enums.TruckBrand
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
-import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.Mapper
-import com.example.truckercore.shared.utils.expressions.toDate
-import com.example.truckercore.shared.utils.expressions.toLocalDateTime
+import com.example.truckercore.model.modules.fleet.truck.dto.TruckDto
+import com.example.truckercore.model.modules.fleet.truck.entity.Truck
+import com.example.truckercore.model.modules.fleet.truck.enums.TruckBrand
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.model.shared.errors.mapping.InvalidForMappingException
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.interfaces.Entity
+import com.example.truckercore.model.shared.interfaces.Mapper
+import com.example.truckercore.model.shared.utils.expressions.toDate
+import com.example.truckercore.model.shared.utils.expressions.toLocalDateTime
 
 internal class TruckMapper : Mapper {
 

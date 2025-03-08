@@ -53,8 +53,9 @@ internal class FirebaseRepositoryImpl(
                 this.close(error)
             }
 
-            if (task.isSuccessful) trySend(Response.Success(docReference.id))
-            else {
+            if (task.isSuccessful) {
+                trySend(Response.Success(docReference.id))
+            } else {
                 val error = IncompleteTaskException(
                     "Failed while creating an entity: ${dto::class.simpleName}."
                 )

@@ -1,10 +1,10 @@
 package com.example.truckercore.model.modules.fleet.trailer.service
 
-import com.example.truckercore.modules.fleet.trailer.aggregations.TrailerWithDetails
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.fleet.trailer.aggregations.TrailerWithDetails
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**

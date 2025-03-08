@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.fleet.shared.module.licensing.dto
 
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Dto
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.interfaces.Dto
 import java.util.Date
 
 internal data class LicensingDto(

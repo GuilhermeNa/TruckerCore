@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.shared.errors.validation
 
-import com.example.truckercore.modules.person.employee.driver.entity.Driver
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.validation.IllegalValidationArgumentException
+import com.example.truckercore.model.modules.person.employee.driver.entity.Driver
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.errors.validation.IllegalValidationArgumentException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

@@ -1,17 +1,18 @@
 package com.example.truckercore.unit.model.modules.person.employee.admin.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.errors.UnauthorizedAccessException
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.person.employee.admin.entity.Admin
-import com.example.truckercore.modules.person.employee.admin.mapper.AdminMapper
-import com.example.truckercore.modules.person.employee.admin.repository.AdminRepository
-import com.example.truckercore.modules.person.employee.admin.use_cases.implementations.CreateAdminUseCaseImpl
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.errors.UnauthorizedAccessException
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.model.modules.person.employee.admin.mapper.AdminMapper
+import com.example.truckercore.model.modules.person.employee.admin.repository.AdminRepository
+import com.example.truckercore.model.modules.person.employee.admin.use_cases.implementations.CreateAdminUseCaseImpl
+import com.example.truckercore.model.modules.person.employee.admin.use_cases.interfaces.CreateAdminUseCase
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,7 +38,7 @@ class CreateAdminUseCaseImplTest : KoinTest {
     private val repository: AdminRepository by inject()
     private val validatorService: ValidatorService by inject()
     private val mapper: AdminMapper by inject()
-    private val useCase: com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.CreateAdminUseCase by inject()
+    private val useCase: CreateAdminUseCase by inject()
 
     private val user = mockk<User>()
     private val admin = mockk<Admin>()
@@ -55,7 +56,7 @@ class CreateAdminUseCaseImplTest : KoinTest {
                         single<AdminRepository> { mockk() }
                         single<ValidatorService> { mockk() }
                         single<AdminMapper> { mockk() }
-                        single<com.example.truckercore.modules.person.employee.admin.use_cases.interfaces.CreateAdminUseCase> {
+                        single<CreateAdminUseCase> {
                             CreateAdminUseCaseImpl(
                                 Permission.CREATE_ADMIN,
                                 get(), get(), get(), get()

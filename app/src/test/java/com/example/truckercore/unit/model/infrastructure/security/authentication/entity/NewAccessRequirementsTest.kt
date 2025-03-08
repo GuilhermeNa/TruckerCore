@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.entity
 
-import com.example.truckercore.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.shared.errors.InvalidStateException
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.model.modules.user.enums.PersonCategory
+import com.example.truckercore.model.shared.errors.InvalidStateException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals

@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.person.employee.driver.use_cases.interfaces
 
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.errors.ObjectNotFoundException
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**

@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.shared.errors.mapping
 
-import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
-import com.example.truckercore.modules.person.employee.admin.entity.Admin
-import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
+import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
+import com.example.truckercore.model.shared.errors.mapping.InvalidForMappingException
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

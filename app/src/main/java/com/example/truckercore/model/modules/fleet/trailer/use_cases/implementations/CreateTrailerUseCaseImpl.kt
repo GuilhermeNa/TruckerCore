@@ -1,15 +1,15 @@
 package com.example.truckercore.model.modules.fleet.trailer.use_cases.implementations
 
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.modules.fleet.trailer.entity.Trailer
-import com.example.truckercore.modules.fleet.trailer.mapper.TrailerMapper
-import com.example.truckercore.modules.fleet.trailer.repository.TrailerRepository
-import com.example.truckercore.modules.fleet.trailer.use_cases.interfaces.CreateTrailerUseCase
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.shared.abstractions.UseCase
-import com.example.truckercore.shared.services.ValidatorService
-import com.example.truckercore.shared.utils.sealeds.Response
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
+import com.example.truckercore.model.modules.fleet.trailer.mapper.TrailerMapper
+import com.example.truckercore.model.modules.fleet.trailer.repository.TrailerRepository
+import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.CreateTrailerUseCase
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.shared.abstractions.UseCase
+import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateTrailerUseCaseImpl(

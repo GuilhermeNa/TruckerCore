@@ -1,9 +1,9 @@
 package com.example.truckercore.unit.model.infrastructure.security.permissions.service
 
 import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionService
-import com.example.truckercore.infrastructure.security.permissions.service.PermissionServiceImpl
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
+import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionServiceImpl
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

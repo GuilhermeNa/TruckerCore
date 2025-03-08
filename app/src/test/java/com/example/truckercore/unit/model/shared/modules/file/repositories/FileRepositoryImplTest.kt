@@ -1,15 +1,14 @@
-package com.example.truckercore.unit.model.shared.modules.personal_data.repositories
+package com.example.truckercore.unit.model.shared.modules.file.repositories
 
-import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
-import com.example.truckercore.shared.modules.personal_data.dto.PersonalDataDto
-import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepository
-import com.example.truckercore.shared.modules.personal_data.repository.PersonalDataRepositoryImpl
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
-import io.mockk.coVerify
+import com.example.truckercore._test_data_provider.TestFileDataProvider
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.shared.modules.file.dto.FileDto
+import com.example.truckercore.model.shared.modules.file.repository.FileRepository
+import com.example.truckercore.model.shared.modules.file.repository.FileRepositoryImpl
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -24,13 +23,13 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-internal class PersonalDataFirebaseRepositoryImplTest : KoinTest {
+internal class FileRepositoryImplTest : KoinTest {
 
     private val fireBaseRepository: FirebaseRepository by inject()
-    private val repository: PersonalDataRepository by inject()
+    private val repository: FileRepository by inject()
 
-    private val collection = Collection.PERSONAL_DATA
-    private val dto = TestPersonalDataDataProvider.getBaseDto()
+    private val collection = Collection.FILE
+    private val dto = TestFileDataProvider.getBaseDto()
     private val id = "testId"
 
     companion object {
@@ -42,8 +41,8 @@ internal class PersonalDataFirebaseRepositoryImplTest : KoinTest {
                 modules(
                     module {
                         single<FirebaseRepository> { mockk(relaxed = true) }
-                        single<PersonalDataRepository> {
-                            PersonalDataRepositoryImpl(get(), collection = Collection.PERSONAL_DATA)
+                        single<FileRepository> {
+                            FileRepositoryImpl(get(), collection = Collection.FILE)
                         }
                     }
                 )
@@ -71,7 +70,7 @@ internal class PersonalDataFirebaseRepositoryImplTest : KoinTest {
         repository.update(dto)
 
         // Assertions
-        coVerify { fireBaseRepository.update(collection, dto) }
+        verify { fireBaseRepository.update(collection, dto) }
     }
 
     @Test
@@ -96,7 +95,7 @@ internal class PersonalDataFirebaseRepositoryImplTest : KoinTest {
     fun `fetchByDocument() should call fireBaseRepository`() {
         // Arrange
         val params = mockk<DocumentParameters>()
-        val request = mockk<FirebaseRequest<PersonalDataDto>>()
+        val request = mockk<FirebaseRequest<FileDto>>()
         val repositorySpy = spyk(repository, recordPrivateCalls = true)
 
         every { repositorySpy["createFirestoreRequest"](params) } returns request
@@ -115,7 +114,7 @@ internal class PersonalDataFirebaseRepositoryImplTest : KoinTest {
     fun `fetchByQuery() should call fireBaseRepository`() {
         // Arrange
         val params = mockk<QueryParameters>()
-        val request = mockk<FirebaseRequest<PersonalDataDto>>()
+        val request = mockk<FirebaseRequest<FileDto>>()
         val repositorySpy = spyk(repository, recordPrivateCalls = true)
 
         every { repositorySpy["createFirestoreRequest"](params) } returns request

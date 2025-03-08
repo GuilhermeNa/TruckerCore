@@ -1,18 +1,18 @@
 package com.example.truckercore.model.modules.user.mapper
 
-import com.example.truckercore.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.modules.user.dto.UserDto
-import com.example.truckercore.modules.user.entity.User
-import com.example.truckercore.modules.user.enums.PersonCategory
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.errors.mapping.IllegalMappingArgumentException
-import com.example.truckercore.shared.errors.mapping.InvalidForMappingException
-import com.example.truckercore.shared.interfaces.Dto
-import com.example.truckercore.shared.interfaces.Entity
-import com.example.truckercore.shared.interfaces.Mapper
-import com.example.truckercore.shared.utils.expressions.toDate
-import com.example.truckercore.shared.utils.expressions.toLocalDateTime
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.user.dto.UserDto
+import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.user.enums.PersonCategory
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.errors.mapping.IllegalMappingArgumentException
+import com.example.truckercore.model.shared.errors.mapping.InvalidForMappingException
+import com.example.truckercore.model.shared.interfaces.Dto
+import com.example.truckercore.model.shared.interfaces.Entity
+import com.example.truckercore.model.shared.interfaces.Mapper
+import com.example.truckercore.model.shared.utils.expressions.toDate
+import com.example.truckercore.model.shared.utils.expressions.toLocalDateTime
 
 internal class UserMapper : Mapper {
 

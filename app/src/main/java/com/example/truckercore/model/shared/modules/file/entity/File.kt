@@ -1,7 +1,7 @@
 package com.example.truckercore.model.shared.modules.file.entity
 
-import com.example.truckercore.shared.enums.PersistenceStatus
-import com.example.truckercore.shared.interfaces.Entity
+import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.shared.interfaces.Entity
 import java.net.URL
 import java.time.LocalDateTime
 

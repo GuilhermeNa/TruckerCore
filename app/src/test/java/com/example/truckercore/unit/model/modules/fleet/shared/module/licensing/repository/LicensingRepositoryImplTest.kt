@@ -1,14 +1,14 @@
 package com.example.truckercore.unit.model.modules.fleet.shared.module.licensing.repository
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
-import com.example.truckercore.configs.app_constants.Collection
-import com.example.truckercore.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepository
-import com.example.truckercore.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
-import com.example.truckercore.modules.person.employee.admin.dto.AdminDto
-import com.example.truckercore.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.shared.utils.parameters.QueryParameters
+import com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
+import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
+import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -26,7 +26,7 @@ import org.koin.test.inject
 class LicensingRepositoryImplTest : KoinTest {
 
     private val fireBaseRepository: FirebaseRepository by inject()
-    private val repository: com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepository by inject()
+    private val repository: LicensingRepository by inject()
 
     private val collection = Collection.LICENSING
     private val dto = TestLicensingDataProvider.getBaseDto()
