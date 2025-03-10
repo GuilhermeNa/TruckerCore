@@ -81,7 +81,6 @@ internal interface FirebaseRepository {
      * @return A [Flow] that emits:
      * - [Response.Success] if the document exists.
      * - [Response.Empty] if the document does not exist.
-     * @throws IncompleteTaskException If the task of checking existence fails or the operation is unsuccessful.
      */
     fun entityExists(collection: Collection, id: String): Flow<Response<Unit>>
 
@@ -93,8 +92,6 @@ internal interface FirebaseRepository {
      * @return A [Flow] of:
      *  - [Response.Success] representing the fetched user data.
      *  - [Response.Empty] if the document does not exist.
-     * @throws IncompleteTaskException If the task of fetching the logged user data is unsuccessful.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun fetchLoggedUser(userId: String, shouldStream: Boolean): Flow<Response<UserDto>>
 
@@ -106,7 +103,6 @@ internal interface FirebaseRepository {
      *  - [Response.Success] that represents the fetched document.
      *  - [Response.Empty] if the document does not exist.
      * @throws FirebaseRequestException If the Firebase request is invalid or malformed.
-     * @throws IncompleteTaskException If the task of fetching the document fails.
      * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>>
@@ -120,7 +116,6 @@ internal interface FirebaseRepository {
      *  - [Response.Success] representing the list of fetched documents.
      * - [Response.Empty] if the document does not exist.
      * @throws FirebaseRequestException If the Firebase request is invalid or malformed.
-     * @throws IncompleteTaskException If the task of fetching the query fails.
      * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<List<T>>>

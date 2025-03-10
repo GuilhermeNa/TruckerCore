@@ -77,7 +77,6 @@ internal class FirebaseRepositoryImpl(
             task.exception?.let { error ->
                 this.close(error)
             }
-
             if (task.isSuccessful) this.trySend(Response.Success(Unit))
             else {
                 val error = IncompleteTaskException(
@@ -85,7 +84,6 @@ internal class FirebaseRepositoryImpl(
                 )
                 this.close(error)
             }
-
         }
 
         awaitClose { this.cancel() }
@@ -101,7 +99,6 @@ internal class FirebaseRepositoryImpl(
             task.exception?.let { error ->
                 this.close(error)
             }
-
             if (task.isSuccessful) this.trySend(Response.Success(Unit))
             else {
                 val error = IncompleteTaskException(
@@ -109,7 +106,6 @@ internal class FirebaseRepositoryImpl(
                 )
                 this.close(error)
             }
-
         }
 
         awaitClose { this.cancel() }
@@ -122,20 +118,18 @@ internal class FirebaseRepositoryImpl(
         val docReference = queryBuilder.getDocument(collection, id)
         val nDocSnap = docReference.get().await()
 
-        nDocSnap?.let { dss ->
+        nDocSnap.let { dss ->
             val result =
                 if (dss.exists()) Response.Success(Unit)
                 else Response.Empty
             emit(result)
-        } ?: throw IncompleteTaskException(
-            "Failed while verifying an entity existence for id: $id."
-        )
+        }
     }
 
     override fun fetchLoggedUser(userId: String, shouldStream: Boolean): Flow<Response<UserDto>> =
         when (shouldStream) {
-            true -> getLoggedUser(userId)
-            false -> streamLoggedUser(userId)
+            false -> getLoggedUser(userId)
+            true -> streamLoggedUser(userId)
         }
 
     override fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<Response<T>> {
@@ -158,12 +152,10 @@ internal class FirebaseRepositoryImpl(
         val docReference = queryBuilder.getDocument(Collection.USER, userId)
         val nDocSnap = docReference.get().await()
 
-        nDocSnap?.let { dss ->
+        nDocSnap.let { dss ->
             val result = converter.processDocumentSnapShot(dss, UserDto::class.java)
             emit(result)
-        } ?: throw IncompleteTaskException(
-            "Failed while searching the logged user for userId: $userId."
-        )
+        }
     }
 
     private fun streamLoggedUser(userId: String) = callbackFlow {
@@ -173,15 +165,9 @@ internal class FirebaseRepositoryImpl(
             nError?.let { error ->
                 this.close(error)
             }
-
-            nDocSnap?.let { docSnap ->
-                val result = converter.processDocumentSnapShot(docSnap, UserDto::class.java)
+            nDocSnap.let { docSnap ->
+                val result = converter.processDocumentSnapShot(docSnap!!, UserDto::class.java)
                 this.trySend(result)
-            } ?: {
-                val error = IncompleteTaskException(
-                    "Failed while streaming the logged user with id: $userId."
-                )
-                this.close(error)
             }
         }
 
@@ -194,12 +180,10 @@ internal class FirebaseRepositoryImpl(
         val documentRef = queryBuilder.getDocument(firebaseRequest.collection, params.id)
         val docSnap = documentRef.get().await()
 
-        docSnap?.let { dss ->
+        docSnap.let { dss ->
             val result = converter.processDocumentSnapShot(dss, firebaseRequest.clazz)
             emit(result)
-        } ?: throw IncompleteTaskException(
-            "Failed while searching a document with id: ${params.id}."
-        )
+        }
     }
 
     private fun <T : Dto> streamDocument(firebaseRequest: FirebaseRequest<T>) = callbackFlow {
@@ -212,14 +196,9 @@ internal class FirebaseRepositoryImpl(
                 this.close(error)
             }
 
-            nDocSnap?.let { docSnap ->
-                val result = converter.processDocumentSnapShot(docSnap, firebaseRequest.clazz)
+            nDocSnap.let { docSnap ->
+                val result = converter.processDocumentSnapShot(docSnap!!, firebaseRequest.clazz)
                 this.trySend(result)
-            } ?: {
-                val error = IncompleteTaskException(
-                    "Failed while streaming a document with id: ${params.id}.",
-                )
-                this.close(error)
             }
         }
 
@@ -232,10 +211,10 @@ internal class FirebaseRepositoryImpl(
         val query = queryBuilder.getQuery(firebaseRequest.collection, *params.queries)
         val querySnapshot = query.get().await()
 
-        querySnapshot?.let { qss ->
+        querySnapshot.let { qss ->
             val result = converter.processQuerySnapShot(qss, firebaseRequest.clazz)
             emit(result)
-        } ?: throw IncompleteTaskException("Failed while searching a query.")
+        }
     }
 
     private fun <T : Dto> streamQuery(firebaseRequest: FirebaseRequest<T>) = callbackFlow {
@@ -247,15 +226,10 @@ internal class FirebaseRepositoryImpl(
             nError?.let { error ->
                 this.close(error)
             }
-
-            nSnapShot?.let { snapShot ->
-                val result = converter.processQuerySnapShot(snapShot, firebaseRequest.clazz)
+            nSnapShot.let { snapShot ->
+                val result = converter.processQuerySnapShot(snapShot!!, firebaseRequest.clazz)
                 this.trySend(result)
-            } ?: {
-                val error = IncompleteTaskException("Failed while streaming a query.")
-                this.close(error)
             }
-
         }
 
         awaitClose { this.cancel() }
