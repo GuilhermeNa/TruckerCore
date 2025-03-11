@@ -56,7 +56,7 @@ internal class BusinessCentralMapperTest : KoinTest {
 
         @JvmStatic
         fun getInvalidDtos(): Array<BusinessCentralDto> =
-            TestBusinessCentralDataProvider.arrInvalidDtos()
+            TestBusinessCentralDataProvider.arrInvalidDtosForMapping()
 
     }
 
@@ -72,6 +72,7 @@ internal class BusinessCentralMapperTest : KoinTest {
         assertEquals(entity.creationDate.toDate(), createdDto.creationDate)
         assertEquals(entity.lastUpdate.toDate(), createdDto.lastUpdate)
         assertEquals(entity.persistenceStatus.name, createdDto.persistenceStatus)
+        assertEquals(entity.authorizedUserIds, createdDto.authorizedUserIds)
         assertEquals(entity.keys, createdDto.keys)
     }
 
@@ -90,6 +91,7 @@ internal class BusinessCentralMapperTest : KoinTest {
             dto.persistenceStatus?.let { PersistenceStatus.valueOf(it) },
             createdEntity.persistenceStatus
         )
+        assertEquals(dto.authorizedUserIds, createdEntity.authorizedUserIds)
         assertEquals(dto.keys, createdEntity.keys)
     }
 

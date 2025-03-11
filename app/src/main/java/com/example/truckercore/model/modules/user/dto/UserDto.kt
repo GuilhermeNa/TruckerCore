@@ -16,7 +16,7 @@ internal data class UserDto(
     val vipStart: Date? = null,
     val vipEnd: Date? = null,
     val level: String? = null,
-    val permissions: List<String>? = null,
+    val permissions: HashSet<String>? = null,
     val personFLag: String? = null
 ) : Dto {
 

@@ -11,20 +11,24 @@ internal class BusinessCentralDtoTest {
 
     @Test
     fun `test initializeId should update id and set status to persisted`() {
-        // Arrange
+        // Arrange --
         val newId = "newId"
 
-        // Call
+        // Call --
         val updatedDto = dto.initializeId(newId)
 
-        // Assertions
+        // Assertions --
+
+        // Should be updated
         assertEquals(newId, updatedDto.id)
         assertEquals("PERSISTED", updatedDto.persistenceStatus)
 
+        // Should be equals
         assertEquals(dto.businessCentralId, updatedDto.businessCentralId)
         assertEquals(dto.lastModifierId, updatedDto.lastModifierId)
         assertEquals(dto.creationDate, updatedDto.creationDate)
         assertEquals(dto.lastUpdate, updatedDto.lastUpdate)
+        assertEquals(dto.authorizedUserIds, updatedDto.authorizedUserIds)
         assertEquals(dto.keys, updatedDto.keys)
 
     }

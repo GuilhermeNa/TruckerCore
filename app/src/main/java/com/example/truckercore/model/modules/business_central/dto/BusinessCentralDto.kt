@@ -11,6 +11,7 @@ internal data class BusinessCentralDto(
     override val creationDate: Date? = null,
     override val lastUpdate: Date? = null,
     override val persistenceStatus: String? = null,
+    val authorizedUserIds: HashSet<String>? = null,
     val keys: Int? = null
 ) : Dto {
 

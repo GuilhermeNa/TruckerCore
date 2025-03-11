@@ -1,5 +1,6 @@
 package com.example.truckercore.model.modules.business_central.entity
 
+import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.enums.PersistenceStatus
 import com.example.truckercore.model.shared.interfaces.Entity
 import java.time.LocalDateTime
@@ -21,5 +22,22 @@ data class BusinessCentral(
     override val creationDate: LocalDateTime,
     override val lastUpdate: LocalDateTime,
     override val persistenceStatus: PersistenceStatus,
+    val authorizedUserIds: HashSet<String>,
     val keys: Int
-) : Entity
+) : Entity {
+
+    /**
+     * Checks if a user has permission to access the system.
+     *
+     * This method checks if the provided `userId` is present in the set of authorized user IDs,
+     * indicating whether the user has access to the system associated with the `BusinessCentral` object.
+     *
+     * @param userId The identifier of the user whose access is being verified.
+     * @return Returns `true` if the `userId` is present in the set of authorized users,
+     *         meaning the user has access to the system. Returns `false` otherwise.
+     */
+    fun hasSystemAccess(userId: String): Boolean {
+        return authorizedUserIds.contains(userId)
+    }
+
+}

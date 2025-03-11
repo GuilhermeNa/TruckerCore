@@ -26,7 +26,7 @@ enum class Level {
     /**
      * Represents a user assigned to driving tasks in the system, typically in logistics or transport-related systems.
      */
-    DRIVER;
+    OPERATIONAL;
 
     companion object {
 

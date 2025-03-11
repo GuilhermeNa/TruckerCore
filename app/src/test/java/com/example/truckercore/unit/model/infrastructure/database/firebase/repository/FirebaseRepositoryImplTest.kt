@@ -84,20 +84,36 @@ internal class FirebaseRepositoryImplTest : KoinTest {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Testing create()
+    // Testing createBlankDocument()
     //----------------------------------------------------------------------------------------------
 
     @Test
-    fun `should call queryBuilder and create Document`() {
+    fun `should call queryBuilder and create Document without path`() {
         // Arrange
         val collection = Collection.PERSONAL_DATA
-        every { queryBuilder.createDocument(collection) } returns docReference
+        every { queryBuilder.createBlankDocument(collection) } returns docReference
 
         // Call
-        val result = repository.createDocument(collection)
+        val result = repository.createBlankDocument(collection)
 
         // Assertion
         assertEquals(result, docReference)
+        verify { queryBuilder.createBlankDocument(collection) }
+    }
+
+    @Test
+    fun `should call queryBuilder and create Document with path`() {
+        // Arrange
+        val collection = Collection.PERSONAL_DATA
+        val path = "path"
+        every { queryBuilder.createBlankDocument(collection, path) } returns docReference
+
+        // Call
+        val result = repository.createBlankDocument(collection, path)
+
+        // Assertion
+        assertEquals(result, docReference)
+        verify { queryBuilder.createBlankDocument(collection, path) }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -121,7 +137,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
         }
 
         every { docReference.id } returns docRefId
-        every { queryBuilder.createDocument(any()) } returns docReference
+        every { queryBuilder.createBlankDocument(any()) } returns docReference
         every { docReference.set(any()) } returns task
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
@@ -135,7 +151,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
                 assertTrue(response is Response.Success)
                 assertEquals(response.data, docRefId)
                 verify {
-                    queryBuilder.createDocument(Collection.USER)
+                    queryBuilder.createBlankDocument(Collection.USER)
                     docReference.set(newDto)
                 }
             }
@@ -160,7 +176,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
         }
 
         every { docReference.id } returns docRefId
-        every { queryBuilder.createDocument(any()) } returns docReference
+        every { queryBuilder.createBlankDocument(any()) } returns docReference
         every { docReference.set(any()) } returns task
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
@@ -173,7 +189,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
             assertThrows<NullPointerException> {
                 repository.create(Collection.USER, dto).single()
                 verify {
-                    queryBuilder.createDocument(Collection.USER)
+                    queryBuilder.createBlankDocument(Collection.USER)
                     docReference.set(newDto)
                 }
             }
@@ -199,7 +215,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
         }
 
         every { docReference.id } returns docRefId
-        every { queryBuilder.createDocument(any()) } returns docReference
+        every { queryBuilder.createBlankDocument(any()) } returns docReference
         every { docReference.set(any()) } returns task
         every { task.addOnCompleteListener(any()) } answers {
             val listener = it.invocation.args[0] as OnCompleteListener<Void>
@@ -212,7 +228,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
             assertThrows<IncompleteTaskException> {
                 repository.create(Collection.USER, dto).single()
                 verify {
-                    queryBuilder.createDocument(Collection.USER)
+                    queryBuilder.createBlankDocument(Collection.USER)
                     docReference.set(newDto)
                 }
             }
@@ -318,7 +334,7 @@ internal class FirebaseRepositoryImplTest : KoinTest {
             }
 
             every { docReference.id } returns docRefId
-            every { queryBuilder.createDocument(any()) } returns docReference
+            every { queryBuilder.createBlankDocument(any()) } returns docReference
             every { docReference.set(any()) } returns task
             every { task.addOnCompleteListener(any()) } answers {
                 val listener = it.invocation.args[0] as OnCompleteListener<Void>

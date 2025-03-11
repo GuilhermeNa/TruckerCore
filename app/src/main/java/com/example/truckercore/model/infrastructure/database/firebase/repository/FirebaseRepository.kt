@@ -34,12 +34,19 @@ internal interface FirebaseRepository {
     /**
      * Creates a new document in the specified Firestore collection.
      *
-     * This method creates a document in a Firestore collection and returns the reference to the newly created document.
+     * This method creates a document in a Firestore collection and returns a [DocumentReference] pointing to
+     * the newly created document. If no [documentPath] is provided, a new document with an automatically
+     * generated ID will be created. If a [documentPath] is provided, the document will be created with that
+     * specific ID.
      *
-     * @param collection The collection in which the document should be created.
-     * @return A [DocumentReference] representing the created document in Firestore.
+     * @param collection The [Collection] enum value representing the Firestore collection in which
+     *                   the document should be created.
+     * @param documentPath An optional document ID. If provided, the document will be created with
+     *                     this specific ID. If not provided, a new document with an automatically
+     *                     generated ID will be created.
+     * @return A [DocumentReference] representing the newly created document in the specified collection.
      */
-    fun createDocument(collection: Collection): DocumentReference
+    fun createBlankDocument(collection: Collection, documentPath: String? = null): DocumentReference
 
     /**
      * Creates a new document in the specified Firestore collection using the provided DTO.

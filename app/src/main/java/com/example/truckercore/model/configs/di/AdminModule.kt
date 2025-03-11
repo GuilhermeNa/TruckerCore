@@ -2,6 +2,7 @@ package com.example.truckercore.model.configs.di
 
 import com.example.truckercore.model.configs.app_constants.Collection
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.person.employee.admin.factory.AdminFactory
 import com.example.truckercore.model.modules.person.employee.admin.mapper.AdminMapper
 import com.example.truckercore.model.modules.person.employee.admin.repository.AdminRepository
 import com.example.truckercore.model.modules.person.employee.admin.repository.AdminRepositoryImpl
@@ -23,6 +24,7 @@ val adminModule = module {
     single<AdminRepository> { AdminRepositoryImpl(get(), Collection.ADMIN) }
     single<AdminService> { AdminServiceImpl(get(), get(), get()) }
     single { AdminMapper() }
+    single { AdminFactory(get(), get()) }
 
     //--
 

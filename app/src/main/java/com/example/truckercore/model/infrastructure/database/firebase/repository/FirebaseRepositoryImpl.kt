@@ -35,8 +35,8 @@ internal class FirebaseRepositoryImpl(
             awaitClose { this.cancel() }
         }
 
-    override fun createDocument(collection: Collection): DocumentReference {
-        return queryBuilder.createDocument(collection)
+    override fun createBlankDocument(collection: Collection, documentPath: String?): DocumentReference {
+        return queryBuilder.createBlankDocument(collection, documentPath)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ internal class FirebaseRepositoryImpl(
         collection: Collection,
         dto: Dto
     ): Flow<Response<String>> = callbackFlow {
-        val docReference = queryBuilder.createDocument(collection)
+        val docReference = queryBuilder.createBlankDocument(collection)
         val newDto = dto.initializeId(docReference.id)
 
         docReference.set(newDto).addOnCompleteListener { task ->

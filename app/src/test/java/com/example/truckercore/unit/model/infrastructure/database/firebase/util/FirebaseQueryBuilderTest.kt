@@ -31,19 +31,40 @@ internal class FirebaseQueryBuilderTest : KoinTest {
     private val collectionName = Collection.USER
 
     @Test
-    fun `newDocument() should get a document from firestore`() {
+    fun `should get a blank document from firestore`() {
         // Arrange
         every {
             firestore.collection(collectionName.getName()).document()
         } returns docReference
 
         // Call
-        val result = queryBuilder.createDocument(collectionName)
+        val result = queryBuilder.createBlankDocument(collectionName)
 
         // Assertions
         assertEquals(docReference, result)
         verify {
             firestore.collection(collectionName.getName()).document()
+        }
+    }
+
+    @Test
+    fun `should get a blank document with a defined path from firestore`() {
+        // Arrange
+        val docPath = "documentPath"
+
+        every { docReference.id } returns docPath
+        every {
+            firestore.collection(collectionName.getName()).document(docPath)
+        } returns docReference
+
+        // Call
+        val result = queryBuilder.createBlankDocument(collectionName, docPath)
+
+        // Assertions
+        assertEquals(docReference, result)
+        verify {
+            firestore.collection(collectionName.getName()).document(docPath)
+
         }
     }
 

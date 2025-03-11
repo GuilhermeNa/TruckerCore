@@ -35,6 +35,7 @@ internal class BusinessCentralMapper : Mapper {
             creationDate = dto.creationDate!!.toLocalDateTime(),
             lastUpdate = dto.lastUpdate!!.toLocalDateTime(),
             persistenceStatus = PersistenceStatus.convertString(dto.persistenceStatus!!),
+            authorizedUserIds = dto.authorizedUserIds ?: hashSetOf(),
             keys = dto.keys!!
         )
     } catch (error: Exception) {
@@ -49,6 +50,7 @@ internal class BusinessCentralMapper : Mapper {
             creationDate = entity.creationDate.toDate(),
             lastUpdate = entity.lastUpdate.toDate(),
             persistenceStatus = entity.persistenceStatus.name,
+            authorizedUserIds = entity.authorizedUserIds,
             keys = entity.keys
         )
     } catch (error: Exception) {

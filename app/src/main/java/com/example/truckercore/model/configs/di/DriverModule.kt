@@ -17,13 +17,14 @@ import com.example.truckercore.model.modules.person.employee.driver.use_cases.in
 import com.example.truckercore.model.modules.person.employee.driver.use_cases.interfaces.DeleteDriverUseCase
 import com.example.truckercore.model.modules.person.employee.driver.use_cases.interfaces.GetDriverUseCase
 import com.example.truckercore.model.modules.person.employee.driver.use_cases.interfaces.UpdateDriverUseCase
+import com.example.truckercore.model.modules.user.factory.UserFactory
 import org.koin.dsl.module
 
 val driverModule = module {
     single<DriverRepository> { DriverRepositoryImpl(get(), Collection.DRIVER) }
     single<DriverService> { DriverServiceImpl(get(), get(), get()) }
     single { DriverMapper() }
-
+    single { UserFactory(get(), get()) }
     //--
 
     single<CreateDriverUseCase> {

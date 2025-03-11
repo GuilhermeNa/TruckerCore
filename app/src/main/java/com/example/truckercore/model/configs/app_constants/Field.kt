@@ -44,7 +44,9 @@ enum class Field(private val fieldName: String) {
     PERSON_FLAG("personFlag"),
     PERMISSIONS("permissions"),
     PERSISTENCE_STATUS("persistenceStatus"),
-    EMPLOYEE_STATUS("employeeStatus");
+    EMPLOYEE_STATUS("employeeStatus"),
+    AUTHORIZED_USER_IDS("authorizedUserIds")
+    ;
 
     /**
      * Gets the name of the field.

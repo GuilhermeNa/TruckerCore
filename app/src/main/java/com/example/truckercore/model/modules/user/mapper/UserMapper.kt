@@ -61,7 +61,7 @@ internal class UserMapper : Mapper {
             vipStart = entity.vipStart?.toDate(),
             vipEnd = entity.vipEnd?.toDate(),
             level = entity.level.name,
-            permissions = entity.permissions.map { it.name },
+            permissions = entity.permissions.map { it.name }.toHashSet(),
             personFLag = entity.personFLag.name
         )
     } catch (error: Exception) {

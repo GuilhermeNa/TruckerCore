@@ -15,15 +15,27 @@ import com.google.firebase.firestore.Query
  */
 internal class FirebaseQueryBuilder(val firestore: FirebaseFirestore) {
 
-     /**
+    /**
      * Creates a new Firestore document reference in the specified collection.
      * This method returns a new [DocumentReference], which can be used to perform various operations
-     * on the document such as set, update, and delete.
+     * on the document such as set, update, and delete. If no [documentPath] is provided,
+     * a new document ID will be automatically generated.
      *
-     * @param collectionRef The name of the Firestore collection where the new document will be created.
+     * @param collectionRef The [Collection] enum value representing the Firestore collection where
+     *                      the new document will be created.
+     * @param documentPath The optional document ID. If provided, the document will be created
+     *                     with this specific ID. If not provided, a new document with an automatically
+     *                     generated ID will be created.
      * @return A [DocumentReference] pointing to the newly created document in the specified collection.
      */
-    fun createDocument(collectionRef: Collection) = collection(collectionRef).document()
+    fun createBlankDocument(
+        collectionRef: Collection,
+        documentPath: String? = null
+    ): DocumentReference {
+        return documentPath?.let { path ->
+            collection(collectionRef).document(path)
+        } ?: collection(collectionRef).document()
+    }
 
     /**
      * Fetches a Firestore document reference based on the collection name and document ID.
@@ -71,4 +83,7 @@ internal class FirebaseQueryBuilder(val firestore: FirebaseFirestore) {
     private fun collection(collectionRef: Collection) =
         firestore.collection(collectionRef.getName())
 
+    private fun teste() {
+        firestore.collection("coleção A").document("já tenho um id")
+    }
 }

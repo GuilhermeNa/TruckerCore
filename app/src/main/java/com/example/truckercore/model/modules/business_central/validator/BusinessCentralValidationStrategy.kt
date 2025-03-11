@@ -43,28 +43,22 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         dto as BusinessCentralDto
         val invalidFields = mutableListOf<String>()
 
-        if (dto.id.isNullOrBlank()) {
-            invalidFields.add(Field.ID.getName())
-        }
-        if (dto.lastModifierId.isNullOrBlank()) {
-            invalidFields.add(Field.LAST_MODIFIER_ID.getName())
-        }
-        if (dto.creationDate == null) {
-            invalidFields.add(Field.CREATION_DATE.getName())
-        }
-        if (dto.lastUpdate == null) {
-            invalidFields.add(Field.LAST_UPDATE.getName())
-        }
+        if (dto.id.isNullOrBlank()) invalidFields.add(Field.ID.getName())
+
+        if (dto.lastModifierId.isNullOrBlank()) invalidFields.add(Field.LAST_MODIFIER_ID.getName())
+
+        if (dto.creationDate == null) invalidFields.add(Field.CREATION_DATE.getName())
+
+        if (dto.lastUpdate == null) invalidFields.add(Field.LAST_UPDATE.getName())
+
         if (dto.persistenceStatus.isNullOrBlank() ||
             dto.persistenceStatus == PersistenceStatus.PENDING.name ||
             !PersistenceStatus.enumExists(dto.persistenceStatus!!)
-        ) {
-            invalidFields.add(Field.PERSISTENCE_STATUS.getName())
-        }
+        ) invalidFields.add(Field.PERSISTENCE_STATUS.getName())
 
-        if (dto.keys == null) {
-            invalidFields.add(Field.KEYS.getName())
-        }
+        if (dto.authorizedUserIds == null) invalidFields.add(Field.AUTHORIZED_USER_IDS.getName())
+
+        if (dto.keys == null) invalidFields.add(Field.KEYS.getName())
 
         if (invalidFields.isNotEmpty()) throw InvalidObjectException(dto, invalidFields)
     }

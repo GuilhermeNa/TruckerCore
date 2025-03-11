@@ -20,7 +20,7 @@ internal object DefaultPermissions {
             Level.MASTER -> masterPermissions
             Level.MANAGER -> adminPermissions
             Level.MODERATOR -> moderatorPermissions
-            Level.DRIVER -> userPermissions
+            Level.OPERATIONAL -> userPermissions
         }
     }
 

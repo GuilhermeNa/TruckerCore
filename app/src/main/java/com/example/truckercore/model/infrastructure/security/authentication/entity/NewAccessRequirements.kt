@@ -22,7 +22,8 @@ class NewAccessRequirements private constructor() {
     val name get() = _name
     val surname get() = _surname
     val email get() = _email
-    val personFlag get() = _personFlag
+    val category get() = _personFlag
+    val fullName get() = "$_name $_surname"
 
     constructor(
         uid: String,

@@ -2,6 +2,7 @@ package com.example.truckercore.model.configs.di
 
 import com.example.truckercore.model.configs.app_constants.Collection
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.business_central.factory.BusinessCentralFactory
 import com.example.truckercore.model.modules.business_central.mapper.BusinessCentralMapper
 import com.example.truckercore.model.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.model.modules.business_central.repository.BusinessCentralRepositoryImpl
@@ -20,6 +21,7 @@ import org.koin.dsl.module
 val businessCentralModule = module {
     single<BusinessCentralRepository> { BusinessCentralRepositoryImpl(get(), Collection.CENTRAL) }
     single { BusinessCentralMapper() }
+    single { BusinessCentralFactory(get(), get()) }
 
     //--
 

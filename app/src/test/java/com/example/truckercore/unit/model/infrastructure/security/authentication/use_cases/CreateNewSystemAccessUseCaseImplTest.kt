@@ -51,7 +51,8 @@ class CreateNewSystemAccessUseCaseImplTest : KoinTest {
                         single<CreateNewSystemAccessUseCase> {
                             CreateNewSystemAccessUseCaseImpl(
                                 get(), get(), get(),
-                                get(), get(), get()
+                                get(), get(), get(),
+                                get(), get(), get(), get()
                             )
                         }
                     }
@@ -69,7 +70,7 @@ class CreateNewSystemAccessUseCaseImplTest : KoinTest {
     fun `should execute use case successfully for creating new system access`() = runTest {
         // Arrange
         val requirements: NewAccessRequirements = mockk(relaxed = true) {
-            every { personFlag } returns PersonCategory.ADMIN
+            every { category } returns PersonCategory.ADMIN
         }
 
         every { firebaseRepository.runTransaction(any()) } returns flowOf(Response.Success(Unit))

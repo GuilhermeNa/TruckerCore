@@ -15,6 +15,7 @@ internal object TestBusinessCentralDataProvider {
         creationDate = LocalDateTime.now(),
         lastUpdate = LocalDateTime.now(),
         persistenceStatus = PersistenceStatus.PERSISTED,
+        authorizedUserIds = hashSetOf("userId1"),
         keys = 1
     )
 
@@ -25,12 +26,14 @@ internal object TestBusinessCentralDataProvider {
         creationDate = Date(),
         lastUpdate = Date(),
         persistenceStatus = PersistenceStatus.PERSISTED.name,
+        authorizedUserIds = hashSetOf("userId1"),
         keys = 1
     )
 
     fun arrValidDtosForValidationRules() = arrayOf(
         getBaseDto(),
-        getBaseDto().copy(persistenceStatus = PersistenceStatus.ARCHIVED.name)
+        getBaseDto().copy(persistenceStatus = PersistenceStatus.ARCHIVED.name),
+        getBaseDto().copy(authorizedUserIds = hashSetOf())
     )
 
     fun arrInvalidDtosForValidationRules() = arrayOf(
@@ -46,6 +49,7 @@ internal object TestBusinessCentralDataProvider {
         getBaseDto().copy(persistenceStatus = ""),
         getBaseDto().copy(persistenceStatus = " "),
         getBaseDto().copy(persistenceStatus = PersistenceStatus.PENDING.name),
+        getBaseDto().copy(authorizedUserIds = null),
         getBaseDto().copy(keys = null),
     )
 
@@ -68,15 +72,21 @@ internal object TestBusinessCentralDataProvider {
 
     fun arrValidEntitiesForValidationRules() = arrayOf(
         getBaseEntity(),
-        getBaseEntity().copy(persistenceStatus = PersistenceStatus.ARCHIVED)
+        getBaseEntity().copy(persistenceStatus = PersistenceStatus.ARCHIVED),
+        getBaseEntity().copy(authorizedUserIds = hashSetOf())
     )
 
     fun arrValidEntitiesForCreationRules() = arrayOf(
         getBaseEntity().copy(id = null, persistenceStatus = PersistenceStatus.PENDING),
-        getBaseEntity().copy(id = "", persistenceStatus = PersistenceStatus.PENDING)
+        getBaseEntity().copy(id = "", persistenceStatus = PersistenceStatus.PENDING),
+        getBaseEntity().copy(
+            id = "",
+            persistenceStatus = PersistenceStatus.PENDING,
+            authorizedUserIds = hashSetOf()
+        )
     )
 
-    fun arrInvalidDtos() = arrayOf(
+    fun arrInvalidDtosForMapping() = arrayOf(
         getBaseDto().copy(businessCentralId = null),
         getBaseDto().copy(id = null),
         getBaseDto().copy(lastModifierId = null),

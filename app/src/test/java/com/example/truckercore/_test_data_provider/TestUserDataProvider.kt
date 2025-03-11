@@ -37,7 +37,7 @@ internal object TestUserDataProvider {
         vipStart = Date(),
         vipEnd = Date(),
         level = Level.MASTER.name,
-        permissions = listOf(Permission.VIEW_USER.name, Permission.CREATE_USER.name),
+        permissions = hashSetOf(Permission.VIEW_USER.name, Permission.CREATE_USER.name),
         personFLag = PersonCategory.ADMIN.name
     )
 
@@ -83,8 +83,8 @@ internal object TestUserDataProvider {
         getBaseDto().copy(level = " "),
         getBaseDto().copy(level = "INVALID"),
         getBaseDto().copy(permissions = null),
-        getBaseDto().copy(permissions = emptyList()),
-        getBaseDto().copy(permissions = listOf("INVALID_VALUE")),
+        getBaseDto().copy(permissions = hashSetOf()),
+        getBaseDto().copy(permissions = hashSetOf("INVALID_VALUE")),
         getBaseDto().copy(personFLag = null),
         getBaseDto().copy(personFLag = "INVALID")
     )

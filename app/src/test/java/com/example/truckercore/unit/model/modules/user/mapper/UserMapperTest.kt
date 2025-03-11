@@ -76,7 +76,10 @@ internal class UserMapperTest : KoinTest {
         assertEquals(entity.lastUpdate.toDate(), createdDto.lastUpdate)
         assertEquals(entity.persistenceStatus.name, createdDto.persistenceStatus)
         assertEquals(entity.level.name, createdDto.level)
-        assertEquals(entity.permissions.map { it.name }, createdDto.permissions)
+        assertEquals(entity.permissions.size, createdDto.permissions?.size)
+        entity.permissions.forEach {
+            assertTrue(createdDto.permissions!!.contains(it.name))
+        }
         assertEquals(entity.personFLag.name, createdDto.personFLag)
     }
 

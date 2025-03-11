@@ -2,6 +2,7 @@ package com.example.truckercore.model.configs.di
 
 import com.example.truckercore.model.configs.app_constants.Collection
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.user.factory.UserFactory
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore.model.modules.user.repository.UserRepository
 import com.example.truckercore.model.modules.user.repository.UserRepositoryImpl
@@ -22,6 +23,7 @@ import org.koin.dsl.module
 val userModule = module {
     single<UserRepository> { UserRepositoryImpl(get(), Collection.USER) }
     single { UserMapper() }
+    single { UserFactory(get(), get()) }
 
     //--
 

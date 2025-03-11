@@ -23,8 +23,8 @@ class LevelTest {
         val levelModerator = Level.convertString("MODERATOR")
         assertEquals(Level.MODERATOR, levelModerator)
 
-        val levelDriver = Level.convertString("DRIVER")
-        assertEquals(Level.DRIVER, levelDriver)
+        val levelDriver = Level.convertString("OPERATIONAL")
+        assertEquals(Level.OPERATIONAL, levelDriver)
     }
 
     @Test

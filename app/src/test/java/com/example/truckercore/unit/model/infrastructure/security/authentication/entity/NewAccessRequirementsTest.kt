@@ -23,7 +23,8 @@ class NewAccessRequirementsTest {
         assertEquals("John", requirements.name)
         assertEquals("Doe", requirements.surname)
         assertEquals("john.doe@mail.com", requirements.email)
-        assertEquals(PersonCategory.ADMIN, requirements.personFlag)
+        assertEquals(PersonCategory.ADMIN, requirements.category)
+        assertEquals("John Doe", requirements.fullName)
     }
 
     @Test
