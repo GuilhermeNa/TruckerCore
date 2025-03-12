@@ -45,7 +45,9 @@ enum class Field(private val fieldName: String) {
     PERMISSIONS("permissions"),
     PERSISTENCE_STATUS("persistenceStatus"),
     EMPLOYEE_STATUS("employeeStatus"),
-    AUTHORIZED_USER_IDS("authorizedUserIds")
+    AUTHORIZED_USER_IDS("authorizedUserIds"),
+    IS_ACTIVE("isActive"),
+    NOTIFICATION_DATE("notificationDate"),
     ;
 
     /**

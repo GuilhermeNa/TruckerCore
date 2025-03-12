@@ -3,14 +3,12 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCaseImpl
-import com.example.truckercore.model.modules.business_central.mapper.BusinessCentralMapper
-import com.example.truckercore.model.modules.person.employee.admin.mapper.AdminMapper
-import com.example.truckercore.model.modules.person.employee.driver.mapper.DriverMapper
+import com.example.truckercore.model.modules.business_central.factory.BusinessCentralFactory
+import com.example.truckercore.model.modules.person.employee.admin.factory.AdminFactory
+import com.example.truckercore.model.modules.person.employee.driver.factory.DriverFactory
 import com.example.truckercore.model.modules.user.enums.PersonCategory
-import com.example.truckercore.model.modules.user.mapper.UserMapper
-import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.modules.user.factory.UserFactory
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import io.mockk.every
 import io.mockk.mockk
@@ -31,10 +29,9 @@ import org.koin.test.inject
 class CreateNewSystemAccessUseCaseImplTest : KoinTest {
 
     private val firebaseRepository: FirebaseRepository by inject()
-    private val useCase: CreateNewSystemAccessUseCase by inject()
+    private val useCase: CreateNewSystemAccessUseCaseImpl by inject()
 
     companion object {
-
         @JvmStatic
         @BeforeAll
         fun setup() {
@@ -43,17 +40,12 @@ class CreateNewSystemAccessUseCaseImplTest : KoinTest {
                 modules(
                     module {
                         single<FirebaseRepository> { mockk() }
-                        single<ValidatorService> { mockk() }
-                        single<BusinessCentralMapper> { mockk() }
-                        single<UserMapper> { mockk() }
-                        single<DriverMapper> { mockk() }
-                        single<AdminMapper> { mockk() }
-                        single<CreateNewSystemAccessUseCase> {
-                            CreateNewSystemAccessUseCaseImpl(
-                                get(), get(), get(),
-                                get(), get(), get(),
-                                get(), get(), get(), get()
-                            )
+                        single<BusinessCentralFactory> { mockk() }
+                        single<UserFactory> { mockk() }
+                        single<AdminFactory> { mockk() }
+                        single<DriverFactory> { mockk() }
+                        single {
+                            CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get())
                         }
                     }
                 )
@@ -67,10 +59,27 @@ class CreateNewSystemAccessUseCaseImplTest : KoinTest {
     }
 
     @Test
-    fun `should execute use case successfully for creating new system access`() = runTest {
+    fun `should execute use case successfully for creating new admin system access`() = runTest {
         // Arrange
         val requirements: NewAccessRequirements = mockk(relaxed = true) {
             every { category } returns PersonCategory.ADMIN
+        }
+
+        every { firebaseRepository.runTransaction(any()) } returns flowOf(Response.Success(Unit))
+
+        // Call
+        val result = useCase.execute(requirements).single()
+
+        // Assertions
+        assertTrue(result is Response.Success)
+        verify { firebaseRepository.runTransaction(any()) }
+    }
+
+    @Test
+    fun `should execute use case successfully for creating new driver system access`() = runTest {
+        // Arrange
+        val requirements: NewAccessRequirements = mockk(relaxed = true) {
+            every { category } returns PersonCategory.DRIVER
         }
 
         every { firebaseRepository.runTransaction(any()) } returns flowOf(Response.Success(Unit))

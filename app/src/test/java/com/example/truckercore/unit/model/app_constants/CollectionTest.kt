@@ -33,6 +33,7 @@ class CollectionTest {
         assertEquals("user", Collection.USER.getName())
         assertEquals("trailer", Collection.TRAILER.getName())
         assertEquals("licensing", Collection.LICENSING.getName())
+        assertEquals("vip", Collection.VIP.getName())
     }
 
 }

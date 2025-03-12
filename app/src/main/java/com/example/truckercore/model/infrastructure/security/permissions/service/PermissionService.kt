@@ -1,6 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.permissions.service
 
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.modules.user.entity.User
 
 /**
@@ -17,5 +18,14 @@ internal interface PermissionService {
      * @return A boolean indicating if the user has the permission (true) or not (false).
      */
     fun canPerformAction(user: User, permission: Permission): Boolean
+
+    /**
+     * Checks if a user has access to the system in a specific Business Central.
+     *
+     * @param user The user whose system access is being checked.
+     * @param central The Business Central instance where the access is being verified.
+     * @return A boolean value indicating whether the user has system access (true) or not (false).
+     */
+    fun hasSystemAccess(user: User, central: BusinessCentral): Boolean
 
 }

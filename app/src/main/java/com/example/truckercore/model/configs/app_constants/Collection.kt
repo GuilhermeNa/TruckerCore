@@ -29,7 +29,9 @@ enum class Collection(private val collectionName: String) {
     TRUCK("truck"),
     USER("user"),
     TRAILER("trailer"),
-    LICENSING("licensing");
+    LICENSING("licensing"),
+    VIP("vip")
+    ;
 
     /**
      * Gets the name of the collection.

@@ -26,11 +26,8 @@ class NewAccessRequirements private constructor() {
     val fullName get() = "$_name $_surname"
 
     constructor(
-        uid: String,
-        name: String,
-        surname: String,
-        email: String,
-        personFlag: PersonCategory
+        uid: String, name: String, surname: String,
+        email: String, personFlag: PersonCategory
     ) : this() {
         _uid = validateUid(uid)
         _name = validateName(name)

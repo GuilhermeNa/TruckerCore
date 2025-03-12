@@ -53,5 +53,6 @@ val businessCentralModule = module {
     single<GetBusinessCentralUseCase> {
         GetBusinessCentralUseCaseImpl(Permission.VIEW_BUSINESS_CENTRAL, get(), get(), get(), get())
     }
+
 }
 

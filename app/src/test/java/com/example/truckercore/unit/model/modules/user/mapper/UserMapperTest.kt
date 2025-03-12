@@ -38,7 +38,6 @@ internal class UserMapperTest : KoinTest {
     private val dto: UserDto = TestUserDataProvider.getBaseDto()
 
     companion object {
-
         @BeforeAll
         @JvmStatic
         fun setup() {

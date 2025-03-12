@@ -3,40 +3,19 @@ package com.example.truckercore.model.infrastructure.security.authentication.use
 import com.example.truckercore.model.configs.app_constants.Collection
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.model.infrastructure.security.permissions.configs.DefaultPermissions
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
-import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.modules.business_central.factory.BusinessCentralFactory
-import com.example.truckercore.model.modules.business_central.mapper.BusinessCentralMapper
-import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
-import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
 import com.example.truckercore.model.modules.person.employee.admin.factory.AdminFactory
-import com.example.truckercore.model.modules.person.employee.admin.mapper.AdminMapper
-import com.example.truckercore.model.modules.person.employee.driver.dto.DriverDto
-import com.example.truckercore.model.modules.person.employee.driver.entity.Driver
 import com.example.truckercore.model.modules.person.employee.driver.factory.DriverFactory
-import com.example.truckercore.model.modules.person.employee.driver.mapper.DriverMapper
-import com.example.truckercore.model.modules.person.employee.shared.enums.EmployeeStatus
-import com.example.truckercore.model.modules.user.dto.UserDto
-import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.modules.user.factory.UserFactory
-import com.example.truckercore.model.modules.user.mapper.UserMapper
-import com.example.truckercore.model.shared.enums.PersistenceStatus
-import com.example.truckercore.model.shared.services.ValidatorService
+import com.example.truckercore.model.shared.interfaces.Dto
 import com.example.truckercore.model.shared.utils.sealeds.Response
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDateTime
 
 internal class CreateNewSystemAccessUseCaseImpl(
     private val fbRepository: FirebaseRepository,
-    private val validatorService: ValidatorService,
-    private val centralMapper: BusinessCentralMapper,
-    private val userMapper: UserMapper,
-    private val driverMapper: DriverMapper,
-    private val adminMapper: AdminMapper,
     private val centralFactory: BusinessCentralFactory,
     private val userFactory: UserFactory,
     private val adminFactory: AdminFactory,
@@ -45,236 +24,70 @@ internal class CreateNewSystemAccessUseCaseImpl(
 
     override fun execute(requirements: NewAccessRequirements): Flow<Response<Unit>> {
         return fbRepository.runTransaction { transaction ->
-            // Get document references from firebase
-            val docRefCentral = fbRepository.createBlankDocument(Collection.CENTRAL)
-            val docRefUser = fbRepository.createBlankDocument(Collection.USER, requirements.uid)
-            val docRefPerson = fbRepository.createBlankDocument(getPersonCollection(requirements.category))
-
-            // TODO(parei nessa parte)
-            // Revisar a criação da referencia dos objetos
-            // Rever as classes Factory
-            // Finalizar a refatoração da classe
-            // Alterar documentação e testes
-
-            // Create the dto objects
-            val central = centralFactory.create(
-                centralId = docRefCentral.id,
-                userId = requirements.uid
-            )
-            val user = userFactory.create(
-                centralId = docRefCentral.id,
-                uid = requirements.uid,
-                personCategory = requirements.category,
-                personLevel = Level.MASTER
-            )
-            val person = when (requirements.category) {
-                PersonCategory.DRIVER -> driverFactory.create(
-                    centralId = docRefCentral.id,
-                    userId = requirements.uid,
-                    personId = docRefPerson.id,
-                    name = requirements.fullName,
-                    email = requirements.email
-                )
-              PersonCategory.ADMIN -> adminFactory.create(
-                  centralId = docRefCentral.id,
-                  userId = requirements.uid,
-                  personId = docRefPerson.id,
-                  name = requirements.fullName,
-                  email = requirements.email
-              )
-            }
-
-            // Set the dtos into references
-            transaction.set(docRefCentral, central)
-            transaction.set(docRefPerson, person)
+            processCreation(requirements, transaction)
         }
     }
 
+    private fun processCreation(requirements: NewAccessRequirements, transaction: Transaction) {
+        // Get document references from firebase
+        val docRefCentral = fbRepository.createBlankDocument(Collection.CENTRAL)
+        val docRefUser = fbRepository.createBlankDocument(Collection.USER, requirements.uid)
+        val docRefPerson = fbRepository.createBlankDocument(
+            getPersonCollection(requirements.category)
+        )
+
+        // Create the dto objects
+        val central = centralFactory.create(
+            centralId = docRefCentral.id,
+            userId = requirements.uid
+        )
+        val user = userFactory.create(
+            centralId = docRefCentral.id,
+            uid = requirements.uid,
+            personCategory = requirements.category,
+            personLevel = Level.MASTER
+        )
+        val person = createPerson(
+            requirements = requirements,
+            centralId = docRefCentral.id,
+            personId = docRefPerson.id
+        )
+
+        // Set the dtos into references
+        transaction.set(docRefCentral, central)
+        transaction.set(docRefUser, user)
+        transaction.set(docRefPerson, person)
+    }
+
     private fun getPersonCollection(category: PersonCategory): Collection {
-        return when(category) {
+        return when (category) {
             PersonCategory.ADMIN -> Collection.ADMIN
             PersonCategory.DRIVER -> Collection.DRIVER
         }
     }
 
-    /*    override fun execute(requirements: NewAccessRequirements): Flow<Response<Unit>> {
-            return firebaseRepository.runTransaction { transaction ->
-                // Get document references from firebase
-                val (centralRef, userRef, personRef) = createDocumentReferences(requirements)
-
-                // Create the dto objects
-                val (centralDto, userDto, personDto) = createDtosToBeSaved(
-                    centralRef, userRef, requirements, personRef
-                )
-
-                // Set the dtos into references
-                transaction.set(centralRef, centralDto)
-                transaction.set(userRef, userDto)
-                transaction.set(personRef, personDto)
-            }
-        }*/
-
-    /**
-     * Creates references for central, user, and person entities in Firebase based on the requirements.
-     *
-     * @param requirements The [NewAccessRequirements] containing the data to create the references.
-     * @return A [Triple] containing the references for the central, user, and person entities.
-     */
-    private fun createDocumentReferences(
-        requirements: NewAccessRequirements
-    ): Triple<DocumentReference, DocumentReference, DocumentReference> {
-        val centralRef = fbRepository.createBlankDocument(Collection.CENTRAL)
-        val userRef = fbRepository.createBlankDocument(Collection.USER)
-        val personRef = when (requirements.category) {
-            PersonCategory.DRIVER -> fbRepository.createBlankDocument(Collection.DRIVER)
-            PersonCategory.ADMIN -> fbRepository.createBlankDocument(Collection.ADMIN)
-        }
-        return Triple(centralRef, userRef, personRef)
-    }
-
-    /**
-     * Creates the necessary DTOs to be saved in Firebase.
-     *
-     * @param centralRef The reference for the central entity in Firebase.
-     * @param userRef The reference for the user entity in Firebase.
-     * @param requirements The [NewAccessRequirements] containing the data for the new system access.
-     * @param personRef The reference for the person entity in Firebase (either driver or admin).
-     * @return A [Triple] containing the DTOs for central, user, and person entities.
-     */
-    private fun createDtosToBeSaved(
-        centralRef: DocumentReference,
-        userRef: DocumentReference,
+    private fun createPerson(
         requirements: NewAccessRequirements,
-        personRef: DocumentReference
-    ): Triple<BusinessCentralDto, UserDto, Any> {
-        val centralDto = createAndValidateCentral(centralRef = centralRef, userRef = userRef)
-        val userDto = createAndValidateUser(
-            centralRef = centralRef, userRef = userRef,
-            personFlag = requirements.category
-        )
-        val personDto = when (requirements.category) {
-            PersonCategory.DRIVER -> createDriver(userDto, personRef, requirements)
-            PersonCategory.ADMIN -> createAdmin(userDto, personRef, requirements)
+        centralId: String,
+        personId: String
+    ): Dto {
+        return when (requirements.category) {
+            PersonCategory.DRIVER -> driverFactory.create(
+                centralId = centralId,
+                userId = requirements.uid,
+                personId = personId,
+                name = requirements.fullName,
+                email = requirements.email
+            )
+
+            PersonCategory.ADMIN -> adminFactory.create(
+                centralId = centralId,
+                userId = requirements.uid,
+                personId = personId,
+                name = requirements.fullName,
+                email = requirements.email
+            )
         }
-        return Triple(centralDto, userDto, personDto)
-    }
-
-    /**
-     * Creates and validates a central entity and returns its corresponding DTO.
-     *
-     * @param centralRef The reference for the central entity in Firebase.
-     * @param userRef The reference for the user entity in Firebase.
-     * @return The DTO for the central entity.
-     */
-    private fun createAndValidateCentral(
-        centralRef: DocumentReference,
-        userRef: DocumentReference
-    ): BusinessCentralDto {
-        val entity = BusinessCentral(
-            businessCentralId = "",
-            id = null,
-            lastModifierId = userRef.id,
-            creationDate = LocalDateTime.now(),
-            lastUpdate = LocalDateTime.now(),
-            persistenceStatus = PersistenceStatus.PENDING,
-            authorizedUserIds = hashSetOf(userRef.id),
-            keys = 1
-        )
-        validatorService.validateForCreation(entity)
-        val dto = centralMapper.toDto(entity)
-        return dto.initializeId(centralRef.id)
-    }
-
-    /**
-     * Creates and validates a user entity and returns its corresponding DTO.
-     *
-     * @param centralRef The reference for the central entity in Firebase.
-     * @param userRef The reference for the user entity in Firebase.
-     * @param personFlag The flag indicating the type of person (Driver or Admin).
-     * @return The DTO for the user entity.
-     */
-    private fun createAndValidateUser(
-        centralRef: DocumentReference,
-        userRef: DocumentReference,
-        personFlag: PersonCategory
-    ): UserDto {
-        val entity = User(
-            businessCentralId = centralRef.id,
-            id = null,
-            lastModifierId = userRef.id,
-            creationDate = LocalDateTime.now(),
-            lastUpdate = LocalDateTime.now(),
-            persistenceStatus = PersistenceStatus.PENDING,
-            isVip = false,
-            vipStart = null,
-            vipEnd = null,
-            level = Level.MASTER,
-            permissions = DefaultPermissions.get(Level.MASTER),
-            personFLag = personFlag
-        )
-        validatorService.validateForCreation(entity)
-        val dto = userMapper.toDto(entity)
-        return dto.initializeId(userRef.id)
-    }
-
-    /**
-     * Creates an admin entity and returns its corresponding DTO.
-     *
-     * @param user The user DTO to associate with the admin.
-     * @param personRef The reference for the admin entity in Firebase.
-     * @param requirements The [NewAccessRequirements] containing the admin details.
-     * @return The DTO for the admin entity.
-     */
-    private fun createAdmin(
-        user: UserDto,
-        personRef: DocumentReference,
-        requirements: NewAccessRequirements
-    ): AdminDto {
-        val entity = Admin(
-            businessCentralId = user.businessCentralId!!,
-            id = null,
-            lastModifierId = user.id!!,
-            creationDate = LocalDateTime.now(),
-            lastUpdate = LocalDateTime.now(),
-            persistenceStatus = PersistenceStatus.PENDING,
-            userId = user.id,
-            name = "${requirements.name} ${requirements.surname}",
-            email = requirements.email,
-            employeeStatus = EmployeeStatus.WORKING
-        )
-        validatorService.validateForCreation(entity)
-        val dto = adminMapper.toDto(entity)
-        return dto.initializeId(personRef.id)
-    }
-
-    /**
-     * Creates a driver entity and returns its corresponding DTO.
-     *
-     * @param user The user DTO to associate with the driver.
-     * @param personRef The reference for the driver entity in Firebase.
-     * @param requirements The [NewAccessRequirements] containing the driver details.
-     * @return The DTO for the driver entity.
-     */
-    private fun createDriver(
-        user: UserDto,
-        personRef: DocumentReference,
-        requirements: NewAccessRequirements
-    ): DriverDto {
-        val entity = Driver(
-            businessCentralId = user.businessCentralId!!,
-            id = null,
-            lastModifierId = user.id!!,
-            creationDate = LocalDateTime.now(),
-            lastUpdate = LocalDateTime.now(),
-            persistenceStatus = PersistenceStatus.PENDING,
-            userId = user.id,
-            name = "${requirements.name} ${requirements.surname}",
-            email = requirements.email,
-            employeeStatus = EmployeeStatus.WORKING
-        )
-        validatorService.validateForCreation(entity)
-        val dto = driverMapper.toDto(entity)
-        return dto.initializeId(personRef.id)
     }
 
 }

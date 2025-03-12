@@ -1,6 +1,5 @@
 package com.example.truckercore.model.modules.business_central.entity
 
-import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.enums.PersistenceStatus
 import com.example.truckercore.model.shared.interfaces.Entity
 import java.time.LocalDateTime
@@ -36,7 +35,7 @@ data class BusinessCentral(
      * @return Returns `true` if the `userId` is present in the set of authorized users,
      *         meaning the user has access to the system. Returns `false` otherwise.
      */
-    fun hasSystemAccess(userId: String): Boolean {
+    fun userHasSystemAccess(userId: String): Boolean {
         return authorizedUserIds.contains(userId)
     }
 

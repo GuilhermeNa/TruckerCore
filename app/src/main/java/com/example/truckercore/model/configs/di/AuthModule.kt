@@ -11,7 +11,7 @@ import org.koin.dsl.module
 val authModule = module {
     single<AuthService> { AuthServiceImpl(get(), get(), get(), get()) }
     single<CreateNewSystemAccessUseCase> {
-        CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get(), get(),get(), get(), get(), get())
+        CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get())
     }
     single<GetLoggedUserDetailsUseCase> {
         GetLoggedUserDetailsUseCaseImpl(get(), get())

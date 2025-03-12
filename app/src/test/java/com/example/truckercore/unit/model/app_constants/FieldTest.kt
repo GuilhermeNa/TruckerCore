@@ -7,7 +7,7 @@ import kotlin.test.assertTrue
 
 class FieldTest {
 
-    val expectedEnums: HashSet<Field> = hashSetOf(
+    private val expectedEnums: HashSet<Field> = hashSetOf(
         Field.BUSINESS_CENTRAL_ID,
         Field.EMPLOYEE_ID,
         Field.INITIAL_DATE,
@@ -47,7 +47,9 @@ class FieldTest {
         Field.PERMISSIONS,
         Field.PERSISTENCE_STATUS,
         Field.EMPLOYEE_STATUS,
-        Field.AUTHORIZED_USER_IDS
+        Field.AUTHORIZED_USER_IDS,
+        Field.IS_ACTIVE,
+        Field.NOTIFICATION_DATE
     )
 
     @Test
@@ -92,6 +94,8 @@ class FieldTest {
         assertEquals("vipStart", Field.VIP_START.getName())
         assertEquals("vipEnd", Field.VIP_END.getName())
         assertEquals("authorizedUserIds", Field.AUTHORIZED_USER_IDS.getName())
+        assertEquals("isActive", Field.IS_ACTIVE.getName())
+        assertEquals("notificationDate", Field.NOTIFICATION_DATE.getName())
     }
 
     @Test

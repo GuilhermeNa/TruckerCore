@@ -19,7 +19,7 @@ class BusinessCentralTest {
         val user = userProvider.getBaseEntity().copy(id = userId)
 
         // Act
-        val result = central.hasSystemAccess(userId)
+        val result = central.userHasSystemAccess(userId)
 
         // Assert
         assertTrue(result)
@@ -33,7 +33,7 @@ class BusinessCentralTest {
         val user = userProvider.getBaseEntity().copy(id = userId)
 
         // Act
-        val result = central.hasSystemAccess(userId)
+        val result = central.userHasSystemAccess(userId)
 
         // Assert
         assertFalse(result)

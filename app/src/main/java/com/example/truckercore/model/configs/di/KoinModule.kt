@@ -14,5 +14,6 @@ val koinModules = listOf(
     travelModule,
     serviceModule,
     licensingModule,
+    vipModule,
     testModule
 )
