@@ -53,6 +53,12 @@ enum class Permission {
     DELETE_USER,
     VIEW_USER,
 
+    CREATE_VIP,
+    UPDATE_VIP,
+    ARCHIVE_VIP,
+    DELETE_VIP,
+    VIEW_VIP,
+
     CREATE_PERSONAL_DATA,
     UPDATE_PERSONAL_DATA,
     ARCHIVE_PERSONAL_DATA,
@@ -69,9 +75,9 @@ enum class Permission {
                 ?: throw NullPointerException("Received a null string and can not convert Permission.")
         }
 
-        fun enumExists(str: String): Boolean =
-            entries.any { it.name == str }
+        fun enumExists(str: String): Boolean = entries.any { it.name == str }
 
     }
+
 }
 

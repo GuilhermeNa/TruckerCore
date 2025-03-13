@@ -5,14 +5,13 @@ import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionServiceImpl
-import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.modules.user.entity.User
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -24,29 +23,23 @@ class PermissionServiceTest : KoinTest {
 
     private val centralProvider = TestBusinessCentralDataProvider
     private val service: PermissionService by inject()
-    private val userWithViewPermission = getUserWithViewPermission()
 
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun setup() {
-            startKoin {
-                modules(
-                    module {
-                        single<PermissionService> { PermissionServiceImpl() }
-                    }
-                )
-            }
+    private val userWithViewPermission =
+        TestUserDataProvider.getBaseEntity().copy(permissions = hashSetOf(Permission.VIEW_USER))
+
+    @BeforeEach
+    fun setup() {
+        startKoin {
+            modules(
+                module {
+                    single<PermissionService> { PermissionServiceImpl() }
+                }
+            )
         }
-
-        @JvmStatic
-        @AfterAll
-        fun tearDown() = stopKoin()
-
     }
 
-    private fun getUserWithViewPermission() =
-        TestUserDataProvider.getBaseEntity().copy(permissions = hashSetOf(Permission.VIEW_USER))
+    @AfterEach
+    fun tearDown() = stopKoin()
 
     @Test
     fun `canPerformAction() should return true when the user has required permission`() {

@@ -4,8 +4,8 @@ import com.example.truckercore.model.infrastructure.security.authentication.serv
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCaseImpl
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCaseImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserUseCaseImpl
 import org.koin.dsl.module
 
 val authModule = module {
@@ -13,7 +13,7 @@ val authModule = module {
     single<CreateNewSystemAccessUseCase> {
         CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get())
     }
-    single<GetLoggedUserDetailsUseCase> {
-        GetLoggedUserDetailsUseCaseImpl(get(), get())
+    single<GetLoggedUserUseCase> {
+        GetLoggedUserUseCaseImpl(get(), get(), get())
     }
 }

@@ -12,7 +12,7 @@ internal class FirebaseAuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : FirebaseAuthRepository {
 
-    override fun authenticateWithEmail(email: String, password: String) = callbackFlow {
+    override fun createUserWithEmailAndPassword(email: String, password: String) = callbackFlow {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 task.exception?.let { error ->

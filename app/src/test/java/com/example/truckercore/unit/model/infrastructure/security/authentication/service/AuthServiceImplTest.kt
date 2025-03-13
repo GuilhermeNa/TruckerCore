@@ -1,15 +1,16 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.service
 
 import com.example.truckercore._test_utils.mockStaticLog
+import com.example.truckercore.model.configs.di.firebaseModule
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUserDetails
+import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUser
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserDetailsUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserUseCase
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.every
@@ -35,7 +36,7 @@ class AuthServiceImplTest : KoinTest {
 
     private val authRepo: FirebaseAuthRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
-    private val getLoggedUser: GetLoggedUserDetailsUseCase by inject()
+    private val getLoggedUser: GetLoggedUserUseCase by inject()
     private val service: AuthService by inject()
 
     companion object {
@@ -47,7 +48,7 @@ class AuthServiceImplTest : KoinTest {
             startKoin {
                 modules(
                     module {
-                        single<GetLoggedUserDetailsUseCase> { mockk() }
+                        single<GetLoggedUserUseCase> { mockk() }
                         single<FirebaseAuthRepository> { mockk() }
                         single<CreateNewSystemAccessUseCase> { mockk() }
                         single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get()) }
@@ -70,17 +71,17 @@ class AuthServiceImplTest : KoinTest {
         val credentials = Credentials(email = email, password = password)
         val createdId = "uid123"
 
-        every { authRepo.authenticateWithEmail(any(), any()) } returns flowOf(
+        every { authRepo.createUserWithEmailAndPassword(any(), any()) } returns flowOf(
             Response.Success(createdId)
         )
 
         // Call
-        val result = service.authenticateCredentials(credentials).single()
+        val result = service.createUserWithEmailAndPassword(credentials).single()
 
         // Assertions
         assertEquals(createdId, (result as Response.Success).data)
         verify {
-            authRepo.authenticateWithEmail(email, password)
+            authRepo.createUserWithEmailAndPassword(email, password)
         }
 
     }
@@ -91,15 +92,24 @@ class AuthServiceImplTest : KoinTest {
         val email = "abc@mail.com"
         val password = "123456"
         val credentials = Credentials(email, password)
+        val id = "uid"
+        val fbUser: FirebaseUser = mockk { every { uid } returns id}
+        val loggedUser: LoggedUser = mockk()
 
         every { authRepo.signIn(email, password) } returns flowOf(Response.Success(Unit))
+        every { authRepo.getCurrentUser() } returns fbUser
+        every { getLoggedUser.execute(any()) } returns flowOf(Response.Success(loggedUser))
 
         //Call
         val result = service.signIn(credentials).single()
 
         // Assertions
         assertTrue(result is Response.Success)
-        verify { authRepo.signIn(email, password) }
+        verifyOrder {
+            authRepo.signIn(email, password)
+            authRepo.getCurrentUser()
+            getLoggedUser.execute(id)
+        }
     }
 
     @Test
@@ -159,13 +169,13 @@ class AuthServiceImplTest : KoinTest {
         // Arrange
         val fbUid = "uid"
         val fbUser: FirebaseUser = mockk { every { uid } returns fbUid }
-        val loggedUser: LoggedUserDetails = mockk()
+        val loggedUser: LoggedUser = mockk()
 
         every { authRepo.getCurrentUser() } returns fbUser
         every { getLoggedUser.execute(any()) } returns flowOf(Response.Success(loggedUser))
 
         // Act
-        val result = service.getLoggedUserDetails().single()
+        val result = service.getLoggedUser().single()
 
         // Assert
         assertTrue(result is Response.Success)
@@ -181,7 +191,7 @@ class AuthServiceImplTest : KoinTest {
         every { authRepo.getCurrentUser() } returns null
 
         // Act
-        val result = service.getLoggedUserDetails().single()
+        val result = service.getLoggedUser().single()
 
         // Assert
         assertTrue(result is Response.Error)

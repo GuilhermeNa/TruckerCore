@@ -2,6 +2,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.ent
 
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.vip.entity.Vip
 import com.example.truckercore.model.shared.errors.InvalidStateException
 
 /**
@@ -12,15 +13,22 @@ import com.example.truckercore.model.shared.errors.InvalidStateException
  *
  * @throws InvalidStateException If the `userId` of the `personWD` does not match the `id` of the provided `user`.
  */
-data class LoggedUserDetails(
+data class LoggedUser(
     val user: User,
-    val personWD: PersonWithDetails
+    val personWD: PersonWithDetails,
+    val vips: List<Vip> = emptyList()
 ) {
 
     init {
         // Validate PersonWithDetails
         if (personWD.userId != user.id)
             throw InvalidStateException("Person details does not belong to the provided user.")
+
+        // Validate Vip
+        vips.forEach {
+            if (user.id != it.userId)
+                throw InvalidStateException("Vip does not belong to the provided user.")
+        }
     }
 
 }

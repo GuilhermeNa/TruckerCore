@@ -20,7 +20,7 @@ internal interface FirebaseAuthRepository {
      * @param password The password of the user trying to authenticate.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun authenticateWithEmail(email: String, password: String): Flow<Response<String>>
+    fun createUserWithEmailAndPassword(email: String, password: String): Flow<Response<String>>
 
     /**
      * Signs in a user with their email and password.

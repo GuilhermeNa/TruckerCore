@@ -18,7 +18,7 @@ internal class ExceptionHandler {
     }
 
     private fun handleError(throwable: Throwable): Response.Error {
-        logError(throwable.message ?: "Unregistered error message .")
+        logError(throwable.message ?: "Unregistered error message.")
         return Response.Error(UnknownErrorException(throwable))
     }
 

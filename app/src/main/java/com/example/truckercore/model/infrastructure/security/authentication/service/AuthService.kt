@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.authentication.service
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUserDetails
+import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUser
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -22,18 +22,25 @@ interface AuthService {
      * @param credentials The credentials of the user, including email and password.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun authenticateCredentials(credentials: Credentials): Flow<Response<String>>
+    fun createUserWithEmailAndPassword(credentials: Credentials): Flow<Response<String>>
 
     /**
-     * Signs in a user using their credentials.
+     * Signs in a user using their credentials (email and password).
      *
-     * This method performs the sign-in process using the provided [Credentials] and returns a flow
-     * with a [Response] indicating success (Unit) or failure (error response).
+     * This method performs the sign-in process by utilizing the provided [Credentials],
+     * authenticating the user via Firebase, and then fetching the corresponding logged user
+     * details. The method returns a [Flow] emitting a [Response] that contains:
+     * - [LoggedUser] on successful sign-in with user details.
+     * - [Response.Empty] if the user is authenticated but no details are found.
+     * - An error response if the sign-in or user retrieval fails.
      *
      * @param credentials The credentials of the user, including email and password.
-     * @return A [Flow] emitting the [Response] containing [Unit] on successful sign-in, or an error if it fails.
+     * @return A [Flow] emitting a [Response] containing:
+     * - [LoggedUser] on successful sign-in,
+     * - [Response.Empty] if no user details are found,
+     * - An error if the process fails (e.g., authentication failure or network error).
      */
-    fun signIn(credentials: Credentials): Flow<Response<Unit>>
+    fun signIn(credentials: Credentials): Flow<Response<LoggedUser>>
 
     /**
      * Signs out the current authenticated user.
@@ -53,6 +60,15 @@ interface AuthService {
      */
     fun thereIsLoggedUser(): Boolean
 
+     /**
+     * Retrieves the logged-in user along with their associated person details.
+     *
+     * @return A [Flow] emitting:
+     * - [Response.Success] containing [LoggedUser] if successful, or an error response if the user is not logged in.
+     * - [Response.Error] if any error occurs.
+     */
+    fun getLoggedUser(): Flow<Response<LoggedUser>>
+
     /**
      * Creates a new system access based on the provided access requirements.
      *
@@ -63,14 +79,5 @@ interface AuthService {
      * @return A [Flow] emitting the [Response] containing [Unit] on success, or an error response if access creation fails.
      */
     fun createNewSystemAccess(requirements: NewAccessRequirements): Flow<Response<Unit>>
-
-    /**
-     * Retrieves the logged-in user along with their associated person details.
-     *
-     * @return A [Flow] emitting:
-     * - [Response.Success] containing [LoggedUserDetails] if successful, or an error response if the user is not logged in.
-     * - [Response.Error] if any error occurs.
-     */
-    fun getLoggedUserDetails(): Flow<Response<LoggedUserDetails>>
 
 }
