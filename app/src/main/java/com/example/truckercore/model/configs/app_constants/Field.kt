@@ -16,6 +16,7 @@ enum class Field(private val fieldName: String) {
     TRAVEL_ID("travelId"),
     LABEL_ID("labelId"),
     FREIGHT_ID("freightId"),
+    PARENT("parent"),
     PARENT_ID("parentId"),
     TYPE("type"),
     VACATION_ID("vacationId"),
@@ -48,6 +49,9 @@ enum class Field(private val fieldName: String) {
     AUTHORIZED_USER_IDS("authorizedUserIds"),
     IS_ACTIVE("isActive"),
     NOTIFICATION_DATE("notificationDate"),
+    TITLE("title"),
+    MESSAGE("message"),
+    IS_READ("isRead"),
     ;
 
     /**

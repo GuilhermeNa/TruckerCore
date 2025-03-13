@@ -30,7 +30,8 @@ enum class Collection(private val collectionName: String) {
     USER("user"),
     TRAILER("trailer"),
     LICENSING("licensing"),
-    VIP("vip")
+    VIP("vip"),
+    NOTIFICATION("notification")
     ;
 
     /**

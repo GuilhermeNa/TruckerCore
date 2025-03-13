@@ -19,6 +19,7 @@ class FieldTest {
         Field.LABEL_ID,
         Field.FREIGHT_ID,
         Field.PARENT_ID,
+        Field.PARENT,
         Field.TYPE,
         Field.VACATION_ID,
         Field.USER_ID,
@@ -49,7 +50,10 @@ class FieldTest {
         Field.EMPLOYEE_STATUS,
         Field.AUTHORIZED_USER_IDS,
         Field.IS_ACTIVE,
-        Field.NOTIFICATION_DATE
+        Field.NOTIFICATION_DATE,
+        Field.TITLE,
+        Field.MESSAGE,
+        Field.IS_READ,
     )
 
     @Test
@@ -65,6 +69,7 @@ class FieldTest {
         assertEquals("labelId", Field.LABEL_ID.getName())
         assertEquals("freightId", Field.FREIGHT_ID.getName())
         assertEquals("parentId", Field.PARENT_ID.getName())
+        assertEquals("parent", Field.PARENT.getName())
         assertEquals("type", Field.TYPE.getName())
         assertEquals("vacationId", Field.VACATION_ID.getName())
         assertEquals("userId", Field.USER_ID.getName())
@@ -96,6 +101,9 @@ class FieldTest {
         assertEquals("authorizedUserIds", Field.AUTHORIZED_USER_IDS.getName())
         assertEquals("isActive", Field.IS_ACTIVE.getName())
         assertEquals("notificationDate", Field.NOTIFICATION_DATE.getName())
+        assertEquals("title", Field.TITLE.getName())
+        assertEquals("message", Field.MESSAGE.getName())
+        assertEquals("isRead", Field.IS_READ.getName())
     }
 
     @Test

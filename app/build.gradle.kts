@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.crashlytics)
-    `maven-publish`
 }
 
 android {
@@ -29,13 +28,49 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+ /*   flavorDimensions += listOf("product", "version")
+    productFlavors {
+        create("limited") {
+            dimension = "version"
+            applicationIdSuffix = ".limited"
+            versionNameSuffix = "-limited"
+        }
+        create("full") {
+            dimension = "version"
+            applicationIdSuffix = ".full"
+            versionNameSuffix = "-full"
+        }
+
+        create("individual") {
+            dimension = "product"
+            applicationIdSuffix = ".individual"
+            versionNameSuffix = "-individual"
+        }
+        create("business_admin") {
+            dimension = "product"
+            applicationIdSuffix = ".integrated_admin"
+            versionNameSuffix = "-integrated_admin"
+        }
+        create("business_driver") {
+            dimension = "product"
+            applicationIdSuffix = ".integrated_driver"
+            versionNameSuffix = "-integrated_driver"
+        }*/
+    //}
 }
 
 dependencies {
@@ -44,7 +79,7 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)
-    testImplementation (libs.kotlinx.co.test)
+    testImplementation(libs.kotlinx.co.test)
     testImplementation(libs.mockk)
 
     implementation(libs.androidx.core.ktx)
@@ -63,19 +98,6 @@ dependencies {
     implementation(libs.google.auth)
     implementation(libs.google.storage)
 
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/GuilhermeNa/TruckerCore")  // Substitua OWNER e REPOSITORY pelos valores reais
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
-            }
-        }
-    }
 }
 
 tasks.withType<Test> {
