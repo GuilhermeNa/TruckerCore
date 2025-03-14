@@ -42,35 +42,31 @@ android {
         viewBinding = true
     }
 
- /*   flavorDimensions += listOf("product", "version")
+    flavorDimensions += listOf("product")
     productFlavors {
-        create("limited") {
-            dimension = "version"
-            applicationIdSuffix = ".limited"
-            versionNameSuffix = "-limited"
-        }
-        create("full") {
-            dimension = "version"
-            applicationIdSuffix = ".full"
-            versionNameSuffix = "-full"
-        }
-
         create("individual") {
             dimension = "product"
             applicationIdSuffix = ".individual"
             versionNameSuffix = "-individual"
+            manifestPlaceholders["appName"] = "Trucker"
         }
+
         create("business_admin") {
             dimension = "product"
-            applicationIdSuffix = ".integrated_admin"
-            versionNameSuffix = "-integrated_admin"
+            applicationIdSuffix = ".business_admin"
+            versionNameSuffix = "-business_admin"
+            manifestPlaceholders["appName"] = "Trucker Empresas"
         }
+
         create("business_driver") {
             dimension = "product"
-            applicationIdSuffix = ".integrated_driver"
-            versionNameSuffix = "-integrated_driver"
-        }*/
-    //}
+            applicationIdSuffix = ".business_driver"
+            versionNameSuffix = "-business_driver"
+            manifestPlaceholders["appName"] ="Trucker Motoristas"
+        }
+
+    }
+
 }
 
 dependencies {
