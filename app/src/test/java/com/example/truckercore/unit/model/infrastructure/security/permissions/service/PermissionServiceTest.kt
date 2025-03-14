@@ -61,13 +61,13 @@ class PermissionServiceTest : KoinTest {
     }
 
     @Test
-    fun `hasSystemAccess() should return true when the user can access a business central`() {
+    fun `canAccessSystem() should return true when the user can access a business central`() {
         // Arrange
         val user: User = mockk(relaxed = true) { every { id } returns "userId" }
         val central = centralProvider.getBaseEntity().copy(authorizedUserIds = hashSetOf("userId"))
 
         // Call
-        val result = service.hasSystemAccess(user, central)
+        val result = service.canAccessSystem(user, central)
 
         // Assert
         assertTrue(result)
@@ -75,13 +75,13 @@ class PermissionServiceTest : KoinTest {
     }
 
     @Test
-    fun `hasSystemAccess() should return false when the user cant access a business central`() {
+    fun `canAccessSystem() should return false when the user cant access a business central`() {
         // Arrange
         val user: User = mockk(relaxed = true) { every { id } returns "userId" }
         val central = centralProvider.getBaseEntity().copy(authorizedUserIds = hashSetOf("otherId"))
 
         // Call
-        val result = service.hasSystemAccess(user, central)
+        val result = service.canAccessSystem(user, central)
 
         // Assert
         assertFalse(result)
@@ -89,13 +89,13 @@ class PermissionServiceTest : KoinTest {
     }
 
     @Test
-    fun `hasSystemAccess() should return false when the business central set is empty`() {
+    fun `canAccessSystem() should return false when the business central set is empty`() {
         // Arrange
         val user: User = mockk(relaxed = true) { every { id } returns "userId" }
         val central = centralProvider.getBaseEntity().copy(authorizedUserIds = hashSetOf())
 
         // Call
-        val result = service.hasSystemAccess(user, central)
+        val result = service.canAccessSystem(user, central)
 
         // Assert
         assertFalse(result)

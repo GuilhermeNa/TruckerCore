@@ -117,5 +117,4 @@ internal class NotificationValidationStrategy : ValidatorStrategy() {
         if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
-
 }

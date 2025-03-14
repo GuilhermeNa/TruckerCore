@@ -26,6 +26,6 @@ internal interface PermissionService {
      * @param central The Business Central instance where the access is being verified.
      * @return A boolean value indicating whether the user has system access (true) or not (false).
      */
-    fun hasSystemAccess(user: User, central: BusinessCentral): Boolean
+    fun canAccessSystem(user: User, central: BusinessCentral): Boolean
 
 }

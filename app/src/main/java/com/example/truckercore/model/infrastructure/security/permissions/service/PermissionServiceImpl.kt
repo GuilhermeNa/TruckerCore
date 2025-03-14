@@ -10,7 +10,7 @@ internal class PermissionServiceImpl: PermissionService {
         return user.hasPermission(permission)
     }
 
-    override fun hasSystemAccess(user: User, central: BusinessCentral): Boolean {
+    override fun canAccessSystem(user: User, central: BusinessCentral): Boolean {
         return central.userHasSystemAccess(user.id!!)
     }
 
