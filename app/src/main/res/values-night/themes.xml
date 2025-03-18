@@ -13,4 +13,19 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- Activity without action bar. -->
+    <style name="Theme.TruckerCore.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Base fonts for text -->
+    <style name="TEXT_DEFAULT">
+        <item name = "fontFamily">@font/poppins</item>
+    </style>
+    <style name="TEXT_HEADER">
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
 </resources>

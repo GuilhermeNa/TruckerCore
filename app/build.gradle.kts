@@ -55,14 +55,14 @@ android {
             dimension = "product"
             applicationIdSuffix = ".business_admin"
             versionNameSuffix = "-business_admin"
-            manifestPlaceholders["appName"] = "Trucker Empresas"
+            manifestPlaceholders["appName"] = "Trucker Empresa"
         }
 
         create("business_driver") {
             dimension = "product"
             applicationIdSuffix = ".business_driver"
             versionNameSuffix = "-business_driver"
-            manifestPlaceholders["appName"] ="Trucker Motoristas"
+            manifestPlaceholders["appName"] = "Trucker Motorista"
         }
 
     }
@@ -70,6 +70,7 @@ android {
 }
 
 dependencies {
+
 
     androidTestImplementation(libs.androidx.espresso.core)
     testRuntimeOnly(libs.junit.jupiter.engine)
@@ -93,6 +94,9 @@ dependencies {
     implementation(libs.google.crashlytics)
     implementation(libs.google.auth)
     implementation(libs.google.storage)
+
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
 }
 

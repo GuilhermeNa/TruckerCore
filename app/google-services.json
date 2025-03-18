@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "758888265184",
-    "project_id": "smart-truck-3352c",
-    "storage_bucket": "smart-truck-3352c.appspot.com"
+    "project_number": "634916806417",
+    "project_id": "truckercore-a932a",
+    "storage_bucket": "truckercore-a932a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:758888265184:android:19a29bb0c2457157b36785",
+        "mobilesdk_app_id": "1:634916806417:android:a2a6ed4f4dffbff3c336b0",
         "android_client_info": {
           "package_name": "com.example.truckercore.business_admin"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCPfy7-y8BggZvfSQ3ALsWB4IvUXOyb4ss"
+          "current_key": "AIzaSyBByStJ8sfI_nmmBl-Gm1xWmMAviVkoyH8"
         }
       ],
       "services": {
@@ -26,7 +26,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:758888265184:android:9b23b508fea15011b36785",
+        "mobilesdk_app_id": "1:634916806417:android:55278bc5660f1aa3c336b0",
         "android_client_info": {
           "package_name": "com.example.truckercore.business_driver"
         }
@@ -34,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCPfy7-y8BggZvfSQ3ALsWB4IvUXOyb4ss"
+          "current_key": "AIzaSyBByStJ8sfI_nmmBl-Gm1xWmMAviVkoyH8"
         }
       ],
       "services": {
@@ -45,7 +45,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:758888265184:android:8e056f356a177867b36785",
+        "mobilesdk_app_id": "1:634916806417:android:b53c12c4eddfffabc336b0",
         "android_client_info": {
           "package_name": "com.example.truckercore.individual"
         }
@@ -53,7 +53,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCPfy7-y8BggZvfSQ3ALsWB4IvUXOyb4ss"
+          "current_key": "AIzaSyBByStJ8sfI_nmmBl-Gm1xWmMAviVkoyH8"
         }
       ],
       "services": {
