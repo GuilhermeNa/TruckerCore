@@ -64,13 +64,11 @@ android {
             versionNameSuffix = "-business_driver"
             manifestPlaceholders["appName"] = "Trucker Motorista"
         }
-
     }
 
 }
 
 dependencies {
-
 
     androidTestImplementation(libs.androidx.espresso.core)
     testRuntimeOnly(libs.junit.jupiter.engine)
