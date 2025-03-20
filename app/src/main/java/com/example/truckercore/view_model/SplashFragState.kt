@@ -4,19 +4,16 @@ sealed class SplashFragState {
 
     data object Initial : SplashFragState()
 
+    data object FirstAccess : SplashFragState()
+
     sealed class UserLoggedIn : SplashFragState() {
         data object ProfileIncomplete : UserLoggedIn()
-        data object ProfileComplete : UserLoggedIn()
+        data object SystemAccessAllowed : UserLoggedIn()
+        data object SystemAccessDenied : UserLoggedIn()
     }
 
-    sealed class UserNotFound : SplashFragState() {
-        data object FirstAccess : UserNotFound()
-        data object NotFirstAccess : UserNotFound()
-    }
+    data object UserNotFound : SplashFragState()
 
-    sealed class SystemAccess : SplashFragState() {
-        data object AccessAllowed : SystemAccess()
-        data object AccessDenied : SystemAccess()
-    }
+    data class Error(val error: Exception) : SplashFragState()
 
 }

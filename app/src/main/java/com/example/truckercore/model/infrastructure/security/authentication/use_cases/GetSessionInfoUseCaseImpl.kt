@@ -1,7 +1,9 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases
 
 import com.example.truckercore.model.configs.app_constants.Field
-import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUser
+import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
+import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
+import com.example.truckercore.model.modules.business_central.use_cases.interfaces.GetBusinessCentralUseCase
 import com.example.truckercore.model.modules.person.shared.person_details.GetPersonWithDetailsUseCase
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.modules.user.entity.User
@@ -10,6 +12,7 @@ import com.example.truckercore.model.modules.vip.entity.Vip
 import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseCase
 import com.example.truckercore.model.shared.enums.QueryType
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.QuerySettings
 import com.example.truckercore.model.shared.utils.sealeds.Response
@@ -19,14 +22,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
 
-internal class GetLoggedUserUseCaseImpl(
+internal class GetSessionInfoUseCaseImpl(
     private val getUser: GetUserUseCase,
     private val getPersonDetails: GetPersonWithDetailsUseCase,
-    private val getVip: GetVipUseCase
-) : GetLoggedUserUseCase {
+    private val getVip: GetVipUseCase,
+    private val getCentral: GetBusinessCentralUseCase
+) : GetSessionInfoUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun execute(firebaseUid: String): Flow<Response<LoggedUser>> =
+    override fun execute(firebaseUid: String): Flow<Response<SessionInfo>> =
         getUser.execute(firebaseUid).flatMapConcat { userResponse ->
 
             val user = when (userResponse) {
@@ -34,22 +38,29 @@ internal class GetLoggedUserUseCaseImpl(
                 else -> return@flatMapConcat flowOf(Response.Empty)
             }
 
-            combineVipAndPersonFlow(user)
+            combineSessionInfoFlows(user)
 
         }
 
-    private fun combineVipAndPersonFlow(user: User): Flow<Response<LoggedUser>> =
+    private fun combineSessionInfoFlows(user: User): Flow<Response<SessionInfo>> =
         combine(
             getVip.execute(getQueryParams(user)),
-            getPersonDetails.execute(user)
-        ) { vipResponse, personResponse ->
-            val loggedUser = LoggedUser(
+            getPersonDetails.execute(user),
+            getCentral.execute(getDocumentParams(user))
+        ) { vipResponse, personResponse, centralResponse ->
+            val sessionInfo = SessionInfo(
                 user = user,
+                central = centralResponse.extractBusinessCentral(),
                 personWD = personResponse.extractPersonDetails(),
-                vips = vipResponse.extractVipList()
+                vips = vipResponse.extractVipList(),
             )
-            Response.Success(loggedUser)
+            Response.Success(sessionInfo)
         }
+
+    private fun getDocumentParams(user: User): DocumentParameters {
+        val centralId = user.businessCentralId
+        return DocumentParameters.create(user).setId(centralId).build()
+    }
 
     private fun getQueryParams(user: User): QueryParameters =
         QueryParameters.create(user)
@@ -68,5 +79,9 @@ internal class GetLoggedUserUseCaseImpl(
     private fun Response<PersonWithDetails>.extractPersonDetails(): PersonWithDetails =
         if (this is Response.Success) data
         else throw ObjectNotFoundException("Person Data was not found.")
+
+    private fun Response<BusinessCentral>.extractBusinessCentral(): BusinessCentral =
+        if (this is Response.Success) data
+        else throw ObjectNotFoundException("Business Central was not found.")
 
 }

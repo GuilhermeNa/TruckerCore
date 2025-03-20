@@ -1,6 +1,9 @@
 <resources>
-    <!-- Login -->
     <string name="password">Senha</string>
     <string name="email">Email</string>
+
+    <string name="finish">Finalizar</string>
+
+
 
 </resources>

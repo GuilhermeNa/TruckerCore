@@ -1,9 +1,9 @@
 package com.example.truckercore.view.enums
 
 enum class Flavor(private val fieldName: String) {
-    INDIVIDUAL("individual"),
-    BUSINESS_ADMIN("business_admin"),
-    BUSINESS_DRIVER("business_driver");
+    INDIVIDUAL("Trucker"),
+    BUSINESS_ADMIN("Trucker Empresa"),
+    BUSINESS_DRIVER("Trucker Motorista");
 
     fun getName() = fieldName
 

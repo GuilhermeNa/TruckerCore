@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.authentication.service
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUser
+import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
@@ -30,17 +30,17 @@ interface AuthService {
      * This method performs the sign-in process by utilizing the provided [Credentials],
      * authenticating the user via Firebase, and then fetching the corresponding logged user
      * details. The method returns a [Flow] emitting a [Response] that contains:
-     * - [LoggedUser] on successful sign-in with user details.
+     * - [SessionInfo] on successful sign-in with user details.
      * - [Response.Empty] if the user is authenticated but no details are found.
      * - An error response if the sign-in or user retrieval fails.
      *
      * @param credentials The credentials of the user, including email and password.
      * @return A [Flow] emitting a [Response] containing:
-     * - [LoggedUser] on successful sign-in,
+     * - [SessionInfo] on successful sign-in,
      * - [Response.Empty] if no user details are found,
      * - An error if the process fails (e.g., authentication failure or network error).
      */
-    fun signIn(credentials: Credentials): Flow<Response<LoggedUser>>
+    fun signIn(credentials: Credentials): Flow<Response<SessionInfo>>
 
     /**
      * Signs out the current authenticated user.
@@ -64,10 +64,10 @@ interface AuthService {
      * Retrieves the logged-in user along with their associated person details.
      *
      * @return A [Flow] emitting:
-     * - [Response.Success] containing [LoggedUser] if successful, or an error response if the user is not logged in.
+     * - [Response.Success] containing [SessionInfo] if successful, or an error response if the user is not logged in.
      * - [Response.Error] if any error occurs.
      */
-    fun getLoggedUser(): Flow<Response<LoggedUser>>
+    fun getSessionInfo(): Flow<Response<SessionInfo>>
 
     /**
      * Creates a new system access based on the provided access requirements.

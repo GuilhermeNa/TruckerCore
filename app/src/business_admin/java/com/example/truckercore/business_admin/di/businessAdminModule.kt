@@ -5,5 +5,5 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val businessAdminModule = module {
-    viewModel<BaSplashFragmentViewModel> { BaSplashFragmentViewModel(get()) }
+    viewModel<BaSplashFragmentViewModel> { BaSplashFragmentViewModel(get(), get(), get()) }
 }

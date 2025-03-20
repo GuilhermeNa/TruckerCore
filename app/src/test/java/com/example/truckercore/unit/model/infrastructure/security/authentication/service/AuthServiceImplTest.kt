@@ -1,16 +1,15 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.configs.di.firebaseModule
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.model.infrastructure.security.authentication.entity.LoggedUser
+import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetLoggedUserUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.every
@@ -36,7 +35,7 @@ class AuthServiceImplTest : KoinTest {
 
     private val authRepo: FirebaseAuthRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
-    private val getLoggedUser: GetLoggedUserUseCase by inject()
+    private val getSessionInfo: GetSessionInfoUseCase by inject()
     private val service: AuthService by inject()
 
     companion object {
@@ -48,7 +47,7 @@ class AuthServiceImplTest : KoinTest {
             startKoin {
                 modules(
                     module {
-                        single<GetLoggedUserUseCase> { mockk() }
+                        single<GetSessionInfoUseCase> { mockk() }
                         single<FirebaseAuthRepository> { mockk() }
                         single<CreateNewSystemAccessUseCase> { mockk() }
                         single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get()) }
@@ -94,11 +93,11 @@ class AuthServiceImplTest : KoinTest {
         val credentials = Credentials(email, password)
         val id = "uid"
         val fbUser: FirebaseUser = mockk { every { uid } returns id}
-        val loggedUser: LoggedUser = mockk()
+        val sessionInfo: SessionInfo = mockk()
 
         every { authRepo.signIn(email, password) } returns flowOf(Response.Success(Unit))
         every { authRepo.getCurrentUser() } returns fbUser
-        every { getLoggedUser.execute(any()) } returns flowOf(Response.Success(loggedUser))
+        every { getSessionInfo.execute(any()) } returns flowOf(Response.Success(sessionInfo))
 
         //Call
         val result = service.signIn(credentials).single()
@@ -108,7 +107,7 @@ class AuthServiceImplTest : KoinTest {
         verifyOrder {
             authRepo.signIn(email, password)
             authRepo.getCurrentUser()
-            getLoggedUser.execute(id)
+            getSessionInfo.execute(id)
         }
     }
 
@@ -169,19 +168,19 @@ class AuthServiceImplTest : KoinTest {
         // Arrange
         val fbUid = "uid"
         val fbUser: FirebaseUser = mockk { every { uid } returns fbUid }
-        val loggedUser: LoggedUser = mockk()
+        val sessionInfo: SessionInfo = mockk()
 
         every { authRepo.getCurrentUser() } returns fbUser
-        every { getLoggedUser.execute(any()) } returns flowOf(Response.Success(loggedUser))
+        every { getSessionInfo.execute(any()) } returns flowOf(Response.Success(sessionInfo))
 
         // Act
-        val result = service.getLoggedUser().single()
+        val result = service.getSessionInfo().single()
 
         // Assert
         assertTrue(result is Response.Success)
         verifyOrder {
             authRepo.getCurrentUser()
-            getLoggedUser.execute(fbUid)
+            getSessionInfo.execute(fbUid)
         }
     }
 
@@ -191,7 +190,7 @@ class AuthServiceImplTest : KoinTest {
         every { authRepo.getCurrentUser() } returns null
 
         // Act
-        val result = service.getLoggedUser().single()
+        val result = service.getSessionInfo().single()
 
         // Assert
         assertTrue(result is Response.Error)

@@ -13,36 +13,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TruckerCore"
         tools:targetApi="31">
-
+        <activity
+            android:name=".view.activities.ErrorActivity"
+            android:exported="false" />
         <!-- Para o flavor "individual" -->
         <activity
-            android:name="com.example.truckercore.individual.view.login.MainActivity"
+            android:name=".individual.view.login.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.TruckerCore.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Para o flavor "business_admin" -->
+        </activity> <!-- Para o flavor "business_admin" -->
         <activity
-            android:name="com.example.truckercore.business_admin.view.login.LoginActivity"
+            android:name=".business_admin.view.login.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.TruckerCore.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Para o flavor "business_driver" -->
+        </activity> <!-- Para o flavor "business_driver" -->
         <activity
-            android:name="com.example.truckercore.business_driver.MainActivity"
+            android:name=".business_driver.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.TruckerCore.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -50,6 +51,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
     </application>
+
 </manifest>

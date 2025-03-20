@@ -15,6 +15,8 @@ kotlinxCoTest = "1.8.1"
 mockk = "1.13.12"
 googleBom = "33.7.0"
 navFragment = "2.8.9"
+dataStore = "1.1.2"
+coilVersion = "2.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +40,9 @@ google-auth = { group = "com.google.firebase", name = "firebase-auth" }
 google-storage = { group = "com.google.firebase", name = "firebase-storage-ktx" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navFragment" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navFragment" }
+data-store-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coilVersion" }
+coil-gif = { group = "io.coil-kt", name = "coil-gif", version.ref = "coilVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "pluginAgp" }

@@ -2,6 +2,7 @@ package com.example.truckercore.model.configs.di
 
 import com.example.truckercore.model.configs.app_constants.Collection
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.modules.person.employee.driver.factory.DriverFactory
 import com.example.truckercore.model.modules.person.employee.driver.mapper.DriverMapper
 import com.example.truckercore.model.modules.person.employee.driver.repository.DriverRepository
 import com.example.truckercore.model.modules.person.employee.driver.repository.DriverRepositoryImpl
@@ -24,7 +25,7 @@ val driverModule = module {
     single<DriverRepository> { DriverRepositoryImpl(get(), Collection.DRIVER) }
     single<DriverService> { DriverServiceImpl(get(), get(), get()) }
     single { DriverMapper() }
-    single { UserFactory(get(), get()) }
+    single { DriverFactory(get(), get()) }
     //--
 
     single<CreateDriverUseCase> {

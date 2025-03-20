@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.user.entity.User
  * Interface that defines a service to check if a user has the required permission to perform an action.
  * It serves as an abstraction layer for permission validation logic.
  */
-internal interface PermissionService {
+interface PermissionService {
 
     /**
      * Checks if a user has the required permission to perform a specific action.

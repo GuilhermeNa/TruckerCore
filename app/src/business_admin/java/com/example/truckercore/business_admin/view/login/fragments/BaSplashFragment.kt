@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.truckercore.business_admin.view_model.login.fragments.BaSplashFragmentViewModel
 import com.example.truckercore.databinding.FragmentSplashBinding
-import com.example.truckercore.view.expressions.repeatOnFragmentStart
+import com.example.truckercore.view.activities.ErrorActivity
+import com.example.truckercore.view.expressions.collectOnStarted
+import com.example.truckercore.view_model.SplashFragState.Error
+import com.example.truckercore.view_model.SplashFragState.FirstAccess
 import com.example.truckercore.view_model.SplashFragState.Initial
-import com.example.truckercore.view_model.SplashFragState.SystemAccess
 import com.example.truckercore.view_model.SplashFragState.UserLoggedIn
 import com.example.truckercore.view_model.SplashFragState.UserNotFound
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,41 +37,49 @@ class BaSplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.repeatOnFragmentStart(this) {
-            viewModel.fragState.collect { state ->
-                when (state) {
-                    is Initial -> searchForLoggedUser()
-                    is UserLoggedIn -> handleLoggedUser(state)
-                    is UserNotFound -> handleUserNotFound(state)
-                    is SystemAccess -> handleSystemAccess(state)
-                }
+        collectOnStarted(viewModel.fragmentState) { state ->
+            when (state) {
+                is Initial -> initializeViewModelFlow()
+                is FirstAccess -> handleFirstAccess()
+                is UserLoggedIn -> handleLoggedUser(state)
+                is UserNotFound -> handleUserNotFound()
+                is Error -> handleError(state.error)
             }
         }
     }
 
+    private fun initializeViewModelFlow() {
+        viewModel.initialize()
+    }
+
+    private fun handleFirstAccess() {
+        navigateToWelcomeFragment()
+    }
+
     private fun handleLoggedUser(state: UserLoggedIn) {
         when (state) {
-            is UserLoggedIn.ProfileComplete -> tryAccessSystem()
+            is UserLoggedIn.SystemAccessAllowed -> navigateToMainActivity()
+            is UserLoggedIn.SystemAccessDenied -> navigateToDeniedSystemAccessFragment()
             is UserLoggedIn.ProfileIncomplete -> navigateToProfileCreationFragment()
         }
     }
 
-    private fun handleUserNotFound(state: UserNotFound) {
-        when (state) {
-            is UserNotFound.FirstAccess -> navigateToWelcomeFragment()
-            is UserNotFound.NotFirstAccess -> navigateToLoginFragment()
-        }
+    private fun handleUserNotFound() {
+        navigateToLoginFragment()
     }
 
-    private fun handleSystemAccess(state: SystemAccess) {
-        when (state) {
-            is SystemAccess.AccessAllowed -> navigateToMainActivity()
-            is SystemAccess.AccessDenied -> navigateToDeniedSystemAccessFragment()
-        }
+    private fun handleError(error: Exception) {
+        navigateToErrorActivity(error)
     }
 
-    private fun searchForLoggedUser() {
-        viewModel.searchForLoggedUser()
+    private fun navigateToErrorActivity(error: Exception) {
+        val intent = ErrorActivity.newInstance(
+            context = requireContext(),
+            errorHeader = viewModel.getErrorTitle(),
+            errorBody = viewModel.getErrorMessage()
+        )
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun navigateToWelcomeFragment() {}
@@ -78,10 +87,6 @@ class BaSplashFragment : Fragment() {
     private fun navigateToLoginFragment() {}
 
     private fun navigateToProfileCreationFragment() {}
-
-    private fun tryAccessSystem() {
-
-    }
 
     private fun navigateToMainActivity() {
 
@@ -99,4 +104,5 @@ class BaSplashFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
