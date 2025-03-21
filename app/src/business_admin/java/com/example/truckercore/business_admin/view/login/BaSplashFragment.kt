@@ -1,20 +1,26 @@
-package com.example.truckercore.business_admin.view.login.fragments
+package com.example.truckercore.business_admin.view.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.truckercore.business_admin.view_model.login.fragments.BaSplashFragmentViewModel
+import com.example.truckercore.R
+import com.example.truckercore.business_admin.view_model.login.BaSplashFragmentViewModel
 import com.example.truckercore.databinding.FragmentSplashBinding
-import com.example.truckercore.view.activities.ErrorActivity
+import com.example.truckercore.view.activities.NotificationActivity
+import com.example.truckercore.view.expressions.animPumpAndDump
 import com.example.truckercore.view.expressions.collectOnStarted
-import com.example.truckercore.view_model.SplashFragState.Error
-import com.example.truckercore.view_model.SplashFragState.FirstAccess
-import com.example.truckercore.view_model.SplashFragState.Initial
-import com.example.truckercore.view_model.SplashFragState.UserLoggedIn
-import com.example.truckercore.view_model.SplashFragState.UserNotFound
+import com.example.truckercore.view.expressions.navigateTo
+import com.example.truckercore.view_model.states.SplashFragState
+import com.example.truckercore.view_model.states.SplashFragState.Error
+import com.example.truckercore.view_model.states.SplashFragState.FirstAccess
+import com.example.truckercore.view_model.states.SplashFragState.Initial
+import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn
+import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val MOTION_DELAY = 3000L
 
 class BaSplashFragment : Fragment() {
 
@@ -37,23 +43,30 @@ class BaSplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        collectOnStarted(viewModel.fragmentState) { state ->
+        collectOnStarted(flow = viewModel.fragmentState, timer = MOTION_DELAY) { state ->
+            if (state != Initial) removeProgressBar()
             when (state) {
-                is Initial -> initializeViewModelFlow()
+                is Initial -> runViewModel()
                 is FirstAccess -> handleFirstAccess()
                 is UserLoggedIn -> handleLoggedUser(state)
-                is UserNotFound -> handleUserNotFound()
+                is SplashFragState.UserNotFound -> handleUserNotFound()
                 is Error -> handleError(state.error)
             }
         }
     }
 
-    private fun initializeViewModelFlow() {
-        viewModel.initialize()
+    private suspend fun removeProgressBar() {
+        binding.fragSplashProgressbar.animPumpAndDump()
+        delay(550)
+    }
+
+    private fun runViewModel() {
+        viewModel.run()
     }
 
     private fun handleFirstAccess() {
-        navigateToWelcomeFragment()
+        val direction = BaSplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
+        navigateTo(direction)
     }
 
     private fun handleLoggedUser(state: UserLoggedIn) {
@@ -69,12 +82,13 @@ class BaSplashFragment : Fragment() {
     }
 
     private fun handleError(error: Exception) {
-        navigateToErrorActivity(error)
+        navigateToNotificationActivityWithAnError(error)
     }
 
-    private fun navigateToErrorActivity(error: Exception) {
-        val intent = ErrorActivity.newInstance(
+    private fun navigateToNotificationActivityWithAnError(error: Exception) {
+        val intent = NotificationActivity.newInstance(
             context = requireContext(),
+            gifRes = R.drawable.gif_error,
             errorHeader = viewModel.getErrorTitle(),
             errorBody = viewModel.getErrorMessage()
         )

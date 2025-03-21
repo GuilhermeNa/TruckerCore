@@ -1,4 +1,4 @@
-package com.example.truckercore.view_model
+package com.example.truckercore.view_model.states
 
 sealed class SplashFragState {
 

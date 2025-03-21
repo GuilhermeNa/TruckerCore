@@ -7,8 +7,17 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.truckercore.business_admin.view.login.fragments.BaSplashFragment"
+        android:name="com.example.truckercore.business_admin.view.login.BaSplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" />
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.truckercore.view.fragments.welcome.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome"/>
 
 </navigation>

@@ -12,16 +12,18 @@ class PreferenceDataStore private constructor() {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-    private val isFirstAppAccess = booleanPreferencesKey("firstAccess")
+    private val isFirstAccess = booleanPreferencesKey("firstAccess")
 
-    suspend fun getIsFirstAppAccess(context: Context): Boolean {
+    //----------------------------------------------------------------------------------------------
+
+    suspend fun getFirstAccessStatus(context: Context): Boolean {
         val preferences = context.dataStore.data.first()
-        return preferences[isFirstAppAccess] ?: false
+        return preferences[isFirstAccess] ?: true
     }
 
-    suspend fun setIsFirstAppAccess(context: Context, value: Boolean) {
+    suspend fun setAppAlreadyAccessed(context: Context) {
         context.dataStore.edit { settings ->
-            settings[isFirstAppAccess] = value
+            settings[isFirstAccess] = false
         }
     }
 

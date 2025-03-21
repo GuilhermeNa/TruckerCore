@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.google.crashlytics)
+    alias(libs.plugins.safe.args)
+    alias(libs.plugins.parcelize)
 }
 
 android {

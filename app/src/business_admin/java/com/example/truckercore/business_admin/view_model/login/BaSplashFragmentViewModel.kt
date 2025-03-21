@@ -1,4 +1,4 @@
-package com.example.truckercore.business_admin.view_model.login.fragments
+package com.example.truckercore.business_admin.view_model.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,10 +7,11 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.shared.utils.sealeds.Response
-import com.example.truckercore.view_model.SplashFragState
-import com.example.truckercore.view_model.SplashFragState.Error
-import com.example.truckercore.view_model.SplashFragState.UserLoggedIn
+import com.example.truckercore.view_model.states.SplashFragState
+import com.example.truckercore.view_model.states.SplashFragState.Error
+import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn
 import com.example.truckercore.view_model.datastore.PreferenceDataStore
+import com.example.truckercore.view_model.states.FragState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.single
@@ -24,35 +25,31 @@ class BaSplashFragmentViewModel(
 
     private var _fragmentState: MutableStateFlow<SplashFragState> =
         MutableStateFlow(SplashFragState.Initial)
-
     val fragmentState get() = _fragmentState.asStateFlow()
-
-    private fun updateFragmentState(newState: SplashFragState) {
-        _fragmentState.value = newState
-    }
 
     //----------------------------------------------------------------------------------------------
 
-    fun initialize() {
+    fun run() {
         viewModelScope.launch {
-            when (isFirstAccess()) {
+            updateFragmentState(SplashFragState.FirstAccess)
+           /* when (isFirstAccess()) {
                 true -> handleFirstAccess()
                 false -> handleDefaultAccess()
-            }
+            }*/
         }
     }
 
     private suspend fun isFirstAccess(): Boolean =
         PreferenceDataStore
             .getInstance()
-            .getIsFirstAppAccess(application.applicationContext)
+            .getFirstAccessStatus(application.applicationContext)
 
     private suspend fun handleFirstAccess() {
         updateFragmentState(SplashFragState.FirstAccess)
 
         PreferenceDataStore
             .getInstance()
-            .setIsFirstAppAccess(application.applicationContext, true)
+            .setAppAlreadyAccessed(application.applicationContext)
 
     }
 
@@ -91,5 +88,10 @@ class BaSplashFragmentViewModel(
 
     fun getErrorMessage() = "Houve alguma falha no carregamento de dados, entre em contato com o " +
             "distribuidor do App para mais informações."
+
+    private fun updateFragmentState(newState: SplashFragState) {
+        _fragmentState.value = newState
+    }
+
 
 }

@@ -39,10 +39,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- FABS -->
+    <!-- Fabs -->
     <style name="FAB_SECONDARY">
         <item name ="android:backgroundTint">?attr/colorSecondaryVariant</item>
         <item name = "tint">?attr/colorOnSecondary</item>
+    </style>
+
+    <!-- Buttons -->
+    <style name="BUTTON_TRANSPARENT">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:background">@drawable/shape_transparent_button</item>
     </style>
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.truckercore.business_admin.di.businessAdminModule
 import com.example.truckercore.model.configs.di.koinModules
 import com.example.truckercore.view.enums.Flavor
+import com.example.truckercore.view.expressions.getFlavor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -20,15 +21,12 @@ class AppApplication : Application() {
     }
 
     private fun getKoinModules(): List<Module> {
-        return when (getAppLabel()) {
-            Flavor.INDIVIDUAL.getName() -> emptyList()
-            Flavor.BUSINESS_ADMIN.getName() -> koinModules.plus(businessAdminModule)
-            Flavor.BUSINESS_DRIVER.getName() -> emptyList()
+        return when (getFlavor()) {
+            Flavor.INDIVIDUAL -> emptyList()
+            Flavor.BUSINESS_ADMIN -> koinModules.plus(businessAdminModule)
+            Flavor.BUSINESS_DRIVER -> emptyList()
             else -> emptyList()
         }
     }
-
-    private fun getAppLabel() =
-        applicationContext.packageManager.getApplicationLabel(applicationInfo)
 
 }

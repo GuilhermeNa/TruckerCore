@@ -44,4 +44,15 @@
         <item name = "tint">?attr/colorOnSecondary</item>
     </style>
 
+    <!-- Buttons -->
+    <style name="BUTTON_TRANSPARENT">
+    <item name="android:textColor">@color/grey</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:fontFamily">@font/roboto_medium</item>
+    <item name="android:background">@drawable/shape_transparent_button</item>
+    <item name="android:strokeWidth">3</item>
+    <item name="android:strokeColor">@color/grey</item>
+    </style>
+
 </resources>

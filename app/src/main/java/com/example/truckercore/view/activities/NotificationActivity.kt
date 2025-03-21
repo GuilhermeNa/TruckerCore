@@ -3,13 +3,11 @@ package com.example.truckercore.view.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.truckercore.R
-import com.example.truckercore.databinding.ActivityErrorBinding
+import com.example.truckercore.databinding.ActivityNotificationBinding
 import com.example.truckercore.view.expressions.loadGif
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private const val HEADER_MESSAGE = "error_header"
 
@@ -19,15 +17,17 @@ private const val BODY_MESSAGE = "error_body"
 
 private const val NULL_BODY_MESSAGE = "Error body message is null."
 
-class ErrorActivity : AppCompatActivity() {
+private const val GIF_RESOURCE = "gif_resource"
 
-    private var _binding: ActivityErrorBinding? = null
+class NotificationActivity : AppCompatActivity() {
+
+    private var _binding: ActivityNotificationBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        _binding = ActivityErrorBinding.inflate(layoutInflater)
+        _binding = ActivityNotificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         animateGif()
         bindTitleMessage()
@@ -42,7 +42,8 @@ class ErrorActivity : AppCompatActivity() {
     }
 
     private fun animateGif() {
-        binding.actErrorImage.loadGif(R.drawable.gif_error, this)
+        val gif = intent.getIntExtra(GIF_RESOURCE, R.drawable.gif_unknown)
+        binding.actErrorImage.loadGif(gif, this)
     }
 
     private fun bindTitleMessage() {
@@ -57,8 +58,14 @@ class ErrorActivity : AppCompatActivity() {
 
     companion object {
 
-        fun newInstance(context: Context, errorHeader: String, errorBody: String): Intent =
-            Intent(context, ErrorActivity::class.java).apply {
+        fun newInstance(
+            context: Context,
+            gifRes: Int? = null,
+            errorHeader: String,
+            errorBody: String
+        ): Intent =
+            Intent(context, NotificationActivity::class.java).apply {
+                putExtra(GIF_RESOURCE, gifRes)
                 putExtra(HEADER_MESSAGE, errorHeader)
                 putExtra(BODY_MESSAGE, errorBody)
             }

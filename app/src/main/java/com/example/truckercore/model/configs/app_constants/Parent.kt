@@ -1,6 +1,5 @@
 package com.example.truckercore.model.configs.app_constants
 
-import com.example.truckercore.model.modules.fleet.trailer.enums.TrailerBrand
 import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
 
 enum class Parent {

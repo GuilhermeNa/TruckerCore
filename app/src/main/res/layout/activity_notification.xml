@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.activities.ErrorActivity">
+    tools:context=".view.activities.NotificationActivity">
 
     <ImageView
         android:id="@+id/act_error_image"
@@ -17,7 +17,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        android:layout_marginTop="16dp"/>
 
     <TextView
         android:id="@+id/act_error_title"
