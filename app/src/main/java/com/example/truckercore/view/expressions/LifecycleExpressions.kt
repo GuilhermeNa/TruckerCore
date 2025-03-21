@@ -6,6 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 private const val DEFAULT_TIMER = 0L
@@ -31,6 +33,21 @@ fun <T> LifecycleOwner.collectOnStarted(
         if (timer != DEFAULT_TIMER) delay(timer)
         repeatOnLifecycle(Lifecycle.State.STARTED) {
             flow.collect { data -> block(data) }
+        }
+    }
+}
+
+fun <T> LifecycleOwner.collectOn(
+    flow1: StateFlow<T>,
+    flow2: StateFlow<T>,
+    flow3: StateFlow<T>,
+    block: suspend (data: List<T>) -> Unit
+) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            combine(flow1, flow2, flow3) {f1, f2, f3 ->
+                block(listOf(f1,f2,f3))
+            }
         }
     }
 }

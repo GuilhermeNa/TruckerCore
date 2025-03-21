@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import com.example.truckercore.R
 import com.example.truckercore.business_admin.view_model.login.BaSplashFragmentViewModel
@@ -19,8 +20,6 @@ import com.example.truckercore.view_model.states.SplashFragState.Initial
 import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn
 import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-private const val MOTION_DELAY = 3000L
 
 class BaSplashFragment : Fragment() {
 
@@ -43,10 +42,10 @@ class BaSplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        collectOnStarted(flow = viewModel.fragmentState, timer = MOTION_DELAY) { state ->
+        collectOnStarted(flow = viewModel.fragmentState) { state ->
             if (state != Initial) removeProgressBar()
             when (state) {
-                is Initial -> runViewModel()
+                is Initial -> handleInitialState()
                 is FirstAccess -> handleFirstAccess()
                 is UserLoggedIn -> handleLoggedUser(state)
                 is SplashFragState.UserNotFound -> handleUserNotFound()
@@ -55,13 +54,49 @@ class BaSplashFragment : Fragment() {
         }
     }
 
+    private fun setMotionLayoutCompletedListener(complete: () -> Unit) {
+        binding.motionLayout.setTransitionListener(
+            object : MotionLayout.TransitionListener {
+                override fun onTransitionStarted(
+                    motionLayout: MotionLayout?,
+                    startId: Int,
+                    endId: Int
+                ) {
+                }
+
+                override fun onTransitionChange(
+                    motionLayout: MotionLayout?,
+                    startId: Int,
+                    endId: Int,
+                    progress: Float
+                ) {
+                }
+
+                override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                    complete()
+                }
+
+                override fun onTransitionTrigger(
+                    motionLayout: MotionLayout?,
+                    triggerId: Int,
+                    positive: Boolean,
+                    progress: Float
+                ) {
+                }
+
+            }
+        )
+    }
+
     private suspend fun removeProgressBar() {
         binding.fragSplashProgressbar.animPumpAndDump()
         delay(550)
     }
 
-    private fun runViewModel() {
-        viewModel.run()
+    private fun handleInitialState() {
+        setMotionLayoutCompletedListener {
+            viewModel.run()
+        }
     }
 
     private fun handleFirstAccess() {

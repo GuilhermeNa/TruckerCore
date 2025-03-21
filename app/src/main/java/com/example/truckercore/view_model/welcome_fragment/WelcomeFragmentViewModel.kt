@@ -15,8 +15,14 @@ class WelcomeFragmentViewModel : ViewModel() {
 
     private val _fragmentState: MutableStateFlow<FragState<List<WelcomePagerData>>> =
         MutableStateFlow(Initial)
-
     val fragmentState get() = _fragmentState.asStateFlow()
+    val data get() = (_fragmentState.value as FragState.Loaded).data
+
+    private val _leftFabState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Invisible)
+    val leftFabState get() = _leftFabState.asStateFlow()
+
+    private var _rightFabState: FabState = FabState.Paginate
+    val rightFabState get() = _rightFabState
 
     //----------------------------------------------------------------------------------------------
 
@@ -90,6 +96,27 @@ class WelcomeFragmentViewModel : ViewModel() {
 
     private fun updateFragmentState(newState: FragState<List<WelcomePagerData>>) {
         _fragmentState.value = newState
+    }
+
+    fun notifyPagerChanged(position: Int) {
+        checkLeftFabVisibility(position)
+        checkRightFabVisibility(position)
+    }
+
+    private fun checkLeftFabVisibility(position: Int) {
+        val firstPager = 0
+        _leftFabState.value = when (position) {
+            firstPager -> ViewState.Invisible
+            else -> ViewState.Enabled
+        }
+    }
+
+    private fun checkRightFabVisibility(position: Int) {
+        val lastPager = data.size - 1
+        _rightFabState = when (position) {
+            lastPager -> FabState.Navigate
+            else -> FabState.Paginate
+        }
     }
 
 }

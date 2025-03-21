@@ -29,7 +29,7 @@
 
     <!-- Base fonts for text -->
     <style name="TEXT_DEFAULT">
-        <item name = "fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -41,8 +41,25 @@
 
     <!-- Fabs -->
     <style name="FAB_SECONDARY">
-        <item name ="android:backgroundTint">?attr/colorSecondaryVariant</item>
-        <item name = "tint">?attr/colorOnSecondary</item>
+        <item name="android:backgroundTint">?attr/colorSecondaryVariant</item>
+        <item name="tint">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="FAB_PRIMARY">
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="tint">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="EXTENDED_FAB_PRIMARY">
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="tint">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="EXTENDED_FAB_SECONDARY">
+        <item name="android:backgroundTint">?attr/colorSecondaryVariant</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="tint">?attr/colorOnSecondary</item>
     </style>
 
     <!-- Buttons -->

@@ -33,9 +33,7 @@
         android:id="@+id/frag_welcome_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="@android:color/transparent"
-
         app:layout_constraintBottom_toBottomOf="@id/frag_welcome_left_fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +50,8 @@
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/icon_arrow_back" />
+        app:srcCompat="@drawable/icon_arrow_back"
+        android:visibility="invisible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/frag_welcome_right_fab"
