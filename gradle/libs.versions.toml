@@ -9,7 +9,7 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 koin = "3.4.0"
-activity = "1.9.3"
+activity = "1.10.1"
 constraintlayout = "2.2.1"
 kotlinxCoTest = "1.8.1"
 mockk = "1.13.12"
@@ -17,7 +17,6 @@ googleBom = "33.7.0"
 navFragment = "2.8.9"
 dataStore = "1.1.2"
 coilVersion = "2.4.0"
-
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,5 +49,5 @@ android-application = { id = "com.android.application", version.ref = "pluginAgp
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "pluginKotlin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "pluginGoogleServices" }
 google-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "pluginGoogleCrashlytics" }
-safe-args = {id = "androidx.navigation.safeargs.kotlin", version.ref = "navFragment"}
-parcelize = {id = "kotlin-parcelize"}
+safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navFragment" }
+parcelize = { id = "kotlin-parcelize" }

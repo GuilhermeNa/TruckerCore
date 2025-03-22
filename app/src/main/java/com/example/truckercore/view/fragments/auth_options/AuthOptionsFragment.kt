@@ -1,12 +1,14 @@
 package com.example.truckercore.view.fragments.auth_options
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentAuthOptionsBinding
+import com.example.truckercore.view.expressions.loadGif
 
 class AuthOptionsFragment : Fragment() {
 
@@ -26,6 +28,14 @@ class AuthOptionsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.fragAuthOptionsImage.loadGif(R.drawable.gif_locked, requireContext())
+
+        binding.fragAuthOptionsButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
 
 
 }

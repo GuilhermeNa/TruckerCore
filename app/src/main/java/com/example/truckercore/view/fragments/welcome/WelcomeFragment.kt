@@ -1,6 +1,5 @@
 package com.example.truckercore.view.fragments.welcome
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -69,6 +68,23 @@ class WelcomeFragment : Fragment() {
         }
     }
 
+    private fun handleInitialState() {
+        val flavor = requireContext().getFlavor()
+        viewModel.run(flavor)
+    }
+
+    private fun handleLoadedState(data: List<WelcomePagerData>) {
+        pagerAdapter = WelcomePagerAdapter(data, this)
+        viewPager = binding.fragWelcomePager
+        viewPager.adapter = pagerAdapter
+        TabLayoutMediator(binding.fragWelcomeTabLayout, viewPager) { _, _ -> }.attach()
+        viewPager.registerOnPageChangeCallback(pagerListener)
+    }
+
+    private fun navigateToNotificationActivity() {
+
+    }
+
     private fun setLeftFabManager(): Unit = with(binding.fragWelcomeLeftFab) {
         collectOnStarted(viewModel.leftFabState) { state ->
             when (state) {
@@ -83,40 +99,24 @@ class WelcomeFragment : Fragment() {
 
     }
 
-    private fun setRightFabManager(): Unit = with(binding.fragWelcomeRightFab) {
-        setOnClickListener {
+    private fun setRightFabManager() {
+        binding.fragWelcomeRightFab.setOnClickListener {
             when (viewModel.rightFabState) {
-                FabState.Navigate -> {
-                    val direction = TODO()
-                    navigateTo(direction)
-                }
-
-                FabState.Paginate -> {
-                    viewPager.setCurrentItem(viewPager.currentItem + 1, true)
-                }
+                FabState.Navigate -> navigateToAuthOptionsFragment()
+                FabState.Paginate -> viewPager.setCurrentItem(viewPager.currentItem + 1, true)
             }
         }
     }
 
-    private fun handleInitialState() {
-        val flavor = requireContext().getFlavor()
-        viewModel.run(flavor)
-    }
-
-    private fun handleLoadedState(data: List<WelcomePagerData>) {
-        pagerAdapter = WelcomePagerAdapter(data, this)
-        viewPager = binding.fragWelcomePager
-        viewPager.adapter = pagerAdapter
-        TabLayoutMediator(binding.fragWelcomeTabLayout, viewPager) { _, _ -> }.attach()
-        viewPager.registerOnPageChangeCallback(pagerListener)
-    }
-
     private fun setButtonManager() {
-
+        binding.fragWelcomeJumpButton.setOnClickListener {
+            navigateToAuthOptionsFragment()
+        }
     }
 
-    private fun navigateToNotificationActivity() {
-        TODO("Not yet implemented")
+    private fun navigateToAuthOptionsFragment() {
+        val direction = WelcomeFragmentDirections.actionWelcomeFragmentToAuthOptionsFragment()
+        navigateTo(direction)
     }
 
     //----------------------------------------------------------------------------------------------

@@ -60,38 +60,35 @@ class WelcomeFragmentViewModel : ViewModel() {
 
     private fun getCommonWelcomeData() = WelcomePagerData(
         res = R.drawable.gif_welcome,
-        title = "Bem Vindo",
-        message = "Aqui você encontrará várias funcionalidades voltadas a ajudar motoristas e gestores de frota." +
-                " \n Nosso objetivo é facilitar seu dia a dia com praticidade e eficiência. " +
-                "Conte conosco para tornar sua jornada mais simples e agradável." +
-                " \n Estamos felizes em ter você com a gente."
+        title = "Bem vindo",
+        message = "Aqui você encontrará funcionalidades focadas em ajudar motoristas e gestores de frota." +
+                " Nosso objetivo é facilitar seu dia a dia com praticidade e eficiência." +
+                " Conte conosco para tornar sua jornada mais simples e agradável." +
+                " Estamos felizes em ter você com a gente."
     )
 
     private fun getCommonDocumentData() = WelcomePagerData(
-        res = R.drawable.git_searching,
-        title = "Cadastro de Documentos",
-        message = "Cadastre documentos, como licenciamento, licenças estaduais e federais, CNH, entre outros." +
-                "\nAcompanhe os prazos de renovação e receba avisos antecipados para não perder as datas importantes." +
-                "\nMantenha sua documentação sempre em dia com facilidade e sem preocupações." +
-                "\nTudo organizado em um único lugar para sua conveniência.\nNão deixe mais prazos passarem despercebidos."
+        res = R.drawable.gif_clock,
+        title = "De olho no prazo",
+        message = "Nunca mais perca a data de renovação dos seus documentos." +
+                " Cadastre-os e deixe que a gente fique de olho nos prazos." +
+                " Enviaremos notificações para que você não perca as datas importantes." +
+                "Mantenha sua documentação sempre em dia com facilidade e sem preocupações."
     )
 
     private fun getBusinessAdminIntegrationData() = WelcomePagerData(
         res = R.drawable.git_integration,
-        title = "Integração com seus motoristas",
-        message = "Como gestor, você tem a opção de cadastrar e fornecer acesso aos seus motoristas, " +
-                "permitindo que eles acessem a documentação necessária." +
-                "\nAlém disso, você pode compartilhar outras informações adicionais essenciais para o trabalho diário." +
-                "\nIsso facilita a gestão da frota, melhora a comunicação e mantém todos na mesma página." +
-                "\nCom essa integração, os motoristas terão acesso fácil e rápido aos dados que precisam para realizar suas atividades." +
-                "\nAcompanhe tudo de forma eficiente e organizada em um único lugar."
+        title = "Integração com sua equipe",
+        message = " Forneça acesso a outros membros da sua equipe." +
+                " Compartilhe informações essenciais para o dia a dia, como, por exemplo, a documentação necessária para um caminhão transitar."
     )
 
     private fun getCommonWorkingTogether() = WelcomePagerData(
         res = R.drawable.gif_working,
-        title = "Foco no que importa",
-        message = "Estamos aqui para cuidar dos detalhes administrativos, para que você possa se concentrar no que realmente importa, o sucesso do seu negócio." +
-                "\nVamos trabalhar juntos para otimizar seu tempo e suas tarefas."
+        title = "Estamos em desenvolvimento",
+        message = "Ainda estamos na nossa fase inicial de desenvolvimento. " +
+                "Portanto, espere muitas novidades em breve." +
+                " Nosso objetivo é atendê-lo com excelência."
     )
 
     private fun updateFragmentState(newState: FragState<List<WelcomePagerData>>) {
