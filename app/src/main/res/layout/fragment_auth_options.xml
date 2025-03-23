@@ -13,16 +13,17 @@
         android:importantForAccessibility="no"
         android:src="@drawable/gif_locked"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintHeight_percent="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/frag_auth_options_text"
-        style="@style/TEXT_DEFAULT"
+        style="@style/TEXT_EMPHASIS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginTop="16dp"
         android:text="@string/frag_auth_options_text_string"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

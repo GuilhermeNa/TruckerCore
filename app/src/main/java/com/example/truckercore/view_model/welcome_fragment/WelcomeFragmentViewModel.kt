@@ -1,13 +1,17 @@
 package com.example.truckercore.view_model.welcome_fragment
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.truckercore.R
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.view.enums.Flavor
 import com.example.truckercore.view_model.states.FragState
 import com.example.truckercore.view_model.states.FragState.Initial
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 private const val NULL_FLAVOR = "Received flavor is not null and data cannot be created without it."
 
@@ -18,11 +22,18 @@ class WelcomeFragmentViewModel : ViewModel() {
     val fragmentState get() = _fragmentState.asStateFlow()
     val data get() = (_fragmentState.value as FragState.Loaded).data
 
+    private val _fragmentEvent = MutableSharedFlow<WelcomeFragmentEvent>()
+    val fragmentEvent get() = _fragmentEvent.asSharedFlow()
+
+    //
     private val _leftFabState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Invisible)
     val leftFabState get() = _leftFabState.asStateFlow()
 
     private var _rightFabState: FabState = FabState.Paginate
     val rightFabState get() = _rightFabState
+
+    private var _lastPagerPos: Int = 0
+    val pagerPos get() = _lastPagerPos
 
     //----------------------------------------------------------------------------------------------
 
@@ -73,21 +84,21 @@ class WelcomeFragmentViewModel : ViewModel() {
         message = "Nunca mais perca a data de renovação dos seus documentos." +
                 " Cadastre-os e deixe que a gente fique de olho nos prazos." +
                 " Enviaremos notificações para que você não perca as datas importantes." +
-                "Mantenha sua documentação sempre em dia com facilidade e sem preocupações."
+                " Mantenha sua documentação sempre em dia com facilidade e sem preocupações."
     )
 
     private fun getBusinessAdminIntegrationData() = WelcomePagerData(
         res = R.drawable.git_integration,
         title = "Integração com sua equipe",
-        message = " Forneça acesso a outros membros da sua equipe." +
+        message = "Forneça acesso a outros membros da sua equipe." +
                 " Compartilhe informações essenciais para o dia a dia, como, por exemplo, a documentação necessária para um caminhão transitar."
     )
 
     private fun getCommonWorkingTogether() = WelcomePagerData(
         res = R.drawable.gif_working,
         title = "Estamos em desenvolvimento",
-        message = "Ainda estamos na nossa fase inicial de desenvolvimento. " +
-                "Portanto, espere muitas novidades em breve." +
+        message = "Ainda estamos na nossa fase inicial de desenvolvimento." +
+                " Portanto, espere muitas novidades em breve." +
                 " Nosso objetivo é atendê-lo com excelência."
     )
 
@@ -96,6 +107,7 @@ class WelcomeFragmentViewModel : ViewModel() {
     }
 
     fun notifyPagerChanged(position: Int) {
+        _lastPagerPos = position
         checkLeftFabVisibility(position)
         checkRightFabVisibility(position)
     }
@@ -113,6 +125,12 @@ class WelcomeFragmentViewModel : ViewModel() {
         _rightFabState = when (position) {
             lastPager -> FabState.Navigate
             else -> FabState.Paginate
+        }
+    }
+
+    fun setEvent(newEvent: WelcomeFragmentEvent) {
+        viewModelScope.launch {
+            _fragmentEvent.emit(newEvent)
         }
     }
 
