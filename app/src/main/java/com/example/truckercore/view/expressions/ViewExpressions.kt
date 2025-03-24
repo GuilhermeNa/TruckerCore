@@ -8,16 +8,27 @@ import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import com.example.truckercore.R
 
-fun View.navigateTo(direction: NavDirections) {
-    val navController = Navigation.findNavController(this)
-    navController.navigate(direction)
-}
-
+/**
+ * Navigates to the specified destination using a NavController.
+ *
+ * This function leverages the Navigation component in Android to handle navigation within the app.
+ * It is typically used within a Fragment to navigate to another screen.
+ *
+ * @param direction The [NavDirections] object containing the navigation direction to a destination.
+ */
 fun Fragment.navigateTo(direction: NavDirections) {
     val navController = Navigation.findNavController(this.requireView())
     navController.navigate(direction)
 }
 
+/**
+ * Animates the view to create a "pump and dump" effect, where the view scales down, expands,
+ * and then fades away.
+ *
+ * This animation sequence first shrinks the view to 80% of its size, then expands it to 150%
+ * of its size, and finally makes it disappear (scale and fade to 0).
+ * This effect could be used for emphasizing or removing a UI element in a visually striking way.
+ */
 fun View.animPumpAndDump() {
     animate().run {
         // Reduz a escala view
@@ -44,14 +55,45 @@ fun View.animPumpAndDump() {
     }
 }
 
+/**
+ * Extension function for `View` that animates the view sliding in from the bottom.
+ * The view becomes visible and animates using a slide-in animation from the bottom.
+ * This function checks if the visibility of the view is not already `VISIBLE` before applying the animation.
+ *
+ * @receiver View - The view on which this function is invoked.
+ */
 fun View.slideInBottom() {
-    val animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
-    if (visibility != VISIBLE) visibility = VISIBLE
-    this.startAnimation(animation)
+    // Checks if the view is not already visible before applying the animation.
+    if (visibility != VISIBLE) {
+        // Loads the slide-in animation from the resource.
+        val animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
+
+        // Makes the view visible.
+        visibility = VISIBLE
+
+        // Starts the animation.
+        this.startAnimation(animation)
+    }
 }
 
+/**
+ * Extension function for `View` that animates the view sliding out to the bottom.
+ * The view becomes either `INVISIBLE` or `GONE` depending on the `vis` parameter and animates with a slide-out effect.
+ * This function checks if the view's visibility is not already the provided visibility value before applying the animation.
+ *
+ * @receiver View - The view on which this function is invoked.
+ * @param vis Int - The desired visibility state after the animation (either `INVISIBLE` or `GONE`).
+ */
 fun View.slideOutBottom(vis: Int) {
-    val animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
-    if (visibility != vis) visibility = vis
-    this.startAnimation(animation)
+    // Checks if the view's visibility is not already the desired value.
+    if (visibility != vis) {
+        // Loads the slide-out animation from the resource.
+        val animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
+
+        // Sets the view's visibility to the provided value (INVISIBLE or GONE).
+        visibility = vis
+
+        // Starts the animation.
+        this.startAnimation(animation)
+    }
 }

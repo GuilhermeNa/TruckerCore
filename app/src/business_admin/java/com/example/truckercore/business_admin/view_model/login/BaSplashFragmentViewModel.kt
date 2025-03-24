@@ -11,7 +11,6 @@ import com.example.truckercore.view_model.states.SplashFragState
 import com.example.truckercore.view_model.states.SplashFragState.Error
 import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn
 import com.example.truckercore.view_model.datastore.PreferenceDataStore
-import com.example.truckercore.view_model.states.FragState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.single

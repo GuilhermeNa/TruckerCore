@@ -32,12 +32,41 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpToInclusive="false" />
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="flavor"
+            app:argType="com.example.truckercore.view.enums.Flavor" />
     </fragment>
     <fragment
         android:id="@+id/authOptionsFragment"
         android:name="com.example.truckercore.view.fragments.auth_options.AuthOptionsFragment"
         android:label="fragment_auth_options"
-        tools:layout="@layout/fragment_auth_options" />
+        tools:layout="@layout/fragment_auth_options" >
+        <action
+            android:id="@+id/action_authOptionsFragment_to_phoneAuthFragment"
+            app:destination="@id/phoneAuthFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_authOptionsFragment_to_emailAuthFragment"
+            app:destination="@id/emailAuthFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/phoneAuthFragment"
+        android:name="com.example.truckercore.view.fragments.phone_auth.PhoneAuthFragment"
+        android:label="fragment_phone_auth"
+        tools:layout="@layout/fragment_phone_auth" />
+    <fragment
+        android:id="@+id/emailAuthFragment"
+        android:name="com.example.truckercore.view.fragments.email_auth.EmailAuthFragment"
+        android:label="fragment_email_auth"
+        tools:layout="@layout/fragment_email_auth" />
 
 </navigation>

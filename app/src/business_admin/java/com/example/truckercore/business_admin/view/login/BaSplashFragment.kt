@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
+import com.example.truckercore.R
 import com.example.truckercore.business_admin.view_model.login.BaSplashFragmentViewModel
 import com.example.truckercore.databinding.FragmentSplashBinding
+import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.animPumpAndDump
 import com.example.truckercore.view.expressions.collectOnStarted
+import com.example.truckercore.view.expressions.getFlavor
 import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view_model.states.SplashFragState
 import com.example.truckercore.view_model.states.SplashFragState.Error
@@ -98,7 +101,8 @@ class BaSplashFragment : Fragment() {
     }
 
     private fun handleFirstAccess() {
-        val direction = BaSplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
+        val flavor = requireContext().getFlavor()
+        val direction = BaSplashFragmentDirections.actionSplashFragmentToWelcomeFragment(flavor)
         navigateTo(direction)
     }
 
@@ -119,14 +123,14 @@ class BaSplashFragment : Fragment() {
     }
 
     private fun navigateToNotificationActivityWithAnError(error: Exception) {
-      /*  val intent = NotificationActivity.newInstance(
+        val intent = NotificationActivity.newInstance(
             context = requireContext(),
             gifRes = R.drawable.gif_error,
             errorHeader = viewModel.getErrorTitle(),
             errorBody = viewModel.getErrorMessage()
         )
         startActivity(intent)
-        requireActivity().finish()*/
+        requireActivity().finish()
     }
 
     private fun navigateToWelcomeFragment() {}

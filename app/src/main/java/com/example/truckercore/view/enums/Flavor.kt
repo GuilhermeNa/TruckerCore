@@ -1,7 +1,6 @@
 package com.example.truckercore.view.enums
 
-import com.example.truckercore.model.configs.app_constants.Parent
-import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
+import java.security.InvalidParameterException
 
 enum class Flavor(private val fieldName: String) {
     INDIVIDUAL("Trucker"),
@@ -12,8 +11,11 @@ enum class Flavor(private val fieldName: String) {
 
     companion object {
 
-        fun fromFieldName(fieldName: String): Flavor? {
+        fun fromFieldName(fieldName: String): Flavor {
             return entries.find { it.fieldName == fieldName }
+                ?: throw InvalidParameterException(
+                    "Received an invalid field name for flavors: $fieldName."
+                )
         }
 
     }
