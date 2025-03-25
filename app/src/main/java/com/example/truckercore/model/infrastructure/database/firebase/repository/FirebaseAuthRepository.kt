@@ -2,6 +2,7 @@ package com.example.truckercore.model.infrastructure.database.firebase.repositor
 
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,7 +21,17 @@ internal interface FirebaseAuthRepository {
      * @param password The password of the user trying to authenticate.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun createUserWithEmailAndPassword(email: String, password: String): Flow<Response<String>>
+    fun createUserWithEmail(email: String, password: String): Flow<Response<String>>
+
+    /**
+     * Authenticates a user using their phone number.
+     *
+     * This method returns a flow that emits a response containing the authentication token (String)
+     * if the authentication is successful, or an error response if authentication fails.
+     *
+     * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
+     */
+    fun createUserWithPhone(credential: PhoneAuthCredential): Flow<Response<String>>
 
     /**
      * Signs in a user with their email and password.

@@ -4,6 +4,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -23,6 +24,17 @@ interface AuthService {
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
     fun createUserWithEmailAndPassword(credentials: Credentials): Flow<Response<String>>
+
+    /**
+     * Authenticates a user using their phone number and authentication credentials.
+     *
+     * This method validates the provided [PhoneAuthCredential] and returns a flow that emits a response
+     * containing an authentication token (String) if successful, or an error response if authentication fails.
+     *
+     * @param phoneAuthCredential The authentication credentials for the user's phone number, including verification ID and code.
+     * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
+     */
+    fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Flow<Response<String>>
 
     /**
      * Signs in a user using their credentials (email and password).

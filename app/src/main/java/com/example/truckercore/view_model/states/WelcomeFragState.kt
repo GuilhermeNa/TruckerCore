@@ -9,13 +9,13 @@ import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePa
  * in its lifecycle or UI interactions. It can represent an initial state, a successful state with data,
  * or an error state.
  */
-sealed class WelcomeFragmentState {
+sealed class WelcomeFragState {
 
     /**
      * Represents the initial state of the fragment.
      * Typically used when the fragment is being created or initialized.
      */
-    data object Initial : WelcomeFragmentState()
+    data object Initial : WelcomeFragState()
 
     /**
      * Represents the success state of the fragment.
@@ -24,14 +24,14 @@ sealed class WelcomeFragmentState {
      */
     data class Success(
         val data: List<WelcomePagerData>,
-        val uiStage: FragmentWelcomeStage
-    ): WelcomeFragmentState()
+        val uiStage: Stage
+    ): WelcomeFragState()
 
     /**
      * Enum class that defines the different stages of the fragment's UI.
      * This is used to track the user's position in the ViewPager and adjust the UI accordingly.
      */
-    enum class FragmentWelcomeStage {
+    enum class Stage {
         UserInFirsPage,
         UserInIntermediatePages,
         UserInLastPage
@@ -44,6 +44,6 @@ sealed class WelcomeFragmentState {
     data class Error(
         val type: ErrorType,
         val message: String
-    ): WelcomeFragmentState()
+    ): WelcomeFragState()
 
 }

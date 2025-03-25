@@ -9,6 +9,6 @@ import org.koin.dsl.module
 
 val commonViewModelModule = module {
     viewModel<WelcomeFragmentViewModel> { (flavor: Flavor) -> WelcomeFragmentViewModel(flavor) }
-    viewModel<PhoneAuthFragmentViewModel> { PhoneAuthFragmentViewModel() }
+    viewModel<PhoneAuthFragmentViewModel> { PhoneAuthFragmentViewModel(get()) }
     viewModel<EmailAuthFragmentViewModel> { EmailAuthFragmentViewModel() }
 }

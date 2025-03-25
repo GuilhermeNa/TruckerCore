@@ -18,14 +18,13 @@ import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.slideInBottom
 import com.example.truckercore.view.expressions.slideOutBottom
 import com.example.truckercore.view.sealeds.Direction
-import com.example.truckercore.view_model.datastore.PreferenceDataStore
-import com.example.truckercore.view_model.states.WelcomeFragmentState.Error
-import com.example.truckercore.view_model.states.WelcomeFragmentState.FragmentWelcomeStage
-import com.example.truckercore.view_model.states.WelcomeFragmentState.Initial
-import com.example.truckercore.view_model.states.WelcomeFragmentState.Success
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentEvent.LeftFabCLicked
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentEvent.RightFabClicked
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentEvent.TopButtonClicked
+import com.example.truckercore.view_model.states.WelcomeFragState.Error
+import com.example.truckercore.view_model.states.WelcomeFragState.Stage
+import com.example.truckercore.view_model.states.WelcomeFragState.Initial
+import com.example.truckercore.view_model.states.WelcomeFragState.Success
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.LeftFabCLicked
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.RightFabClicked
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.TopButtonClicked
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentViewModel
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 import com.google.android.material.tabs.TabLayoutMediator
@@ -116,9 +115,9 @@ class WelcomeFragment : Fragment() {
     /**
      * Controls the visibility of the left FAB based on the current fragment stage.
      */
-    private fun handleLeftFab(stage: FragmentWelcomeStage): Unit =
+    private fun handleLeftFab(stage: Stage): Unit =
         with(binding.fragWelcomeLeftFab) {
-            if (stage == FragmentWelcomeStage.UserInFirsPage)
+            if (stage == Stage.UserInFirsPage)
                 slideOutBottom(INVISIBLE)
             else {
                 slideInBottom()
@@ -171,7 +170,7 @@ class WelcomeFragment : Fragment() {
      * Otherwise, it advances the ViewPager.
      */
     private suspend fun handleRightFabClicked() {
-        if (viewModel.getUiStage() == FragmentWelcomeStage.UserInLastPage) {
+        if (viewModel.getUiStage() == Stage.UserInLastPage) {
             navigateToAuthOptionsFragment()
         } else {
             paginateViewPager(Direction.Forward)

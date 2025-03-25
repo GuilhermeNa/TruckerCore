@@ -4,6 +4,7 @@ import com.example.truckercore.model.infrastructure.database.firebase.errors.Inc
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -12,7 +13,7 @@ internal class FirebaseAuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : FirebaseAuthRepository {
 
-    override fun createUserWithEmailAndPassword(email: String, password: String) = callbackFlow {
+    override fun createUserWithEmail(email: String, password: String) = callbackFlow {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 task.exception?.let { error ->
@@ -22,14 +23,35 @@ internal class FirebaseAuthRepositoryImpl(
                 task.result.user?.let { user ->
                     val result = Response.Success(user.uid)
                     trySend(result)
-                } ?: {
-                    close(
+                } ?: close(
+                    IncompleteTaskException(
+                        "The task did not complete successfully." +
+                                " User authentication failed."
+                    )
+                )
+
+
+            }
+
+        awaitClose { this.cancel() }
+    }
+
+    override fun createUserWithPhone(credential: PhoneAuthCredential) = callbackFlow {
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                task.exception?.let { error ->
+                    this.close(error)
+                }
+
+                task.result.user?.let { user ->
+                    val result = Response.Success(user.uid)
+                    trySend(result)
+                } ?: close(
                         IncompleteTaskException(
                             "The task did not complete successfully." +
                                     " User authentication failed."
                         )
                     )
-                }
 
             }
 
@@ -54,7 +76,6 @@ internal class FirebaseAuthRepositoryImpl(
         firebaseAuth.signOut()
     }
 
-    override fun getCurrentUser(): FirebaseUser? =
-        firebaseAuth.currentUser
+    override fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 
 }

@@ -10,6 +10,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.use_
 import com.example.truckercore.model.infrastructure.util.ExceptionHandler
 import com.example.truckercore.model.shared.abstractions.Service
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -24,10 +25,15 @@ internal class AuthServiceImpl(
 
     override fun createUserWithEmailAndPassword(credentials: Credentials): Flow<Response<String>> =
         runSafe {
-            firebaseAuthRepository.createUserWithEmailAndPassword(
+            firebaseAuthRepository.createUserWithEmail(
                 email = credentials.email,
                 password = credentials.password
             )
+        }
+
+    override fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Flow<Response<String>> =
+        runSafe {
+            firebaseAuthRepository.createUserWithPhone(phoneAuthCredential)
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)

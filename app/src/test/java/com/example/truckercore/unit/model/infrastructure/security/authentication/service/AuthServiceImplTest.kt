@@ -3,8 +3,8 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
@@ -12,6 +12,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.use_
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.PhoneAuthCredential
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -70,7 +71,7 @@ class AuthServiceImplTest : KoinTest {
         val credentials = Credentials(email = email, password = password)
         val createdId = "uid123"
 
-        every { authRepo.createUserWithEmailAndPassword(any(), any()) } returns flowOf(
+        every { authRepo.createUserWithEmail(any(), any()) } returns flowOf(
             Response.Success(createdId)
         )
 
@@ -80,7 +81,7 @@ class AuthServiceImplTest : KoinTest {
         // Assertions
         assertEquals(createdId, (result as Response.Success).data)
         verify {
-            authRepo.createUserWithEmailAndPassword(email, password)
+            authRepo.createUserWithEmail(email, password)
         }
 
     }
@@ -92,7 +93,7 @@ class AuthServiceImplTest : KoinTest {
         val password = "123456"
         val credentials = Credentials(email, password)
         val id = "uid"
-        val fbUser: FirebaseUser = mockk { every { uid } returns id}
+        val fbUser: FirebaseUser = mockk { every { uid } returns id }
         val sessionInfo: SessionInfo = mockk()
 
         every { authRepo.signIn(email, password) } returns flowOf(Response.Success(Unit))
@@ -198,5 +199,20 @@ class AuthServiceImplTest : KoinTest {
 
     }
 
+    @Test
+    fun `should call auth repository for authenticate with phone`() = runTest {
+        // Arrange
+        val flowResponse = flowOf(Response.Success("id"))
+        val phoneCredential: PhoneAuthCredential = mockk(relaxed = true)
+
+        every { authRepo.createUserWithPhone(any()) } returns flowResponse
+
+        // Call
+        val result = service.createUserWithPhone(phoneCredential).single()
+
+        // Assert
+        assertTrue(result is Response.Success)
+        assertEquals(result.data, "id")
+    }
 
 }

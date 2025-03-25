@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.R
 import com.example.truckercore.view.enums.Flavor
 import com.example.truckercore.view_model.enums.ErrorType
-import com.example.truckercore.view_model.states.WelcomeFragmentState
-import com.example.truckercore.view_model.states.WelcomeFragmentState.FragmentWelcomeStage
-import com.example.truckercore.view_model.states.WelcomeFragmentState.Initial
-import com.example.truckercore.view_model.states.WelcomeFragmentState.Success
+import com.example.truckercore.view_model.states.WelcomeFragState
+import com.example.truckercore.view_model.states.WelcomeFragState.Stage
+import com.example.truckercore.view_model.states.WelcomeFragState.Initial
+import com.example.truckercore.view_model.states.WelcomeFragState.Success
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -27,12 +27,12 @@ class WelcomeFragmentViewModel(actualFlavor: Flavor) : ViewModel() {
 
     // Fragment State --------------------------------------------------------------
     // MutableStateFlow that holds the current state of the fragment.
-    private val _fragmentState: MutableStateFlow<WelcomeFragmentState> = MutableStateFlow(Initial)
+    private val _fragmentState: MutableStateFlow<WelcomeFragState> = MutableStateFlow(Initial)
     val fragmentState get() = _fragmentState.asStateFlow()
 
     // Fragment Event --------------------------------------------------------------
     // MutableSharedFlow to emit events that the fragment will react to.
-    private val _fragmentEvent = MutableSharedFlow<WelcomeFragmentEvent>()
+    private val _fragmentEvent = MutableSharedFlow<WelcomeFragEvent>()
     val fragmentEvent get() = _fragmentEvent.asSharedFlow()
 
     // ViewPager last position ------------------------------------------------------
@@ -48,14 +48,14 @@ class WelcomeFragmentViewModel(actualFlavor: Flavor) : ViewModel() {
         try {
             val state = Success(
                 data = buildFragData(actualFlavor),
-                uiStage = FragmentWelcomeStage.UserInFirsPage
+                uiStage = Stage.UserInFirsPage
             )
 
             updateFragmentState(state)
 
         } catch (e: Exception) {
             updateFragmentState(
-                WelcomeFragmentState.Error(
+                WelcomeFragState.Error(
                     type = ErrorType.UnknownError,
                     message = GENERIC_ERROR_MESSAGE
                 )
@@ -134,7 +134,7 @@ class WelcomeFragmentViewModel(actualFlavor: Flavor) : ViewModel() {
     /**
      * Updates the current state of the fragment with the new state.
      */
-    private fun updateFragmentState(newState: WelcomeFragmentState) {
+    private fun updateFragmentState(newState: WelcomeFragState) {
         _fragmentState.value = newState
     }
 
@@ -148,13 +148,13 @@ class WelcomeFragmentViewModel(actualFlavor: Flavor) : ViewModel() {
         fun getData() = (_fragmentState.value as Success).data
 
         // Helper function to determine the UI stage based on the position
-        fun getActualStage(position: Int): FragmentWelcomeStage {
+        fun getActualStage(position: Int): Stage {
             val firstPage = 0
             val lastPage = getData().size - 1
             return when (position) {
-                firstPage -> FragmentWelcomeStage.UserInFirsPage
-                lastPage -> FragmentWelcomeStage.UserInLastPage
-                else -> FragmentWelcomeStage.UserInIntermediatePages
+                firstPage -> Stage.UserInFirsPage
+                lastPage -> Stage.UserInLastPage
+                else -> Stage.UserInIntermediatePages
             }
         }
 
@@ -169,7 +169,7 @@ class WelcomeFragmentViewModel(actualFlavor: Flavor) : ViewModel() {
     /**
      * Emits a new event to the fragment's event flow.
      */
-    fun setEvent(newEvent: WelcomeFragmentEvent) {
+    fun setEvent(newEvent: WelcomeFragEvent) {
         viewModelScope.launch {
             _fragmentEvent.emit(newEvent)
         }

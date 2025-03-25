@@ -4,22 +4,43 @@ package com.example.truckercore.view_model.enums
  * Enum class representing different types of errors that can occur in the application.
  * Each error type is associated with a human-readable string (field name) that can be used for displaying error messages.
  */
-enum class ErrorType(private val fieldName: String) {
+enum class ErrorType(
+    private val fieldName: String,
+    private val message: String
+) {
 
-    /**
-     * Represents an error that occurs due to a network failure or connectivity issue.
-     */
-    NetworkError("Falha de conexão"),
+    NetworkError(
+        fieldName = "Falha de conexão",
+        message = "Não foi possível estabelecer uma conexão com o servidor."
+    ),
+    InitializationError(
+        fieldName = "Falha de inicialização",
+        message = "Erro ao inicializar o sistema. Tente novamente mais tarde."
+    ),
+    UnknownError(
+        fieldName = "Erro desconhecido",
+        message = "Ocorreu um erro inesperado. Tente novamente mais tarde."
+    ),
+    UnexpectedResponse(
+        fieldName = "Resposta inesperada",
+        message = "A resposta recebida do servidor é inválida ou inesperada."
+    ),
 
-    /**
-     * Represents an error that occurs due to a component initialization.
-     */
-    InitializationError("Falha de inicialização"),
+    // Autenticação
+    UserCollisionError(
+        fieldName = "Credencial existente",
+        message = "Já existe um usuário registrado com essa credencial."
+    ),
+    InvalidUserError(
+        fieldName = "Credencial não encontrada",
+        message = "A credencial informada não foi encontrada ou está desativada."
+    ),
+    WeakPasswordError(
+        fieldName = "Senha inválida",
+        message = "A senha deve ter pelo menos 6 caracteres."
+    )
+    ;
 
-    /**
-     * Represents an unknown error that could not be categorized.
-     */
-    UnknownError("Erro desconhecido");
 
     /**
      * Returns the human-readable name of the error type, which can be used for displaying
@@ -30,3 +51,5 @@ enum class ErrorType(private val fieldName: String) {
     fun getFieldName() = fieldName
 
 }
+
+enum class Teste {}
