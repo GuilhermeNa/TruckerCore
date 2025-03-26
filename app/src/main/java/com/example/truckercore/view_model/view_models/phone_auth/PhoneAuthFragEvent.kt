@@ -4,6 +4,4 @@ sealed class PhoneAuthFragEvent {
 
     data class SendCodeButtonCLicked(val phoneNumber: String) : PhoneAuthFragEvent()
 
-    data class VerifyButtonClicked(val code: String) : PhoneAuthFragEvent()
-
 }

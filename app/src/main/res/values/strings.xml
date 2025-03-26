@@ -11,5 +11,10 @@
     <string name="frag_auth_options_text_string">Escolha uma opção para cadastro</string>
     <string name="phone">Telefone</string>
     <string name="already_registered">Já tenho uma conta</string>
+    <string name="enter_phone">Digite seu telefone</string>
+    <string name="phone_verification_message">Você receberá um código de verificação por mensagem de texto</string>
+    <string name="receive_code">Receber código</string>
+    <string name="enter_code">Digite o código de verificação</string>
+    <string name="verify">Verificar</string>
 
 </resources>

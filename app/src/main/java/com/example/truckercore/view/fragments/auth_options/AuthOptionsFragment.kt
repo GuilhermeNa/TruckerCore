@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentAuthOptionsBinding
+import com.example.truckercore.view.activities.PhoneAuthActivity
 import com.example.truckercore.view.expressions.loadGif
 import com.example.truckercore.view.expressions.navigateTo
 
@@ -58,9 +59,10 @@ class AuthOptionsFragment : Fragment() {
      */
     private fun setPhoneFabListener() {
         binding.fragAuthOptionsFabPhone.setOnClickListener {
-            val direction = AuthOptionsFragmentDirections
-                .actionAuthOptionsFragmentToPhoneAuthFragment()
-            navigateTo(direction)
+            requireActivity().navigateTo(PhoneAuthActivity::class.java)
+       /*     val direction = AuthOptionsFragmentDirections
+                .actionAuthOptionsFragmentToNavGraphPhoneAuth()
+            navigateTo(direction)*/
         }
     }
 

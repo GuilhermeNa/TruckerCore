@@ -5,6 +5,8 @@
     android:id="@+id/nav_graph_login"
     app:startDestination="@id/splashFragment">
 
+    <include app:graph="@navigation/nav_graph_phone_auth" />
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.truckercore.business_admin.view.login.BaSplashFragment"
@@ -44,29 +46,25 @@
         android:label="fragment_auth_options"
         tools:layout="@layout/fragment_auth_options" >
         <action
-            android:id="@+id/action_authOptionsFragment_to_phoneAuthFragment"
-            app:destination="@id/phoneAuthFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-        <action
             android:id="@+id/action_authOptionsFragment_to_emailAuthFragment"
             app:destination="@id/emailAuthFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_authOptionsFragment_to_nav_graph_phone_auth"
+            app:destination="@id/nav_graph_phone_auth"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
-    <fragment
-        android:id="@+id/phoneAuthFragment"
-        android:name="com.example.truckercore.view.fragments.phone_auth.PhoneAuthFragment"
-        android:label="fragment_phone_auth"
-        tools:layout="@layout/fragment_phone_auth" />
     <fragment
         android:id="@+id/emailAuthFragment"
         android:name="com.example.truckercore.view.fragments.email_auth.EmailAuthFragment"
         android:label="fragment_email_auth"
         tools:layout="@layout/fragment_email_auth" />
+
 
 </navigation>

@@ -1,7 +1,5 @@
 package com.example.truckercore.view_model.view_models.phone_auth
 
-import com.example.truckercore.view.sealeds.AppError
-
 sealed class PhoneAuthFragState {
 
     data object Initial : PhoneAuthFragState()
@@ -19,7 +17,7 @@ sealed class PhoneAuthFragState {
 
     data object Success : PhoneAuthFragState()
 
-    data class Error(val type: AppError) : PhoneAuthFragState()
+    /*data class Error(*//*val type: AppError*//*) : PhoneAuthFragState()*/
 
 }
 

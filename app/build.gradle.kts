@@ -78,6 +78,7 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.kotlinx.co.test)
     testImplementation(libs.mockk)
+    implementation(libs.leak.canary)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -100,6 +101,8 @@ dependencies {
     implementation(libs.data.store.preferences)
     implementation(libs.coil)
     implementation(libs.coil.gif)
+    implementation(libs.country.picker)
+    implementation(libs.otp.view)
 
 }
 

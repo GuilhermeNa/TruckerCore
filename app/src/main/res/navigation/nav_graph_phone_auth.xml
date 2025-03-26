@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_phone_auth"
+    app:startDestination="@id/phoneAuthFragment2">
+
+    <fragment
+        android:id="@+id/phoneAuthFragment2"
+        android:name="com.example.truckercore.view.fragments.phone_auth.PhoneAuthFragment"
+        android:label="fragment_phone_auth"
+        tools:layout="@layout/fragment_phone_auth" >
+        <action
+            android:id="@+id/action_phoneAuthFragment2_to_phoneAuthCodeVerificationFragment"
+            app:destination="@id/phoneAuthCodeVerificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/phoneAuthCodeVerificationFragment"
+        android:name="com.example.truckercore.view.fragments.phone_auth_code_verification.PhoneAuthCodeVerificationFragment"
+        android:label="fragment_phone_auth_code_verification"
+        tools:layout="@layout/fragment_phone_auth_code_verification" />
+</navigation>

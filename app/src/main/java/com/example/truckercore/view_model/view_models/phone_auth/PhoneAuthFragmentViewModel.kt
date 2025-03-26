@@ -6,10 +6,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.serv
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.example.truckercore.view_model.enums.ErrorType
 import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragEvent.SendCodeButtonCLicked
-import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragEvent.VerifyButtonClicked
 import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragState.Stage.WaitingCodeMessage
-import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragState.Stage.WaitingPhoneNumber
-import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragState.Stage.WaitingUserTypePhone
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -21,9 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
-class PhoneAuthFragmentViewModel(
-    private val authService: AuthService
-) : ViewModel() {
+class PhoneAuthFragmentViewModel: ViewModel() {
 
     private val _fragmentState: MutableStateFlow<PhoneAuthFragState> =
         MutableStateFlow(PhoneAuthFragState.Initial)
@@ -32,23 +27,19 @@ class PhoneAuthFragmentViewModel(
     private val _fragmentEvent = MutableSharedFlow<PhoneAuthFragEvent>()
     val fragmentEvent get() = _fragmentEvent.asSharedFlow()
 
-    init {
-        setState(PhoneAuthFragState.AuthProgress(WaitingUserTypePhone))
-    }
-
     fun authenticateUser(credential: PhoneAuthCredential) {
-        viewModelScope.launch {
+       /* viewModelScope.launch {
             when (val response = authService.createUserWithPhone(credential).single()) {
                 is Response.Success -> setState(PhoneAuthFragState.Success)
                 is Response.Empty -> handleAuthenticationEmptyResponse()
                 is Response.Error -> handleAuthenticationErrorResponse(response)
             }
-        }
+        }*/
     }
 
     private fun handleAuthenticationEmptyResponse() {
-        val newState = PhoneAuthFragState.Error(LoginError.LockedAccount)
-        setState(newState)
+        //val newState = PhoneAuthFragState.Error()
+        //setState(newState)
     }
 
     private fun handleAuthenticationErrorResponse(response: Response.Error) {
@@ -59,7 +50,7 @@ class PhoneAuthFragmentViewModel(
             else -> ErrorType.UnknownError
         }
 
-        setState(PhoneAuthFragState.Error(type))
+        // setState(PhoneAuthFragState.Error(type))
     }
 
     private fun setState(newState: PhoneAuthFragState) {
@@ -68,13 +59,9 @@ class PhoneAuthFragmentViewModel(
 
     fun setEvent(newEvent: PhoneAuthFragEvent) {
         viewModelScope.launch {
-            when (newEvent) {
-                is SendCodeButtonCLicked -> setState(PhoneAuthFragState.AuthProgress(WaitingCodeMessage))
-                is VerifyButtonClicked ->
-
-
+            if (newEvent is SendCodeButtonCLicked) {
+                setState(PhoneAuthFragState.AuthProgress(WaitingCodeMessage))
             }
-
             _fragmentEvent.emit(newEvent)
         }
     }
