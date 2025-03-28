@@ -21,7 +21,19 @@ internal interface FirebaseAuthRepository {
      * @param password The password of the user trying to authenticate.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun createUserWithEmail(email: String, password: String): Flow<Response<String>>
+    suspend fun createUserWithEmail(email: String, password: String): Response<FirebaseUser>
+
+    /**
+     * Sends a verification email to the newly registered user.
+     *
+     * This method sends an email verification to the provided [FirebaseUser] after they have been successfully created.
+     * Returns a [Response] indicating success or failure of the verification email sending.
+     *
+     * @param firebaseUser The user for whom the email verification will be sent.
+     * @return A [Response] with [Unit] on successful email verification, or an error response if it fails.
+     * @throws IncompleteTaskException If the email verification task fails.
+     */
+    suspend fun sendEmailVerification(firebaseUser: FirebaseUser): Response<Unit>
 
     /**
      * Authenticates a user using their phone number.
@@ -31,7 +43,7 @@ internal interface FirebaseAuthRepository {
      *
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun createUserWithPhone(credential: PhoneAuthCredential): Flow<Response<String>>
+    suspend fun createUserWithPhone(credential: PhoneAuthCredential): Response<String>
 
     /**
      * Signs in a user with their email and password.

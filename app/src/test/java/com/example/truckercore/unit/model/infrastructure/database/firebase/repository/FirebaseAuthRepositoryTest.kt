@@ -82,16 +82,15 @@ class FirebaseAuthRepositoryTest : KoinTest {
             task
         }
 
-        // Call && Assert
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            authRepository.createUserWithEmail(email, pass).collect { response ->
-                assertTrue(response is Response.Success)
-                assertEquals(response.data, fbUid)
-                verify(exactly = 1) {
-                    auth.createUserWithEmailAndPassword(email, pass)
-                    task.addOnCompleteListener(any())
-                }
-            }
+        // Call
+        val response = authRepository.createUserWithEmail(email, pass)
+
+        // Assert
+        assertTrue(response is Response.Success)
+        assertEquals(response.data, fbUser)
+        verify(exactly = 1) {
+            auth.createUserWithEmailAndPassword(email, pass)
+            task.addOnCompleteListener(any())
         }
     }
 
@@ -117,20 +116,17 @@ class FirebaseAuthRepositoryTest : KoinTest {
             }
 
             // Call && Assert
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                assertThrows<IncompleteTaskException> {
-                    authRepository.createUserWithEmail(email, pass).single()
-                    verify(exactly = 1) {
-                        auth.createUserWithEmailAndPassword(email, pass)
-                        task.addOnCompleteListener(any())
-                    }
-                }
-
+            assertThrows<IncompleteTaskException> {
+                authRepository.createUserWithEmail(email, pass)
+            }
+            verify(exactly = 1) {
+                auth.createUserWithEmailAndPassword(email, pass)
+                task.addOnCompleteListener(any())
             }
         }
 
     @Test
-    fun `should throw NullPointerException when the task returns npe error for email auth`() =
+    fun `should return Response Error when the task returns npe error for email auth`() =
         runTest {
             // Arrange
             val email = "email"
@@ -151,14 +147,106 @@ class FirebaseAuthRepositoryTest : KoinTest {
             }
 
             // Call && Assert
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                assertThrows<NullPointerException> {
-                    authRepository.createUserWithEmail(email, pass).single()
-                    verify(exactly = 1) {
-                        auth.createUserWithEmailAndPassword(email, pass)
-                        task.addOnCompleteListener(any())
-                    }
+            val response = authRepository.createUserWithEmail(email, pass)
+
+            assertTrue(response is Response.Error)
+            assertTrue(response.exception is NullPointerException)
+            verify(exactly = 1) {
+                auth.createUserWithEmailAndPassword(email, pass)
+                task.addOnCompleteListener(any())
+            }
+
+        }
+
+    //----------------------------------------------------------------------------------------------
+    // Testing sendEmailVerification()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should send email verification`() = runTest {
+        // Arrange
+        val task = mockk<Task<Void>> {
+            every { exception } returns null
+            every { isSuccessful } returns true
+            every { isComplete } returns true
+            every { isCanceled } returns false
+            every { result } returns null
+        }
+
+        every { fbUser.sendEmailVerification() } returns task
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = it.invocation.args[0] as OnCompleteListener<Void>
+            listener.onComplete(task)
+            task
+        }
+
+        // Call
+        val response = authRepository.sendEmailVerification(fbUser)
+
+        // Assert
+        assertTrue(response is Response.Success)
+        verify(exactly = 1) {
+            fbUser.sendEmailVerification()
+            task.addOnCompleteListener(any())
+        }
+    }
+
+    @Test
+    fun `should throw IncompleteTaskException when returns unsuccessful task`() =
+        runTest {
+            // Arrange
+            val task = mockk<Task<Void>> {
+                every { exception } returns null
+                every { isSuccessful } returns false
+                every { isComplete } returns true
+                every { isCanceled } returns false
+                every { result } returns null
+            }
+
+            every { fbUser.sendEmailVerification() } returns task
+            every { task.addOnCompleteListener(any()) } answers {
+                val listener = it.invocation.args[0] as OnCompleteListener<Void>
+                listener.onComplete(task)
+                task
+            }
+
+            // Call && Assert
+            assertThrows<IncompleteTaskException> {
+                authRepository.sendEmailVerification(fbUser)
+                verify(exactly = 1) {
+                    fbUser.sendEmailVerification()
+                    task.addOnCompleteListener(any())
                 }
+            }
+        }
+
+    @Test
+    fun `should return Response Error when the task returns npe error for email verification`() =
+        runTest {
+            // Arrange
+            val task = mockk<Task<Void>> {
+                every { exception } returns NullPointerException("Simulated")
+                every { isSuccessful } returns false
+                every { isComplete } returns true
+                every { isCanceled } returns false
+                every { result } returns null
+            }
+
+            every { fbUser.sendEmailVerification() } returns task
+            every { task.addOnCompleteListener(any()) } answers {
+                val listener = it.invocation.args[0] as OnCompleteListener<Void>
+                listener.onComplete(task)
+                task
+            }
+
+            // Call
+            val response = authRepository.sendEmailVerification(fbUser)
+
+            // Assert
+            assertTrue(response is Response.Error)
+            assertTrue(response.exception is NullPointerException)
+            verify(exactly = 1) {
+                fbUser.sendEmailVerification()
+                task.addOnCompleteListener(any())
             }
         }
 
@@ -166,7 +254,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     // Testing createUserWithPhone()
     //----------------------------------------------------------------------------------------------
     @Test
-    fun `should authenticate with phone and return uid`() = runTest {
+    fun `should authenticate with phone`() = runTest {
         // Arrange
         val credential: PhoneAuthCredential = mockk(relaxed = true)
         val task = mockk<Task<AuthResult>> {
@@ -184,18 +272,18 @@ class FirebaseAuthRepositoryTest : KoinTest {
             task
         }
 
-        // Call && Assert
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            authRepository.createUserWithPhone(credential).collect { response ->
-                assertTrue(response is Response.Success)
-                assertEquals(response.data, fbUid)
-                verify(exactly = 1) {
-                    auth.signInWithCredential(credential)
-                    task.addOnCompleteListener(any())
-                }
-            }
+        // Call
+        val response = authRepository.createUserWithPhone(credential)
+
+        // Assert
+        assertTrue(response is Response.Success)
+        assertEquals(response.data, fbUid)
+        verify(exactly = 1) {
+            auth.signInWithCredential(credential)
+            task.addOnCompleteListener(any())
         }
     }
+
 
     @Test
     fun `should throw IncompleteTaskException when the task returns an null user for phone auth`() =
@@ -218,20 +306,17 @@ class FirebaseAuthRepositoryTest : KoinTest {
             }
 
             // Call && Assert
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                assertThrows<IncompleteTaskException> {
-                    authRepository.createUserWithPhone(credential).single()
-                    verify(exactly = 1) {
-                        auth.signInWithCredential(credential)
-                        task.addOnCompleteListener(any())
-                    }
+            assertThrows<IncompleteTaskException> {
+                authRepository.createUserWithPhone(credential)
+                verify(exactly = 1) {
+                    auth.signInWithCredential(credential)
+                    task.addOnCompleteListener(any())
                 }
-
             }
         }
 
     @Test
-    fun `should throw NullPointerException when the task returns npe error for phone auth`() =
+    fun `should return Response Error when the task returns npe error for phone auth`() =
         runTest {
             // Arrange
             val credential: PhoneAuthCredential = mockk(relaxed = true)
@@ -250,21 +335,22 @@ class FirebaseAuthRepositoryTest : KoinTest {
                 task
             }
 
-            // Call && Assert
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                assertThrows<NullPointerException> {
-                    authRepository.createUserWithPhone(credential).single()
-                    verify(exactly = 1) {
-                        auth.signInWithCredential(credential)
-                        task.addOnCompleteListener(any())
-                    }
-                }
+            // Call
+            val response = authRepository.createUserWithPhone(credential)
+
+            // Assert
+            assertTrue(response is Response.Error)
+            assertTrue(response.exception is NullPointerException)
+            verify(exactly = 1) {
+                auth.signInWithCredential(credential)
+                task.addOnCompleteListener(any())
             }
         }
 
+
     //----------------------------------------------------------------------------------------------
-    // Testing signIn()
-    //----------------------------------------------------------------------------------------------
+// Testing signIn()
+//----------------------------------------------------------------------------------------------
     @Test
     fun `should signIn with email and return Success`() = runTest {
         // Arrange
@@ -364,8 +450,8 @@ class FirebaseAuthRepositoryTest : KoinTest {
         }
 
     //----------------------------------------------------------------------------------------------
-    // Testing signOut()
-    //----------------------------------------------------------------------------------------------
+// Testing signOut()
+//----------------------------------------------------------------------------------------------
     @Test
     fun `should call signOut from firebase auth`() {
         // Call && Assert
@@ -374,8 +460,8 @@ class FirebaseAuthRepositoryTest : KoinTest {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Testing getCurrentUser()
-    //----------------------------------------------------------------------------------------------
+// Testing getCurrentUser()
+//----------------------------------------------------------------------------------------------
     @Test
     fun `should call currentUser from firebase auth`() {
         // Arrange

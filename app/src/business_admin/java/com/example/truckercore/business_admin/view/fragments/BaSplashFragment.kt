@@ -1,4 +1,4 @@
-package com.example.truckercore.business_admin.view.login
+package com.example.truckercore.business_admin.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import com.example.truckercore.R
-import com.example.truckercore.business_admin.view_model.login.BaSplashFragmentViewModel
+import com.example.truckercore.business_admin.view_model.view_models.BaSplashFragmentViewModel
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.animPumpAndDump

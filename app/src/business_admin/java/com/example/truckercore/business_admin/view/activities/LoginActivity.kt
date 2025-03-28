@@ -1,4 +1,4 @@
-package com.example.truckercore.business_admin.view.login
+package com.example.truckercore.business_admin.view.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/fragment_splash_scene"
-    tools:context=".business_admin.view.login.BaSplashFragment">
+    tools:context=".business_admin.view.fragments.BaSplashFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_splash_guideline"
@@ -23,7 +23,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/shape_circular"
-        android:backgroundTint="?attr/colorPrimary"
+        android:backgroundTint="@color/secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/adm"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="@color/primary"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/frag_splash_guideline"
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/in"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="@color/secondary"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/frag_splash_adm"

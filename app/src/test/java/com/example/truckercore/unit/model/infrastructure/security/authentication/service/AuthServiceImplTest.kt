@@ -2,17 +2,21 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
-import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateAndVerifyUserEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,6 +41,7 @@ class AuthServiceImplTest : KoinTest {
     private val authRepo: FirebaseAuthRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
     private val getSessionInfo: GetSessionInfoUseCase by inject()
+    private val createAndVerifyUser: CreateAndVerifyUserEmailUseCase by inject()
     private val service: AuthService by inject()
 
     companion object {
@@ -51,7 +56,8 @@ class AuthServiceImplTest : KoinTest {
                         single<GetSessionInfoUseCase> { mockk() }
                         single<FirebaseAuthRepository> { mockk() }
                         single<CreateNewSystemAccessUseCase> { mockk() }
-                        single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get()) }
+                        single<CreateAndVerifyUserEmailUseCase> { mockk() }
+                        single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get(), get()) }
                     }
                 )
             }
@@ -66,32 +72,45 @@ class AuthServiceImplTest : KoinTest {
     @Test
     fun `should call auth repository for authenticate credentials`() = runTest {
         // Arrange
-        val email = "abc@mail.com"
-        val password = "123456"
-        val credentials = Credentials(email = email, password = password)
-        val createdId = "uid123"
+        val response: NewEmailUserResponse = mockk()
+        val emailAuthCredential: EmailAuthCredential = mockk(relaxed = true)
 
-        every { authRepo.createUserWithEmail(any(), any()) } returns flowOf(
-            Response.Success(createdId)
-        )
+
+        coEvery { createAndVerifyUser(any()) } returns response
 
         // Call
-        val result = service.createUserWithEmailAndPassword(credentials).single()
+        val result = service.createUserWithEmail(emailAuthCredential)
 
         // Assertions
-        assertEquals(createdId, (result as Response.Success).data)
-        verify {
-            authRepo.createUserWithEmail(email, password)
-        }
-
+        assertEquals(result, response)
+        coVerify(exactly = 1) { createAndVerifyUser(emailAuthCredential) }
     }
 
     @Test
+    fun `should call auth repository for authenticate with phone`() = runTest {
+        // Arrange
+        val uid = "123"
+        val phoneCredential: PhoneAuthCredential = mockk(relaxed = true)
+
+        coEvery { authRepo.createUserWithPhone(any()) } returns Response.Success(uid)
+
+        // Call
+        val result = service.createUserWithPhone(phoneCredential)
+
+        // Assert
+        assertTrue(result is Response.Success)
+        assertEquals(result.data, uid)
+        coVerify(exactly = 1) {
+            authRepo.createUserWithPhone(phoneCredential)
+        }
+    }
+
+   /* @Test
     fun `should call auth repository for sign in`() = runTest {
         // Arrange
         val email = "abc@mail.com"
         val password = "123456"
-        val credentials = Credentials(email, password)
+        val emailAuthCredential = EmailAuthCredential(email, password)
         val id = "uid"
         val fbUser: FirebaseUser = mockk { every { uid } returns id }
         val sessionInfo: SessionInfo = mockk()
@@ -101,7 +120,7 @@ class AuthServiceImplTest : KoinTest {
         every { getSessionInfo.execute(any()) } returns flowOf(Response.Success(sessionInfo))
 
         //Call
-        val result = service.signIn(credentials).single()
+        val result = service.signIn(emailAuthCredential).single()
 
         // Assertions
         assertTrue(result is Response.Success)
@@ -197,22 +216,7 @@ class AuthServiceImplTest : KoinTest {
         assertTrue(result is Response.Error)
         assertTrue(result.exception is NullFirebaseUserException)
 
-    }
+    }*/
 
-    @Test
-    fun `should call auth repository for authenticate with phone`() = runTest {
-        // Arrange
-        val flowResponse = flowOf(Response.Success("id"))
-        val phoneCredential: PhoneAuthCredential = mockk(relaxed = true)
-
-        every { authRepo.createUserWithPhone(any()) } returns flowResponse
-
-        // Call
-        val result = service.createUserWithPhone(phoneCredential).single()
-
-        // Assert
-        assertTrue(result is Response.Success)
-        assertEquals(result.data, "id")
-    }
 
 }

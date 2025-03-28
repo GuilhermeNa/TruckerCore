@@ -188,7 +188,7 @@ class WelcomeFragment : Fragment() {
         //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
 
         // Navigate to destination direction.
-        val direction = WelcomeFragmentDirections.actionWelcomeFragmentToAuthOptionsFragment()
+        val direction = WelcomeFragmentDirections.actionWelcomeFragmentToEmailAuthFragment()
         navigateTo(direction)
     }
 

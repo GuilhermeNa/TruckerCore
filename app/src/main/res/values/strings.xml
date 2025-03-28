@@ -1,6 +1,8 @@
 <resources>
+
     <string name="password">Senha</string>
     <string name="email">Email</string>
+
     <string name="finish">Finalizar</string>
 
     <string name="welcome">Bem Vindo</string>
@@ -8,13 +10,16 @@
     <string name="jump">Pular</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="frag_auth_options_text_string">Escolha uma opção para cadastro</string>
+    <string name="frag_auth_options_text_title">Escolha uma opção para cadastro</string>
     <string name="phone">Telefone</string>
     <string name="already_registered">Já tenho uma conta</string>
     <string name="enter_phone">Digite seu telefone</string>
     <string name="phone_verification_message">Você receberá um código de verificação por mensagem de texto</string>
     <string name="receive_code">Receber código</string>
+
+
     <string name="enter_code">Digite o código de verificação</string>
     <string name="verify">Verificar</string>
+    <string name="already_have_a_code">Já tenho um código</string>
 
 </resources>

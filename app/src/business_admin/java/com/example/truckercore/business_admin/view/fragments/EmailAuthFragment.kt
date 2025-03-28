@@ -1,4 +1,4 @@
-package com.example.truckercore.view.fragments.email_auth
+package com.example.truckercore.business_admin.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragmentViewModel
 

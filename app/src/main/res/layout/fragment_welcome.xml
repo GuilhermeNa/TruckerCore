@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/frag_welcome_left_fab"
-        app:tabBackground="@drawable/tab_pager_selector"
+        app:tabBackground="@drawable/selector_pager_tab"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp" />
 
@@ -55,7 +55,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/frag_welcome_right_fab"
-        style="@style/FAB_SECONDARY"
+        style="@style/FAB_PRIMARY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

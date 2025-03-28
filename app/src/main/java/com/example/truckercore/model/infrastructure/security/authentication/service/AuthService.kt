@@ -1,8 +1,9 @@
 package com.example.truckercore.model.infrastructure.security.authentication.service
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.Credentials
-import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
+import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +18,13 @@ interface AuthService {
     /**
      * Authenticates a user using their credentials.
      *
-     * This method validates the provided [Credentials] and returns a flow that emits a response
+     * This method validates the provided [EmailAuthCredential] and returns a flow that emits a response
      * containing an authentication token (String) if successful, or an error response if authentication fails.
      *
-     * @param credentials The credentials of the user, including email and password.
+     * @param credential The credentials of the user, including email and password.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun createUserWithEmailAndPassword(credentials: Credentials): Flow<Response<String>>
+    suspend fun createUserWithEmail(credential: EmailAuthCredential): NewEmailUserResponse
 
     /**
      * Authenticates a user using their phone number and authentication credentials.
@@ -34,25 +35,25 @@ interface AuthService {
      * @param phoneAuthCredential The authentication credentials for the user's phone number, including verification ID and code.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Flow<Response<String>>
+    suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Response<String>
 
     /**
      * Signs in a user using their credentials (email and password).
      *
-     * This method performs the sign-in process by utilizing the provided [Credentials],
+     * This method performs the sign-in process by utilizing the provided [EmailAuthCredential],
      * authenticating the user via Firebase, and then fetching the corresponding logged user
      * details. The method returns a [Flow] emitting a [Response] that contains:
      * - [SessionInfo] on successful sign-in with user details.
      * - [Response.Empty] if the user is authenticated but no details are found.
      * - An error response if the sign-in or user retrieval fails.
      *
-     * @param credentials The credentials of the user, including email and password.
+     * @param emailAuthCredential The credentials of the user, including email and password.
      * @return A [Flow] emitting a [Response] containing:
      * - [SessionInfo] on successful sign-in,
      * - [Response.Empty] if no user details are found,
      * - An error if the process fails (e.g., authentication failure or network error).
      */
-    fun signIn(credentials: Credentials): Flow<Response<SessionInfo>>
+    fun signIn(emailAuthCredential: EmailAuthCredential): Flow<Response<SessionInfo>>
 
     /**
      * Signs out the current authenticated user.
@@ -72,7 +73,7 @@ interface AuthService {
      */
     fun thereIsLoggedUser(): Boolean
 
-     /**
+    /**
      * Retrieves the logged-in user along with their associated person details.
      *
      * @return A [Flow] emitting:

@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frag_phone_auth_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.phone_auth.PhoneAuthFragment"
-    android:id="@+id/frag_phone_auth_main"
-    >
+    tools:context=".view.fragments.phone_auth.PhoneAuthFragment">
 
     <LinearLayout
         android:id="@+id/frag_phone_auth_title_layout"
@@ -45,10 +44,10 @@
         android:layout_marginHorizontal="32dp"
         android:gravity="center"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_phone_auth_title_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.15">
 
         <com.hbb20.CountryCodePicker
@@ -64,24 +63,24 @@
             android:id="@+id/frag_phone_auth_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="phone"
-            android:singleLine="true"
-            android:maxLength="13"
+            android:hint="@string/phone"
             android:imeOptions="actionDone"
-            android:hint="@string/phone"/>
+            android:inputType="phone"
+            android:maxLength="13"
+            android:singleLine="true"
+            tools:text="99 99999-9999" />
     </LinearLayout>
 
     <Button
         android:id="@+id/frag_phone_auth_button"
-        style="@style/FAB_SECONDARY"
+        style="@style/FAB_PRIMARY"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="64dp"
-        android:text="@string/receive_code"
         android:enabled="false"
+        android:text="@string/receive_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_phone_txt_view_layout" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

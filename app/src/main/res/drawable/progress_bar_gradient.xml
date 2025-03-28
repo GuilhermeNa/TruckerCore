@@ -14,7 +14,7 @@
             android:height="60dp" />
         <gradient
             android:centerY="0.50"
-            android:startColor="?attr/colorSecondary"
+            android:startColor="@color/primary"
             android:type="sweep"
             android:useLevel="false" />
     </shape>

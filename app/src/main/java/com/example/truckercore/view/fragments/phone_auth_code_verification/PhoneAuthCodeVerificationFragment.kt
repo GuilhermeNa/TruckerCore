@@ -5,24 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.navGraphViewModels
+import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentPhoneAuthCodeVerificationBinding
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.example.truckercore.view.expressions.hideKeyboard
+import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragState
+import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthSharedViewModel
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import com.ozcanalasalvar.otp_view.view.OtpView
+import kotlinx.coroutines.launch
 
 class PhoneAuthCodeVerificationFragment : Fragment() {
 
     private var _binding: FragmentPhoneAuthCodeVerificationBinding? = null
     private val binding get() = _binding!!
 
-    private var code = ""
-    private val phoneNumber = "(62)98132-4562"
-
-    //----------------------------------------------------------------------------------------------
-    // onCreate()
-    //----------------------------------------------------------------------------------------------
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val sharedViewModel: PhoneAuthSharedViewModel by navGraphViewModels(R.id.nav_graph_login)
 
     //----------------------------------------------------------------------------------------------
     // onCreateView()
@@ -48,8 +51,8 @@ class PhoneAuthCodeVerificationFragment : Fragment() {
 
     private fun setMessageText() {
         val message = "Você receberá um código de verificação " +
-                "por mensagem de texto no número: $phoneNumber."
-        binding.fragPhoneAuthCodeVerificationMessage.setText(message)
+                "por mensagem de texto no número: ${sharedViewModel.phoneNumber}."
+        binding.fragPhoneAuthCodeVerificationMessage.text = message
     }
 
     private fun setMainLayoutClickListener() {
@@ -59,15 +62,15 @@ class PhoneAuthCodeVerificationFragment : Fragment() {
     }
 
     private fun hideKeyboardAndClearOtpViewFocus(): Unit = with(binding) {
-            fragPhoneAuthCodeVerificationOtp.clearFocus()
-            hideKeyboard()
+        fragPhoneAuthCodeVerificationOtp.clearFocus()
+        hideKeyboard()
     }
 
     private fun setOtpChangedListener() {
         binding.fragPhoneAuthCodeVerificationOtp.setTextChangeListener(
             object : OtpView.ChangeListener {
                 override fun onTextChange(value: String, completed: Boolean) {
-                    code = value
+                    sharedViewModel.storeReceivedCode(value)
                     updateButtonState(completed)
                 }
             })
@@ -80,7 +83,17 @@ class PhoneAuthCodeVerificationFragment : Fragment() {
     private fun setButtonClickListener(): Unit = with(binding) {
         fragPhoneAuthCodeVerificationButton.setOnClickListener {
             hideKeyboardAndClearOtpViewFocus()
-            fragPhoneAuthCodeVerificationOtp
+            verifyCodeAndAuth()
+        }
+    }
+
+    private fun verifyCodeAndAuth() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                sharedViewModel.getCredentialAndAuthenticateUser().let {
+
+                }
+            }
         }
     }
 

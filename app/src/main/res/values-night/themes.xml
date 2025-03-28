@@ -39,7 +39,7 @@
     </style>
 
     <!-- FABS -->
-    <style name="FAB_SECONDARY">
+    <style name="FAB_PRIMARY">
         <item name ="android:backgroundTint">?attr/colorSecondaryVariant</item>
         <item name = "tint">?attr/colorOnSecondary</item>
     </style>

@@ -1,8 +1,7 @@
 <resources>
 
+    <!-- Splash Art Fragment -->
     <string name="adm">Adm</string>
     <string name="in">in</string>
-    <!-- TODO: Remove or change this placeholder text -->
-
 
 </resources>

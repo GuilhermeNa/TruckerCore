@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.email_auth.EmailAuthFragment">
+    tools:context=".business_admin.view.fragments.EmailAuthFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

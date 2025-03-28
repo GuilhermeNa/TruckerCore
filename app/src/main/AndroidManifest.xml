@@ -32,7 +32,7 @@
             </intent-filter>
         </activity> <!-- Para o flavor "business_admin" -->
         <activity
-            android:name=".business_admin.view.login.LoginActivity"
+            android:name=".business_admin.view.activities.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.TruckerCore.NoActionBar">
             <intent-filter>

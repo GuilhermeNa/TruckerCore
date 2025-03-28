@@ -1,4 +1,4 @@
-package com.example.truckercore.business_admin.view_model.login
+package com.example.truckercore.business_admin.view_model.view_models
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

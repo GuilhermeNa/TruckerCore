@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Tamanhos de texto -->
-    <dimen name="default_tab_dot_size">2dp</dimen>
-    <dimen name="selected_tab_dot_size">3dp</dimen>
+    <!-- Pager dot size -->
+    <dimen name="default_pager_dot_size">2dp</dimen>
+    <dimen name="selected_pager_dot_size">3dp</dimen>
 </resources>

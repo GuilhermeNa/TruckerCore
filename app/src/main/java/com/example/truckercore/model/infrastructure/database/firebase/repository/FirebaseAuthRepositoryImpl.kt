@@ -8,55 +8,60 @@ import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
+private const val NEW_USER_ERROR_MESSAGE = "Failed on recover new user."
+
+private const val VERIFICATION_ERROR_MESSAGE = "Failed on send verification to registered email."
 
 internal class FirebaseAuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : FirebaseAuthRepository {
 
-    override fun createUserWithEmail(email: String, password: String) = callbackFlow {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                task.exception?.let { error ->
-                    this.close(error)
-                }
-
-                task.result.user?.let { user ->
-                    val result = Response.Success(user.uid)
-                    trySend(result)
-                } ?: close(
-                    IncompleteTaskException(
-                        "The task did not complete successfully." +
-                                " User authentication failed."
-                    )
-                )
-
-
+    override suspend fun createUserWithEmail(
+        email: String, password: String
+    ) = suspendCoroutine { continuation ->
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            task.exception?.let { e ->
+                continuation.resume(Response.Error(e))
+                return@addOnCompleteListener
             }
-
-        awaitClose { this.cancel() }
+            task.result.user?.let { fbUser ->
+                continuation.resume(Response.Success(fbUser))
+            } ?: continuation.resumeWithException(IncompleteTaskException(NEW_USER_ERROR_MESSAGE))
+        }
     }
 
-    override fun createUserWithPhone(credential: PhoneAuthCredential) = callbackFlow {
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                task.exception?.let { error ->
-                    this.close(error)
-                }
-
-                task.result.user?.let { user ->
-                    val result = Response.Success(user.uid)
-                    trySend(result)
-                } ?: close(
-                        IncompleteTaskException(
-                            "The task did not complete successfully." +
-                                    " User authentication failed."
-                        )
-                    )
-
+    override suspend fun sendEmailVerification(
+        firebaseUser: FirebaseUser
+    ): Response<Unit> = suspendCoroutine { continuation ->
+        firebaseUser.sendEmailVerification().addOnCompleteListener { task ->
+            task.exception?.let { e ->
+                continuation.resume(Response.Error(e))
+                return@addOnCompleteListener
             }
-
-        awaitClose { this.cancel() }
+            if (task.isSuccessful) {
+                continuation.resume(Response.Success(Unit))
+            } else {
+                continuation.resumeWithException(IncompleteTaskException(VERIFICATION_ERROR_MESSAGE))
+            }
+        }
     }
+
+    override suspend fun createUserWithPhone(credential: PhoneAuthCredential) =
+        suspendCoroutine { cont ->
+            firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+                task.exception?.let { error ->
+                    cont.resume(Response.Error(error))
+                    return@addOnCompleteListener
+                }
+                task.result.user?.let { user ->
+                    cont.resume(Response.Success(user.uid))
+                } ?: cont.resumeWithException(IncompleteTaskException(NEW_USER_ERROR_MESSAGE))
+            }
+        }
 
     override fun signIn(email: String, password: String) = callbackFlow {
         firebaseAuth.signInWithEmailAndPassword(email, password)
