@@ -28,6 +28,7 @@ internal class CreateAndVerifyUserEmailUseCaseImpl(
             userCreated = true,
             emailSent = true
         )
+
     }
 
     private fun handleUnexpectedUserResponse(newUserResponse: Response<FirebaseUser>) =

@@ -14,32 +14,66 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <!-- Activity without action bar. -->
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for activities -->
+    <!-- ======================================================================================= -->
     <style name="Theme.TruckerCore.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Activity with fullscreen. -->
     <style name="Theme.TruckerCore.FullScreen">
         <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- ======================================================================================= -->
     <!-- Base fonts for text -->
-    <style name="TEXT_DEFAULT">
+    <!-- ======================================================================================= -->
+    <style name="textDefault">
         <item name="fontFamily">@font/poppins</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/textMedium</item>
     </style>
 
-    <style name="TEXT_EMPHASIS">
+    <style name="textEmphasis">
         <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/textBig</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- Fabs -->
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for buttons-->
+    <!-- ======================================================================================= -->
+    <style name="buttonPrimary">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/textMedium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:background">@drawable/button_primary</item>
+    </style>
+
+    <style name="buttonSecondary">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/textMedium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:background">@color/primaryVar</item>
+    </style>
+
+    <style name="buttonTransparent">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:drawableTint">@color/grey</item>
+        <item name="android:textSize">@dimen/textMedium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:background">@drawable/button_transparent</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for fabs -->
+    <!-- ======================================================================================= -->
     <style name="FAB_PRIMARY">
         <item name="android:backgroundTint">@color/primaryVar</item>
         <item name="tint">@color/white</item>
@@ -62,13 +96,5 @@
         <item name="iconTint">@color/white</item>
     </style>
 
-    <!-- Buttons -->
-    <style name="BUTTON_TRANSPARENT">
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:background">@drawable/shape_transparent_button</item>
-    </style>
 
 </resources>

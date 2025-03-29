@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/frag_phone_auth_title"
-            style="@style/TEXT_EMPHASIS"
+            style="@style/textEmphasis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/frag_phone_auth_message"
-            style="@style/TEXT_DEFAULT"
+            style="@style/textDefault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"

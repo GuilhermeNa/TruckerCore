@@ -3,4 +3,9 @@
     <!-- Pager dot size -->
     <dimen name="default_pager_dot_size">2dp</dimen>
     <dimen name="selected_pager_dot_size">3dp</dimen>
+
+    <!-- Text size -->
+    <dimen name="textMedium">14sp</dimen>
+    <dimen name="textBig">18sp</dimen>
+
 </resources>

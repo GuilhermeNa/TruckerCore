@@ -8,17 +8,16 @@
 
     <Button
         android:id="@+id/frag_welcome_jump_button"
-        style="@style/BUTTON_TRANSPARENT"
+        style="@style/buttonTransparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:drawableEnd="@drawable/icon_arrow_forward"
-        android:drawableTint="@color/grey"
-        android:foreground="?attr/selectableItemBackground"
         android:text="@string/jump"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/frag_welcome_pager"
@@ -38,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/frag_welcome_left_fab"
-        app:tabBackground="@drawable/selector_pager_tab"
+        app:tabBackground="@drawable/selector_view_pager_tab"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp" />
 
