@@ -44,7 +44,7 @@ class BaSplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         collectOnStarted(flow = viewModel.fragmentState) { state ->
-            if (state != Initial) removeProgressBar()
+            if (state != Initial) removeLoadingBar()
             when (state) {
                 is Initial -> handleInitialState()
                 is FirstAccess -> handleFirstAccess()
@@ -89,9 +89,9 @@ class BaSplashFragment : Fragment() {
         )
     }
 
-    private suspend fun removeProgressBar() {
+    private suspend fun removeLoadingBar() {
         binding.fragSplashProgressbar.animPumpAndDump()
-        delay(550)
+        delay(600)
     }
 
     private fun handleInitialState() {

@@ -3,6 +3,7 @@ package com.example.truckercore.view.expressions
 import android.graphics.Color
 import android.view.View
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
@@ -91,6 +92,40 @@ fun View.slideOutBottom(vis: Int) {
     if (visibility != vis) {
         // Loads the slide-out animation from the resource.
         val animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
+
+        // Sets the view's visibility to the provided value (INVISIBLE or GONE).
+        visibility = vis
+
+        // Starts the animation.
+        this.startAnimation(animation)
+    }
+}
+
+fun View.setBottomMargin(bottomMargin: Int) {
+    val layoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+    layoutParams.bottomMargin = bottomMargin.dp
+    this.layoutParams = layoutParams
+}
+
+fun View.slideInTop() {
+    // Checks if the view is not already visible before applying the animation.
+    if (visibility != VISIBLE) {
+        // Loads the slide-in animation from the resource.
+        val animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_top)
+
+        // Makes the view visible.
+        visibility = VISIBLE
+
+        // Starts the animation.
+        this.startAnimation(animation)
+    }
+}
+
+fun View.slideOutTop(vis: Int) {
+    // Checks if the view's visibility is not already the desired value.
+    if (visibility != vis) {
+        // Loads the slide-out animation from the resource.
+        val animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_top)
 
         // Sets the view's visibility to the provided value (INVISIBLE or GONE).
         visibility = vis

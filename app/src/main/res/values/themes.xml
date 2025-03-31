@@ -42,6 +42,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="textAlert">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textSize">@dimen/textSmall</item>
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
     <!-- ======================================================================================= -->
     <!-- Base fonts for buttons-->
     <!-- ======================================================================================= -->
@@ -55,10 +62,11 @@
 
     <style name="buttonSecondary">
         <item name="android:textColor">@color/grey</item>
+        <item name="android:drawableTint">@color/grey</item>
         <item name="android:textSize">@dimen/textMedium</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:background">@color/primaryVar</item>
+        <item name="android:background">@drawable/button_secondary</item>
     </style>
 
     <style name="buttonTransparent">

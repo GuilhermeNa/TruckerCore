@@ -21,5 +21,11 @@
     <string name="enter_code">Digite o código de verificação</string>
     <string name="verify">Verificar</string>
     <string name="already_have_a_code">Já tenho um código</string>
+    <string name="name">Nome</string>
+    <string name="surname">Sobrenome</string>
+    <string name="confirm_password">Confirme a senha</string>
+    <string name="create_account">Criar conta</string>
+    <string name="account_creation">Criação de conta</string>
+    <string name="or">ou</string>
 
 </resources>

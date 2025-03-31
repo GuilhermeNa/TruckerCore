@@ -40,9 +40,18 @@
     </fragment>
     <fragment
         android:id="@+id/emailAuthFragment"
-        android:name="com.example.truckercore.business_admin.view.fragments.EmailAuthFragment"
+        android:name="com.example.truckercore.view.fragments.email_auth.EmailAuthFragment"
         android:label="fragment_email_auth"
-        tools:layout="@layout/fragment_email_auth" />
+        tools:layout="@layout/fragment_email_auth" >
+        <action
+            android:id="@+id/action_emailAuthFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.truckercore.business_admin.view.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 
 
 </navigation>
