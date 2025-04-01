@@ -1,15 +1,26 @@
 package com.example.truckercore.view_model.view_models.email_auth
 
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
+
 sealed class EmailAuthFragState {
 
     data object Initial: EmailAuthFragState()
+    // Estado inicial do aplicativo. Quando ele é aberto
+
 
     data object Creating: EmailAuthFragState()
+    // Quando o bota de criar conta é clicado
+
+    data class Success(val type: EmailAuthFragSuccess): EmailAuthFragState()
+
+    enum class EmailAuthFragSuccess {
+        UserCreatedAndEmailSent, UserCreatedAndEmailFailed
+    }
 
     data class Error(val errorMap: HashMap<EmailAuthFragError, String>): EmailAuthFragState()
 
     enum class EmailAuthFragError {
-        InvalidName, InvalidSurname, InvalidEmail, InvalidPassword, InvalidPasswordConfirmation,
+        InvalidEmail, InvalidPassword, InvalidPasswordConfirmation,
 
         Network, EmailAlreadyExists,
 

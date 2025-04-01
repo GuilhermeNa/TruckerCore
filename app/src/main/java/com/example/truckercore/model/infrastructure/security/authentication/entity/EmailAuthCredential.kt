@@ -2,6 +2,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.ent
 
 import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidEmailException
 import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidPasswordException
+import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
@@ -28,7 +29,7 @@ class EmailAuthCredential private constructor() {
      */
     constructor(email: String, password: String) : this() {
         this._email = validateEmail(email)
-        this._password = validatePassword(password)
+        this._password = validatePassword(password).toHash()
     }
 
     /**
@@ -61,7 +62,7 @@ class EmailAuthCredential private constructor() {
     private fun validatePassword(password: String): String {
         val trimmedPass = password.removeBlank()
 
-        if (trimmedPass.length < 6) throw InvalidPasswordException(
+        if (trimmedPass.length < 6 || trimmedPass.length > 12) throw InvalidPasswordException(
             "Password must have at least 6 characters."
         )
 

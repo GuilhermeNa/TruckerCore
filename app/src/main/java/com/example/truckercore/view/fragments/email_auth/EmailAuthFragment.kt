@@ -4,19 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonCLicked
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailSent
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailFailed
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Error
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Initial
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUiHandler
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthStateHandler
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -27,7 +30,7 @@ class EmailAuthFragment : Fragment() {
     // Binding -------------------------------------------------------------------------------------
     private var _binding: FragmentEmailAuthBinding? = null
     private val binding get() = _binding!!
-    private var uiHandler: EmailAuthUiHandler? = null
+    private var stateHandler: EmailAuthStateHandler? = null
 
     // ViewModel -----------------------------------------------------------------------------------
     private val viewModel: EmailAuthViewModel by viewModel()
@@ -47,23 +50,57 @@ class EmailAuthFragment : Fragment() {
         launch {
             viewModel.fragmentState.collect { state ->
                 when (state) {
-                    is Initial -> {}
-                    is Creating -> {}
-                    is Error -> {}
+                    is Initial -> Unit
+                    is Creating -> handleCreatingState()
+                    is Success -> handleSuccessState(state.type)
+                    is Error -> handleErrorState(state.errorMap)
                 }
             }
         }
     }
 
+    private fun handleCreatingState() {
+        stateHandler?.setCreatingState()
+
+        val email = binding.fragEmailAuthEmailEditText.text.toString()
+        val password = binding.fragEmailAuthPasswordEditText.text.toString()
+        val confirmation = binding.fragEmailAuthConfirmPasswordEditText.text.toString()
+
+        viewModel.tryToAuthenticate(email, password, confirmation)
+    }
+
+    private fun handleSuccessState(type: EmailAuthFragSuccess) {
+        stateHandler?.setSuccessState()
+
+        when(type) {
+            UserCreatedAndEmailSent -> {}
+            UserCreatedAndEmailFailed -> {}
+        }
+
+    }
+
+    private fun handleErrorState(errorMap: HashMap<EmailAuthFragError, String>) {
+        stateHandler?.setErrorState(errorMap)
+    }
+
     private suspend fun setFragmentEventsManager() {
         viewModel.event.collect { event ->
             when (event) {
-                is CreateAccountButtonCLicked -> viewModel.setState(Creating)
-                is AlreadyHaveAccountButtonCLicked -> navigateTo(
-                    EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
-                )
+                is CreateAccountButtonCLicked -> handleCreateButtonClicked()
+                is AlreadyHaveAccountButtonCLicked -> handleAlreadyHaveAccButtonClicked()
             }
         }
+    }
+
+    private fun handleCreateButtonClicked() {
+        hideKeyboardAndClearFocus()
+        viewModel.setState(Creating)
+    }
+
+    private fun handleAlreadyHaveAccButtonClicked() {
+        navigateTo(
+            EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
+        )
     }
 
     //----------------------------------------------------------------------------------------------
@@ -74,7 +111,7 @@ class EmailAuthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        uiHandler = EmailAuthUiHandler(binding)
+        stateHandler = EmailAuthStateHandler(binding)
         return binding.root
     }
 
@@ -86,77 +123,27 @@ class EmailAuthFragment : Fragment() {
         setRegisterButtonListener()
         setAlreadyRegisteredButtonListener()
         setMainLayoutClickListener()
-        setNameFieldManager()
-        setSurnameEditTextFocusListener()
         setPasswordEditTextFocusListener()
 
-        binding.fragEmailAuthNameEditText.setOnClickListener {
-            binding.fragEmailAuthNameError.text = "Testando o text ode erro"
-            val motionLayout = binding.fragEmailAuthMain
-            motionLayout.setTransitionDuration(100)
-            motionLayout.transitionToState(R.id.frag_email_auth_state_1)
-        }
-        binding.fragEmailAuthSurnameEditText.setOnClickListener {
-            val motionLayout = binding.fragEmailAuthMain
-            motionLayout.setTransitionDuration(100)
-            motionLayout.transitionToState(R.id.frag_email_auth_state_2)
-        }
-        binding.fragEmailAuthEmailEditText.setOnClickListener {
-            val motionLayout = binding.fragEmailAuthMain
-            motionLayout.setTransitionDuration(100)
-            motionLayout.transitionToState(R.id.frag_email_auth_state_3)
-        }
-        binding.fragEmailAuthPasswordEditText.setOnClickListener {
-            val motionLayout = binding.fragEmailAuthMain
-            motionLayout.setTransitionDuration(100)
-            motionLayout.transitionToState(R.id.frag_email_auth_state_4)
-        }
-        binding.fragEmailAuthConfirmPasswordEditText.setOnClickListener {
-            val motionLayout = binding.fragEmailAuthMain
-            motionLayout.setTransitionDuration(100)
-            motionLayout.transitionToState(R.id.frag_email_auth_state_5)
-        }
+
     }
 
     private fun setMainLayoutClickListener() {
         binding.fragEmailAuthMain.setOnClickListener {
-            hideKeyboard()
-            uiHandler?.clearLayoutFocus()
+            hideKeyboardAndClearFocus()
         }
     }
 
-    private fun setNameFieldManager() {
-        binding.fragEmailAuthNameEditText.setOnFocusChangeListener { _, hasFocus ->
-           // uiHandler?.setNameHelper(selected = hasFocus)
-        }
-
-        binding.fragEmailAuthNameEditText.addTextChangedListener { text ->
-   /*         val wrongFormat = !text.toString().isNameFormat()
-            val isEmpty = text.toString().isEmpty()
-
-            when {
-                isEmpty -> uiHandler?.setNameError(false)
-                wrongFormat -> uiHandler?.setNameError(true)
-                else -> uiHandler?.setNameError(false)
-            }*/
-
-        }
+    private fun hideKeyboardAndClearFocus() {
+        hideKeyboard()
+        stateHandler?.clearLayoutFocus()
     }
-
-    private fun setSurnameEditTextFocusListener() {
-        binding.fragEmailAuthSurnameEditText.setOnFocusChangeListener { _, hasFocus ->
-          //  uiHandler?.setSurnameHelper(hasFocus)
-        }
-    }
-
-
 
     private fun setPasswordEditTextFocusListener() {
         binding.fragEmailAuthPasswordEditText.setOnFocusChangeListener { _, hasFocus ->
-          //  uiHandler?.setPasswordHelper(selected = hasFocus)
+            //  uiHandler?.setPasswordHelper(selected = hasFocus)
         }
     }
-
 
     private fun setRegisterButtonListener() {
         binding.fragEmailAuthRegisterButton.setOnClickListener {

@@ -9,7 +9,7 @@ import com.example.truckercore.model.shared.utils.sealeds.Response
  * This use case is responsible for validating the provided email and password, creating a user
  * in Firebase Authentication, and sending an email verification to the newly created user.
  */
-internal interface CreateAndVerifyUserEmailUseCase {
+internal interface CreateUserAndVerifyEmailUseCase {
 
     /**
      * Creates a new user using email and password, and sends an email verification.

@@ -5,7 +5,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateAndVerifyUserEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.infrastructure.util.ExceptionHandler
@@ -24,10 +24,10 @@ internal class AuthServiceImpl(
     private val authRepository: FirebaseAuthRepository,
     private val createSystemAccess: CreateNewSystemAccessUseCase,
     private val getLoggedUser: GetSessionInfoUseCase,
-    private val createAndVerifyEmail: CreateAndVerifyUserEmailUseCase
+    private val createAndVerifyEmail: CreateUserAndVerifyEmailUseCase
 ) : Service(exceptionHandler), AuthService {
 
-    override suspend fun createUserWithEmail(credential: EmailAuthCredential) =
+    override suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential) =
         withContext(Dispatchers.IO) { createAndVerifyEmail(credential) }
 
     override suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential) =

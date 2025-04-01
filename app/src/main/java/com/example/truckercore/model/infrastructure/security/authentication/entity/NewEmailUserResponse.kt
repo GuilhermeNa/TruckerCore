@@ -1,5 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.entity
 
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState
 import com.google.firebase.auth.FirebaseUser
 
 /**
@@ -21,4 +22,12 @@ data class NewEmailUserResponse(
     val emailSent: Boolean,
     val createUserError: Exception? = null,
     val sendEmailError: Exception? = null
-)
+) {
+
+    val userCreatedAndEmailSent = userCreated && emailSent
+
+    val failure = !userCreated && !emailSent
+
+    val userCreatedAndEmailFailed = userCreated && !emailSent
+
+}

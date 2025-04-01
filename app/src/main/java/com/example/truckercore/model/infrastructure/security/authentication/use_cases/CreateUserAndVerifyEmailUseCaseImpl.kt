@@ -7,9 +7,9 @@ import com.example.truckercore.model.shared.errors.InvalidResponseException
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 
-internal class CreateAndVerifyUserEmailUseCaseImpl(
+internal class CreateUserAndVerifyEmailUseCaseImpl(
     private val authRepository: FirebaseAuthRepository
-) : CreateAndVerifyUserEmailUseCase {
+) : CreateUserAndVerifyEmailUseCase {
 
     override suspend fun invoke(credential: EmailAuthCredential) = with(credential) {
 

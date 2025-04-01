@@ -18,3 +18,4 @@ fun Context.getFlavor(): Flavor {
     val appName = applicationContext.packageManager.getApplicationLabel(applicationInfo)
     return Flavor.fromFieldName(appName.toString())
 }
+

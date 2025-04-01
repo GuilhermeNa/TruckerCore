@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateAndVerifyUserEmailUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateAndVerifyUserEmailUseCaseImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCaseImpl
 import com.example.truckercore.model.shared.errors.InvalidResponseException
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
@@ -24,11 +24,11 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class CreateAndVerifyUserEmailUseCaseTest : KoinTest {
+class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
     // Injections
     private val authRepo: FirebaseAuthRepository by inject()
-    private val useCase: CreateAndVerifyUserEmailUseCase by inject()
+    private val useCase: CreateUserAndVerifyEmailUseCase by inject()
 
     // Data
     private val fbUser: FirebaseUser = mockk(relaxed = true)
@@ -43,8 +43,8 @@ class CreateAndVerifyUserEmailUseCaseTest : KoinTest {
             modules(
                 module {
                     single<FirebaseAuthRepository> { mockk(relaxed = true) }
-                    single<CreateAndVerifyUserEmailUseCase> {
-                        CreateAndVerifyUserEmailUseCaseImpl(
+                    single<CreateUserAndVerifyEmailUseCase> {
+                        CreateUserAndVerifyEmailUseCaseImpl(
                             get()
                         )
                     }

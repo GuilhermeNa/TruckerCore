@@ -3,26 +3,17 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
-import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateAndVerifyUserEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.shared.utils.sealeds.Response
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
-import io.mockk.verifyOrder
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -33,7 +24,6 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class AuthServiceImplTest : KoinTest {
@@ -41,7 +31,7 @@ class AuthServiceImplTest : KoinTest {
     private val authRepo: FirebaseAuthRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
     private val getSessionInfo: GetSessionInfoUseCase by inject()
-    private val createAndVerifyUser: CreateAndVerifyUserEmailUseCase by inject()
+    private val createAndVerifyUser: CreateUserAndVerifyEmailUseCase by inject()
     private val service: AuthService by inject()
 
     companion object {
@@ -56,7 +46,7 @@ class AuthServiceImplTest : KoinTest {
                         single<GetSessionInfoUseCase> { mockk() }
                         single<FirebaseAuthRepository> { mockk() }
                         single<CreateNewSystemAccessUseCase> { mockk() }
-                        single<CreateAndVerifyUserEmailUseCase> { mockk() }
+                        single<CreateUserAndVerifyEmailUseCase> { mockk() }
                         single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get(), get()) }
                     }
                 )
@@ -79,7 +69,7 @@ class AuthServiceImplTest : KoinTest {
         coEvery { createAndVerifyUser(any()) } returns response
 
         // Call
-        val result = service.createUserWithEmail(emailAuthCredential)
+        val result = service.createUserAndVerifyEmail(emailAuthCredential)
 
         // Assertions
         assertEquals(result, response)

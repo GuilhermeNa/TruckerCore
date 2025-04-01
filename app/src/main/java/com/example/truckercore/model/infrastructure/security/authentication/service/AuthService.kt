@@ -24,7 +24,7 @@ interface AuthService {
      * @param credential The credentials of the user, including email and password.
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
-    suspend fun createUserWithEmail(credential: EmailAuthCredential): NewEmailUserResponse
+    suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential): NewEmailUserResponse
 
     /**
      * Authenticates a user using their phone number and authentication credentials.
