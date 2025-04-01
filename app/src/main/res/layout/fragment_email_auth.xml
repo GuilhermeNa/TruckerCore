@@ -1,134 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frag_email_auth_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    app:layoutDescription="@xml/fragment_email_auth_scene"
     tools:context=".view.fragments.email_auth.EmailAuthFragment">
 
     <TextView
+        android:id="@+id/frag_email_auth_header"
         style="@style/textEmphasis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="@string/account_creation" />
+        android:text="@string/account_creation"
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/frag_email_auth_name_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            app:cardElevation="11dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/frag_email_auth_surname_card"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/frag_email_auth_name_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/frag_email_auth_name_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:imeOptions="actionNext"
-                    android:importantForAutofill="no"
-                    android:inputType="textCapWords"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/frag_email_auth_name_error"
-            style="@style/textAlert"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintEnd_toEndOf="@id/frag_email_auth_name_card"
-            app:layout_constraintStart_toStartOf="@id/frag_email_auth_name_card"
-            app:layout_constraintTop_toBottomOf="@id/frag_email_auth_name_card"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:maxLines="1"
-            tools:text="@tools:sample/lorem/random"
-            android:visibility="gone" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/frag_email_auth_surname_card"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginVertical="16dp"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/primaryVar"
-            app:cardElevation="11dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/frag_email_auth_name_card"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/frag_email_auth_surname_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/frag_email_auth_surname_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:hint="@string/surname"
-                    android:imeOptions="actionNext"
-                    android:importantForAutofill="no"
-                    android:inputType="textCapWords"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/frag_email_auth_surname_error"
-            style="@style/textAlert"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/frag_email_auth_surname_card"
-            app:layout_constraintStart_toStartOf="@id/frag_email_auth_surname_card"
-            app:layout_constraintTop_toBottomOf="@id/frag_email_auth_surname_card"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:maxLines="1"
-            android:gravity="end"
-            tools:text="@tools:sample/lorem/random" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_email_auth_name_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+
+        app:cardElevation="11dp"
+        app:layout_constraintEnd_toStartOf="@id/frag_email_auth_surname_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_header">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_email_auth_name_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/frag_email_auth_name_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:imeOptions="actionNext"
+                android:importantForAutofill="no"
+                android:inputType="textCapWords"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/frag_email_auth_name_error"
+        style="@style/textAlert"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+
+        android:maxLines="1"
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="@id/frag_email_auth_name_card"
+        app:layout_constraintStart_toStartOf="@id/frag_email_auth_name_card"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_name_card"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_email_auth_surname_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+
+        app:cardElevation="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frag_email_auth_name_card"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_header">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_email_auth_surname_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/frag_email_auth_surname_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:hint="@string/surname"
+                android:imeOptions="actionNext"
+                android:importantForAutofill="no"
+                android:inputType="textCapWords"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/frag_email_auth_surname_error"
+        style="@style/textAlert"
+        android:layout_width="0dp"
+
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+
+        android:gravity="end"
+        android:maxLines="1"
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="@id/frag_email_auth_surname_card"
+        app:layout_constraintStart_toStartOf="@id/frag_email_auth_surname_card"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_surname_card"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_email_auth_email_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
 
-        app:cardElevation="11dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+
+        app:cardElevation="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_name_card">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_email_layout"
@@ -144,6 +153,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:imeOptions="actionNext"
+                android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 android:maxLines="1" />
 
@@ -156,18 +166,31 @@
         style="@style/textAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="4dp"
+
         android:maxLines="1"
-        tools:text="@tools:sample/lorem/random"
-        android:visibility="gone" />
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_email_card"
+
+        tools:text="@tools:sample/lorem/random" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_email_auth_pass_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+
         android:layout_marginHorizontal="16dp"
-        app:cardElevation="11dp">
+        android:layout_marginTop="16dp"
+
+        app:cardElevation="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_email_card">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_password_layout"
@@ -197,18 +220,31 @@
         style="@style/textAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="4dp"
+
         android:maxLines="1"
-        tools:text="@tools:sample/lorem/random"
-        android:visibility="gone"/>
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
+        tools:text="@tools:sample/lorem/random" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_email_auth_confirmation_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+
+
         android:layout_marginHorizontal="16dp"
-        app:cardElevation="11dp">
+        android:layout_marginTop="16dp"
+
+        app:cardElevation="11dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_confirm_password_layout"
@@ -238,11 +274,18 @@
         style="@style/textAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+
         android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="4dp"
+
         android:maxLines="1"
-        tools:text="@tools:sample/lorem/random"
-        android:visibility="gone"/>
+        android:visibility="gone"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card"
+
+        tools:text="@tools:sample/lorem/random" />
 
     <Button
         android:id="@+id/frag_email_auth_register_button"
@@ -254,15 +297,21 @@
         android:layout_marginTop="48dp"
         android:layout_marginBottom="24dp"
         android:enabled="false"
-        android:text="@string/create_account" />
+        android:text="@string/create_account"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card" />
 
     <LinearLayout
+        android:id="@+id/frag_email_auth_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginVertical="16dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_register_button">
 
         <View
             android:layout_width="match_parent"
@@ -294,6 +343,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"
         android:layout_marginTop="24dp"
-        android:text="@string/already_registered" />
+        android:text="@string/already_registered"
 
-</LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_divider" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
@@ -89,6 +89,33 @@ class EmailAuthFragment : Fragment() {
         setNameFieldManager()
         setSurnameEditTextFocusListener()
         setPasswordEditTextFocusListener()
+
+        binding.fragEmailAuthNameEditText.setOnClickListener {
+            binding.fragEmailAuthNameError.text = "Testando o text ode erro"
+            val motionLayout = binding.fragEmailAuthMain
+            motionLayout.setTransitionDuration(100)
+            motionLayout.transitionToState(R.id.frag_email_auth_state_1)
+        }
+        binding.fragEmailAuthSurnameEditText.setOnClickListener {
+            val motionLayout = binding.fragEmailAuthMain
+            motionLayout.setTransitionDuration(100)
+            motionLayout.transitionToState(R.id.frag_email_auth_state_2)
+        }
+        binding.fragEmailAuthEmailEditText.setOnClickListener {
+            val motionLayout = binding.fragEmailAuthMain
+            motionLayout.setTransitionDuration(100)
+            motionLayout.transitionToState(R.id.frag_email_auth_state_3)
+        }
+        binding.fragEmailAuthPasswordEditText.setOnClickListener {
+            val motionLayout = binding.fragEmailAuthMain
+            motionLayout.setTransitionDuration(100)
+            motionLayout.transitionToState(R.id.frag_email_auth_state_4)
+        }
+        binding.fragEmailAuthConfirmPasswordEditText.setOnClickListener {
+            val motionLayout = binding.fragEmailAuthMain
+            motionLayout.setTransitionDuration(100)
+            motionLayout.transitionToState(R.id.frag_email_auth_state_5)
+        }
     }
 
     private fun setMainLayoutClickListener() {
@@ -102,22 +129,23 @@ class EmailAuthFragment : Fragment() {
         binding.fragEmailAuthNameEditText.setOnFocusChangeListener { _, hasFocus ->
            // uiHandler?.setNameHelper(selected = hasFocus)
         }
+
         binding.fragEmailAuthNameEditText.addTextChangedListener { text ->
-            val wrongFormat = !text.toString().isNameFormat()
+   /*         val wrongFormat = !text.toString().isNameFormat()
             val isEmpty = text.toString().isEmpty()
 
             when {
                 isEmpty -> uiHandler?.setNameError(false)
                 wrongFormat -> uiHandler?.setNameError(true)
                 else -> uiHandler?.setNameError(false)
-            }
+            }*/
 
         }
     }
 
     private fun setSurnameEditTextFocusListener() {
         binding.fragEmailAuthSurnameEditText.setOnFocusChangeListener { _, hasFocus ->
-            uiHandler?.setSurnameHelper(hasFocus)
+          //  uiHandler?.setSurnameHelper(hasFocus)
         }
     }
 
@@ -125,7 +153,7 @@ class EmailAuthFragment : Fragment() {
 
     private fun setPasswordEditTextFocusListener() {
         binding.fragEmailAuthPasswordEditText.setOnFocusChangeListener { _, hasFocus ->
-            uiHandler?.setPasswordHelper(selected = hasFocus)
+          //  uiHandler?.setPasswordHelper(selected = hasFocus)
         }
     }
 

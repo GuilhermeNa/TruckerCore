@@ -1,14 +1,9 @@
 package com.example.truckercore.view_model.view_models.email_auth
 
 import android.content.res.ColorStateList
-import android.view.View
-import androidx.core.view.isVisible
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.view.expressions.setBottomMargin
-import com.example.truckercore.view.expressions.slideInBottom
-import com.example.truckercore.view.expressions.slideInTop
-import com.example.truckercore.view.expressions.slideOutTop
 import com.google.android.material.textfield.TextInputLayout
 
 class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
@@ -38,7 +33,7 @@ class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
         }
     }
 
-    fun setSurnameHelper(selected: Boolean) {
+/*    fun setSurnameHelper(selected: Boolean) {
         val passLayout = binding.fragEmailAuthSurnameLayout
 
         if (selected && (!passLayout.isHelperTextEnabled)) {
@@ -64,7 +59,7 @@ class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
             passLayout.setCounter(enabled = false)
         }
 
-    }
+    }*/
 
     private fun TextInputLayout.setCounter(enabled: Boolean) {
         isCounterEnabled = enabled
@@ -87,13 +82,16 @@ class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
         }
     }
 
-    fun setNameError(enabled: Boolean) {
-        val errorView = binding.fragEmailAuthNameError
+/*    fun setNameError(enabled: Boolean) {
+        val motionLayout = binding.fragEmailAuthMain
+        //motionLayout.setTransition(R.id.frag_email_auth_start, R.id.frag_email_auth_motion_1)
+
+        motionLayout.transitionToState(R.id.frag_email_auth_state_3)
 
         if (enabled) {
-            errorView.setText("Teste de string hahaha")
-            errorView.slideInTop()
-        } else errorView.slideOutTop(View.GONE)
+            motionLayout.transitionToEnd()
+        } else
+            motionLayout.transitionToStart()
+    }*/
 
-    }
 }
