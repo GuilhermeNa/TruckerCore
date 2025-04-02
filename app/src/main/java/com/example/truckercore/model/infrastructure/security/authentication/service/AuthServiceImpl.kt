@@ -28,7 +28,7 @@ internal class AuthServiceImpl(
 ) : Service(exceptionHandler), AuthService {
 
     override suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential) =
-        withContext(Dispatchers.IO) { createAndVerifyEmail(credential) }
+        withContext(Dispatchers.IO) { createAndVerifyEmail.invoke(credential) }
 
     override suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential) =
         withContext(Dispatchers.IO) { authRepository.createUserWithPhone(phoneAuthCredential) }

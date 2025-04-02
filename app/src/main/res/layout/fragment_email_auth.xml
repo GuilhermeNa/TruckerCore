@@ -58,18 +58,18 @@
 
     <TextView
         android:id="@+id/frag_email_auth_email_error"
+        style="@style/textAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="4dp"
 
         android:maxLines="1"
         android:visibility="gone"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_email_card" />
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_email_card"
+        tools:text="@tools:sample/lorem/random" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/frag_email_auth_pass_card"
@@ -109,9 +109,9 @@
 
     <TextView
         android:id="@+id/frag_email_auth_password_error"
+        style="@style/textAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="4dp"
 
@@ -120,13 +120,13 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card" />
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
+        tools:text="@tools:sample/lorem/random" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/frag_email_auth_confirmation_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
 
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
@@ -161,9 +161,9 @@
 
     <TextView
         android:id="@+id/frag_email_auth_confirmation_error"
+        style="@style/textAlert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="4dp"
 
@@ -172,15 +172,16 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card" />
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card"
+        tools:text="@tools:sample/lorem/random" />
 
     <Button
-        style="@style/buttonPrimary"
         android:id="@+id/frag_email_auth_register_button"
+        style="@style/buttonPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="64dp"
         android:layout_marginBottom="24dp"
         android:text="@string/create_account"
         app:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card" />
@@ -222,8 +223,8 @@
     </LinearLayout>
 
     <Button
-        style="@style/buttonSecondary"
         android:id="@+id/frag_email_auth_already_registered_button"
+        style="@style/buttonSecondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"

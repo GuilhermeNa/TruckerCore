@@ -35,7 +35,7 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
         NewEmailUserResponse(
             userCreated = false,
             emailSent = false,
-            createUserError = try {
+            _createUserError = try {
                 newUserResponse.extractException()
             } catch (_: Exception) {
                 InvalidResponseException("Database returned an unexpected response: (Empty Response)")

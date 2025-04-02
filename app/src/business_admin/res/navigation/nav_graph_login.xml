@@ -46,12 +46,31 @@
         <action
             android:id="@+id/action_emailAuthFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_emailAuthFragment_to_verifyingEmailFragment"
+            app:destination="@id/verifyingEmailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"/>
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.truckercore.business_admin.view.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/verifyingEmailFragment"
+        android:name="com.example.truckercore.view.fragments.verifying_email.VerifyingEmailFragment"
+        android:label="fragment_verifying_email"
+        tools:layout="@layout/fragment_verifying_email" >
+        <argument
+            android:name="emailSent"
+            app:argType="boolean" />
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

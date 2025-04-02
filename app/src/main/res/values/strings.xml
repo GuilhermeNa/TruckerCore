@@ -27,5 +27,6 @@
     <string name="create_account">Criar conta</string>
     <string name="account_creation">Criação de conta</string>
     <string name="or">ou</string>
+    <string name="resend">Reenviar</string>
 
 </resources>

@@ -73,7 +73,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         assertEquals(response.user, fbUser)
         assertTrue(response.userCreated)
         assertTrue(response.emailSent)
-        assertNull(response.createUserError)
+        assertNull(response._createUserError)
         assertNull(response.sendEmailError)
 
         coVerify(exactly = 1) {
@@ -101,7 +101,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         assertNull(response.user)
         assertFalse(response.userCreated)
         assertFalse(response.emailSent)
-        assertTrue(response.createUserError is InvalidResponseException)
+        assertTrue(response._createUserError is InvalidResponseException)
         assertNull(response.sendEmailError)
 
         coVerify(exactly = 1) {
@@ -131,7 +131,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         assertNull(response.user)
         assertFalse(response.userCreated)
         assertFalse(response.emailSent)
-        assertTrue(response.createUserError is NullPointerException)
+        assertTrue(response._createUserError is NullPointerException)
         assertNull(response.sendEmailError)
 
         coVerify(exactly = 1) {
@@ -155,7 +155,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         assertEquals(response.user, fbUser)
         assertTrue(response.userCreated)
         assertFalse(response.emailSent)
-        assertNull(response.createUserError)
+        assertNull(response._createUserError)
         assertTrue(response.sendEmailError is InvalidResponseException)
 
         coVerify(exactly = 1) {
@@ -181,7 +181,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         assertEquals(response.user, fbUser)
         assertTrue(response.userCreated)
         assertFalse(response.emailSent)
-        assertNull(response.createUserError)
+        assertNull(response._createUserError)
         assertTrue(response.sendEmailError is NullPointerException)
 
         coVerify(exactly = 1) {

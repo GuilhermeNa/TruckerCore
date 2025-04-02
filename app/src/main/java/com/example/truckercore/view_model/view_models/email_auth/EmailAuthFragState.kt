@@ -1,7 +1,5 @@
 package com.example.truckercore.view_model.view_models.email_auth
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
-
 sealed class EmailAuthFragState {
 
     data object Initial: EmailAuthFragState()
@@ -22,9 +20,7 @@ sealed class EmailAuthFragState {
     enum class EmailAuthFragError {
         InvalidEmail, InvalidPassword, InvalidPasswordConfirmation,
 
-        Network, EmailAlreadyExists,
-
-        Unknown;
+        Network, Unknown;
     }
 
 }

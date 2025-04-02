@@ -1,6 +1,5 @@
 package com.example.truckercore.model.infrastructure.security.authentication.entity
 
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState
 import com.google.firebase.auth.FirebaseUser
 
 /**
@@ -13,20 +12,20 @@ import com.google.firebase.auth.FirebaseUser
  * @property user The [FirebaseUser] object for the newly created user. It is null if user creation failed.
  * @property userCreated A boolean flag indicating whether the user was successfully created.
  * @property emailSent A boolean flag indicating whether the email verification was successfully sent.
- * @property createUserError An [Exception] that occurred during the user creation process, if any.
+ * @property _createUserError An [Exception] that occurred during the user creation process, if any.
  * @property sendEmailError An [Exception] that occurred during the email sending process, if any.
  */
 data class NewEmailUserResponse(
     val user: FirebaseUser? = null,
     val userCreated: Boolean,
     val emailSent: Boolean,
-    val createUserError: Exception? = null,
+    private val _createUserError: Exception? = null,
     val sendEmailError: Exception? = null
 ) {
 
-    val userCreatedAndEmailSent = userCreated && emailSent
+    val createUserError get() = _createUserError!!
 
-    val failure = !userCreated && !emailSent
+    val userCreatedAndEmailSent = userCreated && emailSent
 
     val userCreatedAndEmailFailed = userCreated && !emailSent
 

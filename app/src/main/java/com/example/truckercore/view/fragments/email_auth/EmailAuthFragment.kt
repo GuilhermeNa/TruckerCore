@@ -5,21 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonCLicked
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailSent
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailFailed
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailSent
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Error
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Initial
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthStateHandler
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -41,8 +42,10 @@ class EmailAuthFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            setFragmentStateManager()
-            setFragmentEventsManager()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setFragmentStateManager()
+                setFragmentEventsManager()
+            }
         }
     }
 
@@ -71,23 +74,37 @@ class EmailAuthFragment : Fragment() {
 
     private fun handleSuccessState(type: EmailAuthFragSuccess) {
         stateHandler?.setSuccessState()
+        navigateToDestination(type)
+    }
 
-        when(type) {
-            UserCreatedAndEmailSent -> {}
-            UserCreatedAndEmailFailed -> {}
+    private fun navigateToDestination(type: EmailAuthFragSuccess) {
+        fun navigateToVerifyFragment(emailSent: Boolean) {
+            val emailText = binding.fragEmailAuthEmailEditText.text.toString()
+            navigateTo(
+                EmailAuthFragmentDirections.actionEmailAuthFragmentToVerifyingEmailFragment(
+                    email = emailText,
+                    emailSent = emailSent
+                )
+            )
         }
 
+        when (type) {
+            UserCreatedAndEmailSent -> navigateToVerifyFragment(true)
+            UserCreatedAndEmailFailed -> navigateToVerifyFragment(false)
+        }
+
+        viewModel.setState(Initial)
     }
 
     private fun handleErrorState(errorMap: HashMap<EmailAuthFragError, String>) {
-        stateHandler?.setErrorState(errorMap)
+        stateHandler?.setErrorState(errorMap, lifecycle.currentState)
     }
 
     private suspend fun setFragmentEventsManager() {
         viewModel.event.collect { event ->
             when (event) {
                 is CreateAccountButtonCLicked -> handleCreateButtonClicked()
-                is AlreadyHaveAccountButtonCLicked -> handleAlreadyHaveAccButtonClicked()
+                is AlreadyHaveAccountButtonCLicked -> navigateToLoginFragment()
             }
         }
     }
@@ -97,7 +114,7 @@ class EmailAuthFragment : Fragment() {
         viewModel.setState(Creating)
     }
 
-    private fun handleAlreadyHaveAccButtonClicked() {
+    private fun navigateToLoginFragment() {
         navigateTo(
             EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
         )
@@ -124,8 +141,6 @@ class EmailAuthFragment : Fragment() {
         setAlreadyRegisteredButtonListener()
         setMainLayoutClickListener()
         setPasswordEditTextFocusListener()
-
-
     }
 
     private fun setMainLayoutClickListener() {
