@@ -74,10 +74,10 @@ class EmailAuthFragment : Fragment() {
 
     private fun handleSuccessState(type: EmailAuthFragSuccess) {
         stateHandler?.setSuccessState()
-        navigateToDestination(type)
+        navigateToVerificationFragment(type)
     }
 
-    private fun navigateToDestination(type: EmailAuthFragSuccess) {
+    private fun navigateToVerificationFragment(type: EmailAuthFragSuccess) {
         fun navigateToVerifyFragment(emailSent: Boolean) {
             val emailText = binding.fragEmailAuthEmailEditText.text.toString()
             navigateTo(

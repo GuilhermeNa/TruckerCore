@@ -1,7 +1,5 @@
 package com.example.truckercore.view.fragments.email_auth
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.util.Log
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -10,18 +8,11 @@ import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.configs.app_constants.Tag
 import com.example.truckercore.view.dialogs.LoadingDialog
-import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.showSnackBarRed
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
 
 private const val ERROR = "1"
 private const val EMPTY = "0"
-
-private const val SUCCESS_DIALOG_TITLE = "Conta Criada com Sucesso!"
-private const val SUCCESS_DIALOG_MESSAGE =
-    "Parabéns, sua conta foi criada com êxito. Enviamos um e-mail de" +
-            " verificação para o endereço cadastrado. Por favor, verifique" +
-            " sua caixa de entrada e siga as instruções para ativar sua conta."
 
 class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
 
@@ -121,7 +112,6 @@ private class EmailAuthFragTextViewHandler(private val binding: FragmentEmailAut
 
     }
 
-
 }
 
 private class EmailAuthGenericErrorHandler(private val view: View) {
@@ -143,29 +133,10 @@ private class EmailAuthGenericErrorHandler(private val view: View) {
 
 private class EmailAuthTransitionHandler(private val layout: MotionLayout) {
 
-    companion object {
-        private const val STATE_ERROR_1 = "100"
-        private const val STATE_ERROR_2 = "010"
-        private const val STATE_ERROR_3 = "001"
-        private const val STATE_ERROR_4 = "110"
-        private const val STATE_ERROR_5 = "101"
-        private const val STATE_ERROR_6 = "011"
-        private const val STATE_ERROR_7 = "111"
-        private const val ERROR_MESSAGE = "Falha ao carregar transição."
-    }
-
-    private val transitionsMap = hashMapOf(
-        Pair(STATE_ERROR_1, R.id.frag_email_auth_state_1),
-        Pair(STATE_ERROR_2, R.id.frag_email_auth_state_2),
-        Pair(STATE_ERROR_3, R.id.frag_email_auth_state_3),
-        Pair(STATE_ERROR_4, R.id.frag_email_auth_state_4),
-        Pair(STATE_ERROR_5, R.id.frag_email_auth_state_5),
-        Pair(STATE_ERROR_6, R.id.frag_email_auth_state_6),
-        Pair(STATE_ERROR_7, R.id.frag_email_auth_state_7)
-    )
+    private val transitionManager = EmailAuthFragTransitions()
 
     operator fun invoke(transitionCode: String, lifecycleState: Lifecycle.State) {
-        transitionsMap[transitionCode]?.let { transition ->
+        transitionManager.getTransition(transitionCode)?.let { transition ->
             startTransition(lifecycleState, transition)
         } ?: notifyError(transitionCode)
     }
@@ -183,8 +154,34 @@ private class EmailAuthTransitionHandler(private val layout: MotionLayout) {
             Tag.ERROR.name,
             "EmailAuthTransitionHandler failed on loading transition: $transitionCode."
         )
-        layout.showSnackBarRed(ERROR_MESSAGE)
+        layout.showSnackBarRed("Falha ao carregar transição.")
     }
 
+}
+
+private class EmailAuthFragTransitions {
+
+    companion object {
+        private const val STATE_ERROR_1 = "100"
+        private const val STATE_ERROR_2 = "010"
+        private const val STATE_ERROR_3 = "001"
+        private const val STATE_ERROR_4 = "110"
+        private const val STATE_ERROR_5 = "101"
+        private const val STATE_ERROR_6 = "011"
+        private const val STATE_ERROR_7 = "111"
+    }
+
+    private val transitionsMap = hashMapOf(
+        Pair(STATE_ERROR_1, R.id.frag_email_auth_state_1),
+        Pair(STATE_ERROR_2, R.id.frag_email_auth_state_2),
+        Pair(STATE_ERROR_3, R.id.frag_email_auth_state_3),
+        Pair(STATE_ERROR_4, R.id.frag_email_auth_state_4),
+        Pair(STATE_ERROR_5, R.id.frag_email_auth_state_5),
+        Pair(STATE_ERROR_6, R.id.frag_email_auth_state_6),
+        Pair(STATE_ERROR_7, R.id.frag_email_auth_state_7)
+    )
+
+    fun getTransition(transitionCode: String): Int? = transitionsMap[transitionCode]
 
 }
+

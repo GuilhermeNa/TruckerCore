@@ -5,9 +5,10 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
 import com.example.truckercore.model.infrastructure.util.ExceptionHandler
 import com.example.truckercore.model.shared.abstractions.Service
 import com.example.truckercore.model.shared.utils.sealeds.Response
@@ -24,7 +25,8 @@ internal class AuthServiceImpl(
     private val authRepository: FirebaseAuthRepository,
     private val createSystemAccess: CreateNewSystemAccessUseCase,
     private val getLoggedUser: GetSessionInfoUseCase,
-    private val createAndVerifyEmail: CreateUserAndVerifyEmailUseCase
+    private val createAndVerifyEmail: CreateUserAndVerifyEmailUseCase,
+    private val sendVerificationEmail: SendVerificationEmailUseCase
 ) : Service(exceptionHandler), AuthService {
 
     override suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential) =
@@ -32,6 +34,9 @@ internal class AuthServiceImpl(
 
     override suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential) =
         withContext(Dispatchers.IO) { authRepository.createUserWithPhone(phoneAuthCredential) }
+
+    override suspend fun sendVerificationEmail(): Response<Unit> =
+        withContext(Dispatchers.IO) { sendVerificationEmail.invoke() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun signIn(emailAuthCredential: EmailAuthCredential): Flow<Response<SessionInfo>> =
@@ -53,6 +58,10 @@ internal class AuthServiceImpl(
 
     override fun createNewSystemAccess(requirements: NewAccessRequirements) =
         runSafe { createSystemAccess.execute(requirements) }
+
+    override fun observeEmailValidation(): Flow<Response<Unit>> = runSafe {
+        authRepository.observeEmailValidation()
+    }
 
     override fun getSessionInfo(): Flow<Response<SessionInfo>> = runSafe {
         getLoggedUserFromFirebase()

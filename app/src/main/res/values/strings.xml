@@ -28,5 +28,8 @@
     <string name="account_creation">Criação de conta</string>
     <string name="or">ou</string>
     <string name="resend">Reenviar</string>
+    <string name="await">Aguarde 0:</string>
+    <string name="to_send_another_email">para enviar novamente</string>
+    <string name="to_resend">para reenviar</string>
 
 </resources>

@@ -47,7 +47,7 @@ class AuthServiceImplTest : KoinTest {
                         single<FirebaseAuthRepository> { mockk() }
                         single<CreateNewSystemAccessUseCase> { mockk() }
                         single<CreateUserAndVerifyEmailUseCase> { mockk() }
-                        single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get(), get()) }
+                        single<AuthService> { AuthServiceImpl(mockk(), get(), get(), get(), get(), get()) }
                     }
                 )
             }

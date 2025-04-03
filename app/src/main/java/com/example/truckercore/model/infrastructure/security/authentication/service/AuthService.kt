@@ -5,6 +5,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
 
@@ -36,6 +37,8 @@ interface AuthService {
      * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
      */
     suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Response<String>
+
+    suspend fun sendVerificationEmail(): Response<Unit>
 
     /**
      * Signs in a user using their credentials (email and password).
@@ -92,5 +95,7 @@ interface AuthService {
      * @return A [Flow] emitting the [Response] containing [Unit] on success, or an error response if access creation fails.
      */
     fun createNewSystemAccess(requirements: NewAccessRequirements): Flow<Response<Unit>>
+
+    fun observeEmailValidation(): Flow<Response<Unit>>
 
 }

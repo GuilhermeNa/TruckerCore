@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.fragments.verifying_email.VerifyingEmailFragment">
+    app:layoutDescription="@xml/fragment_verifying_email_scene"
+    tools:context=".view.fragments.verifying_email.VerifyingEmailFragment"
+    android:id="@+id/frag_verifying_email_main">
 
     <LinearLayout
         android:id="@+id/frag_verifying_layout_text"
@@ -42,12 +44,12 @@
         <TextView
             android:id="@+id/frag_verifying_email_sent_to"
             style="@style/textDefault"
-            android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="email_test@mail.com"
-            android:maxLines="1"
             android:layout_marginTop="16dp"
+            android:maxLines="1"
+            android:textStyle="italic"
+            tools:text="email_test@mail.com"
 
             />
 
@@ -67,17 +69,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_verifying_layout_text" />
 
-    <TextView
-        android:id="@+id/frag_verifying_email_timer"
-        style="@style/textDefault"
+    <LinearLayout
+        android:id="@+id/frag_verifying_email_layout_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:textColor="@color/grey"
-        android:textStyle="bold"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_button_resend"
-        tools:text="@tools:sample/date/hhmm" />
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_button_resend">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            style="@style/textDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/await"
+            android:textColor="@color/grey" />
+
+        <TextView
+            android:id="@+id/frag_verifying_email_timer"
+            style="@style/textEmphasis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            android:text="59" />
+
+        <TextView
+            style="@style/textDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/to_resend"
+            android:textColor="@color/grey" />
+    </LinearLayout>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

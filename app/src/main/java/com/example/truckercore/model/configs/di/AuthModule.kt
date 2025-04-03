@@ -8,10 +8,12 @@ import com.example.truckercore.model.infrastructure.security.authentication.use_
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCaseImpl
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCaseImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCaseImpl
 import org.koin.dsl.module
 
 val authModule = module {
-    single<AuthService> { AuthServiceImpl(get(), get(), get(), get(), get()) }
+    single<AuthService> { AuthServiceImpl(get(), get(), get(), get(), get(), get()) }
     single<CreateNewSystemAccessUseCase> {
         CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get())
     }
@@ -19,4 +21,6 @@ val authModule = module {
         GetSessionInfoUseCaseImpl(get(), get(), get(), get())
     }
     single<CreateUserAndVerifyEmailUseCase> { CreateUserAndVerifyEmailUseCaseImpl(get()) }
+    single<SendVerificationEmailUseCase> { SendVerificationEmailUseCaseImpl(get()) }
+
 }

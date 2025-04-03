@@ -73,4 +73,6 @@ internal interface FirebaseAuthRepository {
      */
     fun getCurrentUser(): FirebaseUser?
 
+    fun observeEmailValidation(): Flow<Response<Unit>>
+
 }
