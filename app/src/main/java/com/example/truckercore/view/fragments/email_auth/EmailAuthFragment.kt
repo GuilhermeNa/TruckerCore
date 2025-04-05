@@ -9,8 +9,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
+import com.example.truckercore.view.expressions.getBackPressCallback
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view.expressions.navigateTo
+import com.example.truckercore.view.helpers.ExitAppManager
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
@@ -35,6 +37,10 @@ class EmailAuthFragment : Fragment() {
 
     // ViewModel -----------------------------------------------------------------------------------
     private val viewModel: EmailAuthViewModel by viewModel()
+
+    // BackPressed ---------------------------------------------------------------------------------
+    private val exitManager by lazy { ExitAppManager() }
+    private val backPressCallback by lazy { getBackPressCallback(exitManager) }
 
     //----------------------------------------------------------------------------------------------
     // onCreate()
@@ -141,6 +147,7 @@ class EmailAuthFragment : Fragment() {
         setAlreadyRegisteredButtonListener()
         setMainLayoutClickListener()
         setPasswordEditTextFocusListener()
+        setBackPressedCallback()
     }
 
     private fun setMainLayoutClickListener() {
@@ -172,11 +179,17 @@ class EmailAuthFragment : Fragment() {
         }
     }
 
+    private fun setBackPressedCallback() {
+        requireActivity().onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, backPressCallback)
+    }
+
     //----------------------------------------------------------------------------------------------
     // onViewDestroyed()
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        exitManager.cancelCoroutines()
         _binding = null
     }
 

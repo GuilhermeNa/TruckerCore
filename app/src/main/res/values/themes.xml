@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.TruckerCore" parent="Theme.Material3.DayNight">
+    <style name="Theme.TruckerCore" parent="Theme.Material3.DayNight"   >
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primaryVar</item>
@@ -31,15 +31,15 @@
     <!-- ======================================================================================= -->
     <!-- Base fonts for text -->
     <!-- ======================================================================================= -->
-    <style name="textDefault">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:textSize">@dimen/textMedium</item>
-    </style>
-
     <style name="textEmphasis">
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:textSize">@dimen/textBig</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textDefault">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textSize">@dimen/textMedium</item>
     </style>
 
     <style name="textAlert">
@@ -104,5 +104,13 @@
         <item name="iconTint">@color/white</item>
     </style>
 
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for dialogs -->
+    <!-- ======================================================================================= -->
+    <style name="dialogLoadingBg">
+        <item name="android:background">@drawable/background_circle</item>
+        <item name="android:backgroundTint">@color/darkTransparent</item>
+        <item name="android:padding">4dp</item>
+    </style>
 
 </resources>

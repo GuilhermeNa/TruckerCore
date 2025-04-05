@@ -1,15 +1,15 @@
 package com.example.truckercore.view.expressions
 
-import android.graphics.Color
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.Navigator
 import com.example.truckercore.R
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * Navigates to the specified destination using a NavController.

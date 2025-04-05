@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,10 +16,11 @@ import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.slideInBottom
 import com.example.truckercore.view.expressions.slideOutBottom
+import com.example.truckercore.view.fragments.base.CloseAppFragment
 import com.example.truckercore.view.sealeds.Direction
 import com.example.truckercore.view_model.states.WelcomeFragState.Error
-import com.example.truckercore.view_model.states.WelcomeFragState.Stage
 import com.example.truckercore.view_model.states.WelcomeFragState.Initial
+import com.example.truckercore.view_model.states.WelcomeFragState.Stage
 import com.example.truckercore.view_model.states.WelcomeFragState.Success
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.LeftFabCLicked
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.RightFabClicked
@@ -38,7 +38,7 @@ import org.koin.core.parameter.parametersOf
  * It handles displaying a ViewPager with different welcome pages, managing FAB buttons,
  * and interacting with the ViewModel to manage UI states and events.
  */
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : CloseAppFragment() {
 
     // Binding --------------------------------------------------------------
     private var _binding: FragmentWelcomeBinding? = null
@@ -48,7 +48,7 @@ class WelcomeFragment : Fragment() {
     private val args: WelcomeFragmentArgs by navArgs()
     private val viewModel: WelcomeFragmentViewModel by viewModel { parametersOf(args.flavor) }
 
-    // ViewPager ------------------------------------------------------------
+    // ViewPager -----------------------------------------------------------------------------------
     private var viewPager: ViewPager2? = null
     private var pagerAdapter: WelcomePagerAdapter? = null
     private val pagerListener = object : ViewPager2.OnPageChangeCallback() {
@@ -63,7 +63,6 @@ class WelcomeFragment : Fragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Launch coroutines to collect fragment states and events.
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

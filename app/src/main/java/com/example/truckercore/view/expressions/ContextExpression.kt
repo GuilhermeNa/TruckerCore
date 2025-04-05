@@ -2,6 +2,7 @@ package com.example.truckercore.view.expressions
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.example.truckercore.view.enums.Flavor
 
 fun Context.navigateTo(
@@ -19,3 +20,6 @@ fun Context.getFlavor(): Flavor {
     return Flavor.fromFieldName(appName.toString())
 }
 
+fun Context.toast(message: String, length: Int) {
+    Toast.makeText(this, message, length).show()
+}

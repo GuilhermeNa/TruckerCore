@@ -73,6 +73,7 @@ class EmailAuthViewModel(
             val credential = EmailAuthCredential(email, password)
             val newState = authenticateAndVerifyEmail(credential)
             setState(newState)
+
         }
     }
 

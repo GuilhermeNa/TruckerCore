@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.truckercore.R
+import com.example.truckercore.view.helpers.ExitAppManager
 
 class LoginActivity : AppCompatActivity() {
 
@@ -21,3 +22,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 }
+
+
+
+
