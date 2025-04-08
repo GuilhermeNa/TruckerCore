@@ -4,7 +4,9 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavDirections
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -99,6 +101,15 @@ fun View.slideOutBottom(vis: Int) {
         // Starts the animation.
         this.startAnimation(animation)
     }
+}
+
+fun MotionLayout.transitionOnLifecycle(
+    lifecycle: Lifecycle.State,
+    viewResumed: (MotionLayout) -> Unit,
+    viewRestoring: (MotionLayout) -> Unit
+) {
+    if (lifecycle == Lifecycle.State.RESUMED) viewResumed(this)
+    else viewRestoring(this)
 }
 
 fun View.setBottomMargin(bottomMargin: Int) {

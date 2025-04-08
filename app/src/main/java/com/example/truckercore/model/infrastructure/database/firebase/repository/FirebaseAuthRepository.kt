@@ -3,6 +3,7 @@ package com.example.truckercore.model.infrastructure.database.firebase.repositor
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -34,6 +35,22 @@ internal interface FirebaseAuthRepository {
      * @throws IncompleteTaskException If the email verification task fails.
      */
     suspend fun sendEmailVerification(firebaseUser: FirebaseUser): Response<Unit>
+
+    /**
+     * Updates the profile information of the given user.
+     *
+     * This method allows for updating the user's profile information, such as their display name or photo URL.
+     * It uses the provided [UserProfileChangeRequest] to perform the update for the given [FirebaseUser].
+     * Returns a [Response] indicating the success or failure of the profile update operation.
+     *
+     * @param fbUser The [FirebaseUser] whose profile is to be updated.
+     * @param profile The [UserProfileChangeRequest] containing the updated profile information.
+     * @return A [Response] with [Unit] on successful profile update, or an error response if it fails.
+     * @throws IncompleteTaskException If the profile update task fails.
+     */
+    suspend fun updateUserProfile(
+        fbUser: FirebaseUser, profile: UserProfileChangeRequest
+    ): Response<Unit>
 
     /**
      * Authenticates a user using their phone number.

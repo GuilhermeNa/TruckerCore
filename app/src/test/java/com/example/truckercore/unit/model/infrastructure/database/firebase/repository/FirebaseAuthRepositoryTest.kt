@@ -10,6 +10,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.UserProfileChangeRequest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -246,6 +247,102 @@ class FirebaseAuthRepositoryTest : KoinTest {
             assertTrue(response.exception is NullPointerException)
             verify(exactly = 1) {
                 fbUser.sendEmailVerification()
+                task.addOnCompleteListener(any())
+            }
+        }
+
+    //----------------------------------------------------------------------------------------------
+    // Testing updateUserProfile()
+    //----------------------------------------------------------------------------------------------
+
+    @Test
+    fun `should update user profile`() = runTest {
+        // Arrange
+        val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
+        val task = mockk<Task<Void>> {
+            every { exception } returns null
+            every { isSuccessful } returns true
+            every { isComplete } returns true
+            every { isCanceled } returns false
+            every { result } returns null
+        }
+
+        every { fbUser.updateProfile(any()) } returns task
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = it.invocation.args[0] as OnCompleteListener<Void>
+            listener.onComplete(task)
+            task
+        }
+
+        // Call
+        val response = authRepository.updateUserProfile(fbUser, profileChange)
+
+        // Assert
+        assertTrue(response is Response.Success)
+        verify(exactly = 1) {
+            fbUser.updateProfile(profileChange)
+            task.addOnCompleteListener(any())
+        }
+    }
+
+    @Test
+    fun `should throw IncompleteTaskException when update profile returns unsuccessful task`() =
+        runTest {
+            // Arrange
+            val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
+            val task = mockk<Task<Void>> {
+                every { exception } returns null
+                every { isSuccessful } returns false
+                every { isComplete } returns true
+                every { isCanceled } returns false
+                every { result } returns null
+            }
+
+            every { fbUser.updateProfile(any()) } returns task
+            every { task.addOnCompleteListener(any()) } answers {
+                val listener = it.invocation.args[0] as OnCompleteListener<Void>
+                listener.onComplete(task)
+                task
+            }
+
+            // Call && Assert
+            assertThrows<IncompleteTaskException> {
+                authRepository.updateUserProfile(fbUser, profileChange)
+                verify(exactly = 1) {
+                    fbUser.updateProfile(profileChange)
+                    task.addOnCompleteListener(any())
+                }
+            }
+        }
+
+    @Test
+    fun `should return Response Error when the task returns npe error for update profile`() =
+        runTest {
+            // Arrange
+            val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
+            val task = mockk<Task<Void>> {
+                every { exception } returns NullPointerException("Simulated")
+                every { isSuccessful } returns false
+                every { isComplete } returns true
+                every { isCanceled } returns false
+                every { result } returns null
+            }
+
+            every { fbUser.updateProfile(any()) } returns task
+            every { task.addOnCompleteListener(any()) } answers {
+                val listener = it.invocation.args[0] as OnCompleteListener<Void>
+                listener.onComplete(task)
+                task
+            }
+
+            // Call
+            val response = authRepository.updateUserProfile(fbUser, profileChange)
+
+            // Assert
+            assertTrue(response is Response.Error)
+            assertTrue(response.exception is NullPointerException)
+            verify(exactly = 1) {
+                fbUser.updateProfile(profileChange)
                 task.addOnCompleteListener(any())
             }
         }

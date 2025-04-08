@@ -14,13 +14,10 @@
         android:theme="@style/Theme.TruckerCore"
         tools:targetApi="31">
         <activity
-            android:name=".view.activities.PhoneAuthActivity"
-            android:exported="false"
-            android:theme="@style/Theme.TruckerCore.NoActionBar" />
-        <activity
             android:name=".view.activities.NotificationActivity"
             android:exported="false"
             android:theme="@style/Theme.TruckerCore.NoActionBar" />
+        <!-- Para o flavor "individual" -->
         <activity
             android:name=".individual.view.login.MainActivity"
             android:exported="true"
@@ -30,17 +27,17 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Para o flavor "business_admin" -->
+        </activity>
+        <!-- Para o flavor "business_admin" -->
         <activity
             android:name=".business_admin.view.activities.LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.TruckerCore.NoActionBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Para o flavor "business_driver" -->
+        </activity>
+        <!-- Para o flavor "business_driver" -->
         <activity
             android:name=".business_driver.MainActivity"
             android:exported="true"

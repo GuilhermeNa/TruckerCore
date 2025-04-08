@@ -82,12 +82,12 @@
     <!-- ======================================================================================= -->
     <!-- Base fonts for fabs -->
     <!-- ======================================================================================= -->
-    <style name="FAB_PRIMARY">
+    <style name="fabPrimary">
         <item name="android:backgroundTint">@color/primaryVar</item>
         <item name="tint">@color/white</item>
     </style>
 
-    <style name="FAB_SECONDARY">
+    <style name="fabSecondary">
         <item name="android:backgroundTint">@color/secondaryVar</item>
         <item name="tint">?attr/colorOnSecondary</item>
     </style>

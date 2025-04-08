@@ -105,4 +105,16 @@
             android:textColor="@color/grey" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/frag_verifying_email_button_new_account"
+        style="@style/buttonTransparent"
+        android:layout_width="match_parent"
+        android:text="@string/register_new_account"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="64dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.motion.widget.MotionLayout>

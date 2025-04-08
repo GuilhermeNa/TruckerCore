@@ -3,8 +3,7 @@
     <application>
         <activity
             android:name="com.example.truckercore.business_admin.view.activities.LoginActivity"
-            android:exported="true"
-
-            />
+            android:theme="@style/Theme.TruckerCore.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 </manifest>

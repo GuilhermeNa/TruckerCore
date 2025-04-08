@@ -14,7 +14,7 @@ import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragSt
 private const val ERROR = "1"
 private const val EMPTY = "0"
 
-class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
+class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
 
     private val context = binding.root.context
     private val view = binding.root.rootView

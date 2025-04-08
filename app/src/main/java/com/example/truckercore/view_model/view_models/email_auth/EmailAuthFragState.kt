@@ -2,9 +2,8 @@ package com.example.truckercore.view_model.view_models.email_auth
 
 sealed class EmailAuthFragState {
 
-    data object Initial: EmailAuthFragState()
+    data object WaitingInput: EmailAuthFragState()
     // Estado inicial do aplicativo. Quando ele é aberto
-
 
     data object Creating: EmailAuthFragState()
     // Quando o bota de criar conta é clicado

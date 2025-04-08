@@ -4,8 +4,10 @@ import com.example.truckercore.model.infrastructure.security.authentication.erro
 import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidPasswordException
 import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.model.shared.errors.InvalidStateException
+import com.example.truckercore.model.shared.utils.expressions.capitalizeFirstChar
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
+import com.example.truckercore.view_model.expressions.validateUserName
 import java.util.Locale
 
 /**
@@ -15,10 +17,12 @@ import java.util.Locale
  */
 class EmailAuthCredential private constructor() {
 
+    private lateinit var _name: String
     private lateinit var _email: String
     private lateinit var _password: String
 
     // Read-only properties to access the validated user details
+    val name get() = _name
     val email get() = _email
     val password get() = _password
 
@@ -27,9 +31,25 @@ class EmailAuthCredential private constructor() {
      * @param email The user's email address.
      * @param password The user's password.
      */
-    constructor(email: String, password: String) : this() {
+    constructor(name: String, email: String, password: String) : this() {
+        this._name = validateName(name)
         this._email = validateEmail(email)
         this._password = validatePassword(password).toHash()
+    }
+
+    /**
+     * Function to validate the username and return the original name if valid.
+     *
+     * @param name The username to be validated.
+     * @return The original username if valid.
+     * @throws EmptyUserNameException If the username is empty after trimming.
+     * @throws InvalidSizeException If the username size is not within the valid range (5 to 29 characters).
+     * @throws IncompleteNameException If the username does not contain both a first and last name.
+     * @throws WrongNameFormatException If any word in the username contains invalid characters (e.g., numbers or special symbols).
+     */
+    private fun validateName(name: String): String {
+        name.validateUserName()
+        return name.trimStart().trimEnd().capitalizeFirstChar()
     }
 
     /**

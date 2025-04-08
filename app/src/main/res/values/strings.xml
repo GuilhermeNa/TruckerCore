@@ -31,5 +31,7 @@
     <string name="await">Aguarde 0:</string>
     <string name="to_send_another_email">para enviar novamente</string>
     <string name="to_resend">para reenviar</string>
+    <string name="enter_name">Digite seu nome</string>
+    <string name="register_new_account">Cadastrar nova conta</string>
 
 </resources>

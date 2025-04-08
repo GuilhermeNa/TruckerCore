@@ -7,8 +7,11 @@ package com.example.truckercore.model.shared.utils.expressions
  *
  * @return The string with the first letter capitalized and the rest in lowercase.
  */
-fun String.capitalizeFirstChar(): String =
-    this.lowercase().replaceFirstChar { it.uppercase() }
+fun String.capitalizeFirstChar(): String {
+    val arr = this.split(" ")
+    val upperCaseArr = arr.map { it.lowercase().replaceFirstChar { it.uppercase() } }
+    return upperCaseArr.joinToString(" ")
+}
 
 /**
  * Extension function to check if the string is in a valid name format (only alphabetic characters).
@@ -19,7 +22,7 @@ fun String.capitalizeFirstChar(): String =
  * @receiver String The string to check.
  * @return `true` if the string contains only alphabetic characters; `false` otherwise.
  */
-fun String.isNameFormat(): Boolean = this.matches("[\\p{L}]+".toRegex())
+fun String.isNameFormat(): Boolean = this.matches("[\\p{L} ]+".toRegex())
 
 /**
  * Extension function to check if the string is in a valid email format.

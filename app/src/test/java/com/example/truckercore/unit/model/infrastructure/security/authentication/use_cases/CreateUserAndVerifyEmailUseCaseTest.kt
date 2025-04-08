@@ -33,6 +33,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     // Data
     private val fbUser: FirebaseUser = mockk(relaxed = true)
     private val credential = EmailAuthCredential(
+        name = "John Doe",
         email = "abc@email.com",
         password = "123456"
     )
@@ -60,6 +61,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     fun `should return an User Task when the operation is successful`() = runTest {
         // Arrange
         val credential = EmailAuthCredential(
+            name = "John Doe",
             email = "abc@email.com",
             password = "123456"
         )
@@ -88,6 +90,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     fun `should return an User Task when the user creation returns empty`() = runTest {
         // Arrange
         val credential = EmailAuthCredential(
+            name = "John Doe",
             email = "abc@email.com",
             password = "123456"
         )
@@ -116,6 +119,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     fun `should return an User Task when the user creation returns error`() = runTest {
         // Arrange
         val credential = EmailAuthCredential(
+            name = "John Doe",
             email = "abc@email.com",
             password = "123456"
         )

@@ -6,6 +6,9 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.shared.errors.InvalidResponseException
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.userProfileChangeRequest
+
+private const val UNEXPECTED_RESPONSE = "Database returned an unexpected response: (Empty Response)"
 
 internal class CreateUserAndVerifyEmailUseCaseImpl(
     private val authRepository: FirebaseAuthRepository

@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class VerifyingEmailViewModel(
-    private val args: VerifyingEmailReceivedArgs,
+    args: VerifyingEmailReceivedArgs,
     private val authService: AuthService
 ) : ViewModel() {
 

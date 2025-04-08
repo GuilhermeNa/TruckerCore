@@ -6,6 +6,7 @@ import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -17,10 +18,6 @@ import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-
-private const val NEW_USER_ERROR_MESSAGE = "Failed on recover new user."
-private const val VERIFICATION_ERROR_MESSAGE = "Failed on send verification to registered email."
-private const val FB_USER_NOT_FOUND = "The firebase user was not found."
 
 internal class FirebaseAuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
@@ -52,6 +49,23 @@ internal class FirebaseAuthRepositoryImpl(
                 continuation.resume(Response.Success(Unit))
             } else {
                 continuation.resumeWithException(IncompleteTaskException(VERIFICATION_ERROR_MESSAGE))
+            }
+        }
+    }
+
+    override suspend fun updateUserProfile(
+        fbUser: FirebaseUser,
+        profile: UserProfileChangeRequest
+    ): Response<Unit> = suspendCoroutine { continuation ->
+        fbUser.updateProfile(profile).addOnCompleteListener { task ->
+            task.exception?.let { e ->
+                continuation.resume(Response.Error(e))
+                return@addOnCompleteListener
+            }
+            if(task.isSuccessful) {
+                continuation.resume(Response.Success(Unit))
+            } else {
+                continuation.resumeWithException(IncompleteTaskException(UPDATE_PROFILE_ERROR_MSG))
             }
         }
     }
@@ -101,6 +115,13 @@ internal class FirebaseAuthRepositoryImpl(
 
             emit(response)
         }
+    }
+
+    companion object {
+        private const val NEW_USER_ERROR_MESSAGE = "Failed on recover new user."
+        private const val VERIFICATION_ERROR_MESSAGE = "Failed on send verification to registered email."
+        private const val UPDATE_PROFILE_ERROR_MSG = "Failed on update user profile."
+        private const val FB_USER_NOT_FOUND = "The firebase user was not found."
     }
 
 }

@@ -15,14 +15,6 @@ fun Fragment.hideKeyboard() {
 }
 
 /**
- * Extension function for Activity to hide the keyboard.
- * This function will attempt to hide the keyboard by calling the `hideKeyboard` function with the current focused view.
- */
-fun Activity.hideKeyboard() {
-    hideKeyboard(currentFocus ?: View(this))
-}
-
-/**
  * Extension function for Context to hide the keyboard.
  * This function hides the soft keyboard if it is currently visible by calling the InputMethodManager's hideSoftInputFromWindow method.
  *
