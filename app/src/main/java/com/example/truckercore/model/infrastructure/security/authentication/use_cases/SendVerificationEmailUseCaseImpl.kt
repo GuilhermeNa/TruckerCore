@@ -1,6 +1,5 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases
 
-import com.example.truckercore.model.infrastructure.database.firebase.errors.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.shared.utils.sealeds.Response

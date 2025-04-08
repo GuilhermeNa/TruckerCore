@@ -9,4 +9,4 @@ package com.example.truckercore.model.shared.errors
  *
  * @param message The error message that provides more details about the invalid response.
  */
-class InvalidResponseException(message: String): Exception(message)
+class InvalidResponseException(message: String? = null): Exception(message)

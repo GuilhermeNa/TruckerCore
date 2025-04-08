@@ -1,5 +1,6 @@
 package com.example.truckercore._test_utils
 
+import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -17,6 +18,14 @@ fun mockStaticLog() {
 
 fun mockStaticTask() {
     mockkStatic("kotlinx.coroutines.tasks.TasksKt")
+}
+
+fun mockStaticTextUtil() {
+    mockkStatic(TextUtils::class)
+    every { TextUtils.isEmpty(any()) } answers {
+        val input = arg<String?>(0)
+        input?.isEmpty() ?: true
+    }
 }
 
 fun mockTask() = mockk<Task<Void>> {

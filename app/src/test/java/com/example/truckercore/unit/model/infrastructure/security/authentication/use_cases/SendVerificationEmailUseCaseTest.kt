@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.use_cases
 
-import com.example.truckercore.model.infrastructure.database.firebase.errors.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCaseImpl
 import com.example.truckercore.model.shared.utils.sealeds.Response
@@ -21,7 +21,6 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertEquals
-
 
 class SendVerificationEmailUseCaseTest : KoinTest {
 
@@ -74,8 +73,8 @@ class SendVerificationEmailUseCaseTest : KoinTest {
         // Assert
         assertTrue(result is Response.Error)
         val error = result.extractException()
-        assertTrue(error is IncompleteTaskException)
-        assertEquals(error.message, ERROR_MESSAGE)
+        assertTrue(error is NullFirebaseUserException)
+        assertEquals(error?.message, ERROR_MESSAGE)
         coVerify(exactly = 0) { auth.sendEmailVerification(any()) }
     }
 

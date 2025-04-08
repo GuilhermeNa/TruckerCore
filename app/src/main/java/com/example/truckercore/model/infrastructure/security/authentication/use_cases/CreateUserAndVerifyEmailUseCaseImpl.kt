@@ -4,59 +4,201 @@ import com.example.truckercore.model.infrastructure.database.firebase.repository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
 import com.example.truckercore.model.shared.errors.InvalidResponseException
+import com.example.truckercore.model.shared.utils.expressions.logError
+import com.example.truckercore.model.shared.utils.expressions.logInfo
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
-
-private const val UNEXPECTED_RESPONSE = "Database returned an unexpected response: (Empty Response)"
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 
 internal class CreateUserAndVerifyEmailUseCaseImpl(
     private val authRepository: FirebaseAuthRepository
 ) : CreateUserAndVerifyEmailUseCase {
 
-    override suspend fun invoke(credential: EmailAuthCredential) = with(credential) {
+    private lateinit var fbUser: FirebaseUser
+    private val logger = MLogger()
 
-        // Check New User Response and get firebase User or exit if got an error
-        val newUserResponse = authRepository.createUserWithEmail(email, password)
-        val fbUser = if (newUserResponse is Response.Success) newUserResponse.data
-        else return@with handleUnexpectedUserResponse(newUserResponse)
+    override suspend fun invoke(credential: EmailAuthCredential): NewEmailUserResponse {
 
-        // Check if the email verification have been send when newUser response is success
-        val verificationResponse = authRepository.sendEmailVerification(fbUser)
-        if (verificationResponse !is Response.Success)
-            return@with handleUnexpectedVerificationResponse(fbUser, verificationResponse)
+        // Create an new user. Early return an default Response when fails.
+        val userResp = try {
+            createUser(credential)
+        } catch (e: Exception) {
+            return buildResponseWhenUserCreationFailed(e)
+        }
 
-        return NewEmailUserResponse(
-            user = fbUser,
-            userCreated = true,
-            emailSent = true
+        // Async name update and email send
+        val nameAndEmailResp = updateNameAndSendEmailAsync(credential)
+        val combinedResp = CombinedResponses(
+            userResp = userResp,
+            nameResp = nameAndEmailResp.nameResp,
+            emailResp = nameAndEmailResp.emailResp
         )
+
+        // Get all responses and combine
+        buildFinalResponse(combinedResp)
 
     }
 
-    private fun handleUnexpectedUserResponse(newUserResponse: Response<FirebaseUser>) =
-        NewEmailUserResponse(
-            userCreated = false,
-            emailSent = false,
-            _createUserError = try {
-                newUserResponse.extractException()
-            } catch (_: Exception) {
-                InvalidResponseException("Database returned an unexpected response: (Empty Response)")
-            }
-        )
+    private fun buildResponseWhenUserCreationFailed(e: Exception) =
+        NewEmailUserResponse(_createUserError = e)
 
-    private fun handleUnexpectedVerificationResponse(
-        fbUser: FirebaseUser,
-        newUserResponse: Response<Unit>
-    ) = NewEmailUserResponse(
-        user = fbUser,
-        userCreated = true,
-        emailSent = false,
-        sendEmailError = try {
-            newUserResponse.extractException()
-        } catch (_: Exception) {
-            InvalidResponseException("Database returned an unexpected response: (Empty Response)")
+    private suspend fun createUser(credential: EmailAuthCredential): Response<FirebaseUser> {
+        val response = authRepository.createUserWithEmail(credential.email, credential.name)
+
+        when (response) {
+            is Response.Success -> {
+                fbUser = response.data
+                logInfo("User created with success for email: ${credential.email}.")
+            }
+
+            is Response.Empty -> {
+                val message = "Failure occurs while creating a new User access with email: " +
+                        "${credential.email}. Some error ocurred on firebase."
+                logError(message)
+                throw InvalidResponseException(message)
+            }
+
+            is Response.Error -> {
+                val message = "Wrong response found while creating a new User with email: " +
+                        "${credential.email}. Received an Empty response and it is not allowed."
+                logError(message)
+                throw response.exception
+            }
         }
+
+        return response
+    }
+
+    private fun buildResponseWhenFailed() = NewEmailUserResponse()
+
+    private suspend fun updateNameAndSendEmailAsync(credential: EmailAuthCredential) =
+        coroutineScope {
+            val nameDef = async { updateName(credential) }
+            val emailDef = async { sendEmail(credential) }
+
+            return@coroutineScope NameAndEmailResp(
+                nameResp = nameDef.await(),
+                emailResp = emailDef.await()
+            )
+        }
+
+    private suspend fun updateName(credential: EmailAuthCredential): Response<Unit> {
+        val request = userProfileChangeRequest { displayName = credential.name }
+        val response = authRepository.updateUserProfile(fbUser, request)
+
+        if (response is Response.Success) {
+            logger.logNameUpdated(credential.name)
+        } else logger.logNameFailed(response, credential.name)
+
+        return response
+    }
+
+    private suspend fun sendEmail(credential: EmailAuthCredential): Response<Unit> {
+        val response = authRepository.sendEmailVerification(fbUser)
+
+        if (response is Response.Success) {
+            logger.logEmailSent(credential.email)
+        } else logger.logEmailFailed(response, credential.email)
+
+        return response
+    }
+
+    private fun buildFinalResponse(combinedResp: CombinedResponses): NewEmailUserResponse =
+        with(combinedResp) {
+            return NewEmailUserResponse(
+                user = fbUser,
+                userCreated = userResp.isSuccess(),
+                nameUpdated = nameResp.isSuccess(),
+                emailSent = emailResp.isSuccess(),
+                _createUserError = userResp.extractException(),
+                updateNameError = nameResp.extractException(),
+                sendEmailError = emailResp.extractException()
+            )
+        }
+
+    // Helper Classes ------------------------------------------------------------------------------
+    private class MLogger {
+
+        fun logUserCreationError(userResp: Response<FirebaseUser>, email: String) {
+            val (cause, message) = when (userResp) {
+
+
+                else -> Pair(
+                    InvalidResponseException(""),
+                    "Wrong response found while creating a new User with email: $email. " +
+                            "Received an Empty response and it is not allowed."
+                )
+            }
+
+            logError("$message cause: $cause")
+        }
+
+        fun logUserCreationSuccess(email: String) {
+
+        }
+
+        fun logNameUpdated(name: String) {
+            logInfo("User name have been updated successfully: $name.")
+        }
+
+        fun logNameFailed(nameResp: Response<Unit>, name: String) {
+            val (cause, message) = when (nameResp) {
+                is Response.Error -> Pair(
+                    nameResp.exception,
+                    "Failure occurs while updating the user's name: $name." +
+                            " Some error ocurred on firebase."
+                )
+
+                else -> Pair(
+                    InvalidResponseException(),
+                    "Wrong response found while while updating the user's name: $name. " +
+                            "Received an Empty response and it is not allowed."
+                )
+            }
+
+            logError("$message cause: $cause")
+        }
+
+        fun logEmailSent(email: String) {
+            logInfo("Verification email was sent successfully: $email.")
+        }
+
+        fun logEmailFailed(response: Response<Unit>, email: String) {
+            val (cause, message) = when (response) {
+                is Response.Error -> Pair(
+                    response.exception,
+                    "Failure occurs while sending verification email: $email." +
+                            " Some error ocurred on firebase."
+                )
+
+                else -> Pair(
+                    InvalidResponseException(),
+                    "Wrong response found while while sending verification email: $email. " +
+                            "Received an Empty response and it is not allowed."
+                )
+            }
+
+            logError("$message cause: $cause")
+        }
+
+        fun logUnknownError(e: Exception) {
+            logError("An unknown error ocurred, cause: $e")
+        }
+
+    }
+
+    private data class CombinedResponses(
+        val userResp: Response<FirebaseUser>,
+        val nameResp: Response<Unit>,
+        val emailResp: Response<Unit>
+    )
+
+    private data class NameAndEmailResp(
+        val nameResp: Response<Unit>,
+        val emailResp: Response<Unit>
     )
 
 }
+

@@ -17,9 +17,9 @@ import com.google.firebase.auth.FirebaseUser
  */
 data class NewEmailUserResponse(
     val user: FirebaseUser? = null,
-    val userCreated: Boolean,
-    val nameUpdated: Boolean,
-    val emailSent: Boolean,
+    val userCreated: Boolean = false,
+    val nameUpdated: Boolean = false,
+    val emailSent: Boolean = false,
     private val _createUserError: Exception? = null,
     val updateNameError: Exception? = null,
     val sendEmailError: Exception? = null

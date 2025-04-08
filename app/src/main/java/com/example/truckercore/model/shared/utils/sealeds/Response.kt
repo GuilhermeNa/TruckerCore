@@ -26,9 +26,9 @@ sealed class Response<out T> {
      */
     data object Empty: Response<Nothing>()
 
-    fun extractData() = (this as Success).data
+    fun extractData() = (this as? Success)?.data
 
-    fun extractException() = (this as Error).exception
+    fun extractException() = (this as? Error)?.exception
 
     fun isSuccess() = this is Success
 

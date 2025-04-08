@@ -6,3 +6,7 @@ import com.example.truckercore.model.configs.app_constants.Tag
 fun logError(message: String) {
     Log.e(Tag.ERROR.getName(), message)
 }
+
+fun logInfo(message: String) {
+    Log.e(Tag.INFO.getName(), message)
+}
