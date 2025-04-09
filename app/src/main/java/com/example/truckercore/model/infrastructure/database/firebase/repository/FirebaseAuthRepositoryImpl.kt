@@ -2,7 +2,6 @@ package com.example.truckercore.model.infrastructure.database.firebase.repositor
 
 import com.example.truckercore.model.infrastructure.database.firebase.errors.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailUserException
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailUserException.ErrorCode
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationException
 import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateUserProfileException
@@ -86,15 +85,25 @@ internal class FirebaseAuthRepositoryImpl(
         }
     }
 
+    // Helper Class --------------------------------------------------------------------------------
+
     private class ErrorHandler {
 
         fun handleCreateUserWithEmailError(e: Exception): Response<FirebaseUser> {
             // Mapping exception to error code and user-friendly message
             val (code, message) = when (e) {
-                is FirebaseNetworkException -> NewEmailUserException.ErrorCode.Network to "Network error while creating your email account. Please check your internet connection."
-                is FirebaseAuthUserCollisionException -> NewEmailUserException.ErrorCode.AccountCollision to "An account is already registered with this email. Please use a different email."
-                is FirebaseAuthInvalidCredentialsException -> NewEmailUserException.ErrorCode.InvalidCredentials to "Invalid email and/or password. Please check your credentials."
-                else -> NewEmailUserException.ErrorCode.Unknown to "An unknown error occurred while creating your email account. Please try again later."
+                is FirebaseNetworkException -> {
+                    NewEmailUserException.ErrorCode.Network to "Network error while creating your email account. Please check your internet connection."
+                }
+                is FirebaseAuthUserCollisionException -> {
+                    NewEmailUserException.ErrorCode.AccountCollision to "An account is already registered with this email. Please use a different email."
+                }
+                is FirebaseAuthInvalidCredentialsException -> {
+                    NewEmailUserException.ErrorCode.InvalidCredentials to "Invalid email and/or password. Please check your credentials."
+                }
+                else -> {
+                    NewEmailUserException.ErrorCode.Unknown to "An unknown error occurred while creating your email account. Please try again later."
+                }
             }
 
             // Returning the response with the exception, error code, and message
@@ -106,7 +115,7 @@ internal class FirebaseAuthRepositoryImpl(
             return Response.Error(
                 NewEmailUserException(
                     message = message,
-                    code = ErrorCode.UserNotFound
+                    code = NewEmailUserException.ErrorCode.UserNotFound
                 )
             )
         }
@@ -139,7 +148,7 @@ internal class FirebaseAuthRepositoryImpl(
             )
         }
 
-        fun handleUpdateUserNameError(e: java.lang.Exception): Response<Unit> {
+        fun handleUpdateUserNameError(e: Exception): Response<Unit> {
             // Mapping exception to error code and user-friendly message
             val (code, message) = when (e) {
                 is FirebaseNetworkException -> UpdateUserProfileException.ErrorCode.Network to "Network error while updating your profile. Please check your internet connection."
@@ -168,7 +177,7 @@ internal class FirebaseAuthRepositoryImpl(
 
     }
 
-
+    // TODO("refatorar os metodos abaixo")
 
 
 
@@ -229,7 +238,5 @@ internal class FirebaseAuthRepositoryImpl(
         private const val UPDATE_PROFILE_ERROR_MSG = "Task failed on update user profile."
         private const val FB_USER_NOT_FOUND = "The firebase user was not found."
     }
-
-
 
 }
