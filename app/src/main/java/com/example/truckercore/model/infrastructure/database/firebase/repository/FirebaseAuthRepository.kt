@@ -1,6 +1,7 @@
 package com.example.truckercore.model.infrastructure.database.firebase.repository
 
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -31,10 +32,9 @@ internal interface FirebaseAuthRepository {
      * Returns a [Response] indicating success or failure of the verification email sending.
      *
      * @param firebaseUser The user for whom the email verification will be sent.
-     * @return A [Response] with [Unit] on successful email verification, or an error response if it fails.
-     * @throws IncompleteTaskException If the email verification task fails.
+     * @return A [Result] with successful email verification, or an error response if it fails.
      */
-    suspend fun sendEmailVerification(firebaseUser: FirebaseUser): Response<Unit>
+    suspend fun sendEmailVerification(firebaseUser: FirebaseUser): Result<Unit>
 
     /**
      * Updates the profile information of the given user.
@@ -45,12 +45,9 @@ internal interface FirebaseAuthRepository {
      *
      * @param fbUser The [FirebaseUser] whose profile is to be updated.
      * @param profile The [UserProfileChangeRequest] containing the updated profile information.
-     * @return A [Response] with [Unit] on successful profile update, or an error response if it fails.
-     * @throws IncompleteTaskException If the profile update task fails.
+     * @return A [Result] with successful email verification, or an error response if it fails.
      */
-    suspend fun updateUserProfile(
-        fbUser: FirebaseUser, profile: UserProfileChangeRequest
-    ): Response<Unit>
+    suspend fun updateUserProfile(fbUser: FirebaseUser, profile: UserProfileChangeRequest): Result<Unit>
 
     /**
      * Authenticates a user using their phone number.

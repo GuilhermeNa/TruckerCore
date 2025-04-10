@@ -67,8 +67,8 @@ class VerifyingEmailViewModel(
     fun sendVerificationEmail() {
         viewModelScope.launch {
             val response = authService.sendVerificationEmail()
-            val newState = stateProvider.getStateOnTrySendEmailResponse(response)
-            setState(newState)
+          //  val newState = stateProvider.getStateOnTrySendEmailResponse(response)
+           // setState(newState)
         }
     }
 

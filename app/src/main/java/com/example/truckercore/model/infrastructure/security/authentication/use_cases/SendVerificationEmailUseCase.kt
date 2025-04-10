@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases
 
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Result
 
 /**
  * Use case interface for sending a verification email to the authenticated Firebase user.
@@ -14,10 +14,10 @@ interface SendVerificationEmailUseCase {
     /**
      * Invokes the use case to send a verification email to the current Firebase user.
      *
-     * @return [Response] A response object that indicates the result of the operation. It can either be:
-     * - [Response.Success] if the email was sent successfully.
-     * - [Response.Error] if there was an error (e.g., no user found).
+     * @return
+     * - [Result.Success] if the email was sent successfully.
+     * - [Result.Error] if there was an error (e.g., no user found).
      */
-    suspend operator fun invoke(): Response<Unit>
+    suspend operator fun invoke(): Result<Unit>
 
 }

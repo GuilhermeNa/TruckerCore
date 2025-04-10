@@ -2,11 +2,25 @@ package com.example.truckercore.model.shared.utils.expressions
 
 import android.util.Log
 import com.example.truckercore.model.configs.app_constants.Tag
+import com.hbb20.BuildConfig
 
-fun logError(message: String) {
-    Log.e(Tag.ERROR.getName(), message)
+fun Any.logInfo(message: String) {
+    if (BuildConfig.DEBUG) {
+        val className = this::class.java.simpleName
+        Log.i(Tag.INFO.getName(), "$className: $message")
+    }
 }
 
-fun logInfo(message: String) {
-    Log.e(Tag.INFO.getName(), message)
+fun Any.logError(message: String) {
+    if (BuildConfig.DEBUG) {
+        val className = this::class.java.simpleName
+        Log.e(Tag.ERROR.getName(), "$className: $message")
+    }
+}
+
+fun Any.logWar(message: String) {
+    if (BuildConfig.DEBUG) {
+        val className = this::class.java.simpleName
+        Log.e(Tag.WARN.getName(), "$className: $message")
+    }
 }

@@ -2,10 +2,10 @@ package com.example.truckercore.model.infrastructure.security.authentication.ser
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.shared.utils.sealeds.Response
-import com.google.firebase.auth.FirebaseUser
+import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
 
@@ -23,9 +23,9 @@ interface AuthService {
      * containing an authentication token (String) if successful, or an error response if authentication fails.
      *
      * @param credential The credentials of the user, including email and password.
-     * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
+     * @return A [NewEmailResult] task.
      */
-    suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential): NewEmailUserResponse
+    suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential): NewEmailResult
 
     /**
      * Authenticates a user using their phone number and authentication credentials.
@@ -38,7 +38,7 @@ interface AuthService {
      */
     suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Response<String>
 
-    suspend fun sendVerificationEmail(): Response<Unit>
+    suspend fun sendVerificationEmail(): Result<Unit>
 
     /**
      * Signs in a user using their credentials (email and password).

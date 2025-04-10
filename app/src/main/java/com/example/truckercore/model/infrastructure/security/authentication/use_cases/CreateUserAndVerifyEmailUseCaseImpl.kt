@@ -2,203 +2,396 @@ package com.example.truckercore.model.infrastructure.security.authentication.use
 
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailUserResponse
-import com.example.truckercore.model.shared.errors.InvalidResponseException
+import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.shared.utils.expressions.logError
-import com.example.truckercore.model.shared.utils.expressions.logInfo
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.other.EarlyExit
+import com.example.truckercore.model.shared.utils.other.Task
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 
 internal class CreateUserAndVerifyEmailUseCaseImpl(
     private val authRepository: FirebaseAuthRepository
 ) : CreateUserAndVerifyEmailUseCase {
 
-    private lateinit var fbUser: FirebaseUser
-    private val logger = MLogger()
+    private val newUserTaskManager = NewUserAuthTaskManager()
+    private val updateNameTaskManager = UpdateNameTaskManager()
+    private val sendEmailTaskManager = SendEmailTaskManager()
+    private val fbUser get() = manager.getFirebaseUser()
 
-    override suspend fun invoke(credential: EmailAuthCredential): NewEmailUserResponse {
 
-        // Create an new user. Early return an default Response when fails.
-        val userResp = try {
-            createUser(credential)
+    override suspend fun invoke(credential: EmailAuthCredential): NewEmailResult {
+        return try {
+
+            val earlyExit = createUser(credential)
+            if (earlyExit) return manager.getResult()
+
+            updateNameAndSendEmailAsync(credential)
+
+            manager.getResult()
+
         } catch (e: Exception) {
-            return buildResponseWhenUserCreationFailed(e)
+            logError("An error ocurred while authenticating and verifying a new Email: $e.")
+            manager.getResult()
         }
-
-        // Async name update and email send
-        val nameAndEmailResp = updateNameAndSendEmailAsync(credential)
-        val combinedResp = CombinedResponses(
-            userResp = userResp,
-            nameResp = nameAndEmailResp.nameResp,
-            emailResp = nameAndEmailResp.emailResp
-        )
-
-        // Get all responses and combine
-        buildFinalResponse(combinedResp)
-
     }
 
-    private fun buildResponseWhenUserCreationFailed(e: Exception) =
-        NewEmailUserResponse(_createUserError = e)
-
-    private suspend fun createUser(credential: EmailAuthCredential): Response<FirebaseUser> {
-        val response = authRepository.createUserWithEmail(credential.email, credential.name)
-
-        when (response) {
-            is Response.Success -> {
-                fbUser = response.data
-                logInfo("User created with success for email: ${credential.email}.")
-            }
-
-            is Response.Empty -> {
-                val message = "Failure occurs while creating a new User access with email: " +
-                        "${credential.email}. Some error ocurred on firebase."
-                logError(message)
-                throw InvalidResponseException(message)
-            }
-
-            is Response.Error -> {
-                val message = "Wrong response found while creating a new User with email: " +
-                        "${credential.email}. Received an Empty response and it is not allowed."
-                logError(message)
-                throw response.exception
-            }
-        }
-
-        return response
+    private suspend fun createUser(credential: EmailAuthCredential): EarlyExit {
+        return authRepository.createUserWithEmail(credential.email, credential.password)
+            .handleResponseAndConsume(
+                success = { fbUser ->
+                    manager.setTaskResult(UserCreated(fbUser))
+                    false
+                },
+                empty = {
+                    manager.setTaskResult(UserCreationEmpty)
+                    true
+                },
+                error = { e ->
+                    manager.setTaskResult(UserCreationFailed(e))
+                    true
+                }
+            )
     }
 
-    private fun buildResponseWhenFailed() = NewEmailUserResponse()
-
-    private suspend fun updateNameAndSendEmailAsync(credential: EmailAuthCredential) =
+    private suspend fun updateNameAndSendEmailAsync(credential: EmailAuthCredential): Unit =
         coroutineScope {
             val nameDef = async { updateName(credential) }
-            val emailDef = async { sendEmail(credential) }
-
-            return@coroutineScope NameAndEmailResp(
-                nameResp = nameDef.await(),
-                emailResp = emailDef.await()
-            )
+            val emailDef = async { sendEmail() }
+            joinAll(nameDef, emailDef)
         }
 
-    private suspend fun updateName(credential: EmailAuthCredential): Response<Unit> {
+    private suspend fun updateName(credential: EmailAuthCredential) {
         val request = userProfileChangeRequest { displayName = credential.name }
-        val response = authRepository.updateUserProfile(fbUser, request)
-
-        if (response is Response.Success) {
-            logger.logNameUpdated(credential.name)
-        } else logger.logNameFailed(response, credential.name)
-
-        return response
-    }
-
-    private suspend fun sendEmail(credential: EmailAuthCredential): Response<Unit> {
-        val response = authRepository.sendEmailVerification(fbUser)
-
-        if (response is Response.Success) {
-            logger.logEmailSent(credential.email)
-        } else logger.logEmailFailed(response, credential.email)
-
-        return response
-    }
-
-    private fun buildFinalResponse(combinedResp: CombinedResponses): NewEmailUserResponse =
-        with(combinedResp) {
-            return NewEmailUserResponse(
-                user = fbUser,
-                userCreated = userResp.isSuccess(),
-                nameUpdated = nameResp.isSuccess(),
-                emailSent = emailResp.isSuccess(),
-                _createUserError = userResp.extractException(),
-                updateNameError = nameResp.extractException(),
-                sendEmailError = emailResp.extractException()
+        authRepository.updateUserProfile(fbUser, request)
+            .handleResult(
+                success = { manager.setTaskResult(NameUpdated) },
+                error = { e -> manager.setTaskResult(UpdateNameFailed(e)) }
             )
-        }
-
-    // Helper Classes ------------------------------------------------------------------------------
-    private class MLogger {
-
-        fun logUserCreationError(userResp: Response<FirebaseUser>, email: String) {
-            val (cause, message) = when (userResp) {
-
-
-                else -> Pair(
-                    InvalidResponseException(""),
-                    "Wrong response found while creating a new User with email: $email. " +
-                            "Received an Empty response and it is not allowed."
-                )
-            }
-
-            logError("$message cause: $cause")
-        }
-
-        fun logUserCreationSuccess(email: String) {
-
-        }
-
-        fun logNameUpdated(name: String) {
-            logInfo("User name have been updated successfully: $name.")
-        }
-
-        fun logNameFailed(nameResp: Response<Unit>, name: String) {
-            val (cause, message) = when (nameResp) {
-                is Response.Error -> Pair(
-                    nameResp.exception,
-                    "Failure occurs while updating the user's name: $name." +
-                            " Some error ocurred on firebase."
-                )
-
-                else -> Pair(
-                    InvalidResponseException(),
-                    "Wrong response found while while updating the user's name: $name. " +
-                            "Received an Empty response and it is not allowed."
-                )
-            }
-
-            logError("$message cause: $cause")
-        }
-
-        fun logEmailSent(email: String) {
-            logInfo("Verification email was sent successfully: $email.")
-        }
-
-        fun logEmailFailed(response: Response<Unit>, email: String) {
-            val (cause, message) = when (response) {
-                is Response.Error -> Pair(
-                    response.exception,
-                    "Failure occurs while sending verification email: $email." +
-                            " Some error ocurred on firebase."
-                )
-
-                else -> Pair(
-                    InvalidResponseException(),
-                    "Wrong response found while while sending verification email: $email. " +
-                            "Received an Empty response and it is not allowed."
-                )
-            }
-
-            logError("$message cause: $cause")
-        }
-
-        fun logUnknownError(e: Exception) {
-            logError("An unknown error ocurred, cause: $e")
-        }
-
     }
 
-    private data class CombinedResponses(
-        val userResp: Response<FirebaseUser>,
-        val nameResp: Response<Unit>,
-        val emailResp: Response<Unit>
-    )
-
-    private data class NameAndEmailResp(
-        val nameResp: Response<Unit>,
-        val emailResp: Response<Unit>
-    )
+    private suspend fun sendEmail() {
+        authRepository.sendEmailVerification(fbUser)
+            .handleResult(
+                success = { manager.setTaskResult(EmailSent) },
+                error = { e -> manager.setTaskResult(EmailFailed(e)) }
+            )
+    }
 
 }
+
+class SendEmailTaskManager: TaskManager<FirebaseUser>() {
+
+    override fun setTaskResult(receivedTask: TaskResult) {
+        TODO("Not yet implemented")
+    }
+
+}
+
+class UpdateNameTaskManager {
+
+    private var task: Task<Unit>? = null
+
+
+}
+
+class NewUserAuthTaskManager {
+
+    private var task: Task<Unit>? = null
+
+
+}
+
+abstract class TaskManager<T> {
+
+    private var _task: Task<T>? = null
+    val task get() = _task
+
+    abstract fun setTaskResult(receivedTask: TaskResult)
+
+}
+
+sealed class SendEmailTask: TaskResult {
+    data object Success : SendEmailTask()
+    data class Error(val exception: Exception) : SendEmailTask()
+}
+
+sealed interface TaskResult
+
+private class MyClassManager {
+
+    private var userTask: Task<FirebaseUser>? = null
+    private var nameTask: Task<Unit>? = null
+    private var emailTask: Task<Unit>? = null
+
+    fun setTaskResult(entry: TaskEntry) {
+        when (entry) {
+            is UserCreated -> {
+                userTask = Task(
+                    result = entry.fbUser,
+                    isSuccess = true
+                )
+            }
+
+            is UserCreationEmpty -> {
+                userTask = Task(
+                    exception = NullFirebaseUserException(
+                        "Firebase user was not found while authenticating an email."
+                    )
+                )
+            }
+
+            is UserCreationFailed -> {
+                userTask = Task(exception = entry.exception)
+            }
+
+            is NameUpdated -> {
+                nameTask = Task(isSuccess = true)
+            }
+
+            is UpdateNameFailed -> {
+                nameTask = Task(exception = entry.exception)
+            }
+
+            is EmailSent -> {
+                emailTask = Task(isSuccess = true)
+            }
+
+            is EmailFailed -> {
+                emailTask = Task(exception = entry.exception)
+            }
+
+        }
+    }
+
+    fun getResult(): NewEmailResult = try {
+        val errorSet = mutableSetOf<Exception>().apply {
+            userTask?.exception?.let { add(it) }
+            nameTask?.exception?.let { add(it) }
+            emailTask?.exception?.let { add(it) }
+        }
+
+        NewEmailResult(
+            firebaseUser = userTask?.result,
+            userTaskSucceed = userTask?.isSuccess ?: false,
+            nameTaskSucceed = nameTask?.isSuccess ?: false,
+            emailTaskSucceed = emailTask?.isSuccess ?: false,
+            errors = errorSet
+        )
+
+    } catch (e: Exception) {
+        logError("An error ocurred while creating a EmailTask result: $e.")
+        NewEmailResult(errors = setOf(e))
+
+    } finally {
+        clear()
+    }
+
+    fun getFirebaseUser() = userTask?.result ?: throw NullFirebaseUserException(
+        "Firebase user is not defined in UseCase Manager while authenticating email."
+    )
+
+    private fun clear() {
+        userTask = null
+        nameTask = null
+        emailTask = null
+    }
+
+}
+
+sealed class CreateUserTask {
+    data class Success(val fbUser: FirebaseUser) : CreateUserTask()
+    data object Empty : CreateUserTask()
+    data class Error(val exception: Exception) : CreateUserTask()
+}
+
+sealed class UpdateNameTask {
+    data object Success : UpdateNameTask()
+    data class Error(val exception: Exception) : UpdateNameTask()
+}
+
+
+
+/*
+private typealias UserCreated = TaskEntry.CreateUser.Success
+private typealias UserCreationFailed = TaskEntry.CreateUser.Error
+private typealias UserCreationEmpty = TaskEntry.CreateUser.Empty
+
+private typealias NameUpdated = TaskEntry.UpdateName.Success
+private typealias UpdateNameFailed = TaskEntry.UpdateName.Error
+
+private typealias EmailSent = TaskEntry.SendEmail.Success
+private typealias EmailFailed = TaskEntry.SendEmail.Error
+
+internal class CreateUserAndVerifyEmailUseCaseImpl(
+    private val authRepository: FirebaseAuthRepository
+) : CreateUserAndVerifyEmailUseCase {
+
+    private val manager = MyClassManager()
+    private val fbUser get() = manager.getFirebaseUser()
+
+    override suspend fun invoke(credential: EmailAuthCredential): NewEmailResult {
+        return try {
+
+            val earlyExit = createUser(credential)
+            if (earlyExit) return manager.getResult()
+
+            updateNameAndSendEmailAsync(credential)
+
+            manager.getResult()
+
+        } catch (e: Exception) {
+            logError("An error ocurred while authenticating and verifying a new Email: $e.")
+            manager.getResult()
+        }
+    }
+
+    private suspend fun createUser(credential: EmailAuthCredential): EarlyExit {
+        return authRepository.createUserWithEmail(credential.email, credential.password)
+            .handleResponseAndConsume(
+                success = { fbUser ->
+                    manager.setTaskResult(UserCreated(fbUser))
+                    false
+                },
+                empty = {
+                    manager.setTaskResult(UserCreationEmpty)
+                    true
+                },
+                error = { e ->
+                    manager.setTaskResult(UserCreationFailed(e))
+                    true
+                }
+            )
+    }
+
+    private suspend fun updateNameAndSendEmailAsync(credential: EmailAuthCredential): Unit =
+        coroutineScope {
+            val nameDef = async { updateName(credential) }
+            val emailDef = async { sendEmail() }
+            joinAll(nameDef, emailDef)
+        }
+
+    private suspend fun updateName(credential: EmailAuthCredential) {
+        val request = userProfileChangeRequest { displayName = credential.name }
+        authRepository.updateUserProfile(fbUser, request)
+            .handleResult(
+                success = { manager.setTaskResult(NameUpdated) },
+                error = { e -> manager.setTaskResult(UpdateNameFailed(e)) }
+            )
+    }
+
+    private suspend fun sendEmail() {
+        authRepository.sendEmailVerification(fbUser)
+            .handleResult(
+                success = { manager.setTaskResult(EmailSent) },
+                error = { e -> manager.setTaskResult(EmailFailed(e)) }
+            )
+    }
+
+}
+
+private class MyClassManager {
+
+    private var userTask: Task<FirebaseUser>? = null
+    private var nameTask: Task<Unit>? = null
+    private var emailTask: Task<Unit>? = null
+
+    fun setTaskResult(entry: TaskEntry) {
+        when (entry) {
+            is UserCreated -> {
+                userTask = Task(
+                    result = entry.fbUser,
+                    isSuccess = true
+                )
+            }
+
+            is UserCreationEmpty -> {
+                userTask = Task(
+                    exception = NullFirebaseUserException(
+                        "Firebase user was not found while authenticating an email."
+                    )
+                )
+            }
+
+            is UserCreationFailed -> {
+                userTask = Task(exception = entry.exception)
+            }
+
+            is NameUpdated -> {
+                nameTask = Task(isSuccess = true)
+            }
+
+            is UpdateNameFailed -> {
+                nameTask = Task(exception = entry.exception)
+            }
+
+            is EmailSent -> {
+                emailTask = Task(isSuccess = true)
+            }
+
+            is EmailFailed -> {
+                emailTask = Task(exception = entry.exception)
+            }
+
+        }
+    }
+
+    fun getResult(): NewEmailResult = try {
+        val errorSet = mutableSetOf<Exception>().apply {
+            userTask?.exception?.let { add(it) }
+            nameTask?.exception?.let { add(it) }
+            emailTask?.exception?.let { add(it) }
+        }
+
+        NewEmailResult(
+            firebaseUser = userTask?.result,
+            userTaskSucceed = userTask?.isSuccess ?: false,
+            nameTaskSucceed = nameTask?.isSuccess ?: false,
+            emailTaskSucceed = emailTask?.isSuccess ?: false,
+            errors = errorSet
+        )
+
+    } catch (e: Exception) {
+        logError("An error ocurred while creating a EmailTask result: $e.")
+        NewEmailResult(errors = setOf(e))
+
+    } finally {
+        clear()
+    }
+
+    fun getFirebaseUser() = userTask?.result ?: throw NullFirebaseUserException(
+        "Firebase user is not defined in UseCase Manager while authenticating email."
+    )
+
+    private fun clear() {
+        userTask = null
+        nameTask = null
+        emailTask = null
+    }
+
+}
+
+private sealed class TaskEntry {
+
+    sealed class CreateUser {
+        data class Success(val fbUser: FirebaseUser) : TaskEntry()
+        data object Empty : TaskEntry()
+        data class Error(val exception: Exception) : TaskEntry()
+    }
+
+    sealed class UpdateName {
+        data object Success : TaskEntry()
+        data class Error(val exception: Exception) : TaskEntry()
+    }
+
+    sealed class SendEmail {
+        data object Success : TaskEntry()
+        data class Error(val exception: Exception) : TaskEntry()
+    }
+
+}
+*/
 

@@ -3,7 +3,14 @@ package com.example.truckercore.unit.model.infrastructure.database.firebase.repo
 import com.example.truckercore.model.infrastructure.database.firebase.errors.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepositoryImpl
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailUserException
+import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationException
+import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateProfileErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateUserProfileException
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -29,6 +36,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -64,7 +72,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     // Testing createUserWithEmail()
     //----------------------------------------------------------------------------------------------
     @Test
-    fun `should authenticate with email and return uid`() = runTest {
+    fun `should return Success when authenticate with email and return uid`() = runTest {
         // Arrange
         val email = "email"
         val pass = "password"
@@ -96,38 +104,36 @@ class FirebaseAuthRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `should throw IncompleteTaskException when the task returns an null user for email auth`() =
-        runTest {
-            // Arrange
-            val email = "email"
-            val pass = "password"
-            val task = mockk<Task<AuthResult>> {
-                every { exception } returns null
-                every { isSuccessful } returns true
-                every { isComplete } returns true
-                every { isCanceled } returns false
-                every { result.user } returns null
-            }
-
-            every { auth.createUserWithEmailAndPassword(any(), any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call && Assert
-            assertThrows<IncompleteTaskException> {
-                authRepository.createUserWithEmail(email, pass)
-            }
-            verify(exactly = 1) {
-                auth.createUserWithEmailAndPassword(email, pass)
-                task.addOnCompleteListener(any())
-            }
+    fun `should return Empty when result user is not found`() = runTest {
+        // Arrange
+        val email = "email"
+        val pass = "password"
+        val task = mockk<Task<AuthResult>> {
+            every { exception } returns null
+            every { isSuccessful } returns true
+            every { isComplete } returns true
+            every { isCanceled } returns false
+            every { result.user } returns null
         }
 
+        every { auth.createUserWithEmailAndPassword(any(), any()) } returns task
+        every { task.addOnCompleteListener(any()) } answers {
+            val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
+            listener.onComplete(task)
+            task
+        }
+
+        // Call && Assert
+        val response = authRepository.createUserWithEmail(email, pass)
+        assertTrue(response is Response.Empty)
+        verify(exactly = 1) {
+            auth.createUserWithEmailAndPassword(email, pass)
+            task.addOnCompleteListener(any())
+        }
+    }
+
     @Test
-    fun `should return Response Error when the task returns npe error for email auth`() =
+    fun `should return Response Error (NewEmailUserException) when failed`() =
         runTest {
             // Arrange
             val email = "email"
@@ -149,9 +155,11 @@ class FirebaseAuthRepositoryTest : KoinTest {
 
             // Call && Assert
             val response = authRepository.createUserWithEmail(email, pass)
+            val error = response.extractException()
 
-            assertTrue(response is Response.Error)
-            assertTrue(response.exception is NullPointerException)
+            // Assert
+            assertTrue(error is NewEmailUserException)
+            assertTrue(error.code is NewEmailErrCode.Unknown)
             verify(exactly = 1) {
                 auth.createUserWithEmailAndPassword(email, pass)
                 task.addOnCompleteListener(any())
@@ -163,7 +171,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     // Testing sendEmailVerification()
     //----------------------------------------------------------------------------------------------
     @Test
-    fun `should send email verification`() = runTest {
+    fun `should return Response when email verification have been sent`() = runTest {
         // Arrange
         val task = mockk<Task<Void>> {
             every { exception } returns null
@@ -184,7 +192,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
         val response = authRepository.sendEmailVerification(fbUser)
 
         // Assert
-        assertTrue(response is Response.Success)
+        assertTrue(response is Result.Success)
         verify(exactly = 1) {
             fbUser.sendEmailVerification()
             task.addOnCompleteListener(any())
@@ -192,7 +200,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `should throw IncompleteTaskException when returns unsuccessful task`() =
+    fun `should return Error (SendEmailVerificationException) when returns unsuccessful task`() =
         runTest {
             // Arrange
             val task = mockk<Task<Void>> {
@@ -210,18 +218,22 @@ class FirebaseAuthRepositoryTest : KoinTest {
                 task
             }
 
-            // Call && Assert
-            assertThrows<IncompleteTaskException> {
-                authRepository.sendEmailVerification(fbUser)
-                verify(exactly = 1) {
-                    fbUser.sendEmailVerification()
-                    task.addOnCompleteListener(any())
-                }
+            // Call
+            val result = authRepository.sendEmailVerification(fbUser)
+
+            // Assert
+            val error = result.extractException()
+            assertTrue(error is SendEmailVerificationException)
+            assertNull(error.cause)
+            assertTrue(error.code is SendEmailVerificationErrCode.UnsuccessfulTask)
+            verify(exactly = 1) {
+                fbUser.sendEmailVerification()
+                task.addOnCompleteListener(any())
             }
         }
 
     @Test
-    fun `should return Response Error when the task returns npe error for email verification`() =
+    fun `should return Error (SendEmailVerificationException) when failed`() =
         runTest {
             // Arrange
             val task = mockk<Task<Void>> {
@@ -240,11 +252,13 @@ class FirebaseAuthRepositoryTest : KoinTest {
             }
 
             // Call
-            val response = authRepository.sendEmailVerification(fbUser)
+            val result = authRepository.sendEmailVerification(fbUser)
 
             // Assert
-            assertTrue(response is Response.Error)
-            assertTrue(response.exception is NullPointerException)
+            val error = result.extractException()
+            assertTrue(error is SendEmailVerificationException)
+            assertTrue(error.code is SendEmailVerificationErrCode.Unknown)
+            assertTrue(error.cause is NullPointerException)
             verify(exactly = 1) {
                 fbUser.sendEmailVerification()
                 task.addOnCompleteListener(any())
@@ -256,7 +270,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     //----------------------------------------------------------------------------------------------
 
     @Test
-    fun `should update user profile`() = runTest {
+    fun `should return Success when update user profile`() = runTest {
         // Arrange
         val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
         val task = mockk<Task<Void>> {
@@ -278,7 +292,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
         val response = authRepository.updateUserProfile(fbUser, profileChange)
 
         // Assert
-        assertTrue(response is Response.Success)
+        assertTrue(response is Result.Success)
         verify(exactly = 1) {
             fbUser.updateProfile(profileChange)
             task.addOnCompleteListener(any())
@@ -286,7 +300,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `should throw IncompleteTaskException when update profile returns unsuccessful task`() =
+    fun `should return Error (UpdateUserProfileException) when task returns unsuccessful`() =
         runTest {
             // Arrange
             val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
@@ -305,18 +319,21 @@ class FirebaseAuthRepositoryTest : KoinTest {
                 task
             }
 
-            // Call && Assert
-            assertThrows<IncompleteTaskException> {
-                authRepository.updateUserProfile(fbUser, profileChange)
-                verify(exactly = 1) {
-                    fbUser.updateProfile(profileChange)
-                    task.addOnCompleteListener(any())
-                }
+            // Call
+            val result = authRepository.updateUserProfile(fbUser, profileChange)
+
+            // Assert
+            val error = result.extractException()
+            assertTrue(error is UpdateUserProfileException)
+            assertTrue(error.code is UpdateProfileErrCode.UnsuccessfulTask)
+            verify(exactly = 1) {
+                fbUser.updateProfile(profileChange)
+                task.addOnCompleteListener(any())
             }
         }
 
     @Test
-    fun `should return Response Error when the task returns npe error for update profile`() =
+    fun `should return Error (UpdateUserProfileException) when failed`() =
         runTest {
             // Arrange
             val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
@@ -339,8 +356,9 @@ class FirebaseAuthRepositoryTest : KoinTest {
             val response = authRepository.updateUserProfile(fbUser, profileChange)
 
             // Assert
-            assertTrue(response is Response.Error)
-            assertTrue(response.exception is NullPointerException)
+            val error = response.extractException()
+            assertTrue(error is UpdateUserProfileException)
+            assertTrue(error.code is UpdateProfileErrCode.Unknown)
             verify(exactly = 1) {
                 fbUser.updateProfile(profileChange)
                 task.addOnCompleteListener(any())

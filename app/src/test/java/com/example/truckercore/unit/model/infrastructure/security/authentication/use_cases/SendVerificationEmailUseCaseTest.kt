@@ -4,7 +4,7 @@ import com.example.truckercore.model.infrastructure.database.firebase.repository
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCaseImpl
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -52,13 +52,13 @@ class SendVerificationEmailUseCaseTest : KoinTest {
     fun `should send email verification when current user is found`() = runTest {
         // Arrange
         every { auth.getCurrentUser() } returns mockFireBaseUser
-        coEvery { auth.sendEmailVerification(mockFireBaseUser) } returns Response.Success(Unit)
+        coEvery { auth.sendEmailVerification(mockFireBaseUser) } returns Result.Success(Unit)
 
         // Act
         val result = useCase.invoke()
 
         // Assert
-        assertTrue(result is Response.Success)
+        assertTrue(result is Result.Success)
         coVerify(exactly = 1) { auth.sendEmailVerification(mockFireBaseUser) }
     }
 
@@ -71,7 +71,7 @@ class SendVerificationEmailUseCaseTest : KoinTest {
         val result = useCase.invoke()
 
         // Assert
-        assertTrue(result is Response.Error)
+        assertTrue(result is Result.Error)
         val error = result.extractException()
         assertTrue(error is NullFirebaseUserException)
         assertEquals(error?.message, ERROR_MESSAGE)

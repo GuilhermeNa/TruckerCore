@@ -4,16 +4,23 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTextUtil
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateUserProfileException
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCaseImpl
-import com.example.truckercore.model.shared.errors.InvalidResponseException
+import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.koin.core.context.startKoin
@@ -21,10 +28,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
@@ -62,35 +65,23 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     fun tearDown() = stopKoin()
 
     @Test
-    fun teste() {
-
-
-    }
-
-    @Test
     fun `should return an Response when the operation is successful`() = runTest {
         // Arrange
-        val credential = EmailAuthCredential(
-            name = "John Doe",
-            email = "abc@email.com",
-            password = "123456"
-        )
-
         coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Success(fbUser)
-        coEvery { authRepo.updateUserProfile(any(), any()) } returns Response.Success(Unit)
-        coEvery { authRepo.sendEmailVerification(any()) } returns Response.Success(Unit)
+        coEvery { authRepo.updateUserProfile(any(), any()) } returns Result.Success(Unit)
+        coEvery { authRepo.sendEmailVerification(any()) } returns Result.Success(Unit)
 
         // Act
-        val response = useCase(credential)
+        val result = useCase(credential)
 
-        assertEquals(response.user, fbUser)
-        assertTrue(response.userCreated)
-        assertTrue(response.nameUpdated)
-        assertTrue(response.emailSent)
-        assertNull(response.createUserError)
-        assertNull(response.sendEmailError)
-        assertNull(response.updateNameError)
+        // Assertions
 
+        assertEquals(result.firebaseUser, fbUser)
+        assertTrue(result.userTaskSucceed)
+        assertTrue(result.nameTaskSucceed)
+        assertTrue(result.emailTaskSucceed)
+        assertTrue(result.userTaskSucceed)
+        assertTrue(result.errors.isEmpty())
         coVerify(exactly = 1) {
             authRepo.createUserWithEmail(credential.email, credential.password)
         }
@@ -105,25 +96,17 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     @Test
     fun `should return an Response when the user creation returns empty`() = runTest {
         // Arrange
-        val credential = EmailAuthCredential(
-            name = "John Doe",
-            email = "abc@email.com",
-            password = "123456"
-        )
-
         coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Empty
 
         // Act
-        val response = useCase(credential)
+        val result = useCase(credential)
 
         // Assert
-        assertNull(response.user)
-        assertFalse(response.userCreated)
-        assertFalse(response.nameUpdated)
-        assertFalse(response.emailSent)
-        assertTrue(response.createUserError.cause is InvalidResponseException)
-        assertNull(response.sendEmailError)
-        assertNull(response.updateNameError)
+        assertNull(result.firebaseUser)
+        assertFalse(result.userTaskSucceed)
+        assertFalse(result.nameTaskSucceed)
+        assertFalse(result.emailTaskSucceed)
+        assertTrue(result.errors.first() is NullFirebaseUserException)
 
         coVerify(exactly = 1) {
             authRepo.createUserWithEmail(credential.email, credential.password)
@@ -139,27 +122,20 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     @Test
     fun `should return an Response when the user creation returns error`() = runTest {
         // Arrange
-        val credential = EmailAuthCredential(
-            name = "John Doe",
-            email = "abc@email.com",
-            password = "123456"
-        )
-
         coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Error(
             NullPointerException("Simulated")
         )
 
         // Act
-        val response = useCase(credential)
+        val result = useCase(credential)
 
         // Assert
-        assertNull(response.user)
-        assertFalse(response.userCreated)
-        assertFalse(response.nameUpdated)
-        assertFalse(response.emailSent)
-        assertTrue(response.createUserError.cause is NullPointerException)
-        assertNull(response.sendEmailError)
-        assertNull(response.updateNameError)
+        assertNull(result.firebaseUser)
+        assertFalse(result.userTaskSucceed)
+        assertFalse(result.nameTaskSucceed)
+        assertFalse(result.emailTaskSucceed)
+        assertTrue(result.errors.size == 1)
+        assertTrue(result.errors.first() is NullPointerException)
 
         coVerify(exactly = 1) {
             authRepo.createUserWithEmail(credential.email, credential.password)
@@ -175,28 +151,21 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     @Test
     fun `should return an Response when the name update response returns error`() = runTest {
         // Arrange
-        val credential = EmailAuthCredential(
-            name = "John Doe",
-            email = "abc@email.com",
-            password = "123456"
-        )
-
         coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Success(fbUser)
-        coEvery { authRepo.updateUserProfile(any(), any()) } returns Response.Error(
+        coEvery { authRepo.updateUserProfile(any(), any()) } returns Result.Error(
             NullPointerException("Simulated")
         )
-        coEvery { authRepo.sendEmailVerification(any()) } returns Response.Success(Unit)
+        coEvery { authRepo.sendEmailVerification(any()) } returns Result.Success(Unit)
 
         // Act
-        val response = useCase(credential)
+        val result = useCase(credential)
 
-        assertEquals(response.user, fbUser)
-        assertTrue(response.userCreated)
-        assertFalse(response.nameUpdated)
-        assertTrue(response.emailSent)
-        assertNull(response.createUserError)
-        assertNull(response.sendEmailError)
-        assertTrue(response.updateNameError is NullPointerException)
+        assertEquals(result.firebaseUser, fbUser)
+        assertTrue(result.userTaskSucceed)
+        assertFalse(result.nameTaskSucceed)
+        assertTrue(result.emailTaskSucceed)
+        assertTrue(result.errors.size == 1)
+        assertTrue(result.errors.first() is NullPointerException)
 
         coVerify(exactly = 1) {
             authRepo.createUserWithEmail(credential.email, credential.password)
@@ -206,71 +175,6 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         }
         coVerify(exactly = 1) {
             authRepo.sendEmailVerification(any())
-        }
-    }
-
-    @Test
-    fun `should return an Response when the name update response returns empty`() = runTest {
-        // Arrange
-        val credential = EmailAuthCredential(
-            name = "John Doe",
-            email = "abc@email.com",
-            password = "123456"
-        )
-
-        coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Success(fbUser)
-        coEvery { authRepo.updateUserProfile(any(), any()) } returns Response.Empty
-        coEvery { authRepo.sendEmailVerification(any()) } returns Response.Success(Unit)
-
-        // Act
-        val response = useCase(credential)
-
-        assertEquals(response.user, fbUser)
-        assertTrue(response.userCreated)
-        assertFalse(response.nameUpdated)
-        assertTrue(response.emailSent)
-        assertNull(response.createUserError)
-        assertNull(response.sendEmailError)
-        assertTrue(response.updateNameError is InvalidResponseException)
-
-        coVerify(exactly = 1) {
-            authRepo.createUserWithEmail(credential.email, credential.password)
-        }
-        coVerify(exactly = 1) {
-            authRepo.updateUserProfile(fbUser, any())
-        }
-        coVerify(exactly = 1) {
-            authRepo.sendEmailVerification(any())
-        }
-    }
-
-    @Test
-    fun `should return an Response when the email verification returns empty`() = runTest {
-        // Arrange
-        coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Success(fbUser)
-        coEvery { authRepo.updateUserProfile(any(), any()) } returns Response.Empty
-        coEvery { authRepo.sendEmailVerification(any()) } returns Response.Empty
-
-        // Act
-        val response = useCase(credential)
-
-        // Assert
-        assertEquals(response.user, fbUser)
-        assertTrue(response.userCreated)
-        assertTrue(response.nameUpdated)
-        assertFalse(response.emailSent)
-        assertNull(response.createUserError)
-        assertTrue(response.sendEmailError is InvalidResponseException)
-        assertNull(response.updateNameError)
-
-        coVerify(exactly = 1) {
-            authRepo.createUserWithEmail(credential.email, credential.password)
-        }
-        coVerify(exactly = 1) {
-            authRepo.updateUserProfile(fbUser, any())
-        }
-        coVerify(exactly = 1) {
-            authRepo.sendEmailVerification(fbUser)
         }
     }
 
@@ -278,22 +182,55 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
     fun `should return an Response when the email verification returns error`() = runTest {
         // Arrange
         coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Success(fbUser)
-        coEvery { authRepo.updateUserProfile(any(), any()) } returns Response.Success(Unit)
-        coEvery { authRepo.sendEmailVerification(any()) } returns Response.Error(
+        coEvery { authRepo.updateUserProfile(any(), any()) } returns Result.Success(Unit)
+        coEvery { authRepo.sendEmailVerification(any()) } returns Result.Error(
             NullPointerException("Simulated")
         )
 
         // Act
-        val response = useCase(credential)
+        val result = useCase(credential)
 
         // Assert
-        assertEquals(response.user, fbUser)
-        assertTrue(response.userCreated)
-        assertTrue(response.nameUpdated)
-        assertFalse(response.emailSent)
-        assertNull(response.createUserError)
-        assertTrue(response.sendEmailError is NullPointerException)
-        assertNull(response.updateNameError)
+        assertEquals(result.firebaseUser, fbUser)
+        assertTrue(result.userTaskSucceed)
+        assertTrue(result.nameTaskSucceed)
+        assertFalse(result.emailTaskSucceed)
+        assertTrue(result.errors.size == 1)
+        assertTrue(result.errors.first() is NullPointerException)
+
+        coVerify(exactly = 1) {
+            authRepo.createUserWithEmail(credential.email, credential.password)
+        }
+        coVerify(exactly = 1) {
+            authRepo.updateUserProfile(fbUser, any())
+        }
+        coVerify(exactly = 1) {
+            authRepo.sendEmailVerification(any())
+        }
+    }
+
+    @Test
+    fun `should return an Response when name update and email verification failed`() = runTest {
+        // Arrange
+        coEvery { authRepo.createUserWithEmail(any(), any()) } returns Response.Success(fbUser)
+        coEvery { authRepo.updateUserProfile(any(), any()) } returns Result.Error(
+            InvalidStateException("Simulated")
+        )
+        coEvery { authRepo.sendEmailVerification(any()) } returns Result.Error(
+            NullPointerException("Simulated")
+        )
+
+        // Act
+        val result = useCase(credential)
+
+        // Assert
+        assertEquals(result.firebaseUser, fbUser)
+        assertTrue(result.userTaskSucceed)
+        assertFalse(result.nameTaskSucceed)
+        assertFalse(result.emailTaskSucceed)
+        assertTrue(result.errors.size == 2)
+        assertTrue(result.errors.first() is InvalidStateException)
+        assertTrue(result.errors.last() is NullPointerException)
 
         coVerify(exactly = 1) {
             authRepo.createUserWithEmail(credential.email, credential.password)

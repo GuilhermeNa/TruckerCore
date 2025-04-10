@@ -79,18 +79,18 @@ class EmailAuthViewModel(
             // Create a credential with hashed password and authenticate
             val credential = EmailAuthCredential(args.name, email, password)
             val newState = authenticateAndVerifyEmail(credential)
-            setState(newState)
+           // setState(newState)
 
         }
     }
 
     private suspend fun authenticateAndVerifyEmail(credential: EmailAuthCredential) =
         authService.createUserAndVerifyEmail(credential).let { response ->
-            when {
+          /*  when {
                 response.userCreatedAndEmailSent -> Success(UserCreatedAndEmailSent)
                 response.userCreatedAndEmailFailed -> Success(UserCreatedAndEmailFailed)
                 else -> handleError.invoke(response.createUserError)
-            }
+            }*/
         }
 
     fun setEvent(newEvent: EmailAuthFragEvent) {

@@ -12,6 +12,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.use_
 import com.example.truckercore.model.infrastructure.util.ExceptionHandler
 import com.example.truckercore.model.shared.abstractions.Service
 import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +36,7 @@ internal class AuthServiceImpl(
     override suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential) =
         withContext(Dispatchers.IO) { authRepository.createUserWithPhone(phoneAuthCredential) }
 
-    override suspend fun sendVerificationEmail(): Response<Unit> =
+    override suspend fun sendVerificationEmail(): Result<Unit> =
         withContext(Dispatchers.IO) { sendVerificationEmail.invoke() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
