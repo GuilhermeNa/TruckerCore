@@ -52,7 +52,7 @@ class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
     }
 
     private fun HashMap<EmailAuthFragError, String>.hasEditTextError(): Boolean {
-        return this.containsKey(EmailAuthFragError.InvalidEmail) ||
+        return this.containsKey(EmailAuthFragError.InvalidEmailError) ||
                 this.containsKey(EmailAuthFragError.InvalidPassword) ||
                 this.containsKey(EmailAuthFragError.InvalidPasswordConfirmation)
     }
@@ -61,7 +61,7 @@ class EmailAuthUiHandler(private val binding: FragmentEmailAuthBinding) {
         val code = StringBuilder()
 
         val v1 =
-            if (errorMap.containsKey(EmailAuthFragError.InvalidEmail)) ERROR else EMPTY
+            if (errorMap.containsKey(EmailAuthFragError.InvalidEmailError)) ERROR else EMPTY
         code.append(v1)
 
         val v2 =
@@ -98,7 +98,7 @@ private class EmailAuthFragTextViewHandler(private val binding: FragmentEmailAut
         val hasError = '1'
 
         if (arrCode[0] == hasError) {
-            binding.fragEmailAuthEmailError.text = errorMap[EmailAuthFragError.InvalidEmail]
+            binding.fragEmailAuthEmailError.text = errorMap[EmailAuthFragError.InvalidEmailError]
         }
 
         if (arrCode[1] == hasError) {
@@ -118,10 +118,10 @@ private class EmailAuthGenericErrorHandler(private val view: View) {
 
     operator fun invoke(errorMap: HashMap<EmailAuthFragError, String>) {
         val errorMessage = when {
-            errorMap.containsKey(EmailAuthFragError.Network) -> errorMap[EmailAuthFragError.Network]
+            errorMap.containsKey(EmailAuthFragError.NetworkError) -> errorMap[EmailAuthFragError.NetworkError]
                 ?: "Falha ao carregar mensagem de erro."
 
-            errorMap.containsKey(EmailAuthFragError.Unknown) -> errorMap[EmailAuthFragError.Unknown]
+            errorMap.containsKey(EmailAuthFragError.UnknownError) -> errorMap[EmailAuthFragError.UnknownError]
                 ?: "Falha ao carregar mensagem de erro."
 
             else -> "Falha ao carregar erro."

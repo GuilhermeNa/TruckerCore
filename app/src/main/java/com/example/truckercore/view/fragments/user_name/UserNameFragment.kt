@@ -78,6 +78,9 @@ class UserNameFragment : CloseAppFragment() {
         // Reset to initial state
         viewModel.setState(WaitingForInput)
 
+        // Update the editText with a formated name
+        uiHandler.bindEditText(name)
+
         // Navigate to the email authentication screen
         viewModel.setEvent(NavigateToEmailAuth(args = name))
     }
@@ -97,7 +100,7 @@ class UserNameFragment : CloseAppFragment() {
             when (event) {
                 is FabCLicked -> handleFabClicked()
                 is BackgroundClicked -> handleBackgroundClicked()
-                is NavigateToEmailAuth -> handleNavigation(event.args)
+                is NavigateToEmailAuth -> handleNavigateToEmail(event.args)
             }
         }
     }
@@ -106,7 +109,7 @@ class UserNameFragment : CloseAppFragment() {
      * Handle the navigation to Email Auth Fragment
      * @param args The name of the user define on EditText.
      */
-    private fun handleNavigation(args: String) {
+    private fun handleNavigateToEmail(args: String) {
         val direction = UserNameFragmentDirections.actionUserNameFragmentToEmailAuthFragment(args)
         navigateTo(direction)
     }
@@ -203,6 +206,10 @@ class UserNameFragment : CloseAppFragment() {
                 viewResumed = { it.transitionToEnd() },
                 viewRestoring = { it.jumpToState(R.id.frag_user_name_scene_state_end) }
             )
+        }
+
+        fun bindEditText(formatedName: String) {
+            binding.fragUserNameText.setText(formatedName)
         }
 
     }

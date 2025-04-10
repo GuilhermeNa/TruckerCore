@@ -41,7 +41,7 @@ class VerifyingEmailViewModel(
     private var counterJob: Job? = null
 
     // Helper Classes ------------------------------------------------------------------------------
-    private val stateProvider = VerifyingEmailFragStateProvider(args)
+    private val stateProvider = StateProvider(args)
 
     //----------------------------------------------------------------------------------------------
     //
@@ -102,7 +102,7 @@ class VerifyingEmailViewModel(
 
 }
 
-private class VerifyingEmailFragStateProvider(private val args: VerifyingEmailReceivedArgs) {
+private class StateProvider(private val args: VerifyingEmailReceivedArgs) {
 
     fun getInitialState() = when (args.emailSent) {
         true -> EmailSent(ResendBlocked)

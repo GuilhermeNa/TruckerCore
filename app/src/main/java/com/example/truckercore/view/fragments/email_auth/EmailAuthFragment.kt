@@ -20,8 +20,8 @@ import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragSt
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailFailed
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailSent
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Error
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.WaitingInput
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.WaitingInput
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthVmArgs
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +76,7 @@ class EmailAuthFragment : Fragment() {
     }
 
     private fun handleCreatingState() {
-        uiHandler?.setCreatingState()
+        uiHandler.setCreatingState()
 
         val email = binding.fragEmailAuthEmailEditText.text.toString()
         val password = binding.fragEmailAuthPasswordEditText.text.toString()
@@ -91,20 +91,23 @@ class EmailAuthFragment : Fragment() {
     }
 
     private fun navigateToVerificationFragment(type: EmailAuthFragSuccess) {
-        fun navigateToVerifyFragment(emailSent: Boolean) {
-            val emailText = binding.fragEmailAuthEmailEditText.text.toString()
-            navigateTo(
-                EmailAuthFragmentDirections.actionEmailAuthFragmentToVerifyingEmailFragment(
-                    email = emailText,
-                    emailSent = emailSent
-                )
-            )
-        }
+        val emailText = binding.fragEmailAuthEmailEditText.text.toString()
 
-        when (type) {
-            UserCreatedAndEmailSent -> navigateToVerifyFragment(true)
-            UserCreatedAndEmailFailed -> navigateToVerifyFragment(false)
-        }
+        with(EmailAuthFragmentDirections) {
+            return@with when (type) {
+                UserCreatedAndEmailSent ->
+                    actionEmailAuthFragmentToVerifyingEmailFragment(
+                        email = emailText,
+                        emailSent = true
+                    )
+
+                UserCreatedAndEmailFailed ->
+                    actionEmailAuthFragmentToVerifyingEmailFragment(
+                        email = emailText,
+                        emailSent = false
+                    )
+            }
+        }.let { direction -> navigateTo(direction) }
 
         viewModel.setState(WaitingInput)
     }
@@ -184,6 +187,7 @@ class EmailAuthFragment : Fragment() {
     // onViewDestroyed() ---------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        _uiHandler = null
         _binding = null
     }
 

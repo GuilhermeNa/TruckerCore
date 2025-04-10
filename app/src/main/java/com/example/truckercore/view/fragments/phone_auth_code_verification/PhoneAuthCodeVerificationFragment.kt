@@ -27,9 +27,7 @@ class PhoneAuthCodeVerificationFragment : Fragment() {
 
     private val sharedViewModel: PhoneAuthSharedViewModel by navGraphViewModels(R.id.nav_graph_login)
 
-    //----------------------------------------------------------------------------------------------
-    // onCreateView()
-    //----------------------------------------------------------------------------------------------
+    // onCreateView() ------------------------------------------------------------------------------
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,9 +36,7 @@ class PhoneAuthCodeVerificationFragment : Fragment() {
         return binding.root
     }
 
-    //----------------------------------------------------------------------------------------------
-    // onViewCreated
-    //----------------------------------------------------------------------------------------------
+    // onViewCreated -------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setMessageText()
@@ -97,9 +93,7 @@ class PhoneAuthCodeVerificationFragment : Fragment() {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
-    // onDestroyView()
-    //----------------------------------------------------------------------------------------------
+    // onDestroyView() -----------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

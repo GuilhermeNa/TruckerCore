@@ -3,6 +3,7 @@ package com.example.truckercore.view_model.view_models.user_name
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
+import com.example.truckercore.model.shared.utils.expressions.toCompleteNameFormat
 import com.example.truckercore.view_model.view_models.user_name.UserNameFragState.UserNameFragErrorType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,60 +55,56 @@ class UserNameViewModel : ViewModel() {
      * It checks for empty names, name size, and whether the name contains at least two words.
      */
     fun validateName(name: String) {
-        val validationResult = validateEntries(name)
-        val newState = stateProvider(name, validationResult)
+        val formatedName = name.toCompleteNameFormat()
+        val errorResult = validateEntries.invoke(formatedName)
+        val newState = stateProvider.invoke(formatedName, errorResult)
         setState(newState)
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Helper classes
-    //----------------------------------------------------------------------------------------------
+}
+
+/**
+ * Class responsible for validating the user input (name).
+ */
+private class ValidateEntries {
 
     /**
-     * Class responsible for validating the user input (name).
+     * Validates the user input for different error types, including empty name, size constraints,
+     * incomplete name, and invalid name format.
      */
-    private class ValidateEntries {
+    operator fun invoke(name: String): UserNameFragErrorType? {
+        val wordArr = name.split(" ")
 
-        /**
-         * Validates the user input for different error types, including empty name, size constraints,
-         * incomplete name, and invalid name format.
-         */
-        operator fun invoke(name: String): UserNameFragErrorType? {
-            val trimmedName = name.trimMargin()
-            val wordArr = name.split(" ")
-
-            return when {
-                trimmedName.isEmpty() -> UserNameFragErrorType.NameIsEmpty
-                !trimmedName.sizeIsValid() -> UserNameFragErrorType.InvalidSize
-                wordArr.size == 1 -> UserNameFragErrorType.CompleteNameRequired
-                trimmedName.isAnyWordInWrongFormat() -> UserNameFragErrorType.InvalidName
-                else -> null
-            }
+        return when {
+            name.isEmpty() -> UserNameFragErrorType.NameIsEmpty
+            wordArr.size == 1 -> UserNameFragErrorType.CompleteNameRequired
+            !name.sizeIsValid() -> UserNameFragErrorType.InvalidSize
+            name.isAnyWordInWrongFormat() -> UserNameFragErrorType.InvalidName
+            else -> null
         }
-
-        private fun String.sizeIsValid(): Boolean = length in 5..29
-
-        private fun String.isAnyWordInWrongFormat(): Boolean {
-            val wordArr = this.split(" ")
-            return wordArr.any { !it.isNameFormat() }
-        }
-
     }
+
+    private fun String.sizeIsValid(): Boolean = length in 5..29
+
+    private fun String.isAnyWordInWrongFormat(): Boolean {
+        val wordArr = this.split(" ")
+        return wordArr.any { !it.isNameFormat() }
+    }
+
+}
+
+/**
+ * Class responsible for generating the appropriate state based on validation results.
+ */
+private class StateProvider {
 
     /**
-     * Class responsible for generating the appropriate state based on validation results.
+     * Returns the new state based on the validation result.
+     * If there is an error, it returns an error state, otherwise a valid name state.
      */
-    private class StateProvider {
-
-        /**
-         * Returns the new state based on the validation result.
-         * If there is an error, it returns an error state, otherwise a valid name state.
-         */
-        operator fun invoke(name: String, error: UserNameFragErrorType?): UserNameFragState =
-            if (error == null) UserNameFragState.ValidName(name)
-            else UserNameFragState.Error(error)
-
-    }
+    operator fun invoke(name: String, error: UserNameFragErrorType?): UserNameFragState =
+        if (error == null) UserNameFragState.ValidName(name)
+        else UserNameFragState.Error(error)
 
 }
 

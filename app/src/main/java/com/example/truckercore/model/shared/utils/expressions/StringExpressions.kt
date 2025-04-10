@@ -1,16 +1,52 @@
 package com.example.truckercore.model.shared.utils.expressions
 
 /**
- * Extension function that capitalizes the first letter of the string and makes the rest lowercase.
+ * Extension function for the [String] class that capitalizes the first letter of
+ * every word in the string, while making the rest of the letters lowercase.
+ * Words are considered as substrings separated by spaces.
  *
- * @receiver String The string to capitalize.
+ * This function is useful for formatting strings where each word should start with
+ * an uppercase letter, such as titles or names.
  *
- * @return The string with the first letter capitalized and the rest in lowercase.
+ * Example:
+ * ```
+ * "hello world".capitalizeEveryFirstChar() // Returns "Hello World"
+ * ```
+ *
+ * @return A new string where the first letter of each word is capitalized and the
+ *         remaining letters are lowercase.
  */
-fun String.capitalizeFirstChar(): String {
+fun String.capitalizeEveryFirstChar(): String {
     val arr = this.split(" ")
     val upperCaseArr = arr.map { it.lowercase().replaceFirstChar { it.uppercase() } }
     return upperCaseArr.joinToString(" ")
+}
+
+/**
+ * Formats a full name string so that each word is properly capitalized,
+ * while handling small words (like prepositions or articles) differently.
+ *
+ * - Words with more than 2 characters will have the first character capitalized
+ *   and the rest in lowercase.
+ * - Words with 2 or fewer characters (e.g., "de", "da") will be fully lowercased.
+ * - Leading and trailing spaces are removed.
+ *
+ * This is useful for formatting personal names, where certain particles should
+ * remain in lowercase while others are capitalized properly.
+ *
+ * Example:
+ * ```
+ * "joão DA silva".toCompleteNameFormat() // Returns "João da Silva"
+ * ```
+ *
+ * @return A string formatted as a properly capitalized full name.
+ */
+fun String.toCompleteNameFormat(): String {
+    return trim().split(Regex("\\s+")) // Evita strings vazias se houver múltiplos espaços
+        .joinToString(" ") { word ->
+            if (word.length <= 2) word.lowercase()
+            else word.lowercase().replaceFirstChar { it.titlecase() }
+        }
 }
 
 /**

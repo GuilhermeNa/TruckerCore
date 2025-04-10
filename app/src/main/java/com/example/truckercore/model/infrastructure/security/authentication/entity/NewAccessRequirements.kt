@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.ent
 
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.shared.errors.InvalidStateException
-import com.example.truckercore.model.shared.utils.expressions.capitalizeFirstChar
+import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFirstChar
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
@@ -65,7 +65,7 @@ class NewAccessRequirements private constructor() {
      * @throws InvalidStateException if the surname contains non-letter characters.
      */
     private fun validateSurname(surname: String): String {
-        val trimmedSurname = surname.removeBlank().capitalizeFirstChar()
+        val trimmedSurname = surname.removeBlank().capitalizeEveryFirstChar()
 
         if (!trimmedSurname.isNameFormat()) throw InvalidStateException(
             "The surname must contain only letters."
@@ -100,7 +100,7 @@ class NewAccessRequirements private constructor() {
      * @throws InvalidStateException if the name contains non-letter characters.
      */
     private fun validateName(name: String): String {
-        val trimmedName = name.removeBlank().capitalizeFirstChar()
+        val trimmedName = name.removeBlank().capitalizeEveryFirstChar()
 
         if (!trimmedName.isNameFormat()) throw InvalidStateException(
             "The name must contain only letters."

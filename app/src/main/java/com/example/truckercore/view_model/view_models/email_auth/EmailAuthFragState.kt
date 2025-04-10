@@ -17,9 +17,8 @@ sealed class EmailAuthFragState {
     data class Error(val errorMap: HashMap<EmailAuthFragError, String>): EmailAuthFragState()
 
     enum class EmailAuthFragError {
-        InvalidEmail, InvalidPassword, InvalidPasswordConfirmation,
-
-        Network, Unknown;
+        InvalidEmailError, InvalidPassword, InvalidPasswordConfirmation,
+        NetworkError, UnknownError;
     }
 
 }

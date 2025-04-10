@@ -6,27 +6,19 @@ import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.example.truckercore.model.shared.utils.sealeds.Result
 
 /**
- * Interface representing the use case for creating and verifying a user via email.
- * This use case is responsible for validating the provided email and password, creating a user
- * in Firebase Authentication, and sending an email verification to the newly created user.
+ * Interface defining the contract for a use case that creates a new user and verifies their email.
+ * This use case involves creating the user, updating their display name, and sending an email verification request.
  */
 internal interface CreateUserAndVerifyEmailUseCase {
 
     /**
-     * Creates a new user using email and password, and sends an email verification.
+     * Main function to create a user and verify their email address.
+     * This method performs multiple asynchronous operations: user creation, name update, and email verification.
      *
-     * This method performs the following steps:
-     * 1. Validates the provided email and password.
-     * 2. Creates the user in Firebase Authentication with the given email and password.
-     * 3. If user creation is successful, it sends a verification email.
-     * 4. Returns a [Response] containing a [NewEmailResult] that includes information about
-     *    the user creation process (whether the user was created, email sent, or errors encountered).
-     *
-     * If the provided email format is invalid, or if the password does not meet the required
-     * criteria (at least 6 characters), the operation will return an error response.
-     *
-     * @param credential The [EmailAuthCredential] containing the user's email and password.
-     * @return A [NewEmailResult] containing the result from task or an error.
+     * @param credential The credentials (email and password) used to create the user.
+     * @return [NewEmailResult] A result containing information about the user creation process,
+     *         including whether the user was created successfully, if the name was updated,
+     *         if the email was sent, and any errors encountered during the process.
      */
     suspend operator fun invoke(credential: EmailAuthCredential): NewEmailResult
 

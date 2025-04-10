@@ -25,24 +25,24 @@ import org.koin.core.parameter.parametersOf
 
 class VerifyingEmailFragment : CloseAppFragment() {
 
+    // Binding
     private var _binding: FragmentVerifyingEmailBinding? = null
     private val binding get() = _binding!!
 
-    // Args ----------------------------------------------------------------------------------------
+    // Ui Handler
+    private var _uiHandler: VerifyingEmailFragStateHandler? = null
+    private val uiHandler get() = _uiHandler!!
+
+    // Fragment Args
     private val args: VerifyingEmailFragmentArgs by navArgs()
     private val receivedArgs: VerifyingEmailReceivedArgs by lazy {
         VerifyingEmailReceivedArgs(email = args.email, emailSent = args.emailSent)
     }
 
-    // ViewModel -----------------------------------------------------------------------------------
+    // ViewModel
     private val viewModel: VerifyingEmailViewModel by viewModel { parametersOf(receivedArgs) }
 
-    // StateHandler---------------------------------------------------------------------------------
-    private var stateHandler: VerifyingEmailFragStateHandler? = null
-
-    //----------------------------------------------------------------------------------------------
-    // onCreate()
-    //----------------------------------------------------------------------------------------------
+    // onCreate ------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
@@ -60,9 +60,9 @@ class VerifyingEmailFragment : CloseAppFragment() {
                 when (state) {
                     is VerifyingEmailFragState.Initial -> Unit
                     is VerifyingEmailFragState.EmailSent -> handleEMailSentState(state.resendType)
-                    is VerifyingEmailFragState.EmailNotSend -> stateHandler?.setEmailNotSendState()
+                    is VerifyingEmailFragState.EmailNotSend -> _uiHandler?.setEmailNotSendState()
                     is VerifyingEmailFragState.Success -> handleSuccessState()
-                    is VerifyingEmailFragState.Error -> stateHandler?.setErrorState(state.message)
+                    is VerifyingEmailFragState.Error -> _uiHandler?.setErrorState(state.message)
                 }
             }
         }
@@ -74,15 +74,15 @@ class VerifyingEmailFragment : CloseAppFragment() {
 
     private suspend fun handleEMailSentState(resendType: ResendFunction) {
         when (resendType) {
-            ResendBlocked -> stateHandler?.setEmailSentWIthButtonDisabled()
-            ResendEnabled -> stateHandler?.setEmailSentWithButtonEnabled()
+            ResendBlocked -> _uiHandler?.setEmailSentWIthButtonDisabled()
+            ResendEnabled -> _uiHandler?.setEmailSentWithButtonEnabled()
         }
     }
 
     private fun CoroutineScope.setCounterStateManager() {
         launch {
             viewModel.counterState.collect { counter ->
-                    stateHandler?.updateCounter(counter)
+                    _uiHandler?.updateCounter(counter)
             }
         }
     }
@@ -95,21 +95,17 @@ class VerifyingEmailFragment : CloseAppFragment() {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
-    // onCreateView()
-    //----------------------------------------------------------------------------------------------
+    // onCreateView --------------------------------------------------------------------------------
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentVerifyingEmailBinding.inflate(layoutInflater)
-        stateHandler = VerifyingEmailFragStateHandler(binding, args.email)
+        _uiHandler = VerifyingEmailFragStateHandler(binding, args.email)
         return binding.root
     }
 
-    //----------------------------------------------------------------------------------------------
-    // onViewCreated()
-    //----------------------------------------------------------------------------------------------
+    // onViewCreated -------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setResendButtonClickListener()
@@ -119,6 +115,13 @@ class VerifyingEmailFragment : CloseAppFragment() {
         binding.fragVerifyingEmailButtonResend.setOnClickListener {
             viewModel.setEvent(ResendButtonClicked)
         }
+    }
+
+    // onDestroyView -------------------------------------------------------------------------------
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _uiHandler = null
+        _binding = null
     }
 
 }

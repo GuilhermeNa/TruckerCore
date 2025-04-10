@@ -20,7 +20,8 @@ val authModule = module {
     single<GetSessionInfoUseCase> {
         GetSessionInfoUseCaseImpl(get(), get(), get(), get())
     }
-    single<CreateUserAndVerifyEmailUseCase> { CreateUserAndVerifyEmailUseCaseImpl(get()) }
     single<SendVerificationEmailUseCase> { SendVerificationEmailUseCaseImpl(get()) }
+
+    single<CreateUserAndVerifyEmailUseCase> { CreateUserAndVerifyEmailUseCaseImpl(get(), get(), get(), get()) }
 
 }

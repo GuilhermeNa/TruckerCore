@@ -5,12 +5,13 @@ import com.example.truckercore._test_utils.mockStaticTextUtil
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
-import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateUserProfileException
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCaseImpl
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.example.truckercore.model.shared.utils.sealeds.Result
+import com.example.truckercore.model.shared.task_manager.TaskManagerImpl
+import com.example.truckercore.model.shared.task_manager.TaskManager
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -51,9 +52,10 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
             modules(
                 module {
                     single<FirebaseAuthRepository> { mockk(relaxed = true) }
+                    factory<TaskManager<Any>> { TaskManagerImpl() }
                     single<CreateUserAndVerifyEmailUseCase> {
                         CreateUserAndVerifyEmailUseCaseImpl(
-                            get()
+                            get(), get(), get(), get()
                         )
                     }
                 }
@@ -77,10 +79,10 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         // Assertions
 
         assertEquals(result.firebaseUser, fbUser)
-        assertTrue(result.userTaskSucceed)
-        assertTrue(result.nameTaskSucceed)
-        assertTrue(result.emailTaskSucceed)
-        assertTrue(result.userTaskSucceed)
+        assertTrue(result.userCreated)
+        assertTrue(result.nameUpdated)
+        assertTrue(result.emailSent)
+        assertTrue(result.userCreated)
         assertTrue(result.errors.isEmpty())
         coVerify(exactly = 1) {
             authRepo.createUserWithEmail(credential.email, credential.password)
@@ -103,9 +105,9 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
         // Assert
         assertNull(result.firebaseUser)
-        assertFalse(result.userTaskSucceed)
-        assertFalse(result.nameTaskSucceed)
-        assertFalse(result.emailTaskSucceed)
+        assertFalse(result.userCreated)
+        assertFalse(result.nameUpdated)
+        assertFalse(result.emailSent)
         assertTrue(result.errors.first() is NullFirebaseUserException)
 
         coVerify(exactly = 1) {
@@ -131,9 +133,9 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
         // Assert
         assertNull(result.firebaseUser)
-        assertFalse(result.userTaskSucceed)
-        assertFalse(result.nameTaskSucceed)
-        assertFalse(result.emailTaskSucceed)
+        assertFalse(result.userCreated)
+        assertFalse(result.nameUpdated)
+        assertFalse(result.emailSent)
         assertTrue(result.errors.size == 1)
         assertTrue(result.errors.first() is NullPointerException)
 
@@ -161,9 +163,9 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         val result = useCase(credential)
 
         assertEquals(result.firebaseUser, fbUser)
-        assertTrue(result.userTaskSucceed)
-        assertFalse(result.nameTaskSucceed)
-        assertTrue(result.emailTaskSucceed)
+        assertTrue(result.userCreated)
+        assertFalse(result.nameUpdated)
+        assertTrue(result.emailSent)
         assertTrue(result.errors.size == 1)
         assertTrue(result.errors.first() is NullPointerException)
 
@@ -192,9 +194,9 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
         // Assert
         assertEquals(result.firebaseUser, fbUser)
-        assertTrue(result.userTaskSucceed)
-        assertTrue(result.nameTaskSucceed)
-        assertFalse(result.emailTaskSucceed)
+        assertTrue(result.userCreated)
+        assertTrue(result.nameUpdated)
+        assertFalse(result.emailSent)
         assertTrue(result.errors.size == 1)
         assertTrue(result.errors.first() is NullPointerException)
 
@@ -225,9 +227,9 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
         // Assert
         assertEquals(result.firebaseUser, fbUser)
-        assertTrue(result.userTaskSucceed)
-        assertFalse(result.nameTaskSucceed)
-        assertFalse(result.emailTaskSucceed)
+        assertTrue(result.userCreated)
+        assertFalse(result.nameUpdated)
+        assertFalse(result.emailSent)
         assertTrue(result.errors.size == 2)
         assertTrue(result.errors.first() is InvalidStateException)
         assertTrue(result.errors.last() is NullPointerException)

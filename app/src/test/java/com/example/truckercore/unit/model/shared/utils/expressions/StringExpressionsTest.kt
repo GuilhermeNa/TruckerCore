@@ -1,9 +1,10 @@
 package com.example.truckercore.unit.model.shared.utils.expressions
 
-import com.example.truckercore.model.shared.utils.expressions.capitalizeFirstChar
+import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFirstChar
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
+import com.example.truckercore.model.shared.utils.expressions.toCompleteNameFormat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -11,46 +12,103 @@ import org.junit.jupiter.api.Test
 
 class StringExpressionsTest {
 
+    //----------------------------------------------------------------------------------------------
+    // String.capitalizeEveryFirstChar()
+    //----------------------------------------------------------------------------------------------
     @Test
-    fun `should capitalize the first character and lowercase the rest`() {
+    fun `should capitalize every first char and trim spaces`() {
         // Given a string
-        val input = "hello world"
+        val input = " hello world "
 
         // When applying capitalizeFirstChar
-        val result = input.capitalizeFirstChar()
+        val result = input.capitalizeEveryFirstChar()
 
         // Then the first letter should be capitalized, and the rest should be lowercase
-        assertEquals("Hello world", result)
+        assertEquals(" Hello World ", result)
     }
 
     @Test
-    fun `should not change string that starts with an uppercase letter`() {
+    fun `should set all string in lowercase and the first in uppercase `() {
         // Given a string that starts with uppercase
-        val input = "Hello World"
+        val input = "HELLO WORLD"
 
         // When applying capitalizeFirstChar
-        val result = input.capitalizeFirstChar()
+        val result = input.capitalizeEveryFirstChar()
 
         // Then the result should be the same as the input
-        assertEquals("Hello world", result)
+        assertEquals("Hello World", result)
     }
 
     @Test
-    fun `should handle an empty string gracefully`() {
+    fun `should handle with empty string`() {
         // Given an empty string
         val input = ""
 
         // When applying capitalizeFirstChar
-        val result = input.capitalizeFirstChar()
+        val result = input.capitalizeEveryFirstChar()
 
         // Then the result should still be an empty string
         assertEquals("", result)
     }
 
+    //----------------------------------------------------------------------------------------------
+    // String.toCompleteNameFormat()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should return in name format when its lowercase `() {
+        // Arrange
+        val name = "josé da silva"
+
+        // Act
+        val result = name.toCompleteNameFormat()
+
+        // Assert
+        assertEquals(result, "José da Silva")
+    }
+
+    @Test
+    fun `should return in name format when its uppercase `() {
+        // Arrange
+        val name = "JOSÉ DA SILVA"
+
+        // Act
+        val result = name.toCompleteNameFormat()
+
+        // Assert
+        assertEquals(result, "José da Silva")
+    }
+
+    @Test
+    fun `should return in name format when has blank space`() {
+        // Arrange
+        val name = " JOSÉ   DA SILVA  "
+
+        // Act
+        val result = name.toCompleteNameFormat()
+
+        // Assert
+        assertEquals(result, "José da Silva")
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // String.isNameFormat()
+    //----------------------------------------------------------------------------------------------
     @Test
     fun `should return true for a valid name format`() {
         // Given a valid name (alphabetic only)
         val input = "John"
+
+        // When checking the name format
+        val result = input.isNameFormat()
+
+        // Then the result should be true
+        assertTrue(result)
+    }
+
+    @Test
+    fun `should return true for a valid name format with space`() {
+        // Given a valid name (alphabetic only)
+        val input = "John Doe"
 
         // When checking the name format
         val result = input.isNameFormat()
@@ -74,7 +132,7 @@ class StringExpressionsTest {
     @Test
     fun `should return false for a name with spaces`() {
         // Given a name with spaces
-        val input = "John Doe"
+        val input = "John Doe!"
 
         // When checking the name format
         val result = input.isNameFormat()
@@ -83,6 +141,9 @@ class StringExpressionsTest {
         assertFalse(result)
     }
 
+    //----------------------------------------------------------------------------------------------
+    // String.isEmailFormat()
+    //----------------------------------------------------------------------------------------------
     @Test
     fun `should return true for a valid email format`() {
         // Given a valid email
@@ -119,6 +180,9 @@ class StringExpressionsTest {
         assertFalse(result)
     }
 
+    //----------------------------------------------------------------------------------------------
+    // String.removeBlank()
+    //----------------------------------------------------------------------------------------------
     @Test
     fun `should remove all spaces from a string`() {
         // Given a string with spaces

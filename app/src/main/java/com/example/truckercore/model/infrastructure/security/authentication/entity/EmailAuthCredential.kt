@@ -4,7 +4,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.erro
 import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidPasswordException
 import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.model.shared.errors.InvalidStateException
-import com.example.truckercore.model.shared.utils.expressions.capitalizeFirstChar
+import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFirstChar
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
 import com.example.truckercore.view_model.expressions.validateUserName
@@ -49,7 +49,7 @@ class EmailAuthCredential private constructor() {
      */
     private fun validateName(name: String): String {
         name.validateUserName()
-        return name.trimStart().trimEnd().capitalizeFirstChar()
+        return name.trimStart().trimEnd().capitalizeEveryFirstChar()
     }
 
     /**

@@ -56,7 +56,7 @@
                     android:background="@color/white"
                     android:imeOptions="actionDone"
                     android:importantForAutofill="no"
-                    android:inputType="textCapWords"
+                    android:inputType="textPersonName"
                     android:maxLength="30"
                     android:maxLines="1" />
 

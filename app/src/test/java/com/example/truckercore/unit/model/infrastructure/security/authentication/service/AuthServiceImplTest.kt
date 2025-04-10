@@ -9,6 +9,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.serv
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
 import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.google.firebase.auth.PhoneAuthCredential
 import io.mockk.coEvery
@@ -31,6 +32,7 @@ class AuthServiceImplTest : KoinTest {
     private val authRepo: FirebaseAuthRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
     private val getSessionInfo: GetSessionInfoUseCase by inject()
+    private val sendEmail: SendVerificationEmailUseCase by inject()
     private val createAndVerifyUser: CreateUserAndVerifyEmailUseCase by inject()
     private val service: AuthService by inject()
 
@@ -44,6 +46,7 @@ class AuthServiceImplTest : KoinTest {
                     single<FirebaseAuthRepository> { mockk() }
                     single<CreateNewSystemAccessUseCase> { mockk() }
                     single<CreateUserAndVerifyEmailUseCase> { mockk() }
+                    single<SendVerificationEmailUseCase> {  mockk() }
                     single<AuthService> {
                         AuthServiceImpl(mockk(), get(), get(), get(), get(), get())
                     }
