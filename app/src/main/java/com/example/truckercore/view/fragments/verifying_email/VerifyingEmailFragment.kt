@@ -10,8 +10,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view.expressions.navigateTo
+import com.example.truckercore.view.expressions.showSnackBarRed
 import com.example.truckercore.view.fragments.base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent.ResendButtonClicked
+import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragData
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.ResendFunction
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.ResendFunction.ResendBlocked
@@ -19,6 +21,7 @@ import com.example.truckercore.view_model.view_models.verifying_email.VerifyingE
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailReceivedArgs
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -27,10 +30,10 @@ class VerifyingEmailFragment : CloseAppFragment() {
 
     // Binding
     private var _binding: FragmentVerifyingEmailBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     // Ui Handler
-    private var _uiHandler: VerifyingEmailFragStateHandler? = null
+    private var _uiHandler: UiHandler? = null
     private val uiHandler get() = _uiHandler!!
 
     // Fragment Args
@@ -101,7 +104,7 @@ class VerifyingEmailFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentVerifyingEmailBinding.inflate(layoutInflater)
-        _uiHandler = VerifyingEmailFragStateHandler(binding, args.email)
+        _uiHandler = UiHandler(this, args.email)
         return binding.root
     }
 
@@ -122,6 +125,72 @@ class VerifyingEmailFragment : CloseAppFragment() {
         super.onDestroyView()
         _uiHandler = null
         _binding = null
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //
+    //----------------------------------------------------------------------------------------------
+
+
+}
+
+private class UiHandler(fragment: VerifyingEmailFragment, email: String) {
+
+    private val binding = fragment.binding
+    private val view = binding.root.rootView
+    private val textProvider = VerifyingEmailTextProvider(email)
+
+    //----------------------------------------------------------------------------------------------
+
+    fun setEmailSentWIthButtonDisabled() {
+        setButton(enable = false)
+        setInState1()
+        val viewData = textProvider.invoke(true)
+        bindData(viewData)
+    }
+
+    suspend fun setEmailSentWithButtonEnabled() {
+        val viewData = textProvider.invoke(true)
+        bindData(viewData)
+        setInState2()
+        delay(500)
+        setButton(enable = true)
+
+    }
+
+    fun setEmailNotSendState() {
+        setInState2()
+        val viewData = textProvider.invoke(false)
+        bindData(viewData)
+    }
+
+    fun setErrorState(message: String) {
+        view.showSnackBarRed(message)
+    }
+
+    private fun bindData(data: VerifyingEmailFragData) {
+        binding.run {
+            fragVerifyingEmailTitle.text = data.title
+            fragVerifyingEmailMessage.text = data.text
+            fragVerifyingEmailSentTo.text = data.email
+        }
+    }
+
+    private fun setInState1() {
+        binding.fragVerifyingEmailMain.transitionToStart()
+    }
+
+    private fun setInState2() {
+        binding.fragVerifyingEmailMain.transitionToEnd()
+    }
+
+    private fun setButton(enable: Boolean) {
+        binding.fragVerifyingEmailButtonResend.isEnabled = enable
+    }
+
+    fun updateCounter(counter: Int) {
+        val value = if (counter >= 10) "$counter" else "0$counter"
+        binding.fragVerifyingEmailTimer.text = value
     }
 
 }

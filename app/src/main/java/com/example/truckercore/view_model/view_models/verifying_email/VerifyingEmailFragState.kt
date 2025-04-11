@@ -19,7 +19,7 @@ sealed class VerifyingEmailFragState {
 
     enum class ResendFunction { ResendBlocked, ResendEnabled }
 
-    enum class VerifyingEmailFragError { Network, UserNotFound, Unknown }
+    enum class VerifyingEmailFragError { NetworkError, UserNotFoundError, Unknown }
 
     fun isUserWaitingAnEmail(): Boolean = when (this) {
         is EmailSent -> resendType == ResendFunction.ResendBlocked

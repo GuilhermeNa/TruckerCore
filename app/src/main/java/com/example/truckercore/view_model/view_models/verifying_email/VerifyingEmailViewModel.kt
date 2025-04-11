@@ -10,9 +10,9 @@ import com.example.truckercore.view_model.view_models.verifying_email.VerifyingE
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.ResendFunction.ResendBlocked
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.ResendFunction.ResendEnabled
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.VerifyingEmailFragError
-import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.VerifyingEmailFragError.Network
+import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.VerifyingEmailFragError.NetworkError
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.VerifyingEmailFragError.Unknown
-import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.VerifyingEmailFragError.UserNotFound
+import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.VerifyingEmailFragError.UserNotFoundError
 import com.google.firebase.FirebaseNetworkException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -125,8 +125,8 @@ private class StateProvider(private val args: VerifyingEmailReceivedArgs) {
 
     private fun getErrorState(exception: Exception): VerifyingEmailFragState.Error {
         val (message: String, type: VerifyingEmailFragError) = when (exception) {
-            is FirebaseNetworkException -> Pair(NETWORK_ERROR, Network)
-            is NullFirebaseUserException -> Pair(USER_NOT_FOUND, UserNotFound)
+            is FirebaseNetworkException -> Pair(NETWORK_ERROR, NetworkError)
+            is NullFirebaseUserException -> Pair(USER_NOT_FOUND, UserNotFoundError)
             else -> Pair(UNKNOWN_ERROR, Unknown)
         }
         return VerifyingEmailFragState.Error(message, type)
