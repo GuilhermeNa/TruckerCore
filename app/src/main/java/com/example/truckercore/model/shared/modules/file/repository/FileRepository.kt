@@ -5,7 +5,7 @@ import com.example.truckercore.model.shared.modules.file.dto.FileDto
 import com.example.truckercore.model.shared.modules.file.entity.File
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**

@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.enums.QueryType
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.QuerySettings
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
@@ -27,17 +27,17 @@ internal class AggregateTrailerWithDetailsUseCaseImpl(
         getTrailer.execute(documentParams),
         getLicensingWithFiles.execute(getLicensingWithFilesQueryParams(documentParams))
     ) { trailerResponse, licensingWithFilesResponse ->
-        if (trailerResponse !is Response.Success) return@combine Response.Empty
+        if (trailerResponse !is AppResponse.Success) return@combine AppResponse.Empty
 
         val trailer = trailerResponse.data
         val licensingWithFiles = licensingWithFilesResponse.extractList()
         val result = TrailerWithDetails(trailer, licensingWithFiles)
 
-        Response.Success(result)
+        AppResponse.Success(result)
     }
 
-    private fun Response<List<LicensingWithFile>>.extractList() =
-        if (this is Response.Success) this.data
+    private fun AppResponse<List<LicensingWithFile>>.extractList() =
+        if (this is AppResponse.Success) this.data
         else emptyList()
 
     private fun getLicensingWithFilesQueryParams(documentParams: DocumentParameters) =
@@ -51,7 +51,7 @@ internal class AggregateTrailerWithDetailsUseCaseImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(queryParams: QueryParameters) =
         getTrailer.execute(queryParams).flatMapConcat { trailerResponse ->
-            if (trailerResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+            if (trailerResponse !is AppResponse.Success) return@flatMapConcat flowOf(AppResponse.Empty)
 
             val trailerList = trailerResponse.data
             val licensingQueryParams = getLicensingQueryParams(queryParams, trailerList)
@@ -59,7 +59,7 @@ internal class AggregateTrailerWithDetailsUseCaseImpl(
             getLicensingWithFiles.execute(licensingQueryParams).map { licensingWithFilesResponse ->
                 val licensingWithFilesMap = licensingWithFilesResponse.groupByParentId()
                 val result = getResult(trailerList, licensingWithFilesMap)
-                Response.Success(result)
+                AppResponse.Success(result)
             }
         }
 
@@ -73,8 +73,8 @@ internal class AggregateTrailerWithDetailsUseCaseImpl(
         )
     }
 
-    private fun Response<List<LicensingWithFile>>.groupByParentId(): Map<String, List<LicensingWithFile>> =
-        if (this is Response.Success) this.data.groupBy { it.licensing.parentId }
+    private fun AppResponse<List<LicensingWithFile>>.groupByParentId(): Map<String, List<LicensingWithFile>> =
+        if (this is AppResponse.Success) this.data.groupBy { it.licensing.parentId }
         else emptyMap()
 
     private fun getLicensingQueryParams(

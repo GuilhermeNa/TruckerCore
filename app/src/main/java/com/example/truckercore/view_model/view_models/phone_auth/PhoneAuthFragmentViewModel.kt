@@ -3,7 +3,7 @@ package com.example.truckercore.view_model.view_models.phone_auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,9 +28,9 @@ class PhoneAuthFragmentViewModel(
         viewModelScope.launch {
             authService.createUserWithPhone(credential).let { response ->
                 val newState = when (response) {
-                    is Response.Success -> PhoneAuthFragState.Success
-                    is Response.Empty -> emptyResponse()
-                    is Response.Error -> errorResponse(response.exception)
+                    is AppResponse.Success -> PhoneAuthFragState.Success
+                    is AppResponse.Empty -> emptyResponse()
+                    is AppResponse.Error -> errorResponse(response.exception)
                 }
                 setState(newState)
             }

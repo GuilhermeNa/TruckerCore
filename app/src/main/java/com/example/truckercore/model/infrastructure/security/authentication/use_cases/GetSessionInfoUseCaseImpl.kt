@@ -15,7 +15,7 @@ import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.QuerySettings
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -30,12 +30,12 @@ internal class GetSessionInfoUseCaseImpl(
 ) : GetSessionInfoUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun execute(firebaseUid: String): Flow<Response<SessionInfo>> =
+    override fun execute(firebaseUid: String): Flow<AppResponse<SessionInfo>> =
         getUser.execute(firebaseUid).flatMapConcat { userResponse ->
 
             val user = when (userResponse) {
-                is Response.Success -> userResponse.data
-                else -> return@flatMapConcat flowOf(Response.Empty)
+                is AppResponse.Success -> userResponse.data
+                else -> return@flatMapConcat flowOf(AppResponse.Empty)
             }
 
             combineSessionInfoFlows(user)

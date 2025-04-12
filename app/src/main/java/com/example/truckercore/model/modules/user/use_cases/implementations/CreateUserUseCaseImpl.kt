@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.user.repository.UserRepository
 import com.example.truckercore.model.modules.user.use_cases.interfaces.CreateUserUseCase
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateUserUseCaseImpl(
@@ -19,10 +19,10 @@ internal class CreateUserUseCaseImpl(
     private val mapper: UserMapper,
 ) : UseCase(permissionService), CreateUserUseCase {
 
-    override fun execute(user: User, newUser: User): Flow<Response<String>> =
+    override fun execute(user: User, newUser: User): Flow<AppResponse<String>> =
         user.runIfPermitted { processCreation(newUser) }
 
-    private fun processCreation(newUser: User): Flow<Response<String>> {
+    private fun processCreation(newUser: User): Flow<AppResponse<String>> {
         validatorService.validateForCreation(newUser)
         val dto = mapper.toDto(newUser)
         return repository.create(dto)

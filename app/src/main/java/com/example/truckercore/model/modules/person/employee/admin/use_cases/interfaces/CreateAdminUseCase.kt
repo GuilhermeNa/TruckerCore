@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.person.employee.admin.use_cases.in
 
 import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
  * It handles permission checks, validation, and delegates the actual creation to a repository.
  *
  * @see Admin
- * @see Response
+ * @see AppResponse
  */
 internal interface CreateAdminUseCase {
 
@@ -21,8 +21,8 @@ internal interface CreateAdminUseCase {
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param admin The [Admin] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of [Response.Success] when the object is successfully created.
+     * @return A [Flow] of [AppResponse.Success] when the object is successfully created.
      */
-    fun execute(user: User, admin: Admin): Flow<Response<String>>
+    fun execute(user: User, admin: Admin): Flow<AppResponse<String>>
 
 }

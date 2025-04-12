@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.Ge
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.QuerySettings
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapConcat
@@ -27,12 +27,12 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
         getLicensing.execute(documentParams),
         getFile.execute(getQueryParams(documentParams))
     ) { licensingResponse, fileResponse ->
-        if (licensingResponse !is Response.Success) return@combine Response.Empty
+        if (licensingResponse !is AppResponse.Success) return@combine AppResponse.Empty
 
-        val files = if (fileResponse is Response.Success) fileResponse.data else emptyList()
+        val files = if (fileResponse is AppResponse.Success) fileResponse.data else emptyList()
         val licensing = licensingResponse.data
 
-        Response.Success(LicensingWithFile(licensing, files))
+        AppResponse.Success(LicensingWithFile(licensing, files))
     }
 
     private fun getQueryParams(documentParams: DocumentParameters) =
@@ -46,7 +46,7 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun execute(queryParams: QueryParameters) =
         getLicensing.execute(queryParams).flatMapConcat { licensingResponse ->
-            if (licensingResponse !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
+            if (licensingResponse !is AppResponse.Success) return@flatMapConcat flowOf(AppResponse.Empty)
 
             val licensing = licensingResponse.data
             val licensingIds = licensing.mapNotNull { it.id }
@@ -55,7 +55,7 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
             getFile.execute(filesQueryParams).map { filesResponse ->
                 val filesMap = getFilesMap(filesResponse)
                 val result = getResult(licensing, filesMap)
-                Response.Success(result)
+                AppResponse.Success(result)
             }
         }
 
@@ -65,8 +65,8 @@ internal class AggregateLicensingWithFilesUseCaseImpl(
         LicensingWithFile(licensing = lic, files = filesMap[lic.id] ?: emptyList())
     }
 
-    private fun getFilesMap(filesResponse: Response<List<File>>) =
-        if (filesResponse is Response.Success) {
+    private fun getFilesMap(filesResponse: AppResponse<List<File>>) =
+        if (filesResponse is AppResponse.Success) {
             filesResponse.data.groupBy { it.parentId }
         } else emptyMap()
 

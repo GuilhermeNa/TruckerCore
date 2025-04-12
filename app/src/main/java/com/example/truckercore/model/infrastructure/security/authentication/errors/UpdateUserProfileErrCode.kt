@@ -1,0 +1,47 @@
+package com.example.truckercore.model.infrastructure.security.authentication.errors
+
+/**
+ * Sealed class representing error codes for user profile update operations.
+ *
+ * Implementations of this sealed class provide:
+ * - `name`: A unique identifier for the error.
+ * - `userMessage`: A user-friendly message that can be shown to the end user.
+ * - `logMessage`: A message that will be logged for internal tracking and debugging.
+ * - `isRecoverable`: A boolean indicating if the error is recoverable (i.e., whether the user can attempt the operation again).
+ */
+sealed class UpdateUserProfileErrCode : AuthErrorCode {
+
+    /**
+     * Error code indicating an unsuccessful task during the profile update process.
+     * This may occur due to various reasons such as failure to update user data in the backend.
+     */
+    data object UnsuccessfulTask : UpdateUserProfileErrCode() {
+        override val name = "UNSUCCESSFUL_TASK"
+        override val userMessage = "Falha ao completar tarefa."
+        override val logMessage = "Failed on complete update user. Task returned unsuccessful."
+        override val isRecoverable = true
+    }
+
+    /**
+     * Error code indicating a network failure during the profile update process.
+     * This happens when the operation cannot complete due to an issue with the network connection.
+     */
+    data object Network : UpdateUserProfileErrCode() {
+        override val name = "NETWORK_ERROR"
+        override val userMessage = "Erro de rede. Verifique sua conexão."
+        override val logMessage = "Network failure on sign-up."
+        override val isRecoverable = true
+    }
+
+    /**
+     * Error code indicating an unknown error occurred during the profile update process.
+     * This is a generic error that should be handled when an unforeseen issue arises.
+     */
+    data object Unknown : UpdateUserProfileErrCode() {
+        override val name = "UNKNOWN_ERROR"
+        override val userMessage = "Erro desconhecido. Tente novamente."
+        override val logMessage = "Unexpected error on update users name."
+        override val isRecoverable = false
+    }
+
+}

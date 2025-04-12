@@ -1,7 +1,7 @@
 package com.example.truckercore.model.shared.abstractions
 
 import com.example.truckercore.model.infrastructure.util.ExceptionHandler
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -34,7 +34,7 @@ internal abstract class Service(
      * @return A [Flow] that represents the result of the operation, potentially wrapped in
      *         a safe context with exception handling.
      */
-    fun <T> runSafe(block: () -> Flow<Response<T>>): Flow<Response<T>> = try {
+    fun <T> runSafe(block: () -> Flow<AppResponse<T>>): Flow<AppResponse<T>> = try {
         block()
             .flowOn(Dispatchers.IO)
             .catch { emit(exceptionHandler.run(it)) }

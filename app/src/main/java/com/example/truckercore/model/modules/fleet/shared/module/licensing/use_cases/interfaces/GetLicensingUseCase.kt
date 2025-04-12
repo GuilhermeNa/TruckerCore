@@ -3,14 +3,14 @@ package com.example.truckercore.model.modules.fleet.shared.module.licensing.use_
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface representing the use case for retrieving a [Licensing].
  *
  * @see Licensing
- * @see Response
+ * @see AppResponse
  */
 internal interface GetLicensingUseCase {
 
@@ -20,10 +20,10 @@ internal interface GetLicensingUseCase {
      *
      * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of:
-     * - [Response.Success] containing the [Licensing] object if the licensing record was found.
-     * - [Response.Empty] if no licensing record exists with the given ID.
+     * - [AppResponse.Success] containing the [Licensing] object if the licensing record was found.
+     * - [AppResponse.Empty] if no licensing record exists with the given ID.
      */
-    fun execute(documentParams: DocumentParameters): Flow<Response<Licensing>>
+    fun execute(documentParams: DocumentParameters): Flow<AppResponse<Licensing>>
 
     /**
      * Fetches a list of licensing records based on the provided query settings.
@@ -31,9 +31,9 @@ internal interface GetLicensingUseCase {
      *
      * @param queryParams The query parameters to filter the licensing records.
      * @return A [Flow] of:
-     * - [Response.Success] containing a list of [Licensing] objects that match the query.
-     * - [Response.Empty] if no licensing records match the query criteria.
+     * - [AppResponse.Success] containing a list of [Licensing] objects that match the query.
+     * - [AppResponse.Empty] if no licensing records match the query criteria.
      */
-    fun execute(queryParams: QueryParameters): Flow<Response<List<Licensing>>>
+    fun execute(queryParams: QueryParameters): Flow<AppResponse<List<Licensing>>>
 
 }

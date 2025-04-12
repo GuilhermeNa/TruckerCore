@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseC
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -22,17 +22,17 @@ internal class GetVipUseCaseImpl(
     private val mapper: VipMapper
 ) : UseCase(permissionService), GetVipUseCase {
 
-    override fun execute(queryParams: QueryParameters): Flow<Response<List<Vip>>> =
+    override fun execute(queryParams: QueryParameters): Flow<AppResponse<List<Vip>>> =
         with(queryParams) {
             user.runIfPermitted { getVipListFlow(this) }
         }
 
-    private fun getVipListFlow(queryParams: QueryParameters): Flow<Response<List<Vip>>> =
+    private fun getVipListFlow(queryParams: QueryParameters): Flow<AppResponse<List<Vip>>> =
         repository.fetchByQuery(queryParams).map { response ->
-            if (response is Response.Success) {
+            if (response is AppResponse.Success) {
                 val result = response.data.map { validateAndMapToEntity(it) }
-                Response.Success(result)
-            } else Response.Empty
+                AppResponse.Success(result)
+            } else AppResponse.Empty
         }
 
     private fun validateAndMapToEntity(dto: VipDto): Vip {

@@ -11,8 +11,8 @@ import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
-import com.example.truckercore.model.shared.utils.sealeds.Response.Success
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse.Success
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -24,7 +24,7 @@ internal class GetTrailerUseCaseImpl(
     private val mapper: TrailerMapper
 ) : UseCase(permissionService), GetTrailerUseCase {
 
-    override fun execute(documentParams: DocumentParameters): Flow<Response<Trailer>> =
+    override fun execute(documentParams: DocumentParameters): Flow<AppResponse<Trailer>> =
         with(documentParams) {
             user.runIfPermitted { getTrailerFlow(this) }
         }
@@ -33,7 +33,7 @@ internal class GetTrailerUseCaseImpl(
         repository.fetchByDocument(documentParams).map { response ->
             if (response is Success) {
                 Success(validateAndMapToEntity(response.data))
-            } else Response.Empty
+            } else AppResponse.Empty
         }
 
     private fun validateAndMapToEntity(dto: TrailerDto): Trailer {
@@ -43,7 +43,7 @@ internal class GetTrailerUseCaseImpl(
 
     //----------------------------------------------------------------------------------------------
 
-    override fun execute(queryParams: QueryParameters): Flow<Response<List<Trailer>>> =
+    override fun execute(queryParams: QueryParameters): Flow<AppResponse<List<Trailer>>> =
         with(queryParams) {
             user.runIfPermitted { getTrailerListFlow(queryParams) }
         }
@@ -52,7 +52,7 @@ internal class GetTrailerUseCaseImpl(
         repository.fetchByQuery(queryParams).map { response ->
             if (response is Success) {
                 Success(response.data.map { validateAndMapToEntity(it) })
-            } else Response.Empty
+            } else AppResponse.Empty
         }
 
 }

@@ -7,7 +7,7 @@ import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.modules.file.repository.FileRepository
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.CheckFileExistenceUseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

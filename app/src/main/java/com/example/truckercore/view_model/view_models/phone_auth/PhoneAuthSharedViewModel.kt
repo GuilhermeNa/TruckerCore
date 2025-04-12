@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.phone_auth
 
 import androidx.lifecycle.ViewModel
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 
@@ -36,7 +36,7 @@ class PhoneAuthSharedViewModel(
     suspend fun authenticateUser(credential: PhoneAuthCredential) =
         authService.createUserWithPhone(credential)
 
-    suspend fun getCredentialAndAuthenticateUser(): Response<String> {
+    suspend fun getCredentialAndAuthenticateUser(): AppResponse<String> {
         val credential = PhoneAuthProvider.getCredential(verificationId, receivedCode)
         return authenticateUser(credential)
     }

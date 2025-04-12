@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.fleet.shared.module.licensing.use_
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -16,11 +16,11 @@ internal interface UpdateLicensingUseCase {
      *
      * @param user The [User] who is performing the update. This parameter might be used to check permissions or track the update.
      * @param licensing The [Licensing] entity that is being updated. This contains the data to be modified.
-     * @return A [Flow] containing [Response.Success] when the [Licensing] entity is successfully updated.
+     * @return A [Flow] containing [AppResponse.Success] when the [Licensing] entity is successfully updated.
      *
      * @throws NullPointerException if the [Licensing] entity's ID is null.
      * @throws ObjectNotFoundException if the [Licensing] entity does not exist.
      */
-    fun execute(user: User, licensing: Licensing): Flow<Response<Unit>>
+    fun execute(user: User, licensing: Licensing): Flow<AppResponse<Unit>>
 
 }

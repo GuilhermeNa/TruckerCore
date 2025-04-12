@@ -9,7 +9,7 @@ import com.example.truckercore.model.shared.interfaces.Dto
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.SearchParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class BusinessCentralRepositoryImpl(
@@ -17,16 +17,16 @@ internal class BusinessCentralRepositoryImpl(
     private val collection: Collection
 ) : Repository(), BusinessCentralRepository {
 
-    override fun <T : Dto> create(dto: T): Flow<Response<String>> =
+    override fun <T : Dto> create(dto: T): Flow<AppResponse<String>> =
         firebaseRepository.create(collection, dto)
 
-    override fun <T : Dto> update(dto: T): Flow<Response<Unit>> =
+    override fun <T : Dto> update(dto: T): Flow<AppResponse<Unit>> =
         firebaseRepository.update(collection, dto)
 
-    override fun delete(id: String): Flow<Response<Unit>> =
+    override fun delete(id: String): Flow<AppResponse<Unit>> =
         firebaseRepository.delete(collection, id)
 
-    override fun entityExists(id: String): Flow<Response<Unit>> =
+    override fun entityExists(id: String): Flow<AppResponse<Unit>> =
         firebaseRepository.entityExists(collection, id)
 
     override fun fetchByDocument(documentParams: DocumentParameters) =

@@ -4,7 +4,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.flow.Flow
@@ -34,9 +34,9 @@ interface AuthService {
      * containing an authentication token (String) if successful, or an error response if authentication fails.
      *
      * @param phoneAuthCredential The authentication credentials for the user's phone number, including verification ID and code.
-     * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
+     * @return A [Flow] emitting the [AppResponse] with the authentication token, or an error if authentication fails.
      */
-    suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): Response<String>
+    suspend fun createUserWithPhone(phoneAuthCredential: PhoneAuthCredential): AppResponse<String>
 
     suspend fun sendVerificationEmail(): Result<Unit>
 
@@ -45,18 +45,18 @@ interface AuthService {
      *
      * This method performs the sign-in process by utilizing the provided [EmailAuthCredential],
      * authenticating the user via Firebase, and then fetching the corresponding logged user
-     * details. The method returns a [Flow] emitting a [Response] that contains:
+     * details. The method returns a [Flow] emitting a [AppResponse] that contains:
      * - [SessionInfo] on successful sign-in with user details.
-     * - [Response.Empty] if the user is authenticated but no details are found.
+     * - [AppResponse.Empty] if the user is authenticated but no details are found.
      * - An error response if the sign-in or user retrieval fails.
      *
      * @param emailAuthCredential The credentials of the user, including email and password.
-     * @return A [Flow] emitting a [Response] containing:
+     * @return A [Flow] emitting a [AppResponse] containing:
      * - [SessionInfo] on successful sign-in,
-     * - [Response.Empty] if no user details are found,
+     * - [AppResponse.Empty] if no user details are found,
      * - An error if the process fails (e.g., authentication failure or network error).
      */
-    fun signIn(emailAuthCredential: EmailAuthCredential): Flow<Response<SessionInfo>>
+    fun signIn(emailAuthCredential: EmailAuthCredential): Flow<AppResponse<SessionInfo>>
 
     /**
      * Signs out the current authenticated user.
@@ -80,22 +80,22 @@ interface AuthService {
      * Retrieves the logged-in user along with their associated person details.
      *
      * @return A [Flow] emitting:
-     * - [Response.Success] containing [SessionInfo] if successful, or an error response if the user is not logged in.
-     * - [Response.Error] if any error occurs.
+     * - [AppResponse.Success] containing [SessionInfo] if successful, or an error response if the user is not logged in.
+     * - [AppResponse.Error] if any error occurs.
      */
-    fun getSessionInfo(): Flow<Response<SessionInfo>>
+    fun getSessionInfo(): Flow<AppResponse<SessionInfo>>
 
     /**
      * Creates a new system access based on the provided access requirements.
      *
      * This method processes the provided [NewAccessRequirements] and returns a flow
-     * with a [Response] indicating the success (Unit) or failure (error response) of the access creation.
+     * with a [AppResponse] indicating the success (Unit) or failure (error response) of the access creation.
      *
      * @param requirements The requirements for creating a new system access.
-     * @return A [Flow] emitting the [Response] containing [Unit] on success, or an error response if access creation fails.
+     * @return A [Flow] emitting the [AppResponse] containing [Unit] on success, or an error response if access creation fails.
      */
-    fun createNewSystemAccess(requirements: NewAccessRequirements): Flow<Response<Unit>>
+    fun createNewSystemAccess(requirements: NewAccessRequirements): Flow<AppResponse<Unit>>
 
-    fun observeEmailValidation(): Flow<Response<Unit>>
+    fun observeEmailValidation(): Flow<AppResponse<Unit>>
 
 }

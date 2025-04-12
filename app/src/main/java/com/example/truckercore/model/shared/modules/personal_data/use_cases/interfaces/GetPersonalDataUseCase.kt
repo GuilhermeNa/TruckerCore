@@ -3,7 +3,7 @@ package com.example.truckercore.model.shared.modules.personal_data.use_cases.int
 import com.example.truckercore.model.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**

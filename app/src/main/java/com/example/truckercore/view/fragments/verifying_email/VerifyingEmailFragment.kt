@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -15,7 +14,6 @@ import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.execute
 import com.example.truckercore.view.expressions.navigateTo
-import com.example.truckercore.view.expressions.showSnackBarGreen
 import com.example.truckercore.view.expressions.showSnackBarRed
 import com.example.truckercore.view.expressions.showToast
 import com.example.truckercore.view.fragments.base.CloseAppFragment
@@ -27,7 +25,6 @@ import com.example.truckercore.view_model.view_models.verifying_email.VerifyingE
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEffect.SendEmailSucceed
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent.NewAccountButtonClicked
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent.ResendButtonClicked
-import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.TryingToVerify
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailFragState.WaitingResend
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel

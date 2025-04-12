@@ -4,7 +4,7 @@ import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -18,10 +18,10 @@ internal interface GetPersonWithDetailsUseCase {
      *
      * @param user The user whose person details are to be retrieved.
      * @return A [Flow] of:
-     * - [Response.Success] containing the detailed information about the person.
-     * - [Response.Empty] when the data was not found.
+     * - [AppResponse.Success] containing the detailed information about the person.
+     * - [AppResponse.Empty] when the data was not found.
      */
-    fun execute(user: User): Flow<Response<PersonWithDetails>>
+    fun execute(user: User): Flow<AppResponse<PersonWithDetails>>
 
     /**
      * Executes the use case to retrieve detailed information about a [PersonWithDetails]
@@ -34,15 +34,15 @@ internal interface GetPersonWithDetailsUseCase {
      * @param params The [DocumentParameters] containing the necessary information for the query.
      * @param category The [PersonCategory] indicating the type of person (e.g., "ADMIN" or "DRIVER").
      * @return A [Flow] of:
-     * - [Response.Success] containing the detailed information about the person.
-     * - [Response.Empty] if no data is found.
+     * - [AppResponse.Success] containing the detailed information about the person.
+     * - [AppResponse.Empty] if no data is found.
      *
      * @throws [NullPointerException] If any required parameter is null (e.g., user ID).
      */
     fun execute(
         params: DocumentParameters,
         category: PersonCategory
-    ): Flow<Response<PersonWithDetails>>
+    ): Flow<AppResponse<PersonWithDetails>>
 
     /**
      * Executes the use case to retrieve a list of [PersonWithDetails] based on the provided
@@ -56,14 +56,14 @@ internal interface GetPersonWithDetailsUseCase {
      * @param category The [PersonCategory] indicating the type of people to be retrieved
      * (e.g., "ADMIN" or "DRIVER").
      * @return A [Flow] of:
-     * - [Response.Success] containing a list of detailed information about the people.
-     * - [Response.Empty] if no data is found.
+     * - [AppResponse.Success] containing a list of detailed information about the people.
+     * - [AppResponse.Empty] if no data is found.
      *
      * @throws [NullPointerException] If any required parameter is null (e.g., user ID).
      */
     fun execute(
         params: QueryParameters,
         category: PersonCategory
-    ): Flow<Response<List<PersonWithDetails>>>
+    ): Flow<AppResponse<List<PersonWithDetails>>>
 
 }

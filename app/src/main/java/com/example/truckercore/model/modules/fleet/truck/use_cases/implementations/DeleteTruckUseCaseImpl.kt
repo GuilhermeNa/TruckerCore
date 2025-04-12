@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.De
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

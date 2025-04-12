@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -25,11 +25,11 @@ internal class UpdateLicensingUseCaseImpl(
 ) : UseCase(permissionService), UpdateLicensingUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun execute(user: User, licensing: Licensing): Flow<Response<Unit>> {
+    override fun execute(user: User, licensing: Licensing): Flow<AppResponse<Unit>> {
         val id = licensing.id ?: throw NullPointerException("Null Licensing id while updating.")
 
         return checkExistence.execute(user, id).flatMapConcat { response ->
-            if (response !is Response.Success) {
+            if (response !is AppResponse.Success) {
                 throw ObjectNotFoundException(
                     "Attempting to update a Licensing that was not found for id: $id."
                 )
@@ -38,7 +38,7 @@ internal class UpdateLicensingUseCaseImpl(
         }
     }
 
-    private fun processUpdate(licensing: Licensing): Flow<Response<Unit>> {
+    private fun processUpdate(licensing: Licensing): Flow<AppResponse<Unit>> {
         validatorService.validateEntity(licensing)
         val dto = mapper.toDto(licensing)
         return repository.update(dto)

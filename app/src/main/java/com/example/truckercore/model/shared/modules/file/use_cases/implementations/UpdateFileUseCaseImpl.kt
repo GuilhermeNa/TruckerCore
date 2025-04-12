@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.modules.file.repository.FileReposito
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.CheckFileExistenceUseCase
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.UpdateFileUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

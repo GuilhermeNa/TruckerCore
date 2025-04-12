@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.business_central.repository.Busines
 import com.example.truckercore.model.modules.business_central.use_cases.implementations.CheckBusinessCentralExistenceUseCaseImpl
 import com.example.truckercore.model.modules.business_central.use_cases.interfaces.CheckBusinessCentralExistenceUseCase
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -68,13 +68,13 @@ class CheckBusinessCentralExistenceUseCaseImplTest : KoinTest {
     fun `execute() should return a response success with when object was found`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(any(), any()) } returns true
-        every { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
+        every { repository.entityExists(id) } returns flowOf(AppResponse.Success(Unit))
 
         // Call
         val response = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(response is Response.Success)
+        assertTrue(response is AppResponse.Success)
 
         verifyOrder {
             permissionService.canPerformAction(user, requiredPermission)
@@ -103,13 +103,13 @@ class CheckBusinessCentralExistenceUseCaseImplTest : KoinTest {
     fun `execute() should return empty when the object was not found`() = runTest {
         //Behavior
         every { permissionService.canPerformAction(any(), any()) } returns true
-        every { repository.entityExists(id) } returns flowOf(Response.Empty)
+        every { repository.entityExists(id) } returns flowOf(AppResponse.Empty)
 
         // Call
         val response = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(response is Response.Empty)
+        assertTrue(response is AppResponse.Empty)
         verifyOrder {
             permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)

@@ -9,7 +9,7 @@ import com.example.truckercore.model.shared.modules.personal_data.dto.PersonalDa
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.SearchParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class PersonalDataRepositoryImpl(
@@ -17,22 +17,22 @@ internal class PersonalDataRepositoryImpl(
     private val collection: Collection
 ) : Repository(), PersonalDataRepository {
 
-    override fun <T : Dto> create(dto: T): Flow<Response<String>> =
+    override fun <T : Dto> create(dto: T): Flow<AppResponse<String>> =
         firebaseRepository.create(collection, dto)
 
-    override fun <T : Dto> update(dto: T): Flow<Response<Unit>> =
+    override fun <T : Dto> update(dto: T): Flow<AppResponse<Unit>> =
         firebaseRepository.update(collection, dto)
 
-    override fun delete(id: String): Flow<Response<Unit>> =
+    override fun delete(id: String): Flow<AppResponse<Unit>> =
         firebaseRepository.delete(collection, id)
 
     override fun entityExists(id: String) =
         firebaseRepository.entityExists(collection, id)
 
-    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<PersonalDataDto>> =
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<AppResponse<PersonalDataDto>> =
         firebaseRepository.documentFetch(createFirestoreRequest(documentParams))
 
-    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<PersonalDataDto>>> =
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<AppResponse<List<PersonalDataDto>>> =
         firebaseRepository.queryFetch(createFirestoreRequest(queryParams))
 
     override fun createFirestoreRequest(params: SearchParameters) =

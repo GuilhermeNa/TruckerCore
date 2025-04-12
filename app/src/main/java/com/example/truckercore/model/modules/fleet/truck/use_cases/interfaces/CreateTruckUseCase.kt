@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces
 
 import com.example.truckercore.model.modules.fleet.truck.entity.Truck
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -18,8 +18,8 @@ internal interface CreateTruckUseCase {
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param truck The [Truck] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of [Response.Success] when the object is successfully created.
+     * @return A [Flow] of [AppResponse.Success] when the object is successfully created.
      */
-    fun execute(user: User, truck: Truck): Flow<Response<String>>
+    fun execute(user: User, truck: Truck): Flow<AppResponse<String>>
 
 }

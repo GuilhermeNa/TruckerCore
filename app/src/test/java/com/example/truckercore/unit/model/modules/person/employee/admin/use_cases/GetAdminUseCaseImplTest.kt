@@ -13,7 +13,7 @@ import com.example.truckercore.model.modules.person.employee.admin.use_cases.int
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -85,7 +85,7 @@ class GetAdminUseCaseImplTest : KoinTest {
             val entity: Admin = mockk(relaxed = true)
 
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByDocument(any()) } returns flowOf(Response.Success(dto))
+            every { repository.fetchByDocument(any()) } returns flowOf(AppResponse.Success(dto))
             every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
@@ -93,7 +93,7 @@ class GetAdminUseCaseImplTest : KoinTest {
             val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertEquals(entity, (result as Response.Success).data)
+            assertEquals(entity, (result as AppResponse.Success).data)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByDocument(docParams)
@@ -107,13 +107,13 @@ class GetAdminUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByDocument(any()) } returns flowOf(Response.Empty)
+            every { repository.fetchByDocument(any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByDocument(docParams)

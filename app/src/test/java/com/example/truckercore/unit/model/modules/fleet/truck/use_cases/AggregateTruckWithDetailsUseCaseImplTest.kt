@@ -12,7 +12,7 @@ import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.Ag
 import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -75,21 +75,21 @@ class AggregateTruckWithDetailsUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { getTruck.execute(any() as DocumentParameters) } returns flowOf(
-                Response.Success(truck)
+                AppResponse.Success(truck)
             )
             every { getTrailerWithDetails.execute(any() as QueryParameters) } returns flowOf(
-                Response.Success(listOf(trailerWithDetails))
+                AppResponse.Success(listOf(trailerWithDetails))
             )
             every { getLicensingWithFiles.execute(any() as QueryParameters) } returns flowOf(
-                Response.Success(listOf(licensingWithFile))
+                AppResponse.Success(listOf(licensingWithFile))
             )
 
             // Call
             val result = aggregateTruckWithDetailsUseCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Success)
-            val successData = (result as Response.Success).data
+            assertTrue(result is AppResponse.Success)
+            val successData = (result as AppResponse.Success).data
             assertEquals(truck, successData.truck)
             assertEquals(trailerWithDetails, successData.trailersWithDetails.first())
             assertEquals(licensingWithFile, successData.licensingWithFiles.first())
@@ -104,13 +104,13 @@ class AggregateTruckWithDetailsUseCaseImplTest : KoinTest {
     fun `execute(DocumentParameters) should return Empty when getTruck fails`() =
         runTest {
             // Arrange
-            every { getTruck.execute(docParams) } returns flowOf(Response.Empty)
+            every { getTruck.execute(docParams) } returns flowOf(AppResponse.Empty)
 
             // Call
             val result = aggregateTruckWithDetailsUseCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
 
             // Verify that getTrailerWithDetails and getLicensingWithFiles are not called
             verify { getTruck.execute(docParams) }
@@ -123,21 +123,21 @@ class AggregateTruckWithDetailsUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { getTruck.execute(any() as DocumentParameters) } returns flowOf(
-                Response.Success(truck)
+                AppResponse.Success(truck)
             )
             every { getTrailerWithDetails.execute(any() as QueryParameters) } returns flowOf(
-                Response.Empty
+                AppResponse.Empty
             )
             every { getLicensingWithFiles.execute(any() as QueryParameters) } returns flowOf(
-                Response.Success(listOf(licensingWithFile))
+                AppResponse.Success(listOf(licensingWithFile))
             )
 
             // Call
             val result = aggregateTruckWithDetailsUseCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Success)
-            val successData = (result as Response.Success).data
+            assertTrue(result is AppResponse.Success)
+            val successData = (result as AppResponse.Success).data
             assertEquals(truck, successData.truck)
             assertTrue(successData.trailersWithDetails.isEmpty())
             assertEquals(licensingWithFile, successData.licensingWithFiles.first())
@@ -152,20 +152,20 @@ class AggregateTruckWithDetailsUseCaseImplTest : KoinTest {
     fun `execute(DocumentParameters) should return empty licensing when getLicensingWithFiles returns Empty`() =
         runTest {
             // Arrange
-            every { getTruck.execute(docParams) } returns flowOf(Response.Success(truck))
+            every { getTruck.execute(docParams) } returns flowOf(AppResponse.Success(truck))
             every { getTrailerWithDetails.execute(any() as QueryParameters) } returns flowOf(
-                Response.Success(listOf(trailerWithDetails))
+                AppResponse.Success(listOf(trailerWithDetails))
             )
             every { getLicensingWithFiles.execute(any() as QueryParameters) } returns flowOf(
-                Response.Empty
+                AppResponse.Empty
             )
 
             // Call
             val result = aggregateTruckWithDetailsUseCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Success)
-            val successData = (result as Response.Success).data
+            assertTrue(result is AppResponse.Success)
+            val successData = (result as AppResponse.Success).data
             assertEquals(truck, successData.truck)
             assertEquals(trailerWithDetails, successData.trailersWithDetails.first())
             assertTrue(successData.licensingWithFiles.isEmpty())
@@ -180,19 +180,19 @@ class AggregateTruckWithDetailsUseCaseImplTest : KoinTest {
     fun `execute(QueryParameters) should call getTruck, getTrailerWithDetails and getLicensingWithFiles useCases`() =
         runTest {
             // Arrange
-            every { getTruck.execute(queryParams) } returns flowOf(Response.Success(listOf(truck)))
+            every { getTruck.execute(queryParams) } returns flowOf(AppResponse.Success(listOf(truck)))
             every { getTrailerWithDetails.execute(any() as QueryParameters) } returns flowOf(
-                Response.Success(listOf(trailerWithDetails))
+                AppResponse.Success(listOf(trailerWithDetails))
             )
             every { getLicensingWithFiles.execute(any() as QueryParameters) } returns flowOf(
-                Response.Success(listOf(licensingWithFile))
+                AppResponse.Success(listOf(licensingWithFile))
             )
 
             // Call
             val result = aggregateTruckWithDetailsUseCase.execute(queryParams).single()
 
             // Assertions
-            assertTrue(result is Response.Success)
+            assertTrue(result is AppResponse.Success)
             val successData = (result as Response.Success).data.first()
             assertEquals(truck, successData.truck)
             assertEquals(trailerWithDetails, successData.trailersWithDetails.first())

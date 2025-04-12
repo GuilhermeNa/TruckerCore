@@ -10,7 +10,7 @@ import com.example.truckercore.model.shared.modules.personal_data.use_cases.inte
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

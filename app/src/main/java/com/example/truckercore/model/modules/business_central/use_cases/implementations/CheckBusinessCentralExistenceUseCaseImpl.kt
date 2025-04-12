@@ -6,7 +6,7 @@ import com.example.truckercore.model.modules.business_central.repository.Busines
 import com.example.truckercore.model.modules.business_central.use_cases.interfaces.CheckBusinessCentralExistenceUseCase
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CheckBusinessCentralExistenceUseCaseImpl(
@@ -15,7 +15,7 @@ internal class CheckBusinessCentralExistenceUseCaseImpl(
     private val repository: BusinessCentralRepository
 ) : UseCase(permissionService), CheckBusinessCentralExistenceUseCase {
 
-    override fun execute(user: User, id: String): Flow<Response<Unit>> =
+    override fun execute(user: User, id: String): Flow<AppResponse<Unit>> =
         user.runIfPermitted { repository.entityExists(id) }
 
 }

@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.modules.personal_data.repository.Per
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.UpdatePersonalDataUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.
 import com.example.truckercore.model.shared.abstractions.Service
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class TrailerServiceImpl(
@@ -19,22 +19,22 @@ internal class TrailerServiceImpl(
 
     override fun fetchTrailer(
         documentParam: DocumentParameters
-    ): Flow<Response<Trailer>> =
+    ): Flow<AppResponse<Trailer>> =
         runSafe { getTrailer.execute(documentParam) }
 
     override fun fetchTrailerList(
         queryParam: QueryParameters
-    ): Flow<Response<List<Trailer>>> =
+    ): Flow<AppResponse<List<Trailer>>> =
         runSafe { getTrailer.execute(queryParam) }
 
     override fun fetchTrailerWithDetails(
         documentParam: DocumentParameters
-    ): Flow<Response<TrailerWithDetails>> =
+    ): Flow<AppResponse<TrailerWithDetails>> =
         runSafe { getTrailerWithDetails.execute(documentParam) }
 
     override fun fetchTrailerWithDetailsList(
         queryParam: QueryParameters
-    ): Flow<Response<List<TrailerWithDetails>>> =
+    ): Flow<AppResponse<List<TrailerWithDetails>>> =
         runSafe { getTrailerWithDetails.execute(queryParam) }
 
 }

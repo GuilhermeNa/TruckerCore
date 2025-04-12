@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.Ge
 import com.example.truckercore.model.shared.abstractions.Service
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class TruckServiceImpl(
@@ -17,20 +17,20 @@ internal class TruckServiceImpl(
     private val getTruckWithDetailsUseCase: AggregateTruckWithDetailsUseCase
 ) : Service(exceptionHandler), TruckService {
 
-    override fun fetchTruck(documentParam: DocumentParameters): Flow<Response<Truck>> =
+    override fun fetchTruck(documentParam: DocumentParameters): Flow<AppResponse<Truck>> =
         runSafe { getTruck.execute(documentParam) }
 
-    override fun fetchTruck(queryParam: QueryParameters): Flow<Response<List<Truck>>> =
+    override fun fetchTruck(queryParam: QueryParameters): Flow<AppResponse<List<Truck>>> =
         runSafe { getTruck.execute(queryParam) }
 
     override fun fetchTruckWithDetails(
         documentParam: DocumentParameters
-    ): Flow<Response<TruckWithDetails>> =
+    ): Flow<AppResponse<TruckWithDetails>> =
         runSafe { getTruckWithDetailsUseCase.execute(documentParam) }
 
     override fun fetchTruckWithDetails(
         queryParam: QueryParameters
-    ): Flow<Response<List<TruckWithDetails>>> =
+    ): Flow<AppResponse<List<TruckWithDetails>>> =
         runSafe { getTruckWithDetailsUseCase.execute(queryParam) }
 
 }

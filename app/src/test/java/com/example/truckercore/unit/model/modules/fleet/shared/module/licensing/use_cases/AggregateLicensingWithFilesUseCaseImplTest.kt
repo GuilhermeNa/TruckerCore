@@ -10,7 +10,7 @@ import com.example.truckercore.model.shared.modules.file.entity.File
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.GetFileUseCase
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

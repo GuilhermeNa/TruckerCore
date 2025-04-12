@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.user.use_cases.implementations.Dele
 import com.example.truckercore.model.modules.user.use_cases.interfaces.CheckUserExistenceUseCase
 import com.example.truckercore.model.modules.user.use_cases.interfaces.DeleteUserUseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

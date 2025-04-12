@@ -4,7 +4,7 @@ import com.example.truckercore.model.shared.modules.personal_data.aggregations.P
 import com.example.truckercore.model.shared.modules.personal_data.entity.PersonalData
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see PersonalData
  * @see PersonalDataWithDetails
- * @see Response
+ * @see AppResponse
  */
 interface PersonalDataService {
 
@@ -22,32 +22,32 @@ interface PersonalDataService {
      * Fetches a single personal data record based on document parameters.
      *
      * @param documentParam The document parameters to filter the personal data records.
-     * @return A [Flow] containing a [Response] with the [PersonalData] record.
+     * @return A [Flow] containing a [AppResponse] with the [PersonalData] record.
      */
-    fun fetchPersonalData(documentParam: DocumentParameters): Flow<Response<PersonalData>>
+    fun fetchPersonalData(documentParam: DocumentParameters): Flow<AppResponse<PersonalData>>
 
     /**
      * Fetches a list of personal data records based on query parameters.
      *
      * @param queryParam The query parameters to filter the personal data records.
-     * @return A [Flow] containing a [Response] with a list of [PersonalData] records.
+     * @return A [Flow] containing a [AppResponse] with a list of [PersonalData] records.
      */
-    fun fetchPersonalData(queryParam: QueryParameters): Flow<Response<List<PersonalData>>>
+    fun fetchPersonalData(queryParam: QueryParameters): Flow<AppResponse<List<PersonalData>>>
 
     /**
      * Fetches a single personal data record along with its associated details based on document parameters.
      *
      * @param documentParam The document parameters to filter the personal data records with details.
-     * @return A [Flow] containing a [Response] with the [PersonalDataWithFile] record.
+     * @return A [Flow] containing a [AppResponse] with the [PersonalDataWithFile] record.
      */
-    fun fetchPersonalDataWithDetails(documentParam: DocumentParameters): Flow<Response<PersonalDataWithFile>>
+    fun fetchPersonalDataWithDetails(documentParam: DocumentParameters): Flow<AppResponse<PersonalDataWithFile>>
 
     /**
      * Fetches a list of personal data records along with their associated details based on query parameters.
      *
      * @param queryParam The query parameters to filter the personal data records with details.
-     * @return A [Flow] containing a [Response] with a list of [PersonalDataWithFile] records.
+     * @return A [Flow] containing a [AppResponse] with a list of [PersonalDataWithFile] records.
      */
-    fun fetchPersonalDataWithDetails(queryParam: QueryParameters): Flow<Response<List<PersonalDataWithFile>>>
+    fun fetchPersonalDataWithDetails(queryParam: QueryParameters): Flow<AppResponse<List<PersonalDataWithFile>>>
 
 }

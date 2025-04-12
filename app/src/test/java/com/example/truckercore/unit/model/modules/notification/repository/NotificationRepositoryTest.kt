@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.notification.repository.Notificatio
 import com.example.truckercore.model.modules.notification.repository.NotificationRepositoryImpl
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

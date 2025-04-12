@@ -9,7 +9,7 @@ import com.example.truckercore.model.modules.person.employee.admin.use_cases.int
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateAdminUseCaseImpl(
@@ -21,10 +21,10 @@ internal class CreateAdminUseCaseImpl(
 ) : UseCase(permissionService),
     CreateAdminUseCase {
 
-    override fun execute(user: User, admin: Admin): Flow<Response<String>> =
+    override fun execute(user: User, admin: Admin): Flow<AppResponse<String>> =
         user.runIfPermitted { processCreation(admin) }
 
-    private fun processCreation(admin: Admin): Flow<Response<String>> {
+    private fun processCreation(admin: Admin): Flow<AppResponse<String>> {
         validatorService.validateForCreation(admin)
         val adminDto = mapper.toDto(admin)
         return repository.create(adminDto)

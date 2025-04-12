@@ -7,7 +7,7 @@ import com.example.truckercore.model.modules.user.repository.UserRepository
 import com.example.truckercore.model.modules.user.use_cases.interfaces.CreateMasterUserUseCase
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateMasterUserUseCaseImpl(
@@ -16,7 +16,7 @@ internal class CreateMasterUserUseCaseImpl(
     private val mapper: UserMapper
 ) : CreateMasterUserUseCase {
 
-    override fun execute(masterUser: User): Flow<Response<String>> {
+    override fun execute(masterUser: User): Flow<AppResponse<String>> {
         validateState(masterUser)
         return processCreation(masterUser)
     }
@@ -27,7 +27,7 @@ internal class CreateMasterUserUseCaseImpl(
         )
     }
 
-    private fun processCreation(masterUser: User): Flow<Response<String>> {
+    private fun processCreation(masterUser: User): Flow<AppResponse<String>> {
         validatorService.validateForCreation(masterUser)
         val dto = mapper.toDto(masterUser)
         return repository.create(dto)

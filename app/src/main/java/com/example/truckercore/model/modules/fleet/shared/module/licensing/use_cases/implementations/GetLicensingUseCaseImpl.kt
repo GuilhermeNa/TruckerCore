@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,16 +23,16 @@ internal class GetLicensingUseCaseImpl(
     private val mapper: LicensingMapper
 ) : UseCase(permissionService), GetLicensingUseCase {
 
-    override fun execute(documentParams: DocumentParameters): Flow<Response<Licensing>> =
+    override fun execute(documentParams: DocumentParameters): Flow<AppResponse<Licensing>> =
         with(documentParams) {
             user.runIfPermitted { getMappedLicensingFlow(this) }
         }
 
     private fun getMappedLicensingFlow(documentParams: DocumentParameters) =
         repository.fetchByDocument(documentParams).map { response ->
-            if (response is Response.Success) {
-                Response.Success(validateAndMapToEntity(response.data))
-            } else Response.Empty
+            if (response is AppResponse.Success) {
+                AppResponse.Success(validateAndMapToEntity(response.data))
+            } else AppResponse.Empty
         }
 
     private fun validateAndMapToEntity(dto: LicensingDto): Licensing {

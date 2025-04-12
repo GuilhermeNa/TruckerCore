@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_c
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateLicensingUseCaseImpl(

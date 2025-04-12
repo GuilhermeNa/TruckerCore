@@ -11,7 +11,7 @@ import com.example.truckercore.model.modules.user.repository.UserRepository
 import com.example.truckercore.model.modules.user.use_cases.implementations.CreateUserUseCaseImpl
 import com.example.truckercore.model.modules.user.use_cases.interfaces.CreateUserUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

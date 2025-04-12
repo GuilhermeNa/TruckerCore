@@ -14,7 +14,7 @@ import com.example.truckercore.model.shared.modules.personal_data.use_cases.inte
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -89,7 +89,7 @@ class GetPersonalDataUseCaseImplTest : KoinTest {
             val entity: PersonalData = mockk(relaxed = true)
 
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByDocument(any()) } returns flowOf(Response.Success(dto))
+            every { repository.fetchByDocument(any()) } returns flowOf(AppResponse.Success(dto))
             every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
@@ -97,7 +97,7 @@ class GetPersonalDataUseCaseImplTest : KoinTest {
             val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertEquals(entity, (result as Response.Success).data)
+            assertEquals(entity, (result as AppResponse.Success).data)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByDocument(docParams)
@@ -111,13 +111,13 @@ class GetPersonalDataUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByDocument(any()) } returns flowOf(Response.Empty)
+            every { repository.fetchByDocument(any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByDocument(docParams)
@@ -151,7 +151,7 @@ class GetPersonalDataUseCaseImplTest : KoinTest {
             val entityList = listOf(entity)
 
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByQuery(any()) } returns flowOf(Response.Success(dtoList))
+            every { repository.fetchByQuery(any()) } returns flowOf(AppResponse.Success(dtoList))
             every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
@@ -159,7 +159,7 @@ class GetPersonalDataUseCaseImplTest : KoinTest {
             val result = useCase.execute(queryParams).single()
 
             // Assertions
-            assertEquals(entityList, (result as Response.Success).data)
+            assertEquals(entityList, (result as AppResponse.Success).data)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByQuery(queryParams)
@@ -173,13 +173,13 @@ class GetPersonalDataUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByQuery(any()) } returns flowOf(Response.Empty)
+            every { repository.fetchByQuery(any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             val result = useCase.execute(queryParams).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByQuery(queryParams)

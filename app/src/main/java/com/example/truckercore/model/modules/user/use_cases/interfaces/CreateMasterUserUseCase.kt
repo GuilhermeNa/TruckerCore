@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.user.use_cases.interfaces
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.errors.InvalidStateException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,9 +20,9 @@ internal interface CreateMasterUserUseCase {
      * Executes the use case to create the first [User] entity for a new account.
      *
      * @param masterUser The User entity to be created. This object contains the data to be stored in the system.
-     * @return A [Response] string representing the unique identifier of the newly created User entity.
+     * @return A [AppResponse] string representing the unique identifier of the newly created User entity.
      * @throws InvalidStateException when the user is not in [Level.MASTER]
      */
-    fun execute(masterUser: User): Flow<Response<String>>
+    fun execute(masterUser: User): Flow<AppResponse<String>>
 
 }

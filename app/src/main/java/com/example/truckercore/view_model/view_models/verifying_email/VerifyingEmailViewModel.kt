@@ -2,11 +2,10 @@ package com.example.truckercore.view_model.view_models.verifying_email
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationException
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.example.truckercore.model.shared.utils.sealeds.mapResult
 import com.example.truckercore.view.sealeds.UiFatalError
@@ -129,7 +128,7 @@ class VerifyingEmailViewModel(private val authService: AuthService) : ViewModel(
             else -> UiUnknownError()
         }
 
-        fun handleObserveEmailResult(response: Response<Unit>) {
+        fun handleObserveEmailResult(response: AppResponse<Unit>) {
             response.mapResponse(
                 success = { EmailVerificationSucceed },
                 error = { e -> EmailVerificationFailed(getUiError(e)) }

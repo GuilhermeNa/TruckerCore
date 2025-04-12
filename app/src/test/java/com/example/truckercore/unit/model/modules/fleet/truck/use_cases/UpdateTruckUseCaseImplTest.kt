@@ -13,7 +13,7 @@ import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.Up
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

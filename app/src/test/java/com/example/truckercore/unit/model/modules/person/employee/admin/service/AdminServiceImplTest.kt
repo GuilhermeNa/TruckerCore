@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.person.shared.person_details.GetPer
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -63,7 +63,7 @@ class AdminServiceImplTest : KoinTest {
     fun `fetchAdmin() should call getAdmin execute`() = runTest {
         // Arrange
         every { getAdmin.execute(any() as DocumentParameters) } returns flowOf(
-            Response.Success(
+            AppResponse.Success(
                 admin
             )
         )
@@ -82,7 +82,7 @@ class AdminServiceImplTest : KoinTest {
 
         every {
             getPerson.execute(any() as DocumentParameters, PersonCategory.ADMIN)
-        } returns flowOf(Response.Success(personWD))
+        } returns flowOf(AppResponse.Success(personWD))
 
         // Call
         adminService.fetchAdminWithDetails(docParams).single()

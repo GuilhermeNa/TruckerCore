@@ -7,7 +7,7 @@ import com.example.truckercore.model.infrastructure.security.permissions.service
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionServiceImpl
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single

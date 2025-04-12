@@ -8,7 +8,7 @@ import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.DeletePersonalDataUseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

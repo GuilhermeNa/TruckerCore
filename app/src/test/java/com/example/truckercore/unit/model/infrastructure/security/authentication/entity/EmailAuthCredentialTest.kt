@@ -1,8 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.entity
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
-import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidEmailException
-import com.example.truckercore.model.infrastructure.security.authentication.errors.InvalidPasswordException
 import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.view_model.errors.EmptyUserNameException
 import com.example.truckercore.view_model.errors.IncompleteNameException

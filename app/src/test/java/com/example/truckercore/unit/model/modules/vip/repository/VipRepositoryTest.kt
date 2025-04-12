@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.vip.repository.VipRepository
 import com.example.truckercore.model.modules.vip.repository.VipRepositoryImpl
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -49,7 +49,7 @@ internal class VipRepositoryTest : KoinTest {
     fun `should call create from firebaseRepository`() = runTest {
         // Arrange
         val dto: VipDto = mockk()
-        val response: Response<String> = mockk()
+        val response: AppResponse<String> = mockk()
         every { fbRepository.create(any(), any()) } returns flowOf(response)
 
         // Act
@@ -64,7 +64,7 @@ internal class VipRepositoryTest : KoinTest {
     fun `should call update from firebaseRepository`() = runTest {
         // Arrange
         val dto: VipDto = mockk()
-        val response: Response<Unit> = mockk()
+        val response: AppResponse<Unit> = mockk()
         every { fbRepository.update(any(), any()) } returns flowOf(response)
 
         // Act
@@ -79,7 +79,7 @@ internal class VipRepositoryTest : KoinTest {
     fun `should call delete from firebaseRepository`() = runTest {
         // Arrange
         val id = "id"
-        val response: Response<Unit> = mockk()
+        val response: AppResponse<Unit> = mockk()
         every { fbRepository.delete(any(), any()) } returns flowOf(response)
 
         // Act
@@ -94,7 +94,7 @@ internal class VipRepositoryTest : KoinTest {
     fun `should call entityExists from firebaseRepository`() = runTest {
         // Arrange
         val id = "id"
-        val response: Response<Unit> = mockk()
+        val response: AppResponse<Unit> = mockk()
         every { fbRepository.entityExists(any(), any()) } returns flowOf(response)
 
         // Act
@@ -109,7 +109,7 @@ internal class VipRepositoryTest : KoinTest {
     fun `should call documentFetch from firebaseRepository`() = runTest {
         // Arrange
         val params: DocumentParameters = mockk()
-        val response: Response<VipDto> = mockk()
+        val response: AppResponse<VipDto> = mockk()
         every {
             fbRepository.documentFetch(any() as FirebaseRequest<VipDto>)
         } returns flowOf(response)
@@ -126,7 +126,7 @@ internal class VipRepositoryTest : KoinTest {
     fun `should call queryFetch from firebaseRepository`() = runTest {
         // Arrange
         val params: QueryParameters = mockk()
-        val response: Response<List<VipDto>> = mockk()
+        val response: AppResponse<List<VipDto>> = mockk()
         every {
             fbRepository.queryFetch(any() as FirebaseRequest<VipDto>)
         } returns flowOf(response)

@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.implementations.CheckPersonalDataExistenceUseCaseImpl
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -69,13 +69,13 @@ class CheckPersonalDataExistenceUseCaseImplTest : KoinTest {
     fun `execute() should return success when personal data exists`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(any(), any()) } returns true
-        every { repository.entityExists(id) } returns flowOf(Response.Success(Unit))
+        every { repository.entityExists(id) } returns flowOf(AppResponse.Success(Unit))
 
         // Call
         val result = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Success)
+        assertTrue(result is AppResponse.Success)
         verifyOrder {
             permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)
@@ -102,13 +102,13 @@ class CheckPersonalDataExistenceUseCaseImplTest : KoinTest {
     fun `execute() should return empty when personal data does not exist`() = runTest {
         // Arrange
         every { permissionService.canPerformAction(any(), any()) } returns true
-        every { repository.entityExists(id) } returns flowOf(Response.Empty)
+        every { repository.entityExists(id) } returns flowOf(AppResponse.Empty)
 
         // Call
         val result = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Empty)
+        assertTrue(result is AppResponse.Empty)
         verifyOrder {
             permissionService.canPerformAction(user, requiredPermission)
             repository.entityExists(id)

@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.person.employee.admin.use_cases.in
 
 import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -16,9 +16,9 @@ internal interface CheckAdminExistenceUseCase {
      * @param user The [User] who is making the request.
      * @param id The ID of the [Admin] entity to check for existence.
      * @return A [Flow] of:
-     * - [Response.Success] when the object exists.
-     * - [Response.Empty] when the object does not exist.
+     * - [AppResponse.Success] when the object exists.
+     * - [AppResponse.Empty] when the object does not exist.
      */
-    fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<AppResponse<Unit>>
 
 }

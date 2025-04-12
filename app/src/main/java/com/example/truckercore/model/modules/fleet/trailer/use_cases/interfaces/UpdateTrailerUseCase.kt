@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces
 import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,12 +20,12 @@ internal interface UpdateTrailerUseCase {
      * @param trailer The [Trailer] entity that is being updated. This contains the data to be modified.
      *
      * @return A [Flow] of
-     * - [Response.Success] when the trailer is successfully updated.
-     * - [Response.Empty] if the trailer was not found or could not be updated.
+     * - [AppResponse.Success] when the trailer is successfully updated.
+     * - [AppResponse.Empty] if the trailer was not found or could not be updated.
      *
      * @throws NullPointerException If the `Trailer.id` is null when attempting to update the trailer.
      * @throws ObjectNotFoundException If the trailer with the given ID does not exist in the system.
      */
-    fun execute(user: User, trailer: Trailer): Flow<Response<Unit>>
+    fun execute(user: User, trailer: Trailer): Flow<AppResponse<Unit>>
 
 }

@@ -12,7 +12,7 @@ import com.example.truckercore.model.modules.vip.use_cases.implementations.GetVi
 import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -73,7 +73,7 @@ internal class GetVipUseCaseTest : KoinTest {
             val userWithPermission: User = mockk(relaxed = true)
             val vip: Vip = mockk()
             val vipDto: VipDto = mockk()
-            val successResponse = Response.Success(listOf(vipDto))
+            val successResponse = AppResponse.Success(listOf(vipDto))
 
             every { permission.canPerformAction(any(), any()) } returns true
             every { queryParams.user } returns userWithPermission
@@ -85,7 +85,7 @@ internal class GetVipUseCaseTest : KoinTest {
             val result = getVip.execute(queryParams).single()
 
             // Assertions
-            assertTrue(result is Response.Success)
+            assertTrue(result is AppResponse.Success)
             assertTrue(result.data.contains(vip))
             verifyOrder {
                 permission.canPerformAction(
@@ -133,13 +133,13 @@ internal class GetVipUseCaseTest : KoinTest {
 
             every { permission.canPerformAction(any(), any()) } returns true
             every { queryParams.user } returns userWithPermission
-            every { repository.fetchByQuery(queryParams) } returns flowOf(Response.Empty)
+            every { repository.fetchByQuery(queryParams) } returns flowOf(AppResponse.Empty)
 
             // Call
             val result = getVip.execute(queryParams).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
             verifyOrder {
                 permission.canPerformAction(userWithPermission, Permission.VIEW_VIP)
                 repository.fetchByQuery(queryParams)
@@ -156,13 +156,13 @@ internal class GetVipUseCaseTest : KoinTest {
 
             every { permission.canPerformAction(any(), any()) } returns true
             every { queryParams.user } returns userWithPermission
-            every { repository.fetchByQuery(queryParams) } returns flowOf(Response.Error(mockk()))
+            every { repository.fetchByQuery(queryParams) } returns flowOf(AppResponse.Error(mockk()))
 
             // Call
             val result = getVip.execute(queryParams).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
             verifyOrder {
                 permission.canPerformAction(userWithPermission, Permission.VIEW_VIP)
                 repository.fetchByQuery(queryParams)

@@ -13,7 +13,7 @@ import com.example.truckercore.model.modules.vip.entity.Vip
 import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

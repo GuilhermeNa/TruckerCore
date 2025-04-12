@@ -8,7 +8,7 @@ import com.example.truckercore.model.shared.modules.personal_data.use_cases.inte
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.GetPersonalDataWithFilesUseCase
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class PersonalDataServiceImpl(
@@ -17,16 +17,16 @@ internal class PersonalDataServiceImpl(
     private val getPDataWF: GetPersonalDataWithFilesUseCase
 ) : Service(exceptionHandler), PersonalDataService {
 
-    override fun fetchPersonalData(documentParam: DocumentParameters): Flow<Response<PersonalData>> =
+    override fun fetchPersonalData(documentParam: DocumentParameters): Flow<AppResponse<PersonalData>> =
         runSafe { getPersonalData.execute(documentParam) }
 
-    override fun fetchPersonalData(queryParam: QueryParameters): Flow<Response<List<PersonalData>>> =
+    override fun fetchPersonalData(queryParam: QueryParameters): Flow<AppResponse<List<PersonalData>>> =
         runSafe { getPersonalData.execute(queryParam) }
 
-    override fun fetchPersonalDataWithDetails(documentParam: DocumentParameters): Flow<Response<PersonalDataWithFile>> =
+    override fun fetchPersonalDataWithDetails(documentParam: DocumentParameters): Flow<AppResponse<PersonalDataWithFile>> =
         runSafe { getPDataWF.execute(documentParam) }
 
-    override fun fetchPersonalDataWithDetails(queryParam: QueryParameters): Flow<Response<List<PersonalDataWithFile>>> =
+    override fun fetchPersonalDataWithDetails(queryParam: QueryParameters): Flow<AppResponse<List<PersonalDataWithFile>>> =
         runSafe { getPDataWF.execute(queryParam) }
 
 }

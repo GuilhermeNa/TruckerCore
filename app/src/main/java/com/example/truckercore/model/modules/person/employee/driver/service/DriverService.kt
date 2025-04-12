@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.person.employee.driver.service
 import com.example.truckercore.model.modules.person.employee.driver.entity.Driver
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -20,11 +20,11 @@ interface DriverService {
      *
      * @param documentParam The document parameters used to filter and fetch the driver record.
      * @return A [Flow] containing:
-     * - [Response.Success] if the driver was found and fetched successfully.
-     * - [Response.Empty] if no driver was found for the provided parameters.
-     * - [Response.Error] if there was an error during the operation.
+     * - [AppResponse.Success] if the driver was found and fetched successfully.
+     * - [AppResponse.Empty] if no driver was found for the provided parameters.
+     * - [AppResponse.Error] if there was an error during the operation.
      */
-    fun fetchDriver(documentParam: DocumentParameters): Flow<Response<Driver>>
+    fun fetchDriver(documentParam: DocumentParameters): Flow<AppResponse<Driver>>
 
     /**
      * Fetches a single driver record along with its associated details, such as personal data and files.
@@ -34,10 +34,10 @@ interface DriverService {
      *
      * @param documentParam The document parameters used to filter and fetch the driver and its details.
      * @return A [Flow] containing:
-     *  - [Response.Success] if the driver and its details were found and fetched successfully.
-     *  - [Response.Empty] if no driver or details were found for the provided parameters.
-     *  - [Response.Error] if there was an error during the operation.
+     *  - [AppResponse.Success] if the driver and its details were found and fetched successfully.
+     *  - [AppResponse.Empty] if no driver or details were found for the provided parameters.
+     *  - [AppResponse.Error] if there was an error during the operation.
      */
-    fun fetchDriverWithDetails(documentParam: DocumentParameters): Flow<Response<PersonWithDetails>>
+    fun fetchDriverWithDetails(documentParam: DocumentParameters): Flow<AppResponse<PersonWithDetails>>
 
 }

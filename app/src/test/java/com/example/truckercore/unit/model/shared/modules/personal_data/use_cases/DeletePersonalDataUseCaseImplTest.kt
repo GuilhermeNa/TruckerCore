@@ -10,7 +10,7 @@ import com.example.truckercore.model.shared.modules.personal_data.repository.Per
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.implementations.DeletePersonalDataUseCaseImpl
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.CheckPersonalDataExistenceUseCase
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.DeletePersonalDataUseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -72,15 +72,15 @@ class DeletePersonalDataUseCaseImplTest : KoinTest {
     @Test
     fun `execute() should return success when user has permission and object is found`() = runTest {
         // Arrange
-        every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+        every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Success(Unit))
         every { permissionService.canPerformAction(any(), any()) } returns true
-        every { repository.delete(any()) } returns flowOf(Response.Success(Unit))
+        every { repository.delete(any()) } returns flowOf(AppResponse.Success(Unit))
 
         // Call
         val result = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Success)
+        assertTrue(result is AppResponse.Success)
         verifyOrder {
             checkExistence.execute(user, id)
             permissionService.canPerformAction(user, requiredPermission)
@@ -92,7 +92,7 @@ class DeletePersonalDataUseCaseImplTest : KoinTest {
     fun `execute() should throw ObjectNotFoundException when the entity does not exist`() =
         runTest {
             // Arrange
-            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Empty)
+            every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             assertThrows<ObjectNotFoundException> {
@@ -109,7 +109,7 @@ class DeletePersonalDataUseCaseImplTest : KoinTest {
     fun `execute() should throw UnauthorizedAccessException when the user does not have auth`() =
         runTest {
             // Arrange
-            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+            every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Success(Unit))
             every { permissionService.canPerformAction(any(), any()) } returns false
 
             // Call

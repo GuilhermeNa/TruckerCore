@@ -4,7 +4,7 @@ import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
 import com.example.truckercore.model.shared.interfaces.Repository
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -21,8 +21,8 @@ import kotlinx.coroutines.flow.Flow
  */
 internal interface AdminRepository : Repository {
 
-    override fun fetchByDocument(documentParams: DocumentParameters): Flow<Response<AdminDto>>
+    override fun fetchByDocument(documentParams: DocumentParameters): Flow<AppResponse<AdminDto>>
 
-    override fun fetchByQuery(queryParams: QueryParameters): Flow<Response<List<AdminDto>>>
+    override fun fetchByQuery(queryParams: QueryParameters): Flow<AppResponse<List<AdminDto>>>
 
 }

@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,12 +23,12 @@ internal class GetUserUseCaseImpl(
     private val mapper: UserMapper
 ) : UseCase(permissionService), GetUserUseCase {
 
-    override fun execute(firebaseUid: String, shouldStream: Boolean): Flow<Response<User>> =
+    override fun execute(firebaseUid: String, shouldStream: Boolean): Flow<AppResponse<User>> =
         repository.fetchLoggedUser(firebaseUid, shouldStream).map { response ->
-            if (response is Response.Success) {
+            if (response is AppResponse.Success) {
                 val result = validateAndMapToEntity(response.data)
-                Response.Success(result)
-            } else return@map Response.Empty
+                AppResponse.Success(result)
+            } else return@map AppResponse.Empty
         }
 
     private fun validateAndMapToEntity(dto: UserDto): User {
@@ -38,7 +38,7 @@ internal class GetUserUseCaseImpl(
 
     //----------------------------------------------------------------------------------------------
 
-    override fun execute(documentParams: DocumentParameters): Flow<Response<User>> =
+    override fun execute(documentParams: DocumentParameters): Flow<AppResponse<User>> =
         with(documentParams) {
             user.runIfPermitted { getMappedUserFlow(documentParams) }
         }

@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.use
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**

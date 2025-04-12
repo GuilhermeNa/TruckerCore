@@ -7,7 +7,7 @@ import com.example.truckercore.model.infrastructure.database.firebase.util.Fireb
 import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.user.dto.UserDto
 import com.example.truckercore.model.shared.interfaces.Dto
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.cancel
@@ -22,12 +22,12 @@ internal class FirebaseRepositoryImpl(
     private val converter: FirebaseConverter
 ) : FirebaseRepository {
 
-    override fun runTransaction(transactionOperation: (transaction: Transaction) -> Unit): Flow<Response<Unit>> =
+    override fun runTransaction(transactionOperation: (transaction: Transaction) -> Unit): Flow<AppResponse<Unit>> =
         callbackFlow {
             queryBuilder.firestore.runTransaction { transaction ->
                 transactionOperation(transaction)
             }.addOnSuccessListener {
-                trySend(Response.Success(Unit))
+                trySend(AppResponse.Success(Unit))
             }.addOnFailureListener { error ->
                 close(error)
             }
@@ -44,7 +44,7 @@ internal class FirebaseRepositoryImpl(
     override fun create(
         collection: Collection,
         dto: Dto
-    ): Flow<Response<String>> = callbackFlow {
+    ): Flow<AppResponse<String>> = callbackFlow {
         val docReference = queryBuilder.createBlankDocument(collection)
         val newDto = dto.initializeId(docReference.id)
 
@@ -54,7 +54,7 @@ internal class FirebaseRepositoryImpl(
             }
 
             if (task.isSuccessful) {
-                trySend(Response.Success(docReference.id))
+                trySend(AppResponse.Success(docReference.id))
             } else {
                 val error = IncompleteTaskException(
                     "Failed while creating an entity: ${dto::class.simpleName}."
@@ -70,7 +70,7 @@ internal class FirebaseRepositoryImpl(
     override fun update(
         collection: Collection,
         dto: Dto
-    ): Flow<Response<Unit>> = callbackFlow {
+    ): Flow<AppResponse<Unit>> = callbackFlow {
         val document = queryBuilder.getDocument(collection, dto.id!!)
 
         document.set(dto).addOnCompleteListener { task ->

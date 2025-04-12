@@ -13,7 +13,7 @@ import com.example.truckercore.model.modules.user.use_cases.interfaces.GetUserUs
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -87,7 +87,7 @@ class GetUserUseCaseImplTest : KoinTest {
             val dto: UserDto = mockk(relaxed = true)
             val entity: User = mockk(relaxed = true)
 
-            every { repository.fetchLoggedUser(any(), any()) } returns flowOf(Response.Success(dto))
+            every { repository.fetchLoggedUser(any(), any()) } returns flowOf(AppResponse.Success(dto))
             every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
@@ -95,7 +95,7 @@ class GetUserUseCaseImplTest : KoinTest {
             val result = useCase.execute("userId", true).single()
 
             // Assertions
-            assertEquals(entity, (result as Response.Success).data)
+            assertEquals(entity, (result as AppResponse.Success).data)
             verifyOrder {
                 repository.fetchLoggedUser("userId", true)
                 validatorService.validateDto(dto)
@@ -107,13 +107,13 @@ class GetUserUseCaseImplTest : KoinTest {
     fun `execute(userId, shouldStream) should return Empty when the repository doesn't find data`() =
         runTest {
             // Arrange
-            every { repository.fetchLoggedUser(any(), any()) } returns flowOf(Response.Empty)
+            every { repository.fetchLoggedUser(any(), any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             val result = useCase.execute("userId", true).single()
 
             // Assertions
-            assertTrue(result is Response.Empty)
+            assertTrue(result is AppResponse.Empty)
             verify {
                 repository.fetchLoggedUser("userId", true)
             }
@@ -127,7 +127,7 @@ class GetUserUseCaseImplTest : KoinTest {
             val entity: User = mockk(relaxed = true)
 
             every { permissionService.canPerformAction(any(), any()) } returns true
-            every { repository.fetchByDocument(any()) } returns flowOf(Response.Success(dto))
+            every { repository.fetchByDocument(any()) } returns flowOf(AppResponse.Success(dto))
             every { validatorService.validateDto(any()) } returns Unit
             every { mapper.toEntity(dto) } returns entity
 
@@ -135,7 +135,7 @@ class GetUserUseCaseImplTest : KoinTest {
             val result = useCase.execute(docParams).single()
 
             // Assertions
-            assertEquals(entity, (result as Response.Success).data)
+            assertEquals(entity, (result as AppResponse.Success).data)
             verifyOrder {
                 permissionService.canPerformAction(user, requiredPermission)
                 repository.fetchByDocument(docParams)

@@ -4,11 +4,10 @@ import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTextUtil
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCaseImpl
 import com.example.truckercore.model.shared.errors.InvalidStateException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.example.truckercore.model.shared.task_manager.TaskManagerImpl
 import com.example.truckercore.model.shared.task_manager.TaskManager

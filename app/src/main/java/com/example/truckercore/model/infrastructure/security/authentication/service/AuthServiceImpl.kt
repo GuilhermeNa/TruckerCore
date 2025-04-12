@@ -4,14 +4,13 @@ import com.example.truckercore.model.infrastructure.database.firebase.repository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
 import com.example.truckercore.model.infrastructure.util.ExceptionHandler
 import com.example.truckercore.model.shared.abstractions.Service
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.firebase.auth.PhoneAuthCredential
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +39,7 @@ internal class AuthServiceImpl(
         withContext(Dispatchers.IO) { sendVerificationEmail.invoke() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun signIn(emailAuthCredential: EmailAuthCredential): Flow<Response<SessionInfo>> =
+    override fun signIn(emailAuthCredential: EmailAuthCredential): Flow<AppResponse<SessionInfo>> =
         runSafe {
             authRepository.signIn(emailAuthCredential.email, emailAuthCredential.password)
                 .flatMapConcat { response ->
@@ -60,11 +59,11 @@ internal class AuthServiceImpl(
     override fun createNewSystemAccess(requirements: NewAccessRequirements) =
         runSafe { createSystemAccess.execute(requirements) }
 
-    override fun observeEmailValidation(): Flow<Response<Unit>> = runSafe {
+    override fun observeEmailValidation(): Flow<AppResponse<Unit>> = runSafe {
         authRepository.observeEmailValidation()
     }
 
-    override fun getSessionInfo(): Flow<Response<SessionInfo>> = runSafe {
+    override fun getSessionInfo(): Flow<AppResponse<SessionInfo>> = runSafe {
         getLoggedUserFromFirebase()
     }
 

@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -23,17 +23,17 @@ internal class GetDriverUseCaseImpl(
     private val mapper: DriverMapper
 ) : UseCase(permissionService), GetDriverUseCase {
 
-    override fun execute(documentParams: DocumentParameters): Flow<Response<Driver>> =
+    override fun execute(documentParams: DocumentParameters): Flow<AppResponse<Driver>> =
         with(documentParams) {
             user.runIfPermitted { getDriverFlow(this) }
         }
 
-    private fun getDriverFlow(documentParams: DocumentParameters): Flow<Response<Driver>> =
+    private fun getDriverFlow(documentParams: DocumentParameters): Flow<AppResponse<Driver>> =
         repository.fetchByDocument(documentParams).map { response ->
-            if (response is Response.Success) {
+            if (response is AppResponse.Success) {
                 val result = validateAndMapToEntity(response.data)
-                Response.Success(result)
-            } else Response.Empty
+                AppResponse.Success(result)
+            } else AppResponse.Empty
         }
 
     private fun validateAndMapToEntity(dto: DriverDto): Driver {
@@ -43,17 +43,17 @@ internal class GetDriverUseCaseImpl(
 
     //----------------------------------------------------------------------------------------------
 
-    override fun execute(queryParams: QueryParameters): Flow<Response<List<Driver>>> =
+    override fun execute(queryParams: QueryParameters): Flow<AppResponse<List<Driver>>> =
         with(queryParams) {
             user.runIfPermitted { getDriverListFlow(this) }
         }
 
-    private fun getDriverListFlow(queryParams: QueryParameters): Flow<Response<List<Driver>>> =
+    private fun getDriverListFlow(queryParams: QueryParameters): Flow<AppResponse<List<Driver>>> =
         repository.fetchByQuery(queryParams).map { response ->
-            if (response is Response.Success) {
+            if (response is AppResponse.Success) {
                 val result = response.data.map { validateAndMapToEntity(it) }
-                Response.Success(result)
-            } else Response.Empty
+                AppResponse.Success(result)
+            } else AppResponse.Empty
         }
 
 }

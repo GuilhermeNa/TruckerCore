@@ -11,7 +11,7 @@ import com.example.truckercore.model.modules.user.use_cases.implementations.Crea
 import com.example.truckercore.model.modules.user.use_cases.interfaces.CreateMasterUserUseCase
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

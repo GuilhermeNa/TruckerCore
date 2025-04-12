@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.person.employee.admin.use_cases.in
 import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  * checking the necessary permissions, and ensuring the [Admin] exists in the system.
  *
  * @see Admin
- * @see Response
+ * @see AppResponse
  */
 interface GetAdminUseCase {
 
@@ -22,10 +22,10 @@ interface GetAdminUseCase {
      *
      * @param documentParams The document parameters to filter the admin records.
      * @return A [Flow] of:
-     * - [Response.Success] containing the [Admin] object if the admin record was found.
-     * - [Response.Empty] if no admin record exists with the given ID.
+     * - [AppResponse.Success] containing the [Admin] object if the admin record was found.
+     * - [AppResponse.Empty] if no admin record exists with the given ID.
      */
-    fun execute(documentParams: DocumentParameters): Flow<Response<Admin>>
+    fun execute(documentParams: DocumentParameters): Flow<AppResponse<Admin>>
 
     /**
      * Executes the use case to retrieve a list of [Admin] entities based on the provided query parameters.
@@ -36,9 +36,9 @@ interface GetAdminUseCase {
      * @param queryParams The query parameters to filter and search for the admin records. This may
      *                    include various filters such as name, role, status, etc.
      * @return A [Flow] of:
-     * - [Response.Success] containing a list of [Admin] objects if admins were found.
-     * - [Response.Empty] if no admins match the given query criteria.
+     * - [AppResponse.Success] containing a list of [Admin] objects if admins were found.
+     * - [AppResponse.Empty] if no admins match the given query criteria.
      */
-    fun execute(queryParams: QueryParameters): Flow<Response<List<Admin>>>
+    fun execute(queryParams: QueryParameters): Flow<AppResponse<List<Admin>>>
 
 }

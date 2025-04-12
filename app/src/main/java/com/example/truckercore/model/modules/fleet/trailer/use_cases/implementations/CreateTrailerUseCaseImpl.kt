@@ -9,7 +9,7 @@ import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CreateTrailerUseCaseImpl(
@@ -20,10 +20,10 @@ internal class CreateTrailerUseCaseImpl(
     private val mapper: TrailerMapper
 ) : UseCase(permissionService), CreateTrailerUseCase {
 
-    override fun execute(user: User, trailer: Trailer): Flow<Response<String>> =
+    override fun execute(user: User, trailer: Trailer): Flow<AppResponse<String>> =
         user.runIfPermitted { processCreation(trailer) }
 
-    private fun processCreation(trailer: Trailer): Flow<Response<String>> {
+    private fun processCreation(trailer: Trailer): Flow<AppResponse<String>> {
         validatorService.validateForCreation(trailer)
         val dto = mapper.toDto(trailer)
         return repository.create(dto)

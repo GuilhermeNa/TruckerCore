@@ -3,7 +3,6 @@ package com.example.truckercore.model.infrastructure.security.authentication.use
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NullFirebaseUserException
 import com.example.truckercore.model.shared.utils.expressions.logError
 import com.example.truckercore.model.shared.utils.expressions.onEarlyExit
 import com.example.truckercore.model.configs.app_constants.EarlyExit

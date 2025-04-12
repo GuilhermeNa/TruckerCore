@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_c
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.GetLicensingUseCase
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class LicensingServiceImpl(
@@ -19,12 +19,12 @@ internal class LicensingServiceImpl(
 
     override fun fetchLicensing(
         documentParam: DocumentParameters
-    ): Flow<Response<Licensing>> =
+    ): Flow<AppResponse<Licensing>> =
         runSafe { getLicensing.execute(documentParam) }
 
     override fun fetchLicensing(
         queryParam: QueryParameters
-    ): Flow<Response<List<Licensing>>> =
+    ): Flow<AppResponse<List<Licensing>>> =
         runSafe { getLicensing.execute(queryParam) }
 
     override fun fetchLicensingWithFiles(

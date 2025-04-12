@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.use
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 
 /**

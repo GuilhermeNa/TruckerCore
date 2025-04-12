@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_c
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -21,9 +21,9 @@ internal class DeleteLicensingUseCaseImpl(
 ) : UseCase(permissionService), DeleteLicensingUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun execute(user: User, id: String): Flow<Response<Unit>> =
+    override fun execute(user: User, id: String): Flow<AppResponse<Unit>> =
         checkExistence.execute(user, id).flatMapConcat { response ->
-            if (response !is Response.Success) throw ObjectNotFoundException(
+            if (response !is AppResponse.Success) throw ObjectNotFoundException(
                 "Attempting to delete a Licensing that was not found for id: $id."
             )
             user.runIfPermitted { repository.delete(id) }

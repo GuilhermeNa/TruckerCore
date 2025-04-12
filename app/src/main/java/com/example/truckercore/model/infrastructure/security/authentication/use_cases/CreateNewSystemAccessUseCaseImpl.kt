@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.person.employee.driver.factory.Driv
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.modules.user.factory.UserFactory
 import com.example.truckercore.model.shared.interfaces.Dto
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 

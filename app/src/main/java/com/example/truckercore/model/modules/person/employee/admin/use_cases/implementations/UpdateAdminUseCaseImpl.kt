@@ -11,7 +11,7 @@ import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -26,7 +26,7 @@ internal class UpdateAdminUseCaseImpl(
 ) : UseCase(permissionService), UpdateAdminUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun execute(user: User, admin: Admin): Flow<Response<Unit>> {
+    override fun execute(user: User, admin: Admin): Flow<AppResponse<Unit>> {
         val id = admin.id ?: throw NullPointerException("Null Admin id while updating.")
 
         return checkExistence.execute(user, id).flatMapConcat { response ->
@@ -37,7 +37,7 @@ internal class UpdateAdminUseCaseImpl(
         }
     }
 
-    private fun processUpdate(adminToUpdate: Admin): Flow<Response<Unit>> {
+    private fun processUpdate(adminToUpdate: Admin): Flow<AppResponse<Unit>> {
         validatorService.validateEntity(adminToUpdate)
         val dto = mapper.toDto(adminToUpdate)
         return repository.update(dto)

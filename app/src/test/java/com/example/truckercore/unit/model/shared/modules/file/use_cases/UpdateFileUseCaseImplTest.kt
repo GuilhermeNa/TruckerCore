@@ -13,7 +13,7 @@ import com.example.truckercore.model.shared.modules.file.use_cases.implementatio
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.CheckFileExistenceUseCase
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.UpdateFileUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -82,17 +82,17 @@ class UpdateFileUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { file.id } returns id
-            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+            every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Success(Unit))
             every { permissionService.canPerformAction(any(), any()) } returns true
             every { validatorService.validateEntity(any()) } returns Unit
             every { mapper.toDto(any()) } returns dto
-            every { repository.update(any()) } returns flowOf(Response.Success(Unit))
+            every { repository.update(any()) } returns flowOf(AppResponse.Success(Unit))
 
             // Call
             val result = useCase.execute(user, file).single()
 
             // Assertions
-            assertTrue(result is Response.Success)
+            assertTrue(result is AppResponse.Success)
             verifyOrder {
                 file.id
                 checkExistence.execute(user, id)
@@ -125,7 +125,7 @@ class UpdateFileUseCaseImplTest : KoinTest {
         runTest {
             // Arrange
             every { file.id } returns id
-            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Empty)
+            every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             assertThrows<ObjectNotFoundException> {

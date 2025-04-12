@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.fleet.trailer.repository.TrailerRep
 import com.example.truckercore.model.modules.fleet.trailer.use_cases.implementations.CheckTrailerExistenceUseCaseImpl
 import com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces.CheckTrailerExistenceUseCase
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

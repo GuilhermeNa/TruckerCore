@@ -12,7 +12,7 @@ import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_c
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.use_cases.interfaces.CreateLicensingUseCase
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -80,13 +80,13 @@ class CreateLicensingUseCaseImplTest : KoinTest {
         every { permissionService.canPerformAction(any(), any()) } returns true
         every { validatorService.validateForCreation(any()) } returns Unit
         every { mapper.toDto(any()) } returns dto
-        every { repository.create(any()) } returns flowOf(Response.Success(id))
+        every { repository.create(any()) } returns flowOf(AppResponse.Success(id))
 
         // Call
         val result = useCase.execute(user, licensing).single()
 
         // Assertions
-        assertEquals(id, (result as Response.Success).data)
+        assertEquals(id, (result as AppResponse.Success).data)
         verifyOrder {
             permissionService.canPerformAction(user, requirePermission)
             validatorService.validateForCreation(licensing)

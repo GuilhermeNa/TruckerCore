@@ -9,7 +9,7 @@ import com.example.truckercore.model.shared.modules.personal_data.mapper.Persona
 import com.example.truckercore.model.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.CreatePersonalDataUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class CreatePersonalDataUseCaseImpl(

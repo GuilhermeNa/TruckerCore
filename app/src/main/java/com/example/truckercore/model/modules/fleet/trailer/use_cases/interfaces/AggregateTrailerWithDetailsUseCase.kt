@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.fleet.trailer.use_cases.interfaces
 import com.example.truckercore.model.modules.fleet.trailer.aggregations.TrailerWithDetails
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  * or query parameters.
  *
  * @see TrailerWithDetails
- * @see Response
+ * @see AppResponse
  */
 internal interface AggregateTrailerWithDetailsUseCase {
 
@@ -23,10 +23,10 @@ internal interface AggregateTrailerWithDetailsUseCase {
      *
      * @param documentParams The parameters used to filter the trailer and its licensing records.
      * @return A [Flow] containing:
-     * - [Response.Success] with the found [TrailerWithDetails] record.
-     * - [Response.Empty] if no trailer with details is found.
+     * - [AppResponse.Success] with the found [TrailerWithDetails] record.
+     * - [AppResponse.Empty] if no trailer with details is found.
      */
-    fun execute(documentParams: DocumentParameters): Flow<Response<TrailerWithDetails>>
+    fun execute(documentParams: DocumentParameters): Flow<AppResponse<TrailerWithDetails>>
 
     /**
      * Executes the use case to aggregate a list of [TrailerWithDetails] records based on
@@ -38,6 +38,6 @@ internal interface AggregateTrailerWithDetailsUseCase {
      *     - [Response.Success] with a list of found [TrailerWithDetails] records.
      *     - [Response.Empty] if no trailers with details are found.
      */
-    fun execute(queryParams: QueryParameters): Flow<Response<List<TrailerWithDetails>>>
+    fun execute(queryParams: QueryParameters): Flow<AppResponse<List<TrailerWithDetails>>>
 
 }

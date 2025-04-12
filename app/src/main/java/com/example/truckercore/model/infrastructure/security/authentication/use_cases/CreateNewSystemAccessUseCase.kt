@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**

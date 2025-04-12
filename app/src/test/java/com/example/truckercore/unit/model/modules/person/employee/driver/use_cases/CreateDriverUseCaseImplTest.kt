@@ -12,7 +12,7 @@ import com.example.truckercore.model.modules.person.employee.driver.use_cases.im
 import com.example.truckercore.model.modules.person.employee.driver.use_cases.interfaces.CreateDriverUseCase
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

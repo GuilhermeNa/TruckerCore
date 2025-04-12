@@ -4,7 +4,7 @@ import com.example.truckercore.model.infrastructure.security.permissions.enums.P
 import com.example.truckercore.model.infrastructure.security.permissions.errors.UnauthorizedAccessException
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**

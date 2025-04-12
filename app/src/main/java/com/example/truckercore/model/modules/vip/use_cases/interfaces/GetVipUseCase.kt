@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.vip.use_cases.interfaces
 
 import com.example.truckercore.model.modules.vip.entity.Vip
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**

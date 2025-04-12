@@ -12,7 +12,7 @@ import com.example.truckercore.model.shared.modules.personal_data.repository.Per
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.implementations.CreatePersonalDataUseCaseImpl
 import com.example.truckercore.model.shared.modules.personal_data.use_cases.interfaces.CreatePersonalDataUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

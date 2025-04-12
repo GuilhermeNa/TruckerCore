@@ -12,7 +12,7 @@ import com.example.truckercore.model.shared.modules.file.repository.FileReposito
 import com.example.truckercore.model.shared.modules.file.use_cases.implementations.CreateFileUseCaseImpl
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.CreateFileUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -80,13 +80,13 @@ class CreateFileUseCaseImplTest : KoinTest {
         every { permissionService.canPerformAction(any(), any()) } returns true
         every { validatorService.validateForCreation(any()) } returns Unit
         every { mapper.toDto(any()) } returns dto
-        every { repository.create(any()) } returns flowOf(Response.Success(id))
+        every { repository.create(any()) } returns flowOf(AppResponse.Success(id))
 
         // Call
         val result = useCase.execute(user, file).single()
 
         // Assertions
-        assertEquals(id, (result as Response.Success).data)
+        assertEquals(id, (result as AppResponse.Success).data)
         verifyOrder {
             permissionService.canPerformAction(user, requiredPermission)
             validatorService.validateForCreation(file)

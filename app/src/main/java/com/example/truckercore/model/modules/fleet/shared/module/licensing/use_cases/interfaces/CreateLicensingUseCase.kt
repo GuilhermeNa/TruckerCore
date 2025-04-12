@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.fleet.shared.module.licensing.use_
 
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -18,8 +18,8 @@ internal interface CreateLicensingUseCase {
      *
      * @param user The [User] who is requesting the creation. This parameter might be used for permission checks or tracking.
      * @param licensing The [Licensing] entity to be created. This object contains the data to be stored in the system.
-     * @return A [Flow] of [Response.Success] when the object is successfully created.
+     * @return A [Flow] of [AppResponse.Success] when the object is successfully created.
      */
-    fun execute(user: User, licensing: Licensing): Flow<Response<String>>
+    fun execute(user: User, licensing: Licensing): Flow<AppResponse<String>>
 
 }

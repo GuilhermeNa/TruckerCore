@@ -4,7 +4,7 @@ import com.example.truckercore.model.modules.fleet.trailer.aggregations.TrailerW
 import com.example.truckercore.model.modules.fleet.trailer.entity.Trailer
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see Trailer
  * @see TrailerWithDetails
- * @see Response
+ * @see AppResponse
  */
 interface TrailerService {
 
@@ -23,40 +23,40 @@ interface TrailerService {
      *
      * @param documentParam The document parameters to filter the trailer record.
      * @return A [Flow] containing:
-     * - [Response.Success] with the found [Trailer] record.
-     * - [Response.Empty] if no trailer was found matching the provided parameters.
-     * - [Response.Error] if an error occurs during the operation.
+     * - [AppResponse.Success] with the found [Trailer] record.
+     * - [AppResponse.Empty] if no trailer was found matching the provided parameters.
+     * - [AppResponse.Error] if an error occurs during the operation.
      */
-    fun fetchTrailer(documentParam: DocumentParameters): Flow<Response<Trailer>>
+    fun fetchTrailer(documentParam: DocumentParameters): Flow<AppResponse<Trailer>>
 
     /**
      * Fetches a list of [Trailer] records based on query parameters.
      *
      * @param queryParam The query parameters to filter the trailer records.
      * @return A [Flow] containing:
-     * - [Response.Success] with a list of found [Trailer] records.
-     * - [Response.Empty] if no trailers match the query parameters.
-     * - [Response.Error] if an error occurs during the operation.
+     * - [AppResponse.Success] with a list of found [Trailer] records.
+     * - [AppResponse.Empty] if no trailers match the query parameters.
+     * - [AppResponse.Error] if an error occurs during the operation.
      */
-    fun fetchTrailerList(queryParam: QueryParameters): Flow<Response<List<Trailer>>>
+    fun fetchTrailerList(queryParam: QueryParameters): Flow<AppResponse<List<Trailer>>>
 
     /**
      * Fetches a single [TrailerWithDetails] record based on document parameters.
      *
      * @param documentParam The document parameters to filter the trailer with associated details.
      * @return A [Flow] containing:
-     * - [Response.Success] with the found [TrailerWithDetails] record.
-     * - [Response.Empty] if no trailer with details was found matching the provided parameters.
-     * - [Response.Error] if an error occurs during the operation.
+     * - [AppResponse.Success] with the found [TrailerWithDetails] record.
+     * - [AppResponse.Empty] if no trailer with details was found matching the provided parameters.
+     * - [AppResponse.Error] if an error occurs during the operation.
      */
-    fun fetchTrailerWithDetails(documentParam: DocumentParameters): Flow<Response<TrailerWithDetails>>
+    fun fetchTrailerWithDetails(documentParam: DocumentParameters): Flow<AppResponse<TrailerWithDetails>>
 
     /**
      * Fetches a list of [TrailerWithDetails] records based on query parameters.
      *
      * @param queryParam The query parameters to filter the trailer with associated details.
      * @return A [Flow] containing:
-     * - [Response.Success] with a list of found [TrailerWithDetails] records.
+     * - [AppResponse.Success] with a list of found [TrailerWithDetails] records.
      * - [Response.Empty] if no trailers with details match the query parameters.
      * - [Response.Error] if an error occurs during the operation.
      */

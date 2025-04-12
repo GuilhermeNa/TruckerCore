@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.person.shared.person_details.Person
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.shared.abstractions.Service
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class DriverServiceImpl(
@@ -19,12 +19,12 @@ internal class DriverServiceImpl(
 
     override fun fetchDriver(
         documentParam: DocumentParameters
-    ): Flow<Response<Driver>> =
+    ): Flow<AppResponse<Driver>> =
         runSafe { getDriver.execute(documentParam) }
 
     override fun fetchDriverWithDetails(
         documentParam: DocumentParameters
-    ): Flow<Response<PersonWithDetails>> =
+    ): Flow<AppResponse<PersonWithDetails>> =
         runSafe { getPersonWD.execute(documentParam, PersonCategory.DRIVER) }
 
 }

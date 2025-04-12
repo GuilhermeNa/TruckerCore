@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.person.employee.admin.use_cases.in
 
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
  * that the [Admin] entity exists before performing the deletion.
  *
  * @see Admin
- * @see Response
+ * @see AppResponse
  */
 internal interface DeleteAdminUseCase {
 
@@ -21,9 +21,9 @@ internal interface DeleteAdminUseCase {
      *
      * @param user The [User] who is requesting the deletion. This is used to check if the user has the necessary permissions.
      * @param id The ID of the [Admin] entity to be deleted.
-     * @return A [Flow] of [Response.Success] if the data was successfully deleted.
+     * @return A [Flow] of [AppResponse.Success] if the data was successfully deleted.
      * @throws ObjectNotFoundException if the object to be updated is not found.
      */
-    fun execute(user: User, id: String): Flow<Response<Unit>>
+    fun execute(user: User, id: String): Flow<AppResponse<Unit>>
 
 }

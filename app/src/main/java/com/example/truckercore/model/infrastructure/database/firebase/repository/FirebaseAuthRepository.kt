@@ -1,92 +1,180 @@
 package com.example.truckercore.model.infrastructure.database.firebase.repository
 
-import com.example.truckercore.model.shared.utils.sealeds.Response
-import com.example.truckercore.model.shared.utils.sealeds.Result
+import com.example.truckercore.model.infrastructure.security.authentication.errors.AuthErrorCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.AuthErrorFactory
+import com.example.truckercore.model.infrastructure.security.authentication.errors.AuthenticationException
+import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.ObserveEmailValidationErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.SignInErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateUserProfileErrCode
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Interface representing a repository for Firebase Authentication operations.
- * Provides methods for user authentication, sign-in, sign-out, and fetching the current authenticated user.
+ * Interface responsible for handling user authentication operations via Firebase Authentication.
+ *
+ * Each method returns structured result types ([AppResponse] or [AppResult]) that encapsulate:
+ * - Success with a result (e.g., [FirebaseUser])
+ * - Failure via [AuthenticationException] containing an [AuthErrorCode]
+ *
+ * Errors are mapped using [AuthErrorFactory], ensuring consistent handling across the application.
  */
-internal interface FirebaseAuthRepository {
+interface FirebaseAuthRepository {
 
     /**
-     * Authenticates a user using their email and password.
+     * Creates a new Firebase user account using the provided email and password.
      *
-     * This method returns a flow that emits a response containing the authentication token (String)
-     * if the authentication is successful, or an error response if authentication fails.
+     * @param email The user's email address.
+     * @param password The user's password.
+     * @return [AppResponse.Success] containing the newly created [FirebaseUser], or
+     *         [Response.Error] with the appropriate [NewEmailErrCode] on failure.
      *
-     * @param email The email of the user trying to authenticate.
-     * @param password The password of the user trying to authenticate.
-     * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
+     * Possible error codes:
+     * - [NewEmailErrCode.InvalidCredentials] – Invalid email or weak password
+     * - [NewEmailErrCode.AccountCollision] – Email is already registered
+     * - [NewEmailErrCode.Network] – Network issue
+     * - [NewEmailErrCode.Unknown] – Unexpected error
+     *
+     * ```kotlin
+     * val result = repository.createUserWithEmail("user@example.com", "SecurePass123")
+     * when (result) {
+     *     is AppResponse.Success -> {
+     *          val fbUser: FirebaseUser = result.data
+     *          // new account registered for user@example.com
+     *     }
+     *     is AppResponse.Empty -> {
+     *           // account created but FirebaseUser was not recovered
+     *     }
+     *     is AppResponse.Error ->{
+     *          val message = result. exception.message
+     *          // Show error message to the user
+     *     }
+     * }
+     * ```
      */
-    suspend fun createUserWithEmail(email: String, password: String): Response<FirebaseUser>
+    suspend fun createUserWithEmail(email: String, password: String): AppResponse<FirebaseUser>
 
     /**
-     * Sends a verification email to the newly registered user.
+     * Sends an email verification message to the given Firebase user.
      *
-     * This method sends an email verification to the provided [FirebaseUser] after they have been successfully created.
-     * Returns a [Response] indicating success or failure of the verification email sending.
+     * @param firebaseUser The currently authenticated user.
+     * @return [AppResult.Success] if the email was successfully sent, or [AppResult.Error] with a [SendEmailVerificationErrCode] if an error occurred.
      *
-     * @param firebaseUser The user for whom the email verification will be sent.
-     * @return A [Result] with successful email verification, or an error response if it fails.
+     * Possible error codes:
+     * - [SendEmailVerificationErrCode.UnsuccessfulTask] – Task failed unexpectedly
+     * - [SendEmailVerificationErrCode.Unknown] – Unknown error occurred
+     *
+     * ```kotlin
+     * val result = repository.sendEmailVerification(user)
+     * when (result) {
+     *     is AppResult.Success -> {
+     *         // Inform the user to check their inbox
+     *     }
+     *     is AppResult.Error -> {
+     *         val message = result.exception.message
+     *         // Show error message to the user
+     *     }
+     * }
+     * ```
      */
-    suspend fun sendEmailVerification(firebaseUser: FirebaseUser): Result<Unit>
+    suspend fun sendEmailVerification(firebaseUser: FirebaseUser): AppResult<Unit>
 
     /**
-     * Updates the profile information of the given user.
+     * Updates the profile of the currently authenticated user (e.g., name, photo URL).
      *
-     * This method allows for updating the user's profile information, such as their display name or photo URL.
-     * It uses the provided [UserProfileChangeRequest] to perform the update for the given [FirebaseUser].
-     * Returns a [Response] indicating the success or failure of the profile update operation.
+     * @param fbUser The authenticated Firebase user.
+     * @param profile A [UserProfileChangeRequest] containing the desired profile changes.
+     * @return [AppResult.Success] if the profile was successfully updated, or [AppResult.Error] with [UpdateUserProfileErrCode] on failure.
      *
-     * @param fbUser The [FirebaseUser] whose profile is to be updated.
-     * @param profile The [UserProfileChangeRequest] containing the updated profile information.
-     * @return A [Result] with successful email verification, or an error response if it fails.
+     * Possible error codes:
+     * - [UpdateUserProfileErrCode.UnsuccessfulTask]
+     * - [UpdateUserProfileErrCode.Unknown]
+     *
+     * ```kotlin
+     * val result = repository.updateUserProfile(user, request)
+     * if (result is AppResult.Success) {
+     *           // name updated
+     * } else {
+     *           // failed in updating name
+     * }
+     * ```
      */
-    suspend fun updateUserProfile(fbUser: FirebaseUser, profile: UserProfileChangeRequest): Result<Unit>
+    suspend fun updateUserProfile(
+        fbUser: FirebaseUser,
+        profile: UserProfileChangeRequest
+    ): AppResult<Unit>
 
     /**
-     * Authenticates a user using their phone number.
+     * Authenticates a user using their email and password credentials.
      *
-     * This method returns a flow that emits a response containing the authentication token (String)
-     * if the authentication is successful, or an error response if authentication fails.
+     * @param email The user's email.
+     * @param password The user's password.
+     * @return [AppResult.Success] if login was successful, or [AppResult.Error] with [SignInErrCode] on failure.
      *
-     * @return A [Flow] emitting the [Response] with the authentication token, or an error if authentication fails.
+     * Possible error codes:
+     * - [SignInErrCode.InvalidCredentials]
+     * - [SignInErrCode.NetworkError]
+     * - [SignInErrCode.TooManyRequests]
+     * - [SignInErrCode.UnsuccessfulTask]
+     * - [SignInErrCode.UnknownError]
+     *
+     * ```kotlin
+     * val result = repository.signIn("user@example.com", "MyPassword")
+     * if (result is AppResult.Success) {
+     *     // proceed to app
+     * } else {
+     *     // show error message
+     * }
+     * ```
      */
-    suspend fun createUserWithPhone(credential: PhoneAuthCredential): Response<String>
+    suspend fun signIn(email: String, password: String): AppResult<Unit>
 
     /**
-     * Signs in a user with their email and password.
+     * Signs out the currently authenticated user.
      *
-     * This method performs the sign-in process and returns a [Flow] with a [Response] indicating success (Unit)
-     * or failure (error response).
+     * This action is synchronous and clears the local authentication session.
      *
-     * @param email The email of the user trying to sign in.
-     * @param password The password of the user trying to sign in.
-     * @return A [Flow] emitting the [Response] containing [Unit] on successful sign-in or an error if it fails.
-     */
-    fun signIn(email: String, password: String): Flow<Response<Unit>>
-
-    /**
-     * Signs out the current authenticated user.
-     *
-     * This method does not return a value. It performs the sign-out operation on Firebase.
      */
     fun signOut()
 
     /**
-     * Retrieves the current authenticated Firebase user.
+     * Retrieves the currently authenticated Firebase user, if available.
      *
-     * This method returns the current [FirebaseUser] if a user is authenticated, or null if no user is signed in.
+     * @return The currently logged-in [FirebaseUser], or null if no user is authenticated.
      *
-     * @return The current [FirebaseUser] or null if no user is authenticated.
+     * ```kotlin
+     * val currentUser = repository.getCurrentUser()
+     * if (currentUser != null) {
+     *     // User is logged in
+     * }
+     * ```
      */
     fun getCurrentUser(): FirebaseUser?
 
-    fun observeEmailValidation(): Flow<Response<Unit>>
+    /**
+     * Observes whether the authenticated user's email has been verified.
+     *
+     * Continuously checks the verification status in a coroutine-safe flow.
+     *
+     * @return A [Flow] emitting:
+     * - [AppResponse.Success] if the email has been verified
+     * - [AppResponse.Empty] if the email is not verified yet
+     * - [AppResponse.Error] with [ObserveEmailValidationErrCode] on failure
+     *
+     * ```kotlin
+     * repository.observeEmailValidation().collect { response ->
+     *     when (response) {
+     *         is AppResponse.Success -> // email verified
+     *         is AppResponse.Empty -> // not verified yet
+     *         is AppResponse.Error -> // handle error
+     *     }
+     * }
+     * ```
+     */
+    fun observeEmailValidation(): Flow<AppResponse<Unit>>
 
 }

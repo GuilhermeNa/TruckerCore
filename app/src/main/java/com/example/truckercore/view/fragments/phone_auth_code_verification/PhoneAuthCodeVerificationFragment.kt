@@ -11,7 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentPhoneAuthCodeVerificationBinding
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthFragState
 import com.example.truckercore.view_model.view_models.phone_auth.PhoneAuthSharedViewModel

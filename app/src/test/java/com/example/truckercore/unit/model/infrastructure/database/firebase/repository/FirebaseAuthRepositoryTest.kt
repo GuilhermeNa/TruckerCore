@@ -3,16 +3,15 @@ package com.example.truckercore.unit.model.infrastructure.database.firebase.repo
 import com.example.truckercore.model.infrastructure.database.firebase.errors.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
 import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepositoryImpl
+import com.example.truckercore.model.infrastructure.security.authentication.errors.AuthErrorFactory
 import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailErrCode
-import com.example.truckercore.model.infrastructure.security.authentication.errors.NewEmailUserException
 import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationErrCode
-import com.example.truckercore.model.infrastructure.security.authentication.errors.SendEmailVerificationException
-import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateProfileErrCode
-import com.example.truckercore.model.infrastructure.security.authentication.errors.UpdateUserProfileException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.errors._main.AppException
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -47,6 +46,8 @@ class FirebaseAuthRepositoryTest : KoinTest {
     private val authRepository: FirebaseAuthRepository by inject()
 
     // Mocks
+    private val email = "email"
+    private val pass = "password"
     private val fbUid = "uid"
     private val fbUser: FirebaseUser = mockk(relaxed = true) {
         every { uid } returns fbUid
@@ -54,13 +55,11 @@ class FirebaseAuthRepositoryTest : KoinTest {
 
     @BeforeEach
     fun setup() {
-        //mockStaticLog()
-        //mockStaticTask()
-
         startKoin {
             modules(module {
                 single<FirebaseAuth> { mockk(relaxed = true) }
-                single<FirebaseAuthRepository> { FirebaseAuthRepositoryImpl(get()) }
+                single { AuthErrorFactory }
+                single<FirebaseAuthRepository> { FirebaseAuthRepositoryImpl(get(), get()) }
             })
         }
     }
@@ -74,8 +73,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
     @Test
     fun `should return Success when authenticate with email and return uid`() = runTest {
         // Arrange
-        val email = "email"
-        val pass = "password"
+
         val task = mockk<Task<AuthResult>> {
             every { exception } returns null
             every { isSuccessful } returns true
@@ -133,17 +131,17 @@ class FirebaseAuthRepositoryTest : KoinTest {
     }
 
     @Test
-    fun `should return Response Error (NewEmailUserException) when failed`() =
+    fun `should return Response Error when new user creation with email failed`() =
         runTest {
             // Arrange
             val email = "email"
             val pass = "password"
             val task = mockk<Task<AuthResult>> {
-                every { exception } returns NullPointerException("Simulated exception.")
+                every { exception } returns FirebaseNetworkException("Simulated exception.")
                 every { isSuccessful } returns false
                 every { isComplete } returns false
                 every { isCanceled } returns false
-                every { result.user } returns fbUser
+                every { result.user } returns null
             }
 
             every { auth.createUserWithEmailAndPassword(any(), any()) } returns task
@@ -153,13 +151,14 @@ class FirebaseAuthRepositoryTest : KoinTest {
                 task
             }
 
-            // Call && Assert
+            // Call
             val response = authRepository.createUserWithEmail(email, pass)
-            val error = response.extractException()
 
             // Assert
-            assertTrue(error is NewEmailUserException)
-            assertTrue(error.code is NewEmailErrCode.UnknownError)
+            assertTrue(response is Response.Error)
+
+            assertTrue((response.exception as AppException).errorCode is NewEmailErrCode.Network)
+
             verify(exactly = 1) {
                 auth.createUserWithEmailAndPassword(email, pass)
                 task.addOnCompleteListener(any())

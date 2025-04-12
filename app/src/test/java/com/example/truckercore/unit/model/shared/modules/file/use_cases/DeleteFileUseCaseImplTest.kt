@@ -10,7 +10,7 @@ import com.example.truckercore.model.shared.modules.file.repository.FileReposito
 import com.example.truckercore.model.shared.modules.file.use_cases.implementations.DeleteStorageFileUseCaseImpl
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.CheckFileExistenceUseCase
 import com.example.truckercore.model.shared.modules.file.use_cases.interfaces.DeleteStorageFileUseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

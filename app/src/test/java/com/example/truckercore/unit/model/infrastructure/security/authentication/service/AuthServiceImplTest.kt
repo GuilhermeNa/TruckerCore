@@ -10,7 +10,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.use_
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.auth.PhoneAuthCredential
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -80,13 +80,13 @@ class AuthServiceImplTest : KoinTest {
         val uid = "123"
         val phoneCredential: PhoneAuthCredential = mockk(relaxed = true)
 
-        coEvery { authRepo.createUserWithPhone(any()) } returns Response.Success(uid)
+        coEvery { authRepo.createUserWithPhone(any()) } returns AppResponse.Success(uid)
 
         // Call
         val result = service.createUserWithPhone(phoneCredential)
 
         // Assert
-        assertTrue(result is Response.Success)
+        assertTrue(result is AppResponse.Success)
         assertEquals(result.data, uid)
         coVerify(exactly = 1) {
             authRepo.createUserWithPhone(phoneCredential)

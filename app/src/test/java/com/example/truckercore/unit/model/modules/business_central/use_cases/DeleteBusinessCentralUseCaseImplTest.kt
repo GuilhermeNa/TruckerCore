@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.business_central.use_cases.interfac
 import com.example.truckercore.model.modules.business_central.use_cases.interfaces.DeleteBusinessCentralUseCase
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -72,15 +72,15 @@ class DeleteBusinessCentralUseCaseImplTest : KoinTest {
     @Test
     fun `execute() should return success when user has permission and object is found`() = runTest {
         // Arrange
-        every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+        every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Success(Unit))
         every { permissionService.canPerformAction(any(), any()) } returns true
-        every { repository.delete(any()) } returns flowOf(Response.Success(Unit))
+        every { repository.delete(any()) } returns flowOf(AppResponse.Success(Unit))
 
         // Call
         val result = useCase.execute(user, id).single()
 
         // Assertions
-        assertTrue(result is Response.Success)
+        assertTrue(result is AppResponse.Success)
         verifyOrder {
             checkExistence.execute(user, id)
             permissionService.canPerformAction(user, requiredPermission)
@@ -92,7 +92,7 @@ class DeleteBusinessCentralUseCaseImplTest : KoinTest {
     fun `execute() should throw ObjectNotFoundException when the entity does not exist`() =
         runTest {
             // Arrange
-            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Empty)
+            every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Empty)
 
             // Call
             assertThrows<ObjectNotFoundException> {
@@ -109,7 +109,7 @@ class DeleteBusinessCentralUseCaseImplTest : KoinTest {
     fun `execute() should throw UnauthorizedAccessException when the user does not have auth`() =
         runTest {
             // Arrange
-            every { checkExistence.execute(any(), any()) } returns flowOf(Response.Success(Unit))
+            every { checkExistence.execute(any(), any()) } returns flowOf(AppResponse.Success(Unit))
             every { permissionService.canPerformAction(any(), any()) } returns false
 
             // Call

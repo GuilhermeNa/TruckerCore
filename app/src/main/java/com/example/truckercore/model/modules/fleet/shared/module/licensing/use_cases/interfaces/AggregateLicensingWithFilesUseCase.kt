@@ -5,7 +5,7 @@ import com.example.truckercore.model.modules.fleet.shared.module.licensing.entit
 import com.example.truckercore.model.shared.modules.file.entity.File
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see Licensing
  * @see File
- * @see Response
+ * @see AppResponse
  */
 internal interface AggregateLicensingWithFilesUseCase {
 
@@ -24,10 +24,10 @@ internal interface AggregateLicensingWithFilesUseCase {
      *
      * @param documentParams The document parameters to filter the licensing records.
      * @return A [Flow] of:
-     * - [Response.Success] containing the [LicensingWithFile] object if the licensing record and files were found.
-     * - [Response.Empty] if no licensing record exists with the given ID or no files are associated with it.
+     * - [AppResponse.Success] containing the [LicensingWithFile] object if the licensing record and files were found.
+     * - [AppResponse.Empty] if no licensing record exists with the given ID or no files are associated with it.
      */
-    fun execute(documentParams: DocumentParameters): Flow<Response<LicensingWithFile>>
+    fun execute(documentParams: DocumentParameters): Flow<AppResponse<LicensingWithFile>>
 
     /**
      * Fetches a list of licensing records along with their associated files based on the provided query settings.
@@ -35,10 +35,10 @@ internal interface AggregateLicensingWithFilesUseCase {
      *
      * @param queryParams The query parameters to filter the licensing records.
      * @return A [Flow] of:
-     * - [Response.Success] containing a list of [LicensingWithFile] objects, each containing a [Licensing]
+     * - [AppResponse.Success] containing a list of [LicensingWithFile] objects, each containing a [Licensing]
      *   object and its corresponding list of [File] objects.
-     * - [Response.Empty] if no licensing records match the query criteria or no files are associated with the records.
+     * - [AppResponse.Empty] if no licensing records match the query criteria or no files are associated with the records.
      */
-    fun execute(queryParams: QueryParameters): Flow<Response<List<LicensingWithFile>>>
+    fun execute(queryParams: QueryParameters): Flow<AppResponse<List<LicensingWithFile>>>
 
 }

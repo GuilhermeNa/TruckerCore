@@ -9,7 +9,7 @@ import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.Ag
 import com.example.truckercore.model.modules.fleet.truck.use_cases.interfaces.GetTruckUseCase
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -64,7 +64,7 @@ class TruckServiceImplTest : KoinTest {
     fun `fetchTruck(DocumentParameters) should call getTruck useCase`() =
         runTest {
             // Arrange
-            every { getTruck.execute(documentParams) } returns flowOf(Response.Success(truck))
+            every { getTruck.execute(documentParams) } returns flowOf(AppResponse.Success(truck))
 
             // Call
             truckService.fetchTruck(documentParams).single()
@@ -77,7 +77,7 @@ class TruckServiceImplTest : KoinTest {
     fun `fetchTruck(QueryParameters) should call getTruck useCase`() =
         runTest {
             // Arrange
-            every { getTruck.execute(queryParams) } returns flowOf(Response.Success(listOf(truck)))
+            every { getTruck.execute(queryParams) } returns flowOf(AppResponse.Success(listOf(truck)))
 
             // Call
             truckService.fetchTruck(queryParams).single()
@@ -91,7 +91,7 @@ class TruckServiceImplTest : KoinTest {
         runTest {
             // Arrange
             every { getTruckWithDetailsUseCase.execute(documentParams) } returns flowOf(
-                Response.Success(truckWithDetails)
+                AppResponse.Success(truckWithDetails)
             )
 
             // Call
@@ -106,7 +106,7 @@ class TruckServiceImplTest : KoinTest {
         runTest {
             // Arrange
             every { getTruckWithDetailsUseCase.execute(queryParams) } returns flowOf(
-                Response.Success(listOf(truckWithDetails))
+                AppResponse.Success(listOf(truckWithDetails))
             )
 
             // Call

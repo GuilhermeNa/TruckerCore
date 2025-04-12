@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.user.use_cases.interfaces.UpdateUse
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
@@ -25,12 +25,12 @@ internal class UpdateUserUseCaseImpl(
 ) : UseCase(permissionService), UpdateUserUseCase {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun execute(user: User, userToUpdate: User): Flow<Response<Unit>> {
+    override fun execute(user: User, userToUpdate: User): Flow<AppResponse<Unit>> {
         val id =
             userToUpdate.id ?: throw NullPointerException("Null User to updated id while updating.")
 
         return checkExistence.execute(user, id).flatMapConcat { response ->
-            if (response !is Response.Success) {
+            if (response !is AppResponse.Success) {
                 throw ObjectNotFoundException(
                     "Attempting to update a User that was not found for id: $id."
                 )
@@ -39,7 +39,7 @@ internal class UpdateUserUseCaseImpl(
         }
     }
 
-    private fun processUpdate(userToUpdate: User): Flow<Response<Unit>> {
+    private fun processUpdate(userToUpdate: User): Flow<AppResponse<Unit>> {
         validatorService.validateEntity(userToUpdate)
         val dto = mapper.toDto(userToUpdate)
         return repository.update(dto)

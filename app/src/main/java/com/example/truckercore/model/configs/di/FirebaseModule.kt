@@ -19,7 +19,7 @@ val firebaseModule = module {
     single { FirebaseConverter() }
     single { FirebaseQueryBuilder(get()) }
     single<FirebaseRepository> { FirebaseRepositoryImpl(get(), get()) }
-    single<FirebaseAuthRepository> { FirebaseAuthRepositoryImpl(get()) }
+    single<FirebaseAuthRepository> { FirebaseAuthRepositoryImpl(get(), get()) }
 }
 
 

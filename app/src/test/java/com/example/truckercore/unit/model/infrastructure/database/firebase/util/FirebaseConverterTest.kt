@@ -3,7 +3,7 @@ package com.example.truckercore.unit.model.infrastructure.database.firebase.util
 import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseConverter
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.modules.personal_data.dto.PersonalDataDto
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import io.mockk.every

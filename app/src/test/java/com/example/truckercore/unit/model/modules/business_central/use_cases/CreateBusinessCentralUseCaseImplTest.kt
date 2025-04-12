@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.business_central.repository.Busines
 import com.example.truckercore.model.modules.business_central.use_cases.implementations.CreateBusinessCentralUseCaseImpl
 import com.example.truckercore.model.modules.business_central.use_cases.interfaces.CreateBusinessCentralUseCase
 import com.example.truckercore.model.shared.services.ValidatorService
-import com.example.truckercore.model.shared.utils.sealeds.Response
+import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyOrder
@@ -72,13 +72,13 @@ class CreateBusinessCentralUseCaseImplTest : KoinTest {
         val id = "newObjectId"
         every { validatorService.validateForCreation(any()) } returns Unit
         every { mapper.toDto(any()) } returns dto
-        every { repository.create(any()) } returns flowOf(Response.Success(id))
+        every { repository.create(any()) } returns flowOf(AppResponse.Success(id))
 
         // Call
         val result = useCase.execute(bCentral).single()
 
         // Assertions
-        assertEquals(id, (result as Response.Success).data)
+        assertEquals(id, (result as AppResponse.Success).data)
         verifyOrder {
             validatorService.validateForCreation(bCentral)
             mapper.toDto(bCentral)
