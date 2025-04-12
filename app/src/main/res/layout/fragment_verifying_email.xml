@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
-            tools:text="@tools:sample/lorem" />
+            android:text="Aguardando verificação!" />
 
         <TextView
             android:id="@+id/frag_verifying_email_message"
@@ -39,7 +39,7 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:maxLines="5"
-            tools:text="@tools:sample/lorem/random" />
+            android:text="Te enviamos um email de validação. Por favor, verifique sua caixa de entrada (ou pasta de spam) e clique no link de verificação para continuar." />
 
         <TextView
             android:id="@+id/frag_verifying_email_sent_to"

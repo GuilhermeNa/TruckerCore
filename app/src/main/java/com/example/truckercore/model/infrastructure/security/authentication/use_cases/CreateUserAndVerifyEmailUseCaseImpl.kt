@@ -8,6 +8,7 @@ import com.example.truckercore.model.shared.utils.expressions.logError
 import com.example.truckercore.model.shared.utils.expressions.onEarlyExit
 import com.example.truckercore.model.configs.app_constants.EarlyExit
 import com.example.truckercore.model.shared.task_manager.TaskManager
+import com.example.truckercore.model.shared.utils.sealeds.handleResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.async

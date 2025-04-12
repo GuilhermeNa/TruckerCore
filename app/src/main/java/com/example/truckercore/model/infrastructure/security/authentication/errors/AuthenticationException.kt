@@ -11,10 +11,10 @@ class NewEmailUserException(
 ) : AuthenticationException(message, cause)
 
 sealed class NewEmailErrCode(val info: String) : ErrorCode {
-    class InvalidCredentials : NewEmailErrCode("E-mail e/ou senha inválidos.")
-    class AccountCollision : NewEmailErrCode("Já existe uma conta registrada com este e-mail.")
-    class Network : NewEmailErrCode("Erro de rede. Verifique sua conexão com a internet.")
-    class Unknown : NewEmailErrCode("Ocorreu um erro desconhecido. Tente novamente mais tarde.")
+    class InvalidCredentialsError : NewEmailErrCode("E-mail e/ou senha inválidos.")
+    class AccountCollisionError : NewEmailErrCode("Já existe uma conta registrada com este e-mail.")
+    class NetworkError : NewEmailErrCode("Erro de rede. Verifique sua conexão com a internet.")
+    class UnknownError : NewEmailErrCode("Ocorreu um erro desconhecido. Tente novamente mais tarde.")
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -25,16 +25,16 @@ class SendEmailVerificationException(
 ) : AuthenticationException(message, cause)
 
 sealed class SendEmailVerificationErrCode(val info: String) : ErrorCode {
-    class Network :
+    class NetworkError :
         SendEmailVerificationErrCode("Erro de rede. Verifique sua conexão com a internet.")
 
-    class EmailNotFound :
+    class EmailNotFoundError :
         SendEmailVerificationErrCode("O e-mail informado não foi encontrado. Verifique se está correto.")
 
-    class UnsuccessfulTask :
+    class UnsuccessfulTaskError :
         SendEmailVerificationErrCode("A tarefa não foi bem-sucedida. Tente novamente.")
 
-    class Unknown :
+    class UnknownError :
         SendEmailVerificationErrCode("Ocorreu um erro desconhecido. Tente novamente mais tarde.")
 }
 

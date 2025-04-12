@@ -159,7 +159,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
 
             // Assert
             assertTrue(error is NewEmailUserException)
-            assertTrue(error.code is NewEmailErrCode.Unknown)
+            assertTrue(error.code is NewEmailErrCode.UnknownError)
             verify(exactly = 1) {
                 auth.createUserWithEmailAndPassword(email, pass)
                 task.addOnCompleteListener(any())
@@ -225,7 +225,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
             val error = result.extractException()
             assertTrue(error is SendEmailVerificationException)
             assertNull(error.cause)
-            assertTrue(error.code is SendEmailVerificationErrCode.UnsuccessfulTask)
+            assertTrue(error.code is SendEmailVerificationErrCode.UnsuccessfulTaskError)
             verify(exactly = 1) {
                 fbUser.sendEmailVerification()
                 task.addOnCompleteListener(any())
@@ -257,7 +257,7 @@ class FirebaseAuthRepositoryTest : KoinTest {
             // Assert
             val error = result.extractException()
             assertTrue(error is SendEmailVerificationException)
-            assertTrue(error.code is SendEmailVerificationErrCode.Unknown)
+            assertTrue(error.code is SendEmailVerificationErrCode.UnknownError)
             assertTrue(error.cause is NullPointerException)
             verify(exactly = 1) {
                 fbUser.sendEmailVerification()

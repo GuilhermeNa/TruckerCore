@@ -86,7 +86,7 @@ class EmailAuthFragment : Fragment() {
     }
 
     private fun handleSuccessState(type: EmailAuthFragSuccess) {
-        uiHandler?.setSuccessState()
+        uiHandler.setSuccessState()
         navigateToVerificationFragment(type)
     }
 

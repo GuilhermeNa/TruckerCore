@@ -4,7 +4,6 @@ import com.example.truckercore.view.enums.Flavor
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthVmArgs
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
-import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailReceivedArgs
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -15,9 +14,7 @@ val commonViewModelModule = module {
         EmailAuthViewModel(args = args, get())
     }
     viewModel<WelcomeFragmentViewModel> { (flavor: Flavor) -> WelcomeFragmentViewModel(flavor) }
-    viewModel<VerifyingEmailViewModel> { (args: VerifyingEmailReceivedArgs) ->
-        VerifyingEmailViewModel(args = args, get())
-    }
+    viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get()) }
     viewModel<UserNameViewModel> { UserNameViewModel() }
 
 }

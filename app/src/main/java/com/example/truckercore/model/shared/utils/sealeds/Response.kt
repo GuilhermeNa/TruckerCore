@@ -31,9 +31,11 @@ sealed class Response<out T> {
 
     fun extractException() = (this as? Error)?.exception
 
+    fun isSuccess() = this is Success
+
     fun isEmpty() = this is Empty
 
-    fun <C>handleResponseAndConsume(
+    fun <C> handleResponseAndConsume(
         success: (data: T) -> C,
         empty: () -> C,
         error: (e: Exception) -> C
@@ -44,14 +46,23 @@ sealed class Response<out T> {
     }
 
     fun handleResponse(
-        success: (data: T) -> Unit,
-        empty: () -> Unit,
-        error: (e: Exception) -> Unit
+        success: (data: T) -> Unit = {},
+        empty: () -> Unit = {},
+        error: (e: Exception) -> Unit = {}
     ) = when (this) {
         is Success -> success(data)
         is Empty -> empty()
         is Error -> error(exception)
     }
 
+    fun <R>mapResponse(
+        success: (data: T) -> R? = { null },
+        empty: () -> R? = { null } ,
+        error: (e: Exception) -> R? = { null }
+    ): R? = when (this) {
+        is Success -> success(data)
+        is Empty -> empty()
+        is Error -> error(exception)
+    }
 
 }

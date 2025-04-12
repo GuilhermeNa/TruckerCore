@@ -11,13 +11,8 @@ sealed class VerifyingEmailEvent {
     data object ResendButtonClicked : VerifyingEmailEvent()
 
     /**
-     * Triggered when the countdown timer for resending the email reaches zero. This should enable resend button.
+     * This typically means the user wants to restart the sign-up process with a different email or credentials.
      */
-    data object CounterReachZero : VerifyingEmailEvent()
-
-    /**
-     * Triggered when Firebase detects that the user has verified their email via the verification link.
-     */
-    data object EmailVerified: VerifyingEmailEvent()
+    data object NewAccountButtonClicked: VerifyingEmailEvent()
 
 }

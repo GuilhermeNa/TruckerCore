@@ -113,6 +113,20 @@ internal class FirebaseAuthRepositoryImpl(
         }
     }
 
+    override fun observeEmailValidation(): Flow<Response<Unit>> = flow {
+        while (coroutineContext.isActive) {
+            delay(1000)
+
+            val response = getCurrentUser()?.let { fbUser ->
+                fbUser.reload()
+                if (fbUser.isEmailVerified) Response.Success(Unit)
+                else Response.Empty
+            } ?: Response.Error(NullFirebaseUserException(OBSERVE_EMAIL_ERROR_MESSAGE))
+
+            emit(response)
+        }
+    }
+
     // Helper Class --------------------------------------------------------------------------------
 
     private class ErrorHandler {
@@ -152,10 +166,10 @@ internal class FirebaseAuthRepositoryImpl(
         fun handleCreateUserWithEmailError(e: Exception): Response<FirebaseUser> {
             // Mapping exception to error code and user-friendly message
             val (code, message) = when (e) {
-                is FirebaseNetworkException -> NewEmailErrCode.Network() to CREATE_USER_EMAIL_NETWORK_ERROR
-                is FirebaseAuthUserCollisionException -> NewEmailErrCode.AccountCollision() to CREATE_USER_EMAIL_ACCOUNT_COLLISION
-                is FirebaseAuthInvalidCredentialsException -> NewEmailErrCode.InvalidCredentials() to CREATE_USER_EMAIL_INVALID_CREDENTIALS
-                else -> NewEmailErrCode.Unknown() to CREATE_USER_EMAIL_UNKNOWN_ERROR
+                is FirebaseNetworkException -> NewEmailErrCode.NetworkError() to CREATE_USER_EMAIL_NETWORK_ERROR
+                is FirebaseAuthUserCollisionException -> NewEmailErrCode.AccountCollisionError() to CREATE_USER_EMAIL_ACCOUNT_COLLISION
+                is FirebaseAuthInvalidCredentialsException -> NewEmailErrCode.InvalidCredentialsError() to CREATE_USER_EMAIL_INVALID_CREDENTIALS
+                else -> NewEmailErrCode.UnknownError() to CREATE_USER_EMAIL_UNKNOWN_ERROR
             }
 
             // Returning the response with the exception, error code, and message
@@ -166,15 +180,15 @@ internal class FirebaseAuthRepositoryImpl(
             // Mapping the exception to the error code and user-friendly message
             val (code, message) = when (e) {
                 is FirebaseNetworkException -> {
-                    SendEmailVerificationErrCode.Network() to SEND_EMAIL_VERIFICATION_NETWORK_ERROR
+                    SendEmailVerificationErrCode.NetworkError() to SEND_EMAIL_VERIFICATION_NETWORK_ERROR
                 }
 
                 is FirebaseAuthInvalidUserException -> {
-                    SendEmailVerificationErrCode.EmailNotFound() to SEND_EMAIL_VERIFICATION_EMAIL_NOT_FOUND
+                    SendEmailVerificationErrCode.EmailNotFoundError() to SEND_EMAIL_VERIFICATION_EMAIL_NOT_FOUND
                 }
 
                 else -> {
-                    SendEmailVerificationErrCode.Unknown() to SEND_EMAIL_VERIFICATION_UNKNOWN_ERROR
+                    SendEmailVerificationErrCode.UnknownError() to SEND_EMAIL_VERIFICATION_UNKNOWN_ERROR
                 }
             }
 
@@ -192,7 +206,7 @@ internal class FirebaseAuthRepositoryImpl(
             return Result.Error(
                 SendEmailVerificationException(
                     message = ERROR_SEND_EMAIL_UNSUCCESSFUL_TASK,
-                    code = SendEmailVerificationErrCode.UnsuccessfulTask()
+                    code = SendEmailVerificationErrCode.UnsuccessfulTaskError()
                 )
             )
         }
@@ -265,26 +279,14 @@ internal class FirebaseAuthRepositoryImpl(
 
     override fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 
-    override fun observeEmailValidation(): Flow<Response<Unit>> = flow {
-        while (coroutineContext.isActive) {
-            delay(1000)
 
-            val response = getCurrentUser()?.let { fbUser ->
-                fbUser.reload()
-                if (fbUser.isEmailVerified) Response.Success(Unit)
-                else Response.Empty
-            } ?: Response.Error(NullFirebaseUserException(FB_USER_NOT_FOUND))
-
-            emit(response)
-        }
-    }
 
     companion object {
         private const val NEW_USER_ERROR_MESSAGE = "Task failed on recover new user."
         private const val VERIFICATION_ERROR_MESSAGE =
             "Task failed on send verification to registered email."
         private const val UPDATE_PROFILE_ERROR_MSG = "Task failed on update user profile."
-        private const val FB_USER_NOT_FOUND = "The firebase user was not found."
+        private const val OBSERVE_EMAIL_ERROR_MESSAGE = "The firebase user was not found."
     }
 
 }
