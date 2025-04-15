@@ -1,63 +1,53 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.repository
 
+import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.ObserveEmailValidationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SendEmailVerificationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SignInErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
+import com.example.truckercore.model.infrastructure.security.authentication.exceptions.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepositoryImpl
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AuthenticationRepositoryTest : KoinTest {
 
     // Injections
-    private val auth: FirebaseAuth by inject()
-    private val authRepository: AuthenticationRepository by inject()
+    private val dataSource: FirebaseAuthDataSource by inject()
+    private val repository: AuthenticationRepository by inject()
 
-    // Mocks
-    private val email = "email"
-    private val pass = "password"
-    private val fbUid = "uid"
-    private val fbUser: FirebaseUser = mockk(relaxed = true) {
-        every { uid } returns fbUid
-    }
-    private val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
+    // Data Provider
+    private val provider = DataProvider()
 
     @BeforeEach
     fun setup() {
         startKoin {
             modules(module {
-                single<FirebaseAuth> { mockk(relaxed = true) }
-                single { AuthenticationAppErrorFactory }
+                single<FirebaseAuthDataSource> { mockk(relaxed = true) }
+                single<AuthenticationAppErrorFactory> { AuthenticationAppErrorFactory }
                 single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
             })
         }
@@ -66,492 +56,204 @@ class AuthenticationRepositoryTest : KoinTest {
     @AfterEach
     fun tearDown() = stopKoin()
 
-    //----------------------------------------------------------------------------------------------
-    // Testing createUserWithEmail()
-    //----------------------------------------------------------------------------------------------
-    @Test
-    fun `should return Success when authenticate with email and return uid`() = runTest {
-        // Arrange
-        val task = mockk<Task<AuthResult>> {
-            every { exception } returns null
-            every { isSuccessful } returns true
-            every { isComplete } returns true
-            every { isCanceled } returns false
-            every { result.user } returns fbUser
-        }
-
-        every { auth.createUserWithEmailAndPassword(any(), any()) } returns task
-        every { task.addOnCompleteListener(any()) } answers {
-            val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-            listener.onComplete(task)
-            task
-        }
-
-        // Call
-        val response = authRepository.createUserWithEmail(email, pass)
-
-        // Assert
-        assertTrue(response is AppResult.Success)
-        assertEquals(response.data, fbUser)
-        verify(exactly = 1) {
-            auth.createUserWithEmailAndPassword(email, pass)
-            task.addOnCompleteListener(any())
-        }
+    companion object {
+        private const val EMAIL = "email"
+        private const val PASS = "pass"
     }
 
-    @Test
-    fun `should return ErrorResult when user was authenticated but user not found`() =
-        runTest {
-            // Arrange
-            val task = mockk<Task<AuthResult>> {
-                every { exception } returns null
-                every { isSuccessful } returns true
-                every { isComplete } returns true
-                every { isCanceled } returns false
-                every { result.user } returns null
-            }
-
-            every { auth.createUserWithEmailAndPassword(any(), any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.createUserWithEmail(email, pass)
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is NewEmailErrCode.UnsuccessfulTask)
-            verify(exactly = 1) {
-                auth.createUserWithEmailAndPassword(email, pass)
-                task.addOnCompleteListener(any())
-            }
-        }
-
-    @Test
-    fun `should return Response Error when new user creation with email failed`() =
-        runTest {
-            // Arrange
-            val task = mockk<Task<AuthResult>> {
-                every { exception } returns FirebaseNetworkException("Simulated exception.")
-                every { isSuccessful } returns false
-                every { isComplete } returns false
-                every { isCanceled } returns false
-                every { result.user } returns null
-            }
-
-            every { auth.createUserWithEmailAndPassword(any(), any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val response = authRepository.createUserWithEmail(email, pass)
-
-            // Assert
-            assertTrue(response is AppResult.Error)
-            assertTrue(response.exception.errorCode is NewEmailErrCode.Network)
-            verify(exactly = 1) {
-                auth.createUserWithEmailAndPassword(email, pass)
-                task.addOnCompleteListener(any())
-            }
-
-        }
-
     //----------------------------------------------------------------------------------------------
-    // Testing sendEmailVerification()
+    // createUserWithEmail()
     //----------------------------------------------------------------------------------------------
     @Test
-    fun `should return SuccessResult when email verification have been sent`() = runTest {
+    fun `should return Success when createUserWithEmail completes successfully`() = runTest {
         // Arrange
-        every { auth.currentUser } returns fbUser
+        coEvery { dataSource.createUserWithEmail(any(), any()) } returns provider.fbUser
 
-        val task = mockk<Task<Void>> {
-            every { exception } returns null
-            every { isSuccessful } returns true
-            every { isComplete } returns true
-            every { isCanceled } returns false
-            every { result } returns null
-        }
-
-        every { fbUser.sendEmailVerification() } returns task
-        every { task.addOnCompleteListener(any()) } answers {
-            val listener = it.invocation.args[0] as OnCompleteListener<Void>
-            listener.onComplete(task)
-            task
-        }
-
-        // Call
-        val result = authRepository.sendEmailVerification()
+        // Act
+        val result = repository.createUserWithEmail(EMAIL, PASS)
 
         // Assert
         assertTrue(result is AppResult.Success)
-        verify(exactly = 1) {
-            fbUser.sendEmailVerification()
-            task.addOnCompleteListener(any())
-        }
+        assertEquals(provider.fbUser, (result as AppResult.Success).data)
+        coVerify(exactly = 1) { dataSource.createUserWithEmail(EMAIL, PASS) }
     }
 
     @Test
-    fun `should return ErrorResult when no exception was thrown and task is not successful`() =
-        runTest {
-            // Arrange
-            every { auth.currentUser } returns fbUser
-
-            val task = mockk<Task<Void>> {
-                every { exception } returns null
-                every { isSuccessful } returns false
-                every { isComplete } returns true
-                every { isCanceled } returns false
-                every { result } returns null
-            }
-
-            every { fbUser.sendEmailVerification() } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<Void>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.sendEmailVerification()
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is SendEmailVerificationErrCode.UnsuccessfulTask)
-            verify(exactly = 1) {
-                fbUser.sendEmailVerification()
-                task.addOnCompleteListener(any())
-            }
-        }
-
-    @Test
-    fun `should return ErrorResult when an exception was thrown while sending verification email`() =
-        runTest {
-            // Arrange
-            every { auth.currentUser } returns fbUser
-
-            val task = mockk<Task<Void>> {
-                every { exception } returns NullPointerException("Simulated")
-                every { isSuccessful } returns false
-                every { isComplete } returns true
-                every { isCanceled } returns false
-                every { result } returns null
-            }
-
-            every { fbUser.sendEmailVerification() } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<Void>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.sendEmailVerification()
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is SendEmailVerificationErrCode.Unknown)
-            verify(exactly = 1) {
-                fbUser.sendEmailVerification()
-                task.addOnCompleteListener(any())
-            }
-        }
-
-    //----------------------------------------------------------------------------------------------
-    // Testing updateUserProfile()
-    //----------------------------------------------------------------------------------------------
-    @Test
-    fun `should return SuccessResult when user profile was updated`() = runTest {
+    fun `should return Error when createUserWithEmail throws exception`() = runTest {
         // Arrange
-        val task = mockk<Task<Void>> {
-            every { exception } returns null
-            every { isSuccessful } returns true
-            every { isComplete } returns true
-            every { isCanceled } returns false
-            every { result } returns null
-        }
+        coEvery { dataSource.createUserWithEmail(any(), any()) } throws IncompleteTaskException()
 
-        every { auth.currentUser } returns fbUser
-        every { fbUser.updateProfile(any()) } returns task
-        every { task.addOnCompleteListener(any()) } answers {
-            val listener = it.invocation.args[0] as OnCompleteListener<Void>
-            listener.onComplete(task)
-            task
-        }
+        // Act
+        val result = repository.createUserWithEmail(EMAIL, PASS)
 
-        // Call
-        val result = authRepository.updateUserProfile(profileChange)
+        // Assert
+        assertTrue(result is AppResult.Error)
+        assertTrue((result as AppResult.Error).exception.errorCode is NewEmailErrCode.UnsuccessfulTask)
+        coVerify(exactly = 1) {
+            dataSource.createUserWithEmail(EMAIL, PASS)
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // sendEmailVerification()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should return Success when sendEmailVerification completes successfully`() = runTest {
+        // Arrange
+        coEvery { dataSource.sendEmailVerification() } just Runs
+
+        // Act
+        val result = repository.sendEmailVerification()
 
         // Assert
         assertTrue(result is AppResult.Success)
-        verify(exactly = 1) {
-            fbUser.updateProfile(profileChange)
-            task.addOnCompleteListener(any())
-        }
+        assertEquals(Unit, (result as AppResult.Success).data)
+        coVerify(exactly = 1) { dataSource.sendEmailVerification() }
     }
 
     @Test
-    fun `should return an ErrorResult when no exception is thrown but the task is unsuccessful while updating profile`() =
-        runTest {
-            // Arrange
-            val task = mockk<Task<Void>> {
-                every { exception } returns null
-                every { isSuccessful } returns false
-                every { isComplete } returns true
-                every { isCanceled } returns false
-                every { result } returns null
-            }
-
-            every { auth.currentUser } returns fbUser
-            every { fbUser.updateProfile(any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<Void>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.updateUserProfile(profileChange)
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is SendEmailVerificationErrCode.UnsuccessfulTask)
-            verify(exactly = 1) {
-                fbUser.updateProfile(profileChange)
-                task.addOnCompleteListener(any())
-            }
-        }
-
-    @Test
-    fun `should return an ErrorResult when an exception is thrown while updating profile`() =
-        runTest {
-            // Arrange
-            val task = mockk<Task<Void>> {
-                every { exception } returns NullPointerException("Simulated")
-                every { isSuccessful } returns false
-                every { isComplete } returns true
-                every { isCanceled } returns false
-                every { result } returns null
-            }
-
-            every { auth.currentUser } returns fbUser
-            every { fbUser.updateProfile(any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<Void>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.updateUserProfile(profileChange)
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is SendEmailVerificationErrCode.Unknown)
-            verify(exactly = 1) {
-                fbUser.updateProfile(profileChange)
-                task.addOnCompleteListener(any())
-            }
-        }
-
-    //----------------------------------------------------------------------------------------------
-    // Testing observeEmailValidation()
-    //----------------------------------------------------------------------------------------------
-    @Test
-    fun `should return SuccessResult when email is verified`() = runTest {
+    fun `should return Error when sendEmailVerification throws exception`() = runTest {
         // Arrange
-        every { auth.currentUser } returns fbUser
-        every { fbUser.isEmailVerified } returns true
+        coEvery { dataSource.sendEmailVerification() } throws IncompleteTaskException()
 
-        // Act && Arrange
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            authRepository.observeEmailValidation().collect { result ->
-                assertTrue(result is AppResult.Success)
-                verify(exactly = 1) {
-                    auth.currentUser
-                    fbUser.reload()
-                    fbUser.isEmailVerified
-                }
-            }
-        }
+        // Act
+        val result = repository.sendEmailVerification()
 
-    }
-
-    @Test
-    fun `should return ErrorResult when user is not found while verifying email`() = runTest {
-        // Arrange
-        every { auth.currentUser } returns null
-
-        // Act && Arrange
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            authRepository.observeEmailValidation().collect { result ->
-                assertTrue(result is AppResult.Error)
-                assertTrue(result.exception.errorCode is ObserveEmailValidationErrCode.UserNotFound)
-                verify(exactly = 1) {
-                    auth.currentUser
-                }
-                verify(exactly = 0) {
-                    fbUser.reload()
-                    fbUser.isEmailVerified
-                }
-            }
-        }
-
-    }
-
-    @Test
-    fun `should not emit a return when email is not verified`() = runTest {
-        // Arrange
-        every { auth.currentUser } returns fbUser
-        every { fbUser.isEmailVerified } returns false
-
-        // Act && Arrange
-        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            // Check if this exception occurs because the flow should emit nothing
-            assertThrows<NoSuchElementException> {
-                authRepository.observeEmailValidation().first()
-            }
-
-            verify(exactly = 1) {
-                auth.currentUser
-                fbUser.isEmailVerified
-            }
-        }
-
-        advanceTimeBy(200)
-        job.cancel()
-
+        // Assert
+        assertTrue(result is AppResult.Error)
+        assertTrue(
+            (result as AppResult.Error).exception.errorCode is
+                    SendEmailVerificationErrCode.UnsuccessfulTask
+        )
+        coVerify(exactly = 1) { dataSource.sendEmailVerification() }
     }
 
     //----------------------------------------------------------------------------------------------
-    // Testing signIn()
+    // updateUserProfile()
     //----------------------------------------------------------------------------------------------
     @Test
-    fun `should return SuccessResult when signIn works`() = runTest {
+    fun `should return Success when updateUserProfile completes successfully`() = runTest {
         // Arrange
-        val task = mockk<Task<AuthResult>> {
-            every { exception } returns null
-            every { isSuccessful } returns true
-            every { isComplete } returns true
-            every { isCanceled } returns false
-            every { result } returns null
-        }
+        coEvery { dataSource.updateUserProfile(any()) } just Runs
 
-        every { auth.signInWithEmailAndPassword(any(), any()) } returns task
-        every { task.addOnCompleteListener(any()) } answers {
-            val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-            listener.onComplete(task)
-            task
-        }
-
-        // Call
-        val result = authRepository.signIn(email, pass)
+        // Act
+        val result = repository.updateUserProfile(provider.profileChange)
 
         // Assert
         assertTrue(result is AppResult.Success)
-
-        verify(exactly = 1) {
-            auth.signInWithEmailAndPassword(email, pass)
-            task.addOnCompleteListener(any())
-            task.isSuccessful
-        }
-
+        assertEquals(Unit, (result as AppResult.Success).data)
+        coVerify(exactly = 1) { dataSource.updateUserProfile(provider.profileChange) }
     }
 
     @Test
-    fun `should return ErrorResult when signIn throws an exception`() =
-        runTest {
-            // Arrange
-            val task = mockk<Task<AuthResult>> {
-                every { exception } returns NullPointerException("Simulated")
-                every { isSuccessful } returns false
-                every { isComplete } returns false
-                every { isCanceled } returns false
-                every { result.user } returns null
-            }
-
-            every { auth.signInWithEmailAndPassword(any(), any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.signIn(email, pass)
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is SignInErrCode.UnknownError)
-
-            verify(exactly = 1) {
-                auth.signInWithEmailAndPassword(email, pass)
-                task.addOnCompleteListener(any())
-            }
-        }
-
-    @Test
-    fun `should return ErrorResult when signIn task returns as not successful`() =
-        runTest {
-            // Arrange
-            val task = mockk<Task<AuthResult>> {
-                every { exception } returns null
-                every { isSuccessful } returns false
-                every { isComplete } returns false
-                every { isCanceled } returns false
-                every { result.user } returns null
-            }
-
-            every { auth.signInWithEmailAndPassword(any(), any()) } returns task
-            every { task.addOnCompleteListener(any()) } answers {
-                val listener = it.invocation.args[0] as OnCompleteListener<AuthResult>
-                listener.onComplete(task)
-                task
-            }
-
-            // Call
-            val result = authRepository.signIn(email, pass)
-
-            // Assert
-            assertTrue(result is AppResult.Error)
-            assertTrue(result.exception.errorCode is SignInErrCode.UnsuccessfulTask)
-            verify(exactly = 1) {
-                auth.signInWithEmailAndPassword(email, pass)
-                task.addOnCompleteListener(any())
-                task.isSuccessful
-            }
-
-        }
-
-    //----------------------------------------------------------------------------------------------
-    // Testing signOut()
-    //----------------------------------------------------------------------------------------------
-    @Test
-    fun `should call signOut from firebase auth`() {
-        // Call && Assert
-        authRepository.signOut()
-        verify(exactly = 1) { auth.signOut() }
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Testing getCurrentUser()
-    //----------------------------------------------------------------------------------------------
-    @Test
-    fun `should call currentUser from firebase auth`() {
+    fun `should return Error when updateUserProfile throws exception`() = runTest {
         // Arrange
-        every { auth.currentUser } returns fbUser
+        coEvery { dataSource.updateUserProfile(any()) } throws IncompleteTaskException()
 
-        // Call
-        val result = authRepository.getCurrentUser()
+        // Act
+        val result = repository.updateUserProfile(provider.profileChange)
 
         // Assert
-        assertEquals(fbUser, result)
-        verify(exactly = 1) { auth.currentUser }
+        assertTrue(result is AppResult.Error)
+        assertTrue((result as AppResult.Error).exception.errorCode is UpdateUserProfileErrCode.UnsuccessfulTask)
+        coVerify(exactly = 1) { dataSource.updateUserProfile(provider.profileChange) }
     }
+
+    //----------------------------------------------------------------------------------------------
+    // observeEmailValidation()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should return Success when observeEmailValidation completes successfully`() = runTest {
+        // Arrange
+        coEvery { dataSource.observeEmailValidation() } just Runs
+
+        // Act
+        val result = repository.observeEmailValidation()
+
+        // Assert
+        assertTrue(result is AppResult.Success)
+        assertEquals(Unit, (result as AppResult.Success).data)
+        coVerify(exactly = 1) { dataSource.observeEmailValidation() }
+    }
+
+    @Test
+    fun `should return Error when observeEmailValidation throws exception`() = runTest {
+        // Arrange
+        coEvery { dataSource.observeEmailValidation() } throws NullFirebaseUserException()
+
+        // Act
+        val result = repository.observeEmailValidation()
+
+        // Assert
+        assertTrue(result is AppResult.Error)
+        assertTrue((result as AppResult.Error).exception.errorCode is ObserveEmailValidationErrCode.UserNotFound)
+        coVerify(exactly = 1) { dataSource.observeEmailValidation() }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // signIn()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should return Success when signIn completes successfully`() = runTest {
+        // Arrange
+        coEvery { dataSource.signInWithEmail(any(), any()) } just Runs
+
+        // Act
+        val result = repository.signIn(EMAIL, PASS)
+
+        // Assert
+        assertTrue(result is AppResult.Success)
+        assertEquals(Unit, (result as AppResult.Success).data)
+        coVerify(exactly = 1) { dataSource.signInWithEmail(EMAIL, PASS) }
+    }
+
+    @Test
+    fun `should return Error when signIn throws exception`() = runTest {
+        // Arrange
+        coEvery { dataSource.signInWithEmail(any(), any()) } throws IncompleteTaskException()
+
+        // Act
+        val result = repository.signIn(EMAIL, PASS)
+
+        // Assert
+        assertTrue(result is AppResult.Error)
+        assertTrue((result as AppResult.Error).exception.errorCode is SignInErrCode.UnsuccessfulTask)
+        coVerify(exactly = 1) { dataSource.signInWithEmail(EMAIL, PASS) }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // signOut()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should call signOut from dataSource`() {
+        // Act
+        repository.signOut()
+
+        // Assert
+        verify(exactly = 1) { dataSource.signOut() }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // getCurrentUser()
+    //----------------------------------------------------------------------------------------------
+    @Test
+    fun `should return current user from dataSource`() {
+        // Arrange
+        every { dataSource.getCurrentUser() } returns provider.fbUser
+
+        // Act
+        val result = repository.getCurrentUser()
+
+        // Assert
+        assertEquals(provider.fbUser, result)
+        verify(exactly = 1) { dataSource.getCurrentUser() }
+    }
+
+}
+
+private class DataProvider {
+
+    val fbUser: FirebaseUser = mockk(relaxed = true)
+    val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
 
 }

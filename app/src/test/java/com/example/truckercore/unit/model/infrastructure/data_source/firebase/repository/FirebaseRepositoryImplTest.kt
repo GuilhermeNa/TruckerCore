@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.model.infrastructure.database.firebase.repository
+package com.example.truckercore.unit.model.infrastructure.data_source.firebase.repository
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTask

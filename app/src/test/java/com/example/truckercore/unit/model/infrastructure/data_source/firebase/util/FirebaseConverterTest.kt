@@ -1,4 +1,4 @@
-package com.example.truckercore.unit.model.infrastructure.database.firebase.util
+package com.example.truckercore.unit.model.infrastructure.data_source.firebase.util
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseConverter
 import com.example.truckercore.model.modules.user.entity.User

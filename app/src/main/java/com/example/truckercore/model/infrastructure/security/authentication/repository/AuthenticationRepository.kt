@@ -12,7 +12,6 @@ import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface responsible for handling user authentication operations via Firebase Authentication.
@@ -161,10 +160,15 @@ interface AuthenticationRepository {
      *
      * Continuously checks the verification status in a coroutine-safe flow.
      *
-     * @return A [Flow] emitting:
-     * - [AppResult.Success] if the email has been verified
-     * - [AppResponse.Error] with [ObserveEmailValidationErrCode] on failure
+     * @return [AppResult.Success] if the email has been verified
      *
+     * [AppResponse.Error] with [ObserveEmailValidationErrCode] on failure
+     *
+     * Possible error codes:
+     *
+     * - [ObserveEmailValidationErrCode.UserNotFound] If the logged user is not found.
+     *
+     * **Example:**
      * ```kotlin
      * repository.observeEmailValidation().collect { response ->
      *     when (response) {
@@ -174,6 +178,6 @@ interface AuthenticationRepository {
      * }
      * ```
      */
-    fun observeEmailValidation(): Flow<AppResult<Unit>>
+    suspend fun observeEmailValidation(): AppResult<Unit>
 
 }

@@ -1,26 +1,21 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.auth
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.expressions.awaitSuccessOrThrow
 import com.example.truckercore.model.infrastructure.security.authentication.exceptions.NullFirebaseUserException
-import com.example.truckercore.model.shared.utils.expressions.logInfo
+import com.example.truckercore.model.shared.utils.expressions.cancelJob
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class FirebaseAuthDataSourceImpl(
-    private val auth: FirebaseAuth,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : FirebaseAuthDataSource {
+class FirebaseAuthDataSourceImpl(private val auth: FirebaseAuth) : FirebaseAuthDataSource {
 
     override suspend fun createUserWithEmail(email: String, password: String): FirebaseUser =
         suspendCoroutine { cont ->
@@ -32,86 +27,52 @@ class FirebaseAuthDataSourceImpl(
                 }
                 if (taskResult.isSuccessful) taskResult.result.user?.let { fbUser ->
                     cont.resume(fbUser)
-                } ?: cont.resumeWithException(NullFirebaseUserException())
+                } ?: cont.resumeWithException(IncompleteTaskException())
             }
         }
 
-    override suspend fun sendEmailVerification(): Unit = suspendCoroutine { cont ->
-        val fbUser = getCurrentUser()
-        if (fbUser == null) {
-            cont.resumeWithException(NullFirebaseUserException())
-            return@suspendCoroutine
-        }
-
+    override suspend fun sendEmailVerification() {
+        val fbUser = getCurrentUser() ?: throw NullFirebaseUserException()
         val task = fbUser.sendEmailVerification()
-        task.addOnCompleteListener { taskResult ->
-            taskResult.exception?.let { e ->
-                cont.resumeWithException(e)
-                return@addOnCompleteListener
-            }
-            if (task.isSuccessful) cont.resume(Unit)
-            else cont.resumeWithException(IncompleteTaskException())
-        }
-
+        task.awaitSuccessOrThrow()
     }
 
-    override suspend fun updateUserProfile(profile: UserProfileChangeRequest): Unit =
-        suspendCoroutine { cont ->
-            val fbUser = getCurrentUser()
-            if (fbUser == null) {
-                cont.resumeWithException(NullFirebaseUserException())
-                return@suspendCoroutine
-            }
+    override suspend fun updateUserProfile(profile: UserProfileChangeRequest) {
+        val fbUser = getCurrentUser() ?: throw NullFirebaseUserException()
+        val task = fbUser.updateProfile(profile)
+        task.awaitSuccessOrThrow()
+    }
 
-            val task = fbUser.updateProfile(profile)
-            task.addOnCompleteListener { taskResult ->
-                taskResult.exception?.let { e ->
-                    cont.resumeWithException(e)
-                    return@addOnCompleteListener
-                }
-                if (taskResult.isSuccessful) cont.resume(Unit)
-                else cont.resumeWithException(IncompleteTaskException())
-            }
-
-        }
-
-    override suspend fun signInWithEmail(email: String, password: String): Unit =
-        suspendCoroutine { cont ->
-            val task = auth.signInWithEmailAndPassword(email, password)
-            task.addOnCompleteListener { taskResult ->
-                taskResult.exception?.let { e ->
-                    cont.resumeWithException(e)
-                    return@addOnCompleteListener
-                }
-                if (taskResult.isSuccessful) cont.resume(Unit)
-                else cont.resumeWithException(IncompleteTaskException())
-            }
-        }
+    override suspend fun signInWithEmail(email: String, password: String) {
+        val task = auth.signInWithEmailAndPassword(email, password)
+        task.awaitSuccessOrThrow()
+    }
 
     override fun signOut() = auth.signOut()
 
     override fun getCurrentUser(): FirebaseUser? = auth.currentUser
 
-    override suspend fun observeEmailValidation(): Unit = suspendCancellableCoroutine { cont ->
-        val fbUser = getCurrentUser()
-        if (fbUser == null) {
-            cont.resumeWithException(NullFirebaseUserException())
-            return@suspendCancellableCoroutine
-        }
+    override suspend fun observeEmailValidation() {
+        val fbUser = getCurrentUser() ?: throw NullFirebaseUserException()
 
-        val job = CoroutineScope(dispatcher).launch {
-            while (isActive) {
-                delay(1000)
-                fbUser.reload()
+        suspendCoroutine { cont ->
+            // Launches a coroutine tied to the caller's context.
+            // This ensures that the job is automatically cancelled with caller context.
+            CoroutineScope(cont.context).launch {
+                while (isActive) {
+                    delay(1000)
+                    fbUser.reload()
+                    if (fbUser.isEmailVerified) {
+                        cont.resume(Unit)
 
-                if (fbUser.isEmailVerified) {
-                    cont.resume(Unit)
-                    logInfo("FirebaseAuthDataSourceImpl: Loop rodando")
+                        // Cancel CoroutineScope Job.
+                        // Because the caller context may not be canceled after this completion.
+                        cancelJob()
+                    }
                 }
             }
         }
 
-        cont.invokeOnCancellation { job.cancel() }
     }
 
 }

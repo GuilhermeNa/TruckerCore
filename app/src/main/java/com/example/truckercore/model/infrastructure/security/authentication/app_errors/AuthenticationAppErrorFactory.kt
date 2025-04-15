@@ -1,5 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.app_errors
 
+import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.EmailCredentialErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.exceptions.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
@@ -50,11 +51,11 @@ object AuthenticationAppErrorFactory : ErrorFactory {
      */
     fun handleCreateUserWithEmailError(e: Throwable? = null): AuthenticationAppException {
         val code = when (e) {
+            is IncompleteTaskException -> NewEmailErrCode.UnsuccessfulTask
             is FirebaseAuthWeakPasswordException -> NewEmailErrCode.InvalidCredentials
             is FirebaseAuthInvalidCredentialsException -> NewEmailErrCode.InvalidCredentials
             is FirebaseAuthUserCollisionException -> NewEmailErrCode.AccountCollision
             is FirebaseNetworkException -> NewEmailErrCode.Network
-            null -> NewEmailErrCode.UnsuccessfulTask
             else -> NewEmailErrCode.Unknown
         }
 
@@ -81,7 +82,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
     fun handleSendEmailVerificationError(e: Throwable? = null): AuthenticationAppException {
         val code = when (e) {
             is NullFirebaseUserException -> SendEmailVerificationErrCode.UserNotFound
-            null -> SendEmailVerificationErrCode.UnsuccessfulTask
+            is IncompleteTaskException -> SendEmailVerificationErrCode.UnsuccessfulTask
             else -> SendEmailVerificationErrCode.Unknown
         }
 
@@ -112,7 +113,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
         val code = when (e) {
             is FirebaseNetworkException -> UpdateUserProfileErrCode.Network
             is NullFirebaseUserException -> UpdateUserProfileErrCode.UserNotFound
-            null -> UpdateUserProfileErrCode.UnsuccessfulTask
+            is IncompleteTaskException -> UpdateUserProfileErrCode.UnsuccessfulTask
             else -> UpdateUserProfileErrCode.Unknown
         }
 
