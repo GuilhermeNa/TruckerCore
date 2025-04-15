@@ -155,8 +155,12 @@ private class ErrorHandler {
         val errorMap = hashMapOf<EmailAuthFragError, String>()
 
         when {
-            errorSet.any { it is FirebaseNetworkException } -> errorMap[NetworkError] = NETWORK_ERROR_MESSAGE
-            errorSet.any { it is FirebaseAuthUserCollisionException } -> errorMap[InvalidEmailError] = EMAIL_ALREADY_EXISTS_MESSAGE
+            errorSet.any { it is FirebaseNetworkException } -> errorMap[NetworkError] =
+                NETWORK_ERROR_MESSAGE
+
+            errorSet.any { it is FirebaseAuthUserCollisionException } -> errorMap[InvalidEmailError] =
+                EMAIL_ALREADY_EXISTS_MESSAGE
+
             else -> errorMap[UnknownError] = UNKNOWN_ERROR_MESSAGE
         }
 

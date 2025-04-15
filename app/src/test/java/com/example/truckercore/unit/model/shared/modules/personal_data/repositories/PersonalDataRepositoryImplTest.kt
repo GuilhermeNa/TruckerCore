@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.shared.modules.personal_data.reposito
 
 import com.example.truckercore._test_data_provider.TestPersonalDataDataProvider
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.shared.modules.personal_data.dto.PersonalDataDto
 import com.example.truckercore.model.shared.modules.personal_data.repository.PersonalDataRepository
 import com.example.truckercore.model.shared.modules.personal_data.repository.PersonalDataRepositoryImpl

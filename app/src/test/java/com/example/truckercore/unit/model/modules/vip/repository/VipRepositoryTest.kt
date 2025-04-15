@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.modules.vip.repository
 
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.vip.dto.VipDto
 import com.example.truckercore.model.modules.vip.repository.VipRepository
 import com.example.truckercore.model.modules.vip.repository.VipRepositoryImpl

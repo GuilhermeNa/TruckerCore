@@ -1,15 +1,15 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
+import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.SendVerificationEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateNewSystemAccessUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.GetSessionInfoUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.auth.PhoneAuthCredential
 import io.mockk.coEvery
@@ -29,7 +29,7 @@ import kotlin.test.assertTrue
 
 class AuthServiceImplTest : KoinTest {
 
-    private val authRepo: FirebaseAuthRepository by inject()
+    private val authRepo: AuthenticationRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
     private val getSessionInfo: GetSessionInfoUseCase by inject()
     private val sendEmail: SendVerificationEmailUseCase by inject()
@@ -43,7 +43,7 @@ class AuthServiceImplTest : KoinTest {
             modules(
                 module {
                     single<GetSessionInfoUseCase> { mockk() }
-                    single<FirebaseAuthRepository> { mockk() }
+                    single<AuthenticationRepository> { mockk() }
                     single<CreateNewSystemAccessUseCase> { mockk() }
                     single<CreateUserAndVerifyEmailUseCase> { mockk() }
                     single<SendVerificationEmailUseCase> {  mockk() }

@@ -1,14 +1,13 @@
 package com.example.truckercore.unit.model.modules.notification.repository
 
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.notification.dto.NotificationDto
 import com.example.truckercore.model.modules.notification.repository.NotificationRepository
 import com.example.truckercore.model.modules.notification.repository.NotificationRepositoryImpl
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

@@ -21,28 +21,9 @@ internal class Test {
     @Test
     fun test() {
 
-        getError().handleResponseAndConsume(
-            success = ::handleSuccess,
-            empty = ::handleEmpty,
-            error = ::handleError
-        )
+      
 
     }
 
-    fun handleEmpty() {
-        println("empty")
-    }
-
-    fun handleError(exception: Exception) {
-        println(exception)
-    }
-
-    fun handleSuccess(s: String) {
-        println(s)
-    }
-
-    fun getSuccess() = Response.Success("1")
-
-    fun getError() = Response.Error(NullPointerException())
 
 }

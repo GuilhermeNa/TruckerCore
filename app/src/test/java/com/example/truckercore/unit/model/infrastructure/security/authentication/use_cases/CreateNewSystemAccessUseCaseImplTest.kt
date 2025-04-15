@@ -1,15 +1,14 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.use_cases
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateNewSystemAccessUseCaseImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.CreateNewSystemAccessUseCaseImpl
 import com.example.truckercore.model.modules.business_central.factory.BusinessCentralFactory
 import com.example.truckercore.model.modules.person.employee.admin.factory.AdminFactory
 import com.example.truckercore.model.modules.person.employee.driver.factory.DriverFactory
 import com.example.truckercore.model.modules.user.enums.PersonCategory
 import com.example.truckercore.model.modules.user.factory.UserFactory
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

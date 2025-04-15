@@ -68,9 +68,6 @@
         android:label="fragment_verifying_email"
         tools:layout="@layout/fragment_verifying_email" >
         <argument
-            android:name="emailSent"
-            app:argType="boolean" />
-        <argument
             android:name="email"
             app:argType="string" />
         <action

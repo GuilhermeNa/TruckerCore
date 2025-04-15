@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.modules.person.employee.admin.reposit
 
 import com.example.truckercore._test_data_provider.TestAdminDataProvider
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
 import com.example.truckercore.model.modules.person.employee.admin.repository.AdminRepository
 import com.example.truckercore.model.modules.person.employee.admin.repository.AdminRepositoryImpl

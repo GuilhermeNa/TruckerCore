@@ -7,6 +7,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.enti
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.example.truckercore.view_model.states.SplashFragState
 import com.example.truckercore.view_model.states.SplashFragState.Error
 import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn

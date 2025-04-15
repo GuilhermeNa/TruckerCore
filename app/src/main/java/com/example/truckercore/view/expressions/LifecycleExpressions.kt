@@ -35,7 +35,7 @@ fun <T> LifecycleOwner.collectOnStarted(
     }
 }
 
-fun Lifecycle.State.execute(
+fun Lifecycle.State.executeOnState(
     onViewResumed: () -> Unit = {},
     onViewCreating: () -> Unit = {}
 ) {

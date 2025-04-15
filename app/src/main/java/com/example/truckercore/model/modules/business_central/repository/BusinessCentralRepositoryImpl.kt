@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.business_central.repository
 
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.model.shared.abstractions.Repository
 import com.example.truckercore.model.shared.interfaces.Dto

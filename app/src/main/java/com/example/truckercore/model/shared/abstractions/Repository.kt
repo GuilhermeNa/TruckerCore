@@ -1,6 +1,6 @@
 package com.example.truckercore.model.shared.abstractions
 
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.shared.utils.parameters.SearchParameters
 
 /**

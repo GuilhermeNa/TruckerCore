@@ -2,12 +2,11 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseAuthRepository
+import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.CreateUserAndVerifyEmailUseCaseImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.CreateUserAndVerifyEmailUseCaseImpl
 import com.example.truckercore.model.shared.errors.InvalidStateException
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.example.truckercore.model.shared.task_manager.TaskManagerImpl
 import com.example.truckercore.model.shared.task_manager.TaskManager
@@ -32,7 +31,7 @@ import org.koin.test.inject
 class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
     // Injections
-    private val authRepo: FirebaseAuthRepository by inject()
+    private val authRepo: AuthenticationRepository by inject()
     private val useCase: CreateUserAndVerifyEmailUseCase by inject()
 
     // Data
@@ -50,7 +49,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         startKoin {
             modules(
                 module {
-                    single<FirebaseAuthRepository> { mockk(relaxed = true) }
+                    single<AuthenticationRepository> { mockk(relaxed = true) }
                     factory<TaskManager<Any>> { TaskManagerImpl() }
                     single<CreateUserAndVerifyEmailUseCase> {
                         CreateUserAndVerifyEmailUseCaseImpl(

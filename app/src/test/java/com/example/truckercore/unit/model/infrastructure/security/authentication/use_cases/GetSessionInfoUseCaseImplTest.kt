@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.use_cases
 
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.GetSessionInfoUseCaseImpl
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.GetSessionInfoUseCase
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.GetSessionInfoUseCaseImpl
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.modules.business_central.use_cases.interfaces.GetBusinessCentralUseCase
 import com.example.truckercore.model.modules.person.shared.person_details.GetPersonWithDetailsUseCase
@@ -13,7 +13,6 @@ import com.example.truckercore.model.modules.vip.entity.Vip
 import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

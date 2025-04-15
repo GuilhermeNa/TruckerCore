@@ -1,5 +1,9 @@
 package com.example.truckercore.model.infrastructure.security.authentication.entity
 
+import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
+import com.example.truckercore.model.infrastructure.security.authentication.exceptions.InvalidEmailException
+import com.example.truckercore.model.infrastructure.security.authentication.exceptions.InvalidNameException
+import com.example.truckercore.model.infrastructure.security.authentication.exceptions.InvalidPasswordException
 import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFirstChar
@@ -30,9 +34,14 @@ class EmailAuthCredential private constructor() {
      * @param password The user's password.
      */
     constructor(name: String, email: String, password: String) : this() {
-        this._name = validateName(name)
-        this._email = validateEmail(email)
-        this._password = validatePassword(password).toHash()
+        try {
+            this._name = validateName(name)
+            this._email = validateEmail(email)
+            this._password = validatePassword(password).toHash()
+        } catch (e: Exception) {
+            val exception = AuthenticationAppErrorFactory.handleEmailCredentialError(e)
+            throw exception
+        }
     }
 
     /**
@@ -46,8 +55,12 @@ class EmailAuthCredential private constructor() {
      * @throws WrongNameFormatException If any word in the username contains invalid characters (e.g., numbers or special symbols).
      */
     private fun validateName(name: String): String {
-        name.validateUserName()
-        return name.trimStart().trimEnd().capitalizeEveryFirstChar()
+        return try {
+            name.validateUserName()
+            name.trimStart().trimEnd().capitalizeEveryFirstChar()
+        } catch (e: Exception){
+            throw InvalidNameException(message = e.message, cause = e)
+        }
     }
 
     /**

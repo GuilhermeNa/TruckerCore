@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.modules.business_central.repository
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.model.modules.business_central.repository.BusinessCentralRepository
 import com.example.truckercore.model.modules.business_central.repository.BusinessCentralRepositoryImpl

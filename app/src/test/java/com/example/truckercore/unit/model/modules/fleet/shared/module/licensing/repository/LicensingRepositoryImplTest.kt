@@ -2,8 +2,8 @@ package com.example.truckercore.unit.model.modules.fleet.shared.module.licensing
 
 import com.example.truckercore._test_data_provider.TestLicensingDataProvider
 import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.database.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.database.firebase.util.FirebaseRequest
+import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
+import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepository
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.repository.LicensingRepositoryImpl
 import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
