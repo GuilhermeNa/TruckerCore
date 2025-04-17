@@ -2,7 +2,6 @@ package com.example.truckercore._test_data_provider
 
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
-import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 

@@ -1,7 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.util
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.infrastructure.util.ExceptionHandler
 import com.example.truckercore.model.shared.errors.UnknownErrorException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

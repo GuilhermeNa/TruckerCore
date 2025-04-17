@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.repository
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
@@ -8,7 +8,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.app_
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SendEmailVerificationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SignInErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
-import com.example.truckercore.model.infrastructure.security.authentication.exceptions.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.exceptions.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepositoryImpl
 import com.example.truckercore.model.shared.utils.sealeds.AppResult

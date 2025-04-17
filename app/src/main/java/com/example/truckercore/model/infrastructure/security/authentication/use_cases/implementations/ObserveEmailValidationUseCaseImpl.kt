@@ -9,6 +9,6 @@ class ObserveEmailValidationUseCaseImpl(
     private val authenticationRepository: AuthenticationRepository
 ): ObserveEmailValidationUseCase {
 
-    override fun invoke(): Flow<AppResult<Unit>> = authenticationRepository.observeEmailValidation()
+    override suspend fun invoke(): AppResult<Unit> = authenticationRepository.observeEmailValidation()
 
 }

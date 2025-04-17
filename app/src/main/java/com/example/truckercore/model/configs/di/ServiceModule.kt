@@ -1,17 +1,13 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.util.ExceptionHandler
-import com.example.truckercore.model.modules.business_central.validator.BusinessCentralValidationStrategy
 import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
 import com.example.truckercore.model.shared.services.ValidatorService
 import org.koin.dsl.module
 
 val serviceModule = module {
-    single { ExceptionHandler() }
-
     single<ValidatorStrategyResolver> { ValidatorStrategyResolver() }
-    single<ValidatorStrategy> { BusinessCentralValidationStrategy() }
+    single<ValidatorStrategy> { com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy() }
 
     // Singleton instance of ValidatorService is provided, initialized with two dependencies:
     // - The ValidatorStrategyResolver: Responsible for resolving the correct strategy at runtime.

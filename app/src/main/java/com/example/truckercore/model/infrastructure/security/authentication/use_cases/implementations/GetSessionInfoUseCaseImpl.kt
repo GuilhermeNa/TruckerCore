@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations
 
-import com.example.truckercore.model.configs.app_constants.Field
+import com.example.truckercore.model.configs.constants.Field
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.GetSessionInfoUseCase
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
@@ -9,7 +9,7 @@ import com.example.truckercore.model.modules.person.shared.person_details.GetPer
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.modules.user.use_cases.interfaces.GetUserUseCase
-import com.example.truckercore.model.modules.vip.entity.Vip
+import com.example.truckercore.model.modules.vip.data.Vip
 import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseCase
 import com.example.truckercore.model.shared.enums.QueryType
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException

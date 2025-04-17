@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.util
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseConversionException
+import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseMappingException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 
@@ -20,7 +20,7 @@ internal class FirebaseConverter {
      * @return A [Response] containing:
      * - [Response.Success] with a list of [T] if the query contains documents.
      * - [Response.Empty] if the snapshot contains no documents.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
+     * @throws FirebaseMappingException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T> processQuerySnapShot(
         querySnapShot: QuerySnapshot,
@@ -42,7 +42,7 @@ internal class FirebaseConverter {
      * @return A [Response] containing:
      * - [Response.Success] with the [T] object if the document exists.
      * - [Response.Empty] if the document does not exist.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
+     * @throws FirebaseMappingException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T> processDocumentSnapShot(
         documentSnapShot: DocumentSnapshot,
@@ -62,7 +62,7 @@ internal class FirebaseConverter {
      * @param query The Firestore query snapshot to be converted.
      * @param clazz The class type of the DTO to map the document data into.
      * @return A list of [T] objects converted from the documents in the snapshot.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
+     * @throws FirebaseMappingException If the document snapshot cannot be converted into the specified DTO class.
      */
     private fun <T> convertToList(
         query: QuerySnapshot,
@@ -80,12 +80,12 @@ internal class FirebaseConverter {
      * @param document The Firestore document snapshot to be converted.
      * @param clazz The class type of the DTO to map the document data into.
      * @return The converted [T] object.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
+     * @throws FirebaseMappingException If the document snapshot cannot be converted into the specified DTO class.
      */
     private fun <T> convertObject(
         document: DocumentSnapshot,
         clazz: Class<T>
-    ): T = document.toObject(clazz) ?: throw FirebaseConversionException(
+    ): T = document.toObject(clazz) ?: throw FirebaseMappingException(
         "DocumentSnapshot can't be converted into a DTO class: (${clazz.simpleName})."
     )
 

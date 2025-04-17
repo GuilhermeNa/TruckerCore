@@ -1,12 +1,11 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.repository
 
-import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseConverter
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseQueryBuilder
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.user.dto.UserDto
-import com.example.truckercore.model.shared.interfaces.Dto
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction

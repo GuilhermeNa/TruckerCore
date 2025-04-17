@@ -1,7 +1,5 @@
 package com.example.truckercore.model.shared.abstractions
 
-import com.example.truckercore.model.shared.interfaces.Dto
-import com.example.truckercore.model.shared.interfaces.Entity
 import com.example.truckercore.model.shared.interfaces.ValidatorStrategyI
 
 /**

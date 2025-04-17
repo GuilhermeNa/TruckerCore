@@ -1,9 +1,7 @@
 package com.example.truckercore.unit.model.shared.validators
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
-import com.example.truckercore.model.modules.business_central.validator.BusinessCentralValidationStrategy
 import com.example.truckercore.model.shared.errors.strategy.StrategyNotFoundException
-import com.example.truckercore.model.shared.interfaces.Dto
 import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
 import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -26,7 +24,7 @@ internal class ValidatorStrategyResolverTest {
         val strategy = resolver.execute(dtoInput)
 
         // Assert
-        assert(strategy is BusinessCentralValidationStrategy)
+        assert(strategy is com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy)
     }
 
     @Test
@@ -40,7 +38,7 @@ internal class ValidatorStrategyResolverTest {
         val strategy = resolver.execute(entityInput)
 
         // Assert
-        assert(strategy is BusinessCentralValidationStrategy)
+        assert(strategy is com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy)
     }
 
     @Test

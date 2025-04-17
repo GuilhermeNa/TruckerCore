@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.shared.task_manager
 
-import com.example.truckercore.model.shared.task_manager.TaskManager
-import com.example.truckercore.model.shared.task_manager.TaskManagerImpl
+import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManager
+import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManagerImpl
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

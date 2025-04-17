@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.shared.utils.parameters
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.configs.app_constants.Field
+import com.example.truckercore.model.configs.constants.Field
 import com.example.truckercore.model.shared.enums.QueryType
 import com.example.truckercore.model.shared.errors.search_params.InvalidQuerySettingsException
 import com.example.truckercore.model.shared.utils.parameters.QuerySettings

@@ -6,7 +6,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Lifecycle
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.model.configs.app_constants.Tag
+import com.example.truckercore.model.configs.constants.Tag
 import com.example.truckercore.view.dialogs.LoadingDialog
 import com.example.truckercore.view.expressions.showSnackBarRed
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError

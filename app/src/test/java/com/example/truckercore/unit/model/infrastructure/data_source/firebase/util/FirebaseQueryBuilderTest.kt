@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.util
 
-import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.configs.app_constants.Field
+import com.example.truckercore.model.configs.constants.Collection
+import com.example.truckercore.model.configs.constants.Field
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseQueryBuilder
 import com.example.truckercore.model.shared.enums.QueryType
 import com.example.truckercore.model.shared.utils.parameters.QuerySettings

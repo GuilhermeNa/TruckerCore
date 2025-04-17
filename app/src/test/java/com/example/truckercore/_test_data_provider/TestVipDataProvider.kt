@@ -1,8 +1,7 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.model.modules.vip.dto.VipDto
-import com.example.truckercore.model.modules.vip.entity.Vip
-import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.modules.vip.data.VipDto
+import com.example.truckercore.model.modules.vip.data.Vip
 import com.example.truckercore.model.shared.utils.expressions.toDate
 import java.time.LocalDateTime
 import java.util.Date
@@ -16,8 +15,8 @@ internal object TestVipDataProvider {
         creationDate = LocalDateTime.now(),
         lastUpdate = LocalDateTime.now(),
         persistenceStatus = PersistenceStatus.PERSISTED,
-        vipStart = LocalDateTime.now(),
-        vipEnd = LocalDateTime.now().plusDays(30),
+        vipSince = LocalDateTime.now(),
+        vipUntil = LocalDateTime.now().plusDays(30),
         notificationDate = LocalDateTime.now().plusDays(20),
         userId = "userId",
         isActive = true

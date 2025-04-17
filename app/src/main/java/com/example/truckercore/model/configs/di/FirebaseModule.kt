@@ -1,7 +1,7 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSource
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSourceImpl
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSourceImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepositoryImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseConverter

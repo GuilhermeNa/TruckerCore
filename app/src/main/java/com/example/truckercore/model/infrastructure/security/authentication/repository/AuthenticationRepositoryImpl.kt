@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.repository
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.google.firebase.auth.FirebaseUser

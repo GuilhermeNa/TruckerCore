@@ -3,7 +3,6 @@ package com.example.truckercore._test_data_provider
 import com.example.truckercore.model.modules.fleet.truck.dto.TruckDto
 import com.example.truckercore.model.modules.fleet.truck.entity.Truck
 import com.example.truckercore.model.modules.fleet.truck.enums.TruckBrand
-import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 

@@ -1,7 +1,7 @@
 package com.example.truckercore.model.shared.utils.expressions
 
 import android.util.Log
-import com.example.truckercore.model.configs.app_constants.Tag
+import com.example.truckercore.model.configs.constants.Tag
 import com.hbb20.BuildConfig
 
 fun Any.logInfo(message: String) {

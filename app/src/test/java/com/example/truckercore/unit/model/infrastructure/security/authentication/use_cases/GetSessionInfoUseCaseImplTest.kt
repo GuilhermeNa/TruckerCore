@@ -9,7 +9,7 @@ import com.example.truckercore.model.modules.person.shared.person_details.GetPer
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.modules.user.use_cases.interfaces.GetUserUseCase
-import com.example.truckercore.model.modules.vip.entity.Vip
+import com.example.truckercore.model.modules.vip.data.Vip
 import com.example.truckercore.model.modules.vip.use_cases.interfaces.GetVipUseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters

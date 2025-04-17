@@ -1,11 +1,11 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations
 
-import com.example.truckercore.model.configs.app_constants.EarlyExit
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.configs.constants.EarlyExit
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
-import com.example.truckercore.model.shared.task_manager.TaskManager
+import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManager
 import com.example.truckercore.model.shared.utils.expressions.handleAppResult
 import com.example.truckercore.model.shared.utils.expressions.logError
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
@@ -23,7 +23,7 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
     private val emailTask: TaskManager<Unit>,
 ) : CreateUserAndVerifyEmailUseCase {
 
-    override suspend fun invoke(credential: EmailAuthCredential): NewEmailResult {
+    override suspend fun invoke(credential: EmailCredential): NewEmailResult {
         return try {
             // Try creating the user and exit early if failed
             createUser(credential).onEarlyExit { return getResult() }
@@ -44,8 +44,8 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
         }
     }
 
-    private suspend fun createUser(credential: EmailAuthCredential): EarlyExit {
-        return authRepository.createUserWithEmail(credential.email, credential.password)
+    private suspend fun createUser(credential: EmailCredential): EarlyExit {
+        return authRepository.createUserWithEmail(credential.email.value, credential.password.value)
             .mapAppResult(
                 success = { fbUser ->
                     // Mark the task as successful with the Firebase user
@@ -60,15 +60,15 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
             )
     }
 
-    private suspend fun updateNameAndSendEmailAsync(credential: EmailAuthCredential): Unit =
+    private suspend fun updateNameAndSendEmailAsync(credential: EmailCredential): Unit =
         coroutineScope {
             val nameDef = async { updateName(credential) }
             val emailDef = async { sendEmail() }
             joinAll(nameDef, emailDef)
         }
 
-    private suspend fun updateName(credential: EmailAuthCredential) {
-        val request = userProfileChangeRequest { displayName = credential.name }
+    private suspend fun updateName(credential: EmailCredential) {
+        val request = userProfileChangeRequest { displayName = credential.name.value }
 
         authRepository.updateUserProfile(request).handleAppResult(
             success = { nameTask.onSuccess(Unit) },

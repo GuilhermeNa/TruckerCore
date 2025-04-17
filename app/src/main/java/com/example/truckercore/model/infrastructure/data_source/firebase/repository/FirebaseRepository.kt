@@ -1,12 +1,11 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.repository
 
-import com.example.truckercore.model.configs.app_constants.Collection
-import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseConversionException
+import com.example.truckercore.model.configs.constants.Collection
+import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseMappingException
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseRequestException
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.user.dto.UserDto
-import com.example.truckercore.model.shared.interfaces.Dto
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction
@@ -110,7 +109,7 @@ internal interface FirebaseRepository {
      *  - [AppResponse.Success] that represents the fetched document.
      *  - [AppResponse.Empty] if the document does not exist.
      * @throws FirebaseRequestException If the Firebase request is invalid or malformed.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
+     * @throws FirebaseMappingException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T : Dto> documentFetch(firebaseRequest: FirebaseRequest<T>): Flow<AppResponse<T>>
 
@@ -123,7 +122,7 @@ internal interface FirebaseRepository {
      *  - [AppResponse.Success] representing the list of fetched documents.
      * - [AppResponse.Empty] if the document does not exist.
      * @throws FirebaseRequestException If the Firebase request is invalid or malformed.
-     * @throws FirebaseConversionException If the document snapshot cannot be converted into the specified DTO class.
+     * @throws FirebaseMappingException If the document snapshot cannot be converted into the specified DTO class.
      */
     fun <T : Dto> queryFetch(firebaseRequest: FirebaseRequest<T>): Flow<AppResponse<List<T>>>
 

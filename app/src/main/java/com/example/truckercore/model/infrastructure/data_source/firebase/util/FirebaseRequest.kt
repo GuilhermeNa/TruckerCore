@@ -1,8 +1,7 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.util
 
-import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseRequestException
-import com.example.truckercore.model.shared.interfaces.Dto
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.SearchParameters

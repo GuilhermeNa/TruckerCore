@@ -1,9 +1,9 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSource
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthDataSourceImpl
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSourceImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
-import com.example.truckercore.model.infrastructure.security.authentication.exceptions.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.data_source.firebase._auth.exceptions.NullFirebaseUserException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

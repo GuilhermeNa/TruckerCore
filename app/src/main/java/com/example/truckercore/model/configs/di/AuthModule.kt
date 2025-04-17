@@ -19,7 +19,7 @@ import org.koin.dsl.module
 
 val authModule = module {
     single { AuthenticationAppErrorFactory }
-    single<AuthService> { AuthServiceImpl(get(), get(), get(), get(), get()) }
+    single<AuthService> { AuthServiceImpl(get(), get(), get(), get()) }
     single<CreateNewSystemAccessUseCase> {
         CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get())
     }

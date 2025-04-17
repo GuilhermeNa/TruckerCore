@@ -2,7 +2,7 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
@@ -62,16 +62,16 @@ class AuthServiceImplTest : KoinTest {
     fun `should call auth repository for authenticate credentials`() = runTest {
         // Arrange
         val emailResult: NewEmailResult = mockk()
-        val emailAuthCredential: EmailAuthCredential = mockk(relaxed = true)
+        val emailCredential: EmailCredential = mockk(relaxed = true)
 
         coEvery { createAndVerifyUser(any()) } returns emailResult
 
         // Call
-        val result = service.createUserAndVerifyEmail(emailAuthCredential)
+        val result = service.createUserAndVerifyEmail(emailCredential)
 
         // Assertions
         assertEquals(result, emailResult)
-        coVerify(exactly = 1) { createAndVerifyUser(emailAuthCredential) }
+        coVerify(exactly = 1) { createAndVerifyUser(emailCredential) }
     }
 
     @Test

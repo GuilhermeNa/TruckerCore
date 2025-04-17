@@ -16,6 +16,6 @@ interface ObserveEmailValidationUseCase {
      *
      * @see [AuthenticationRepository.observeEmailValidation]
      */
-    operator fun invoke(): Flow<AppResult<Unit>>
+    suspend operator fun invoke(): AppResult<Unit>
 
 }

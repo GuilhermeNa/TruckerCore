@@ -1,6 +1,6 @@
 package com.example.truckercore.model.shared.utils.expressions
 
-import com.example.truckercore.model.configs.app_constants.EarlyExit
+import com.example.truckercore.model.configs.constants.EarlyExit
 
 /**
  * Extension function for the [EarlyExit] class that executes the provided [block]

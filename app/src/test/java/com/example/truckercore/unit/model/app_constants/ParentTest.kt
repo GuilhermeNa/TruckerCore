@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.app_constants
 
-import com.example.truckercore.model.configs.app_constants.Parent
+import com.example.truckercore.model.configs.constants.Parent
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

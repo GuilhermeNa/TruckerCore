@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.service
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
@@ -23,7 +23,7 @@ interface AuthService {
      * Invokes the use case to create a new user and send the verification email.
      * @see [CreateUserAndVerifyEmailUseCase.invoke]
      */
-    suspend fun createUserAndVerifyEmail(credential: EmailAuthCredential): NewEmailResult
+    suspend fun createUserAndVerifyEmail(credential: EmailCredential): NewEmailResult
 
     /**
      * Invokes the use case to send a verification email to the current Firebase user.
@@ -35,7 +35,7 @@ interface AuthService {
      * Invokes the use case to observe the email validation.
      * @see ObserveEmailValidationUseCase.invoke
      */
-    fun observeEmailValidation(): Flow<AppResult<Unit>>
+    suspend fun observeEmailValidation(): AppResult<Unit>
 
     /**
      *  Checks if there is a currently logged-in user.

@@ -22,32 +22,6 @@ fun String.capitalizeEveryFirstChar(): String {
     return upperCaseArr.joinToString(" ")
 }
 
-/**
- * Formats a full name string so that each word is properly capitalized,
- * while handling small words (like prepositions or articles) differently.
- *
- * - Words with more than 2 characters will have the first character capitalized
- *   and the rest in lowercase.
- * - Words with 2 or fewer characters (e.g., "de", "da") will be fully lowercased.
- * - Leading and trailing spaces are removed.
- *
- * This is useful for formatting personal names, where certain particles should
- * remain in lowercase while others are capitalized properly.
- *
- * Example:
- * ```
- * "joão DA silva".toCompleteNameFormat() // Returns "João da Silva"
- * ```
- *
- * @return A string formatted as a properly capitalized full name.
- */
-fun String.toCompleteNameFormat(): String {
-    return trim().split(Regex("\\s+")) // Evita strings vazias se houver múltiplos espaços
-        .joinToString(" ") { word ->
-            if (word.length <= 2) word.lowercase()
-            else word.lowercase().replaceFirstChar { it.titlecase() }
-        }
-}
 
 /**
  * Extension function to check if the string is in a valid name format (only alphabetic characters).
@@ -59,6 +33,9 @@ fun String.toCompleteNameFormat(): String {
  * @return `true` if the string contains only alphabetic characters; `false` otherwise.
  */
 fun String.isNameFormat(): Boolean = this.matches("[\\p{L} ]+".toRegex())
+
+
+
 
 /**
  * Extension function to check if the string is in a valid email format.

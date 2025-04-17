@@ -2,7 +2,7 @@ package com.example.truckercore.unit.model.infrastructure.data_source.firebase.r
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTask
-import com.example.truckercore.model.configs.app_constants.Collection
+import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepositoryImpl

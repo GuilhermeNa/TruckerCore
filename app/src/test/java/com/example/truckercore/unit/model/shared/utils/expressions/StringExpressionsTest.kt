@@ -4,7 +4,7 @@ import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFir
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
-import com.example.truckercore.model.shared.utils.expressions.toCompleteNameFormat
+import com.example.truckercore.model.shared.utils.expressions.formatAsFullName
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -60,7 +60,7 @@ class StringExpressionsTest {
         val name = "josé da silva"
 
         // Act
-        val result = name.toCompleteNameFormat()
+        val result = name.formatAsFullName()
 
         // Assert
         assertEquals(result, "José da Silva")
@@ -72,7 +72,7 @@ class StringExpressionsTest {
         val name = "JOSÉ DA SILVA"
 
         // Act
-        val result = name.toCompleteNameFormat()
+        val result = name.formatAsFullName()
 
         // Assert
         assertEquals(result, "José da Silva")
@@ -84,7 +84,7 @@ class StringExpressionsTest {
         val name = " JOSÉ   DA SILVA  "
 
         // Act
-        val result = name.toCompleteNameFormat()
+        val result = name.formatAsFullName()
 
         // Assert
         assertEquals(result, "José da Silva")

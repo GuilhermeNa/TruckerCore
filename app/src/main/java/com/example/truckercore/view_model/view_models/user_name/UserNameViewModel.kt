@@ -3,7 +3,7 @@ package com.example.truckercore.view_model.view_models.user_name
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
-import com.example.truckercore.model.shared.utils.expressions.toCompleteNameFormat
+import com.example.truckercore.model.shared.utils.expressions.formatAsFullName
 import com.example.truckercore.view_model.view_models.user_name.UserNameFragState.UserNameFragErrorType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,7 +55,7 @@ class UserNameViewModel : ViewModel() {
      * It checks for empty names, name size, and whether the name contains at least two words.
      */
     fun validateName(name: String) {
-        val formatedName = name.toCompleteNameFormat()
+        val formatedName = name.formatAsFullName()
         val errorResult = validateEntries.invoke(formatedName)
         val newState = stateProvider.invoke(formatedName, errorResult)
         setState(newState)

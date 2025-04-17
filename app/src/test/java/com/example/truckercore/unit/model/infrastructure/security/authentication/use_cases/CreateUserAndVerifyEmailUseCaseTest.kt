@@ -3,13 +3,13 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTextUtil
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.CreateUserAndVerifyEmailUseCaseImpl
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.utils.sealeds.Result
-import com.example.truckercore.model.shared.task_manager.TaskManagerImpl
-import com.example.truckercore.model.shared.task_manager.TaskManager
+import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManagerImpl
+import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManager
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -36,7 +36,7 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
     // Data
     private val fbUser: FirebaseUser = mockk(relaxed = true)
-    private val credential = EmailAuthCredential(
+    private val credential = EmailCredential(
         name = "John Doe",
         email = "abc@email.com",
         password = "123456"

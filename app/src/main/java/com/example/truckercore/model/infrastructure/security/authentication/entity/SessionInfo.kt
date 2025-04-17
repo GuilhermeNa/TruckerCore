@@ -3,7 +3,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.ent
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.modules.vip.entity.Vip
+import com.example.truckercore.model.modules.vip.data.Vip
 import com.example.truckercore.model.shared.errors.InvalidStateException
 
 /**

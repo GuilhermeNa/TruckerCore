@@ -1,9 +1,8 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.model.configs.app_constants.Parent
-import com.example.truckercore.model.modules.notification.dto.NotificationDto
-import com.example.truckercore.model.modules.notification.entity.Notification
-import com.example.truckercore.model.shared.enums.PersistenceStatus
+import com.example.truckercore.model.configs.constants.Parent
+import com.example.truckercore.model.modules.notification.data.NotificationDto
+import com.example.truckercore.model.modules.notification.data.Notification
 import java.time.LocalDateTime
 import java.util.Date
 

@@ -2,7 +2,7 @@ package com.example.truckercore.model.shared.resolvers
 
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.model.modules.business_central.validator.BusinessCentralValidationStrategy
+import com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.dto.LicensingDto
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
 import com.example.truckercore.model.modules.fleet.shared.module.licensing.validator.LicensingValidationStrategy
@@ -41,8 +41,12 @@ internal class ValidatorStrategyResolver {
      * This map is used to resolve the correct validation strategy based on the type of the input object.
      */
     private val strategies = mapOf(
-        Pair(BusinessCentral::class.java, BusinessCentralValidationStrategy()),
-        Pair(BusinessCentralDto::class.java, BusinessCentralValidationStrategy()),
+        Pair(BusinessCentral::class.java,
+            com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy()
+        ),
+        Pair(BusinessCentralDto::class.java,
+            com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy()
+        ),
         Pair(User::class.java, UserValidationStrategy()),
         Pair(UserDto::class.java, UserValidationStrategy()),
         Pair(Admin::class.java, AdminValidationStrategy()),

@@ -5,7 +5,6 @@ import com.example.truckercore._test_data_provider.TestUserDataProvider
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.modules.user.dto.UserDto
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.enums.PersistenceStatus
 import com.example.truckercore.model.shared.errors.mapping.IllegalMappingArgumentException
 import com.example.truckercore.model.shared.errors.mapping.InvalidForMappingException
 import com.example.truckercore.model.shared.modules.personal_data.dto.PersonalDataDto

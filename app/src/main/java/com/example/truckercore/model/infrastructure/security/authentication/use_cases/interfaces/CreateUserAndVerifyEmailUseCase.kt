@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 
@@ -16,6 +16,6 @@ internal interface CreateUserAndVerifyEmailUseCase {
      * @see [AuthenticationRepository.updateUserProfile]
      * @see [AuthenticationRepository.sendEmailVerification]
      */
-    suspend operator fun invoke(credential: EmailAuthCredential): NewEmailResult
+    suspend operator fun invoke(credential: EmailCredential): NewEmailResult
 
 }

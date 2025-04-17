@@ -3,7 +3,6 @@ package com.example.truckercore._test_data_provider
 import com.example.truckercore.model.modules.person.employee.admin.dto.AdminDto
 import com.example.truckercore.model.modules.person.employee.admin.entity.Admin
 import com.example.truckercore.model.modules.person.employee.shared.enums.EmployeeStatus
-import com.example.truckercore.model.shared.enums.PersistenceStatus
 import java.time.LocalDateTime
 import java.util.Date
 

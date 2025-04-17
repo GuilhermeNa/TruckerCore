@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.email_auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailAuthCredential
+import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.view_model.expressions.validateUserName
@@ -77,14 +77,14 @@ class EmailAuthViewModel(
             delay(500)
 
             // Create a credential with hashed password and authenticate
-            val credential = EmailAuthCredential(args.name, email, password)
+            val credential = EmailCredential(args.name, email, password)
             val newState = authenticateAndVerifyEmail(credential)
             setState(newState)
 
         }
     }
 
-    private suspend fun authenticateAndVerifyEmail(credential: EmailAuthCredential) =
+    private suspend fun authenticateAndVerifyEmail(credential: EmailCredential) =
         authService.createUserAndVerifyEmail(credential).let { response ->
             when {
                 response.userCreated && response.emailSent -> Success(UserCreatedAndEmailSent)
