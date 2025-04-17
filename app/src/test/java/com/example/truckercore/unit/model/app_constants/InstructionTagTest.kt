@@ -4,7 +4,7 @@ import com.example.truckercore.model.configs.constants.Tag
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class TagTest {
+class InstructionTagTest {
 
     @Test
     fun `test getName should return correct tag name`() {

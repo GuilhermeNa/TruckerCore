@@ -2,7 +2,6 @@ package com.example.truckercore.unit.model.infrastructure.data_source.firebase.u
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.configs.constants.Collection
-import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirebaseRequestException
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseRequest
 import com.example.truckercore.model.modules.user.dto.UserDto
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters

@@ -1,3 +1,3 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.exceptions
 
-class FirebaseMappingException(message: String): Exception(message)
+class FirestoreInstructionException(message: String? = null): Exception(message)

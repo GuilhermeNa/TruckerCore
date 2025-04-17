@@ -8,7 +8,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.app_
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SendEmailVerificationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SignInErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
-import com.example.truckercore.model.infrastructure.data_source.firebase._auth.exceptions.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepositoryImpl
 import com.example.truckercore.model.shared.utils.sealeds.AppResult

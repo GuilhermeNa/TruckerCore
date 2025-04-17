@@ -1,4 +1,4 @@
-package com.example.truckercore.model.infrastructure.data_source.firebase._auth.exceptions
+package com.example.truckercore.model.infrastructure.data_source.firebase.exceptions
 
 /**
  * Exception thrown when a Firebase operation requires a logged-in user,

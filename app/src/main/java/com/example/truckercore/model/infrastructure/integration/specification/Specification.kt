@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.user
+package com.example.truckercore.model.infrastructure.integration.specification
 
 import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto

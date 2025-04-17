@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.security.authentication.app
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.EmailCredentialErrCode
-import com.example.truckercore.model.infrastructure.data_source.firebase._auth.exceptions.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.ObserveEmailValidationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SendEmailVerificationErrCode

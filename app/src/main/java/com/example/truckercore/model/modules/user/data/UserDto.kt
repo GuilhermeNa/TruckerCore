@@ -10,6 +10,6 @@ data class UserDto(
     override val companyId: String? = null,
     override val persistence: Persistence? = null,
     val permissions: HashSet<String>? = null,
-    val category: Category,
+    val category: Category? = null,
     val level: Level? = null,
 ): Dto

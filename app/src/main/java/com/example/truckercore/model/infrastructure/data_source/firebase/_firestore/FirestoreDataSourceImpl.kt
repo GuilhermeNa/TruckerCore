@@ -3,11 +3,12 @@ package com.example.truckercore.model.infrastructure.data_source.firebase._fires
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.expressions.toDto
 import com.example.truckercore.model.infrastructure.data_source.firebase.expressions.toList
-import com.example.truckercore.model.modules.user.Specification
+import com.example.truckercore.model.infrastructure.integration.specification.Specification
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

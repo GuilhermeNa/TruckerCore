@@ -5,6 +5,10 @@ package com.example.truckercore.model.configs.constants
  * Each constant corresponds to a specific field name used within the system.
  */
 enum class Field(private val fieldName: String) {
+    ID("id"),
+    COMPANY_ID("companyId"),
+    CATEGORY("category"),
+
 
     BUSINESS_CENTRAL_ID("centralId"),
     EMPLOYEE_ID("employeeId"),
@@ -24,10 +28,8 @@ enum class Field(private val fieldName: String) {
     PLATE("plate"),
     EXERCISE("exercise"),
     BRAND("brand"),
-    CATEGORY("category"),
     COLOR("color"),
     URL("url"),
-    ID("id"),
     LAST_MODIFIER_ID("lastModifierId"),
     CREATION_DATE("creationDate"),
     LAST_UPDATE("lastUpdate"),

@@ -1,7 +1,8 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase._firestore
 
-import com.example.truckercore.model.modules.user.Specification
+import com.example.truckercore.model.infrastructure.integration.specification.Specification
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
+import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
 interface FirestoreDataSource {
