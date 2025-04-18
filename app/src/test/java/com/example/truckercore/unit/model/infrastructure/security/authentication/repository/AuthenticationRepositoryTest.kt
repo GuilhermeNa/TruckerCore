@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.repository
 
-import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.integration.source_auth.AuthSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
@@ -36,7 +36,7 @@ import org.koin.test.inject
 class AuthenticationRepositoryTest : KoinTest {
 
     // Injections
-    private val dataSource: FirebaseAuthDataSource by inject()
+    private val dataSource: AuthSource by inject()
     private val repository: AuthenticationRepository by inject()
 
     // Data Provider
@@ -46,7 +46,7 @@ class AuthenticationRepositoryTest : KoinTest {
     fun setup() {
         startKoin {
             modules(module {
-                single<FirebaseAuthDataSource> { mockk(relaxed = true) }
+                single<AuthSource> { mockk(relaxed = true) }
                 single<AuthenticationAppErrorFactory> { AuthenticationAppErrorFactory }
                 single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
             })

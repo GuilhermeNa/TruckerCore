@@ -2,8 +2,8 @@ package com.example.truckercore.model.modules.user
 
 import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.configs.constants.Field
-import com.example.truckercore.model.infrastructure.integration.specification.Specification
-import com.example.truckercore.model.infrastructure.integration.specification.exceptions.NullSpecificationProperty
+import com.example.truckercore.model.infrastructure.integration.source_data.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.source_data.specification.exceptions.NullSpecificationProperty
 import com.example.truckercore.model.modules.company.data_helper.CompanyID
 import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.data_helper.Category

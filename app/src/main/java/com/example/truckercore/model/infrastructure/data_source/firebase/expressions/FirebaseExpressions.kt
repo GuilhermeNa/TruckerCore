@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.expressions
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirestoreMappingException
+import com.example.truckercore.model.infrastructure.integration.source_data.exceptions.DataSourceMappingException
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
 import com.google.android.gms.tasks.Task
@@ -53,7 +53,7 @@ suspend fun Task<*>.awaitSuccessOrThrow(): Unit = suspendCoroutine { cont ->
  * @param clazz the class of the DTO to convert each document into
  * @return a list of mapped DTOs or an empty list if the snapshot is empty
  *
- * @throws FirestoreMappingException if any document cannot be mapped to the provided DTO class
+ * @throws DataSourceMappingException if any document cannot be mapped to the provided DTO class
  *
  * ### Example:
  * ```kotlin
@@ -69,12 +69,12 @@ fun <T : BaseDto> QuerySnapshot.toList(clazz: Class<T>): List<T> =
  *
  * This function attempts to deserialize the document's data into an instance of [T]
  * using Firebase's `toObject()` function. If conversion fails or returns null,
- * a [FirestoreMappingException] is thrown.
+ * a [DataSourceMappingException] is thrown.
  *
  * @param clazz the class of the DTO to convert the document into
  * @return an instance of [T] representing the document's data
  *
- * @throws FirestoreMappingException if the conversion fails or results in null
+ * @throws DataSourceMappingException if the conversion fails or results in null
  *
  * ### Example:
  * ```kotlin
@@ -82,6 +82,6 @@ fun <T : BaseDto> QuerySnapshot.toList(clazz: Class<T>): List<T> =
  * ```
  */
 fun <T : BaseDto> DocumentSnapshot.toDto(clazz: Class<T>): T =
-    this.toObject(clazz) ?: throw FirestoreMappingException(
+    this.toObject(clazz) ?: throw DataSourceMappingException(
         "DocumentSnapshot can not be converted into a DTO class: (${this}), (${clazz.simpleName})."
     )

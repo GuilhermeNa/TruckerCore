@@ -1,7 +1,7 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
-import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSourceImpl
+import com.example.truckercore.model.infrastructure.integration.source_auth.AuthSource
+import com.example.truckercore.model.infrastructure.data_source.firebase.firebase_auth.FirebaseAuthDataSourceImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepositoryImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseConverter
@@ -18,7 +18,7 @@ val firebaseModule = module {
     single { Firebase.auth }
     single { Firebase.firestore }
     single { Firebase.storage }
-    single<FirebaseAuthDataSource> { FirebaseAuthDataSourceImpl(get()) }
+    single<AuthSource> { FirebaseAuthDataSourceImpl(get()) }
     single { FirebaseConverter() }
     single { FirebaseQueryBuilder(get()) }
     single<FirebaseRepository> { FirebaseRepositoryImpl(get(), get()) }

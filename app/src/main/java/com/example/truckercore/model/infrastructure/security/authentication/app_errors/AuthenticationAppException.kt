@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.app_errors
 
-import com.example.truckercore.model.shared.errors._main.AppException
+import com.example.truckercore.model.infrastructure.integration.exceptions.AppException
 
 /**
  * Custom exception class used to represent authentication module related errors.

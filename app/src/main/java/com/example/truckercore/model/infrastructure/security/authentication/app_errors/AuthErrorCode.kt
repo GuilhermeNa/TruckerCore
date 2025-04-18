@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.app_errors
 
-import com.example.truckercore.model.shared.errors._main.ErrorCode
+import com.example.truckercore.model.infrastructure.integration.exceptions.ErrorCode
 
 /**
  * Interface that represents error codes specific to authentication processes.

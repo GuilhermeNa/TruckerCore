@@ -10,8 +10,9 @@ import com.example.truckercore.model.infrastructure.security.authentication.app_
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
 import com.example.truckercore.model.shared.value_classes.exceptions.InvalidNameException
 import com.example.truckercore.model.shared.value_classes.exceptions.InvalidPasswordException
-import com.example.truckercore.model.shared.errors._main.ErrorFactory
+import com.example.truckercore.model.infrastructure.integration.exceptions.ErrorFactory
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore.model.shared.value_classes.exceptions.InvalidEmailException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException

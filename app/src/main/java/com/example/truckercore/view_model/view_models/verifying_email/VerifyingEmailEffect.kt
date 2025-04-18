@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.verifying_email
 
-import com.example.truckercore.model.shared.errors._main.ErrorCode
+import com.example.truckercore.model.infrastructure.integration.exceptions.ErrorCode
 import com.example.truckercore.view.fragments.verifying_email.VerifyingEmailFragment
 
 /**

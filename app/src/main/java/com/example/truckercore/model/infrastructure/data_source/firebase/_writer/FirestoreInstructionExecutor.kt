@@ -2,10 +2,9 @@ package com.example.truckercore.model.infrastructure.data_source.firebase._write
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirestoreInstructionException
 import com.example.truckercore.model.infrastructure.data_source.firebase.interpreter.FirestoreInterpreter
-import com.example.truckercore.model.infrastructure.integration.instruction.Instruction
-import com.example.truckercore.model.infrastructure.integration.instruction.InstructionExecutor
-import com.example.truckercore.model.infrastructure.integration.instruction.types.PutLazy
-import com.example.truckercore.model.infrastructure.integration.instruction.types.Update
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration.source_instruction.InstructionExecutor
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.PutLazy
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
@@ -35,8 +34,6 @@ class FirestoreInstructionExecutor(
         if (deque.thereIsRepeatedTag()) throw FirestoreInstructionException()
 
         if (deque.isMissingLazyReference()) throw FirestoreInstructionException()
-
-        if(deque.isAnyUpdateWithInvalidId()) throw FirestoreInstructionException()
     }
 
     private fun ArrayDeque<Instruction>.thereIsRepeatedTag() =
@@ -48,10 +45,6 @@ class FirestoreInstructionExecutor(
     private fun ArrayDeque<Instruction>.isMissingLazyReference(): Boolean =
         this.filterIsInstance<PutLazy<*>>()
             .any { it.referenceIdFromTag !in this.map { t -> t.instructionTag }.toSet() }
-
-    private fun <E> ArrayDeque<E>.isAnyUpdateWithInvalidId(): Boolean =
-        this.filterIsInstance<Update<*>>()
-            .any { it.data.id.isNullOrBlank() }
 
 }
 

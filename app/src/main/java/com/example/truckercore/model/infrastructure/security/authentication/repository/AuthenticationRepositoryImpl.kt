@@ -1,13 +1,13 @@
 package com.example.truckercore.model.infrastructure.security.authentication.repository
 
-import com.example.truckercore.model.infrastructure.data_source.firebase._auth.FirebaseAuthDataSource
+import com.example.truckercore.model.infrastructure.integration.source_auth.AuthSource
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 
 class AuthenticationRepositoryImpl(
-    private val dataSource: FirebaseAuthDataSource,
+    private val dataSource: AuthSource,
     private val appErrorFactory: AuthenticationAppErrorFactory
 ) : AuthenticationRepository {
 

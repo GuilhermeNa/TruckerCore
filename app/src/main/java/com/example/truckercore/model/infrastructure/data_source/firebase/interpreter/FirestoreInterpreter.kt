@@ -1,13 +1,13 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.interpreter
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirestoreInstructionException
-import com.example.truckercore.model.infrastructure.integration.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.Instruction
 import com.example.truckercore.model.shared.value_classes.GenericID
-import com.example.truckercore.model.infrastructure.integration.instruction.types.Put
-import com.example.truckercore.model.infrastructure.integration.instruction.types.PutLazy
-import com.example.truckercore.model.infrastructure.integration.instruction.types.Remove
-import com.example.truckercore.model.infrastructure.integration.instruction.types.Update
-import com.example.truckercore.model.infrastructure.integration.instruction.types.UpdateFields
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.Put
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.PutLazy
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.Remove
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.Update
+import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.UpdateFields
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreInterpreter(private val firestore: FirebaseFirestore) {
@@ -59,7 +59,7 @@ class FirestoreInterpreter(private val firestore: FirebaseFirestore) {
         return GenericID(id)
     }
 
-    private fun getFirebaseDelete(instruction: Remove<*>): FirebaseDelete {
+    private fun getFirebaseDelete(instruction: Remove): FirebaseDelete {
         return FirebaseDelete(
             instructionTag = instruction.instructionTag,
             document = firestore.collection(instruction.collectionName)
@@ -68,12 +68,9 @@ class FirestoreInterpreter(private val firestore: FirebaseFirestore) {
     }
 
     private fun getFirebaseUpdate(instruction: Update<*>): FirebaseUpdate<*> {
-        val id = instruction.data.id ?: throw FirestoreInstructionException(
-            "Id must be valid for Firebase instruction."
-        )
         return FirebaseUpdate(
             instructionTag = instruction.instructionTag,
-            document = firestore.collection(instruction.collectionName).document(id),
+            document = firestore.collection(instruction.collectionName).document(instruction.id),
             data = instruction.data
         )
     }
