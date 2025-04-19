@@ -3,7 +3,7 @@ package com.example.truckercore.model.infrastructure.data_source.firebase.fireba
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.expressions.awaitSuccessOrThrow
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
-import com.example.truckercore.model.infrastructure.integration.source_auth.AuthSource
+import com.example.truckercore.model.infrastructure.integration._auth.AuthSource
 import com.example.truckercore.model.shared.utils.expressions.cancelJob
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

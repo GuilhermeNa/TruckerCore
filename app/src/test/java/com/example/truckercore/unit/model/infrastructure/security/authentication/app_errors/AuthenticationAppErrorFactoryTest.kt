@@ -4,7 +4,7 @@ import com.example.truckercore.model.infrastructure.data_source.firebase.excepti
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.EmailCredentialErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
-import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.ObserveEmailValidationErrCode
+import com.example.truckercore.model.infrastructure.integration._auth.app_errors.error_codes.ObserveEmailValidationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SendEmailVerificationErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SignInErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
@@ -145,7 +145,7 @@ class AuthenticationAppErrorFactoryTest {
     fun `handleObservingEmailValidationError should always return UserNotFound`() {
         val result = AuthenticationAppErrorFactory.handleObservingEmailValidationError()
 
-        assertEquals(ObserveEmailValidationErrCode.UserNotFound, result.errorCode)
+        assertEquals(com.example.truckercore.model.infrastructure.integration._auth.app_errors.error_codes.ObserveEmailValidationErrCode.UserNotFound, result.errorCode)
     }
 
     //----------------------------------------------------------------------------------------------

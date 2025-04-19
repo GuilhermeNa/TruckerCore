@@ -1,13 +1,13 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.interpreter
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.FirestoreInstructionException
-import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration._instruction.for_app.Instruction
 import com.example.truckercore.model.shared.value_classes.GenericID
-import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.Put
-import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.PutLazy
-import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.Remove
-import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.Update
-import com.example.truckercore.model.infrastructure.integration.source_instruction.instruction.types.UpdateFields
+import com.example.truckercore.model.infrastructure.integration._instruction.for_app.types.Put
+import com.example.truckercore.model.infrastructure.integration._instruction.for_app.types.PutLazy
+import com.example.truckercore.model.infrastructure.integration._instruction.for_app.types.Remove
+import com.example.truckercore.model.infrastructure.integration._instruction.for_app.types.Update
+import com.example.truckercore.model.infrastructure.integration._instruction.for_app.types.UpdateFields
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreInterpreter(private val firestore: FirebaseFirestore) {

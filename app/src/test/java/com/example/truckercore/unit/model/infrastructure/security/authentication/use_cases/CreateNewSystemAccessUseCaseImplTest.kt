@@ -3,7 +3,7 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.CreateNewSystemAccessUseCaseImpl
+import com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.CreateNewSystemAccessUseCaseImpl
 import com.example.truckercore.model.modules.business_central.factory.BusinessCentralFactory
 import com.example.truckercore.model.modules.person.employee.admin.factory.AdminFactory
 import com.example.truckercore.model.modules.person.employee.driver.factory.DriverFactory
@@ -28,7 +28,7 @@ import org.koin.test.inject
 class CreateNewSystemAccessUseCaseImplTest : KoinTest {
 
     private val firebaseRepository: FirebaseRepository by inject()
-    private val useCase: CreateNewSystemAccessUseCaseImpl by inject()
+    private val useCase: com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.CreateNewSystemAccessUseCaseImpl by inject()
 
     companion object {
         @JvmStatic
@@ -44,7 +44,13 @@ class CreateNewSystemAccessUseCaseImplTest : KoinTest {
                         single<AdminFactory> { mockk() }
                         single<DriverFactory> { mockk() }
                         single {
-                            CreateNewSystemAccessUseCaseImpl(get(), get(), get(), get(), get())
+                            com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.CreateNewSystemAccessUseCaseImpl(
+                                get(),
+                                get(),
+                                get(),
+                                get(),
+                                get()
+                            )
                         }
                     }
                 )

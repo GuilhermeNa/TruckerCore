@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.entity
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
+import com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.view_model.errors.EmptyUserNameException
 import com.example.truckercore.view_model.errors.IncompleteNameException
@@ -15,11 +15,12 @@ class EmailCredentialTest {
     @Test
     fun `should create user with valid details`() {
         // Call
-        val userReg = EmailCredential(
-            "John Doe",
-            "guilherme@example.com",
-            "123456"
-        )
+        val userReg =
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
+                "John Doe",
+                "guilherme@example.com",
+                "123456"
+            )
 
         // Assert
         assertEquals("John Doe", userReg.name)
@@ -31,7 +32,7 @@ class EmailCredentialTest {
     fun `should trim all received params`() {
         // Call
         val userReg =
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 " John Doe ",
                 " guil herme@example.com ",
                 " 123 456 "
@@ -46,11 +47,12 @@ class EmailCredentialTest {
     @Test
     fun `should capitalize correctly the params`() {
         // Call
-        val userReg = EmailCredential(
-            "JOHN doe",
-            "GUILHERME@example.com",
-            "123456"
-        )
+        val userReg =
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
+                "JOHN doe",
+                "GUILHERME@example.com",
+                "123456"
+            )
 
         // Assert
         assertEquals("John Doe", userReg.name)
@@ -62,7 +64,7 @@ class EmailCredentialTest {
     fun `should throw InvalidEmailException for email without dot`() {
         // Call && Assert
         assertThrows<InvalidEmailException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "John Doe",
                 "guilherme@example",
                 "123456"
@@ -74,7 +76,7 @@ class EmailCredentialTest {
     fun `should throw InvalidEmailException for email without @`() {
         // Call && Assert
         assertThrows<InvalidEmailException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "John Doe",
                 "guilherme.com",
                 "123456"
@@ -86,7 +88,7 @@ class EmailCredentialTest {
     fun `should throw InvalidEmailException for email without name`() {
         // Call && Assert
         assertThrows<InvalidEmailException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "John Doe",
                 "@sample.com",
                 "123456"
@@ -98,7 +100,7 @@ class EmailCredentialTest {
     fun `should throw InvalidPasswordException for password with less than 6 chars`() {
         // Call && Assert
         assertThrows<InvalidPasswordException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "John Doe",
                 "guilherme@example.com",
                 "12345"
@@ -110,7 +112,7 @@ class EmailCredentialTest {
     fun `should throw EmptyUserNameException for name empty`() {
         // Call && Assert
         assertThrows<EmptyUserNameException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "",
                 "guilherme@example.com",
                 "12345"
@@ -122,7 +124,7 @@ class EmailCredentialTest {
     fun `should throw InvalidSizeException for name lower than 5`() {
         // Call && Assert
         assertThrows<InvalidSizeException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "Ab",
                 "guilherme@example.com",
                 "12345"
@@ -134,7 +136,7 @@ class EmailCredentialTest {
     fun `should throw IncompleteNameException for name with only one word`() {
         // Call && Assert
         assertThrows<IncompleteNameException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "Joaquin",
                 "guilherme@example.com",
                 "12345"
@@ -146,7 +148,7 @@ class EmailCredentialTest {
     fun `should throw WrongNameFormatException for name with number`() {
         // Call && Assert
         assertThrows<WrongNameFormatException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "Jhon Doe1",
                 "guilherme@example.com",
                 "12345"
@@ -158,7 +160,7 @@ class EmailCredentialTest {
     fun `should throw WrongNameFormatException for name with special char`() {
         // Call && Assert
         assertThrows<WrongNameFormatException> {
-            EmailCredential(
+            com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
                 "Jhon Doe!",
                 "guilherme@example.com",
                 "12345"

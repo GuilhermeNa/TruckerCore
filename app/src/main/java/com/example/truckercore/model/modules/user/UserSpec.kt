@@ -2,8 +2,8 @@ package com.example.truckercore.model.modules.user
 
 import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.configs.constants.Field
-import com.example.truckercore.model.infrastructure.integration.source_data.specification.Specification
-import com.example.truckercore.model.infrastructure.integration.source_data.specification.exceptions.NullSpecificationProperty
+import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.exceptions.SpecificationException
 import com.example.truckercore.model.modules.company.data_helper.CompanyID
 import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.data_helper.Category
@@ -22,12 +22,14 @@ data class UserSpec(
 
     override val collection = Collection.USER
 
-    override fun toDocumentReference(baseRef: CollectionReference): DocumentReference {
-        val id = userId?.value ?: throw NullSpecificationProperty("UserId is required to create a document reference.")
+    override fun byId(baseRef: CollectionReference): DocumentReference {
+        val id = userId?.value ?: throw SpecificationException(
+            "UserId is required to create a document reference."
+        )
         return baseRef.document(id)
     }
 
-    override fun toQuery(baseQuery: Query): Query {
+    override fun byFilters(baseQuery: Query): Query {
         var base = baseQuery
 
         userId?.let { base = base.whereEqualTo(Field.ID.name, it.value) }

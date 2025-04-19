@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.use_cases
 
-import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
+import com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.SendVerificationEmailUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.SendVerificationEmailUseCaseImpl
+import com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.SendVerificationEmailUseCaseImpl
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 class SendVerificationEmailUseCaseTest : KoinTest {
 
     // Injections
-    private val authRepository: AuthenticationRepository by inject()
+    private val authRepository: com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository by inject()
     private val useCase: SendVerificationEmailUseCase by inject()
 
     @BeforeEach
@@ -29,8 +29,12 @@ class SendVerificationEmailUseCaseTest : KoinTest {
         startKoin {
             modules(
                 module {
-                    single<AuthenticationRepository> { mockk() }
-                    single<SendVerificationEmailUseCase> { SendVerificationEmailUseCaseImpl(get()) }
+                    single<com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository> { mockk() }
+                    single<SendVerificationEmailUseCase> {
+                        com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.SendVerificationEmailUseCaseImpl(
+                            get()
+                        )
+                    }
                 }
             )
         }

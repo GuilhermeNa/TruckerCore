@@ -2,10 +2,10 @@ package com.example.truckercore.unit.model.infrastructure.security.authenticatio
 
 import com.example.truckercore._test_utils.mockStaticLog
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepository
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
+import com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository
+import com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.CreateUserAndVerifyEmailUseCaseImpl
+import com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.CreateUserAndVerifyEmailUseCaseImpl
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.model.shared.utils.sealeds.Result
 import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManagerImpl
@@ -31,16 +31,17 @@ import org.koin.test.inject
 class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
 
     // Injections
-    private val authRepo: AuthenticationRepository by inject()
+    private val authRepo: com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository by inject()
     private val useCase: CreateUserAndVerifyEmailUseCase by inject()
 
     // Data
     private val fbUser: FirebaseUser = mockk(relaxed = true)
-    private val credential = EmailCredential(
-        name = "John Doe",
-        email = "abc@email.com",
-        password = "123456"
-    )
+    private val credential =
+        com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
+            name = "John Doe",
+            email = "abc@email.com",
+            password = "123456"
+        )
 
     @BeforeEach
     fun setup() {
@@ -49,10 +50,10 @@ class CreateUserAndVerifyEmailUseCaseTest : KoinTest {
         startKoin {
             modules(
                 module {
-                    single<AuthenticationRepository> { mockk(relaxed = true) }
+                    single<com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository> { mockk(relaxed = true) }
                     factory<TaskManager<Any>> { TaskManagerImpl() }
                     single<CreateUserAndVerifyEmailUseCase> {
-                        CreateUserAndVerifyEmailUseCaseImpl(
+                        com.example.truckercore.model.infrastructure.integration._auth.use_cases.implementations.CreateUserAndVerifyEmailUseCaseImpl(
                             get(), get(), get(), get()
                         )
                     }

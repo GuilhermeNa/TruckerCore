@@ -1,13 +1,13 @@
 package com.example.truckercore.view_model.view_models.phone_auth
 
 import androidx.lifecycle.ViewModel
-import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
+import com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 
 class PhoneAuthSharedViewModel(
-    private val authService: AuthService
+    private val authService: com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 ) : ViewModel() {
 
     private var _phoneNumber: String? = null

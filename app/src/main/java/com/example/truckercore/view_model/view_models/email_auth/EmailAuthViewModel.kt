@@ -2,8 +2,8 @@ package com.example.truckercore.view_model.view_models.email_auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.security.authentication.entity.EmailCredential
-import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
+import com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential
+import com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.view_model.expressions.validateUserName
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
@@ -37,7 +37,7 @@ private const val UNKNOWN_ERROR_MESSAGE = "Erro desconhecido. Tente novamente."
 
 class EmailAuthViewModel(
     private val args: EmailAuthVmArgs,
-    private val authService: AuthService
+    private val authService: com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 ) : ViewModel() {
 
     // State for managing the UI state of the fragment
@@ -77,14 +77,19 @@ class EmailAuthViewModel(
             delay(500)
 
             // Create a credential with hashed password and authenticate
-            val credential = EmailCredential(args.name, email, password)
+            val credential =
+                com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential(
+                    args.name,
+                    email,
+                    password
+                )
             val newState = authenticateAndVerifyEmail(credential)
             setState(newState)
 
         }
     }
 
-    private suspend fun authenticateAndVerifyEmail(credential: EmailCredential) =
+    private suspend fun authenticateAndVerifyEmail(credential: com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential) =
         authService.createUserAndVerifyEmail(credential).let { response ->
             when {
                 response.userCreated && response.emailSent -> Success(UserCreatedAndEmailSent)

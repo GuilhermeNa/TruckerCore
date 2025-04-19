@@ -12,7 +12,7 @@ import com.example.truckercore.R
 import com.example.truckercore.business_admin.view.activities.HomeActivity
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
-import com.example.truckercore.model.infrastructure.integration.exceptions.ErrorCode
+import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.executeOnState
 import com.example.truckercore.view.expressions.navigateTo

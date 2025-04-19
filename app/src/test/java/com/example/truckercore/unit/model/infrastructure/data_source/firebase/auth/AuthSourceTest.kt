@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
-import com.example.truckercore.model.infrastructure.integration.source_auth.AuthSource
+import com.example.truckercore.model.infrastructure.integration._auth.AuthSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.firebase_auth.FirebaseAuthDataSourceImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException

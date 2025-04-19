@@ -1,6 +1,6 @@
 package com.example.truckercore.model.shared.utils.expressions
 
-import com.example.truckercore.model.infrastructure.integration.exceptions.ErrorCode
+import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
 
 fun ErrorCode.handleOnUi(
     recoverable: () -> Unit,
