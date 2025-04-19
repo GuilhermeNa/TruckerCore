@@ -5,11 +5,11 @@ import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
 import kotlinx.coroutines.flow.Flow
 
 abstract class DataSource(
-    protected val interpreter: DataSourceInterpreter,
+    protected val interpreter: DataSourceInterpreter<out R1, out R2>,
     protected val errorMapper: DataSourceErrorMapper
 ) {
 
-    abstract suspend fun <T : BaseDto> findOneBy(spec: Specification<T>): T?
+    abstract suspend fun <T : BaseDto> findById(spec: Specification<T>): T?
 
     abstract suspend fun <T : BaseDto> findAllBy(spec: Specification<T>): List<T>?
 

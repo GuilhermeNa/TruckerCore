@@ -1,5 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration._data.for_app.repository
 
+import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSource
 import com.example.truckercore.model.infrastructure.integration._data.for_app.app_exception.DataAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Specification
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
@@ -14,28 +15,33 @@ class DataRepositoryImpl(
 ) : DataRepository {
 
     override suspend fun <T : BaseDto> findOneBy(spec: Specification<T>): AppResponse<T> =
-        try {
-            AppResponse.Success(dataSource.findOneBy(spec))
-        } catch (e: Exception) {
-            AppResponse.Error(appErrorFactory.handleDataSourceError(e))
-        }
+        findSafe { dataSource.findById(spec) }
 
     override suspend fun <T : BaseDto> findAllBy(spec: Specification<T>): AppResponse<List<T>> =
-        try {
-            val response = dataSource.findAllBy(spec)
-            if (response.isEmpty()) AppResponse.Empty else AppResponse.Success(response)
-        } catch (e: Exception) {
-            AppResponse.Error(appErrorFactory.handleDataSourceError(e))
-        }
+        findSafe { dataSource.findAllBy(spec) }
 
     override fun <T : BaseDto> flowOneBy(spec: Specification<T>): Flow<AppResponse<T>> =
-        dataSource.flowOneBy(spec)
-            .map { AppResponse.Success(it) }
-            .catch { e -> AppResponse.Error(appErrorFactory.handleDataSourceError(e)) }
+        flowSafe { dataSource.flowOneBy(spec) }
 
     override fun <T : BaseDto> flowAllBy(spec: Specification<T>): Flow<AppResponse<List<T>>> =
-        dataSource.flowAllBy(spec)
-            .map { if (it.isEmpty()) AppResponse.Empty else AppResponse.Success(it) }
-            .catch { e -> AppResponse.Error(appErrorFactory.handleDataSourceError(e)) }
+        flowSafe { dataSource.flowAllBy(spec) }
+
+    //----------------------------------------------------------------------------------------------
+    private inline fun <T> findSafe(block: () -> T?): AppResponse<T> = try {
+        handleDataSourceData(block())
+    } catch (e: Exception) {
+        handleDataSourceException(e)
+    }
+
+    private inline fun <T> flowSafe(block: () -> Flow<T?>): Flow<AppResponse<T>> =
+        block().map { handleDataSourceData(it) }
+            .catch { handleDataSourceException(it) }
+
+    private fun handleDataSourceException(e: Throwable) =
+        AppResponse.Error(appErrorFactory(e))
+
+    private fun <T> handleDataSourceData(data: T?): AppResponse<T> =
+        if (data == null) AppResponse.Empty
+        else AppResponse.Success(data)
 
 }

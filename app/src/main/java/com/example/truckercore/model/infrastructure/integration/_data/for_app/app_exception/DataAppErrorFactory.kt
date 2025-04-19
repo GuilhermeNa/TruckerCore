@@ -3,9 +3,9 @@ package com.example.truckercore.model.infrastructure.integration._data.for_app.a
 import com.example.truckercore.model.infrastructure.app_exception.AppException
 import com.example.truckercore.model.infrastructure.app_exception.ErrorFactory
 
-object DataAppErrorFactory: ErrorFactory {
+class DataAppErrorFactory: ErrorFactory {
 
-    fun handleDataSourceError(e: Throwable): AppException {
+    operator fun invoke(e: Throwable): AppException {
         TODO("Not yet implemented")
     }
 

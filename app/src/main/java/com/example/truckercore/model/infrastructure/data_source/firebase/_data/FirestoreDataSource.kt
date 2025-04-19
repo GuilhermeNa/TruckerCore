@@ -4,8 +4,6 @@ import com.example.truckercore.model.infrastructure.data_source.firebase.express
 import com.example.truckercore.model.infrastructure.data_source.firebase.expressions.toDto
 import com.example.truckercore.model.infrastructure.data_source.firebase.expressions.toList
 import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSource
-import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSourceErrorMapper
-import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSourceInterpreter
 import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Specification
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
 import com.google.firebase.firestore.DocumentReference
@@ -17,15 +15,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDataSource(
-    private val firestore: FirebaseFirestore,
-    errorMapper: DataSourceErrorMapper,
-    interpreter: DataSourceInterpreter
+    errorMapper: FirestoreErrorMapper,
+    interpreter: FirestoreInterpreter
 ) : DataSource(interpreter, errorMapper) {
 
-    private val provider = ReferenceProvider()
-
-    override suspend fun <T : BaseDto> findOneBy(spec: Specification<T>): T? = try {
-        val docReference = provider.documentReference(spec)
+    override suspend fun <T : BaseDto> findById(spec: Specification<T>): T? = try {
+        val docReference = interpreter.interpretIdSearch(spec)
         val docSnap = docReference.get().await()
         docSnap.toDto(spec.dtoClass)
     } catch (e: Exception) {
@@ -33,7 +28,7 @@ class FirestoreDataSource(
     }
 
     override suspend fun <T : BaseDto> findAllBy(spec: Specification<T>): List<T>? = try {
-        val query = provider.query(spec)
+        val query = interpreter.interpretFilterSearch(spec) as Query
         val querySnap = query.get().await()
         querySnap.toList(spec.dtoClass)
     } catch (e: Exception) {
@@ -41,7 +36,7 @@ class FirestoreDataSource(
     }
 
     override fun <T : BaseDto> flowOneBy(spec: Specification<T>): Flow<T?> = callbackFlow {
-        val docReference = provider.documentReference(spec)
+        val docReference = interpreter.interpretIdSearch(spec) as DocumentReference
 
         val listener = docReference.addSnapshotListener { docSnap, error ->
             if (error != null) {
@@ -58,7 +53,7 @@ class FirestoreDataSource(
     }
 
     override fun <T : BaseDto> flowAllBy(spec: Specification<T>): Flow<List<T>?> = callbackFlow {
-        val query = provider.query(spec)
+        val query = interpreter.interpretFilterSearch(spec) as Query
 
         val listener = query.addSnapshotListener { querySnap, error ->
             if (error != null) {
@@ -72,23 +67,6 @@ class FirestoreDataSource(
         }
 
         awaitClose { listener.remove() }
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Helper Class
-    //----------------------------------------------------------------------------------------------
-    private inner class ReferenceProvider {
-
-        fun <T : BaseDto> documentReference(spec: Specification<T>): DocumentReference {
-            val collectionRef = firestore.collection(spec.collectionName)
-            return spec.byId(collectionRef)
-        }
-
-        fun <T : BaseDto> query(spec: Specification<T>): Query {
-            val baseQuery = firestore.collection(spec.collectionName)
-            return spec.byFilters(baseQuery)
-        }
-
     }
 
 }
