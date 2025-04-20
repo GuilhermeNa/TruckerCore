@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class DataRepositoryImpl(
-    private val dataSource: DataSource,
+    private val dataSource: DataSource<*, *>,
     private val appErrorFactory: DataAppErrorFactory
 ) : DataRepository {
 

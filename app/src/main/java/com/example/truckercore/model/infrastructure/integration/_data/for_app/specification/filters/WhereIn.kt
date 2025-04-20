@@ -3,7 +3,10 @@ package com.example.truckercore.model.infrastructure.integration._data.for_app.s
 import com.example.truckercore.model.configs.constants.Field
 import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Filter
 
+/**
+ * Represents a filter that checks if a field's value is contained within a given list.
+ */
 data class WhereIn(
     override val field: Field,
-    override val value: Any
-): Filter
+    override val value: List<Any>
+) : Filter

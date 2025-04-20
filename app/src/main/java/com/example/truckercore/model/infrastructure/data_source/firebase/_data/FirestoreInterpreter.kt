@@ -22,7 +22,7 @@ class FirestoreInterpreter(
         spec.getFilters().forEach { f ->
             baseQuery = when(f){
                 is WhereEqual -> baseQuery.whereEqualTo(f.field.getName(), f.value)
-                is WhereIn -> TODO("Not used yet")
+                is WhereIn -> baseQuery.whereIn(f.field.name, f.value)
                 else -> throw SpecificationException("Unsupported filter: $f")
             }
         }
