@@ -30,15 +30,12 @@ class DataRepositoryImpl(
     private inline fun <T> findSafe(block: () -> T?): AppResponse<T> = try {
         handleDataSourceData(block())
     } catch (e: Exception) {
-        handleDataSourceException(e)
+        AppResponse.Error(appErrorFactory.handleFindError(e))
     }
 
     private inline fun <T> flowSafe(block: () -> Flow<T?>): Flow<AppResponse<T>> =
         block().map { handleDataSourceData(it) }
-            .catch { handleDataSourceException(it) }
-
-    private fun handleDataSourceException(e: Throwable) =
-        AppResponse.Error(appErrorFactory(e))
+            .catch { AppResponse.Error(appErrorFactory.handleFlowError(it)) }
 
     private fun <T> handleDataSourceData(data: T?): AppResponse<T> =
         if (data == null) AppResponse.Empty

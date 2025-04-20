@@ -31,6 +31,17 @@ abstract class DataSource<R1, R2>(
     /**
      * Retrieves a single DTO based on the provided [Specification].
      *
+     * ### Example:
+     * ```kotlin
+     * val response = dataSource.findById(spec)
+     * if(response == null) {
+     *      // data is not found in the specified criteria
+     * } else {
+     *      // the data is found and returned as DTO
+     *      response = MyDto()...
+     * }
+     *  ```
+     *
      * @param T The type of the DTO to retrieve.
      * @param spec The specification defining the lookup parameters.
      * @return The matching DTO, or `null` if not found.
@@ -40,6 +51,17 @@ abstract class DataSource<R1, R2>(
 
     /**
      * Retrieves all DTOs that match the given [Specification].
+     *
+     * ### Example:
+     * ```kotlin
+     * val response = dataSource.findAllBy(spec)
+     * if(response == null) {
+     *      // data is not found in the specified criteria
+     * } else {
+     *      // the data is found and returned as DTO List
+     *      response = List(MyDto())...
+     * }
+     *  ```
      *
      * @param T The type of the DTOs to retrieve.
      * @param spec The specification defining the filtering criteria.
@@ -51,6 +73,19 @@ abstract class DataSource<R1, R2>(
     /**
      * Observes changes to a single DTO in real-time, based on the provided [Specification].
      *
+     * ### Example:
+     * ```kotlin
+     * val response = dataSource.flowOneBy(spec)
+     * response.collect { data ->
+     *      if(data == null) {
+     *          // data is not found in specified criteria
+     *      } else {
+     *          // data is found and returned a DTO
+     *          response = MyDto()...
+     *      }
+     * }
+     *  ```
+     *
      * @param T The type of the DTO to observe.
      * @param spec The specification defining the lookup parameters.
      * @return A cold [Flow] emitting updates to the DTO, or `null` if it doesn't exist.
@@ -60,6 +95,19 @@ abstract class DataSource<R1, R2>(
 
     /**
      * Observes changes to a list of DTOs in real-time, based on the provided [Specification].
+     *
+     * ### Example:
+     * ```kotlin
+     * val response = dataSource.flowOneBy(spec)
+     * response.collect { data ->
+     *      if(data == null) {
+     *          // data is not found in specified criteria
+     *      } else {
+     *          // data is found and returned a DTO List
+     *          response = List(MyDto())...
+     *      }
+     * }
+     *  ```
      *
      * @param T The type of the DTOs to observe.
      * @param spec The specification defining the filtering criteria.

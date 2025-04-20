@@ -50,7 +50,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
      * - [NewEmailErrCode.Network] – Network failure
      * - [NewEmailErrCode.Unknown] – Unexpected error
      */
-    fun handleCreateUserWithEmailError(e: Throwable? = null): AuthenticationAppException {
+    fun handleCreateUserWithEmailError(e: Throwable): AuthenticationAppException {
         val code = when (e) {
             is IncompleteTaskException -> NewEmailErrCode.UnsuccessfulTask
             is FirebaseAuthWeakPasswordException -> NewEmailErrCode.InvalidCredentials
@@ -63,7 +63,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
         factoryLogger(code)
 
         return AuthenticationAppException(
-            message = code.userMessage,
+            message = e.message,
             cause = e,
             errorCode = code
         )
@@ -80,7 +80,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
      * - [SendEmailVerificationErrCode.UnsuccessfulTask]
      * - [SendEmailVerificationErrCode.Unknown]
      */
-    fun handleSendEmailVerificationError(e: Throwable? = null): AuthenticationAppException {
+    fun handleSendEmailVerificationError(e: Throwable): AuthenticationAppException {
         val code = when (e) {
             is NullFirebaseUserException -> SendEmailVerificationErrCode.UserNotFound
             is IncompleteTaskException -> SendEmailVerificationErrCode.UnsuccessfulTask
@@ -90,7 +90,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
         factoryLogger(code)
 
         return AuthenticationAppException(
-            message = code.userMessage,
+            message = e.message,
             cause = e,
             errorCode = code
         )
@@ -110,7 +110,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
      * - [UpdateUserProfileErrCode.UnsuccessfulTask] – Task failed unexpectedly without throwing a specific exception
      * - [UpdateUserProfileErrCode.Unknown] – Unexpected error occurred
      */
-    fun handleUpdateUserNameError(e: Throwable? = null): AuthenticationAppException {
+    fun handleUpdateUserNameError(e: Throwable): AuthenticationAppException {
         val code = when (e) {
             is FirebaseNetworkException -> UpdateUserProfileErrCode.Network
             is NullFirebaseUserException -> UpdateUserProfileErrCode.UserNotFound
@@ -121,7 +121,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
         factoryLogger(code)
 
         return AuthenticationAppException(
-            message = code.userMessage,
+            message = e.message,
             cause = e,
             errorCode = code
         )
@@ -136,12 +136,12 @@ object AuthenticationAppErrorFactory : ErrorFactory {
      * @return An [AuthenticationAppException] with [ObserveEmailValidationErrCode].
      */
     fun handleObservingEmailValidationError(): AuthenticationAppException {
-        val code = com.example.truckercore.model.infrastructure.integration._auth.app_errors.error_codes.ObserveEmailValidationErrCode.UserNotFound
+        val code = ObserveEmailValidationErrCode.UserNotFound
 
         factoryLogger(code)
 
         return AuthenticationAppException(
-            message = code.userMessage,
+            message = code.logMessage,
             errorCode = code
         )
 
@@ -175,7 +175,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
         factoryLogger(code)
 
         return AuthenticationAppException(
-            message = code.userMessage,
+            message = e.message,
             cause = e,
             errorCode = code
         )
@@ -197,7 +197,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
      * - [EmailCredentialErrCode.InvalidPassword] – Password is too weak or invalid
      * - [EmailCredentialErrCode.Unknown] – Any unexpected or unmapped error
      */
-    fun handleEmailCredentialError(e: Throwable? = null): AuthenticationAppException {
+    fun handleEmailCredentialError(e: Throwable): AuthenticationAppException {
         val code = when (e) {
             is InvalidNameException -> EmailCredentialErrCode.InvalidName
             is InvalidEmailException -> EmailCredentialErrCode.InvalidEmail
@@ -208,7 +208,7 @@ object AuthenticationAppErrorFactory : ErrorFactory {
         factoryLogger(code)
 
         return AuthenticationAppException(
-            message = code.userMessage,
+            message = e.message,
             cause = e,
             errorCode = code
         )
