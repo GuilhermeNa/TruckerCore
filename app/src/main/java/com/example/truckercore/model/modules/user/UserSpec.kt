@@ -2,9 +2,9 @@ package com.example.truckercore.model.modules.user
 
 import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.configs.constants.Field
-import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Filter
-import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Specification
-import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.filters.WhereEqual
+import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
+import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.filters.WhereEqual
 import com.example.truckercore.model.modules.company.data_helper.CompanyID
 import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.data_helper.Category

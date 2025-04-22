@@ -1,10 +1,10 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.service
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository
-import com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential
+import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
-import com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthServiceImpl
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
@@ -29,12 +29,12 @@ import kotlin.test.assertTrue
 
 class AuthServiceImplTest : KoinTest {
 
-    private val authRepo: com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository by inject()
+    private val authRepo: AuthenticationRepository by inject()
     private val createAccess: CreateNewSystemAccessUseCase by inject()
     private val getSessionInfo: GetSessionInfoUseCase by inject()
     private val sendEmail: SendVerificationEmailUseCase by inject()
     private val createAndVerifyUser: CreateUserAndVerifyEmailUseCase by inject()
-    private val service: com.example.truckercore.model.infrastructure.integration._auth.service.AuthService by inject()
+    private val service: AuthService by inject()
 
     @BeforeEach
     fun setup() {
@@ -43,11 +43,11 @@ class AuthServiceImplTest : KoinTest {
             modules(
                 module {
                     single<GetSessionInfoUseCase> { mockk() }
-                    single<com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository> { mockk() }
+                    single<AuthenticationRepository> { mockk() }
                     single<CreateNewSystemAccessUseCase> { mockk() }
                     single<CreateUserAndVerifyEmailUseCase> { mockk() }
                     single<SendVerificationEmailUseCase> {  mockk() }
-                    single<com.example.truckercore.model.infrastructure.integration._auth.service.AuthService> {
+                    single<AuthService> {
                         AuthServiceImpl(mockk(), get(), get(), get(), get(), get())
                     }
                 }
@@ -62,7 +62,7 @@ class AuthServiceImplTest : KoinTest {
     fun `should call auth repository for authenticate credentials`() = runTest {
         // Arrange
         val emailResult: NewEmailResult = mockk()
-        val emailCredential: com.example.truckercore.model.infrastructure.integration._auth.entity.EmailCredential = mockk(relaxed = true)
+        val emailCredential: EmailCredential = mockk(relaxed = true)
 
         coEvery { createAndVerifyUser(any()) } returns emailResult
 

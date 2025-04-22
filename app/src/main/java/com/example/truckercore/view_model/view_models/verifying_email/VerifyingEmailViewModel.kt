@@ -2,8 +2,8 @@ package com.example.truckercore.view_model.view_models.verifying_email
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEffect.EmailVerificationFailed
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEffect.EmailVerificationSucceed
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
  * - Triggers resend email actions
  * - Manages UI state, effects, events, and a resend countdown timer
  */
-class VerifyingEmailViewModel(private val authService: com.example.truckercore.model.infrastructure.integration._auth.service.AuthService) : ViewModel() {
+class VerifyingEmailViewModel(private val authService: AuthService) : ViewModel() {
 
     // State, Event, and Effect Managers -----------------------------------------------------------
     private val stateManager = StateManager()

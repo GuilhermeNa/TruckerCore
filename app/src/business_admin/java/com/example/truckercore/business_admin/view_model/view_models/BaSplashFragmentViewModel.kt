@@ -3,11 +3,10 @@ package com.example.truckercore.business_admin.view_model.view_models
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
-import com.example.truckercore.model.infrastructure.integration._auth.service.AuthService
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.Response
 import com.example.truckercore.view_model.states.SplashFragState
 import com.example.truckercore.view_model.states.SplashFragState.Error
 import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 class BaSplashFragmentViewModel(
-    private val authService: com.example.truckercore.model.infrastructure.integration._auth.service.AuthService,
+    private val authService: AuthService,
     private val permissionService: PermissionService,
     private val application: Application
 ) : AndroidViewModel(application) {

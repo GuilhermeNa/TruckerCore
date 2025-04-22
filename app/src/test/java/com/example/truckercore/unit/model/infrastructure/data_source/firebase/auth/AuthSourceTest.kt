@@ -1,7 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
-import com.example.truckercore.model.infrastructure.integration._auth.AuthSource
-import com.example.truckercore.model.infrastructure.data_source.firebase.firebase_auth.FirebaseAuthDataSourceImpl
+import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
 import com.google.android.gms.tasks.OnCompleteListener
@@ -40,7 +39,7 @@ class AuthSourceTest : KoinTest {
         startKoin {
             modules(module {
                 single<FirebaseAuth> { mockk(relaxed = true) }
-                single<AuthSource> { FirebaseAuthDataSourceImpl(get()) }
+                single<AuthSource> { FirebaseAuthSource(get()) }
             })
         }
     }

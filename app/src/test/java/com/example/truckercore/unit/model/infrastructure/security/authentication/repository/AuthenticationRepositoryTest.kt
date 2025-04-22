@@ -1,6 +1,5 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.repository
 
-import com.example.truckercore.model.infrastructure.integration._auth.AuthSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.NewEmailErrCode
@@ -8,6 +7,8 @@ import com.example.truckercore.model.infrastructure.security.authentication.app_
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.SignInErrCode
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepositoryImpl
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.google.firebase.auth.FirebaseUser
@@ -35,7 +36,7 @@ class AuthenticationRepositoryTest : KoinTest {
 
     // Injections
     private val dataSource: AuthSource by inject()
-    private val repository: com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository by inject()
+    private val repository: AuthenticationRepository by inject()
 
     // Data Provider
     private val provider = DataProvider()
@@ -46,7 +47,7 @@ class AuthenticationRepositoryTest : KoinTest {
             modules(module {
                 single<AuthSource> { mockk(relaxed = true) }
                 single<AuthenticationAppErrorFactory> { AuthenticationAppErrorFactory }
-                single<com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
+                single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
             })
         }
     }
@@ -184,7 +185,7 @@ class AuthenticationRepositoryTest : KoinTest {
 
         // Assert
         assertTrue(result is AppResult.Error)
-        assertTrue((result as AppResult.Error).exception.errorCode is com.example.truckercore.model.infrastructure.integration._auth.app_errors.error_codes.ObserveEmailValidationErrCode.UserNotFound)
+        assertTrue((result as AppResult.Error).exception.errorCode is ObserveEmailValidationErrCode.SessionInactive)
         coVerify(exactly = 1) { dataSource.observeEmailValidation() }
     }
 

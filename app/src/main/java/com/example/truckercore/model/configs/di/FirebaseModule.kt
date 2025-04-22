@@ -1,11 +1,11 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.integration._auth.AuthSource
-import com.example.truckercore.model.infrastructure.data_source.firebase.firebase_auth.FirebaseAuthDataSourceImpl
+import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
 import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepositoryImpl
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseConverter
 import com.example.truckercore.model.infrastructure.data_source.firebase.util.FirebaseQueryBuilder
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepositoryImpl
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -17,11 +17,11 @@ val firebaseModule = module {
     single { Firebase.auth }
     single { Firebase.firestore }
     single { Firebase.storage }
-    single<AuthSource> { FirebaseAuthDataSourceImpl(get()) }
+    single<AuthSource> { FirebaseAuthSource(get()) }
     single { FirebaseConverter() }
     single { FirebaseQueryBuilder(get()) }
     single<FirebaseRepository> { FirebaseRepositoryImpl(get(), get()) }
-    single<com.example.truckercore.model.infrastructure.integration._auth.repository.AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
+    single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
 }
 
 
