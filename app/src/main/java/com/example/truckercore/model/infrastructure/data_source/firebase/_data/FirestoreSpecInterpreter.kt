@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase._data
 
-import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSourceInterpreter
+import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSourceSpecificationInterpreter
 import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.Specification
 import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.exceptions.SpecificationException
 import com.example.truckercore.model.infrastructure.integration._data.for_app.specification.filters.WhereEqual
@@ -9,9 +9,9 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-class FirestoreInterpreter(
+class FirestoreSpecInterpreter(
     private val firestore: FirebaseFirestore
-) : DataSourceInterpreter<DocumentReference, Query> {
+) : DataSourceSpecificationInterpreter<DocumentReference, Query> {
 
     override fun interpretIdSearch(spec: Specification<*>): DocumentReference =
         firestore.collection(spec.collectionName).document(spec.id)

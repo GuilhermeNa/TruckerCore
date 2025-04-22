@@ -12,7 +12,7 @@ import kotlinx.coroutines.tasks.await
 
 class FirestoreDataSource(
     errorMapper: FirestoreErrorMapper,
-    interpreter: FirestoreInterpreter
+    interpreter: FirestoreSpecInterpreter
 ) : DataSource<DocumentReference, Query>(interpreter, errorMapper) {
 
     override suspend fun <T : BaseDto> findById(spec: Specification<T>): T? = try {

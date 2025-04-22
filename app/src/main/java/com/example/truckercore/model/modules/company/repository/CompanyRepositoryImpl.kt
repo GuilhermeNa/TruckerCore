@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.company.repository
 
-import com.example.truckercore.model.infrastructure.integration._instruction.for_app.Instruction
-import com.example.truckercore.model.infrastructure.integration._instruction.for_api.InstructionExecutor
+import com.example.truckercore.model.infrastructure.integration._writer.for_app.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration._writer.for_api.InstructionExecutor
 
 class CompanyRepositoryImpl(
     private val executor: InstructionExecutor,

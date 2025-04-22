@@ -1,4 +1,4 @@
-package com.example.truckercore.model.infrastructure.integration._instruction.for_app
+package com.example.truckercore.model.infrastructure.integration._writer.for_app.instruction
 
 import com.example.truckercore.model.configs.constants.Collection
 

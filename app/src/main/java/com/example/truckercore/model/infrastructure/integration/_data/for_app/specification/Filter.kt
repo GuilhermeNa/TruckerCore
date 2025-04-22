@@ -1,14 +1,14 @@
 package com.example.truckercore.model.infrastructure.integration._data.for_app.specification
 
 import com.example.truckercore.model.configs.constants.Field
-import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSourceInterpreter
+import com.example.truckercore.model.infrastructure.integration._data.for_api.DataSourceSpecificationInterpreter
 
 /**
  * Represents a filtering condition to be applied in a query.
  *
  * A [Filter] defines a comparison between a [field] and a [value] in a query operation.
  *
- * Filters are intentionally backend-agnostic and must be interpreted by the [DataSourceInterpreter].
+ * Filters are intentionally backend-agnostic and must be interpreted by the [DataSourceSpecificationInterpreter].
  * ### Example:
  * ```kotlin
  * val filter = WhereEqual(Field.CATEGORY, "books")

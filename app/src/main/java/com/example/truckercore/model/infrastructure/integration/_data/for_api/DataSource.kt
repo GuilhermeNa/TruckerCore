@@ -20,11 +20,11 @@ import kotlinx.coroutines.flow.Flow
  * @property errorMapper Maps backend-specific exceptions into standardized [DataSourceException]s.
  *
  * @see Specification
- * @see DataSourceInterpreter
+ * @see DataSourceSpecificationInterpreter
  * @see DataSourceErrorMapper
  */
 abstract class DataSource<R1, R2>(
-    protected val interpreter: DataSourceInterpreter<R1, R2>,
+    protected val interpreter: DataSourceSpecificationInterpreter<R1, R2>,
     protected val errorMapper: DataSourceErrorMapper
 ) {
 

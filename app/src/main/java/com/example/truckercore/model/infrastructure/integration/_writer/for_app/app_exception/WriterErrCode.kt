@@ -1,0 +1,3 @@
+package com.example.truckercore.model.infrastructure.integration._writer.for_app.app_exception
+
+interface WriterErrCode

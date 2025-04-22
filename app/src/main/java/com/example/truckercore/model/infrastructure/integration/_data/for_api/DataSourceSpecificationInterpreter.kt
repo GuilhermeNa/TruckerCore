@@ -13,7 +13,7 @@ import com.example.truckercore.model.infrastructure.integration._data.for_app.sp
  * @param R1 Type used for single-entity lookups.
  * @param R2 Type used for multi-entity queries.
  */
-interface DataSourceInterpreter<out R1, out R2> {
+interface DataSourceSpecificationInterpreter<out R1, out R2> {
 
     /**
      * Converts a [Specification] into a backend-specific query object for retrieving a single item.

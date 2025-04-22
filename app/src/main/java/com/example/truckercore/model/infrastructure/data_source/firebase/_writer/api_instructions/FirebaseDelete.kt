@@ -1,6 +1,6 @@
-package com.example.truckercore.model.infrastructure.data_source.firebase.interpreter
+package com.example.truckercore.model.infrastructure.data_source.firebase._writer.api_instructions
 
-import com.example.truckercore.model.infrastructure.integration._instruction.for_app.InstructionTag
+import com.example.truckercore.model.infrastructure.integration._writer.for_app.instruction.InstructionTag
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction
 
