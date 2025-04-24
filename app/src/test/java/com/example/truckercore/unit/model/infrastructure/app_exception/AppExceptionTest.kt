@@ -1,11 +1,8 @@
 package com.example.truckercore.unit.model.infrastructure.app_exception
 
 import com.example.truckercore._test_data_provider.TestAppExceptionProvider
-import com.example.truckercore.model.infrastructure.app_exception.AppException
-import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class AppExceptionTest {
 

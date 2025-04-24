@@ -1,17 +1,24 @@
 package com.example.truckercore.unit.model.configs.constants
 
 import com.example.truckercore.model.configs.constants.Collection
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class CollectionTest {
 
+    //----------------------------------------------------------------------------------------------
+    // Setup
+    //----------------------------------------------------------------------------------------------
     private val expectedCollection = listOf(
+        Collection.FAKE,
         Collection.USER,
         Collection.AUDIT
     )
 
+    //----------------------------------------------------------------------------------------------
+    // Testing amount entries
+    //----------------------------------------------------------------------------------------------
     @Test
     fun `should have the expected collection size`() {
         val collectionSize = Collection.entries.size
@@ -21,7 +28,7 @@ class CollectionTest {
 
     @Test
     fun `should have the expected entries`() {
-        val containsAll = Collection.entries.containsAll(expectedCollection)
+        val containsAll = expectedCollection.containsAll(Collection.entries)
         assertTrue(containsAll)
     }
 

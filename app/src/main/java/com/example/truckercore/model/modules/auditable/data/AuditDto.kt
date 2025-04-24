@@ -14,4 +14,8 @@ data class AuditDto(
     val updatedAt: Date? = null,
     val deletedBy: String? = null,
     val deletedAt: Date? = null,
-): BaseDto
+): BaseDto {
+    override fun copyWith(id: String?): BaseDto {
+        TODO("Not yet implemented")
+    }
+}

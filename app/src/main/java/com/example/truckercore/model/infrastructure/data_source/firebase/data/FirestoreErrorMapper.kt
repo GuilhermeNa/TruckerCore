@@ -14,7 +14,7 @@ import com.google.firebase.FirebaseNetworkException
 class FirestoreErrorMapper : DataSourceErrorMapper {
 
     override operator fun invoke(e: Throwable, spec: Specification<*>): DataSourceException {
-        return when (e) {
+        val dataException = when (e) {
             is InvalidDataException -> InvalidDataException(
                 "An error occurred while attempting to recover valid data. Please verify the" +
                         " data source and ensure that the data format is correct: $spec"
@@ -41,6 +41,8 @@ class FirestoreErrorMapper : DataSourceErrorMapper {
                 cause = e
             )
         }
+
+        return dataException
     }
 
 }

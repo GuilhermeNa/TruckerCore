@@ -9,6 +9,9 @@ data class CompanyDto(
     override val persistence: Persistence? = null,
     val allowedUserIds: Set<UserID>? = null
 ) : BaseDto {
+    override fun copyWith(id: String?): BaseDto {
+        TODO("Not yet implemented")
+    }
 
 
 }

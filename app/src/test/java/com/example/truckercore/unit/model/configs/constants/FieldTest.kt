@@ -1,9 +1,11 @@
 package com.example.truckercore.unit.model.configs.constants
 
-import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.configs.constants.Field
 import org.junit.jupiter.api.Assertions.assertEquals
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertTrue
 
 class FieldTest {
@@ -13,8 +15,20 @@ class FieldTest {
     //----------------------------------------------------------------------------------------------
     private val expectedCollection = listOf(
         Field.ID,
-        Field.COMPANY_ID
+        Field.COMPANY_ID,
+        Field.CATEGORY
     )
+
+    companion object {
+
+        @JvmStatic
+        fun provideFieldAndExpectedName() = arrayOf(
+            Arguments.of(Field.ID, "id"),
+            Arguments.of(Field.COMPANY_ID, "companyId"),
+            Arguments.of(Field.CATEGORY, "category")
+        )
+
+    }
 
     //----------------------------------------------------------------------------------------------
     // Testing amount entries
@@ -28,26 +42,17 @@ class FieldTest {
 
     @Test
     fun `should have the expected entries`() {
-        val containsAll = Field.entries.containsAll(expectedCollection)
+        val containsAll = expectedCollection.containsAll(Field.entries)
         assertTrue(containsAll)
     }
 
     //----------------------------------------------------------------------------------------------
     // Testing Names
     //----------------------------------------------------------------------------------------------
-    @Test
-    fun `ID should return the correct name`() {
-        assertEquals(Field.ID.getName(), "id")
-    }
-
-    @Test
-    fun `CATEGORY should return the correct name`() {
-        assertEquals(Field.CATEGORY.getName(), "category")
-    }
-
-    @Test
-    fun `COMPANY_ID should return the correct name`() {
-        assertEquals(Field.COMPANY_ID.getName(), "companyId")
+    @ParameterizedTest
+    @MethodSource("provideFieldAndExpectedName")
+    fun `should return the expected name`(field: Field, expectedName: String) {
+        assertEquals(field.getName(), expectedName)
     }
 
 }

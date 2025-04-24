@@ -31,14 +31,13 @@ import kotlinx.coroutines.channels.ProducerScope
 inline fun <T> ProducerScope<*>.safeInterpretOrEmit(
     block: () -> T,
     error: (Throwable) -> DataSourceException
-): T {
-    val result = runCatching { block() }
-    result.exceptionOrNull()?.let {
-        this.close(error(it))
-        throw error(it)
+): T? =
+    try {
+        block()
+    } catch (e: Exception) {
+        this.close(error(e))
+        null
     }
-    return result.getOrThrow()
-}
 
 /**
  * Executes a block that produces a value and emits it to the [Flow], or closes the flow with a mapped error if it fails.

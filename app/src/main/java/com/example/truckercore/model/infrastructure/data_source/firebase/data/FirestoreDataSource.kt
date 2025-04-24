@@ -35,7 +35,7 @@ class FirestoreDataSource(
         val docReference = safeInterpretOrEmit(
             block = { interpreter.interpretIdSearch(spec) },
             error = { errorMapper(it, spec) }
-        )
+        ) ?: return@callbackFlow
 
         val listener = docReference.addSnapshotListener { docSnap, error ->
             if (error != null) {
@@ -55,7 +55,7 @@ class FirestoreDataSource(
         val query = safeInterpretOrEmit(
             block = { interpreter.interpretFilterSearch(spec) },
             error = { errorMapper(it, spec) }
-        )
+        ) ?: return@callbackFlow
 
         val listener = query.addSnapshotListener { querySnap, error ->
             if (error != null) {

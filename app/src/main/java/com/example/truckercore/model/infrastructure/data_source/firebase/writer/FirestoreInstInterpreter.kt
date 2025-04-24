@@ -20,7 +20,7 @@ class FirestoreInstInterpreter(
     private val firestore: FirebaseFirestore
 ) : InstructionInterpreter<FirebaseInstruction> {
 
-    override fun invoke(deque: ArrayDeque<Instruction>): ArrayDeque<FirebaseInstruction> {
+    override fun <T : Instruction> invoke(deque: ArrayDeque<T>): ArrayDeque<FirebaseInstruction> {
         val fbDeque = ArrayDeque<FirebaseInstruction>()
 
         // Iterate through each instruction in the deque and interpret it into a Firestore-specific instruction
@@ -34,6 +34,7 @@ class FirestoreInstInterpreter(
                     // Not supported yet — throws domain-specific exception
                     "UpdateFields instruction not implemented yet."
                 )
+
                 else -> throw InstructionNotImplementedException(
                     // Catch-all for any unsupported instruction type
                     "Firebase Instruction not implemented yet. Is not possible to interpret."
@@ -49,10 +50,12 @@ class FirestoreInstInterpreter(
 
     // Builds a FirestoreSet instruction for simple Put operations
     private fun getFirebaseSet(instruction: Put): FirebaseSet {
+        val document = firestore.collection(instruction.collectionName).document()
+        val newData = instruction.data.copyWith(document.id)
         return FirebaseSet(
             instructionTag = instruction.instructionTag,
-            document = firestore.collection(instruction.collectionName).document(),
-            data = instruction.data
+            document = document,
+            data = newData
         )
     }
 
@@ -64,10 +67,13 @@ class FirestoreInstInterpreter(
         // Extract referenced document IDs from previously interpreted instructions
         val hash = getHash(instruction.referenceIdFromTag, deque)
 
+        val document = firestore.collection(instruction.collectionName).document()
+
         return FirebaseSet(
             instructionTag = instruction.instructionTag,
-            document = firestore.collection(instruction.collectionName).document(),
-            data = instruction.lazyData(hash) // Lazy data depends on referenced document IDs
+            document = document,
+            data = instruction.lazyData(hash)
+                .copyWith(id = document.id) // Lazy data depends on referenced document IDs
         )
     }
 

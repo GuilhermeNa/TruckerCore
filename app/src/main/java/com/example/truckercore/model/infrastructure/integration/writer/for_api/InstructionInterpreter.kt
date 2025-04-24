@@ -9,9 +9,9 @@ import com.example.truckercore.model.infrastructure.integration.writer.for_app.i
  * This transformation layer acts as a parser between the generic instruction model and
  * an executable representation tailored to the target system (e.g., Firestore, REST APIs).
  *
- * @param T The back-end-specific instruction type produced by this interpreter.
+ * @param R The back-end-specific instruction type produced by this interpreter.
  */
-interface InstructionInterpreter<T : ApiInstruction> {
+interface InstructionInterpreter<R : ApiInstruction> {
 
     /**
      * Parses and converts the given deque of generic [Instruction]s into a
@@ -27,6 +27,6 @@ interface InstructionInterpreter<T : ApiInstruction> {
      * @return A queue of interpreted, executable instructions.
      * @throws InstructionExecutorException if interpretation fails
      */
-    operator fun invoke(deque: ArrayDeque<Instruction>): ArrayDeque<T>
+    operator fun <T : Instruction> invoke(deque: ArrayDeque<T>): ArrayDeque<R>
 
 }

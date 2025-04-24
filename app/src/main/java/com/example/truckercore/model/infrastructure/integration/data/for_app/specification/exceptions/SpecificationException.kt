@@ -13,4 +13,4 @@ import com.example.truckercore.model.infrastructure.integration.data.for_app.spe
  *
  * @see Specification
  */
-class SpecificationException(message: String? = null): Exception(message)
+class SpecificationException(message: String? = null, cause: Throwable? = null): Exception(message, cause)
