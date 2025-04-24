@@ -27,7 +27,10 @@ class FirestoreInstInterpreter(
         deque.forEach { i ->
             val fbInstruction = when (i) {
                 is Put -> getFirebaseSet(i) // Simple insert
-                is PutLazy -> getFirebaseSet(i, fbDeque) // Insert with references to previous instructions
+                is PutLazy -> getFirebaseSet(
+                    i,
+                    fbDeque
+                ) // Insert with references to previous instructions
                 is Remove -> getFirebaseDelete(i) // Deletion instruction
                 is Update -> getFirebaseUpdate(i) // Full update
                 is UpdateFields -> throw InvalidInstructionException(
