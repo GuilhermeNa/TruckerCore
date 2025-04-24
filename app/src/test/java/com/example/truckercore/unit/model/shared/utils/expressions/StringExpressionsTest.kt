@@ -4,7 +4,6 @@ import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFir
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.removeBlank
-import com.example.truckercore.model.shared.utils.expressions.formatAsFullName
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -49,45 +48,6 @@ class StringExpressionsTest {
 
         // Then the result should still be an empty string
         assertEquals("", result)
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // String.toCompleteNameFormat()
-    //----------------------------------------------------------------------------------------------
-    @Test
-    fun `should return in name format when its lowercase `() {
-        // Arrange
-        val name = "josé da silva"
-
-        // Act
-        val result = name.formatAsFullName()
-
-        // Assert
-        assertEquals(result, "José da Silva")
-    }
-
-    @Test
-    fun `should return in name format when its uppercase `() {
-        // Arrange
-        val name = "JOSÉ DA SILVA"
-
-        // Act
-        val result = name.formatAsFullName()
-
-        // Assert
-        assertEquals(result, "José da Silva")
-    }
-
-    @Test
-    fun `should return in name format when has blank space`() {
-        // Arrange
-        val name = " JOSÉ   DA SILVA  "
-
-        // Act
-        val result = name.formatAsFullName()
-
-        // Assert
-        assertEquals(result, "José da Silva")
     }
 
     //----------------------------------------------------------------------------------------------

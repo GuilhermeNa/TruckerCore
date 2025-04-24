@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.repository
 
 import com.example.truckercore.model.configs.constants.Collection
@@ -39,4 +40,4 @@ internal class BusinessCentralRepositoryImpl(
             .setParams(params)
             .build()
 
-}
+}*/

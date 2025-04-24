@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.shared.resolvers
 
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
@@ -31,15 +32,19 @@ import com.example.truckercore.model.shared.modules.personal_data.entity.Persona
 import com.example.truckercore.model.shared.modules.personal_data.validator.PersonalDataValidationStrategy
 import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 
+*/
 /**
  * A Class responsible for resolving the appropriate validation strategy.
- */
+ *//*
+
 internal class ValidatorStrategyResolver {
 
-    /**
+    */
+/**
      * A map that associates class types to their respective [ValidatorStrategy] implementations.
      * This map is used to resolve the correct validation strategy based on the type of the input object.
-     */
+     *//*
+
     private val strategies = mapOf(
         Pair(BusinessCentral::class.java,
             com.example.truckercore.model.modules._previous_sample.business_central.validator.BusinessCentralValidationStrategy()
@@ -65,7 +70,8 @@ internal class ValidatorStrategyResolver {
         Pair(TruckDto::class.java, TruckValidationStrategy())
     )
 
-    /**
+    */
+/**
      * Resolves and returns the appropriate [ValidatorStrategy] based on the provided [ValidatorInput].
      *
      * This method checks the type of the input object (either a [DtoInput] or an [EntityInput]) and calls
@@ -74,7 +80,8 @@ internal class ValidatorStrategyResolver {
      * @param input The input object, which can be of type [ValidatorInput.DtoInput] or [ValidatorInput.EntityInput].
      * @return The corresponding [ValidatorStrategy] that will be used for validating the input.
      * @throws StrategyNotFoundException If no strategy is found for the provided class type, an exception is thrown.
-     */
+     *//*
+
     fun execute(input: ValidatorInput): ValidatorStrategy = when (input) {
         is ValidatorInput.DtoInput -> resolve(input.dto)
         is ValidatorInput.EntityInput -> resolve(input.entity)
@@ -86,4 +93,4 @@ internal class ValidatorStrategyResolver {
             ?: throw StrategyNotFoundException("The strategy for ${klass.javaClass} is not registered.")
     }
 
-}
+}*/

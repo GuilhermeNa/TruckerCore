@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.model.shared.validators
 
 import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
@@ -66,4 +67,4 @@ internal class ValidatorStrategyResolverTest {
 
     }
 
-}
+}*/

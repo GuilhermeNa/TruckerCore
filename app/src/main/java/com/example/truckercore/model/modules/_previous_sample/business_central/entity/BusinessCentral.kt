@@ -1,7 +1,9 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.entity
 
 import java.time.LocalDateTime
 
+*/
 /**
  * Represents a Business Central in the system, which serves as the central entity for business-related data.
  * This class contains the core information about the business, such as its unique identifier, creation and modification dates,
@@ -11,7 +13,8 @@ import java.time.LocalDateTime
  * within the system, encompassing key business-specific information.
  * @param keys The number of VIP keys associated with the business central. Each key represents a unique access
  *             granted for the registration of new users who will be able to manage the business data.
- */
+ *//*
+
 data class BusinessCentral(
     override val businessCentralId: String,
     override val id: String?,
@@ -23,7 +26,8 @@ data class BusinessCentral(
     val keys: Int
 ) : Entity {
 
-    /**
+    */
+/**
      * Checks if a user has permission to access the system.
      *
      * This method checks if the provided `userId` is present in the set of authorized user IDs,
@@ -32,9 +36,10 @@ data class BusinessCentral(
      * @param userId The identifier of the user whose access is being verified.
      * @return Returns `true` if the `userId` is present in the set of authorized users,
      *         meaning the user has access to the system. Returns `false` otherwise.
-     */
+     *//*
+
     fun userHasSystemAccess(userId: String): Boolean {
         return authorizedUserIds.contains(userId)
     }
 
-}
+}*/

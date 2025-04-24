@@ -11,6 +11,9 @@ data class Company(
     val allowedUserIds: Set<UserID>
 ) : BaseEntity {
 
+    fun userHasSystemAccess(id: UserID): Boolean {
+        TODO("Not yet implemented")
+    }
 
 
 }

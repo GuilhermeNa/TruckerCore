@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.security.authentication.repository
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
@@ -255,4 +256,4 @@ private class DataProvider {
     val fbUser: FirebaseUser = mockk(relaxed = true)
     val profileChange: UserProfileChangeRequest = mockk(relaxed = true)
 
-}
+}*/

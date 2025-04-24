@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.use_cases.implementations
 
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
@@ -45,4 +46,4 @@ internal class UpdateBusinessCentralUseCaseImpl(
         return repository.update(dto)
     }
 
-}
+}*/

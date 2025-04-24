@@ -22,7 +22,6 @@ fun String.capitalizeEveryFirstChar(): String {
     return upperCaseArr.joinToString(" ")
 }
 
-
 /**
  * Extension function to check if the string is in a valid name format (only alphabetic characters).
  *
@@ -33,9 +32,6 @@ fun String.capitalizeEveryFirstChar(): String {
  * @return `true` if the string contains only alphabetic characters; `false` otherwise.
  */
 fun String.isNameFormat(): Boolean = this.matches("[\\p{L} ]+".toRegex())
-
-
-
 
 /**
  * Extension function to check if the string is in a valid email format.

@@ -18,7 +18,7 @@ data class User(
     val level: Level,
 
     // Composition Objects
-    val person: Person,
+    /*val person: Person,*/
     val vip: Vip
 
 ) : Entity {

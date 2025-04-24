@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.mapper
 
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
@@ -55,3 +56,4 @@ internal class BusinessCentralMapper : Mapper {
     }
 
 }
+*/

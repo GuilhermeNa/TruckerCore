@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -19,6 +19,6 @@ internal interface GetSessionInfoUseCase {
      *  - [Response.Empty] when data was not found.
      * @throws ObjectNotFoundException If no person details are found for the user.
      */
-    fun execute(firebaseUid: String): Flow<Response<SessionInfo>>
+    fun execute(firebaseUid: String): Flow<Response<String>>
 
 }

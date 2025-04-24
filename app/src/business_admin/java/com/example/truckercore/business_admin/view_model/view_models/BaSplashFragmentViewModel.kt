@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
-import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import com.example.truckercore.view_model.states.SplashFragState
@@ -60,16 +59,16 @@ class BaSplashFragmentViewModel(
     }
 
     private suspend fun handleLoggedUser() {
-        authService.getSessionInfo().single().let { response ->
+       /* authService.getSessionInfo().single().let { response ->
             when (response) {
                 is AppResponse.Success -> updateFragmentState(hasSystemAccess(response.data))
                 is AppResponse.Empty -> updateFragmentState(UserLoggedIn.ProfileIncomplete)
                 is AppResponse.Error -> updateFragmentState(Error(response.exception))
             }
-        }
+        }*/
     }
 
-    private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
+ /*   private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
         val user = sessionInfo.user
         val central = sessionInfo.central
         return if (permissionService.canAccessSystem(user, central)) {
@@ -77,7 +76,7 @@ class BaSplashFragmentViewModel(
         } else {
             UserLoggedIn.SystemAccessDenied
         }
-    }
+    }*/
 
     private fun handleUserNotFound() {
         updateFragmentState(SplashFragState.UserNotFound)

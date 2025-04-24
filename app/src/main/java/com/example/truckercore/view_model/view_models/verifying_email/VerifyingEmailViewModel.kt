@@ -59,9 +59,9 @@ class VerifyingEmailViewModel(private val authService: AuthService) : ViewModel(
      */
     private fun observeEmailValidation() {
         validationJob = viewModelScope.launch {
-            authService.observeEmailValidation().collect { result ->
+        /*    authService.observeEmailValidation().collect { result ->
                 effectManager.handleObserveEmailResult(result)
-            }
+            }*/
         }
     }
 

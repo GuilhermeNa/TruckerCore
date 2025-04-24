@@ -1,5 +1,8 @@
 package com.example.truckercore.model.shared.errors.validation
 
+import com.example.truckercore.model.shared.interfaces.data.dto.Dto
+import com.example.truckercore.model.shared.interfaces.data.entity.Entity
+
 /**
  * Custom exception class that represents an error when an object (either an entity or a DTO)
  * fails validation due to one or more invalid fields.

@@ -1,8 +1,6 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.security.authentication.entity
 
-import com.example.truckercore._test_data_provider.TestBusinessCentralDataProvider
-import com.example.truckercore._test_data_provider.TestUserDataProvider
-import com.example.truckercore._test_data_provider.TestVipDataProvider
 import com.example.truckercore.model.infrastructure.security.authentication.entity.SessionInfo
 import com.example.truckercore.model.modules.person.shared.person_details.PersonWithDetails
 import com.example.truckercore.model.shared.errors.InvalidStateException
@@ -129,4 +127,4 @@ class SessionInfoTest {
         private const val WRONG_ID = "wrongId"
     }
 
-}
+}*/

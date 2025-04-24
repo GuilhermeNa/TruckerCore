@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.repository
 
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
@@ -7,6 +8,7 @@ import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
+*/
 /**
  * Interface representing the repository for managing `BusinessCentralDto` data.
  *
@@ -18,11 +20,12 @@ import kotlinx.coroutines.flow.Flow
  *
  * @see Repository
  * @see BusinessCentralDto
- */
+ *//*
+
 internal interface BusinessCentralRepository : Repository {
 
     override fun fetchByDocument(documentParams: DocumentParameters): Flow<AppResponse<BusinessCentralDto>>
 
     override fun fetchByQuery(queryParams: QueryParameters): Flow<AppResponse<List<BusinessCentralDto>>>
 
-}
+}*/

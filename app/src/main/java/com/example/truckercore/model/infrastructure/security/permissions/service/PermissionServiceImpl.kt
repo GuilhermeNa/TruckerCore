@@ -1,8 +1,8 @@
 package com.example.truckercore.model.infrastructure.security.permissions.service
 
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.company.data.Company
+import com.example.truckercore.model.modules.user.data.User
 
 internal class PermissionServiceImpl: PermissionService {
 
@@ -10,8 +10,8 @@ internal class PermissionServiceImpl: PermissionService {
         return user.hasPermission(permission)
     }
 
-    override fun canAccessSystem(user: User, central: BusinessCentral): Boolean {
-        return central.userHasSystemAccess(user.id!!)
+    override fun canAccessSystem(user: User, central: Company): Boolean {
+        return central.userHasSystemAccess(user.id)
     }
 
 }

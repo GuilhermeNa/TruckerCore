@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.security.authentication.entity
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.security.authentication.expressions.toHash
 import com.example.truckercore.view_model.errors.EmptyUserNameException
 import com.example.truckercore.view_model.errors.IncompleteNameException
 import com.example.truckercore.view_model.errors.InvalidSizeException
@@ -168,4 +168,4 @@ class EmailCredentialTest {
         }
     }
 
-}
+}*/

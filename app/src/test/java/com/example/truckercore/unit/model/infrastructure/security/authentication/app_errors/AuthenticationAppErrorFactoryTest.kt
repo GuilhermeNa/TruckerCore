@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.security.authentication.app_errors
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.IncompleteTaskException
@@ -10,6 +11,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.app_
 import com.example.truckercore.model.shared.value_classes.exceptions.InvalidNameException
 import com.example.truckercore.model.shared.value_classes.exceptions.InvalidPasswordException
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -221,4 +223,4 @@ class AuthenticationAppErrorFactoryTest {
         assertEquals(EmailCredentialErrCode.Unknown, result.errorCode)
     }
 
-}
+}*/

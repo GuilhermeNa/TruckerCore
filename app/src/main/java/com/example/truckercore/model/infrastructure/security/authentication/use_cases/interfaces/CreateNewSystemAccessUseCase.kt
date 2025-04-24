@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
+import com.example.truckercore.model.shared.utils.sealeds.Response
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -19,6 +19,6 @@ internal interface CreateNewSystemAccessUseCase {
      * @param requirements The [NewAccessRequirements] containing details necessary for creating new access.
      * @return A [Flow] emitting a [Response] that indicates success or failure.
      */
-    fun execute(requirements: NewAccessRequirements): Flow<Response<Unit>>
+    fun execute(requirements: String): Flow<Response<Unit>>
 
 }

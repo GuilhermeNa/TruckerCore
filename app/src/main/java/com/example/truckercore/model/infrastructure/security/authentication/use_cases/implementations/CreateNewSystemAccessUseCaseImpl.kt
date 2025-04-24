@@ -1,15 +1,9 @@
+/*
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations
 
 import com.example.truckercore.model.configs.constants.Collection
-import com.example.truckercore.model.infrastructure.data_source.firebase.repository.FirebaseRepository
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewAccessRequirements
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateNewSystemAccessUseCase
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.model.modules.business_central.factory.BusinessCentralFactory
-import com.example.truckercore.model.modules.person.employee.admin.factory.AdminFactory
-import com.example.truckercore.model.modules.person.employee.driver.factory.DriverFactory
-import com.example.truckercore.model.modules.user.enums.PersonCategory
-import com.example.truckercore.model.modules.user.factory.UserFactory
 import com.google.firebase.firestore.Transaction
 import kotlinx.coroutines.flow.Flow
 
@@ -89,4 +83,4 @@ internal class CreateNewSystemAccessUseCaseImpl(
         }
     }
 
-}
+}*/

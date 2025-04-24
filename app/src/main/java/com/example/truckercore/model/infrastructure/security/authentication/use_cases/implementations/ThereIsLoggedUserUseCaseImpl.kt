@@ -7,6 +7,6 @@ class ThereIsLoggedUserUseCaseImpl(
     private val authenticationRepository: AuthenticationRepository
 ): ThereIsLoggedUserUseCase {
 
-    override fun invoke(): Boolean = authenticationRepository.getCurrentUser() != null
+    override fun invoke(): Boolean = TODO()
 
 }

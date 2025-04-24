@@ -1,11 +1,14 @@
+/*
 package com.example.truckercore.model.shared.services
 
 import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.model.shared.errors.strategy.StrategyNotFoundException
 import com.example.truckercore.model.shared.errors.validation.ValidationException
+import com.example.truckercore.model.shared.interfaces.data.dto.Dto
 import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
 import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 
+*/
 /**
  * A service class responsible for validating [Entity] and [Dto] objects using a provided validation strategy.
  *
@@ -16,13 +19,15 @@ import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
  * @param resolver The class responsible for determining which strategy will be used.
  * @param _strategy The validation strategy to be used for validating entities and DTOs.
  *
- */
+ *//*
+
 internal class ValidatorService(
     private val resolver: ValidatorStrategyResolver,
     private var _strategy: ValidatorStrategy
 ) {
 
-    /**
+    */
+/**
      * Validates a [Dto] object using the provided validation strategy.
      *
      * This method delegates the validation of the DTO to the strategy's `validateDto` method.
@@ -30,14 +35,16 @@ internal class ValidatorService(
      *
      * @param dto The DTO object to be validated.
      * @throws ValidationException If the DTO fails any validation checks.
-     */
+     *//*
+
     fun validateDto(dto: Dto) {
         val input = ValidatorInput.DtoInput(dto)
         setStrategy(input)
         _strategy.validateDto(input)
     }
 
-    /**
+    */
+/**
      * Validates an [Entity] object using the provided validation strategy.
      *
      * This method delegates the validation of the entity to the strategy's `validateEntity` method.
@@ -45,14 +52,16 @@ internal class ValidatorService(
      *
      * @param entity The entity object to be validated.
      * @throws ValidationException If the entity fails any validation checks.
-     */
+     *//*
+
     fun validateEntity(entity: Entity) {
         val input = ValidatorInput.EntityInput(entity)
         setStrategy(input)
         _strategy.validateEntity(input)
     }
 
-    /**
+    */
+/**
      * Validates an [Entity] object specifically for creation using the provided validation strategy.
      *
      * This method delegates the validation of the entity for creation to the strategy's `validateForCreation` method.
@@ -60,14 +69,16 @@ internal class ValidatorService(
      *
      * @param entity The entity object to be validated for creation.
      * @throws ValidationException If the entity fails any validation checks for creation.
-     */
+     *//*
+
     fun validateForCreation(entity: Entity) {
         val input = ValidatorInput.EntityInput(entity)
         setStrategy(input)
         _strategy.validateForCreation(input)
     }
 
-    /**
+    */
+/**
      * Sets the validation strategy based on the provided [ValidatorInput].
      *
      * This method is responsible for resolving and assigning the correct [ValidatorStrategy] based on the input type.
@@ -77,10 +88,11 @@ internal class ValidatorService(
      * @param input The input object that provides the data to determine the appropriate validation strategy. This can be
      *              either a [ValidatorInput.DtoInput] containing a [Dto] or a [ValidatorInput.EntityInput] containing an [Entity].
      * @throws StrategyNotFoundException If no strategy is found for the provided input type, an exception is thrown.
-     */
+     *//*
+
     private fun setStrategy(input: ValidatorInput) {
         val newStrategy = resolver.execute(input)
         _strategy = newStrategy
     }
 
-}
+}*/

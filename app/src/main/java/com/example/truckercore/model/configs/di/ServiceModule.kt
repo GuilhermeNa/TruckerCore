@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.configs.di
 
 import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
@@ -15,4 +16,4 @@ val serviceModule = module {
     // The other validation strategies do not need to be manually injected, as the Resolver
     // handles strategy selection.
     single<ValidatorService> { ValidatorService(get(), get()) }
-}
+}*/

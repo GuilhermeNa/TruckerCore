@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.validator
 
 import com.example.truckercore.model.configs.constants.Field
@@ -92,4 +93,4 @@ internal class BusinessCentralValidationStrategy : ValidatorStrategy() {
         if (invalidFields.isNotEmpty()) throw InvalidObjectException(entity, invalidFields)
     }
 
-}
+}*/

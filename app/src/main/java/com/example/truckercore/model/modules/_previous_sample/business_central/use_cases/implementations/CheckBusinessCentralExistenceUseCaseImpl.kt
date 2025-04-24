@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.use_cases.implementations
 
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
@@ -18,4 +19,4 @@ internal class CheckBusinessCentralExistenceUseCaseImpl(
     override fun execute(user: User, id: String): Flow<AppResponse<Unit>> =
         user.runIfPermitted { repository.entityExists(id) }
 
-}
+}*/

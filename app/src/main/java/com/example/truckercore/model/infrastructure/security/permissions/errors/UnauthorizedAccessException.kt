@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.permissions.errors
 
 import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
-import com.example.truckercore.model.modules.user.entity.User
+import com.example.truckercore.model.modules.user.data.User
 
 /**
  * Exception thrown when an unauthorized action is attempted by a user or service.

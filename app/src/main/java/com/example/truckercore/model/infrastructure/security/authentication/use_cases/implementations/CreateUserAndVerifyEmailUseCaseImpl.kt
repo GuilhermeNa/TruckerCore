@@ -1,24 +1,24 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations
 
-import com.example.truckercore.model.configs.constants.EarlyExit
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.NewEmailResult
 import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.infrastructure.utils.task_manager.TaskManager
 import com.example.truckercore.model.shared.utils.expressions.handleAppResult
 import com.example.truckercore.model.shared.utils.expressions.logError
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore.model.shared.utils.expressions.onEarlyExit
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 
+typealias EarlyExit = Boolean
+
 internal class CreateUserAndVerifyEmailUseCaseImpl(
     private val authRepository: AuthenticationRepository,
-    private val userTask: TaskManager<FirebaseUser>,
+    private val userTask: TaskManager<Unit>,
     private val nameTask: TaskManager<Unit>,
     private val emailTask: TaskManager<Unit>,
 ) : CreateUserAndVerifyEmailUseCase {
@@ -45,11 +45,11 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
     }
 
     private suspend fun createUser(credential: EmailCredential): EarlyExit {
-        return authRepository.createUserWithEmail(credential.email.value, credential.password.value)
+        return authRepository.createUserWithEmail(credential.email, credential.password)
             .mapAppResult(
-                success = { fbUser ->
+                success = {
                     // Mark the task as successful with the Firebase user
-                    userTask.onSuccess(fbUser)
+                    userTask.onSuccess(Unit)
                     false // No early exit
                 },
                 error = { e ->
@@ -68,9 +68,8 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
         }
 
     private suspend fun updateName(credential: EmailCredential) {
-        val request = userProfileChangeRequest { displayName = credential.name.value }
-
-        authRepository.updateUserProfile(request).handleAppResult(
+        val profile = UserProfile(credential.name)
+        authRepository.updateUserProfile(profile).handleAppResult(
             success = { nameTask.onSuccess(Unit) },
             error = { e -> nameTask.onError(e) }
         )
@@ -93,7 +92,6 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
         }
 
         return NewEmailResult(
-            firebaseUser = userTask.result,
             userCreated = userTask.isSuccess,
             nameUpdated = nameTask.isSuccess,
             emailSent = emailTask.isSuccess,

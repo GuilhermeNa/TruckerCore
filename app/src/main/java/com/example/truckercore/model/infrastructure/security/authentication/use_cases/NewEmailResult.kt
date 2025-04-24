@@ -9,8 +9,6 @@ import com.google.firebase.auth.FirebaseUser
  * This class is typically used in authentication flows where multiple operations are chained together,
  * and each step may succeed or fail independently.
  *
- * @property firebaseUser The [FirebaseUser] instance returned by Firebase after account creation.
- *                        May be null if the creation failed.
  * @property userCreated Indicates whether the user account was successfully created.
  * @property nameUpdated Indicates whether the display name (or other profile data) was successfully updated.
  * @property emailSent Indicates whether the verification email was successfully sent.
@@ -18,7 +16,6 @@ import com.google.firebase.auth.FirebaseUser
  *                  This allows multiple failure points to be tracked and reported together.
  */
 data class NewEmailResult(
-    val firebaseUser: FirebaseUser? = null,
     val userCreated: Boolean = false,
     val nameUpdated: Boolean = false,
     val emailSent: Boolean = false,

@@ -1,6 +1,7 @@
 package com.example.truckercore.model.shared.errors.mapping
 
-import com.example.truckercore.model.modules.fleet.shared.module.licensing.entity.Licensing
+import com.example.truckercore.model.shared.interfaces.data.dto.Dto
+import com.example.truckercore.model.shared.interfaces.data.entity.Entity
 
 /**
  * Custom exception for errors related to mapping in [Licensing].

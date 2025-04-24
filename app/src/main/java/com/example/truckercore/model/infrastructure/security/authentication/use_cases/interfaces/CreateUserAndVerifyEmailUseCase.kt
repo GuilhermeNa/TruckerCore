@@ -1,8 +1,8 @@
 package com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces
 
-import com.example.truckercore.model.infrastructure.security.authentication.entity.NewEmailResult
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
+import com.example.truckercore.model.infrastructure.security.authentication.use_cases.NewEmailResult
 
 internal interface CreateUserAndVerifyEmailUseCase {
 

@@ -1,7 +1,9 @@
+/*
 package com.example.truckercore.model.shared.errors.strategy
 
 import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
 
+*/
 /**
  * Exception thrown when no validation strategy is found for a given class type.
  *
@@ -9,5 +11,7 @@ import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
  * for the provided class type.
  *
  * @param message The message describing the error.
- */
+ *//*
+
 class StrategyNotFoundException(message: String) : Exception(message)
+*/

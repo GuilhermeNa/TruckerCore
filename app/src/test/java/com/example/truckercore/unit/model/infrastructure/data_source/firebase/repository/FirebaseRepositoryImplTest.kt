@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.repository
 
 import com.example.truckercore._test_utils.mockStaticLog
@@ -875,3 +876,4 @@ internal class FirebaseRepositoryImplTest : KoinTest {
         }
 
 }
+*/

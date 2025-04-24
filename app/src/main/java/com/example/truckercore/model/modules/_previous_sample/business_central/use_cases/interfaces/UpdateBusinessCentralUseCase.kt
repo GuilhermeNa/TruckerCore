@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.use_cases.interfaces
 
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
@@ -6,16 +7,19 @@ import com.example.truckercore.model.shared.errors.ObjectNotFoundException
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 
+*/
 /**
  * Interface representing the use case for updating a [BusinessCentral] entity.
  *
  * This interface defines the contract for a use case that is responsible for updating a [BusinessCentral] entity.
  * It encapsulates the logic for updating the entity, which might include validation, business logic, and persistence operations.
  * The operation is asynchronous and uses Kotlin's [suspend] function to allow it to be executed in a coroutine.
- */
+ *//*
+
 internal interface UpdateBusinessCentralUseCase {
 
-    /**
+    */
+/**
      * Executes the use case to update a [BusinessCentral] entity.
      *
      * This method encapsulates the logic required to update a [BusinessCentral] entity in the system.
@@ -28,7 +32,8 @@ internal interface UpdateBusinessCentralUseCase {
      *         If any error occurs during the process, a relevant error response is emitted.
      * @throws NullPointerException If the [BusinessCentral] entity ID is null while performing the update.
      * @throws ObjectNotFoundException If the [BusinessCentral] entity does not exist during the existence check.
-     */
+     *//*
+
     fun execute(user: User, bCentral: BusinessCentral): Flow<Response<Unit>>
 
-}
+}*/

@@ -16,7 +16,7 @@ import com.example.truckercore.model.shared.value_classes.Password
  *
  * @property errorMapper Maps exceptions thrown by the backend to domain-specific `AuthSourceException`s.
  */
-abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) { // 158
+abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
 
     /**
      * Creates a new user account using the provided email and password.

@@ -96,16 +96,10 @@ class EmailAuthFragment : Fragment() {
         with(EmailAuthFragmentDirections) {
             return@with when (type) {
                 UserCreatedAndEmailSent ->
-                    actionEmailAuthFragmentToVerifyingEmailFragment(
-                        email = emailText,
-                        emailSent = true
-                    )
+                    actionEmailAuthFragmentToVerifyingEmailFragment(email = emailText)
 
                 UserCreatedAndEmailFailed ->
-                    actionEmailAuthFragmentToVerifyingEmailFragment(
-                        email = emailText,
-                        emailSent = false
-                    )
+                    actionEmailAuthFragmentToVerifyingEmailFragment(email = emailText)
             }
         }.let { direction -> navigateTo(direction) }
 

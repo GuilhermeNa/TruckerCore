@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.factory
 
 import com.example.truckercore.model.modules.business_central.dto.BusinessCentralDto
@@ -6,6 +7,7 @@ import com.example.truckercore.model.modules.business_central.mapper.BusinessCen
 import com.example.truckercore.model.shared.services.ValidatorService
 import java.time.LocalDateTime
 
+*/
 /**
  * Factory class for creating instances of [BusinessCentralDto].
  *
@@ -14,7 +16,8 @@ import java.time.LocalDateTime
  *
  * @property validator The [ValidatorService] used to validate the created [BusinessCentral] entity.
  * @property mapper The [BusinessCentralMapper] used to convert the [BusinessCentral] entity to a DTO.
- */
+ *//*
+
 internal class BusinessCentralFactory(
     private val validator: ValidatorService,
     private val mapper: BusinessCentralMapper
@@ -25,7 +28,8 @@ internal class BusinessCentralFactory(
         private const val DEFAULT_SYSTEM_ACCESS_KEYS_AMOUNT = 1
     }
 
-    /**
+    */
+/**
      * Creates a new [BusinessCentralDto] instance with the specified [centralId] and [userId].
      *
      * This method will create a new [BusinessCentral] entity, validate it using the provided [ValidatorService],
@@ -35,7 +39,8 @@ internal class BusinessCentralFactory(
      * @param userId The user ID to be associated with the created [BusinessCentralDto] as the `lastModifierId`
      *               and the only authorized user in the [authorizedUserIds] set.
      * @return The newly created [BusinessCentralDto] initialized with the specified [centralId] and [userId].
-     */
+     *//*
+
     fun create(
         centralId: String,
         userId: String
@@ -55,4 +60,4 @@ internal class BusinessCentralFactory(
         return dto.initializeId(centralId)
     }
 
-}
+}*/

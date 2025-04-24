@@ -27,42 +27,4 @@ internal class AuthServiceImpl(
 
     override fun thereIsLoggedUser(): Boolean = thereIsLoggedUser.invoke()
 
-
-    /*
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun signIn(emailAuthCredential: EmailAuthCredential): Flow<AppResponse<SessionInfo>> =
-        runSafe {
-            authRepository.signIn(emailAuthCredential.email, emailAuthCredential.password)
-                .flatMapConcat { response ->
-                    if (response !is Response.Success) return@flatMapConcat flowOf(Response.Empty)
-                    getLoggedUserFromFirebase()
-                }
-        }
-
-    override fun signOut() {
-        authRepository.signOut()
-    }
-
-
-
-    override fun createNewSystemAccess(requirements: NewAccessRequirements) =
-        runSafe { createSystemAccess.execute(requirements) }
-
-
-
-    override fun getSessionInfo(): Flow<AppResponse<SessionInfo>> = runSafe {
-        getLoggedUserFromFirebase()
-    }
-
-    private fun getLoggedUserFromFirebase(): Flow<Response<SessionInfo>> =
-        authRepository.getCurrentUser()?.let { fbUser ->
-            getLoggedUser.execute(fbUser.uid)
-        } ?: flowOf(
-            Response.Error(
-                NullFirebaseUserException(
-                    "Firebase returned a null FirebaseUser."
-                )
-            )
-        )*/
-
 }

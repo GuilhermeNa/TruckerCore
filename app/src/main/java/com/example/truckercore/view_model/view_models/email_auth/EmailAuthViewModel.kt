@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
+import com.example.truckercore.model.shared.value_classes.Email
+import com.example.truckercore.model.shared.value_classes.FullName
+import com.example.truckercore.model.shared.value_classes.Password
 import com.example.truckercore.view_model.expressions.validateUserName
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError.InvalidEmailError
@@ -79,9 +82,9 @@ class EmailAuthViewModel(
             // Create a credential with hashed password and authenticate
             val credential =
                 EmailCredential(
-                    args.name,
-                    email,
-                    password
+                    FullName(args.name),
+                    Email(email),
+                    Password.from(password)
                 )
             val newState = authenticateAndVerifyEmail(credential)
             setState(newState)

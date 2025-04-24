@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules._previous_sample.business_central.dto
 
 import java.util.Date
@@ -17,4 +18,4 @@ internal data class BusinessCentralDto(
         return this.copy(id = newId, persistenceStatus = PersistenceStatus.PERSISTED.name)
     }
 
-}
+}*/
