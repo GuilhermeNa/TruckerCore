@@ -3,7 +3,7 @@ package com.example.truckercore.view_model.view_models.email_auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
+import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.value_classes.Email
 import com.example.truckercore.model.shared.value_classes.FullName

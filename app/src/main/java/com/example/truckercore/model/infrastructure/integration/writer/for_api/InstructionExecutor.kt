@@ -12,11 +12,11 @@ import com.example.truckercore.model.infrastructure.integration.writer.for_app.i
  *
  * Concrete implementations should define how instructions are executed (e.g., in Firestore, SQLite, etc.).
  *
- * @param T The specific type of [ApiInstruction] produced by the interpreter.
+ * @param I The specific type of [ApiInstruction] produced by the interpreter.
  * @property interpreter The interpreter responsible for transforming raw [Instruction]s into [ApiInstruction]s.
  */
-abstract class InstructionExecutor<T : ApiInstruction>(
-    protected val interpreter: InstructionInterpreter<T>
+abstract class InstructionExecutor<I : ApiInstruction>(
+    protected val interpreter: InstructionInterpreter<I>
 ) {
 
     /**
@@ -36,6 +36,6 @@ abstract class InstructionExecutor<T : ApiInstruction>(
      * @throws InvalidInstructionException if validation fails
      * @throws InstructionExecutorException for interpreter or execution errors
      */
-    abstract suspend operator fun invoke(deque: ArrayDeque<Instruction>)
+    abstract suspend operator fun <T: Instruction>invoke(deque: ArrayDeque<T>)
 
 }

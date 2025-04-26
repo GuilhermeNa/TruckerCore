@@ -13,7 +13,7 @@ class FirestoreExecutor(
     interpreter: FirestoreInstInterpreter
 ) : InstructionExecutor<FirebaseInstruction>(interpreter) {
 
-    override suspend fun invoke(deque: ArrayDeque<Instruction>) {
+    override suspend fun <T : Instruction> invoke(deque: ArrayDeque<T>) {
         validateInstructions(deque)
 
         // Executes all instructions within a Firestore transaction
@@ -31,7 +31,7 @@ class FirestoreExecutor(
     }
 
     // Ensures the instruction queue meets all preconditions before execution
-    private fun validateInstructions(deque: ArrayDeque<Instruction>) {
+    private fun <T : Instruction> validateInstructions(deque: ArrayDeque<T>) {
         if (deque.isEmpty()) throw InvalidInstructionException(
             "Instruction deque must not be empty. At least one instruction is required for execution."
         )
@@ -47,14 +47,14 @@ class FirestoreExecutor(
     }
 
     // Checks if there are duplicate instruction tags in the queue
-    private fun ArrayDeque<Instruction>.thereIsRepeatedTag() =
+    private fun <T : Instruction> ArrayDeque<T>.thereIsRepeatedTag() =
         this.map { it.instructionTag }
             .groupingBy { it }
             .eachCount()
             .any { it.value > 1 }
 
     // Checks if any PutLazy instruction is referencing a missing instruction
-    private fun ArrayDeque<Instruction>.isMissingLazyReference(): Boolean {
+    private fun <T : Instruction> ArrayDeque<T>.isMissingLazyReference(): Boolean {
         val putLazies = this.filterIsInstance<PutLazy>()
 
         return if (putLazies.isNotEmpty()) {

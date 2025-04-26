@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.repository
 
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
-import com.example.truckercore.model.infrastructure.integration.data.for_app.app_exception.DataAppErrorFactory
+import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.DataAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
@@ -35,7 +35,7 @@ class DataRepositoryImpl(
 
     private inline fun <T> flowSafe(block: () -> Flow<T?>): Flow<AppResponse<T>> =
         block().map { handleDataSourceData(it) }
-            .catch { AppResponse.Error(appErrorFactory.handleFlowError(it)) }
+            .catch { emit(AppResponse.Error(appErrorFactory.handleFlowError(it))) }
 
     private fun <T> handleDataSourceData(data: T?): AppResponse<T> =
         if (data == null) AppResponse.Empty

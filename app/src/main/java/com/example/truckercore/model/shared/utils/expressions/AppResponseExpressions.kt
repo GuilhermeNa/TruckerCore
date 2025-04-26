@@ -13,3 +13,16 @@ fun <R, T> AppResponse<T>.mapAppResponse(
     is AppResponse.Empty -> empty()
 }
 
+fun <T> AppResponse<T>.extractData() =
+    if(this is AppResponse.Success) this.data
+    else throw ClassCastException(
+        "Cannot extract data: Response is not of type AppResponse.Success." +
+                " Actual response is $this."
+    )
+
+fun <T> AppResponse<T>.extractError() =
+    if(this is AppResponse.Error) this.exception
+    else throw ClassCastException(
+        "Cannot extract exception: Response is not of type AppResponse.Error." +
+                " Actual response is $this."
+    )

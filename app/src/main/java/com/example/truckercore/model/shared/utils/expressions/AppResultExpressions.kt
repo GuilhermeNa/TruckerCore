@@ -20,3 +20,17 @@ fun <T> AppResult<T>.handleAppResult(
     is Success -> success(data)
     is Error -> error(exception)
 }
+
+fun <T> AppResult<T>.extractData() =
+    if (this is Success) this.data
+    else throw ClassCastException(
+        "Cannot extract data: Result is not of type AppResult.Success." +
+                " Actual response is $this."
+    )
+
+fun <T> AppResult<T>.extractError() =
+    if (this is Error) this.exception
+    else throw ClassCastException(
+        "Cannot extract exception: Result is not of type AppResult.Error." +
+                " Actual response is $this."
+    )

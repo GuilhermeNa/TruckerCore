@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.infrastructure.security.authentication.use_cases
 
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.implementations.SendVerificationEmailUseCaseImpl
+import com.example.truckercore.model.modules.authentication.use_cases.implementations.SendVerificationEmailUseCaseImpl
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
-import com.example.truckercore.model.infrastructure.security.authentication.use_cases.interfaces.SendVerificationEmailUseCase
+import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import io.mockk.coEvery
 import io.mockk.coVerify

@@ -50,7 +50,7 @@ sealed class UpdateUserProfileErrCode : AuthErrorCode {
      * Error code indicating that no user is currently authenticated or the session has expired
      * while attempting to update users name.
      */
-    data object SessionInactive : SendEmailVerificationErrCode() {
+    data object SessionInactive : UpdateUserProfileErrCode() {
         override val name = "SESSION_INACTIVE"
         override val userMessage = "Usuário não encontrado. Tente fazer o login."
         override val logMessage = "Names update attempt failed. User not found or session expired "

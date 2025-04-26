@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.verifying_email
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.security.authentication.service.AuthService
+import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEffect.EmailVerificationFailed

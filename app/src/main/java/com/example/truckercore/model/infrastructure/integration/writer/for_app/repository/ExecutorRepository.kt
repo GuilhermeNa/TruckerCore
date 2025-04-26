@@ -38,6 +38,6 @@ interface ExecutorRepository {
      * @param instructions The instructions to be executed.
      * @return [AppResult] containing the operation result.
      */
-    suspend operator fun invoke(instructions: ArrayDeque<Instruction>): AppResult<Unit>
+    suspend operator fun <T: Instruction>invoke(instructions: ArrayDeque<T>): AppResult<Unit>
 
 }
