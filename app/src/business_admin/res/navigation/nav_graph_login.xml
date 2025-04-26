@@ -19,6 +19,18 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_emailAuthFragment"
+            app:destination="@id/emailAuthFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_continueRegisterFragment"
+            app:destination="@id/continueRegisterFragment" />
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
@@ -29,12 +41,14 @@
             android:name="flavor"
             app:argType="com.example.truckercore.view.enums.Flavor" />
         <action
-            android:id="@+id/action_welcomeFragment_to_userNameFragment"
-            app:destination="@id/userNameFragment"
+            android:id="@+id/action_welcomeFragment_to_emailAuthFragment"
+            app:destination="@id/emailAuthFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/emailAuthFragment"
@@ -42,20 +56,14 @@
         android:label="fragment_email_auth"
         tools:layout="@layout/fragment_email_auth" >
         <action
-            android:id="@+id/action_emailAuthFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_emailAuthFragment_to_verifyingEmailFragment"
-            app:destination="@id/verifyingEmailFragment"
+            android:id="@+id/action_emailAuthFragment_to_userNameFragment"
+            app:destination="@id/userNameFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/emailAuthFragment"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="name"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -71,12 +79,10 @@
             android:name="email"
             app:argType="string" />
         <action
-            android:id="@+id/action_verifyingEmailFragment_to_userNameFragment"
-            app:destination="@id/userNameFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_verifyingEmailFragment_to_emailAuthFragment"
+            app:destination="@id/emailAuthFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/verifyingEmailFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -86,12 +92,36 @@
         android:label="fragment_user_name"
         tools:layout="@layout/fragment_user_name" >
         <action
-            android:id="@+id/action_userNameFragment_to_emailAuthFragment"
-            app:destination="@id/emailAuthFragment"
+            android:id="@+id/action_userNameFragment_to_verifyingEmailFragment"
+            app:destination="@id/verifyingEmailFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/continueRegisterFragment"
+        android:name="com.example.truckercore.view.fragments.continue_register.ContinueRegisterFragment"
+        android:label="fragment_continue_register"
+        tools:layout="@layout/fragment_continue_register" >
+        <action
+            android:id="@+id/action_continueRegisterFragment_to_userNameFragment"
+            app:destination="@id/userNameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/continueRegisterFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_continueRegisterFragment_to_verifyingEmailFragment"
+            app:destination="@id/verifyingEmailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/continueRegisterFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 
