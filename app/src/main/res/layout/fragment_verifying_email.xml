@@ -1,120 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frag_verifying_email_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient_primary"
     android:orientation="vertical"
-    app:layoutDescription="@xml/fragment_verifying_email_scene"
-    tools:context=".view.fragments.verifying_email.VerifyingEmailFragment"
-    android:id="@+id/frag_verifying_email_main">
+    tools:context=".view.fragments.verifying_email.VerifyingEmailFragment">
 
-    <LinearLayout
-        android:id="@+id/frag_verifying_layout_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toTopOf="@id/frag_verifying_email_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25">
+        tools:src="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/frag_verifying_email_title"
-            style="@style/textEmphasis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="Aguardando verificação!" />
-
-        <TextView
-            android:id="@+id/frag_verifying_email_message"
-            style="@style/textDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:maxLines="5"
-            android:text="Te enviamos um email de validação. Por favor, verifique sua caixa de entrada (ou pasta de spam) e clique no link de verificação para continuar." />
-
-        <TextView
-            android:id="@+id/frag_verifying_email_sent_to"
-            style="@style/textDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:maxLines="1"
-            android:textStyle="italic"
-            tools:text="email_test@mail.com"
-
-            />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/frag_verifying_email_button_resend"
-        style="@style/buttonPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="64dp"
-        android:layout_marginTop="64dp"
-        android:enabled="false"
-        android:text="@string/resend"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_verifying_layout_text" />
-
-    <LinearLayout
-        android:id="@+id/frag_verifying_email_layout_counter"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/frag_verifying_email_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:backgroundTint="@color/green"
+        app:cardCornerRadius="50dp"
+        android:translationZ="11dp"
+        app:cardElevation="11dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_button_resend">
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_guideline"
+        app:strokeWidth="0dp" />
 
-        <TextView
-            style="@style/textDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/await"
-            android:textColor="@color/grey" />
 
-        <TextView
-            android:id="@+id/frag_verifying_email_timer"
-            style="@style/textEmphasis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/grey"
-            android:textStyle="bold"
-            android:text="59" />
-
-        <TextView
-            style="@style/textDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/to_resend"
-            android:textColor="@color/grey" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/frag_verifying_email_button_new_account"
-        style="@style/buttonTransparent"
-        android:layout_width="match_parent"
-        android:text="@string/register_new_account"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="64dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.motion.widget.MotionLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
