@@ -1,5 +1,6 @@
 package com.example.truckercore.view.fragments.welcome
 
+import Direction
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,6 @@ import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.slideInBottom
 import com.example.truckercore.view.expressions.slideOutBottom
 import com.example.truckercore.view.fragments.base.CloseAppFragment
-import com.example.truckercore.view.sealeds.Direction
 import com.example.truckercore.view_model.states.WelcomeFragState.Error
 import com.example.truckercore.view_model.states.WelcomeFragState.Initial
 import com.example.truckercore.view_model.states.WelcomeFragState.Stage
@@ -117,7 +117,7 @@ class WelcomeFragment : CloseAppFragment() {
     private fun handleLeftFab(stage: Stage): Unit =
         with(binding.fragWelcomeLeftFab) {
             if (stage == Stage.UserInFirsPage)
-                slideOutBottom(INVISIBLE)
+                slideOutBottom(INVISIBLE, duration = 200)
             else {
                 slideInBottom()
             }
@@ -154,12 +154,8 @@ class WelcomeFragment : CloseAppFragment() {
      * Changes the ViewPager's current item based on the direction (forward or back).
      */
     private fun paginateViewPager(direction: Direction) {
-        val directionVl = when (direction) {
-            Direction.Forward -> +1
-            Direction.Back -> -1
-        }
         viewPager?.run {
-            setCurrentItem(currentItem + directionVl, true)
+            setCurrentItem(currentItem + direction.value, true)
         }
     }
 
@@ -187,7 +183,7 @@ class WelcomeFragment : CloseAppFragment() {
         //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
 
         // Navigate to destination direction.
-        val direction = WelcomeFragmentDirections.actionWelcomeFragmentToUserNameFragment()
+        val direction = WelcomeFragmentDirections.actionWelcomeFragmentToEmailAuthFragment()
         navigateTo(direction)
     }
 

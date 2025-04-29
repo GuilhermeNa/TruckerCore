@@ -200,8 +200,8 @@ class VerifyingEmailFragment : CloseAppFragment() {
          * Handles both recoverable and fatal errors using the provided [ErrorCode].
          */
         fun handleErrorCode(errorCode: ErrorCode) = errorCode.handleOnUi(
-            recoverable = { showSnackBarRed(errorCode.userMessage) },
-            fatalError = { navigateToNotificationActivity(errorCode) }
+            onRecoverable = { showSnackBarRed(errorCode.userMessage) },
+            onFatalError = { navigateToNotificationActivity(errorCode) }
         )
 
         private fun navigateToNotificationActivity(errorCode: ErrorCode) {

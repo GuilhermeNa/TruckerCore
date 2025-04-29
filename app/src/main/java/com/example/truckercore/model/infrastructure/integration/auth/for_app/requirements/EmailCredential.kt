@@ -13,19 +13,13 @@ import com.example.truckercore.model.shared.value_classes.Password
  * ---
  * ### Example:
  * ```kotlin
- * val name = FullName.from("João da Silva")
  * val email = Email("joao.silva@email.com")
  * val password = Password.from("123456")
  *
- * val credentials = EmailCredential(name, email, password)
+ * val credentials = EmailCredential(email, password)
  * ```
  *
- * @property name the full name of the user (validated and normalized)
  * @property email the email address of the user
  * @property password the user's hashed password
  */
-class EmailCredential(
-    val name: FullName,
-    val email: Email,
-    val password: Password
-)
+class EmailCredential(val email: Email, val password: Password)

@@ -8,9 +8,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavDirections
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.Navigator
 import com.example.truckercore.R
 
 /**
@@ -89,11 +87,12 @@ fun View.slideInBottom() {
  * @receiver View - The view on which this function is invoked.
  * @param vis Int - The desired visibility state after the animation (either `INVISIBLE` or `GONE`).
  */
-fun View.slideOutBottom(vis: Int) {
+fun View.slideOutBottom(vis: Int, duration: Long? = null) {
     // Checks if the view's visibility is not already the desired value.
     if (visibility != vis) {
         // Loads the slide-out animation from the resource.
         val animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
+        duration?.let { animation.duration = duration }
 
         // Sets the view's visibility to the provided value (INVISIBLE or GONE).
         visibility = vis
@@ -143,5 +142,11 @@ fun View.slideOutTop(vis: Int) {
 
         // Starts the animation.
         this.startAnimation(animation)
+    }
+}
+
+fun List<View>.clearFocusIfNeeded() {
+    this.forEach { v ->
+        if (v.hasFocus()) v.clearFocus()
     }
 }

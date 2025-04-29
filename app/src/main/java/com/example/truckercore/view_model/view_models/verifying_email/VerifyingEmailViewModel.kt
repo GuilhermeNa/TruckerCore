@@ -159,8 +159,8 @@ class VerifyingEmailViewModel(private val authService: AuthService) : ViewModel(
          */
         fun handleSendEmailResult(result: AppResult<Unit>) =
             result.mapAppResult(
-                success = { SendEmailSucceed(EMAIL_SENT_MESSAGE) },
-                error = { e -> SendEmailFailed(e.errorCode) }
+                onSuccess = { SendEmailSucceed(EMAIL_SENT_MESSAGE) },
+                onError = { e -> SendEmailFailed(e.errorCode) }
             ).let { effect -> setEffect(effect) }
 
         /**
@@ -169,8 +169,8 @@ class VerifyingEmailViewModel(private val authService: AuthService) : ViewModel(
          */
         fun handleObserveEmailResult(response: AppResult<Unit>) =
             response.mapAppResult(
-                success = { EmailVerificationSucceed },
-                error = { e -> EmailVerificationFailed(e.errorCode) }
+                onSuccess = { EmailVerificationSucceed },
+                onError = { e -> EmailVerificationFailed(e.errorCode) }
             ).let { effect ->
                 cancelJob(validationJob)
                 setEffect(effect)

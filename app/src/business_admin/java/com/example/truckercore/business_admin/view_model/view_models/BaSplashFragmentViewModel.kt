@@ -30,10 +30,10 @@ class BaSplashFragmentViewModel(
     fun run() {
         viewModelScope.launch {
             updateFragmentState(SplashFragState.FirstAccess)
-           /* when (isFirstAccess()) {
+            when (isFirstAccess()) {
                 true -> handleFirstAccess()
                 false -> handleDefaultAccess()
-            }*/
+            }
         }
     }
 
@@ -59,7 +59,7 @@ class BaSplashFragmentViewModel(
     }
 
     private suspend fun handleLoggedUser() {
-       /* authService.getSessionInfo().single().let { response ->
+/*        authService.getSessionInfo().single().let { response ->
             when (response) {
                 is AppResponse.Success -> updateFragmentState(hasSystemAccess(response.data))
                 is AppResponse.Empty -> updateFragmentState(UserLoggedIn.ProfileIncomplete)
@@ -67,8 +67,8 @@ class BaSplashFragmentViewModel(
             }
         }*/
     }
-
- /*   private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
+/*
+    private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
         val user = sessionInfo.user
         val central = sessionInfo.central
         return if (permissionService.canAccessSystem(user, central)) {

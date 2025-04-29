@@ -47,12 +47,12 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
     private suspend fun createUser(credential: EmailCredential): EarlyExit {
         return authRepository.createUserWithEmail(credential.email, credential.password)
             .mapAppResult(
-                success = {
+                onSuccess = {
                     // Mark the task as successful with the Firebase user
                     userTask.onSuccess(Unit)
                     false // No early exit
                 },
-                error = { e ->
+                onError = { e ->
                     // Handle error during user creation
                     userTask.onError(e)
                     true // Early exit
@@ -70,8 +70,8 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
     private suspend fun updateName(credential: EmailCredential) {
         val profile = UserProfile(credential.name)
         authRepository.updateUserProfile(profile).handleAppResult(
-            success = { nameTask.onSuccess(Unit) },
-            error = { e -> nameTask.onError(e) }
+            onSuccess = { nameTask.onSuccess(Unit) },
+            onError = { e -> nameTask.onError(e) }
         )
 
     }
@@ -79,8 +79,8 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
     private suspend fun sendEmail() {
         authRepository.sendEmailVerification()
             .handleAppResult(
-                success = { emailTask.onSuccess(Unit) },
-                error = { e -> emailTask.onError(e) }
+                onSuccess = { emailTask.onSuccess(Unit) },
+                onError = { e -> emailTask.onError(e) }
             )
     }
 

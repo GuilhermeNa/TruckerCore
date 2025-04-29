@@ -7,7 +7,7 @@ import com.example.truckercore.model.infrastructure.integration.writer.for_app.a
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class ExecutorAppErrorFactoryTest {
+class ExecutorAppUserInputUserInputErrorFactoryTest {
 
     private val factory = ExecutorAppErrorFactory()
 

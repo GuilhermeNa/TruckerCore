@@ -18,10 +18,4 @@ sealed class UserNameFragEvent {
      */
     data object BackgroundClicked : UserNameFragEvent()
 
-    /**
-     * Event triggered to navigate the user to the email authentication screen.
-     *  @param args The name of the user.
-     */
-    data class NavigateToEmailAuth(val args: String): UserNameFragEvent()
-
 }

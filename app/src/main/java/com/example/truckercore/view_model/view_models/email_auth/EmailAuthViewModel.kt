@@ -5,22 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
+import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.FullName
 import com.example.truckercore.model.shared.value_classes.Password
-import com.example.truckercore.view_model.expressions.validateUserName
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError.InvalidEmailError
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError.InvalidPassword
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError.InvalidPasswordConfirmation
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError.NetworkError
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError.UnknownError
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailFailed
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailSent
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Error
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
-import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,153 +16,138 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-private const val EMPTY_EMAIL_ERROR = "E-mail não pode estar vazio."
-private const val EMAIL_WRONG_FORMAT = "Formato de e-mail inválido."
-private const val EMPTY_PASSWORD_ERROR = "Senha não pode estar vazia."
-private const val PASSWORD_WRONG_FORMAT = "Senha deve ter entre 6 e 12 caracteres."
-private const val EMPTY_CONFIRMATION_ERROR = "Confirmação não pode estar vazia."
-private const val INCOMPATIBLE_CONFIRMATION_ERROR = "As senhas não coincidem."
-private const val NETWORK_ERROR_MESSAGE = "Falha de conexão. Verifique sua internet."
-private const val EMAIL_ALREADY_EXISTS_MESSAGE = "E-mail já cadastrado."
-private const val UNKNOWN_ERROR_MESSAGE = "Erro desconhecido. Tente novamente."
+/**
+ * EmailAuthViewModel is responsible for managing the state, events, and effects related to the EmailAuthFragment.
+ * It handles validation, user creation logic, and emits appropriate UI signals for the fragment to react to.
+ *
+ * @param authService A service responsible for interacting with the authentication backend.
+ */
+class EmailAuthViewModel(private val authService: AuthService) : ViewModel() {
 
-class EmailAuthViewModel(
-    private val args: EmailAuthVmArgs,
-    private val authService: AuthService
-) : ViewModel() {
-
-    // State for managing the UI state of the fragment
-    private val _fragmentState: MutableStateFlow<EmailAuthFragState> =
+    // StateFlow that holds the current UI state of the fragment
+    private val _state: MutableStateFlow<EmailAuthFragState> =
         MutableStateFlow(EmailAuthFragState.WaitingInput)
-    val fragmentState get() = _fragmentState.asStateFlow()
+    val state get() = _state.asStateFlow()
 
-    // Event Flow for handling events in the fragment
+    // SharedFlow for emitting one-time events like button clicks
     private val _event: MutableSharedFlow<EmailAuthFragEvent> = MutableSharedFlow()
     val event get() = _event.asSharedFlow()
 
-    // Helper class for checking the validity of entries
-    private val validateEntries = ValidateEntries()
+    // SharedFlow for emitting one-time effects such as success or failure feedback
+    private val _effect: MutableSharedFlow<EmailAuthFragEffect> = MutableSharedFlow()
+    val effect get() = _effect.asSharedFlow()
 
-    // Error handling logic
-    private val handleError = ErrorHandler()
+    // Helper class responsible for validate user input text
+    private val inputValidator = InputValidator()
 
-    init {
-        args.name.validateUserName()
-    }
-
-    //----------------------------------------------------------------------------------------------
-
+    /**
+     * Attempts to authenticate the user by first validating input and then creating a new account.
+     *
+     * If validation fails, an Error state is emitted. Otherwise, authentication proceeds.
+     *
+     * @param email User input email
+     * @param password User input password
+     * @param confirmation Password confirmation
+     */
     fun tryToAuthenticate(email: String, password: String, confirmation: String) {
         viewModelScope.launch {
-            // Wait for view animation, can be removed without any problem
-            delay(500)
+            delay(500) // Optional UI delay
 
-            // Check if there is any fill error and return a Error State when it occurs
-            val errorResult = validateEntries.invoke(email, password, confirmation)
-            if (errorResult.isNotEmpty()) {
-                setState(Error(errorResult))
+            val validationResult = inputValidator(email, password, confirmation)
+            if (validationResult.hasErrors) {
+                setState(UserInputError(validationResult))
                 return@launch
             }
 
-            // Wait for view animation, can be removed without any problem
-            delay(500)
+            delay(500) // Optional UI delay
 
-            // Create a credential with hashed password and authenticate
-            val credential =
-                EmailCredential(
-                    FullName(args.name),
-                    Email(email),
-                    Password.from(password)
-                )
-            val newState = authenticateAndVerifyEmail(credential)
-            setState(newState)
+            val credential = EmailCredential(Email(email), Password.from(password))
+            val result = authenticateUserWithEmail(credential)
+            val newEffect = result.mapAppResult(
+                onSuccess = { EmailAuthFragEffect.UserCreated },
+                onError = { e -> EmailAuthFragEffect.UserCreationFailed(e) }
+            )
 
+            setEffect(newEffect)
         }
     }
 
-    private suspend fun authenticateAndVerifyEmail(credential: EmailCredential) =
-        authService.createUserAndVerifyEmail(credential).let { response ->
-            when {
-                response.userCreated && response.emailSent -> Success(UserCreatedAndEmailSent)
-                response.userCreated && !response.emailSent -> Success(UserCreatedAndEmailFailed)
-                else -> handleError.invoke(response.errors)
-            }
-        }
+    /**
+     * Uses the AuthService to create a user with the provided credentials,
+     * and emits a success or failure effect accordingly.
+     */
+    private suspend fun authenticateUserWithEmail(credential: EmailCredential) =
+        authService.createUserWithEmail(credential)
 
+    /**
+     * Emits a new UI event to be consumed by the fragment.
+     */
     fun setEvent(newEvent: EmailAuthFragEvent) {
         viewModelScope.launch {
             _event.emit(newEvent)
         }
     }
 
+    /**
+     * Emits a UI effect to trigger a side effect in the fragment (e.g., navigation or dialog).
+     */
+    private fun setEffect(newEffect: EmailAuthFragEffect) {
+        viewModelScope.launch {
+            _effect.emit(newEffect)
+        }
+    }
+
+    /**
+     * Updates the current UI state.
+     */
     fun setState(newState: EmailAuthFragState) {
-        _fragmentState.value = newState
+        _state.value = newState
     }
 
 }
 
-private class ValidateEntries {
+/**
+ * Validates email, password, and confirmation inputs.
+ *
+ * @return An [EmailAuthUserInputValidationResult] of user-readable error messages.
+ */
+private class InputValidator {
 
     operator fun invoke(
         email: String,
         password: String,
         confirmation: String
-    ): HashMap<EmailAuthFragError, String> {
-        val hashMap = hashMapOf<EmailAuthFragError, String>()
+    ): EmailAuthUserInputValidationResult {
+        var inputResult = EmailAuthUserInputValidationResult()
 
         if (email.isEmpty()) {
-            val error = InvalidEmailError
-            val message = EMPTY_EMAIL_ERROR
-            hashMap[error] = message
+            inputResult = inputResult.addEmailError(EMPTY_EMAIL_ERROR)
         } else if (!email.isEmailFormat()) {
-            val error = InvalidEmailError
-            val message = EMAIL_WRONG_FORMAT
-            hashMap[error] = message
+            inputResult = inputResult.addEmailError(EMAIL_WRONG_FORMAT)
         }
 
         if (password.isEmpty()) {
-            val error = InvalidPassword
-            val message = EMPTY_PASSWORD_ERROR
-            hashMap[error] = message
+            inputResult = inputResult.addPassError(EMPTY_PASSWORD_ERROR)
         } else if (password.length !in 6..12) {
-            val error = InvalidPassword
-            val message = PASSWORD_WRONG_FORMAT
-            hashMap[error] = message
+            inputResult = inputResult.addPassError(PASSWORD_WRONG_FORMAT)
         }
 
         if (confirmation.isEmpty()) {
-            val error = InvalidPasswordConfirmation
-            val message = EMPTY_CONFIRMATION_ERROR
-            hashMap[error] = message
+            inputResult = inputResult.addConfirmationError(EMPTY_CONFIRMATION_ERROR)
         } else if (confirmation != password) {
-            val error = InvalidPasswordConfirmation
-            val message = INCOMPATIBLE_CONFIRMATION_ERROR
-            hashMap[error] = message
+            inputResult = inputResult.addConfirmationError(INCOMPATIBLE_CONFIRMATION_ERROR)
         }
 
-        return hashMap
+        return inputResult
+    }
+
+    companion object {
+        private const val EMPTY_EMAIL_ERROR = "E-mail cannot be empty."
+        private const val EMAIL_WRONG_FORMAT = "Invalid email format."
+        private const val EMPTY_PASSWORD_ERROR = "Password cannot be empty."
+        private const val PASSWORD_WRONG_FORMAT = "Password must be between 6 and 12 characters."
+        private const val EMPTY_CONFIRMATION_ERROR = "Confirmation cannot be empty."
+        private const val INCOMPATIBLE_CONFIRMATION_ERROR = "Passwords do not match."
     }
 
 }
-
-private class ErrorHandler {
-
-    operator fun invoke(errorSet: Set<Exception>): Error {
-        val errorMap = hashMapOf<EmailAuthFragError, String>()
-
-        when {
-            errorSet.any { it is FirebaseNetworkException } -> errorMap[NetworkError] =
-                NETWORK_ERROR_MESSAGE
-
-            errorSet.any { it is FirebaseAuthUserCollisionException } -> errorMap[InvalidEmailError] =
-                EMAIL_ALREADY_EXISTS_MESSAGE
-
-            else -> errorMap[UnknownError] = UNKNOWN_ERROR_MESSAGE
-        }
-
-        return Error(errorMap)
-
-    }
-
-}
-

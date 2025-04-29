@@ -30,7 +30,7 @@ import com.example.truckercore.model.shared.value_classes.exceptions.InvalidName
  * @throws InvalidNameException if the input is blank or invalid
  */
 @JvmInline
-value class FullName(val value: String) {
+value class FullName private constructor(val value: String) {
 
     init {
         if (value.isBlank()) {

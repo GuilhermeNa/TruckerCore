@@ -1,26 +1,26 @@
-package com.example.truckercore.view.sealeds
 
 /**
- * A sealed class representing the direction for navigation or page scrolling.
- * It encapsulates two possible navigation directions: `Forward` and `Back`.
- * Sealed classes allow for a limited and controlled set of subclasses, providing exhaustiveness checking in `when` expressions.
+ * A sealed class representing the direction of navigation or page scrolling.
+ * It encapsulates two possible directions: `Forward` and `Back`.
  *
- * This class can be used to determine the direction of pagination, navigation, or movement in a specific UI component.
+ * Each direction has an associated integer value:
+ * `+1` for forward movement and `-1` for backward movement.
+ * This allows direct usage in pagination logic, list traversal,
+ * or step-based navigation without needing to define the value programmatically.
+ *
+ * Sealed classes enable exhaustive `when` statements for safer and more maintainable code.
  */
-sealed class Direction {
+sealed class Direction(val value: Int) {
 
     /**
-     * Represents the "Forward" direction, typically used to navigate to the next item or page.
-     * This object can be used in cases where you want to define navigation going forward,
-     * such as swiping to the next page or moving to the next step in a flow.
+     * Represents the "Forward" direction with a value of +1.
+     * Typically used to move to the next item, page, or step.
      */
-    data object Forward : Direction()
+    data object Forward : Direction(+1)
 
     /**
-     * Represents the "Back" direction, typically used to navigate to the previous item or page.
-     * This object can be used in cases where you want to define navigation going backward,
-     * such as swiping to the previous page or going back to the previous step in a flow.
+     * Represents the "Back" direction with a value of -1.
+     * Typically used to move to the previous item, page, or step.
      */
-    data object Back : Direction()
-
+    data object Back : Direction(-1)
 }

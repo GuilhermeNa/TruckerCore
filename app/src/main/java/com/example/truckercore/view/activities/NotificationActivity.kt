@@ -57,7 +57,6 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     companion object {
-
         fun newInstance(
             context: Context,
             gifRes: Int? = null,
@@ -69,7 +68,6 @@ class NotificationActivity : AppCompatActivity() {
                 putExtra(HEADER_MESSAGE, errorHeader)
                 putExtra(BODY_MESSAGE, errorBody)
             }
-
     }
 
 }

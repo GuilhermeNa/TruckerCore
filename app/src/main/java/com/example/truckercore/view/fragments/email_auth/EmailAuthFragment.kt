@@ -4,185 +4,246 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
+import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.shared.utils.expressions.handleOnUi
+import com.example.truckercore.view.activities.NotificationActivity
+import com.example.truckercore.view.expressions.clearFocusIfNeeded
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view.expressions.navigateTo
+import com.example.truckercore.view.expressions.showToast
+import com.example.truckercore.view.fragments.base.CloseAppFragment
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonCLicked
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonClicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragError
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailFailed
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.EmailAuthFragSuccess.UserCreatedAndEmailSent
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Error
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.WaitingInput
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserInputValidationResult
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthVmArgs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 /**
- * The EmailAuthFragment is responsible for handling the email authentication process.
- * It manages email validation, displays relevant UI states, and navigates to the next step in the authentication flow.
- * The fragment uses a ViewModel for business logic and an EmailAuthUiHandler to handle UI updates.
+ * EmailAuthFragment is responsible for handling the email registration screen in the application.
+ * It allows users to create an account using an email, password, and confirmation, and it reacts
+ * to ViewModel state, effect, and event updates to properly manage UI feedback and navigation.
  */
-class EmailAuthFragment : Fragment() {
+class EmailAuthFragment : CloseAppFragment() {
 
     // Binding reference for the fragment's views
     private var _binding: FragmentEmailAuthBinding? = null
     private val binding get() = _binding!!
 
-    // The EmailAuthUiHandler is responsible for managing UI-specific updates within this fragment
-    private var _uiHandler: EmailAuthUiHandler? = null
-    private val uiHandler get() = _uiHandler!!
+    // Handles UI-specific logic and updates for this fragment
+    private var _stateHandler: EmailAuthStateHandler? = null
+    private val stateHandler get() = _stateHandler!!
 
-    // Initializes the necessary arguments and ViewModel.
-    private val vmArgs by lazy {
-        val args: EmailAuthFragmentArgs by navArgs()
-        EmailAuthVmArgs(name = args.name)
-    }
-    private val viewModel: EmailAuthViewModel by viewModel { parametersOf(vmArgs) }
+    // ViewModel that contains state, effects, and events related to authentication logic
+    private val viewModel: EmailAuthViewModel by viewModel()
 
-    // onCreate() ----------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // onCreate()
+    //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Observes ViewModel's state, effects, and events while lifecycle is in STARTED state
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 setFragmentStateManager()
+                setFragmentEffectManager()
                 setFragmentEventsManager()
             }
         }
     }
 
+    /**
+     * Collects and handles state updates from the ViewModel.
+     * It manages UI behavior based on the current authentication state.
+     */
     private fun CoroutineScope.setFragmentStateManager() {
         launch {
-            viewModel.fragmentState.collect { state ->
+            viewModel.state.collect { state ->
                 when (state) {
                     is WaitingInput -> Unit
                     is Creating -> handleCreatingState()
-                    is Success -> handleSuccessState(state.type)
-                    is Error -> handleErrorState(state.errorMap)
+                    is Success -> handleSuccessState()
+                    is UserInputError -> handleUserInputErrorState(state.validationResult)
                 }
             }
         }
     }
 
+    /**
+     * Updates the UI to reflect the account creation process.
+     */
     private fun handleCreatingState() {
-        uiHandler.setCreatingState()
-
-        val email = binding.fragEmailAuthEmailEditText.text.toString()
-        val password = binding.fragEmailAuthPasswordEditText.text.toString()
-        val confirmation = binding.fragEmailAuthConfirmPasswordEditText.text.toString()
-
-        viewModel.tryToAuthenticate(email, password, confirmation)
+        stateHandler.setCreatingState()
     }
 
-    private fun handleSuccessState(type: EmailAuthFragSuccess) {
-        uiHandler.setSuccessState()
-        navigateToVerificationFragment(type)
+    /**
+     * Handles successful account creation by updating the UI and navigating to the next screen.
+     */
+    private fun handleSuccessState() {
+        stateHandler.setSuccessState()
+        val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToUserNameFragment()
+        navigateTo(direction)
     }
 
-    private fun navigateToVerificationFragment(type: EmailAuthFragSuccess) {
-        val emailText = binding.fragEmailAuthEmailEditText.text.toString()
-
-        with(EmailAuthFragmentDirections) {
-            return@with when (type) {
-                UserCreatedAndEmailSent ->
-                    actionEmailAuthFragmentToVerifyingEmailFragment(email = emailText)
-
-                UserCreatedAndEmailFailed ->
-                    actionEmailAuthFragmentToVerifyingEmailFragment(email = emailText)
-            }
-        }.let { direction -> navigateTo(direction) }
-
-        viewModel.setState(WaitingInput)
+    /**
+     * Displays UI errors based on the received error map.
+     */
+    private fun handleUserInputErrorState(validationResult: EmailAuthUserInputValidationResult) {
+        stateHandler.setUserInputErrorState(validationResult, lifecycle.currentState)
     }
 
-    private fun handleErrorState(errorMap: HashMap<EmailAuthFragError, String>) {
-        uiHandler.setErrorState(errorMap, lifecycle.currentState)
-    }
-
-    private suspend fun setFragmentEventsManager() {
-        viewModel.event.collect { event ->
-            when (event) {
-                is CreateAccountButtonCLicked -> handleCreateButtonClicked()
-                is AlreadyHaveAccountButtonCLicked -> navigateToLoginFragment()
+    /**
+     * Collects and handles side effects emitted by the ViewModel, such as success or failure messages.
+     */
+    private fun CoroutineScope.setFragmentEffectManager() {
+        launch {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    is EmailAuthFragEffect.UserCreated -> handleUserCreatedEffect()
+                    is EmailAuthFragEffect.UserCreationFailed ->
+                        handleUserCreationFailedEffect(effect.error)
+                }
             }
         }
     }
 
+    /**
+     * Triggers the success state once the user has been created.
+     */
+    private fun handleUserCreatedEffect() {
+        viewModel.setState(Success)
+    }
+
+    /**
+     * Handles failures during user creation and determines whether to show a toast or navigate to an error screen.
+     */
+    private fun handleUserCreationFailedEffect(error: AppException) {
+        error.errorCode.let { ec ->
+            ec.handleOnUi(
+                onRecoverable = { showToast(ec.userMessage) },
+                onFatalError = {
+                    val intent = NotificationActivity.newInstance(
+                        context = requireContext(),
+                        errorHeader = ec.name,
+                        errorBody = ec.userMessage
+                    )
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+            )
+        }
+    }
+
+    /**
+     * Collects user interaction events and triggers corresponding UI and ViewModel logic.
+     */
+    private suspend fun setFragmentEventsManager() {
+        viewModel.event.collect { event ->
+            when (event) {
+                is CreateAccountButtonClicked -> handleCreateButtonClicked()
+                is AlreadyHaveAccountButtonCLicked -> handleAlreadyHaveAccountButtonClicked()
+            }
+        }
+    }
+
+    /**
+     * Initiates account creation by collecting user input and passing it to the ViewModel.
+     */
     private fun handleCreateButtonClicked() {
         hideKeyboardAndClearFocus()
         viewModel.setState(Creating)
+
+        val email = binding.fragEmailAuthEmailEditText.text.toString()
+        val password = binding.fragEmailAuthPasswordEditText.text.toString()
+        val confirmation = binding.fragEmailAuthConfirmPasswordEditText.text.toString()
+        viewModel.tryToAuthenticate(email, password, confirmation)
     }
 
-    private fun navigateToLoginFragment() {
-        navigateTo(
-            EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
-        )
+    /**
+     * Navigates to the login screen for users who already have an account.
+     */
+    private fun handleAlreadyHaveAccountButtonClicked() {
+        val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
+        navigateTo(direction)
     }
 
-    // onCreateView() ------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // onCreateView()
+    //----------------------------------------------------------------------------------------------
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        _uiHandler = EmailAuthUiHandler(binding)
+        _stateHandler = EmailAuthStateHandler(binding)
         return binding.root
     }
 
-    // onViewCreated -------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // onViewCreated()
+    //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRegisterButtonListener()
         setAlreadyRegisteredButtonListener()
         setMainLayoutClickListener()
-        setPasswordEditTextFocusListener()
     }
 
+    /**
+     * Hides the keyboard and clears focus from input fields when the main layout is tapped.
+     */
     private fun setMainLayoutClickListener() {
         binding.fragEmailAuthMain.setOnClickListener {
             hideKeyboardAndClearFocus()
         }
     }
 
+    /**
+     * Utility to hide the keyboard and remove focus from all editable fields.
+     */
     private fun hideKeyboardAndClearFocus() {
         hideKeyboard()
-        uiHandler?.clearLayoutFocus()
+        listOf(
+            binding.fragEmailAuthEmailLayout,
+            binding.fragEmailAuthPasswordLayout,
+            binding.fragEmailAuthConfirmPasswordLayout
+        ).clearFocusIfNeeded()
     }
 
-    private fun setPasswordEditTextFocusListener() {
-        binding.fragEmailAuthPasswordEditText.setOnFocusChangeListener { _, hasFocus ->
-            //  uiHandler?.setPasswordHelper(selected = hasFocus)
-        }
-    }
-
+    /**
+     * Sets the click listener for the "Register" button to trigger the account creation process.
+     */
     private fun setRegisterButtonListener() {
         binding.fragEmailAuthRegisterButton.setOnClickListener {
-            viewModel.setEvent(CreateAccountButtonCLicked)
+            viewModel.setEvent(CreateAccountButtonClicked)
         }
     }
 
+    /**
+     * Sets the click listener for the "Already Registered" button to go to the login screen.
+     */
     private fun setAlreadyRegisteredButtonListener() {
         binding.fragEmailAuthAlreadyRegisteredButton.setOnClickListener {
             viewModel.setEvent(AlreadyHaveAccountButtonCLicked)
         }
     }
 
-    // onViewDestroyed() ---------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // onDestroyView()
+    //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-        _uiHandler = null
+        _stateHandler = null
         _binding = null
     }
-
 }

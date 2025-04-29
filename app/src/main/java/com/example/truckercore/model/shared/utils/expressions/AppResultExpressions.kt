@@ -6,19 +6,19 @@ import com.example.truckercore.model.shared.utils.sealeds.AppResult.Error
 import com.example.truckercore.model.shared.utils.sealeds.AppResult.Success
 
 fun <T, R> AppResult<T>.mapAppResult(
-    success: (data: T) -> R,
-    error: (e: AppException) -> R
+    onSuccess: (data: T) -> R,
+    onError: (e: AppException) -> R
 ): R = when (this) {
-    is Success -> success(data)
-    is Error -> error(exception)
+    is Success -> onSuccess(data)
+    is Error -> onError(exception)
 }
 
 fun <T> AppResult<T>.handleAppResult(
-    success: (data: T) -> Unit,
-    error: (e: AppException) -> Unit
+    onSuccess: (data: T) -> Unit,
+    onError: (e: AppException) -> Unit
 ) = when (this) {
-    is Success -> success(data)
-    is Error -> error(exception)
+    is Success -> onSuccess(data)
+    is Error -> onError(exception)
 }
 
 fun <T> AppResult<T>.extractData() =
