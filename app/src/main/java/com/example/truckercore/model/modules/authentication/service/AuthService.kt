@@ -8,6 +8,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore.model.shared.value_classes.Email
 import com.example.truckercore.model.shared.value_classes.FullName
 
 /**
@@ -18,12 +19,6 @@ import com.example.truckercore.model.shared.value_classes.FullName
 interface AuthService {
 
     suspend fun createUserWithEmail(credential: EmailCredential): AppResult<Unit>
-
-    /**
-     * Invokes the use case to create a new user and send the verification email.
-     * @see [CreateUserAndVerifyEmailUseCase.invoke]
-     */
-    suspend fun createUserAndVerifyEmail(credential: EmailCredential): NewEmailResult
 
     /**
      * Invokes the use case to send a verification email to the current Firebase user.
@@ -41,7 +36,10 @@ interface AuthService {
      *  Checks if there is a currently logged-in user.
      * @see ThereIsLoggedUserUseCase.invoke
      */
-    fun thereIsLoggedUser(): Boolean
+    fun thereIsLoggedUser(): AppResult<Boolean>
 
     suspend fun updateUserName(userProfile: UserProfile): AppResult<Unit>
+
+    fun getUserEmail(): AppResult<Email>
+
 }

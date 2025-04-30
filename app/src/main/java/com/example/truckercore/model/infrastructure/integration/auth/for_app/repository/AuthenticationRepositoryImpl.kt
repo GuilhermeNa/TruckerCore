@@ -58,4 +58,14 @@ class AuthenticationRepositoryImpl(
         dataSource.signOut()
     }
 
+    override fun thereIsLoggedUser(): AppResult<Boolean> {
+        return AppResult.Success(dataSource.thereIsLoggedUser())
+    }
+
+    override fun getUserEmail(): AppResult<Email> {
+        return dataSource.getUserEmail()?.let {
+            AppResult.Success(Email(it))
+        } ?: TODO()
+    }
+
 }

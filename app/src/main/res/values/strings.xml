@@ -33,5 +33,7 @@
     <string name="to_resend">para reenviar</string>
     <string name="enter_name">Digite seu nome</string>
     <string name="register_new_account">Cadastrar nova conta</string>
+    <string name="validating_email">Validando email...</string>
+    <string name="validating_email_description">Enviamos um link para confirmar seu e-mail.\n Verifique sua caixa de entrada.</string>
 
 </resources>

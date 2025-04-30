@@ -2,11 +2,12 @@ package com.example.truckercore.model.modules.authentication.use_cases.implement
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
+import com.example.truckercore.model.shared.utils.sealeds.AppResult
 
 class ThereIsLoggedUserUseCaseImpl(
     private val authenticationRepository: AuthenticationRepository
 ): ThereIsLoggedUserUseCase {
 
-    override fun invoke(): Boolean = TODO()
+    override fun invoke(): AppResult<Boolean> = authenticationRepository.thereIsLoggedUser()
 
 }

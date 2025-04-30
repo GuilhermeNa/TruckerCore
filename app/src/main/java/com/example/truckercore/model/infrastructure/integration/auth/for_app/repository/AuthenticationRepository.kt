@@ -118,4 +118,8 @@ interface AuthenticationRepository {
      */
     fun signOut()
 
+    fun thereIsLoggedUser(): AppResult<Boolean>
+
+    fun getUserEmail(): AppResult<Email>
+
 }

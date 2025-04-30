@@ -67,7 +67,6 @@ class EmailAuthViewModel(private val authService: AuthService) : ViewModel() {
                 onSuccess = { EmailAuthFragEffect.UserCreated },
                 onError = { e -> EmailAuthFragEffect.UserCreationFailed(e) }
             )
-
             setEffect(newEffect)
         }
     }

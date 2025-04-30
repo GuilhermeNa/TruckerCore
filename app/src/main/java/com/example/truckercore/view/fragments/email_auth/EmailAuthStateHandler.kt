@@ -68,6 +68,10 @@ class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
         }
     }
 
+    fun dismissDialog() {
+        if(dialog.isShowing) dialog.dismiss()
+    }
+
 }
 
 /**

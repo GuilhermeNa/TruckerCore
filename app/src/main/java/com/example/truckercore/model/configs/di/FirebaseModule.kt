@@ -31,7 +31,7 @@ val firebaseModule = module {
     single<DataSource<*, *>> { FirestoreDataSource(get(), get()) }
 
     // Auth Source
-    single<AuthSourceErrorMapper> { FirebaseAuthErrorMapper() }
+    single { FirebaseAuthErrorMapper() }
     single<AuthSource> { FirebaseAuthSource(get(), get()) }
 
     // Writer Source

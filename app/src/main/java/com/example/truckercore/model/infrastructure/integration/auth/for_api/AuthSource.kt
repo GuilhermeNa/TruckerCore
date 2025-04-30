@@ -113,4 +113,8 @@ abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
      */
     abstract fun signOut()
 
+    abstract fun thereIsLoggedUser(): Boolean
+
+    abstract fun getUserEmail(): String?
+
 }

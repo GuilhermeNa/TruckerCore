@@ -19,6 +19,7 @@ import com.example.truckercore.view.fragments.base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonClicked
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError
@@ -70,7 +71,7 @@ class EmailAuthFragment : CloseAppFragment() {
         launch {
             viewModel.state.collect { state ->
                 when (state) {
-                    is WaitingInput -> Unit
+                    is WaitingInput -> stateHandler.dismissDialog()
                     is Creating -> handleCreatingState()
                     is Success -> handleSuccessState()
                     is UserInputError -> handleUserInputErrorState(state.validationResult)
@@ -128,6 +129,7 @@ class EmailAuthFragment : CloseAppFragment() {
      * Handles failures during user creation and determines whether to show a toast or navigate to an error screen.
      */
     private fun handleUserCreationFailedEffect(error: AppException) {
+        viewModel.setState(WaitingInput)
         error.errorCode.let { ec ->
             ec.handleOnUi(
                 onRecoverable = { showToast(ec.userMessage) },

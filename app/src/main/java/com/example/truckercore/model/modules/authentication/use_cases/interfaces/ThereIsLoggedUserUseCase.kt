@@ -1,6 +1,7 @@
 package com.example.truckercore.model.modules.authentication.use_cases.interfaces
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
+import com.example.truckercore.model.shared.utils.sealeds.AppResult
 
 interface ThereIsLoggedUserUseCase {
 
@@ -9,8 +10,8 @@ interface ThereIsLoggedUserUseCase {
      *
      * @return true when there is an active session, false if not.
      *
-     * @see [AuthenticationRepository.getCurrentUser]
+     * @see [AuthenticationRepository.thereIsLoggedUser]
      */
-    operator fun invoke(): Boolean
+    operator fun invoke(): AppResult<Boolean>
 
 }

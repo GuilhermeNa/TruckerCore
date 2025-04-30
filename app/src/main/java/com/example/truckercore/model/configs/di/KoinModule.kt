@@ -4,6 +4,7 @@ val koinModules = listOf(
     firebaseModule,
     authModule,
     securityModule,
+    repositoriesModule,
     //serviceModule,
     utilModule
 )

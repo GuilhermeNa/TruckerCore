@@ -13,8 +13,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class FirebaseAuthSource(
     private val auth: FirebaseAuth,
@@ -47,7 +47,7 @@ class FirebaseAuthSource(
     override suspend fun observeEmailValidation() {
         val fbUser = getLoggedUser()
 
-        suspendCoroutine { cont ->
+        suspendCancellableCoroutine { cont ->
             // Launches a coroutine tied to the caller's context.
             // This ensures that the job is automatically cancelled with caller context.
             CoroutineScope(cont.context).launch {
@@ -64,10 +64,15 @@ class FirebaseAuthSource(
                 }
             }
         }
-
     }
 
     override fun signOut() = auth.signOut()
+
+    override fun thereIsLoggedUser(): Boolean = auth.currentUser?.let { true } ?: false
+
+    override fun getUserEmail(): String? {
+        return getLoggedUser().email
+    }
 
     private fun getLoggedUser(): FirebaseUser {
         return auth.currentUser ?: throw SessionInactiveException()

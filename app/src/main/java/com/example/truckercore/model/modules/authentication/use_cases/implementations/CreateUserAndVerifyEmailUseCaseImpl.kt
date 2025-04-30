@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.model.modules.authentication.use_cases.implementations
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
@@ -105,4 +106,4 @@ internal class CreateUserAndVerifyEmailUseCaseImpl(
         emailTask.clear()
     }
 
-}
+}*/

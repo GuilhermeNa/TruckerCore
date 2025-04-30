@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.infrastructure.security.permissions.service.PermissionService
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore.view_model.states.SplashFragState
 import com.example.truckercore.view_model.states.SplashFragState.Error
 import com.example.truckercore.view_model.states.SplashFragState.UserLoggedIn
@@ -52,31 +53,37 @@ class BaSplashFragmentViewModel(
     }
 
     private suspend fun handleDefaultAccess() {
-        when (authService.thereIsLoggedUser()) {
-            true -> handleLoggedUser()
-            false -> handleUserNotFound()
+        authService.thereIsLoggedUser().let { result ->
+            when (result) {
+                is AppResult.Success -> {
+                    if (result.data) handleLoggedUser()
+                    else handleUserNotFound()
+                }
+
+                else -> {}
+            }
         }
     }
 
     private suspend fun handleLoggedUser() {
-/*        authService.getSessionInfo().single().let { response ->
-            when (response) {
-                is AppResponse.Success -> updateFragmentState(hasSystemAccess(response.data))
-                is AppResponse.Empty -> updateFragmentState(UserLoggedIn.ProfileIncomplete)
-                is AppResponse.Error -> updateFragmentState(Error(response.exception))
+        /*        authService.getSessionInfo().single().let { response ->
+                    when (response) {
+                        is AppResponse.Success -> updateFragmentState(hasSystemAccess(response.data))
+                        is AppResponse.Empty -> updateFragmentState(UserLoggedIn.ProfileIncomplete)
+                        is AppResponse.Error -> updateFragmentState(Error(response.exception))
+                    }
+                }*/
+    }
+    /*
+        private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
+            val user = sessionInfo.user
+            val central = sessionInfo.central
+            return if (permissionService.canAccessSystem(user, central)) {
+                UserLoggedIn.SystemAccessAllowed
+            } else {
+                UserLoggedIn.SystemAccessDenied
             }
         }*/
-    }
-/*
-    private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
-        val user = sessionInfo.user
-        val central = sessionInfo.central
-        return if (permissionService.canAccessSystem(user, central)) {
-            UserLoggedIn.SystemAccessAllowed
-        } else {
-            UserLoggedIn.SystemAccessDenied
-        }
-    }*/
 
     private fun handleUserNotFound() {
         updateFragmentState(SplashFragState.UserNotFound)

@@ -8,7 +8,7 @@ import com.example.truckercore.model.shared.value_classes.Password
 
 class TestCredentialProvider {
 
-    val name = FullName("John Doe")
+    val name = FullName.from("John Doe")
 
     val email = Email("email@email.com")
 
@@ -17,7 +17,6 @@ class TestCredentialProvider {
     val userProfile = UserProfile(fullName = name)
 
     val credential = EmailCredential(
-        name = name,
         email = email,
         password = password
     )

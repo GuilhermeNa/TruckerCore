@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/verifyingEmailFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -92,6 +92,9 @@
             app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/verifyingEmailFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_verifyingEmailFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/userNameFragment"
@@ -100,11 +103,7 @@
         tools:layout="@layout/fragment_user_name" >
         <action
             android:id="@+id/action_userNameFragment_to_verifyingEmailFragment"
-            app:destination="@id/verifyingEmailFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/verifyingEmailFragment" />
     </fragment>
     <fragment
         android:id="@+id/continueRegisterFragment"

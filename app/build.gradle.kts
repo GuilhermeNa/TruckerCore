@@ -78,7 +78,7 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.kotlinx.co.test)
     testImplementation(libs.mockk)
-    implementation(libs.leak.canary)
+    debugImplementation(libs.leak.canary)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
