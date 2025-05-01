@@ -1,6 +1,7 @@
 package com.example.truckercore.view_model.di
 
 import com.example.truckercore.view.enums.Flavor
+import com.example.truckercore.view_model.use_cases.CounterUseCase
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
@@ -11,7 +12,7 @@ import org.koin.dsl.module
 val commonViewModelModule = module {
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get()) }
     viewModel<WelcomeFragmentViewModel> { (flavor: Flavor) -> WelcomeFragmentViewModel(flavor) }
-    viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get()) }
+    viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get()) }
-
+    factory { CounterUseCase() }
 }

@@ -5,78 +5,96 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.extractData
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import com.example.truckercore.model.shared.value_classes.Email
+import com.example.truckercore.view_model.use_cases.CounterUseCase
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 
-private typealias TryingToVerifyState = VerifyingEmailFragState.TryingToVerify
-private typealias EmailVerifiedState = VerifyingEmailFragState.EmailVerified
-private typealias TimeOutState = VerifyingEmailFragState.TimeOut
-private typealias ErrorState = VerifyingEmailFragState.Error
+private typealias VerifyingState = VerifyingEmailUiState.Verifying
+private typealias VerifiedState = VerifyingEmailUiState.Verified
+private typealias TimeOutState = VerifyingEmailUiState.TimeOut
 
-class VerifyingEmailViewModel(private val authService: AuthService) : ViewModel() {
+private typealias ErrorEffect = VerifyingEmailEffect.Error
 
-    private val _email by lazy { authService.getUserEmail().extractData() }
-    val email get() = _email.value
+private typealias StartEvent = VerifyingEmailEvent.UiEvent.StartVerification
+private typealias RetryEvent = VerifyingEmailEvent.UiEvent.RetryVerification
+private typealias TaskCompleteEvent = VerifyingEmailEvent.InternalEvent.TaskComplete
+private typealias TimeOutEvent = VerifyingEmailEvent.InternalEvent.CounterTimeOut
+
+class VerifyingEmailViewModel(
+    private val authService: AuthService,
+    private val counterUseCase: CounterUseCase
+) : ViewModel() {
+
+    val counterFlow = counterUseCase.counter
 
     // State
-    private val _state: MutableStateFlow<VerifyingEmailFragState> =
-        MutableStateFlow(TryingToVerifyState)
+    private val _state: MutableStateFlow<VerifyingEmailUiState> =
+        MutableStateFlow(VerifyingState)
     val state get() = _state.asStateFlow()
 
-    // Counter
-    private val _counter = MutableStateFlow(60)
-    val counter get() = _counter.asStateFlow()
-    private var counterJob: Job? = null
+    // Effect
+    private val _effect = MutableSharedFlow<VerifyingEmailEffect>()
+    val effect get() = _effect.asSharedFlow()
 
-    init {
-        verifyEmail()
+
+    //-----------------------------------------------------------------------------------------------
+    fun onEvent(event: VerifyingEmailEvent) {
+        when (event) {
+            is StartEvent -> startVerification()
+
+            is RetryEvent -> startVerification()
+
+            is TaskCompleteEvent -> handleVerificationResult(event)
+
+            is TimeOutEvent -> setState(TimeOutState)
+        }
     }
 
-    private fun verifyEmail() {
-        setState(TryingToVerifyState)
+    private fun startVerification() {
         viewModelScope.launch {
-            val result = authService.observeEmailValidation()
-            result.mapAppResult(
-                onSuccess = { EmailVerifiedState },
-                onError = { ErrorState(it) }
-            ).let { newState -> setState(newState) }
+            setState(VerifyingState)
+
+            val counterJob = async { counterUseCase.startCounter() }
+            val observeJob = async { observeEmailValidation() }
+
+            select {
+                counterJob.onAwait {
+                    observeJob.cancel()
+                    onEvent(TimeOutEvent)
+                }
+                observeJob.onAwait { result ->
+                    counterJob.cancel()
+                    onEvent(TaskCompleteEvent(result))
+                }
+            }
         }
     }
 
-    private fun startCounter() {
-        if (counterJob?.isActive == true) return
-
-        counterJob = viewModelScope.launch {
-            for (vle in 60 downTo 0) {
-                _counter.value = vle
-                delay(1000)
-            }
-            setState(TimeOutState)
-        }.also { job ->
-            job.invokeOnCompletion {
-                counterJob = null
-            }
-        }
-
+    private fun handleVerificationResult(event: TaskCompleteEvent) {
+        event.result.mapAppResult(
+            onSuccess = { setState(VerifiedState) },
+            onError = { setEffect(ErrorEffect(it)) }
+        )
     }
 
-    private fun setState(newState: VerifyingEmailFragState) {
-        onStateChanged(newState)
+    private suspend fun observeEmailValidation() = authService.observeEmailValidation()
+
+    private fun setState(newState: VerifyingEmailUiState) {
         _state.value = newState
     }
 
-    private fun onStateChanged(stateChanged: VerifyingEmailFragState) {
-        if (stateChanged is TryingToVerifyState) startCounter()
-        else cancelCounterJob()
-    }
-
-    private fun cancelCounterJob() {
-        if (counterJob?.isActive == true) {
-            counterJob?.cancel()
+    private fun setEffect(newEffect: VerifyingEmailEffect) {
+        viewModelScope.launch {
+            _effect.emit(newEffect)
         }
     }
+
+    fun getEmail(): Email = authService.getUserEmail().extractData()
 
 }

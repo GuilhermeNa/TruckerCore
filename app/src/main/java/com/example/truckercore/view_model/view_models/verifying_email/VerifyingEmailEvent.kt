@@ -1,18 +1,17 @@
 package com.example.truckercore.view_model.view_models.verifying_email
 
-/**
- * Represents the different user actions or events that can occur during the email verification process.
- */
+import com.example.truckercore.model.shared.utils.sealeds.AppResult
+
 sealed class VerifyingEmailEvent {
 
-    /**
-     * Triggered when the user clicks the "Resend" button to request another verification email.
-     */
-    data object ResendButtonClicked : VerifyingEmailEvent()
+    sealed class UiEvent : VerifyingEmailEvent() {
+        data object StartVerification : UiEvent()
+        data object RetryVerification : UiEvent()
+    }
 
-    /**
-     * This typically means the user wants to restart the sign-up process with a different email or credentials.
-     */
-    data object NewAccountButtonClicked: VerifyingEmailEvent()
+    sealed class InternalEvent : VerifyingEmailEvent() {
+        data class TaskComplete(val result: AppResult<Unit>) : InternalEvent()
+        data object CounterTimeOut : InternalEvent()
+    }
 
 }

@@ -132,12 +132,12 @@ class EmailAuthFragment : CloseAppFragment() {
         viewModel.setState(WaitingInput)
         error.errorCode.let { ec ->
             ec.handleOnUi(
-                onRecoverable = { showToast(ec.userMessage) },
-                onFatalError = {
+                onRecoverable = { message -> showToast(message) },
+                onFatalError = { name, message ->
                     val intent = NotificationActivity.newInstance(
                         context = requireContext(),
-                        errorHeader = ec.name,
-                        errorBody = ec.userMessage
+                        errorHeader = name,
+                        errorBody = message
                     )
                     startActivity(intent)
                     requireActivity().finish()

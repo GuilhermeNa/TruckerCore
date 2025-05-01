@@ -35,5 +35,8 @@
     <string name="register_new_account">Cadastrar nova conta</string>
     <string name="validating_email">Validando email...</string>
     <string name="validating_email_description">Enviamos um link para confirmar seu e-mail.\n Verifique sua caixa de entrada.</string>
+    <string name="resend_email">Reenviar email</string>
+    <string name="register_another_email">Cadastrar outro email</string>
+    <string name="email_valid">Email valido!!</string>
 
 </resources>

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    android:id="@+id/frag_verifying_email_motion_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frag_verifying_email_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient_primary"
-    android:orientation="vertical"
+    app:layoutDescription="@xml/fragment_verifying_email_scene"
     tools:context=".view.fragments.verifying_email.VerifyingEmailFragment">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginBottom="16dp"
@@ -17,9 +19,9 @@
         android:src="@drawable/o_email"
         app:layout_constraintBottom_toTopOf="@id/frag_verifying_email_guideline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/white"
-        app:layout_constraintHorizontal_bias="0.52"/>
+        app:tint="@color/white" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_verifying_email_guideline"
@@ -37,17 +39,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_guideline">
 
-        Ver documentação no md3 ->
-        https://github.com/material-components/material-components-android/blob/master/docs/components/ProgressIndicator.md
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/frag_verifying_email_progressbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:max="60"
-            android:progress="50"
-            style="@android:style/Widget.ProgressBar.Large"
-            android:indeterminate="false"
-           />
+            android:max="61"
+            android:progress="0"
+            app:indicatorColor="@color/green"
+            app:indicatorTrackGapSize="0dp"
+            app:trackColor="@color/darkTransparent"
+            app:trackCornerRadius="1dp" />
 
         <TextView
             android:id="@+id/frag_verifying_email_timer"
@@ -68,6 +69,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginTop="16dp"
+        android:animateLayoutChanges="true"
         android:backgroundTint="@color/green"
         android:translationZ="11dp"
         android:visibility="invisible"
@@ -88,50 +90,65 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/frag_verifying_email_text_header_valid"
+        style="@style/textEmphasis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/email_valid"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
+
+    <TextView
+        android:id="@+id/frag_verifying_email_text_header_validating"
+        style="@style/textEmphasis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/validating_email"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
+
+    <TextView
+        android:id="@+id/frag_verifying_email_text_email"
+        style="@style/textDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="64dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:orientation="vertical"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check">
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_header_validating"
+        tools:text="received@email.com" />
 
-        <TextView
-            android:id="@+id/frag_verifying_email_text_header"
-            style="@style/textEmphasis"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/validating_email"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/frag_verifying_email_text_body"
+        style="@style/textDefault"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/validating_email_description"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_email" />
 
-        <TextView
-            android:id="@+id/frag_verifying_email_text_email"
-            style="@style/textDefault"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            android:textStyle="bold|italic"
-            tools:text="received@email.com" />
 
-        <TextView
-            android:id="@+id/frag_verifying_email_text_body"
-            style="@style/textDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/validating_email_description"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            android:textStyle="bold" />
+</androidx.constraintlayout.motion.widget.MotionLayout>
 
-    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>

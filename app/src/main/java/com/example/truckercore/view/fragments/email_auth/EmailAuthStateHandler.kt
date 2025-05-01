@@ -110,7 +110,7 @@ private class EmailAuthTransitionHandler(private val layout: MotionLayout) {
     private fun startTransition(lifecycleState: Lifecycle.State, transitionState: Int) {
         lifecycleState.executeOnState(
             onViewResumed = { layout.transitionToState(transitionState, 200) },
-            onViewCreating = { layout.jumpToState(transitionState) }
+            onReCreating = { layout.jumpToState(transitionState) }
         )
     }
 

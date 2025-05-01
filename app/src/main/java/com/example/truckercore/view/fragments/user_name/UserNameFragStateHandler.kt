@@ -44,7 +44,7 @@ class UserNameFragStateHandler(fragment: UserNameFragment) {
         val motionLayout = binding.fragUserNameMotion
         currentState.executeOnState(
             onViewResumed = { motionLayout.transitionToEnd() },
-            onViewCreating = { motionLayout.jumpToState(R.id.frag_user_name_scene_state_end) }
+            onReCreating = { motionLayout.jumpToState(R.id.frag_user_name_scene_state_end) }
         )
     }
 

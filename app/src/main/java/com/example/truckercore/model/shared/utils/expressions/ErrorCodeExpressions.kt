@@ -4,8 +4,8 @@ import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
 
 fun ErrorCode.handleOnUi(
     onRecoverable: (String) -> Unit,
-    onFatalError: () -> Unit,
+    onFatalError: (name: String, message: String) -> Unit,
 ) {
     if(isRecoverable) onRecoverable(userMessage)
-    else onFatalError()
+    else onFatalError(name, userMessage)
 }

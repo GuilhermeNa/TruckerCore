@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/frag_verifying_email_scene_end"
+        motion:constraintSetStart="@id/frag_verifying_email_scene_start"
+        motion:duration="500">
+        <KeyFrameSet >
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_layout_timer"
+                motion:framePosition="40"
+                android:scaleX="0"
+                android:scaleY="0"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_card_check"
+                motion:framePosition="40"
+                android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_text_header_validating"
+                motion:framePosition="10"
+                android:scaleY="0"
+                android:scaleX="0"
+                android:alpha="0"/>
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_text_email"
+                motion:framePosition="20"
+                android:alpha="0"
+                android:scaleX="0"
+                android:scaleY="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_text_body"
+                motion:framePosition="30"
+                android:alpha="0"
+                android:scaleY="0"
+                android:scaleX="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_text_header_valid"
+                motion:framePosition="50"
+                android:alpha="0"
+                android:scaleX="0"
+                android:scaleY="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/frag_verifying_email_text_header_valid"
+                motion:framePosition="100"
+                android:alpha="1"
+                android:scaleY="1"
+                android:scaleX="1" />
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/frag_verifying_email_scene_start">
+        <Constraint
+            android:id="@+id/frag_verifying_email_text_header_valid"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:alpha="0" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/frag_verifying_email_scene_end">
+        <Constraint
+            android:id="@+id/frag_verifying_email_layout_timer"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_guideline"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:alpha="0" />
+        <Constraint
+            android:id="@+id/frag_verifying_email_card_check"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:visibility="visible"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_guideline"
+            android:translationZ="11dp" />
+        <Constraint
+            android:id="@+id/frag_verifying_email_text_email"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_header_validating"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:alpha="0" />
+        <Constraint
+            android:id="@+id/frag_verifying_email_text_body"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_email"
+            android:alpha="0"
+            android:scaleX="0"
+            android:scaleY="0" />
+        <Constraint
+            android:id="@+id/frag_verifying_email_text_header_validating"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:alpha="0" />
+        <Constraint
+            android:id="@+id/frag_verifying_email_text_header_valid"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            motion:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
+    </ConstraintSet>
+</MotionScene>

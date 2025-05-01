@@ -26,12 +26,12 @@ class UserNameFragEffectHandler(private val fragment: UserNameFragment) {
     fun handleProfileUpdateFailedEffect(error: AppException) {
         val ec = error.errorCode
         ec.handleOnUi(
-            onRecoverable = { fragment.showToast(ec.userMessage) },
-            onFatalError = {
+            onRecoverable = { fragment.showToast(it) },
+            onFatalError = { name, message ->
                 val intent = NotificationActivity.newInstance(
                     context = fragment.requireContext(),
-                    errorHeader = ec.name,
-                    errorBody = ec.userMessage
+                    errorHeader = name,
+                    errorBody = message
                 )
                 fragment.requireActivity().startActivity(intent)
                 fragment.requireActivity().finish()
