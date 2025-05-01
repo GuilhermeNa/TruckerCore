@@ -10,7 +10,7 @@ class UserProfileTest {
     @Test
     fun `UserProfile should correctly assign fullName to its property`() {
         // Arrange
-        val fullName = FullName("John Doe")
+        val fullName = FullName.from("John Doe")
 
         // Act
         val userProfile = UserProfile(fullName)

@@ -2,6 +2,8 @@ package com.example.truckercore.view_model.view_models.verifying_email
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
+import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.extractData
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
@@ -27,8 +29,9 @@ private typealias TaskCompleteEvent = VerifyingEmailEvent.InternalEvent.TaskComp
 private typealias TimeOutEvent = VerifyingEmailEvent.InternalEvent.CounterTimeOut
 
 class VerifyingEmailViewModel(
-    private val authService: AuthService,
-    private val counterUseCase: CounterUseCase
+    private val preferences: PreferencesRepository,
+    private val counterUseCase: CounterUseCase,
+    private val authService: AuthService
 ) : ViewModel() {
 
     val counterFlow = counterUseCase.counter
@@ -77,10 +80,19 @@ class VerifyingEmailViewModel(
     }
 
     private fun handleVerificationResult(event: TaskCompleteEvent) {
+        if (event.result.isSuccess) markEmailVerificationStepComplete()
+
         event.result.mapAppResult(
             onSuccess = { setState(VerifiedState) },
             onError = { setEffect(ErrorEffect(it)) }
         )
+
+    }
+
+    private fun markEmailVerificationStepComplete() {
+        viewModelScope.launch {
+            preferences.markStepAsCompleted(RegistrationStep.EmailVerified)
+        }
     }
 
     private suspend fun observeEmailValidation() = authService.observeEmailValidation()

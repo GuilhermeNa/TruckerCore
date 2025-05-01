@@ -34,3 +34,7 @@ fun <T> AppResult<T>.extractError() =
         "Cannot extract exception: Result is not of type AppResult.Error." +
                 " Actual response is $this."
     )
+
+suspend inline fun <T> AppResult<T>.runSuspendOnSuccess(crossinline block: suspend () -> Unit) {
+    if(this is Success) block()
+}

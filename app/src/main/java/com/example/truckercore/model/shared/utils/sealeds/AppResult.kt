@@ -8,4 +8,6 @@ sealed class AppResult<out T> {
 
     data class Error(val exception: AppException) : AppResult<Nothing>()
 
+    val isSuccess get(): Boolean = this is Success
+
 }

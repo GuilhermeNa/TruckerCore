@@ -8,13 +8,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 class PreferenceDataStore private constructor() {
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
-    private val isFirstAccess = booleanPreferencesKey("firstAccess")
-
     //----------------------------------------------------------------------------------------------
+    // First user access
+    //----------------------------------------------------------------------------------------------
+    private val isFirstAccess = booleanPreferencesKey(FIRST_ACCESS)
 
     suspend fun getFirstAccessStatus(context: Context): Boolean {
         val preferences = context.dataStore.data.first()
@@ -27,7 +28,13 @@ class PreferenceDataStore private constructor() {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    //
+    //----------------------------------------------------------------------------------------------
+
     companion object {
+        private const val FIRST_ACCESS = "firstAccess"
+
         @Volatile
         private var instance: PreferenceDataStore? = null
 
