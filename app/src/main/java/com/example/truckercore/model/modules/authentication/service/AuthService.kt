@@ -2,14 +2,11 @@ package com.example.truckercore.model.modules.authentication.service
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
-import com.example.truckercore.model.modules.authentication.use_cases.NewEmailResult
-import com.example.truckercore.model.modules.authentication.use_cases.interfaces.CreateUserAndVerifyEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.FullName
 
 /**
  * Interface representing the authentication service.
@@ -41,5 +38,9 @@ interface AuthService {
     suspend fun updateUserName(userProfile: UserProfile): AppResult<Unit>
 
     fun getUserEmail(): AppResult<Email>
+
+    fun isEmailVerified(): AppResult<Boolean>
+
+    fun signOut()
 
 }

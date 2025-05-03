@@ -58,6 +58,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:background">@drawable/button_primary</item>
+        <item name="android:layout_marginHorizontal">48dp</item>
     </style>
 
     <style name="buttonSecondary">
@@ -67,6 +68,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:layout_marginHorizontal">48dp</item>
     </style>
 
     <style name="buttonTransparent">

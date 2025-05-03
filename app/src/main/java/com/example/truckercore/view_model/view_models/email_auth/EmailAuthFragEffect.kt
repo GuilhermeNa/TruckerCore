@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.email_auth
 
-import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.errors.AppException
 
 /**
  * EmailAuthFragEffect defines one-time UI side effects triggered by the EmailAuthViewModel.

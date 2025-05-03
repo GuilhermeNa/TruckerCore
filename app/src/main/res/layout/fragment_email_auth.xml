@@ -180,7 +180,6 @@
         style="@style/buttonPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="48dp"
         android:layout_marginTop="64dp"
         android:layout_marginBottom="24dp"
         android:text="@string/create_account"
@@ -227,7 +226,6 @@
         style="@style/buttonSecondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="48dp"
         android:layout_marginTop="16dp"
         android:text="@string/already_registered"
 

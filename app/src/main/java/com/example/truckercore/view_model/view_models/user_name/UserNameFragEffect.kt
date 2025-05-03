@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.user_name
 
-import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.errors.AppException
 
 /**
  * Represents one-time side effects triggered by the [UserNameViewModel].

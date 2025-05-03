@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
-        <activity
-            android:name=".business_admin.view.activities.HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".business_admin.view.activities.LoginActivity"
-            android:theme="@style/Theme.TruckerCore.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-    </application>
-
 </manifest>

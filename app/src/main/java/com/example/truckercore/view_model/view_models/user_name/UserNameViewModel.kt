@@ -3,6 +3,8 @@ package com.example.truckercore.view_model.view_models.user_name
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
+import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
@@ -27,6 +29,7 @@ import kotlinx.coroutines.launch
  * @param authService An instance of AuthService to interact with the authentication service.
  */
 class UserNameViewModel(
+    private val preferences: PreferencesRepository,
     private val authService: AuthService
 ) : ViewModel() {
 
@@ -78,6 +81,7 @@ class UserNameViewModel(
             val result = updateUserName(userProfile)
             val newEffect = result.mapAppResult(
                 onSuccess = {
+                    markNameStepComplete()
                     setState(UserNameFragState.Initial)
                     UserNameFragEffect.ProfileUpdated
                 },
@@ -95,8 +99,7 @@ class UserNameViewModel(
      * @param profile The user profile containing the new full name to be updated.
      * @return The result of the update operation.
      */
-    private suspend fun updateUserName(profile: UserProfile) =
-        authService.updateUserName(profile)
+    private suspend fun updateUserName(profile: UserProfile) = authService.updateUserName(profile)
 
     /**
      * Sets a new event for the fragment to trigger UI actions such as clicks.
@@ -128,6 +131,12 @@ class UserNameViewModel(
     private fun setEffect(newEffect: UserNameFragEffect) {
         viewModelScope.launch {
             _effect.emit(newEffect)
+        }
+    }
+
+    private fun markNameStepComplete() {
+        viewModelScope.launch {
+            preferences.markStepAsCompleted(RegistrationStep.Name)
         }
     }
 

@@ -74,6 +74,10 @@ class FirebaseAuthSource(
         return getLoggedUser().email
     }
 
+    override fun isEmailVerified(): Boolean {
+        return getLoggedUser().isEmailVerified
+    }
+
     private fun getLoggedUser(): FirebaseUser {
         return auth.currentUser ?: throw SessionInactiveException()
     }

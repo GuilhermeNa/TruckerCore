@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.user.data
 
-import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
+import com.example.truckercore.model.infrastructure.security.enums.Level
 import com.example.truckercore.model.modules.user.data_helper.Category
 import com.example.truckercore.model.shared.enums.Persistence
 import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto

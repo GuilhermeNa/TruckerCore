@@ -43,7 +43,7 @@
                 android:layout_marginTop="8dp"
                 android:drawableLeft="@drawable/icon_email"
                 android:gravity="start|center"
-                android:text="@string/register_another_email" />
+                android:text="@string/register_new_email" />
 
         </LinearLayout>
 

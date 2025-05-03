@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors
 
-import com.example.truckercore.model.infrastructure.app_exception.ErrorFactory
+import com.example.truckercore.model.errors.ErrorFactory
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.NetworkException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException

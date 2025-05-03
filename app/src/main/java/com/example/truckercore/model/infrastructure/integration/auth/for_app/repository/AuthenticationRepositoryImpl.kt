@@ -68,4 +68,9 @@ class AuthenticationRepositoryImpl(
         } ?: TODO()
     }
 
+    override fun isEmailVerified(): AppResult<Boolean> {
+        val isVerified = dataSource.isEmailVerified()
+        return AppResult.Success(isVerified)
+    }
+
 }

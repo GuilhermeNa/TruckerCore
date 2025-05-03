@@ -117,4 +117,6 @@ abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
 
     abstract fun getUserEmail(): String?
 
+    abstract fun isEmailVerified(): Boolean
+
 }

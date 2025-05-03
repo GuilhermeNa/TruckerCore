@@ -8,18 +8,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.clearFocusIfNeeded
 import com.example.truckercore.view.expressions.hideKeyboard
-import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.showToast
 import com.example.truckercore.view.fragments.base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonClicked
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError
@@ -91,9 +89,9 @@ class EmailAuthFragment : CloseAppFragment() {
      * Handles successful account creation by updating the UI and navigating to the next screen.
      */
     private fun handleSuccessState() {
-        stateHandler.setSuccessState()
+/*        stateHandler.setSuccessState()
         val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToUserNameFragment()
-        navigateTo(direction)
+        navigateTo(direction)*/
     }
 
     /**
@@ -175,8 +173,8 @@ class EmailAuthFragment : CloseAppFragment() {
      * Navigates to the login screen for users who already have an account.
      */
     private fun handleAlreadyHaveAccountButtonClicked() {
-        val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
-        navigateTo(direction)
+   /*     val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
+        navigateTo(direction)*/
     }
 
     //----------------------------------------------------------------------------------------------

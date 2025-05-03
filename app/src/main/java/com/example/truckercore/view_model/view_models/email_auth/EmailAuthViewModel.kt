@@ -3,6 +3,8 @@ package com.example.truckercore.view_model.view_models.email_auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
+import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
+import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
@@ -22,7 +24,10 @@ import kotlinx.coroutines.launch
  *
  * @param authService A service responsible for interacting with the authentication backend.
  */
-class EmailAuthViewModel(private val authService: AuthService) : ViewModel() {
+class EmailAuthViewModel(
+    private val preferences: PreferencesRepository,
+    private val authService: AuthService
+) : ViewModel() {
 
     // StateFlow that holds the current UI state of the fragment
     private val _state: MutableStateFlow<EmailAuthFragState> =
@@ -64,7 +69,10 @@ class EmailAuthViewModel(private val authService: AuthService) : ViewModel() {
             val credential = EmailCredential(Email(email), Password.from(password))
             val result = authenticateUserWithEmail(credential)
             val newEffect = result.mapAppResult(
-                onSuccess = { EmailAuthFragEffect.UserCreated },
+                onSuccess = {
+                    markEmailStepComplete()
+                    EmailAuthFragEffect.UserCreated
+                },
                 onError = { e -> EmailAuthFragEffect.UserCreationFailed(e) }
             )
             setEffect(newEffect)
@@ -77,6 +85,12 @@ class EmailAuthViewModel(private val authService: AuthService) : ViewModel() {
      */
     private suspend fun authenticateUserWithEmail(credential: EmailCredential) =
         authService.createUserWithEmail(credential)
+
+    private fun markEmailStepComplete() {
+        viewModelScope.launch {
+            preferences.markStepAsCompleted(RegistrationStep.Email)
+        }
+    }
 
     /**
      * Emits a new UI event to be consumed by the fragment.

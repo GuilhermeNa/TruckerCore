@@ -122,4 +122,6 @@ interface AuthenticationRepository {
 
     fun getUserEmail(): AppResult<Email>
 
+    fun isEmailVerified(): AppResult<Boolean>
+
 }

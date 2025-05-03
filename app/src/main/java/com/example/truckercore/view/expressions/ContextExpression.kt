@@ -3,7 +3,7 @@ package com.example.truckercore.view.expressions
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.example.truckercore.view.enums.Flavor
+import com.example.truckercore.model.configs.build.Flavor
 
 fun Context.navigateTo(
     clazz: Class<*>,
@@ -13,11 +13,6 @@ fun Context.navigateTo(
         intent()
         startActivity(this)
     }
-}
-
-fun Context.getFlavor(): Flavor {
-    val appName = applicationContext.packageManager.getApplicationLabel(applicationInfo)
-    return Flavor.fromFieldName(appName.toString())
 }
 
 fun Context.toast(message: String, length: Int) {

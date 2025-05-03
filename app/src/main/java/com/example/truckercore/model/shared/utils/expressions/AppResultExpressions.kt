@@ -1,11 +1,11 @@
 package com.example.truckercore.model.shared.utils.expressions
 
-import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore.model.shared.utils.sealeds.AppResult.Error
 import com.example.truckercore.model.shared.utils.sealeds.AppResult.Success
 
-fun <T, R> AppResult<T>.mapAppResult(
+inline fun <T, R> AppResult<T>.mapAppResult(
     onSuccess: (data: T) -> R,
     onError: (e: AppException) -> R
 ): R = when (this) {
@@ -38,3 +38,4 @@ fun <T> AppResult<T>.extractError() =
 suspend inline fun <T> AppResult<T>.runSuspendOnSuccess(crossinline block: suspend () -> Unit) {
     if(this is Success) block()
 }
+

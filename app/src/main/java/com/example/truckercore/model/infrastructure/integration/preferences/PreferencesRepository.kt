@@ -1,8 +1,5 @@
 package com.example.truckercore.model.infrastructure.integration.preferences
 
-import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
-import com.example.truckercore.model.infrastructure.integration.preferences.model.UserRegistrationStatus
-
 /**
  * Interface that defines the contract for interacting with generic user preferences.
  *
@@ -26,23 +23,17 @@ interface PreferencesRepository {
     suspend fun setFirstAccessComplete()
 
     /**
-     * Retrieves the current status of user preferences.
+     * Checks whether the user has chosen to remain logged in across sessions.
      *
-     * This function returns a [UserRegistrationStatus] object that provides an overview of various user-specific
-     * preferences, such as whether the user has completed certain steps or set specific preferences.
-     *
-     * @return A [UserRegistrationStatus] representing the current status of user preferences.
+     * @return `true` if the user should be kept logged in, `false` otherwise.
      */
-    suspend fun getUserRegistrationStatus(): UserRegistrationStatus
+    suspend fun keepLogged(): Boolean
 
     /**
-     * Marks a specific preference or setting as completed or enabled.
+     * Sets the user's preference for being kept logged in between sessions.
      *
-     * This function updates a particular preference, such as marking a registration step as completed or enabling
-     * a specific user setting.
-     *
-     * @param step A [RegistrationStep] indicating which preference or setting has been updated.
+     * @param active `true` to keep the user logged in, `false` to log out after the session ends.
      */
-    suspend fun markStepAsCompleted(step: RegistrationStep)
+    suspend fun setKeepLogged(active: Boolean)
 
 }

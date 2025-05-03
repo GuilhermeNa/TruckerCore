@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.writer.for_app.app_errors
 
-import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
+import com.example.truckercore.model.errors.ErrorCode
 
 /**
  * Interface representing error codes that are specific to the execution of instructions within the system.

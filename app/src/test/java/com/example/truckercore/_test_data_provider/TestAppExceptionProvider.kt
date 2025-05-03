@@ -1,7 +1,7 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.model.infrastructure.app_exception.AppException
-import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
+import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.ErrorCode
 
 class TestAppExceptionProvider {
 

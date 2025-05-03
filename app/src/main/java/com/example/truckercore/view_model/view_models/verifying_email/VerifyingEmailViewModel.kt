@@ -80,13 +80,13 @@ class VerifyingEmailViewModel(
     }
 
     private fun handleVerificationResult(event: TaskCompleteEvent) {
-        if (event.result.isSuccess) markEmailVerificationStepComplete()
-
         event.result.mapAppResult(
-            onSuccess = { setState(VerifiedState) },
+            onSuccess = {
+                markEmailVerificationStepComplete()
+                setState(VerifiedState)
+            },
             onError = { setEffect(ErrorEffect(it)) }
         )
-
     }
 
     private fun markEmailVerificationStepComplete() {
@@ -108,5 +108,11 @@ class VerifyingEmailViewModel(
     }
 
     fun getEmail(): Email = authService.getUserEmail().extractData()
+
+    fun resetUserRegistration() {
+        viewModelScope.launch {
+            preferences.resetUserRegistration()
+        }
+    }
 
 }

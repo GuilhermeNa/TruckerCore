@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors
 
-import com.example.truckercore.model.infrastructure.app_exception.ErrorCode
+import com.example.truckercore.model.errors.ErrorCode
 
 /**
  * Marker interface representing error codes specific to data layer operations.

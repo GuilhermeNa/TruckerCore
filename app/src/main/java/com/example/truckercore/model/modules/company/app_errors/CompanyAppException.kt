@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.company.app_errors
 
-import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.errors.AppException
 
 class CompanyAppException(
     message: String?,

@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.user.data
 
 import com.example.truckercore.model.modules.company.data_helper.CompanyID
-import com.example.truckercore.model.infrastructure.security.permissions.enums.Level
-import com.example.truckercore.model.infrastructure.security.permissions.enums.Permission
+import com.example.truckercore.model.infrastructure.security.enums.Level
+import com.example.truckercore.model.infrastructure.security.enums.Permission
 import com.example.truckercore.model.modules.user.data_helper.Category
 import com.example.truckercore.model.modules.user.data_helper.UserID
 import com.example.truckercore.model.modules.vip.data.Vip

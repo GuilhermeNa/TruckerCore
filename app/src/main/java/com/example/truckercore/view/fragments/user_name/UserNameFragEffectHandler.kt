@@ -1,9 +1,8 @@
 package com.example.truckercore.view.fragments.user_name
 
-import com.example.truckercore.model.infrastructure.app_exception.AppException
+import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.view.activities.NotificationActivity
-import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.showToast
 
 class UserNameFragEffectHandler(private val fragment: UserNameFragment) {
@@ -13,8 +12,8 @@ class UserNameFragEffectHandler(private val fragment: UserNameFragment) {
      * Navigates to the next screen.
      */
     fun handleProfileUpdatedEffect() {
-        val direction = UserNameFragmentDirections.actionUserNameFragmentToVerifyingEmailFragment()
-        fragment.navigateTo(direction)
+  /*      val direction = UserNameFragmentDirections.actionUserNameFragmentToVerifyingEmailFragment()
+        fragment.navigateTo(direction)*/
     }
 
     /**

@@ -1,60 +1,174 @@
 package com.example.truckercore.view.fragments.continue_register
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
 import com.example.truckercore.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.truckercore.databinding.FragmentContinueRegisterBinding
+import com.example.truckercore.view.expressions.navigateTo
+import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiModel
+import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiState
+import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
- * A simple [Fragment] subclass.
- * Use the [ContinueRegisterFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * Fragment responsible for displaying the Continue Register screen.
+ *
+ * This screen allows the user to:
+ * - View their current email.
+ * - See whether their email is verified.
+ * - Check if a user account exists for the email.
+ *
+ * The UI is driven by a [ContinueRegisterViewModel] which exposes a [StateFlow] of [ContinueRegisterUiState].
+ * Depending on the UI state, the fragment updates the UI or triggers navigation events.
+ *
+ * Responsibilities:
+ * - Observes the ViewModel state and updates the UI accordingly.
+ * - Shows status indicators using level-list drawables.
+ * - Handles user actions like "continue" or "change email".
  */
 class ContinueRegisterFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var _binding: FragmentContinueRegisterBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: ContinueRegisterViewModel by viewModel()
+
+    private var _uiModel: ContinueRegisterUiModel? = null
+    private val uiModel
+        get() = requireNotNull(_uiModel) {
+            "Expected direction is null. Probably it was not initialized correctly."
+        }
+
+    // ---------------------------------------------------------------------------------------------
+    // Lifecycle - OnCreate
+    // ---------------------------------------------------------------------------------------------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        ContinueRegisterUiState.Loading -> Unit
+                        ContinueRegisterUiState.Error -> navigateToEmailAuthFragment()
+                        is ContinueRegisterUiState.Success -> {
+                            _uiModel = state.data
+                            bind()
+                        }
+                    }
+                }
+            }
         }
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // UI Binding
+    // ---------------------------------------------------------------------------------------------
+
+    private fun bind() {
+        bindEmail()
+        bindEmailStatus()
+        bindVerifiedStatus()
+        bindUserExistsStatus()
+    }
+
+    private fun bindUserExistsStatus() {
+        val expectedLevel = uiModel.expectedUserExistsImageLevel
+        val imageLevel = getImageLevel(expectedLevel)
+        binding.fragContinueRegisterNameStatusText.setDrawableLevel(imageLevel)
+    }
+
+    private fun bindVerifiedStatus() {
+        val expectedLevel = uiModel.expectedVerifiedImageLevel
+        val imageLevel = getImageLevel(expectedLevel)
+        binding.fragContinueRegisterVerifiedStatusText.setDrawableLevel(imageLevel)
+    }
+
+    private fun bindEmailStatus() {
+        val imageLevel = getImageLevel(ContinueRegisterImageLevel.DONE)
+        binding.fragContinueRegisterEmailStatusText.setDrawableLevel(imageLevel)
+    }
+
+    private fun bindEmail() {
+        binding.fragContinueRegisterEmailText.text = uiModel.email
+    }
+
+    private fun getImageLevel(level: ContinueRegisterImageLevel): Drawable? {
+        return ContextCompat.getDrawable(
+            requireContext(),
+            R.drawable.level_list_status_icons
+        )?.apply { setLevel(level.value) }
+    }
+
+    private fun TextView.setDrawableLevel(imageLevel: Drawable?) {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(imageLevel, null, null, null)
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Navigation
+    // ---------------------------------------------------------------------------------------------
+
+    private fun navigateToEmailAuthFragment() {
+        viewModel.clearCurrentUser()
+        val direction = ContinueRegisterFragmentDirections
+            .actionContinueRegisterFragmentToEmailAuthFragment()
+        navigateTo(direction)
+    }
+
+    private fun setOnContinueCLickListener() {
+        binding.fragContinueRegisterFinishRegisterButton.setOnClickListener {
+            navigateTo(getContinueRegisterDirection())
+        }
+    }
+
+    private fun getContinueRegisterDirection(): NavDirections {
+        val expectedDirection = uiModel.expectedNavigationDirection
+        return when (expectedDirection) {
+            ContinueRegisterDirection.VERIFY_EMAIL -> ContinueRegisterFragmentDirections
+                .actionContinueRegisterFragmentToVerifyingEmailFragment()
+
+            ContinueRegisterDirection.CREATE_USER -> TODO()
+        }
+    }
+
+    private fun setOnNewEmailClickListener() {
+        binding.fragContinueRegisterNewEmailButton.setOnClickListener {
+            navigateToEmailAuthFragment()
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Lifecycle - View Binding
+    // ---------------------------------------------------------------------------------------------
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_continue_register, container, false)
+    ): View {
+        _binding = FragmentContinueRegisterBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ContinueRegisterFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ContinueRegisterFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setOnContinueCLickListener()
+        setOnNewEmailClickListener()
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

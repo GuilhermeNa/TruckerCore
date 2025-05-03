@@ -36,7 +36,12 @@
     <string name="validating_email">Validando email...</string>
     <string name="validating_email_description">Enviamos um link para confirmar seu e-mail.\n Verifique sua caixa de entrada.</string>
     <string name="resend_email">Reenviar email</string>
-    <string name="register_another_email">Cadastrar outro email</string>
     <string name="email_valid">Email valido!!</string>
+    <string name="registration_in_progress">Encontramos um cadastro em andamento</string>
+    <string name="status">Status</string>
+    <string name="email_registered">Email cadastrado</string>
+    <string name="email_verified">Email verificado</string>
+    <string name="finish_register">Finalizar cadastro</string>
+    <string name="register_new_email">Cadastrar novo email</string>
 
 </resources>

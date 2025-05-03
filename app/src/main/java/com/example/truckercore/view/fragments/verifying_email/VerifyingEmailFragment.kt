@@ -48,7 +48,10 @@ class VerifyingEmailFragment : Fragment() {
 
         BottomSheetVerifyingEmail(
             onRetry = { retry() },
-            onChangeEmail = { navigateToEmailAuth() }
+            onChangeEmail = {
+                viewModel.resetUserRegistration()
+                navigateToEmailAuth()
+            }
         )
     }
 
@@ -56,22 +59,21 @@ class VerifyingEmailFragment : Fragment() {
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionStarted(
             motionLayout: MotionLayout?, startId: Int, endId: Int
-        ) {
-        }
+        ) {}
 
         override fun onTransitionChange(
             motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float
-        ) {
-        }
+        ) {}
 
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-            // TODO navegar para home
+       /*     val direction = VerifyingEmailFragmentDirections
+                .actionVerifyingEmailFragmentToPreparingAmbientFragment()
+            navigateTo(direction)*/
         }
 
         override fun onTransitionTrigger(
             motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float
-        ) {
-        }
+        ) {}
 
     }
 

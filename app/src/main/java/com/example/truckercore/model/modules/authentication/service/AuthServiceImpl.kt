@@ -4,6 +4,7 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_app.req
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.CreateUserWithEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUserEmailUseCase
+import com.example.truckercore.model.modules.authentication.use_cases.interfaces.IsEmailVerifiedUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 internal class AuthServiceImpl(
     private val updateUserProfile: UpdateUserProfileUseCase,
     private val getUserEmail: GetUserEmailUseCase,
+    private val isEmailVerified: IsEmailVerifiedUseCase,
     private val createUserWithEmail: CreateUserWithEmailUseCase,
     private val sendVerificationEmail: SendVerificationEmailUseCase,
     private val observeEmailValidation: ObserveEmailValidationUseCase,
@@ -37,5 +39,9 @@ internal class AuthServiceImpl(
         withContext(Dispatchers.IO) { updateUserProfile.invoke(userProfile) }
 
     override fun getUserEmail(): AppResult<Email> = getUserEmail.invoke()
+
+    override fun isEmailVerified(): AppResult<Boolean> = isEmailVerified.invoke()
+
+    override fun signOut() {}
 
 }

@@ -5,7 +5,7 @@ import com.example.truckercore.model.modules.user.data_helper.UserID
 import com.example.truckercore.model.shared.enums.Persistence
 import com.example.truckercore.model.shared.interfaces.data.entity.BaseEntity
 
-data class Company(
+data class  Company(
     override val id: CompanyID,
     override val persistence: Persistence,
     val allowedUserIds: Set<UserID>

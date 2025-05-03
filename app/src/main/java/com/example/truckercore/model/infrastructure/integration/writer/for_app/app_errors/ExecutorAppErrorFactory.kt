@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.writer.for_app.app_errors
 
-import com.example.truckercore.model.infrastructure.app_exception.ErrorFactory
+import com.example.truckercore.model.errors.ErrorFactory
 import com.example.truckercore.model.infrastructure.integration.writer.for_api.exceptions.InstructionNotImplementedException
 import com.example.truckercore.model.infrastructure.integration.writer.for_api.exceptions.InvalidInstructionException
 import com.example.truckercore.model.infrastructure.integration.writer.for_app.app_errors.error_codes.ExecuteInstructionErrCode
