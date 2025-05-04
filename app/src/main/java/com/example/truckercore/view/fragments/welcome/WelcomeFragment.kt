@@ -17,7 +17,7 @@ import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.navigateTo
 import com.example.truckercore.view.expressions.slideInBottom
 import com.example.truckercore.view.expressions.slideOutBottom
-import com.example.truckercore.view.fragments.base.CloseAppFragment
+import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.states.WelcomeFragState.Error
 import com.example.truckercore.view_model.states.WelcomeFragState.Initial
 import com.example.truckercore.view_model.states.WelcomeFragState.Stage

@@ -7,13 +7,13 @@ package com.example.truckercore.model.configs.build
  * behavior, UI, or business logic. Used to differentiate execution
  * paths based on the active flavor.
  */
-enum class Flavor {
+enum class Flavor(val description: String) {
     /** Flavor for individual users (e.g., general customers). */
-    INDIVIDUAL,
+    INDIVIDUAL("Trucker"),
 
     /** Flavor for administrators or company managers. */
-    ADMIN,
+    ADMIN("Trucker Empresa"),
 
     /** Flavor for professional drivers or delivery personnel. */
-    DRIVER;
+    DRIVER("Trucker Motorista");
 }

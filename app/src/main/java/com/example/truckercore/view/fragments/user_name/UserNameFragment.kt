@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentUserNameBinding
-import com.example.truckercore.view.fragments.base.CloseAppFragment
+import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.user_name.UserNameFragEffect
 import com.example.truckercore.view_model.view_models.user_name.UserNameFragEvent.BackgroundClicked
 import com.example.truckercore.view_model.view_models.user_name.UserNameFragEvent.FabCLicked

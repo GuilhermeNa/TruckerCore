@@ -13,12 +13,11 @@ import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.animPumpAndDump
-import com.example.truckercore.view_model.view_models.splash.SplashUiState
-import com.example.truckercore.view_model.view_models.splash.SplashUiState.Error
-import com.example.truckercore.view_model.view_models.splash.SplashUiState.FirstAccess
-import com.example.truckercore.view_model.view_models.splash.SplashUiState.Initial
-import com.example.truckercore.view_model.view_models.splash.SplashUiState.UserLoggedIn
+import com.example.truckercore.view.expressions.onLifecycleState
+import com.example.truckercore.view_model.view_models.splash.SplashEffect
+import com.example.truckercore.view_model.view_models.splash.SplashEvent
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,20 +29,66 @@ class SplashFragment : Fragment() {
 
     private val viewModel: SplashViewModel by viewModel()
 
+    private var stateHandler: SplashUiStateHandler? = null
+
+    private val transitionListener = object : MotionLayout.TransitionListener {
+        override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
+
+        override fun onTransitionChange(
+            motionLayout: MotionLayout?, startId: Int,
+            endId: Int, progress: Float
+        ) {}
+
+        override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+            val event =
+                if (currentId == R.id.frag_verifying_email_state_2)
+                    SplashEvent.UiEvent.FirstAnimComplete
+                else SplashEvent.UiEvent.SecondAnimComplete
+
+            viewModel.onEvent(event)
+        }
+
+        override fun onTransitionTrigger(
+            motionLayout: MotionLayout?, triggerId: Int,
+            positive: Boolean, progress: Float
+        ) {}
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // On Create
+    //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fragmentState.collect { state ->
-                    if (state != Initial) removeLoadingBar()
-                    when (state) {
-                        is Initial -> handleInitialState()
-                        is FirstAccess -> handleFirstAccess()
-                        is UserLoggedIn -> handleLoggedUser(state)
-                        is SplashUiState.UserNotFound -> handleUserNotFound()
-                        is Error -> handleError(state.error)
+                setUiStateManager()
+                setEffectManager()
+            }
+        }
+    }
+
+    private fun CoroutineScope.setUiStateManager() {
+        launch {
+            viewModel.uiState.collect { state ->
+                onLifecycleState(
+                    resumed = { stateHandler?.handleUiTransition(state, true) },
+                    creating = {
+                        stateHandler?.bindAppName(state)
+                        stateHandler?.handleUiTransition(state, false)
                     }
-                }
+                )
+            }
+        }
+    }
+
+    private suspend fun setEffectManager() {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                SplashEffect.FirstTimeAccess -> TODO()
+                SplashEffect.AlreadyAccessed.RequireLogin -> TODO()
+                SplashEffect.AlreadyAccessed.AuthenticatedUser.AwaitingRegistration -> TODO()
+                SplashEffect.AlreadyAccessed.AuthenticatedUser.RegistrationCompleted -> TODO()
+                is SplashEffect.Error -> TODO()
             }
         }
     }
@@ -84,6 +129,12 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSplashBinding.inflate(layoutInflater)
+
+        stateHandler = SplashUiStateHandler(
+            motionLayout = binding.motionLayout,
+            textView = binding.fragSplashName
+        )
+
         return binding.root
     }
 
@@ -92,6 +143,11 @@ class SplashFragment : Fragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setTransitionListener()
+    }
+
+    private fun setTransitionListener() {
+        binding.motionLayout.setTransitionListener(transitionListener)
     }
 
     private fun setMotionLayoutCompletedListener(complete: () -> Unit) {
@@ -163,6 +219,8 @@ class SplashFragment : Fragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.motionLayout.removeTransitionListener(transitionListener)
+        stateHandler = null
         _binding = null
     }
 

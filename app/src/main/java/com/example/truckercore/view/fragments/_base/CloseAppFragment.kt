@@ -1,4 +1,4 @@
-package com.example.truckercore.view.fragments.base
+package com.example.truckercore.view.fragments._base
 
 import android.os.Bundle
 import android.view.View

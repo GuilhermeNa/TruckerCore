@@ -14,7 +14,7 @@ import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.clearFocusIfNeeded
 import com.example.truckercore.view.expressions.hideKeyboard
 import com.example.truckercore.view.expressions.showToast
-import com.example.truckercore.view.fragments.base.CloseAppFragment
+import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonClicked

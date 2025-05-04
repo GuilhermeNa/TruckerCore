@@ -11,9 +11,9 @@ fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
 
 fun Fragment.onLifecycleState(
     resumed: () -> Unit = {},
-    reCreating: () -> Unit = {}
+    creating: () -> Unit = {}
 ) {
     if (this.lifecycle.currentState == Lifecycle.State.RESUMED) resumed()
-    else reCreating()
+    else creating()
 }
 

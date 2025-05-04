@@ -40,25 +40,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/frag_splash_adm"
+        android:id="@+id/frag_splash_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/adm"
+        tools:text="Trucker"
         android:textColor="@color/primary"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/frag_splash_guideline"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/frag_splash_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/in"
-        android:textColor="@color/secondary"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/frag_splash_adm"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar

@@ -1,43 +1,59 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore.model.configs.build.FlavorService
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.infrastructure.security.service.PermissionService
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+private typealias FirstAnimEvent = SplashEvent.UiEvent.FirstAnimComplete
+private typealias SecondAnimEvent = SplashEvent.UiEvent.SecondAnimComplete
 
 class SplashViewModel(
     private val authService: AuthService,
     private val preferences: PreferencesRepository,
     private val permissionService: PermissionService,
-    private val application: Application
+    private val flavorService: FlavorService
 ) : ViewModel() {
 
-    private var _fragmentState: MutableStateFlow<SplashUiState> =
-        MutableStateFlow(SplashUiState.Initial)
-    val fragmentState get() = _fragmentState.asStateFlow()
+    private val appFlavor = flavorService.getFlavor()
+
+    // State
+    private var _uiState: MutableStateFlow<SplashUiState> =
+        MutableStateFlow(SplashUiState.Initial(appFlavor))
+    val uiState get() = _uiState.asStateFlow()
+
+    // Effect
+    private val _effect = MutableSharedFlow<SplashEffect>()
+    val effect get() = _effect.asSharedFlow()
 
     //----------------------------------------------------------------------------------------------
-    // Fluxo do ViewModel
-    //
-    // Primeiro acesso -> navega p/ WelcomeFrag
-    //
-    // Segundo acesso(+):
-    //      !KeepLogged -> navega p/ Login
-    //       KeepLogged ->
-    //          Cadastro pendente -> navega p/ ContinueFrag
-    //          Cadastro valido -> entra sistema
-    //
-    //
+    fun onEvent(event: SplashEvent) {
+        when(event) {
+            is FirstAnimEvent -> {
+                setState(Loading)
+                loadData()
+            }
+            is SecondAnimEvent -> TODO()
+
+
+            SplashEvent.SystemEvent.EnterSystem -> TODO()
+            SplashEvent.SystemEvent.FinishRegistration -> TODO()
+            SplashEvent.SystemEvent.LoginRequired -> TODO()
+            SplashEvent.SystemEvent.UserInFirstAccess -> TODO()
+        }
+    }
 
     fun run() {
         viewModelScope.launch {
-            updateFragmentState(SplashUiState.FirstAccess)
+            updateFragmentState(SplashEffect.FirstAccess)
             when (isFirstAccess()) {
                 true -> handleFirstAccess()
                 false -> handleDefaultAccess()
@@ -50,7 +66,7 @@ class SplashViewModel(
     }
 
     private suspend fun handleFirstAccess() {
-        updateFragmentState(SplashUiState.FirstAccess)
+        updateFragmentState(SplashEffect.FirstAccess)
 
     }
 
@@ -88,7 +104,7 @@ class SplashViewModel(
         }*/
 
     private fun handleUserNotFound() {
-        updateFragmentState(SplashUiState.UserNotFound)
+        updateFragmentState(SplashEffect.UserNotFound)
     }
 
     fun getErrorTitle() = "Erro de inicialização"
@@ -96,9 +112,8 @@ class SplashViewModel(
     fun getErrorMessage() = "Houve alguma falha no carregamento de dados, entre em contato com o " +
             "distribuidor do App para mais informações."
 
-    private fun updateFragmentState(newState: SplashUiState) {
-        _fragmentState.value = newState
+    private fun updateFragmentState(newState: SplashEffect) {
+        _uiState.value = newState
     }
-
 
 }
