@@ -134,7 +134,7 @@ class VerifyingEmailFragment : Fragment() {
         viewModel.counterFlow.collect { value ->
             onLifecycleState(
                 resumed = { stateHandler.incrementProgress(value, true) },
-                creating = { stateHandler.incrementProgress(value, false) }
+                anyOther = { stateHandler.incrementProgress(value, false) }
             )
         }
     }

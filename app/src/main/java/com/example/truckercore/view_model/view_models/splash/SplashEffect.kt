@@ -1,6 +1,7 @@
 package com.example.truckercore.view_model.view_models.splash
 
 import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.ErrorCode
 
 sealed class SplashEffect {
 
@@ -22,6 +23,6 @@ sealed class SplashEffect {
         }
     }
 
-    data class Error(val error: AppException): SplashEffect()
+    data class Error(val error: ErrorCode): SplashEffect()
 
 }

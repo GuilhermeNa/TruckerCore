@@ -9,11 +9,11 @@ fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(context, message, length).show()
 }
 
-fun Fragment.onLifecycleState(
+inline fun Fragment.onLifecycleState(
     resumed: () -> Unit = {},
-    creating: () -> Unit = {}
+    anyOther: () -> Unit = {}
 ) {
     if (this.lifecycle.currentState == Lifecycle.State.RESUMED) resumed()
-    else creating()
+    else anyOther()
 }
 

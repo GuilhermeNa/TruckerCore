@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.expressions.animPumpAndDump
 import com.example.truckercore.view.expressions.onLifecycleState
 import com.example.truckercore.view_model.view_models.splash.SplashEffect
 import com.example.truckercore.view_model.view_models.splash.SplashEvent
+import com.example.truckercore.view_model.view_models.splash.SplashUiState
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -37,21 +37,22 @@ class SplashFragment : Fragment() {
         override fun onTransitionChange(
             motionLayout: MotionLayout?, startId: Int,
             endId: Int, progress: Float
-        ) {}
+        ) {
+        }
 
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-            val event =
-                if (currentId == R.id.frag_verifying_email_state_2)
-                    SplashEvent.UiEvent.FirstAnimComplete
-                else SplashEvent.UiEvent.SecondAnimComplete
-
+            val event = when (currentId) {
+                stateHandler?.secondUiState -> SplashEvent.UiEvent.FirstAnimComplete
+                else -> SplashEvent.UiEvent.SecondAnimComplete
+            }
             viewModel.onEvent(event)
         }
 
         override fun onTransitionTrigger(
             motionLayout: MotionLayout?, triggerId: Int,
             positive: Boolean, progress: Float
-        ) {}
+        ) {
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -70,13 +71,51 @@ class SplashFragment : Fragment() {
     private fun CoroutineScope.setUiStateManager() {
         launch {
             viewModel.uiState.collect { state ->
-                onLifecycleState(
-                    resumed = { stateHandler?.handleUiTransition(state, true) },
-                    creating = {
-                        stateHandler?.bindAppName(state)
-                        stateHandler?.handleUiTransition(state, false)
+                when (state) {
+                    is SplashUiState.Initial -> {
+                        onLifecycleState(
+                            resumed = {
+                                // Expected flow: the user opens the app and waits for the animation to finish.
+                                // The animation listener will notify the ViewModel that
+                                // the FirstAnim event was completed.
+                                stateHandler?.bindAppName(state.flavor)
+                                stateHandler?.runFirstUiTransition()
+                            },
+                            anyOther = {
+                                // Unexpected flow: the user opens the app and closes it before
+                                // the first transition is completed.
+                                // The FirstAnim event must be triggered outside the animation listener.
+                                viewModel.onEvent(SplashEvent.UiEvent.FirstAnimComplete)
+                            }
+                        )
                     }
-                )
+
+                    is SplashUiState.Loading -> {
+                        // Intermediate state. This ensures that the view is correctly recreated
+                        // when the user leaves and returns to the fragment while in the loading state.
+                        if (lifecycle.currentState != Lifecycle.State.RESUMED) {
+                            stateHandler?.bindAppName(state.flavor)
+                            stateHandler?.jumpToSecondUiState()
+                        }
+                    }
+
+                    is SplashUiState.Loaded -> {
+                        onLifecycleState(
+                            resumed = {
+                                // Expected flow: after the data is loaded, the app runs the second
+                                // animation, and the listener marks it as complete in the ViewModel.
+                                stateHandler?.runSecondUiTransition()
+                            },
+                            anyOther = {
+                                // Unexpected flow: the user closes the app before the second transition is completed.
+                                // The SecondAnim event must be triggered outside the animation listener.
+                                stateHandler?.bindAppName(state.flavor)
+                                stateHandler?.jumpToThirdUiState()
+                                viewModel.onEvent(SplashEvent.UiEvent.SecondAnimComplete)
+                            }
+                        )
+                    }
+                }
             }
         }
     }
@@ -84,41 +123,33 @@ class SplashFragment : Fragment() {
     private suspend fun setEffectManager() {
         viewModel.effect.collect { effect ->
             when (effect) {
-                SplashEffect.FirstTimeAccess -> TODO()
-                SplashEffect.AlreadyAccessed.RequireLogin -> TODO()
-                SplashEffect.AlreadyAccessed.AuthenticatedUser.AwaitingRegistration -> TODO()
-                SplashEffect.AlreadyAccessed.AuthenticatedUser.RegistrationCompleted -> TODO()
-                is SplashEffect.Error -> TODO()
+                SplashEffect.FirstTimeAccess -> {
+                    TODO("Continuar a implementar as navegações")
+                }
+
+                SplashEffect.AlreadyAccessed.RequireLogin -> {
+                    TODO("Continuar a implementar as navegações")
+                }
+
+                SplashEffect.AlreadyAccessed.AuthenticatedUser.AwaitingRegistration -> {
+                    TODO("Continuar a implementar as navegações")
+                }
+
+                SplashEffect.AlreadyAccessed.AuthenticatedUser.RegistrationCompleted -> {
+                    TODO("Continuar a implementar as navegações")
+                }
+
+                is SplashEffect.Error -> {
+                    val intent = NotificationActivity.newInstance(
+                        context = requireContext(),
+                        errorHeader = effect.error.name,
+                        errorBody = effect.error.userMessage
+                    )
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
             }
         }
-    }
-
-    private fun handleInitialState() {
-        setMotionLayoutCompletedListener {
-            viewModel.run()
-        }
-    }
-
-    private fun handleFirstAccess() {
-        /*  val flavor = requireContext().getFlavor()
-          val direction = BaSplashFragmentDirections.actionSplashFragmentToWelcomeFragment(flavor)
-          navigateTo(direction)*/
-    }
-
-    private fun handleLoggedUser(state: UserLoggedIn) {
-        when (state) {
-            is UserLoggedIn.SystemAccessAllowed -> navigateToMainActivity()
-            is UserLoggedIn.SystemAccessDenied -> navigateToDeniedSystemAccessFragment()
-            is UserLoggedIn.ProfileIncomplete -> navigateToProfileCreationFragment()
-        }
-    }
-
-    private fun handleUserNotFound() {
-        navigateToLoginFragment()
-    }
-
-    private fun handleError(error: Exception) {
-        navigateToNotificationActivityWithAnError(error)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -187,17 +218,6 @@ class SplashFragment : Fragment() {
     private suspend fun removeLoadingBar() {
         binding.fragSplashProgressbar.animPumpAndDump()
         delay(600)
-    }
-
-    private fun navigateToNotificationActivityWithAnError(error: Exception) {
-        val intent = NotificationActivity.newInstance(
-            context = requireContext(),
-            gifRes = R.drawable.gif_error,
-            errorHeader = viewModel.getErrorTitle(),
-            errorBody = viewModel.getErrorMessage()
-        )
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     private fun navigateToWelcomeFragment() {}
