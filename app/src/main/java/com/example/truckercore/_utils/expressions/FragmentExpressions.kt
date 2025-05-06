@@ -2,6 +2,7 @@ package com.example.truckercore._utils.expressions
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -62,4 +63,9 @@ fun Fragment.hideKeyboard() {
     val isKeyboardOpen = inputMethodManager.isAcceptingText
 
     if (isKeyboardOpen) inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+}
+
+fun Fragment.hideKeyboardAndClearFocus(vararg view: View) {
+    this.hideKeyboard()
+    view.forEach {v -> if(v.hasFocus()) v.clearFocus() }
 }

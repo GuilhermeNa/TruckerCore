@@ -6,7 +6,9 @@ class LoginViewModel(
 
 ): ViewModel() {
 
+    fun onEvent(event: LoginEvent) {
 
+    }
 
 
 }

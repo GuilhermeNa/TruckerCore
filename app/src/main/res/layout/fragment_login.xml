@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient_primary"
-    tools:context=".view.fragments.login.LoginFragment">
+    tools:context=".view.fragments.login.LoginFragment"
+    android:id="@+id/frag_login_background">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -13,7 +14,8 @@
         android:layout_gravity="center"
         android:layout_marginHorizontal="16dp"
         android:translationZ="11dp"
-        app:cardElevation="11dp">
+        app:cardElevation="11dp"
+        android:id="@+id/frag_login_card">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,15 +32,17 @@
                 android:importantForAccessibility="no"
                 android:src="@drawable/image_profile" />
 
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/frag_login_email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:hint="@string/email"
                 app:errorEnabled="true"
+                app:helperTextEnabled="true"
                 app:startIconDrawable="@drawable/icon_email"
-                android:hint="@string/email">
+                app:helperTextTextColor="@color/green"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/frag_login_email_text"
@@ -54,10 +58,13 @@
                 android:id="@+id/frag_login_password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:hint="@string/password"
                 app:endIconMode="password_toggle"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/icon_key">
+                app:startIconDrawable="@drawable/icon_key"
+                app:helperTextEnabled="true"
+                app:helperTextTextColor="@color/green">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/frag_login_password_text"

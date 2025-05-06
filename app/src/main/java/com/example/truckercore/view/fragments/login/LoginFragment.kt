@@ -4,14 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.view.fragments._base.CloseAppFragment
+import com.example.truckercore.view_model.view_models.login.LoginEvent
+import com.example.truckercore.view_model.view_models.login.LoginViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : CloseAppFragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    private var _stateHandler: LoginUiStateHandler? = null
+    private val stateHandler get() = _stateHandler!!
+
+    private val viewModel: LoginViewModel by viewModel()
 
     //----------------------------------------------------------------------------------------------
     // OnCreate
@@ -28,6 +35,7 @@ class LoginFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(layoutInflater)
+        _stateHandler = LoginUiStateHandler(binding)
         return binding.root
     }
 
@@ -36,20 +44,36 @@ class LoginFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fragLoginEmailLayout.error = "Teste erro"
+        setBackgroundViewsClickListener()
+        setEnterButtonClickListener()
         setNewAccountButtonClickListener()
         setForgetPasswordButtonClickListener()
     }
 
+    private fun setBackgroundViewsClickListener() {
+        binding.fragLoginBackground.setOnClickListener {
+            viewModel.onEvent(LoginEvent.UiEvent.BackGroundCLick)
+        }
+        binding.fragLoginCard.setOnClickListener {
+            viewModel.onEvent(LoginEvent.UiEvent.BackGroundCLick)
+        }
+    }
+
+    private fun setEnterButtonClickListener() {
+        binding.fragLoginEnterButton.setOnClickListener {
+            viewModel.onEvent(LoginEvent.UiEvent.EnterButtonClick)
+        }
+    }
+
     private fun setNewAccountButtonClickListener() {
         binding.fragLoginNewAccountButton.setOnClickListener {
-            binding.fragLoginEnterButton.isEnabled = false
+            viewModel.onEvent(LoginEvent.UiEvent.NewAccountButtonClick)
         }
     }
 
     private fun setForgetPasswordButtonClickListener() {
         binding.fragLoginForgetPasswordButton.setOnClickListener {
-            binding.fragLoginEnterButton.isEnabled = true
+            viewModel.onEvent(LoginEvent.UiEvent.ForgetPasswordButtonClick)
         }
     }
 
@@ -58,6 +82,7 @@ class LoginFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        _stateHandler = null
         _binding = null
     }
 
