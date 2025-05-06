@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.modules.user.service.UserService
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import com.example.truckercore.model.shared.value_classes.Email
+import com.example.truckercore._utils.classes.Email
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

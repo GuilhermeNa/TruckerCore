@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.truckercore.R
 import com.example.truckercore.databinding.ActivityNotificationBinding
-import com.example.truckercore.view.expressions.loadGif
+import com.example.truckercore._utils.expressions.loadGif
 
 private const val HEADER_MESSAGE = "error_header"
 

@@ -1,6 +1,5 @@
 package com.example.truckercore.view_model.states
 
-import com.example.truckercore.view_model.enums.ErrorType
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 
 /**
@@ -25,7 +24,7 @@ sealed class WelcomeFragState {
     data class Success(
         val data: List<WelcomePagerData>,
         val uiStage: Stage
-    ): WelcomeFragState()
+    ) : WelcomeFragState()
 
     /**
      * Enum class that defines the different stages of the fragment's UI.
@@ -39,11 +38,7 @@ sealed class WelcomeFragState {
 
     /**
      * Represents the error state of the fragment.
-     * It contains an `ErrorType` that indicates the type of error and a message providing further details.
      */
-    data class Error(
-        val type: ErrorType,
-        val message: String
-    ): WelcomeFragState()
+    data class Error(val e: Exception) : WelcomeFragState()
 
 }

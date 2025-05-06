@@ -43,5 +43,8 @@
     <string name="email_verified">Email verificado</string>
     <string name="finish_register">Finalizar cadastro</string>
     <string name="register_new_email">Cadastrar novo email</string>
+    <string name="enter">Entrar</string>
+    <string name="forget_password">Esqueci a senha</string>
+    <string name="keep_logged">Manter conectado</string>
 
 </resources>

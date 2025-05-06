@@ -5,24 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.truckercore.business_admin.view.activities.BaMainActivity
 import com.example.truckercore.databinding.FragmentSplashBinding
-import com.example.truckercore.view.activities.NotificationActivity
-import com.example.truckercore.view.expressions.animPumpAndDump
-import com.example.truckercore.view.expressions.onLifecycleState
-import com.example.truckercore.view_model.view_models.splash.SplashEffect
+import com.example.truckercore._utils.expressions.navigateToActivity
+import com.example.truckercore._utils.expressions.navigateToDirection
+import com.example.truckercore._utils.expressions.onLifecycleState
+import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.splash.SplashEvent
 import com.example.truckercore.view_model.view_models.splash.SplashUiState
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SplashFragment : Fragment() {
+class SplashFragment : CloseAppFragment() {
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
@@ -30,6 +29,7 @@ class SplashFragment : Fragment() {
     private val viewModel: SplashViewModel by viewModel()
 
     private var stateHandler: SplashUiStateHandler? = null
+    private val navigationHandler by lazy { SplashNavigationHandler() }
 
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
@@ -43,7 +43,10 @@ class SplashFragment : Fragment() {
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
             val event = when (currentId) {
                 stateHandler?.secondUiState -> SplashEvent.UiEvent.FirstAnimComplete
-                else -> SplashEvent.UiEvent.SecondAnimComplete
+                stateHandler?.thirdUiState -> SplashEvent.UiEvent.SecondAnimComplete
+                else -> throw NotImplementedError(
+                    "SplashFragment completed transition listener unimplemented with id: $currentId."
+                )
             }
             viewModel.onEvent(event)
         }
@@ -122,33 +125,17 @@ class SplashFragment : Fragment() {
 
     private suspend fun setEffectManager() {
         viewModel.effect.collect { effect ->
-            when (effect) {
-                SplashEffect.FirstTimeAccess -> {
-                    TODO("Continuar a implementar as navegações")
-                }
-
-                SplashEffect.AlreadyAccessed.RequireLogin -> {
-                    TODO("Continuar a implementar as navegações")
-                }
-
-                SplashEffect.AlreadyAccessed.AuthenticatedUser.AwaitingRegistration -> {
-                    TODO("Continuar a implementar as navegações")
-                }
-
-                SplashEffect.AlreadyAccessed.AuthenticatedUser.RegistrationCompleted -> {
-                    TODO("Continuar a implementar as navegações")
-                }
-
-                is SplashEffect.Error -> {
-                    val intent = NotificationActivity.newInstance(
-                        context = requireContext(),
-                        errorHeader = effect.error.name,
-                        errorBody = effect.error.userMessage
-                    )
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
+            if (effect.isFragmentNavigation()) {
+                val direction = navigationHandler.getDirection(effect)
+                navigateToDirection(direction)
             }
+
+            if (effect.isCompleteEffect()) {
+                navigateToActivity(BaMainActivity::class.java, true)
+            }
+
+            val intent = navigationHandler.getIntent(effect, requireContext())
+            navigateToActivity(intent, true)
         }
     }
 
@@ -179,59 +166,6 @@ class SplashFragment : Fragment() {
 
     private fun setTransitionListener() {
         binding.motionLayout.setTransitionListener(transitionListener)
-    }
-
-    private fun setMotionLayoutCompletedListener(complete: () -> Unit) {
-        binding.motionLayout.setTransitionListener(
-            object : MotionLayout.TransitionListener {
-                override fun onTransitionStarted(
-                    motionLayout: MotionLayout?,
-                    startId: Int,
-                    endId: Int
-                ) {
-                }
-
-                override fun onTransitionChange(
-                    motionLayout: MotionLayout?,
-                    startId: Int,
-                    endId: Int,
-                    progress: Float
-                ) {
-                }
-
-                override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                    complete()
-                }
-
-                override fun onTransitionTrigger(
-                    motionLayout: MotionLayout?,
-                    triggerId: Int,
-                    positive: Boolean,
-                    progress: Float
-                ) {
-                }
-
-            }
-        )
-    }
-
-    private suspend fun removeLoadingBar() {
-        binding.fragSplashProgressbar.animPumpAndDump()
-        delay(600)
-    }
-
-    private fun navigateToWelcomeFragment() {}
-
-    private fun navigateToLoginFragment() {}
-
-    private fun navigateToProfileCreationFragment() {}
-
-    private fun navigateToMainActivity() {
-
-    }
-
-    private fun navigateToDeniedSystemAccessFragment() {
-
     }
 
     //----------------------------------------------------------------------------------------------

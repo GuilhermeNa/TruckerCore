@@ -1,7 +1,6 @@
-package com.example.truckercore.model.shared.value_classes
+package com.example.truckercore._utils.classes
 
-import com.example.truckercore.model.shared.value_classes.FullName.Companion.from
-import com.example.truckercore.model.shared.value_classes.exceptions.InvalidNameException
+import com.example.truckercore._utils.classes.FullName.Companion.from
 
 /**
  * Represents a validated and formatted full name.
@@ -71,3 +70,4 @@ value class FullName private constructor(val value: String) {
     }
 
 }
+class InvalidNameException(message: String? = null) : Exception(message)

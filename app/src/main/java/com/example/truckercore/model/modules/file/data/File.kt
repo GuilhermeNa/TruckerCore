@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.file.data
 
-import com.example.truckercore.model.shared.value_classes.Url
+import com.example.truckercore._utils.classes.Url
 import com.example.truckercore.model.modules.company.data_helper.CompanyID
 import com.example.truckercore.model.modules.file.data_helper.FileID
 import com.example.truckercore.model.shared.enums.Persistence

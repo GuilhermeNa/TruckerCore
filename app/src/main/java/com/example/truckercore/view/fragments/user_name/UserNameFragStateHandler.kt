@@ -3,7 +3,7 @@ package com.example.truckercore.view.fragments.user_name
 import androidx.lifecycle.Lifecycle
 import com.example.truckercore.R
 import com.example.truckercore.view.dialogs.LoadingDialog
-import com.example.truckercore.view.expressions.executeOnState
+import com.example.truckercore._utils.expressions.executeOnState
 
 class UserNameFragStateHandler(fragment: UserNameFragment) {
 

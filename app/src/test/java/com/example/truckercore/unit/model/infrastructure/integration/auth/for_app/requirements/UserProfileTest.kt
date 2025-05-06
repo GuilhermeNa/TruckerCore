@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.integration.auth.for_app.requirements
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
-import com.example.truckercore.model.shared.value_classes.FullName
+import com.example.truckercore._utils.classes.FullName
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

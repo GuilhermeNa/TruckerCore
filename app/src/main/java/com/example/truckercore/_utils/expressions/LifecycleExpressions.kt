@@ -1,4 +1,4 @@
-package com.example.truckercore.view.expressions
+package com.example.truckercore._utils.expressions
 
 import androidx.lifecycle.Lifecycle
 

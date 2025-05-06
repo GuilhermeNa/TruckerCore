@@ -2,9 +2,9 @@ package com.example.truckercore._test_data_provider
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.FullName
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.FullName
+import com.example.truckercore._utils.classes.Password
 
 class TestCredentialProvider {
 

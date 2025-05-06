@@ -1,8 +1,8 @@
 package com.example.truckercore.unit.model.infrastructure.integration.auth.for_app.requirements
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

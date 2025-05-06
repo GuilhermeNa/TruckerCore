@@ -1,3 +1,4 @@
+package com.example.truckercore._utils.enums
 
 /**
  * A sealed class representing the direction of navigation or page scrolling.
@@ -10,17 +11,18 @@
  *
  * Sealed classes enable exhaustive `when` statements for safer and more maintainable code.
  */
-sealed class Direction(val value: Int) {
+enum class Direction(val value: Int) {
 
     /**
      * Represents the "Forward" direction with a value of +1.
      * Typically used to move to the next item, page, or step.
      */
-    data object Forward : Direction(+1)
+    Forward(+1),
 
     /**
      * Represents the "Back" direction with a value of -1.
      * Typically used to move to the previous item, page, or step.
      */
-    data object Back : Direction(-1)
+    Back(-1)
+
 }

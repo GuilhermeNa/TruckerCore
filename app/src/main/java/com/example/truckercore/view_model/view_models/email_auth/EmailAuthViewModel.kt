@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -66,7 +65,7 @@ class EmailAuthViewModel(
 
             delay(500) // Optional UI delay
 
-            val credential = EmailCredential(Email(email), Password.from(password))
+            val credential = EmailCredential(Email.from(email), Password.from(password))
             val result = authenticateUserWithEmail(credential)
             val newEffect = result.mapAppResult(
                 onSuccess = {
@@ -88,7 +87,7 @@ class EmailAuthViewModel(
 
     private fun markEmailStepComplete() {
         viewModelScope.launch {
-            preferences.markStepAsCompleted(RegistrationStep.Email)
+          /*  preferences.markStepAsCompleted(RegistrationStep.Email)*/
         }
     }
 

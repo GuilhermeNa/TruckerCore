@@ -3,8 +3,8 @@ package com.example.truckercore.model.infrastructure.integration.auth.for_app.re
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppException
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 
 /**
  * Repository interface that defines authentication-related operations used by the application layer.

@@ -1,6 +1,5 @@
 package com.example.truckercore.view.fragments.welcome
 
-import Direction
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.truckercore.R
+import com.example.truckercore._utils.enums.Direction
 import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.view.activities.NotificationActivity
-import com.example.truckercore.view.expressions.navigateTo
-import com.example.truckercore.view.expressions.slideInBottom
-import com.example.truckercore.view.expressions.slideOutBottom
+import com.example.truckercore._utils.expressions.navigateToDirection
+import com.example.truckercore._utils.expressions.slideInBottom
+import com.example.truckercore._utils.expressions.slideOutBottom
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.states.WelcomeFragState.Error
 import com.example.truckercore.view_model.states.WelcomeFragState.Initial
@@ -127,14 +127,14 @@ class WelcomeFragment : CloseAppFragment() {
      * Handles errors by showing a notification activity and finishing the current activity.
      */
     private fun handleErrorState(state: Error) {
-        val intent = NotificationActivity.newInstance(
+       /* val intent = NotificationActivity.newInstance(
             context = requireContext(),
             gifRes = R.drawable.gif_error,
             errorHeader = state.type.getFieldName(),
             errorBody = state.message
         )
         startActivity(intent)
-        requireActivity().finish()
+        requireActivity().finish()*/
     }
 
     /**
@@ -184,7 +184,7 @@ class WelcomeFragment : CloseAppFragment() {
 
         // Navigate to destination direction.
         val direction = WelcomeFragmentDirections.actionWelcomeFragmentToEmailAuthFragment()
-        navigateTo(direction)
+        navigateToDirection(direction)
     }
 
     //----------------------------------------------------------------------------------------------

@@ -4,8 +4,8 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_api.Aut
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
 import com.example.truckercore.model.shared.utils.expressions.cancelJob
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest

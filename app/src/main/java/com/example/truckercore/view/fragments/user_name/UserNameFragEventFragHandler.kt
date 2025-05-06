@@ -1,6 +1,6 @@
 package com.example.truckercore.view.fragments.user_name
 
-import com.example.truckercore.view.expressions.hideKeyboard
+import com.example.truckercore._utils.expressions.hideKeyboard
 
 class UserNameFragEventFragHandler(private val fragment: UserNameFragment) {
 

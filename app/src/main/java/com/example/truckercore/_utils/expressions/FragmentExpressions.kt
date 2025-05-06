@@ -1,0 +1,65 @@
+package com.example.truckercore._utils.expressions
+
+import android.content.Context
+import android.content.Intent
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
+
+/**
+ * Navigates to the specified destination using a NavController.
+ *
+ * This function leverages the Navigation component in Android to handle navigation within the app.
+ * It is typically used within a Fragment to navigate to another screen.
+ *
+ * @param direction The [NavDirections] object containing the navigation direction to a destination.
+ */
+fun Fragment.navigateToDirection(direction: NavDirections) {
+    val navController = Navigation.findNavController(this.requireView())
+    navController.navigate(direction)
+}
+
+fun Fragment.navigateToActivity(
+    clazz: Class<*>, finishActual: Boolean = false,
+    intent: Intent.() -> Unit = {}
+) {
+    val context = this.requireContext()
+    Intent(context, clazz).apply {
+        intent()
+        startActivity(this)
+    }
+    if (finishActual) this.requireActivity().finish()
+}
+
+fun Fragment.navigateToActivity(intent: Intent, finishActual: Boolean = false) {
+    startActivity(intent)
+    if (finishActual) this.requireActivity().finish()
+}
+
+fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
+    val context = this.requireContext()
+    Toast.makeText(context, message, length).show()
+}
+
+inline fun Fragment.onLifecycleState(
+    resumed: () -> Unit = {},
+    anyOther: () -> Unit = {}
+) {
+    if (this.lifecycle.currentState == Lifecycle.State.RESUMED) resumed()
+    else anyOther()
+}
+
+/**
+ * Extension function for Fragment to hide the keyboard.
+ * This function will call the `hideKeyboard` function in the Activity context.
+ */
+fun Fragment.hideKeyboard() {
+    val inputMethodManager =
+        this.requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val isKeyboardOpen = inputMethodManager.isAcceptingText
+
+    if (isKeyboardOpen) inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
+}

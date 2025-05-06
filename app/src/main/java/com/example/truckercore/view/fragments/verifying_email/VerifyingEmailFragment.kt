@@ -14,8 +14,8 @@ import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.model.shared.utils.expressions.logError
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.dialogs.BottomSheetVerifyingEmail
-import com.example.truckercore.view.expressions.navigateTo
-import com.example.truckercore.view.expressions.onLifecycleState
+import com.example.truckercore._utils.expressions.navigateToDirection
+import com.example.truckercore._utils.expressions.onLifecycleState
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEffect
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailUiState
@@ -43,7 +43,7 @@ class VerifyingEmailFragment : Fragment() {
         fun navigateToEmailAuth() {
             val direction = VerifyingEmailFragmentDirections
                 .actionVerifyingEmailFragmentToEmailAuthFragment()
-            navigateTo(direction)
+            navigateToDirection(direction)
         }
 
         BottomSheetVerifyingEmail(

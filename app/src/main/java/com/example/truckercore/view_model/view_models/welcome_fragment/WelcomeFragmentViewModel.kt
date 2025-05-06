@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.R
 import com.example.truckercore.model.configs.build.Flavor
-import com.example.truckercore.view_model.enums.ErrorType
 import com.example.truckercore.view_model.states.WelcomeFragState
 import com.example.truckercore.view_model.states.WelcomeFragState.Stage
 import com.example.truckercore.view_model.states.WelcomeFragState.Initial
@@ -54,12 +53,12 @@ class WelcomeFragmentViewModel(actualFlavor: Flavor) : ViewModel() {
             updateFragmentState(state)
 
         } catch (e: Exception) {
-            updateFragmentState(
+          /*  updateFragmentState(
                 WelcomeFragState.Error(
                     type = ErrorType.UnknownError,
                     message = GENERIC_ERROR_MESSAGE
                 )
-            )
+            )*/
         }
     }
 

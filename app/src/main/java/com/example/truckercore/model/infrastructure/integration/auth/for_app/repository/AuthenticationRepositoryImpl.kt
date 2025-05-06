@@ -4,8 +4,8 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_api.Aut
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 
 class AuthenticationRepositoryImpl(
     private val dataSource: AuthSource,
@@ -64,7 +64,7 @@ class AuthenticationRepositoryImpl(
 
     override fun getUserEmail(): AppResult<Email> {
         return dataSource.getUserEmail()?.let {
-            AppResult.Success(Email(it))
+            AppResult.Success(Email.from(it))
         } ?: TODO()
     }
 

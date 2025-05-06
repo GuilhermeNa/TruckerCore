@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import com.example.truckercore.model.shared.value_classes.FullName
+import com.example.truckercore._utils.classes.FullName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -136,7 +135,7 @@ class UserNameViewModel(
 
     private fun markNameStepComplete() {
         viewModelScope.launch {
-            preferences.markStepAsCompleted(RegistrationStep.Name)
+          /*  preferences.markStepAsCompleted(RegistrationStep.Name)*/
         }
     }
 

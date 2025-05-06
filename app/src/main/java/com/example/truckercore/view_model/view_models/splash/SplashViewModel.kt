@@ -3,18 +3,28 @@ package com.example.truckercore.view_model.view_models.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.configs.build.FlavorService
+import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.infrastructure.security.service.PermissionService
 import com.example.truckercore.model.modules.authentication.service.AuthService
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-private typealias FirstAnimEvent = SplashEvent.UiEvent.FirstAnimComplete
-private typealias SecondAnimEvent = SplashEvent.UiEvent.SecondAnimComplete
+private typealias RegistrationCompletedEffect = SplashEffect.AlreadyAccessed.AuthenticatedUser.RegistrationCompleted
+private typealias AwaitingRegistrationEffect = SplashEffect.AlreadyAccessed.AuthenticatedUser.AwaitingRegistration
+private typealias LoginRequiredEffect = SplashEffect.AlreadyAccessed.RequireLogin
+private typealias FirstAccessEffect = SplashEffect.FirstTimeAccess
+
+private typealias OpenAnimConcludedEvent = SplashEvent.UiEvent.FirstAnimComplete
+private typealias InfoLoadedEvent = SplashEvent.SystemEvent.UserInfoLoaded
+private typealias LoadedAnimConcludedEvent = SplashEvent.UiEvent.SecondAnimComplete
+
+private typealias LoadingState = SplashUiState.Loading
+private typealias LoadedState = SplashUiState.Loaded
 
 class SplashViewModel(
     private val authService: AuthService,
@@ -31,89 +41,71 @@ class SplashViewModel(
     val uiState get() = _uiState.asStateFlow()
 
     // Effect
-    private val _effect = MutableSharedFlow<SplashEffect>()
+    private val _effect = MutableSharedFlow<SplashEffect>(replay = 1)
     val effect get() = _effect.asSharedFlow()
+    private var effectHolder: SplashEffect? = null
 
     //----------------------------------------------------------------------------------------------
     fun onEvent(event: SplashEvent) {
-        when(event) {
-            is FirstAnimEvent -> {
-                setState(Loading)
-                loadData()
+        when (event) {
+            is OpenAnimConcludedEvent -> {
+                setState(LoadingState(appFlavor))
+                loadUserInfo()
             }
-            is SecondAnimEvent -> TODO()
 
+            is InfoLoadedEvent -> setState(LoadedState(appFlavor))
 
-            SplashEvent.SystemEvent.EnterSystem -> TODO()
-            SplashEvent.SystemEvent.FinishRegistration -> TODO()
-            SplashEvent.SystemEvent.LoginRequired -> TODO()
-            SplashEvent.SystemEvent.UserInFirstAccess -> TODO()
+            is LoadedAnimConcludedEvent -> effectHolder?.let { setEffect(it) }
         }
     }
 
-    fun run() {
+    private fun loadUserInfo() {
         viewModelScope.launch {
-            updateFragmentState(SplashEffect.FirstAccess)
-            when (isFirstAccess()) {
-                true -> handleFirstAccess()
-                false -> handleDefaultAccess()
+            try {
+                effectHolder = when {
+                    isFirstAccess() -> FirstAccessEffect(appFlavor)
+                    !activeSession() -> LoginRequiredEffect
+                    registerIncomplete() -> AwaitingRegistrationEffect
+                    registerComplete() -> RegistrationCompletedEffect
+                    else -> throw NotImplementedError("")
+                }
+                onEvent(InfoLoadedEvent)
+
+            } catch (e: Exception) {
+                if (e is AppException) setEffect(SplashEffect.Error(e.errorCode))
+                else throw UnknownError("An unknown error occurred while loading user info.")
             }
         }
+    }
+
+    private fun registerComplete(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    private fun registerIncomplete(): Boolean {
+        TODO("Not yet implemented")
     }
 
     private suspend fun isFirstAccess(): Boolean {
-
+        return preferences.isFirstAccess()
     }
 
-    private suspend fun handleFirstAccess() {
-        updateFragmentState(SplashEffect.FirstAccess)
-
+    private fun activeSession(): Boolean {
+        val result = authService.thereIsLoggedUser()
+        return result.mapAppResult(
+            onSuccess = { it },
+            onError = { throw it }
+        )
     }
 
-    private suspend fun handleDefaultAccess() {
-        authService.thereIsLoggedUser().let { result ->
-            when (result) {
-                is AppResult.Success -> {
-                    if (result.data) handleLoggedUser()
-                    else handleUserNotFound()
-                }
-
-                else -> {}
-            }
-        }
-    }
-
-    private suspend fun handleLoggedUser() {
-        /*        authService.getSessionInfo().single().let { response ->
-                    when (response) {
-                        is AppResponse.Success -> updateFragmentState(hasSystemAccess(response.data))
-                        is AppResponse.Empty -> updateFragmentState(UserLoggedIn.ProfileIncomplete)
-                        is AppResponse.Error -> updateFragmentState(Error(response.exception))
-                    }
-                }*/
-    }
-    /*
-        private fun hasSystemAccess(sessionInfo: SessionInfo): UserLoggedIn {
-            val user = sessionInfo.user
-            val central = sessionInfo.central
-            return if (permissionService.canAccessSystem(user, central)) {
-                UserLoggedIn.SystemAccessAllowed
-            } else {
-                UserLoggedIn.SystemAccessDenied
-            }
-        }*/
-
-    private fun handleUserNotFound() {
-        updateFragmentState(SplashEffect.UserNotFound)
-    }
-
-    fun getErrorTitle() = "Erro de inicialização"
-
-    fun getErrorMessage() = "Houve alguma falha no carregamento de dados, entre em contato com o " +
-            "distribuidor do App para mais informações."
-
-    private fun updateFragmentState(newState: SplashEffect) {
+    private fun setState(newState: SplashUiState) {
         _uiState.value = newState
+    }
+
+    private fun setEffect(newEffect: SplashEffect) {
+        viewModelScope.launch {
+            _effect.emit(newEffect)
+        }
     }
 
 }

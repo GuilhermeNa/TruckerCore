@@ -3,7 +3,7 @@ package com.example.truckercore.view.fragments.user_name
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.view.activities.NotificationActivity
-import com.example.truckercore.view.expressions.showToast
+import com.example.truckercore._utils.expressions.showToast
 
 class UserNameFragEffectHandler(private val fragment: UserNameFragment) {
 

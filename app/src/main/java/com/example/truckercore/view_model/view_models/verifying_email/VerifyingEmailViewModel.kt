@@ -3,11 +3,10 @@ package com.example.truckercore.view_model.view_models.verifying_email
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.infrastructure.integration.preferences.model.RegistrationStep
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.extractData
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import com.example.truckercore.model.shared.value_classes.Email
+import com.example.truckercore._utils.classes.Email
 import com.example.truckercore.view_model.use_cases.CounterUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -91,7 +90,7 @@ class VerifyingEmailViewModel(
 
     private fun markEmailVerificationStepComplete() {
         viewModelScope.launch {
-            preferences.markStepAsCompleted(RegistrationStep.EmailVerified)
+          /*  preferences.markStepAsCompleted(RegistrationStep.EmailVerified)*/
         }
     }
 
@@ -111,7 +110,7 @@ class VerifyingEmailViewModel(
 
     fun resetUserRegistration() {
         viewModelScope.launch {
-            preferences.resetUserRegistration()
+           /* preferences.resetUserRegistration()*/
         }
     }
 

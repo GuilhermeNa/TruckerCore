@@ -10,7 +10,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.UpdateUserProfileUseCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
-import com.example.truckercore.model.shared.value_classes.Email
+import com.example.truckercore._utils.classes.Email
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

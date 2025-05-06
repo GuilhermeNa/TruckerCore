@@ -1,4 +1,4 @@
-package com.example.truckercore.model.shared.value_classes
+package com.example.truckercore._utils.classes
 
 import com.example.truckercore.model.shared.value_classes.exceptions.InvalidUrlException
 import java.net.MalformedURLException

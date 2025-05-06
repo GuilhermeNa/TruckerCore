@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.employee.admin.data
 
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.FullName
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.FullName
 import com.example.truckercore.model.modules.company.data_helper.CompanyID
 import com.example.truckercore.model.modules.employee.admin.data_helper.AdminID
 import com.example.truckercore.model.shared.enums.Persistence

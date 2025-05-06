@@ -2,8 +2,8 @@ package com.example.truckercore.model.infrastructure.integration.auth.for_api
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 
 /**
  * Abstract interface for handling authentication operations with a remote backend (e.g., Firebase).

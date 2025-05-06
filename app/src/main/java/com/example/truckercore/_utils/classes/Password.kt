@@ -1,7 +1,6 @@
-package com.example.truckercore.model.shared.value_classes
+package com.example.truckercore._utils.classes
 
-import com.example.truckercore.model.shared.value_classes.Password.Companion.from
-import com.example.truckercore.model.shared.value_classes.exceptions.InvalidPasswordException
+import com.example.truckercore._utils.classes.Password.Companion.from
 import java.security.MessageDigest
 
 /**
@@ -76,6 +75,8 @@ value class Password private constructor(val value: String) {
     }
 
 }
+
+class InvalidPasswordException(message: String? = null): Exception(message)
 
 
 

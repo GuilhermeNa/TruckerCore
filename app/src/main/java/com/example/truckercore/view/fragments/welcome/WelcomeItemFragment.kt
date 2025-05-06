@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import com.example.truckercore.databinding.FragmentWelcomeItemBinding
-import com.example.truckercore.view.expressions.loadGif
+import com.example.truckercore._utils.expressions.loadGif
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 
 /**

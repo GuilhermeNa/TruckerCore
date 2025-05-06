@@ -1,8 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements
 
-import com.example.truckercore.model.shared.value_classes.Email
-import com.example.truckercore.model.shared.value_classes.FullName
-import com.example.truckercore.model.shared.value_classes.Password
+import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.Password
 
 /**
  * Represents the credentials required for email-based authentication.
