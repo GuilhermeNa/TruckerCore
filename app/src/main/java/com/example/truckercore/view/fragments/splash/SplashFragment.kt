@@ -8,11 +8,11 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.business_admin.view.activities.BaMainActivity
-import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore._utils.expressions.onLifecycleState
+import com.example.truckercore.databinding.FragmentSplash2Binding
+import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.splash.SplashEvent
 import com.example.truckercore.view_model.view_models.splash.SplashUiState
@@ -23,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : CloseAppFragment() {
 
-    private var _binding: FragmentSplashBinding? = null
+    private var _binding: FragmentSplash2Binding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SplashViewModel by viewModel()
@@ -131,7 +131,7 @@ class SplashFragment : CloseAppFragment() {
             }
 
             if (effect.isCompleteEffect()) {
-                navigateToActivity(BaMainActivity::class.java, true)
+                FlavorService.enterSystemIntent(requireContext())
             }
 
             val intent = navigationHandler.getIntent(effect, requireContext())
@@ -146,7 +146,7 @@ class SplashFragment : CloseAppFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSplashBinding.inflate(layoutInflater)
+        _binding = FragmentSplash2Binding.inflate(layoutInflater)
 
         stateHandler = SplashUiStateHandler(
             motionLayout = binding.motionLayout,

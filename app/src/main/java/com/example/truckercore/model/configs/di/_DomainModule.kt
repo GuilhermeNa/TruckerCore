@@ -1,6 +1,6 @@
 package com.example.truckercore.model.configs.di
 
-val koinModules = listOf(
+val domainModules = listOf(
     firebaseModule,
     authModule,
     securityModule,

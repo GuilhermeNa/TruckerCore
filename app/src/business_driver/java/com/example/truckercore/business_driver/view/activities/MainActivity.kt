@@ -1,4 +1,4 @@
-package com.example.truckercore.business_driver
+package com.example.truckercore.business_driver.view.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

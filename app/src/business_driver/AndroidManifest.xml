@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
+    <application
+        android:name=".business_driver.DriverApplication">
+
         <activity
-            android:name="com.example.truckercore.business_driver.MainActivity"
+            android:name="com.example.truckercore.business_driver.view.activities.MainActivity"
             android:exported="true"
 
             />

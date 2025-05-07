@@ -43,4 +43,6 @@ interface AuthService {
 
     fun signOut()
 
+    suspend fun signIn(credential: EmailCredential): AppResult<Unit>
+
 }

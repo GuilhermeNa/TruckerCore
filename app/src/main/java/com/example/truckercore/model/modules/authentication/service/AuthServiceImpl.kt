@@ -11,6 +11,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.UpdateUserProfileUseCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore._utils.classes.Email
+import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SignUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,7 +22,8 @@ internal class AuthServiceImpl(
     private val createUserWithEmail: CreateUserWithEmailUseCase,
     private val sendVerificationEmail: SendVerificationEmailUseCase,
     private val observeEmailValidation: ObserveEmailValidationUseCase,
-    private val thereIsLoggedUser: ThereIsLoggedUserUseCase
+    private val thereIsLoggedUser: ThereIsLoggedUserUseCase,
+    private val sign: SignUseCase
 ) : AuthService {
 
     override suspend fun createUserWithEmail(credential: EmailCredential): AppResult<Unit> =
@@ -42,6 +44,12 @@ internal class AuthServiceImpl(
 
     override fun isEmailVerified(): AppResult<Boolean> = isEmailVerified.invoke()
 
-    override fun signOut() {}
+    override fun signOut() {
+        sign.signOut()
+    }
+
+    override suspend fun signIn(credential: EmailCredential) =
+        sign.signIn(credential)
+
 
 }

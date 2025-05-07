@@ -26,6 +26,10 @@ class LoadingDialog(context: Context) : Dialog(context) {
         }
     }
 
+    fun dismissIfShowing() {
+        if (isShowing) dismiss()
+    }
+
     @Deprecated(
         "Deprecated in Java",
         ReplaceWith(

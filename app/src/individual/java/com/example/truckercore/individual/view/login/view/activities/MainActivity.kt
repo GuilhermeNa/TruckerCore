@@ -1,4 +1,4 @@
-package com.example.truckercore.individual.view.login
+package com.example.truckercore.individual.view.login.view.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

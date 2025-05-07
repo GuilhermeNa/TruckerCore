@@ -2,7 +2,7 @@
 
     <application>
         <activity
-            android:name="com.example.truckercore.individual.view.login.MainActivity"
+            android:name="com.example.truckercore.individual.view.login.view.activities.MainActivity"
             android:exported="true"
 
             />

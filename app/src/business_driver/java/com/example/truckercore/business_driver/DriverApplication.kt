@@ -1,8 +1,6 @@
-package com.example.truckercore
+package com.example.truckercore.business_driver
 
-/*
 import android.app.Application
-import com.example.truckercore.business_admin.config.FlavorAdminNavigation
 import com.example.truckercore.model.configs.build.FlavorProvider
 import com.example.truckercore.model.configs.di.koinModules
 import com.example.truckercore.view_model.di.commonViewModelModule
@@ -11,20 +9,16 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.plus
 
-class AppApplication : Application() {
+class DriverApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FlavorProvider.impl = FlavorAdminNavigation
         startKoin {
-            androidContext(this@Application)
+            androidContext(this@DriverApplication)
             modules(getKoinModules())
         }
     }
 
     private fun getKoinModules(): List<Module> = koinModules.plus(commonViewModelModule)
-    */
-/*  koinModules.plus(businessAdminModule).plus(commonViewModelModule)*//*
 
-
-}*/
+}

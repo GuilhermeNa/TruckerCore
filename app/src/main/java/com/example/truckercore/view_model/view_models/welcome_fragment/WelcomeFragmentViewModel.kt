@@ -3,7 +3,7 @@ package com.example.truckercore.view_model.view_models.welcome_fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.R
-import com.example.truckercore.model.configs.build.Flavor
+import com.example.truckercore.model.configs.flavor.Flavor
 import com.example.truckercore.view_model.states.WelcomeFragState
 import com.example.truckercore.view_model.states.WelcomeFragState.Stage
 import com.example.truckercore.view_model.states.WelcomeFragState.Initial

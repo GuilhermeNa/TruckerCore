@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import com.example.truckercore.model.configs.build.Flavor
+import com.example.truckercore.model.configs.flavor.Flavor
 import com.example.truckercore.model.errors.ErrorCode
 
 /**
