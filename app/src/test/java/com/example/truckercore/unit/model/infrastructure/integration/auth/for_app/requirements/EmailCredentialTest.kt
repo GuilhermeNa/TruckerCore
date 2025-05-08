@@ -11,7 +11,7 @@ class EmailCredentialTest {
     @Test
     fun `EmailCredential should correctly assign values to its properties`() {
         // Arrange
-        val email = Email("john.doe@example.com")
+        val email = Email.from("john.doe@example.com")
         val password = Password.from("123456")
 
         // Act

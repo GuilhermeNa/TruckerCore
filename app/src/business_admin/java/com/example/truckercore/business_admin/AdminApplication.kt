@@ -15,16 +15,10 @@ class AdminApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initFlavorService()
-
         startKoin {
             androidContext(this@AdminApplication)
             modules(getKoinModules())
         }
-    }
-
-    private fun initFlavorService() {
-        FlavorService.setStrategy(FlavorAdminStrategy())
     }
 
     private fun getKoinModules(): List<Module> =

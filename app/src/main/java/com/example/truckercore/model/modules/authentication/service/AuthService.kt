@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.authentication.service
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
@@ -35,7 +35,7 @@ interface AuthService {
      */
     fun thereIsLoggedUser(): AppResult<Boolean>
 
-    suspend fun updateUserName(userProfile: UserProfile): AppResult<Unit>
+    suspend fun updateUserName(userProfile: UserCategory): AppResult<Unit>
 
     fun getUserEmail(): AppResult<Email>
 

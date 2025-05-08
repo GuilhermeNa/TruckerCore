@@ -5,15 +5,15 @@ import com.example.truckercore.model.configs.constants.Field
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.filters.WhereEqual
-import com.example.truckercore.model.modules.company.data_helper.CompanyID
+import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.user.data.UserDto
-import com.example.truckercore.model.modules.user.data_helper.Category
-import com.example.truckercore.model.modules.user.data_helper.UserID
+import com.example.truckercore.model.infrastructure.security.data.enums.Role
+import com.example.truckercore.model.modules.user.data.UserID
 
 data class UserSpec(
     override val entityId: UserID? = null,
     val companyId: CompanyID? = null,
-    val category: Category? = null,
+    val category: Role? = null,
 ) : Specification<UserDto> {
 
     override val dtoClass = UserDto::class.java

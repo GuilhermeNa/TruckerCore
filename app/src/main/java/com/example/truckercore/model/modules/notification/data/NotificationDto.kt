@@ -1,9 +1,8 @@
 package com.example.truckercore.model.modules.notification.data
 
 import com.example.truckercore.model.shared.enums.Persistence
-import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
-import com.example.truckercore.model.shared.interfaces.data.dto.Dto
-import java.util.Date
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
 
 data class NotificationDto(
     override val id: String? = null,

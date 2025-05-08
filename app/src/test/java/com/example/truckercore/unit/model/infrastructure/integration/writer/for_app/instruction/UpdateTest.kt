@@ -2,9 +2,9 @@ package com.example.truckercore.unit.model.infrastructure.integration.writer.for
 
 import com.example.truckercore._test_data_provider.fake_objects.FakeDto
 import com.example.truckercore.model.configs.constants.Collection
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.exceptions.InstructionException
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.Update
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.exceptions.InstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Update
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

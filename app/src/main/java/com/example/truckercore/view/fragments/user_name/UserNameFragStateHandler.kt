@@ -2,10 +2,11 @@ package com.example.truckercore.view.fragments.user_name
 
 import androidx.lifecycle.Lifecycle
 import com.example.truckercore.R
+import com.example.truckercore._utils.expressions.onLifecycleState
 import com.example.truckercore.view.dialogs.LoadingDialog
-import com.example.truckercore._utils.expressions.executeOnState
 
-class UserNameFragStateHandler(fragment: UserNameFragment) {
+
+class UserNameFragStateHandler(private val fragment: UserNameFragment) {
 
     private val binding = fragment.binding
     private val context = fragment.binding.root.context
@@ -42,9 +43,9 @@ class UserNameFragStateHandler(fragment: UserNameFragment) {
 
         // Change UI state to error
         val motionLayout = binding.fragUserNameMotion
-        currentState.executeOnState(
-            onViewResumed = { motionLayout.transitionToEnd() },
-            onReCreating = { motionLayout.jumpToState(R.id.frag_user_name_scene_state_end) }
+        fragment.onLifecycleState(
+            resumed = { motionLayout.transitionToEnd() },
+            anyOther = { motionLayout.jumpToState(R.id.frag_user_name_scene_state_end) }
         )
     }
 

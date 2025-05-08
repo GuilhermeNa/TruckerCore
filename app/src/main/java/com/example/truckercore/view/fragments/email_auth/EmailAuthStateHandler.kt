@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Lifecycle
 import com.example.truckercore.R
+import com.example.truckercore._utils.expressions.onLifecycleState
+import com.example.truckercore._utils.expressions.showSnackBarRed
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.configs.constants.Tag
 import com.example.truckercore.view.dialogs.LoadingDialog
-import com.example.truckercore._utils.expressions.executeOnState
-import com.example.truckercore._utils.expressions.showSnackBarRed
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserInputValidationResult
 
 /**
@@ -17,7 +17,10 @@ import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserIn
  *
  * This class isolates view logic from the fragment to make it more modular and testable.
  */
-class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
+class EmailAuthStateHandler(
+    private val fragment: EmailAuthFragment,
+    private val binding: FragmentEmailAuthBinding
+) {
 
     // The context of fragment
     private val context = binding.root.context
@@ -26,7 +29,7 @@ class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
     private val dialog by lazy { LoadingDialog(context) }
 
     // Handles UI transitions using MotionLayout
-    private val transitionHandler = EmailAuthTransitionHandler(binding.fragEmailAuthMain)
+    private val transitionHandler = EmailAuthTransitionHandler(fragment, binding.fragEmailAuthMain)
 
     /**
      * Shows a loading dialog to indicate that the user creation process is ongoing.
@@ -54,7 +57,7 @@ class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
     ) {
         dialog.dismiss()
         bindErrorMessage(validationResult)
-        transitionHandler.invoke(validationResult.errorCode, lifecycleState)
+        transitionHandler.invoke(validationResult.errorCode)
     }
 
     private fun bindErrorMessage(validationResult: EmailAuthUserInputValidationResult) {
@@ -69,7 +72,7 @@ class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
     }
 
     fun dismissDialog() {
-        if(dialog.isShowing) dialog.dismiss()
+        if (dialog.isShowing) dialog.dismiss()
     }
 
 }
@@ -80,7 +83,10 @@ class EmailAuthStateHandler(private val binding: FragmentEmailAuthBinding) {
  *
  * @param layout The MotionLayout associated with the fragment's main view.
  */
-private class EmailAuthTransitionHandler(private val layout: MotionLayout) {
+private class EmailAuthTransitionHandler(
+    private val fragment: EmailAuthFragment,
+    private val layout: MotionLayout
+) {
 
     private val transitionsMap = hashMapOf(
         Pair(STATE_ERROR_1, R.id.frag_email_auth_state_1),
@@ -98,19 +104,19 @@ private class EmailAuthTransitionHandler(private val layout: MotionLayout) {
      * @param transitionCode A 3-digit binary string representing which fields contain errors.
      * @param lifecycleState The lifecycle state used to determine whether to animate or jump to the state.
      */
-    operator fun invoke(transitionCode: String, lifecycleState: Lifecycle.State) {
+    operator fun invoke(transitionCode: String) {
         getTransition(transitionCode)?.let { transition ->
-            startTransition(lifecycleState, transition)
+            startTransition(transition)
         } ?: notifyError(transitionCode)
     }
 
     /**
      * Starts the UI transition to the given state.
      */
-    private fun startTransition(lifecycleState: Lifecycle.State, transitionState: Int) {
-        lifecycleState.executeOnState(
-            onViewResumed = { layout.transitionToState(transitionState, 200) },
-            onReCreating = { layout.jumpToState(transitionState) }
+    private fun startTransition(transitionState: Int) {
+        fragment.onLifecycleState(
+            resumed = { layout.transitionToState(transitionState, 200) },
+            anyOther = { layout.jumpToState(transitionState) }
         )
     }
 

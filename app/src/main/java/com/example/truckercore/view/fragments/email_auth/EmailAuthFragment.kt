@@ -185,7 +185,7 @@ class EmailAuthFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        _stateHandler = EmailAuthStateHandler(binding)
+        _stateHandler = EmailAuthStateHandler(this,binding)
         return binding.root
     }
 

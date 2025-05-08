@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.authentication.service
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.CreateUserWithEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUserEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.IsEmailVerifiedUseCase
@@ -37,7 +37,7 @@ internal class AuthServiceImpl(
 
     override fun thereIsLoggedUser(): AppResult<Boolean> = thereIsLoggedUser.invoke()
 
-    override suspend fun updateUserName(userProfile: UserProfile): AppResult<Unit> =
+    override suspend fun updateUserName(userProfile: UserCategory): AppResult<Unit> =
         withContext(Dispatchers.IO) { updateUserProfile.invoke(userProfile) }
 
     override fun getUserEmail(): AppResult<Email> = getUserEmail.invoke()
@@ -50,6 +50,5 @@ internal class AuthServiceImpl(
 
     override suspend fun signIn(credential: EmailCredential) =
         sign.signIn(credential)
-
 
 }

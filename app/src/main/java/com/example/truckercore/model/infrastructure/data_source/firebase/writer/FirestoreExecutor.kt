@@ -1,10 +1,10 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.writer
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.FirebaseInstruction
-import com.example.truckercore.model.infrastructure.integration.writer.for_api.InstructionExecutor
-import com.example.truckercore.model.infrastructure.integration.writer.for_api.exceptions.InvalidInstructionException
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.Instruction
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.PutLazy
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.InstructionExecutor
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InvalidInstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.PutLazy
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 

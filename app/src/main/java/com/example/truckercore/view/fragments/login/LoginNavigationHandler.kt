@@ -6,8 +6,12 @@ import androidx.navigation.NavDirections
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view_model.view_models.login.LoginEffect
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class LoginNavigationHandler{
+class LoginNavigationHandler: KoinComponent{
+
+    private val flavorService: FlavorService by inject()
 
     fun getDirection(effect: LoginEffect): NavDirections = when (effect) {
         LoginEffect.Navigation.CompleteRegister -> LoginFragmentDirections.actionLoginFragmentToContinueRegisterFragment()
@@ -17,7 +21,7 @@ class LoginNavigationHandler{
     }
 
     fun getIntent(effect: LoginEffect, context: Context): Intent = when (effect) {
-        is LoginEffect.Navigation.EnterSystem -> FlavorService.enterSystemIntent(context)
+        is LoginEffect.Navigation.EnterSystem -> flavorService.enterSystemIntent(context)
 
         is LoginEffect.Error -> NotificationActivity.newInstance(
             context = context,

@@ -1,8 +1,8 @@
 package com.example.truckercore.model.shared.abstractions
 
 import com.example.truckercore.model.shared.interfaces.ValidatorStrategyI
-import com.example.truckercore.model.shared.interfaces.data.dto.Dto
-import com.example.truckercore.model.shared.interfaces.data.entity.Entity
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
+import com.example.truckercore.model.modules._contracts.Entity
 
 /**
  * This abstract class implements the [ValidatorStrategyI] interface and provides some common functionality for validation strategies.

@@ -1,3 +1,6 @@
+import com.example.truckercore.model.configs.flavor.FlavorService
+import org.koin.dsl.module
+
 /*
 package com.example.truckercore.model.configs.di
 
@@ -17,3 +20,7 @@ val serviceModule = module {
     // handles strategy selection.
     single<ValidatorService> { ValidatorService(get(), get()) }
 }*/
+
+val serviceModule = module {
+    single { FlavorService(get()) }
+}

@@ -11,7 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore._utils.expressions.onLifecycleState
-import com.example.truckercore.databinding.FragmentSplash2Binding
+import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.splash.SplashEvent
@@ -19,14 +19,17 @@ import com.example.truckercore.view_model.view_models.splash.SplashUiState
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : CloseAppFragment() {
 
-    private var _binding: FragmentSplash2Binding? = null
+    private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SplashViewModel by viewModel()
+
+    private val flavorService: FlavorService by inject()
 
     private var stateHandler: SplashUiStateHandler? = null
     private val navigationHandler by lazy { SplashNavigationHandler() }
@@ -81,7 +84,7 @@ class SplashFragment : CloseAppFragment() {
                                 // Expected flow: the user opens the app and waits for the animation to finish.
                                 // The animation listener will notify the ViewModel that
                                 // the FirstAnim event was completed.
-                                stateHandler?.bindAppName(state.flavor)
+                                stateHandler?.bindAppName(flavorService.getFlavor().appName)
                                 stateHandler?.runFirstUiTransition()
                             },
                             anyOther = {
@@ -97,7 +100,7 @@ class SplashFragment : CloseAppFragment() {
                         // Intermediate state. This ensures that the view is correctly recreated
                         // when the user leaves and returns to the fragment while in the loading state.
                         if (lifecycle.currentState != Lifecycle.State.RESUMED) {
-                            stateHandler?.bindAppName(state.flavor)
+                            stateHandler?.bindAppName(flavorService.getFlavor().appName)
                             stateHandler?.jumpToSecondUiState()
                         }
                     }
@@ -112,7 +115,7 @@ class SplashFragment : CloseAppFragment() {
                             anyOther = {
                                 // Unexpected flow: the user closes the app before the second transition is completed.
                                 // The SecondAnim event must be triggered outside the animation listener.
-                                stateHandler?.bindAppName(state.flavor)
+                                stateHandler?.bindAppName(flavorService.getFlavor().appName)
                                 stateHandler?.jumpToThirdUiState()
                                 viewModel.onEvent(SplashEvent.UiEvent.SecondAnimComplete)
                             }
@@ -131,7 +134,8 @@ class SplashFragment : CloseAppFragment() {
             }
 
             if (effect.isCompleteEffect()) {
-                FlavorService.enterSystemIntent(requireContext())
+                val intent = flavorService.enterSystemIntent(requireContext())
+                navigateToActivity(intent, true)
             }
 
             val intent = navigationHandler.getIntent(effect, requireContext())
@@ -146,7 +150,7 @@ class SplashFragment : CloseAppFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSplash2Binding.inflate(layoutInflater)
+        _binding = FragmentSplashBinding.inflate(layoutInflater)
 
         stateHandler = SplashUiStateHandler(
             motionLayout = binding.motionLayout,

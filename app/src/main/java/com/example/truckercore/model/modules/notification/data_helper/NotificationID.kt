@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.notification.data_helper
 
 import com.example.truckercore.model.modules.notification.exceptions.InvalidNotificationIdException
-import com.example.truckercore.model.shared.interfaces.data.ID
+import com.example.truckercore.model.modules._contracts.ID
 
 @JvmInline
 value class NotificationID(override val value: String): ID {

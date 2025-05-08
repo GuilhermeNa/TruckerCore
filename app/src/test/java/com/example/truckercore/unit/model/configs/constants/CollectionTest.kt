@@ -13,7 +13,8 @@ class CollectionTest {
     private val expectedCollection = listOf(
         Collection.FAKE,
         Collection.USER,
-        Collection.AUDIT
+        Collection.ADMIN,
+        Collection.COMPANY
     )
 
     //----------------------------------------------------------------------------------------------

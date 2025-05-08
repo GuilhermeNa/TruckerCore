@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.repository
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
@@ -55,7 +55,7 @@ interface AuthenticationRepository {
     /**
      * Updates the profile of the currently authenticated user.
      *
-     * @param profile The new [UserProfile] containing updated display name, photo, etc.
+     * @param profile The new [UserCategory] containing updated display name, photo, etc.
      * @return [AppResult] wrapping `Unit` on success or an [AuthenticationAppException] on failure.
      *
      * ### Example:
@@ -67,7 +67,7 @@ interface AuthenticationRepository {
      * }
      * ```
      */
-    suspend fun updateUserProfile(profile: UserProfile): AppResult<Unit>
+    suspend fun updateUserProfile(profile: UserCategory): AppResult<Unit>
 
     /**
      * Signs in the user with the provided email and password.

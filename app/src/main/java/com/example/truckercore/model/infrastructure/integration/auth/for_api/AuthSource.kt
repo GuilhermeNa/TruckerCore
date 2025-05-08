@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_api
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
 
@@ -70,7 +70,7 @@ abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
      * @param profile The new user profile to apply.
      * @throws AuthSourceException If the user is not logged in or the update fails.
      */
-    abstract suspend fun updateUserProfile(profile: UserProfile)
+    abstract suspend fun updateUserProfile(profile: UserCategory)
 
     /**
      * Signs in an existing user with the given email and password.

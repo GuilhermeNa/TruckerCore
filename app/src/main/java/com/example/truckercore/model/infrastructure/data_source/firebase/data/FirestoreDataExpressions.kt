@@ -3,7 +3,7 @@ package com.example.truckercore.model.infrastructure.data_source.firebase.data
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.DataSourceException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
-import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.channels.ProducerScope

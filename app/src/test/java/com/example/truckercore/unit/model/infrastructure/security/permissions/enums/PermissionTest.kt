@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.security.permissions.enums
 
-import com.example.truckercore.model.infrastructure.security.enums.Permission
+import com.example.truckercore.model.infrastructure.security.data.enums.Permission
 import com.example.truckercore.model.shared.errors.InvalidEnumParameterException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

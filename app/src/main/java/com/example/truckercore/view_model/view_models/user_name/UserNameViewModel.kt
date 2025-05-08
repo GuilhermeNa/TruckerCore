@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.user_name
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.authentication.service.AuthService
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
@@ -74,7 +74,7 @@ class UserNameViewModel(
             delay(500) // Optional UI delay for user experience
 
             // Create a UserProfile object for updating
-            val userProfile = UserProfile(fullName = FullName.from(name))
+            val userProfile = UserCategory(fullName = FullName.from(name))
 
             // Attempt to update the username and set the appropriate effect based on the result
             val result = updateUserName(userProfile)
@@ -98,7 +98,7 @@ class UserNameViewModel(
      * @param profile The user profile containing the new full name to be updated.
      * @return The result of the update operation.
      */
-    private suspend fun updateUserName(profile: UserProfile) = authService.updateUserName(profile)
+    private suspend fun updateUserName(profile: UserCategory) = authService.updateUserName(profile)
 
     /**
      * Sets a new event for the fragment to trigger UI actions such as clicks.

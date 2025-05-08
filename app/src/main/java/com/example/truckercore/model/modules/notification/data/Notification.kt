@@ -1,11 +1,11 @@
 package com.example.truckercore.model.modules.notification.data
 
-import com.example.truckercore.model.modules.company.data_helper.CompanyID
+import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.notification.data_helper.NotificationID
 import com.example.truckercore.model.modules.notification.data_helper.Recipient
 import com.example.truckercore.model.modules.notification.data_helper.RelatedEntity
 import com.example.truckercore.model.shared.enums.Persistence
-import com.example.truckercore.model.shared.interfaces.data.entity.Entity
+import com.example.truckercore.model.modules._contracts.Entity
 
 data class Notification(
     override val id: NotificationID,

@@ -2,8 +2,8 @@ package com.example.truckercore.model.infrastructure.integration.data.for_app.sp
 
 import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions.SpecificationException
-import com.example.truckercore.model.shared.interfaces.data.ID
-import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
+import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 
 /**
  * Defines the structure for querying data in a type-safe and declarative way.

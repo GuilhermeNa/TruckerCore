@@ -5,11 +5,11 @@ import com.example.truckercore.model.configs.constants.Collection
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.FirestoreExecutor
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.FirestoreInstInterpreter
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.FirebaseSet
-import com.example.truckercore.model.infrastructure.integration.writer.for_api.exceptions.InvalidInstructionException
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.Instruction
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.Put
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.PutLazy
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InvalidInstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Put
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.PutLazy
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore

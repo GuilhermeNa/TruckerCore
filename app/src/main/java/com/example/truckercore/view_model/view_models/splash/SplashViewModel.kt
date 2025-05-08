@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.configs.build.FlavorService
+import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.infrastructure.security.service.PermissionService

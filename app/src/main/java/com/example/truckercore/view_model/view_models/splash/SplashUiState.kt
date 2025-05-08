@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import com.example.truckercore.model.configs.flavor.Flavor
+import com.example.truckercore.model.configs.flavor.contracts.Flavor
 
 /**
  * Represents the different UI states of the splash screen.

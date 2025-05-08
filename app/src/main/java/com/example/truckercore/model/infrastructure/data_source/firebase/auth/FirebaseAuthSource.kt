@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.data_source.firebase.auth
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.shared.utils.expressions.cancelJob
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
@@ -31,7 +31,7 @@ class FirebaseAuthSource(
         task.awaitSuccessOrThrow(authError = { errorMapper.sendingEmailVerification(it) })
     }
 
-    override suspend fun updateUserProfile(profile: UserProfile) {
+    override suspend fun updateUserProfile(profile: UserCategory) {
         val updateProfileReq = userProfileChangeRequest {
             displayName = profile.fullName.value
         }

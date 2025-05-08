@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.writer.api_instructions
 
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.FirebaseDelete
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.InstructionTag
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction
 import io.mockk.mockk

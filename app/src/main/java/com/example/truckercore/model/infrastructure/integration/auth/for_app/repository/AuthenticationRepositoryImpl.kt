@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.integration.auth.for_app.re
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppErrorFactory
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserProfile
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
@@ -29,7 +29,7 @@ class AuthenticationRepositoryImpl(
         AppResult.Error(result)
     }
 
-    override suspend fun updateUserProfile(profile: UserProfile): AppResult<Unit> =
+    override suspend fun updateUserProfile(profile: UserCategory): AppResult<Unit> =
         try {
             dataSource.updateUserProfile(profile)
             AppResult.Success(Unit)

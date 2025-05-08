@@ -1,10 +1,12 @@
 package com.example.truckercore.model.configs.di
 
+import serviceModule
+
 val domainModules = listOf(
     firebaseModule,
     authModule,
     securityModule,
     repositoriesModule,
-    //serviceModule,
+    serviceModule,
     utilModule
 )

@@ -1,6 +1,5 @@
 package com.example.truckercore.view_model.di
 
-import com.example.truckercore.model.configs.flavor.Flavor
 import com.example.truckercore.model.infrastructure.data_source.datastore.UserPreferencesDataStore
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepositoryImpl
@@ -24,7 +23,7 @@ val commonViewModelModule = module {
     viewModel<LoginViewModel> { LoginViewModel(get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
-    viewModel<WelcomeFragmentViewModel> { (flavor: Flavor) -> WelcomeFragmentViewModel(flavor) }
+    viewModel<WelcomeFragmentViewModel> { WelcomeFragmentViewModel(get()) }
     viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get(), get()) }
     viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get()) }

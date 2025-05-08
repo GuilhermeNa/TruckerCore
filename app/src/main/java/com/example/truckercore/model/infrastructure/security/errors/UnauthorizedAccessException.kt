@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.security.errors
 
-import com.example.truckercore.model.infrastructure.security.enums.Permission
+import com.example.truckercore.model.infrastructure.security.data.enums.Permission
 import com.example.truckercore.model.modules.user.data.User
 
 /**

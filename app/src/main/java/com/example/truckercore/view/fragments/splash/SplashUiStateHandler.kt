@@ -3,7 +3,6 @@ package com.example.truckercore.view.fragments.splash
 import android.widget.TextView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.truckercore.R
-import com.example.truckercore.model.configs.flavor.Flavor
 
 /**
  * Responsible for handling MotionLayout transitions and binding UI elements
@@ -28,8 +27,8 @@ class SplashUiStateHandler(
      *
      * @param flavor The app flavor to be displayed.
      */
-    fun bindAppName(flavor: Flavor) {
-        textView.text = flavor.description
+    fun bindAppName(appName: String) {
+        textView.text = appName
     }
 
     /**

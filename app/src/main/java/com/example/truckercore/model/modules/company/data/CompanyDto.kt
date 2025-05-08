@@ -1,17 +1,17 @@
 package com.example.truckercore.model.modules.company.data
 
-import com.example.truckercore.model.modules.user.data_helper.UserID
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
+import com.example.truckercore.model.infrastructure.security.data.collections.ValidKeysRegistry
 import com.example.truckercore.model.shared.enums.Persistence
-import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
 
 data class CompanyDto(
     override val id: String? = null,
     override val persistence: Persistence? = null,
-    val allowedUserIds: Set<UserID>? = null
+    val authorizedKeys: ValidKeysRegistry? = null
 ) : BaseDto {
+
     override fun copyWith(id: String?): BaseDto {
         TODO("Not yet implemented")
     }
-
 
 }

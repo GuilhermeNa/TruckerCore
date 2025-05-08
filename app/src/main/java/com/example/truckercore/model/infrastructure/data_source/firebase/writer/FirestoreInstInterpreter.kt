@@ -4,16 +4,16 @@ import com.example.truckercore.model.infrastructure.data_source.firebase.writer.
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.FirebaseInstruction
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.FirebaseSet
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.FirebaseUpdate
-import com.example.truckercore.model.infrastructure.integration.writer.for_api.InstructionInterpreter
-import com.example.truckercore.model.infrastructure.integration.writer.for_api.exceptions.InstructionNotImplementedException
-import com.example.truckercore.model.infrastructure.integration.writer.for_api.exceptions.InvalidInstructionException
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.Instruction
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.Put
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.PutLazy
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.Remove
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.Update
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.types.UpdateFields
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.InstructionInterpreter
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InstructionNotImplementedException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InvalidInstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Put
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.PutLazy
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Remove
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Update
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.UpdateFields
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreInstInterpreter(

@@ -1,0 +1,27 @@
+package com.example.truckercore.model.modules.user.factory
+
+import com.example.truckercore.model.infrastructure.security.configs.DefaultPermissionsProvider
+import com.example.truckercore.model.infrastructure.security.data.Profile
+import com.example.truckercore.model.infrastructure.security.data.enums.Role
+import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.modules.user.data.UserDto
+import com.example.truckercore.model.shared.enums.Persistence
+
+object UserFactory {
+
+    operator fun invoke(form: UserForm): UserDto {
+        return UserDto(
+            id = ID.generate(),
+            companyId = form.getCompanyId(),
+            persistence = Persistence.ACTIVE,
+            uid = form.getGetUid(),
+            profile = getProfile(form.role)
+        )
+    }
+
+    private fun getProfile(role: Role) = Profile(
+        role = role,
+        permissions = DefaultPermissionsProvider(role)
+    )
+
+}

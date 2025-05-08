@@ -4,7 +4,7 @@ package com.example.truckercore.model.shared.services
 import com.example.truckercore.model.shared.abstractions.ValidatorStrategy
 import com.example.truckercore.model.shared.errors.strategy.StrategyNotFoundException
 import com.example.truckercore.model.shared.errors.validation.ValidationException
-import com.example.truckercore.model.shared.interfaces.data.dto.Dto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
 import com.example.truckercore.model.shared.resolvers.ValidatorStrategyResolver
 import com.example.truckercore.model.shared.utils.sealeds.ValidatorInput
 

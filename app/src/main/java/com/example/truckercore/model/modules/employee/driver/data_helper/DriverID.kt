@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.employee.driver.data_helper
 
 import com.example.truckercore.model.modules.employee.driver.exceptions.InvalidDriverIdException
-import com.example.truckercore.model.shared.interfaces.data.ID
+import com.example.truckercore.model.modules._contracts.ID
 
 @JvmInline
 value class DriverID(override val value: String): ID {

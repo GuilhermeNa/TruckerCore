@@ -1,7 +1,7 @@
 package com.example.truckercore.model.shared.interfaces
 
-import com.example.truckercore.model.shared.interfaces.data.dto.Dto
-import com.example.truckercore.model.shared.interfaces.data.entity.Entity
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
+import com.example.truckercore.model.modules._contracts.Entity
 
 /**
  * An interface that defines the contract for mapping between [Dto] and [Entity] objects.

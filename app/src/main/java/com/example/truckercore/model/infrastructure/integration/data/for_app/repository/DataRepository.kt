@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.integration.data.for_app.re
 
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
-import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.flow.Flow
 

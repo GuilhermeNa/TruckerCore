@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.vip.data
 
 import com.example.truckercore.model.shared.enums.Persistence
-import com.example.truckercore.model.shared.interfaces.data.dto.BaseDto
-import com.example.truckercore.model.shared.interfaces.data.dto.Dto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
 import java.util.Date
 
 internal data class VipDto(

@@ -45,8 +45,7 @@ class WelcomeFragment : CloseAppFragment() {
     private val binding get() = _binding!!
 
     // ViewModel && Args ---------------------------------------------------------------------------
-    private val args: WelcomeFragmentArgs by navArgs()
-    private val viewModel: WelcomeFragmentViewModel by viewModel { parametersOf(args.flavor) }
+    private val viewModel: WelcomeFragmentViewModel by viewModel()
 
     // ViewPager -----------------------------------------------------------------------------------
     private var viewPager: ViewPager2? = null

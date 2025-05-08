@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.integration.writer.for_app.instruction
 
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.writer.for_app.instruction.exceptions.InstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.exceptions.InstructionException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

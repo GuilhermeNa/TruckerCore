@@ -21,7 +21,7 @@ class SplashNavigationHandler {
      */
     fun getDirection(effect: SplashEffect): NavDirections = when (effect) {
         is SplashEffect.FirstTimeAccess ->
-            SplashFragmentDirections.actionSplashFragmentToWelcomeFragment(effect.flavor)
+            SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
 
         SplashEffect.AlreadyAccessed.RequireLogin ->
             SplashFragmentDirections.actionSplashFragmentToLoginFragment()

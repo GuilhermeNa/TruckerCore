@@ -15,11 +15,14 @@ import androidx.navigation.NavDirections
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
 import com.example.truckercore._utils.expressions.navigateToDirection
+import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiModel
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiState
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.java.KoinJavaComponent.inject
 
 /**
  * Fragment responsible for displaying the Continue Register screen.

@@ -1,7 +1,7 @@
 package com.example.truckercore.model.shared.utils.sealeds
 
-import com.example.truckercore.model.shared.interfaces.data.dto.Dto
-import com.example.truckercore.model.shared.interfaces.data.entity.Entity
+import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
+import com.example.truckercore.model.modules._contracts.Entity
 
 /**
  * A sealed class representing different types of input for the validation strategy.

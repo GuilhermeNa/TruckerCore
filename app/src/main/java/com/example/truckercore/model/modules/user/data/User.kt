@@ -1,30 +1,17 @@
 package com.example.truckercore.model.modules.user.data
 
-import com.example.truckercore.model.modules.company.data_helper.CompanyID
-import com.example.truckercore.model.infrastructure.security.enums.Level
-import com.example.truckercore.model.infrastructure.security.enums.Permission
-import com.example.truckercore.model.modules.user.data_helper.Category
-import com.example.truckercore.model.modules.user.data_helper.UserID
-import com.example.truckercore.model.modules.vip.data.Vip
+import com.example.truckercore.model.infrastructure.security.contracts.Authorizable
+import com.example.truckercore.model.infrastructure.security.data.Profile
+import com.example.truckercore.model.modules._contracts.Entity
+import com.example.truckercore.model.modules.authentication.contracts.Authenticable
+import com.example.truckercore.model.modules.authentication.data.UID
+import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.shared.enums.Persistence
-import com.example.truckercore.model.shared.interfaces.data.entity.Entity
 
 data class User(
+    override val uid: UID,
     override val id: UserID,
     override val companyId: CompanyID,
     override val persistence: Persistence,
-    val permissions: HashSet<Permission>,
-    val category: Category,
-    val level: Level,
-
-    // Composition Objects
-    /*val person: Person,*/
-    val vip: Vip
-
-) : Entity {
-
-    fun hasPermission(permission: Permission): Boolean {
-        return permissions.contains(permission)
-    }
-
-}
+    override val profile: Profile
+) : Entity, Authenticable, Authorizable
