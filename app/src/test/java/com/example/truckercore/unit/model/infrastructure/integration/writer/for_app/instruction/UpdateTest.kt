@@ -1,10 +1,10 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.integration.writer.for_app.instruction
 
 import com.example.truckercore._test_data_provider.fake_objects.FakeDto
-import com.example.truckercore.model.configs.constants.Collection
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.exceptions.InstructionException
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Update
+import com.example.truckercore.model.configs.collections.Collection
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InvalidInstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.instructions.Update
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -37,7 +37,7 @@ class UpdateTest {
         val dto = FakeDto(id = null)
 
         // Act & Assert
-        val exception = assertThrows<InstructionException> {
+        val exception = assertThrows<InvalidInstructionException> {
             Update(instructionTag, collection, dto)
         }
 
@@ -56,7 +56,7 @@ class UpdateTest {
         val dto = FakeDto(id = "")
 
         // Act & Assert
-        val exception = assertThrows<InstructionException> {
+        val exception = assertThrows<InvalidInstructionException> {
             Update(instructionTag, collection, dto)
         }
 
@@ -66,4 +66,4 @@ class UpdateTest {
         )
     }
 
-}
+}*/

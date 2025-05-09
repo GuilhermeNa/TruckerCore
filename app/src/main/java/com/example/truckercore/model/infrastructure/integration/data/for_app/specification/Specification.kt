@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.specification
 
-import com.example.truckercore.model.configs.constants.Collection
+import com.example.truckercore.model.configs.collections.Collection
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions.SpecificationException
 import com.example.truckercore.model.modules._contracts.ID
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto

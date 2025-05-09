@@ -1,6 +1,7 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions
 
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
+import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.contracts.Transactional
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.data.contracts.ApiInstruction
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction
 
@@ -13,9 +14,8 @@ import com.google.firebase.firestore.Transaction
  * @param document The Firestore document to be deleted.
  */
 data class FirebaseDelete(
-    override val instructionTag: InstructionTag,
     override val document: DocumentReference
-) : FirebaseInstruction {
+) : ApiInstruction, Transactional {
 
     override fun execute(transaction: Transaction) {
         transaction.delete(document)

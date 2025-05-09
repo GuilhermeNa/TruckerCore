@@ -10,4 +10,3 @@ data class Company(
     override val persistence: Persistence,
     override val validAccessKeys: ValidKeysRegistry,
 ) : BaseEntity, SystemManager
-

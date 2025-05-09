@@ -12,6 +12,4 @@ data class UserDto(
     val profile: Profile? = null
 ) : Dto {
 
-    override fun copyWith(id: String?) = this.copy(id = id)
-
 }

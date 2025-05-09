@@ -4,7 +4,7 @@ import com.example.truckercore._test_data_provider.fake_objects.FakeID
 import com.example.truckercore._test_data_provider.fake_objects.FakeSpec
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
-import com.example.truckercore.model.modules.user.UserSpec
+import com.example.truckercore.model.modules.user.specification.UserSpec
 import com.example.truckercore.model.modules.user.data.UserID
 import io.mockk.every
 import io.mockk.mockk

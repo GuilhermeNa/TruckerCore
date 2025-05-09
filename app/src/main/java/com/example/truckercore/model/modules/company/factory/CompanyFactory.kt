@@ -6,11 +6,11 @@ import com.example.truckercore.model.shared.enums.Persistence
 
 object CompanyFactory {
 
-    operator fun invoke(form: CompanyForm): CompanyDto {
+    operator fun invoke(): CompanyDto {
         return CompanyDto(
             id = ID.generate(),
             persistence = Persistence.ACTIVE,
-            authorizedKeys = form.validAccessKey
+            authorizedKeys = null
         )
     }
 

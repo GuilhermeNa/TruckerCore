@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.specification
 
-import com.example.truckercore.model.configs.constants.Field
+import com.example.truckercore.model.configs.enums.Field
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSourceSpecificationInterpreter
 
 /**

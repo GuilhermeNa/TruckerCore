@@ -10,6 +10,4 @@ data class FakeDto(
     override val persistence: Persistence? = null
 ) : Dto {
 
-    override fun copyWith(id: String?): BaseDto = copy(id = id)
-
 }

@@ -9,7 +9,5 @@ data class FileDto(
     override val companyId: String? = null,
     override val persistence: Persistence? = null
 ): Dto {
-    override fun copyWith(id: String?): BaseDto {
-        TODO("Not yet implemented")
-    }
+
 }

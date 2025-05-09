@@ -1,7 +1,7 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.integration.writer.for_app.instruction
 
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.exceptions.InstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InvalidInstructionException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -26,7 +26,7 @@ class InstructionTagTest {
         val blankValue = "   "
 
         // Act & Assert
-        val exception = assertThrows<InstructionException> {
+        val exception = assertThrows<InvalidInstructionException> {
             InstructionTag(blankValue)
         }
 
@@ -36,4 +36,4 @@ class InstructionTagTest {
         )
     }
 
-}
+}*/

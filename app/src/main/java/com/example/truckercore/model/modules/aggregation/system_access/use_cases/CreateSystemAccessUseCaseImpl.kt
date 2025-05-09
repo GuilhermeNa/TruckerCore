@@ -1,58 +1,52 @@
 package com.example.truckercore.model.modules.aggregation.system_access.use_cases
 
-import com.example.truckercore.model.configs.constants.Collection
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.Instruction
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.InstructionTag
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.Put
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.types.PutLazy
+import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.instructions.Put
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository.InstructionExecutorRepository
-import com.example.truckercore.model.modules.company.data.CompanyDto
-import com.example.truckercore.model.modules.employee.admin.data.AdminDto
-import com.example.truckercore.model.modules.user.data.UserDto
+import com.example.truckercore.model.modules.aggregation.system_access.app_errors.SystemAccessAppException
+import com.example.truckercore.model.modules.aggregation.system_access.app_errors.error_codes.NewSystemAccessErrCode
+import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessFactory
+import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
+import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessResult
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 
 class CreateSystemAccessUseCaseImpl(
     private val instructionExecutor: InstructionExecutorRepository
 ) : CreateNewSystemAccessUseCase {
 
-    private val companyTag = InstructionTag("companyTag")
-    private val userTag = InstructionTag("userTag")
-    private val personTag = InstructionTag("personTag")
+    override suspend fun invoke(form: SystemAccessForm): AppResult<Unit> {
+        // Create dto objects
+        val factoryResult = try {
+            SystemAccessFactory(form)
+        } catch (e: Exception) {
+            return AppResult.Error(getAppException(e))
+        }
 
-    private val companyDto = CompanyDto()
-    private val userDto = UserDto()
-    private val personDto = AdminDto()
+        // Create instructions
+        val deque = getDeque(factoryResult)
 
-    override suspend fun invoke(): AppResult<Unit> {
-        val deque = ArrayDeque<Instruction>()
+        // Execute instructions and return result
+        return instructionExecutor(deque)
+    }
 
-        Put(
-            instructionTag = companyTag,
-            collection = Collection.COMPANY,
-            data = companyDto
-        ).let { deque.add(it) }
+    private fun getAppException(e: Exception): AppException {
+        val appErr = NewSystemAccessErrCode.Factory
+        return SystemAccessAppException(
+            message = appErr.userMessage,
+            cause = e,
+            errorCode = appErr
+        )
+    }
 
-        PutLazy(
-            instructionTag = userTag,
-            collection = Collection.USER,
-            referenceIdFromTag = listOf(companyTag),
-            lazyData = { map ->
-                val value = map[companyTag]
-                userDto.copy(id = value)
-            }
-        ).let { deque.add(it) }
-
-        PutLazy(
-            instructionTag = personTag,
-            collection = Collection.ADMIN,
-            referenceIdFromTag = listOf(userTag),
-            lazyData = { map ->
-                val value = map[userTag]
-                personDto.copy(id = value)
-            }
-        ).let { deque.add(it) }
-
-        return instructionExecutor.invoke(deque)
+    private fun getDeque(factoryResult: SystemAccessResult): InstructionDeque {
+        return InstructionDeque().apply {
+            addInstruction(
+                Put(factoryResult.companyDto),
+                Put(factoryResult.userDto),
+                Put(factoryResult.employeeDto)
+            )
+        }
     }
 
 }

@@ -5,7 +5,7 @@ import com.example.truckercore.model.modules.business_central.dto.BusinessCentra
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.shared.errors.mapping.IllegalMappingArgumentException
 import com.example.truckercore.model.shared.errors.mapping.InvalidForMappingException
-import com.example.truckercore.model.shared.interfaces.Mapper
+import com.example.truckercore.model.z_to_delete.Mapper
 import com.example.truckercore.model.shared.utils.expressions.toDate
 import com.example.truckercore.model.shared.utils.expressions.toLocalDateTime
 

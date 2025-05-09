@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.configs.constants
 
-import com.example.truckercore.model.configs.constants.Field
+import com.example.truckercore.model.configs.enums.Field
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

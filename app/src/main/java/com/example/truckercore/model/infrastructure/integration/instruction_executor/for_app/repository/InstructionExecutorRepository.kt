@@ -1,6 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository
 
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.instruction.Instruction
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 
 /**
@@ -22,7 +23,7 @@ interface InstructionExecutorRepository {
      *
      * ### Example usage:
      * ```kotlin
-     * val instructions = ArrayDeque<Instruction>()
+     * val instructions = InstructionDeque()
      * val result = executor(deque)
      * when(result) {
      *      is AppResult.Success -> // Operation succeed
@@ -35,9 +36,9 @@ interface InstructionExecutorRepository {
      * // Executes all instructions inside a Firestore transaction
      * ```
      *
-     * @param instructions The instructions to be executed.
+     * @param deque The [InstructionDeque] containing instructions to be executed.
      * @return [AppResult] containing the operation result.
      */
-    suspend operator fun <T: Instruction>invoke(instructions: ArrayDeque<T>): AppResult<Unit>
+    suspend operator fun invoke(deque: InstructionDeque): AppResult<Unit>
 
 }

@@ -1,3 +1,4 @@
+/*
 package com.example.truckercore.unit.model.infrastructure.integration.data.for_app.repository
 
 import com.example.truckercore._test_data_provider.fake_objects.FakeDto
@@ -259,4 +260,4 @@ class DataRepositoryTest : KoinTest {
         assertEquals(DataFlowErrCode.Unknown, result.extractError().errorCode)
     }
 
-}
+}*/

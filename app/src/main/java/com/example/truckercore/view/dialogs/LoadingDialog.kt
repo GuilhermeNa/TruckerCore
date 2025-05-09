@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.truckercore.R
-import com.example.truckercore.model.configs.constants.Tag
+import com.example.truckercore.model.configs.enums.Tag
 
 class LoadingDialog(context: Context) : Dialog(context) {
 

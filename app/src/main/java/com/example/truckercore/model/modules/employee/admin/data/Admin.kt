@@ -5,12 +5,19 @@ import com.example.truckercore._utils.classes.FullName
 import com.example.truckercore.model.modules._contracts.Entity
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.employee._contracts.Employee
+import com.example.truckercore.model.modules.user._contracts.UserEligible
+import com.example.truckercore.model.modules.user.data.UserID
 import com.example.truckercore.model.shared.enums.Persistence
 
 data class Admin(
     override val id: AdminID,
-    override val companyId: CompanyID,
-    override val persistence: Persistence,
     override val name: FullName,
-    override val email: Email? = null
-) : Entity, Employee
+    override val companyId: CompanyID,
+    override val email: Email? = null,
+    override val userId: UserID? = null,
+    override val persistence: Persistence
+) : Entity, Employee, UserEligible {
+
+
+
+}

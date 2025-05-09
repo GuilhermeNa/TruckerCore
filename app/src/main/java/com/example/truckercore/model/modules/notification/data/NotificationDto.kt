@@ -16,8 +16,6 @@ data class NotificationDto(
     val parentId: String? = null,
 
 ) : Dto {
-    override fun copyWith(id: String?): BaseDto {
-        TODO("Not yet implemented")
-    }
+
 
 }

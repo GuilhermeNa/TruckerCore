@@ -7,11 +7,9 @@ import com.example.truckercore.model.shared.enums.Persistence
 data class CompanyDto(
     override val id: String? = null,
     override val persistence: Persistence? = null,
-    val authorizedKeys: ValidKeysRegistry? = null
+    val authorizedKeys: Set<String>? = null
 ) : BaseDto {
 
-    override fun copyWith(id: String?): BaseDto {
-        TODO("Not yet implemented")
-    }
-
 }
+
+

@@ -1,9 +1,8 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors
 
 import com.example.truckercore.model.errors.ErrorFactory
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InstructionNotImplementedException
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InvalidInstructionException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InvalidInstructionException
 
 /**
  * Factory responsible for mapping executor-layer exceptions into domain-specific error codes ([ExecuteInstructionErrCode]).
@@ -34,7 +33,7 @@ class ExecutorAppErrorFactory : ErrorFactory {
      */
     operator fun invoke(t: Throwable): ExecutorAppException {
         val code = when (t) {
-            is InstructionNotImplementedException -> ExecuteInstructionErrCode.InstructionNotImplemented
+           // is InstructionNotImplementedException -> ExecuteInstructionErrCode.InstructionNotImplemented
             is InvalidInstructionException -> ExecuteInstructionErrCode.InvalidInstruction
             else -> ExecuteInstructionErrCode.Unknown
         }

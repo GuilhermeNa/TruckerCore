@@ -13,9 +13,6 @@ internal data class VipDto(
     val vipSince: Date? = null,
     val vipUntil: Date? = null
 ) : Dto {
-    override fun copyWith(id: String?): BaseDto {
-        TODO("Not yet implemented")
-    }
 
 
 }

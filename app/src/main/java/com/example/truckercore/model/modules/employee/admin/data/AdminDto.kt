@@ -12,8 +12,4 @@ data class AdminDto(
     override val email: String? = null,
 ) : EmployeeDto {
 
-    override fun copyWith(id: String?): BaseDto {
-        TODO("Not yet implemented")
-    }
-
 }

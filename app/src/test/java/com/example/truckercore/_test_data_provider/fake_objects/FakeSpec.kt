@@ -1,6 +1,6 @@
 package com.example.truckercore._test_data_provider.fake_objects
 
-import com.example.truckercore.model.configs.constants.Collection
+import com.example.truckercore.model.configs.collections.Collection
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
 
