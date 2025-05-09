@@ -7,8 +7,8 @@ import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.user._contracts.UserEligible
 
 data class Session(
-    val uid: UID, // Id do backend
-    val user: Authenticable, // Um usuário
-    val company: SystemManager, // Empresa
-    val person: UserEligible // Person
+    val uid: UID,
+    val user: Authenticable,
+    val company: SystemManager,
+    val person: UserEligible
 )
