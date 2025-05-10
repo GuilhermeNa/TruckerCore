@@ -1,9 +1,6 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.ErrorCode
-import com.example.truckercore.view_model.view_models.splash.SplashEffect.AlreadyAccessed
-import com.example.truckercore.view_model.view_models.splash.SplashEffect.FirstTimeAccess
 
 sealed class LoginEffect {
 

@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.authentication.service
+package com.example.truckercore.model.modules.authentication.manager
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
@@ -15,7 +15,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-internal class AuthServiceImpl(
+internal class AuthManagerImpl(
     private val updateUserProfile: UpdateUserProfileUseCase,
     private val getUserEmail: GetUserEmailUseCase,
     private val isEmailVerified: IsEmailVerifiedUseCase,
@@ -24,7 +24,7 @@ internal class AuthServiceImpl(
     private val observeEmailValidation: ObserveEmailValidationUseCase,
     private val thereIsLoggedUser: ThereIsLoggedUserUseCase,
     private val sign: SignUseCase
-) : AuthService {
+) : AuthManager {
 
     override suspend fun createUserWithEmail(credential: EmailCredential): AppResult<Unit> =
         withContext(Dispatchers.IO) { createUserWithEmail.invoke(credential) }

@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.authentication.service
+package com.example.truckercore.model.modules.authentication.manager
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
@@ -13,7 +13,7 @@ import com.example.truckercore._utils.classes.Email
  * Provides methods for authenticating user credentials, signing in, signing out,
  * retrieving the current authenticated user, and creating new system access.
  */
-interface AuthService {
+interface AuthManager {
 
     suspend fun createUserWithEmail(credential: EmailCredential): AppResult<Unit>
 

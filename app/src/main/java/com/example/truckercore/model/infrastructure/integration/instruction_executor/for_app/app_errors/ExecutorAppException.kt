@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.errors.ErrorCode
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
 
@@ -23,4 +23,4 @@ class ExecutorAppException(
     message: String? = null,
     cause: Throwable? = null,
     errorCode: ExecutorErrCode
-) : AppException(message, cause, errorCode)
+) : AppExceptionOld(message, cause, errorCode)

@@ -1,6 +1,6 @@
 package com.example.truckercore.view.fragments.user_name
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore._utils.expressions.showToast
@@ -22,7 +22,7 @@ class UserNameFragEffectHandler(private val fragment: UserNameFragment) {
      *
      * @param error The exception thrown during the profile update.
      */
-    fun handleProfileUpdateFailedEffect(error: AppException) {
+    fun handleProfileUpdateFailedEffect(error: AppExceptionOld) {
         val ec = error.errorCode
         ec.handleOnUi(
             onRecoverable = { fragment.showToast(it) },

@@ -1,34 +1,41 @@
 package com.example.truckercore.model.shared.utils.sealeds
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 
 sealed class AppResponse<out T> {
 
     data class Success<T>(val data: T) : AppResponse<T>()
 
-    data class Error(val exception: AppException) : AppResponse<Nothing>()
+    data class Error(val exception: AppExceptionOld) : AppResponse<Nothing>()
 
     data object Empty : AppResponse<Nothing>()
 
 }
 
+fun <T> AppResponse<T>.getOrNull(): T? {
+    return when (this) {
+        is AppResponse.Success -> data
+        AppResponse.Empty -> null
+        is AppResponse.Error -> null
+    }
+}
+
 inline fun <R, T> AppResponse<T>.mapAppResponse(
     onSuccess: (data: T) -> R,
     onEmpty: () -> R,
-    onError: (e: AppException) -> R
+    onError: (e: AppExceptionOld) -> R
 ): R = when (this) {
     is AppResponse.Success -> onSuccess(data)
     is AppResponse.Error -> onError(exception)
     is AppResponse.Empty -> onEmpty()
 }
 
-inline fun <T, R> AppResponse<T>.getOrElse(
-    onSuccess: (data: T) -> R,
-    orElse: (AppResponse<Nothing>) -> Nothing
-): R = when (this) {
-    is AppResponse.Success -> onSuccess(data)
-    is AppResponse.Error -> orElse(AppResponse.Error(exception))
-    is AppResponse.Empty -> orElse(AppResponse.Empty)
+inline fun <T> AppResponse<T>.getOrReturn(
+    block: (AppResponse<Nothing>) -> Nothing
+): T = when (this) {
+    is AppResponse.Success -> data
+    is AppResponse.Error -> block(AppResponse.Error(exception))
+    is AppResponse.Empty -> block(AppResponse.Empty)
 }
 
 fun <T> AppResponse<T>.extractData() =

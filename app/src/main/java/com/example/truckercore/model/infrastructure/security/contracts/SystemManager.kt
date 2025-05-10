@@ -5,10 +5,10 @@ import com.example.truckercore.model.modules.company.data.Key
 
 interface SystemManager {
 
-    val validAccessKeys: ValidKeysRegistry
+    val keysRegistry: ValidKeysRegistry
 
     fun isKeyValid(key: Key): Boolean {
-        return validAccessKeys.contains(key)
+        return keysRegistry.contains(key)
     }
 
 }

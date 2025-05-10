@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore._utils.expressions.clearFocusIfNeeded
@@ -126,7 +126,7 @@ class EmailAuthFragment : CloseAppFragment() {
     /**
      * Handles failures during user creation and determines whether to show a toast or navigate to an error screen.
      */
-    private fun handleUserCreationFailedEffect(error: AppException) {
+    private fun handleUserCreationFailedEffect(error: AppExceptionOld) {
         viewModel.setState(WaitingInput)
         error.errorCode.let { ec ->
             ec.handleOnUi(

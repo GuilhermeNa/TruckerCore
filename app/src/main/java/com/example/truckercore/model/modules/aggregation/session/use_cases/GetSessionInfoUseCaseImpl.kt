@@ -17,7 +17,8 @@ import com.example.truckercore.model.modules.user.data.UserID
 import com.example.truckercore.model.modules.user.specification.UserSpec
 import com.example.truckercore.model.modules.user.use_cases.GetUserUserCase
 import com.example.truckercore.model.shared.utils.sealeds.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.getOrElse
+import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
@@ -28,35 +29,32 @@ class GetSessionInfoUseCaseImpl(
     private val getAutonomousUseCase: GetAutonomousUseCase
 ) : GetSessionInfoUseCase {
 
-    override suspend fun invoke(uid: UID): AppResponse<Session> {
-        return coroutineScope {
-            val user = getUser(uid).getOrElse(
-                onSuccess = { data -> data },
-                orElse = { response -> return@coroutineScope response }
+    override suspend fun invoke(uid: UID): AppResponse<Session> = coroutineScope {
+        // Get User
+        val user = getUser(uid).getOrReturn { return@coroutineScope it }
+
+        // Search Async
+        val asyncResponses = getCompanyAndEligibleAsync(user)
+        asyncResponses.awaitAndMap { companyResponse, eligibleResponse ->
+            val company = companyResponse.getOrReturn { return@coroutineScope it }
+            val eligible = eligibleResponse.getOrReturn { return@coroutineScope it }
+
+            AppResponse.Success(
+                Session(
+                    uid = uid,
+                    user = user,
+                    company = company,
+                    person = eligible
+                )
             )
-
-            val companyDef = async { getCompanyAsync(user.companyId) }
-
-            val eligibleDef = async { getEligibleAsync(user.id, user.getRole()) }
-
-            val company = companyDef.await().getOrElse(
-                onSuccess = { data -> data },
-                orElse = { response -> return@coroutineScope response }
-            )
-            val eligible = eligibleDef.await().getOrElse(
-                onSuccess = { data -> data },
-                orElse = { response -> return@coroutineScope response }
-            )
-
-            val response = Session(
-                uid = uid,
-                user = user,
-                company = company,
-                person = eligible
-            )
-
-            return@coroutineScope AppResponse.Success(response)
         }
+    }
+
+    private suspend fun getCompanyAndEligibleAsync(user: User) = coroutineScope {
+        AsyncResponses(
+            companyDef = async { getCompany(user.companyId) },
+            eligibleDef = async { getEligible(user.id, user.profileRole) }
+        )
     }
 
     private suspend fun getUser(uid: UID): AppResponse<User> {
@@ -64,12 +62,12 @@ class GetSessionInfoUseCaseImpl(
         return getUserUseCase(spec)
     }
 
-    private suspend fun getCompanyAsync(companyId: CompanyID): AppResponse<Company> {
+    private suspend fun getCompany(companyId: CompanyID): AppResponse<Company> {
         val spec = CompanySpec(entityId = companyId)
         return getCompanyUseCase(spec)
     }
 
-    private suspend fun getEligibleAsync(userId: UserID, role: Role): AppResponse<UserEligible> {
+    private suspend fun getEligible(userId: UserID, role: Role): AppResponse<UserEligible> {
         return when (role) {
             Role.AUTONOMOUS -> getAutonomous(userId)
             Role.ADMIN -> getAdmin(userId)
@@ -88,4 +86,20 @@ class GetSessionInfoUseCaseImpl(
         return getAutonomousUseCase(spec)
     }
 
+    data class AsyncResponses(
+        val companyDef: Deferred<AppResponse<Company>>,
+        val eligibleDef: Deferred<AppResponse<UserEligible>>
+    ) {
+
+        suspend inline fun awaitAndMap(
+            block: (AppResponse<Company>, AppResponse<UserEligible>) -> AppResponse<Session>
+        ): AppResponse<Session> {
+            val companyResponse = companyDef.await()
+            val eligibleResponse = eligibleDef.await()
+            return block(companyResponse, eligibleResponse)
+        }
+
+    }
+
 }
+

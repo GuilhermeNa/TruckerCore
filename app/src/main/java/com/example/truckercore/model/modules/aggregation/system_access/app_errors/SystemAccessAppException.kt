@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.aggregation.system_access.app_errors
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 
 /**
  * Exception class representing errors that occur during the system access creation process.
@@ -18,4 +18,4 @@ class SystemAccessAppException(
     message: String?,
     cause: Throwable? = null,
     errorCode: SystemAccessErrCode
-) : AppException(message, cause, errorCode)
+) : AppExceptionOld(message, cause, errorCode)

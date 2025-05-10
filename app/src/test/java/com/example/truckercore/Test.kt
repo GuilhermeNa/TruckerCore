@@ -1,13 +1,10 @@
 package com.example.truckercore
 
 import com.example.truckercore._test_utils.mockStaticLog
-import com.example.truckercore.model.errors.AppException
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal class Test {
 

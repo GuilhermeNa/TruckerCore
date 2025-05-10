@@ -1,11 +1,11 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 
 /**
  * Custom exception class used to represent authentication module related errors.
  *
- * This class extends [AppException] and is designed to handle exceptions that occur during authentication operations.
+ * This class extends [AppExceptionOld] and is designed to handle exceptions that occur during authentication operations.
  *
  * @param message The detailed message explaining the exception. This message will typically be user-friendly and
  *                will be extracted from the associated [AuthErrorCode].
@@ -18,7 +18,7 @@ class AuthenticationAppException(
     message: String?,
     cause: Throwable? = null,
     errorCode: AuthErrorCode
-) : AppException(message, cause, errorCode)
+) : AppExceptionOld(message, cause, errorCode)
 
 
 

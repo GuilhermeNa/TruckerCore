@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.modules.authentication.service.AuthService
+import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore._utils.classes.FullName
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
  */
 class UserNameViewModel(
     private val preferences: PreferencesRepository,
-    private val authService: AuthService
+    private val authService: AuthManager
 ) : ViewModel() {
 
     // State Flow for holding and exposing the current state of the fragment

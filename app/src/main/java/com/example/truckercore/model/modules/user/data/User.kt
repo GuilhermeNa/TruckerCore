@@ -16,6 +16,14 @@ data class User(
     override val profile: Profile
 ) : Entity, Authenticable, Authorizable {
 
-    fun getRole() = profile.role
+    val uidVal get() = uid.value
+
+    val idVal get() = id.value
+
+    val profileRole get() = profile.role
+
+    val companyIdVal get() = companyId.value
+
+
 
 }

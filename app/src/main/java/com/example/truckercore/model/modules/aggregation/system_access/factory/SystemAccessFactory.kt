@@ -51,7 +51,7 @@ object SystemAccessFactory {
             val userId = UserID(userDto.id ?: throw NullPointerException(USER_ID_ERROR))
 
             // Copy company and insert new user key
-            val companyDtoWithKey = companyDto.copy(authorizedKeys = setOf(userId.value))
+            val companyDtoWithKey = companyDto.copy(keysRegistry = setOf(userId.value))
 
             // return
             SystemAccessResult(

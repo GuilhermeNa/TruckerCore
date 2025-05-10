@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 
 sealed class LoginEvent {
@@ -18,7 +18,7 @@ sealed class LoginEvent {
         data class AuthenticationResult(val result: AppResult<Unit>) : SystemEvent()
         data object UserRegistered: SystemEvent()
         data object UserAwaitingRegister: SystemEvent()
-        data class AuthError(val error: AppException): SystemEvent()
+        data class AuthError(val error: AppExceptionOld): SystemEvent()
     }
 
 }

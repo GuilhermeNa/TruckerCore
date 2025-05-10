@@ -1,6 +1,6 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.errors.ErrorCode
 
 class TestAppExceptionProvider {
@@ -16,7 +16,7 @@ class TestAppExceptionProvider {
         message: String? = null,
         cause: Throwable? = null,
         errorCode: ErrorCode
-    ) : AppException(message, cause, errorCode)
+    ) : AppExceptionOld(message, cause, errorCode)
 
     val cause = NullPointerException()
 

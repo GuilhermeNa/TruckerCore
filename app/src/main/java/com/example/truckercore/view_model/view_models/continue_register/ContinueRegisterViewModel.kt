@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.continue_register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.modules.authentication.service.AuthService
+import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.modules.user.service.UserService
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore._utils.classes.Email
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel responsible for managing the state of the Continue Register screen.
  *
- * It interacts with [AuthService] to fetch the current user's email and verification status,
+ * It interacts with [AuthManager] to fetch the current user's email and verification status,
  * and with [UserService] to check whether a user with the given email already exists.
  *
  * The ViewModel exposes a [StateFlow] of [ContinueRegisterUiState] to represent
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
  * @property userService Provides user-related operations.
  */
 class ContinueRegisterViewModel(
-    private val authService: AuthService
+    private val authService: AuthManager
     //private val userService: UserService
 ) : ViewModel() {
 

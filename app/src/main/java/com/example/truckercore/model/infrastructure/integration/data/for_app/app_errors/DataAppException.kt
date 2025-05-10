@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.errors.ErrorCode
 
 /**
@@ -22,4 +22,4 @@ class DataAppException(
     message: String? = null,
     cause: Throwable? = null,
     errorCode: DataErrorCode
-): AppException(message, cause, errorCode)
+): AppExceptionOld(message, cause, errorCode)

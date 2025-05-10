@@ -1,13 +1,13 @@
 package com.example.truckercore.model.shared.utils.expressions
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore.model.shared.utils.sealeds.AppResult.Error
 import com.example.truckercore.model.shared.utils.sealeds.AppResult.Success
 
 inline fun <T, R> AppResult<T>.mapAppResult(
     onSuccess: (data: T) -> R,
-    onError: (e: AppException) -> R
+    onError: (e: AppExceptionOld) -> R
 ): R = when (this) {
     is Success -> onSuccess(data)
     is Error -> onError(exception)
@@ -15,7 +15,7 @@ inline fun <T, R> AppResult<T>.mapAppResult(
 
 fun <T> AppResult<T>.handleAppResult(
     onSuccess: (data: T) -> Unit,
-    onError: (e: AppException) -> Unit
+    onError: (e: AppExceptionOld) -> Unit
 ) = when (this) {
     is Success -> onSuccess(data)
     is Error -> onError(exception)

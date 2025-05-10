@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.aggregation.system_access.use_cases
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.instructions.Put
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository.InstructionExecutorRepository
@@ -30,7 +30,7 @@ class CreateSystemAccessUseCaseImpl(
         return instructionExecutor(deque)
     }
 
-    private fun getAppException(e: Exception): AppException {
+    private fun getAppException(e: Exception): AppExceptionOld {
         val appErr = NewSystemAccessErrCode.Factory
         return SystemAccessAppException(
             message = appErr.userMessage,

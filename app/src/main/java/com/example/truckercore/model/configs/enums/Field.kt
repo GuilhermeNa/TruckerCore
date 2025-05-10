@@ -6,6 +6,7 @@ package com.example.truckercore.model.configs.enums
  */
 enum class Field(private val fieldName: String) {
     ID("id"),
+    USER_ID("userId"),
     CATEGORY("category"),
     COMPANY_ID("companyId"),
     UID("uid")

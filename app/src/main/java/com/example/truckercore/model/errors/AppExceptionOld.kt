@@ -12,7 +12,7 @@ package com.example.truckercore.model.errors
  *
  * @see ErrorCode for detailed metadata about the error.
  */
-abstract class AppException(
+abstract class AppExceptionOld(
     message: String? = null,
     cause: Throwable? = null,
     val errorCode: ErrorCode

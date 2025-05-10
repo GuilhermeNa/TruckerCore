@@ -3,10 +3,10 @@ package com.example.truckercore.view_model.view_models.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.infrastructure.security.service.PermissionService
-import com.example.truckercore.model.modules.authentication.service.AuthService
+import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ private typealias LoadingState = SplashUiState.Loading
 private typealias LoadedState = SplashUiState.Loaded
 
 class SplashViewModel(
-    private val authService: AuthService,
+    private val authService: AuthManager,
     private val preferences: PreferencesRepository,
     private val permissionService: PermissionService,
     private val flavorService: FlavorService
@@ -72,7 +72,7 @@ class SplashViewModel(
                 onEvent(InfoLoadedEvent)
 
             } catch (e: Exception) {
-                if (e is AppException) setEffect(SplashEffect.Error(e.errorCode))
+                if (e is AppExceptionOld) setEffect(SplashEffect.Error(e.errorCode))
                 else throw UnknownError("An unknown error occurred while loading user info.")
             }
         }

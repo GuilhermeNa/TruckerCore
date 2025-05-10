@@ -10,7 +10,7 @@ object CompanyFactory {
         return CompanyDto(
             id = ID.generate(),
             persistence = Persistence.ACTIVE,
-            authorizedKeys = null
+            keysRegistry = null
         )
     }
 

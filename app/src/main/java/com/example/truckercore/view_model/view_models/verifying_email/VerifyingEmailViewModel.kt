@@ -3,7 +3,7 @@ package com.example.truckercore.view_model.view_models.verifying_email
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.modules.authentication.service.AuthService
+import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.shared.utils.expressions.extractData
 import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore._utils.classes.Email
@@ -30,7 +30,7 @@ private typealias TimeOutEvent = VerifyingEmailEvent.InternalEvent.CounterTimeOu
 class VerifyingEmailViewModel(
     private val preferences: PreferencesRepository,
     private val counterUseCase: CounterUseCase,
-    private val authService: AuthService
+    private val authService: AuthManager
 ) : ViewModel() {
 
     val counterFlow = counterUseCase.counter

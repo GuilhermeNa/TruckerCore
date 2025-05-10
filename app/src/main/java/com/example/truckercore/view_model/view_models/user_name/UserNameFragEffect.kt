@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.user_name
 
-import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.AppExceptionOld
 
 /**
  * Represents one-time side effects triggered by the [UserNameViewModel].
@@ -17,8 +17,8 @@ sealed class UserNameFragEffect {
     /**
      * Effect triggered when updating the user profile fails.
      *
-     * @property error An [AppException] containing error details for UI handling.
+     * @property error An [AppExceptionOld] containing error details for UI handling.
      */
-    data class ProfileUpdateFailed(val error: AppException) : UserNameFragEffect()
+    data class ProfileUpdateFailed(val error: AppExceptionOld) : UserNameFragEffect()
 
 }

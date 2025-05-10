@@ -4,7 +4,7 @@ import com.example.truckercore._test_data_provider.TestAppExceptionProvider
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class AppExceptionTest {
+class AppExceptionOldTest {
 
     //----------------------------------------------------------------------------------------------
     // Setup
