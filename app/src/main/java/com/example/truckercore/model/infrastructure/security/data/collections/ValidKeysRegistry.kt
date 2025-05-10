@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.security.data.collections
 
 import com.example.truckercore.model.modules.company.data.Key
 
-class ValidKeysRegistry(private val _data: Set<Key>) {
+class ValidKeysRegistry(private val _data: Set<Key> = emptySet()) {
 
     val dataValue get() = _data.mapTo(mutableSetOf()) { it.value }
 

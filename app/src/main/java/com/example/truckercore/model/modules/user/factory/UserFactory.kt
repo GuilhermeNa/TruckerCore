@@ -4,17 +4,17 @@ import com.example.truckercore.model.infrastructure.security.configs.DefaultPerm
 import com.example.truckercore.model.infrastructure.security.data.Profile
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.modules._contracts.ID
-import com.example.truckercore.model.modules.user.data.UserDto
+import com.example.truckercore.model.modules.user.data.User
+import com.example.truckercore.model.modules.user.data.UserID
 import com.example.truckercore.model.shared.enums.Persistence
 
 object UserFactory {
 
-    operator fun invoke(form: UserForm): UserDto {
-        return UserDto(
-            id = ID.generate(),
-            companyId = form.getCompanyId(),
-            persistence = Persistence.ACTIVE,
-            uid = form.getGetUid(),
+    operator fun invoke(form: UserForm): User {
+        return User(
+            id = UserID(ID.generate()),
+            companyId = form.companyId,
+            uid = form.uid,
             profile = getProfile(form.role)
         )
     }

@@ -7,8 +7,8 @@ import com.example.truckercore.model.shared.enums.Persistence
 
 data class Company(
     override val id: CompanyID,
-    override val persistence: Persistence,
-    override val keysRegistry: ValidKeysRegistry,
+    override val persistence: Persistence = Persistence.ACTIVE,
+    override val keysRegistry: ValidKeysRegistry = ValidKeysRegistry(),
 ) : BaseEntity, SystemManager {
 
     val keysValue get() = keysRegistry.dataValue

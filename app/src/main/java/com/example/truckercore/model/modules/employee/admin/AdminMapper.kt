@@ -19,7 +19,8 @@ object AdminMapper : Mapper<Admin, AdminDto> {
                 persistence = entity.persistence,
                 name = entity.nameValue,
                 email = entity.emailValue,
-                userId = entity.userIdValue
+                userId = entity.userIdValue,
+                state = entity.state
             )
         } catch (e: Exception) {
             handleError(entity, e)
@@ -33,7 +34,8 @@ object AdminMapper : Mapper<Admin, AdminDto> {
                 companyId = CompanyID(dto.companyId!!),
                 email = dto.email?.let { Email.from(it) },
                 userId = dto.userId?.let { UserID(it) },
-                persistence = dto.persistence!!
+                persistence = dto.persistence!!,
+                state = dto.state!!
             )
         } catch (e: Exception) {
             handleError(dto, e)
