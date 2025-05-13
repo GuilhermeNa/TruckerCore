@@ -1,6 +1,6 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppErrorFactory
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthErrorFactory
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManagerImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.CreateUserWithEmailUseCaseImpl
@@ -22,7 +22,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import org.koin.dsl.module
 
 val authModule = module {
-    single { AuthenticationAppErrorFactory() }
+    single { AuthErrorFactory() }
     single<AuthManager> { AuthManagerImpl(get(), get(), get(), get(), get(), get(), get(), get()) }
     single<SignUseCase> { SignUseCaseImpl(get()) }
     single<SendVerificationEmailUseCase> { SendVerificationEmailUseCaseImpl(get()) }

@@ -2,7 +2,7 @@
 package com.example.truckercore.model.modules._previous_sample.business_central.use_cases.interfaces
 
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 */

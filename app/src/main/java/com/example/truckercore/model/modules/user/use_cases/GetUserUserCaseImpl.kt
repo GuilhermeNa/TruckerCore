@@ -1,10 +1,13 @@
 package com.example.truckercore.model.modules.user.use_cases
 
+import com.example.truckercore.model.errors.exceptions.AppException
+import com.example.truckercore.model.errors.exceptions.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepository
 import com.example.truckercore.model.modules.user.data.User
+import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore.model.modules.user.specification.UserSpec
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
 
 class GetUserUserCaseImpl(
@@ -13,11 +16,26 @@ class GetUserUserCaseImpl(
 
     override suspend fun invoke(spec: UserSpec): AppResponse<User> =
         try {
-            val dto = dataRepository.findOneBy(spec).getOrReturn { return it }
-            val entity = UserMapper.toEntity(dto)
-            AppResponse.Success(entity)
-        } catch (e: Exception) {
+
+            dataRepository.findOneBy(spec)
+                .getOrReturn { return it }
+                .let { getSuccessResponse(it) }
+
+        } catch (e: AppException) {
             AppResponse.Error(e)
+        } catch (e: Exception) {
+            AppResponse.Error(
+                TechnicalException.Unknown("$UNEXPECTED_ERROR_MESSAGE $spec", e)
+            )
         }
+
+    private fun getSuccessResponse(dto: UserDto): AppResponse.Success<User> {
+        val user = UserMapper.toEntity(dto)
+        return AppResponse.Success(user)
+    }
+
+    companion object {
+        private const val UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred while fetching the user."
+    }
 
 }

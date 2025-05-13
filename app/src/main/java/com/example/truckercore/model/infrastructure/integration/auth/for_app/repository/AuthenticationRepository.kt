@@ -1,10 +1,10 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.repository
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 
 /**
  * Repository interface that defines authentication-related operations used by the application layer.
@@ -120,8 +120,10 @@ interface AuthenticationRepository {
 
     fun thereIsLoggedUser(): AppResult<Boolean>
 
-    fun getUserEmail(): AppResult<Email>
+    fun getUserEmail(): AppResponse<Email>
 
     fun isEmailVerified(): AppResult<Boolean>
+
+    suspend fun sendPasswordResetEmail(email: Email): AppResult<Unit>
 
 }

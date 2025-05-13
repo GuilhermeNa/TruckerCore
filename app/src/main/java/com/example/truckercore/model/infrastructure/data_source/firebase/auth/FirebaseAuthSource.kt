@@ -1,11 +1,12 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.auth
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
-import com.example.truckercore.model.shared.utils.expressions.cancelJob
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
+import com.example.truckercore._utils.expressions.awaitSuccessOrThrow
+import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
+import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
+import com.example.truckercore.model.shared.utils.expressions.cancelJob
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
@@ -28,7 +29,7 @@ class FirebaseAuthSource(
 
     override suspend fun sendEmailVerification() {
         val task = getLoggedUser().sendEmailVerification()
-        task.awaitSuccessOrThrow(authError = { errorMapper.sendingEmailVerification(it) })
+        task.awaitSuccessOrThrow { errorMapper.sendingEmailVerification(it) }
     }
 
     override suspend fun updateUserProfile(profile: UserCategory) {
@@ -36,7 +37,7 @@ class FirebaseAuthSource(
             displayName = profile.fullName.value
         }
         val task = getLoggedUser().updateProfile(updateProfileReq)
-        task.awaitSuccessOrThrow(authError = { errorMapper.updatingProfile(it) })
+        task.awaitSuccessOrThrow { errorMapper.updatingProfile(it) }
     }
 
     override suspend fun signInWithEmail(email: Email, password: Password) {
@@ -80,6 +81,11 @@ class FirebaseAuthSource(
 
     private fun getLoggedUser(): FirebaseUser {
         return auth.currentUser ?: throw SessionInactiveException()
+    }
+
+    override suspend fun sendPasswordResetEmail(email: Email) {
+        val task = auth.sendPasswordResetEmail(email.value)
+        task.awaitSuccessOrThrow { errorMapper.sendPasswordResetEmail(it) }
     }
 
 }

@@ -2,17 +2,14 @@ package com.example.truckercore.model.modules.employee.autonomous.mapper
 
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.FullName
-import com.example.truckercore.model.modules._contracts.Mapper
+import com.example.truckercore.model.modules._contracts.mapper.Mapper
 import com.example.truckercore.model.modules.company.data.CompanyID
-import com.example.truckercore.model.modules.employee.admin.data.Admin
-import com.example.truckercore.model.modules.employee.admin.data.AdminDto
-import com.example.truckercore.model.modules.employee.admin.data.AdminID
 import com.example.truckercore.model.modules.employee.autonomous.data.AutID
 import com.example.truckercore.model.modules.employee.autonomous.data.Autonomous
 import com.example.truckercore.model.modules.employee.autonomous.data.AutonomousDto
 import com.example.truckercore.model.modules.user.data.UserID
 
-object AutonomousMapper: Mapper<Autonomous, AutonomousDto> {
+object AutonomousMapper : Mapper<Autonomous, AutonomousDto> {
 
     override fun toDto(entity: Autonomous): AutonomousDto =
         try {

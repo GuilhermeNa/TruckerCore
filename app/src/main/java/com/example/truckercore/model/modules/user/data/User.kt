@@ -12,17 +12,17 @@ data class User(
     override val uid: UID,
     override val id: UserID,
     override val companyId: CompanyID,
-    override val persistence: Persistence = Persistence.ACTIVE,
+    override val persistence: Persistence,
     override val profile: Profile
 ) : Entity, Authenticable, Authorizable {
 
-    val uidVal get() = uid.value
+    val uidValue get() = uid.value
 
-    val idVal get() = id.value
+    val idValue get() = id.value
 
     val profileRole get() = profile.role
 
-    val companyIdVal get() = companyId.value
+    val companyIdValue get() = companyId.value
 
 
 

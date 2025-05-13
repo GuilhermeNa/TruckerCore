@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.security.contracts
 
 import com.example.truckercore.model.infrastructure.security.data.collections.ValidKeysRegistry
-import com.example.truckercore.model.modules.company.data.Key
+import com.example.truckercore.model.infrastructure.security.data.Key
 
 interface SystemManager {
 

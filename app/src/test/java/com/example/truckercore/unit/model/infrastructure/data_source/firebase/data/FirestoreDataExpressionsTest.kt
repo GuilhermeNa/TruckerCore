@@ -3,10 +3,10 @@ package com.example.truckercore.unit.model.infrastructure.data_source.firebase.d
 import com.example.truckercore._test_data_provider.TestDtoProvider
 import com.example.truckercore._test_data_provider.TestFirestoreDataProvider
 import com.example.truckercore._test_data_provider.fake_objects.FakeDto
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.safeEmit
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.safeInterpretOrEmit
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.toDto
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.toList
+import com.example.truckercore._utils.expressions.safeEmit
+import com.example.truckercore._utils.expressions.safeInterpretOrEmit
+import com.example.truckercore._utils.expressions.toDto
+import com.example.truckercore._utils.expressions.toList
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.UnknownException

@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.business_central.dto.BusinessCentra
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
 import com.example.truckercore.model.shared.utils.parameters.QueryParameters
 import com.example.truckercore.model.shared.utils.parameters.SearchParameters
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal class BusinessCentralRepositoryImpl(

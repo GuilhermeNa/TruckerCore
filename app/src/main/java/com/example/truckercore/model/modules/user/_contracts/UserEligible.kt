@@ -18,11 +18,11 @@ interface UserEligible<T : UserEligible<T>> {
         state: EligibleState
     ): T
 
-    fun register(newEmail: Email, newUserId: UserID): T
+    fun registerSystemUser(newEmail: Email, newUserId: UserID): T
 
-    fun suspendRegister(): T
+    fun suspendSystemUser(): T
 
-    fun reactivateRegister(): T
+    fun reactivateSystemUser(): T
 
 }
 

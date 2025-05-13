@@ -1,8 +1,11 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors
 
 import com.example.truckercore.model.errors.ErrorFactory
+import com.example.truckercore.model.errors.exceptions.InfraException
+import com.example.truckercore.model.errors.exceptions.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InvalidInstructionException
+import com.example.truckercore._utils.classes.AppResult
 
 /**
  * Factory responsible for mapping executor-layer exceptions into domain-specific error codes ([ExecuteInstructionErrCode]).
@@ -31,20 +34,12 @@ class ExecutorAppErrorFactory : ErrorFactory {
      * - [ExecuteInstructionErrCode.InvalidInstruction] – When the instruction is malformed, incomplete, or violates preconditions
      * - [ExecuteInstructionErrCode.Unknown] – When an unrecognized or unexpected exception occurs
      */
-    operator fun invoke(t: Throwable): ExecutorAppException {
-        val code = when (t) {
-           // is InstructionNotImplementedException -> ExecuteInstructionErrCode.InstructionNotImplemented
-            is InvalidInstructionException -> ExecuteInstructionErrCode.InvalidInstruction
-            else -> ExecuteInstructionErrCode.Unknown
+    operator fun invoke(message: String, cause: Throwable): AppResult.Error {
+        val error = when (cause) {
+            is InvalidInstructionException -> InfraException.WriterError(message, cause)
+            else -> TechnicalException.Unknown(message, cause)
         }
-
-        factoryLogger(code)
-
-        return ExecutorAppException(
-            message = code.logMessage,
-            errorCode = code,
-            cause = t
-        )
+        return AppResult.Error(error)
     }
 
 }

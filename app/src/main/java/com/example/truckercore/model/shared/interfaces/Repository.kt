@@ -3,7 +3,7 @@ package com.example.truckercore.model.shared.interfaces
 
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
 import com.example.truckercore.model.shared.utils.parameters.DocumentParameters
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 internal interface Repository {

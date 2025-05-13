@@ -9,4 +9,8 @@ value class AdminID(override val value: String): ID {
         validate()
     }
 
+    companion object {
+        fun generate() = AdminID(ID.generate())
+    }
+
 }

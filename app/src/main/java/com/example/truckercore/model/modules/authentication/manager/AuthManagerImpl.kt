@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.authentication.manager
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.CreateUserWithEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUserEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.IsEmailVerifiedUseCase
@@ -9,9 +9,10 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.UpdateUserProfileUseCase
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SignUseCase
+import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -23,7 +24,8 @@ internal class AuthManagerImpl(
     private val sendVerificationEmail: SendVerificationEmailUseCase,
     private val observeEmailValidation: ObserveEmailValidationUseCase,
     private val thereIsLoggedUser: ThereIsLoggedUserUseCase,
-    private val sign: SignUseCase
+    private val sign: SignUseCase,
+    private val resetEmailUseCase: ResetEmailUseCase
 ) : AuthManager {
 
     override suspend fun createUserWithEmail(credential: EmailCredential): AppResult<Unit> =
@@ -40,7 +42,7 @@ internal class AuthManagerImpl(
     override suspend fun updateUserName(userProfile: UserCategory): AppResult<Unit> =
         withContext(Dispatchers.IO) { updateUserProfile.invoke(userProfile) }
 
-    override fun getUserEmail(): AppResult<Email> = getUserEmail.invoke()
+    override fun getUserEmail(): AppResponse<Email> = getUserEmail.invoke()
 
     override fun isEmailVerified(): AppResult<Boolean> = isEmailVerified.invoke()
 
@@ -50,5 +52,6 @@ internal class AuthManagerImpl(
 
     override suspend fun signIn(credential: EmailCredential) =
         sign.signIn(credential)
+
 
 }

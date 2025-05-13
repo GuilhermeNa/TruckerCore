@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow

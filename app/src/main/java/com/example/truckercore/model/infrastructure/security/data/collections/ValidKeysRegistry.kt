@@ -1,12 +1,16 @@
 package com.example.truckercore.model.infrastructure.security.data.collections
 
-import com.example.truckercore.model.modules.company.data.Key
+import com.example.truckercore.model.infrastructure.security.data.Key
 
-class ValidKeysRegistry(private val _data: Set<Key> = emptySet()) {
+class ValidKeysRegistry(private val _data: MutableSet<Key> = mutableSetOf()) {
 
     val dataValue get() = _data.mapTo(mutableSetOf()) { it.value }
 
     fun contains(key: Key) = _data.contains(key)
+
+    fun registerKey(key: Key) {
+        _data.add(key)
+    }
 
     companion object {
         fun from(stringKeys: Set<String>): ValidKeysRegistry {

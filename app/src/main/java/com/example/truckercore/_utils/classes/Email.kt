@@ -58,6 +58,7 @@ value class Email private constructor(val value: String) {
             }
         }
     }
+
 }
 
 /**

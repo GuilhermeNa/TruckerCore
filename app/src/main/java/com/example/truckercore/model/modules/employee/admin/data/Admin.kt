@@ -16,10 +16,10 @@ data class Admin(
     override val id: AdminID,
     override val name: FullName,
     override val companyId: CompanyID,
-    override val persistence: Persistence = Persistence.ACTIVE,
-    override val email: Email? = null,
-    override val userId: UserID? = null,
-    override val state: EligibleState = Unregistered()
+    override val persistence: Persistence,
+    override val email: Email?,
+    override val userId: UserID?,
+    override val state: EligibleState
 ) : Entity, Employee, UserEligible<Admin> {
 
     val companyIdValue get() = companyId.value
@@ -37,15 +37,15 @@ data class Admin(
         )
     }
 
-    override fun register(newEmail: Email, newUserId: UserID): Admin {
+    override fun registerSystemUser(newEmail: Email, newUserId: UserID): Admin {
         return state.register(newEmail, newUserId, this)
     }
 
-    override fun suspendRegister(): Admin {
+    override fun suspendSystemUser(): Admin {
         return state.suspend(this)
     }
 
-    override fun reactivateRegister(): Admin {
+    override fun reactivateSystemUser(): Admin {
         return state.reactivate(this)
     }
 

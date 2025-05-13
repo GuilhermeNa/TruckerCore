@@ -8,7 +8,6 @@ import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.employee._contracts.Employee
 import com.example.truckercore.model.modules.user._contracts.UserEligible
 import com.example.truckercore.model.modules.user._contracts.eligible_state.EligibleState
-import com.example.truckercore.model.modules.user._contracts.eligible_state.Unregistered
 import com.example.truckercore.model.modules.user.data.UserID
 import com.example.truckercore.model.shared.enums.Persistence
 
@@ -16,10 +15,10 @@ data class Autonomous(
     override val id: AutID,
     override val name: FullName,
     override val companyId: CompanyID,
-    override val email: Email? = null,
-    override val userId: UserID? = null,
-    override val persistence: Persistence = Persistence.ACTIVE,
-    override val state: EligibleState = Unregistered()
+    override val email: Email?,
+    override val userId: UserID?,
+    override val persistence: Persistence,
+    override val state: EligibleState
 ) : Entity, Employee, UserEligible<Autonomous> {
 
     val companyIdValue get() = companyId.value
@@ -37,15 +36,15 @@ data class Autonomous(
         )
     }
 
-    override fun register(newEmail: Email, newUserId: UserID): Autonomous {
+    override fun registerSystemUser(newEmail: Email, newUserId: UserID): Autonomous {
         return state.register(newEmail, newUserId, this)
     }
 
-    override fun suspendRegister(): Autonomous {
+    override fun suspendSystemUser(): Autonomous {
         return state.suspend(this)
     }
 
-    override fun reactivateRegister(): Autonomous {
+    override fun reactivateSystemUser(): Autonomous {
         return state.reactivate(this)
     }
 

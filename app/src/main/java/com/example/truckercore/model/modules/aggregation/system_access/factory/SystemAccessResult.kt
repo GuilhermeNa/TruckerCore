@@ -1,7 +1,13 @@
 package com.example.truckercore.model.modules.aggregation.system_access.factory
 
+import com.example.truckercore.model.infrastructure.security.contracts.SystemManager
+import com.example.truckercore.model.modules.authentication.contracts.Authenticable
+import com.example.truckercore.model.modules.company.data.Company
 import com.example.truckercore.model.modules.company.data.CompanyDto
+import com.example.truckercore.model.modules.employee._contracts.Employee
 import com.example.truckercore.model.modules.employee._contracts.EmployeeDto
+import com.example.truckercore.model.modules.user._contracts.UserEligible
+import com.example.truckercore.model.modules.user.data.User
 import com.example.truckercore.model.modules.user.data.UserDto
 
 /**
@@ -10,12 +16,12 @@ import com.example.truckercore.model.modules.user.data.UserDto
  * This result aggregates all the necessary domain DTOs (Data Transfer Objects) that were
  * generated during the initialization of access for a new system user.
  *
- * @property companyDto The company data object, potentially updated with the new user's authorization.
- * @property userDto The user data object representing the authenticated individual.
- * @property employeeDto The employee data object representing the user's employment link to the company.
+ * @property company The company data object, potentially updated with the new user's authorization.
+ * @property user The user data object representing the authenticated individual.
+ * @property employee The employee data object representing the user's employment link to the company.
  */
 data class SystemAccessResult(
-    val companyDto: CompanyDto,
-    val userDto: UserDto,
-    val employeeDto: EmployeeDto
+    val company: Company,
+    val user: User,
+    val employee: Employee
 )

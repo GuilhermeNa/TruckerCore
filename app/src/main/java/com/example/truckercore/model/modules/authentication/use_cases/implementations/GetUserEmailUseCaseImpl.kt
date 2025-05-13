@@ -2,14 +2,14 @@ package com.example.truckercore.model.modules.authentication.use_cases.implement
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUserEmailUseCase
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
 import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.AppResponse
 
 class GetUserEmailUseCaseImpl(
     private val authRepository: AuthenticationRepository
 ): GetUserEmailUseCase {
 
-    override fun invoke(): AppResult<Email> {
+    override fun invoke(): AppResponse<Email> {
         return authRepository.getUserEmail()
     }
 

@@ -3,7 +3,7 @@ package com.example.truckercore.model.infrastructure.security.contracts
 import com.example.truckercore.model.infrastructure.security.data.enums.Permission
 import com.example.truckercore.model.infrastructure.security.data.Profile
 import com.example.truckercore.model.modules._contracts.ID
-import com.example.truckercore.model.modules.company.data.Key
+import com.example.truckercore.model.infrastructure.security.data.Key
 
 interface Authorizable {
 

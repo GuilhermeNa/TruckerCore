@@ -3,8 +3,8 @@ package com.example.truckercore.model.infrastructure.data_source.firebase.auth
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.NetworkException
+import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TooManyRequestsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.UnknownException
@@ -124,5 +124,19 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
             )
         }
     }
+
+    override fun sendPasswordResetEmail(e: Throwable): AuthSourceException {
+        return when (e) {
+            is TaskFailureException -> TaskFailureException(
+                message = "Failed to send reset email. Please try again."
+            )
+
+            else -> UnknownException(
+                message = "An unknown error occurred while sending reset email.",
+                cause = e
+            )
+        }
+    }
+
 
 }

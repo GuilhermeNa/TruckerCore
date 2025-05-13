@@ -72,4 +72,6 @@ interface AuthSourceErrorMapper {
      */
     fun signingInWithEmail(e: Throwable): AuthSourceException
 
+    fun sendPasswordResetEmail(e: Throwable): AuthSourceException
+
 }

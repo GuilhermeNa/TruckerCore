@@ -9,7 +9,7 @@ import com.example.truckercore.model.infrastructure.integration.instruction_exec
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository.InstructionExecutorRepositoryImpl
 import com.example.truckercore.model.shared.utils.expressions.extractData
 import com.example.truckercore.model.shared.utils.expressions.extractError
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.just

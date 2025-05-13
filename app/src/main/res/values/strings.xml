@@ -46,5 +46,8 @@
     <string name="enter">Entrar</string>
     <string name="forget_password">Esqueci a senha</string>
     <string name="keep_logged">Manter conectado</string>
+    <string name="recover_password_title">Recuperação de senha</string>
+    <string name="recover_password_message">Te enviaremos um email para alteração de senha</string>
+    <string name="send">Enviar</string>
 
 </resources>

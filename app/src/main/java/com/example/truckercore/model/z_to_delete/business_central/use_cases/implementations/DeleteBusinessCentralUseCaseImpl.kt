@@ -9,7 +9,7 @@ import com.example.truckercore.model.modules.business_central.use_cases.interfac
 import com.example.truckercore.model.modules.user.entity.User
 import com.example.truckercore.model.shared.abstractions.UseCase
 import com.example.truckercore.model.shared.errors.ObjectNotFoundException
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat

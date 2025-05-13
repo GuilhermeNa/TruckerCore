@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.aggregation.system_access.use_cases
 
 import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 
 /**
  * Use case interface for creating new system access for a user.

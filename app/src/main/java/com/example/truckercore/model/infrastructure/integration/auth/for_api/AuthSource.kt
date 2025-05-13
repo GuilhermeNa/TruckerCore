@@ -1,9 +1,9 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_api
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
+import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 
 /**
  * Abstract interface for handling authentication operations with a remote backend (e.g., Firebase).
@@ -118,5 +118,7 @@ abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
     abstract fun getUserEmail(): String?
 
     abstract fun isEmailVerified(): Boolean
+
+    abstract suspend fun sendPasswordResetEmail(email: Email)
 
 }

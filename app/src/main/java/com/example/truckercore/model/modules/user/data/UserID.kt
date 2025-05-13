@@ -9,4 +9,8 @@ value class UserID(override val value: String) : ID {
         validate()
     }
 
+    companion object {
+        fun generate() = UserID(ID.generate())
+    }
+
 }

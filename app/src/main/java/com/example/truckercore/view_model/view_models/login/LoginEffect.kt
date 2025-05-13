@@ -19,5 +19,4 @@ sealed class LoginEffect {
             this is Navigation.NewAccount ||
             this is Navigation.ForgetPassword
 
-
 }

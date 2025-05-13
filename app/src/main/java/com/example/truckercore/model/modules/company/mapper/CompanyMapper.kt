@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.company.mapper
 
 import com.example.truckercore.model.infrastructure.security.data.collections.ValidKeysRegistry
-import com.example.truckercore.model.modules._contracts.Mapper
+import com.example.truckercore.model.modules._contracts.mapper.Mapper
 import com.example.truckercore.model.modules.company.data.Company
 import com.example.truckercore.model.modules.company.data.CompanyDto
 import com.example.truckercore.model.modules.company.data.CompanyID

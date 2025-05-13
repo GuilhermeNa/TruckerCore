@@ -1,5 +1,6 @@
 package com.example.truckercore.model.modules._contracts
 
+import com.example.truckercore.model.errors.exceptions.DomainException
 import java.util.UUID
 
 interface ID {
@@ -7,7 +8,7 @@ interface ID {
     val value: String
 
     fun validate() {
-        if (value.isBlank()) throw InvalidIdException(
+        if (value.isBlank()) throw DomainException.InvalidForCreation(
             "Invalid ${this.javaClass.simpleName}: ID must be a non-blank string."
         )
     }
@@ -17,6 +18,3 @@ interface ID {
     }
 
 }
-
-class InvalidIdException(message: String? = null, cause: Throwable? = null) :
-    Exception(message, cause)

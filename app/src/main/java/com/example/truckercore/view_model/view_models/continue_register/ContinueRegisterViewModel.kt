@@ -1,14 +1,11 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.truckercore._utils.classes.Email
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.modules.user.service.UserService
-import com.example.truckercore.model.shared.utils.expressions.mapAppResult
-import com.example.truckercore._utils.classes.Email
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 /**
  * ViewModel responsible for managing the state of the Continue Register screen.
@@ -46,32 +43,32 @@ class ContinueRegisterViewModel(
      * Updates the UI state accordingly.
      */
     private fun loadUiData() {
-        viewModelScope.launch {
-            val email = authService.getUserEmail().mapAppResult(
-                onSuccess = { it },
-                onError = {
-                    _uiState.value = ContinueRegisterUiState.Error
-                    return@launch
-                }
-            )
+        /* viewModelScope.launch {
+             val email = authService.getUserEmail().mapAppResponse(
+                 onSuccess = { it },
+                 onError = {
+                     _uiState.value = ContinueRegisterUiState.Error
+                     return@launch
+                 }
+             )
 
-            val verifiedStatus = getVerifiedStatus()
-            val userExists = getNameStatus(email)
+             val verifiedStatus = getVerifiedStatus()
+             val userExists = getNameStatus(email)
 
-            _uiState.value = ContinueRegisterUiState.Success(
-                ContinueRegisterUiModel(
-                    email = email.value,
-                    verified = verifiedStatus,
-                    userExists = userExists
-                )
-            )
-        }
+             _uiState.value = ContinueRegisterUiState.Success(
+                 ContinueRegisterUiModel(
+                     email = email.value,
+                     verified = verifiedStatus,
+                     userExists = userExists
+                 )
+             )
+         }*/
     }
 
     private fun getVerifiedStatus() = authService.isEmailVerified().isSuccess
 
     private suspend fun getNameStatus(email: Email) = false
-       /* userService.hasUserWithEmail(email).isSuccess*/
+    /* userService.hasUserWithEmail(email).isSuccess*/
 
     /**
      * Clears the currently signed-in user.

@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.integration.instruction_exe
 
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 
 /**
  * Interface defining the repository responsible for managing and executing instructions.

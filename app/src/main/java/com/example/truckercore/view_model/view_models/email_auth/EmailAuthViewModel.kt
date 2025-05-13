@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.email_auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
@@ -67,14 +67,14 @@ class EmailAuthViewModel(
 
             val credential = EmailCredential(Email.from(email), Password.from(password))
             val result = authenticateUserWithEmail(credential)
-            val newEffect = result.mapAppResult(
+/*            val newEffect = result.mapAppResult(
                 onSuccess = {
                     markEmailStepComplete()
                     EmailAuthFragEffect.UserCreated
                 },
                 onError = { e -> EmailAuthFragEffect.UserCreationFailed(e) }
             )
-            setEffect(newEffect)
+            setEffect(newEffect)*/
         }
     }
 

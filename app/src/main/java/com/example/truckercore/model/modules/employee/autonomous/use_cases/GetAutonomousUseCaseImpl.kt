@@ -5,24 +5,31 @@ import com.example.truckercore.model.modules.employee.autonomous.data.Autonomous
 import com.example.truckercore.model.modules.employee.autonomous.data.AutonomousDto
 import com.example.truckercore.model.modules.employee.autonomous.mapper.AutonomousMapper
 import com.example.truckercore.model.modules.employee.autonomous.specification.AutonomousSpec
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.mapAppResponse
+import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
+import com.example.truckercore.model.shared.utils.sealeds.handleErrorResponse
 
 class GetAutonomousUseCaseImpl(
     private val dataRepository: DataRepository
 ) : GetAutonomousUseCase {
 
-    override suspend fun invoke(spec: AutonomousSpec): AppResponse<Autonomous> {
-        return dataRepository.findOneBy(spec).mapAppResponse(
-            onSuccess = { getSuccessResponse(it) },
-            onEmpty = { AppResponse.Empty },
-            onError = { AppResponse.Error(it) }
-        )
-    }
+    override suspend fun invoke(spec: AutonomousSpec): AppResponse<Autonomous> =
+        try {
+            dataRepository.findOneBy(spec)
+                .getOrReturn { unsuccessful -> return unsuccessful }
+                .let { getSuccessResponse(it) }
+
+        } catch (e: Exception) {
+            e.handleErrorResponse("$UNKNOWN_ERR_MSG $spec")
+        }
 
     private fun getSuccessResponse(dto: AutonomousDto): AppResponse.Success<Autonomous> {
         val autonomous = AutonomousMapper.toEntity(dto)
         return AppResponse.Success(autonomous)
+    }
+
+    companion object {
+        private const val UNKNOWN_ERR_MSG = "Unknown error occurred while fetching an Autonomous."
     }
 
 }

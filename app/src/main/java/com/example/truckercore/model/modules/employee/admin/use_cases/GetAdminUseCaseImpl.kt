@@ -1,29 +1,35 @@
 package com.example.truckercore.model.modules.employee.admin.use_cases
 
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepository
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
-import com.example.truckercore.model.modules.employee.admin.AdminMapper
 import com.example.truckercore.model.modules.employee.admin.data.Admin
 import com.example.truckercore.model.modules.employee.admin.data.AdminDto
+import com.example.truckercore.model.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.model.modules.employee.admin.specification.AdminSpec
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.mapAppResponse
+import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
+import com.example.truckercore.model.shared.utils.sealeds.handleErrorResponse
 
 class GetAdminUseCaseImpl(
     private val dataRepository: DataRepository
 ) : GetAdminUseCase {
 
-    override suspend fun invoke(spec: AdminSpec): AppResponse<Admin> {
-        return dataRepository.findOneBy(spec).mapAppResponse(
-            onSuccess = { getSuccessResponse(it) },
-            onEmpty = { AppResponse.Empty },
-            onError = { AppResponse.Error(it) }
-        )
-    }
+    override suspend fun invoke(spec: AdminSpec): AppResponse<Admin> =
+        try {
+            dataRepository.findOneBy(spec)
+                .getOrReturn { unsuccessful -> return unsuccessful }
+                .let { dto -> getSuccessResponse(dto) }
+
+        } catch (e: Exception) {
+            e.handleErrorResponse("$UNKNOWN_ERR_MSG $spec")
+        }
 
     private fun getSuccessResponse(dto: AdminDto): AppResponse.Success<Admin> {
         val admin = AdminMapper.toEntity(dto)
         return AppResponse.Success(admin)
+    }
+
+    companion object {
+        private const val UNKNOWN_ERR_MSG = "Unknown error occurred while fetching an Admin."
     }
 
 }

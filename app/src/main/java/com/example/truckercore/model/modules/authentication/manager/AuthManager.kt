@@ -1,12 +1,13 @@
 package com.example.truckercore.model.modules.authentication.manager
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.EmailCredential
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.classes.AppResponse
 
 /**
  * Interface representing the authentication service.
@@ -37,12 +38,14 @@ interface AuthManager {
 
     suspend fun updateUserName(userProfile: UserCategory): AppResult<Unit>
 
-    fun getUserEmail(): AppResult<Email>
+    fun getUserEmail(): AppResponse<Email>
 
     fun isEmailVerified(): AppResult<Boolean>
 
     fun signOut()
 
     suspend fun signIn(credential: EmailCredential): AppResult<Unit>
+
+    suspend fun resetPassword(email: Email): AppResult<Unit>
 
 }

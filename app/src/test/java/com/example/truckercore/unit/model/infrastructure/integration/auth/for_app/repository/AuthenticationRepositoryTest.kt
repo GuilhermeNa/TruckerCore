@@ -5,7 +5,7 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_api.Aut
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.AuthenticationAppErrorFactory
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthErrorFactory
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.NewEmailErrCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.SendEmailVerificationErrCode
@@ -13,7 +13,7 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_app.app
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.UpdateUserProfileErrCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepositoryImpl
-import com.example.truckercore.model.shared.utils.sealeds.AppResult
+import com.example.truckercore._utils.classes.AppResult
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -44,7 +44,7 @@ class AuthenticationRepositoryTest : KoinTest {
             modules(
                 module {
                     single<AuthSource> { mockk(relaxed = true) }
-                    single { AuthenticationAppErrorFactory() }
+                    single { AuthErrorFactory() }
                     single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
                 }
             )

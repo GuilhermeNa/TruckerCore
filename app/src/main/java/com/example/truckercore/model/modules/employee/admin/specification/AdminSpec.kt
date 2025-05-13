@@ -15,6 +15,7 @@ data class AdminSpec(
 ): Specification<AdminDto> {
 
     override val dtoClass = AdminDto::class.java
+
     override val collection = Collection.ADMIN
 
     override fun getFilters(): List<Filter> {

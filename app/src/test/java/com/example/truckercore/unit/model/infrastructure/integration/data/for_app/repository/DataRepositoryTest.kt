@@ -12,7 +12,7 @@ import com.example.truckercore.model.infrastructure.integration.data.for_app.rep
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepositoryImpl
 import com.example.truckercore.model.shared.utils.expressions.extractData
 import com.example.truckercore.model.shared.utils.expressions.extractError
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.channels.awaitClose

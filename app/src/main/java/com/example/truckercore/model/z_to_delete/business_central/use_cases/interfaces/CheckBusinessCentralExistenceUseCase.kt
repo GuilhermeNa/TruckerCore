@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules._previous_sample.business_central.
 
 import com.example.truckercore.model.modules.business_central.entity.BusinessCentral
 import com.example.truckercore.model.modules.user.entity.User
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.flow.Flow
 
 */

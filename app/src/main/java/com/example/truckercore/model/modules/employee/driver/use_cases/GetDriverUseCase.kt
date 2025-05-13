@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.employee.driver.use_cases
 
 import com.example.truckercore.model.modules.employee.driver.data.Driver
 import com.example.truckercore.model.modules.employee.driver.specification.DriverSpec
-import com.example.truckercore.model.shared.utils.sealeds.AppResponse
+import com.example.truckercore._utils.classes.AppResponse
 
 interface GetDriverUseCase {
 

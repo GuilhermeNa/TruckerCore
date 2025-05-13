@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.user_name
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.requirements.UserCategory
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.shared.utils.expressions.isNameFormat
@@ -78,7 +78,7 @@ class UserNameViewModel(
 
             // Attempt to update the username and set the appropriate effect based on the result
             val result = updateUserName(userProfile)
-            val newEffect = result.mapAppResult(
+         /*   val newEffect = result.mapAppResult(
                 onSuccess = {
                     markNameStepComplete()
                     setState(UserNameFragState.Initial)
@@ -88,7 +88,7 @@ class UserNameViewModel(
                     UserNameFragEffect.ProfileUpdateFailed(e)
                 }
             )
-            setEffect(newEffect)
+            setEffect(newEffect)*/
         }
     }
 
