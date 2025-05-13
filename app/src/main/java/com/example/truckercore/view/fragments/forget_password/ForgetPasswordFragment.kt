@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentForgetPasswordBinding
+import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordEvent
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -54,6 +55,12 @@ class ForgetPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
     }
+
+    fun setButtonClickListener() {
+        viewModel.onEvent(ForgetPasswordEvent.UiEvent.SendButtonClicked)
+    }
+
+
 
     //----------------------------------------------------------------------------------------------
     // OnDestroyView

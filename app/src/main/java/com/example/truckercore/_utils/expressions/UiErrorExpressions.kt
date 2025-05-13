@@ -1,7 +1,13 @@
 package com.example.truckercore._utils.expressions
 
-import com.example.truckercore.model.errors.exceptions.AppException
+import com.example.truckercore.view.ui_error.UiError
 
-fun AppException.getUiError() {
-
+inline fun UiError.handleUiError(
+    onRecoverable: (UiError.Recoverable) -> Unit,
+    onCritical: (UiError.Critical) -> Unit
+) {
+    when (this) {
+        is UiError.Critical -> onCritical(this)
+        is UiError.Recoverable -> onRecoverable(this)
+    }
 }

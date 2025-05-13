@@ -1,10 +1,9 @@
 package com.example.truckercore.model.errors.exceptions
 
-sealed class InfraException(message: String?, cause: Throwable? = null) :
+sealed class InfraException(message: String? = null, cause: Throwable? = null) :
     AppException(message, cause) {
 
-    class NetworkUnavailable :
-        InfraException(message = "Network is unavailable")
+    class NetworkUnavailable : InfraException()
 
     class WriterError(message: String? = null, cause: Throwable? = null) :
         InfraException(message, cause)

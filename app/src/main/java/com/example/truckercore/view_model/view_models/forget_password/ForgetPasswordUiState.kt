@@ -15,7 +15,7 @@ data class ForgetPasswordUiState(
         data object AwaitingInput : Status()
         data object Success : Status()
         data object SendingEmail : Status()
-        data class Error(val uiError: UiError) : Status()
+        data class Error(val uiError: UiError.Critical) : Status()
     }
 
     fun getEmail(): Email {
