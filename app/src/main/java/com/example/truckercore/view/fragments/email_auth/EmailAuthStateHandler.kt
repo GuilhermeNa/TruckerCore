@@ -5,7 +5,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Lifecycle
 import com.example.truckercore.R
 import com.example.truckercore._utils.expressions.onLifecycleState
-import com.example.truckercore._utils.expressions.showSnackBarRed
+import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.configs.enums.Tag
 import com.example.truckercore.view.dialogs.LoadingDialog
@@ -128,7 +128,7 @@ private class EmailAuthTransitionHandler(
             Tag.ERROR.name,
             "EmailAuthTransitionHandler failed on loading transition: $transitionCode."
         )
-        layout.showSnackBarRed("Falha ao carregar transição.")
+        fragment.showRedSnackBar("Falha ao carregar transição.")
     }
 
     /**

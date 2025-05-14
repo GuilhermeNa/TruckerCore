@@ -1,7 +1,6 @@
 package com.example.truckercore.model.modules.authentication.manager
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
@@ -34,13 +33,11 @@ interface AuthManager {
      *  Checks if there is a currently logged-in user.
      * @see ThereIsLoggedUserUseCase.invoke
      */
-    fun thereIsLoggedUser(): AppResult<Boolean>
-
-    suspend fun updateUserName(userProfile: UserCategory): AppResult<Unit>
+    fun thereIsLoggedUser(): Boolean
 
     fun getUserEmail(): AppResponse<Email>
 
-    fun isEmailVerified(): AppResult<Boolean>
+    fun isEmailVerified(): Boolean
 
     fun signOut()
 

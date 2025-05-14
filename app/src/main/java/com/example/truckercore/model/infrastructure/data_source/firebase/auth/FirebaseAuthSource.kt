@@ -4,12 +4,11 @@ import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
 import com.example.truckercore._utils.expressions.awaitSuccessOrThrow
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
+import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 import com.example.truckercore.model.shared.utils.expressions.cancelJob
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -19,12 +18,12 @@ import kotlin.coroutines.resume
 
 class FirebaseAuthSource(
     private val auth: FirebaseAuth,
-    errorMapper: FirebaseAuthErrorMapper
+    errorMapper: AuthSourceErrorMapper
 ) : AuthSource(errorMapper) {
 
     override suspend fun createUserWithEmail(email: Email, password: Password) {
         val task = auth.createUserWithEmailAndPassword(email.value, password.value)
-        task.awaitSuccessOrThrow(authError = { errorMapper.creatingUserWithEmail(it) })
+        task.awaitSuccessOrThrow { errorMapper.creatingUserWithEmail(it) }
     }
 
     override suspend fun sendEmailVerification() {
@@ -32,17 +31,9 @@ class FirebaseAuthSource(
         task.awaitSuccessOrThrow { errorMapper.sendingEmailVerification(it) }
     }
 
-    override suspend fun updateUserProfile(profile: UserCategory) {
-        val updateProfileReq = userProfileChangeRequest {
-            displayName = profile.fullName.value
-        }
-        val task = getLoggedUser().updateProfile(updateProfileReq)
-        task.awaitSuccessOrThrow { errorMapper.updatingProfile(it) }
-    }
-
     override suspend fun signInWithEmail(email: Email, password: Password) {
         val task = auth.signInWithEmailAndPassword(email.value, password.value)
-        task.awaitSuccessOrThrow(authError = { errorMapper.signingInWithEmail(it) })
+        task.awaitSuccessOrThrow { errorMapper.signingInWithEmail(it) }
     }
 
     override suspend fun observeEmailValidation() {

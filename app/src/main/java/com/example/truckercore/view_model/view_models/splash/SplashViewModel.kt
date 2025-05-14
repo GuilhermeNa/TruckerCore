@@ -2,12 +2,12 @@ package com.example.truckercore.view_model.view_models.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore._utils.expressions.mapAppResult
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.infrastructure.security.service.PermissionService
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -90,13 +90,8 @@ class SplashViewModel(
         return preferences.isFirstAccess()
     }
 
-    private fun activeSession(): Boolean {
-        val result = authService.thereIsLoggedUser()
-        return result.mapAppResult(
-            onSuccess = { it },
-            onError = { throw it }
-        )
-    }
+    private fun activeSession() = authService.thereIsLoggedUser()
+
 
     private fun setState(newState: SplashUiState) {
         _uiState.value = newState

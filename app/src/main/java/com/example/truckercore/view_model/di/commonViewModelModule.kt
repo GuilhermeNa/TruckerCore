@@ -6,6 +6,7 @@ import com.example.truckercore.model.infrastructure.integration.preferences.Pref
 import com.example.truckercore.view_model.use_cases.CounterUseCase
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
+import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordViewModel
 import com.example.truckercore.view_model.view_models.login.LoginViewModel
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
@@ -27,6 +28,8 @@ val commonViewModelModule = module {
     viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get(), get()) }
     viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get()) }
+    viewModel<ForgetPasswordViewModel> { ForgetPasswordViewModel(get()) }
+
     factory { CounterUseCase() }
 
 }

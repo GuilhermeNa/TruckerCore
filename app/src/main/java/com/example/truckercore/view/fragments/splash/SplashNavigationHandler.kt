@@ -44,8 +44,8 @@ class SplashNavigationHandler {
         is SplashEffect.Error -> {
             NotificationActivity.newInstance(
                 context = context,
-                errorHeader = effect.error.name,
-                errorBody = effect.error.userMessage
+                title = effect.error.name,
+                message = effect.error.userMessage
             )
         }
 

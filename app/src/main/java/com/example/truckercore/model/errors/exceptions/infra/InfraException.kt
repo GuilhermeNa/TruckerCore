@@ -1,4 +1,6 @@
-package com.example.truckercore.model.errors.exceptions
+package com.example.truckercore.model.errors.exceptions.infra
+
+import com.example.truckercore.model.errors.exceptions.AppException
 
 sealed class InfraException(message: String? = null, cause: Throwable? = null) :
     AppException(message, cause) {
@@ -11,7 +13,10 @@ sealed class InfraException(message: String? = null, cause: Throwable? = null) :
     class DatabaseError(message: String? = null, cause: Throwable? = null) :
         InfraException(message, cause)
 
-    class AuthError(message: String? = null, cause: Throwable? = null) :
-        InfraException(message, cause)
+    class AuthError(
+        val code: AuthErrorCode,
+        message: String? = null,
+        cause: Throwable? = null
+    ) : InfraException(message, cause)
 
 }

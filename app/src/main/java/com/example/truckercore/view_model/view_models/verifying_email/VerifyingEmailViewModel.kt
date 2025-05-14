@@ -3,9 +3,9 @@ package com.example.truckercore.view_model.view_models.verifying_email
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._utils.expressions.extractData
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.model.shared.utils.sealeds.extractData
 import com.example.truckercore.view_model.use_cases.CounterUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow

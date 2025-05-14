@@ -8,6 +8,10 @@ sealed class UiError {
         data class Custom(override val message: String) : Recoverable(message)
     }
 
-    data class Critical(val title: String, val message: String) : UiError()
+    data class Critical(
+        val title: String = "Ocorreu um erro",
+        val message: String = "Algo deu errado. Por favor, tente novamente.\n" +
+                "Se o problema persistir, entre em contato com o suporte."
+    ) : UiError()
 
 }

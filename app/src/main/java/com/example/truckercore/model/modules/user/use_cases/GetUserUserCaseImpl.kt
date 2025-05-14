@@ -1,14 +1,14 @@
 package com.example.truckercore.model.modules.user.use_cases
 
 import com.example.truckercore.model.errors.exceptions.AppException
-import com.example.truckercore.model.errors.exceptions.TechnicalException
+import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepository
 import com.example.truckercore.model.modules.user.data.User
 import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore.model.modules.user.specification.UserSpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
+import com.example.truckercore._utils.expressions.getOrReturn
 
 class GetUserUserCaseImpl(
     private val dataRepository: DataRepository

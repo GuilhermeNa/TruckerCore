@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthErrorMapper
+import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.NetworkException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
@@ -22,12 +22,12 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class FirebaseAuthUserInputUserInputErrorMappingDtoToEntityTest {
+class FirebaseAuthUserInputUserInputCriticalRecoverableErrorMappingDtoToEntityTest {
 
     //----------------------------------------------------------------------------------------------
     // Setup
     //----------------------------------------------------------------------------------------------
-    private val mapper = FirebaseAuthErrorMapper()
+    private val mapper = FirebaseAuthSourceErrorMapper()
 
     @BeforeEach
     fun setup() {

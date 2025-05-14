@@ -3,6 +3,7 @@ package com.example.truckercore.model.infrastructure.data_source.firebase.auth
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
+import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidUserException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.NetworkException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
@@ -17,21 +18,21 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
-class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
+object FirebaseAuthSourceErrorMapper : AuthSourceErrorMapper {
 
     override fun creatingUserWithEmail(e: Throwable): AuthSourceException {
         return when (e) {
             is TaskFailureException -> TaskFailureException(
-                message = "Failed to create user with email. Please try again later."
+                message = "The email creation task failed."
             )
 
             is FirebaseAuthWeakPasswordException -> WeakPasswordException(
-                message = "The password provided is too weak. Please choose a stronger password.",
+                message = "The password provided is too weak.",
                 cause = e
             )
 
             is FirebaseAuthInvalidCredentialsException -> InvalidCredentialsException(
-                "The email address or password is invalid. Please check your credentials.",
+                "The email address or password is invalid.",
                 cause = e
             )
 
@@ -41,7 +42,7 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
             )
 
             is FirebaseNetworkException -> NetworkException(
-                message = "A network error occurred while creating user with email.",
+                message = "Network error during user creation with email.",
                 cause = e
             )
 
@@ -55,11 +56,11 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
     override fun sendingEmailVerification(e: Throwable): AuthSourceException {
         return when (e) {
             is SessionInactiveException -> SessionInactiveException(
-                message = "The user profile is invalid or incomplete for sending email verification."
+                message = "No active session was found."
             )
 
             is TaskFailureException -> TaskFailureException(
-                message = "Failed to send email verification. Please try again."
+                message = "The Task failed while sending email verification."
             )
 
             else -> UnknownException(
@@ -77,11 +78,11 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
             )
 
             is SessionInactiveException -> SessionInactiveException(
-                message = "The data provided for updating the profile is invalid."
+                message = "No active session was found."
             )
 
             is TaskFailureException -> TaskFailureException(
-                message = "Failed to update user profile. Please try again."
+                message = "Failed to update user profile."
             )
 
             else -> UnknownException(
@@ -93,14 +94,13 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
 
     override fun signingInWithEmail(e: Throwable): AuthSourceException {
         return when (e) {
-            is FirebaseAuthInvalidUserException -> InvalidCredentialsException(
-                message = "The user account was not found or may have been deleted. " +
-                        "Please verify your credentials.",
+            is FirebaseAuthInvalidUserException -> InvalidUserException(
+                message = "The user account was not found or may have been deleted.",
                 cause = e
             )
 
             is FirebaseAuthInvalidCredentialsException -> InvalidCredentialsException(
-                message = "Invalid email or password. Please try again.",
+                message = "Invalid email or password.",
                 cause = e
             )
 
@@ -110,12 +110,12 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
             )
 
             is FirebaseTooManyRequestsException -> TooManyRequestsException(
-                message = "Too many login attempts. Please wait and try again later.",
+                message = "Too many login attempts.",
                 cause = e
             )
 
             is TaskFailureException -> TaskFailureException(
-                message = "Sign-in with email failed. Please try again."
+                message = "Sign-in with email failed."
             )
 
             else -> UnknownException(
@@ -127,8 +127,17 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
 
     override fun sendPasswordResetEmail(e: Throwable): AuthSourceException {
         return when (e) {
+            is FirebaseNetworkException -> NetworkException(
+                message = "A network error occurred while attempting to reset password.",
+                cause = e
+            )
+
+            is FirebaseAuthInvalidCredentialsException -> InvalidCredentialsException(
+                message = "The email address is badly formatted"
+            )
+
             is TaskFailureException -> TaskFailureException(
-                message = "Failed to send reset email. Please try again."
+                message = "Failed to send reset email."
             )
 
             else -> UnknownException(
@@ -137,6 +146,5 @@ class FirebaseAuthErrorMapper : AuthSourceErrorMapper {
             )
         }
     }
-
 
 }

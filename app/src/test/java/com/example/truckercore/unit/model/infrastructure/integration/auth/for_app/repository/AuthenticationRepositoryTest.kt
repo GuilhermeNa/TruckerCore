@@ -5,7 +5,7 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_api.Aut
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthErrorFactory
+import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthRepositoryErrorFactory
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.NewEmailErrCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.SendEmailVerificationErrCode
@@ -44,7 +44,7 @@ class AuthenticationRepositoryTest : KoinTest {
             modules(
                 module {
                     single<AuthSource> { mockk(relaxed = true) }
-                    single { AuthErrorFactory() }
+                    single { AuthRepositoryErrorFactory() }
                     single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
                 }
             )

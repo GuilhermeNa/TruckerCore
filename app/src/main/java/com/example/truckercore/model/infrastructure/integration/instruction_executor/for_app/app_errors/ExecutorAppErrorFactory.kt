@@ -1,8 +1,8 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors
 
 import com.example.truckercore.model.errors.ErrorFactory
-import com.example.truckercore.model.errors.exceptions.InfraException
-import com.example.truckercore.model.errors.exceptions.TechnicalException
+import com.example.truckercore.model.errors.exceptions.infra.InfraException
+import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InvalidInstructionException
 import com.example.truckercore._utils.classes.AppResult

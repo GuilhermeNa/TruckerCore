@@ -65,7 +65,7 @@ class ContinueRegisterViewModel(
          }*/
     }
 
-    private fun getVerifiedStatus() = authService.isEmailVerified().isSuccess
+    private fun getVerifiedStatus() = authService.isEmailVerified()
 
     private suspend fun getNameStatus(email: Email) = false
     /* userService.hasUserWithEmail(email).isSuccess*/

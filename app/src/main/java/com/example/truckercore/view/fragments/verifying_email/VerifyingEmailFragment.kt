@@ -118,8 +118,8 @@ class VerifyingEmailFragment : Fragment() {
                         onFatalError = { name, message ->
                             val intent = NotificationActivity.newInstance(
                                 context = requireContext(),
-                                errorHeader = name,
-                                errorBody = message
+                                title = name,
+                                message = message
                             )
                             startActivity(intent)
                             requireActivity().finish()

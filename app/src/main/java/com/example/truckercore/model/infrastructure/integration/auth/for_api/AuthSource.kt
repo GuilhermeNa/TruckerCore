@@ -3,7 +3,6 @@ package com.example.truckercore.model.infrastructure.integration.auth.for_api
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 
 /**
  * Abstract interface for handling authentication operations with a remote backend (e.g., Firebase).
@@ -53,24 +52,6 @@ abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
      * @throws AuthSourceException If the user is not logged in or sending fails.
      */
     abstract suspend fun sendEmailVerification()
-
-    /**
-     * Updates the profile information (e.g., display name) of the currently authenticated user.
-     *
-     * ### Example:
-     * ```
-     * try {
-     *     authSource.updateUserProfile(profile)
-     *     // operation succeed
-     * } catch (e: Exception) {
-     *     // handle operation error
-     * }
-     * ```
-     *
-     * @param profile The new user profile to apply.
-     * @throws AuthSourceException If the user is not logged in or the update fails.
-     */
-    abstract suspend fun updateUserProfile(profile: UserCategory)
 
     /**
      * Signs in an existing user with the given email and password.

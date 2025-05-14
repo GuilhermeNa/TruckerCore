@@ -2,6 +2,7 @@ package com.example.truckercore._utils.expressions
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Navigates to the specified destination using a NavController.
@@ -45,6 +47,25 @@ fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(context, message, length).show()
 }
 
+fun Fragment.showGreenSnackBar(text: String) {
+    Snackbar.make(this.requireView(), text, Snackbar.LENGTH_SHORT)
+        .setBackgroundTint(Color.parseColor("#3ED745"))
+        .setTextColor(Color.parseColor("#FFFFFF"))
+        .show()
+}
+
+fun Fragment.showRedSnackBar(text: String) {
+    Snackbar.make(this.requireView(), text, Snackbar.LENGTH_SHORT)
+        .setBackgroundTint(Color.parseColor("#FF0000"))
+        .setTextColor(Color.parseColor("#FFFFFF"))
+        .show()
+}
+
+fun Fragment.popBackStack() {
+    val navController = Navigation.findNavController(this.requireView())
+    navController.popBackStack()
+}
+
 inline fun Fragment.onLifecycleState(
     resumed: () -> Unit = {},
     anyOther: () -> Unit = {}
@@ -67,5 +88,5 @@ fun Fragment.hideKeyboard() {
 
 fun Fragment.hideKeyboardAndClearFocus(vararg view: View) {
     this.hideKeyboard()
-    view.forEach {v -> if(v.hasFocus()) v.clearFocus() }
+    view.forEach { v -> if (v.hasFocus()) v.clearFocus() }
 }

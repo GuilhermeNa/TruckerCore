@@ -1,6 +1,9 @@
 package com.example.truckercore.model.modules.aggregation.session.use_cases
 
-import com.example.truckercore.model.errors.exceptions.TechnicalException
+import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._utils.expressions.getOrNull
+import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.modules.aggregation.session.data.Session
 import com.example.truckercore.model.modules.authentication.data.UID
@@ -19,9 +22,6 @@ import com.example.truckercore.model.modules.user.data.User
 import com.example.truckercore.model.modules.user.data.UserID
 import com.example.truckercore.model.modules.user.specification.UserSpec
 import com.example.truckercore.model.modules.user.use_cases.GetUserUserCase
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.getOrNull
-import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

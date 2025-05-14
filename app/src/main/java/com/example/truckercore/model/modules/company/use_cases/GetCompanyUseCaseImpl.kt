@@ -6,8 +6,8 @@ import com.example.truckercore.model.modules.company.data.CompanyDto
 import com.example.truckercore.model.modules.company.mapper.CompanyMapper
 import com.example.truckercore.model.modules.company.specification.CompanySpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
-import com.example.truckercore.model.shared.utils.sealeds.handleErrorResponse
+import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.handleErrorResponse
 
 class GetCompanyUseCaseImpl(
     private val dataRepository: DataRepository

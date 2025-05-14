@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.employee.autonomous.factory
 
-import com.example.truckercore.model.errors.exceptions.DomainException
+import com.example.truckercore.model.errors.exceptions.domain.DomainException
 import com.example.truckercore.model.modules._contracts.ID
 import com.example.truckercore.model.modules.employee._shared.EmployeeForm
 import com.example.truckercore.model.modules.employee.autonomous.data.AutID

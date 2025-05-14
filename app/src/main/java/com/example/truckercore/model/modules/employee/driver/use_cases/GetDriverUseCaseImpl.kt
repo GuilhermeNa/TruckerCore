@@ -6,8 +6,8 @@ import com.example.truckercore.model.modules.employee.driver.data.DriverDto
 import com.example.truckercore.model.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.model.modules.employee.driver.specification.DriverSpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
-import com.example.truckercore.model.shared.utils.sealeds.handleErrorResponse
+import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.handleErrorResponse
 
 class GetDriverUseCaseImpl(
     private val dataRepository: DataRepository

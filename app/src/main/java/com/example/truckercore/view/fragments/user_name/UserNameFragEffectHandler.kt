@@ -29,8 +29,8 @@ class UserNameFragEffectHandler(private val fragment: UserNameFragment) {
             onFatalError = { name, message ->
                 val intent = NotificationActivity.newInstance(
                     context = fragment.requireContext(),
-                    errorHeader = name,
-                    errorBody = message
+                    title = name,
+                    message = message
                 )
                 fragment.requireActivity().startActivity(intent)
                 fragment.requireActivity().finish()

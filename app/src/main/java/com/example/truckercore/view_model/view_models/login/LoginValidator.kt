@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.login
 
 import com.example.truckercore._utils.classes.FieldState
-import com.example.truckercore._utils.classes.InputValidation
+import com.example.truckercore._utils.classes.Input
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 
 object LoginValidator {
@@ -12,14 +12,14 @@ object LoginValidator {
         if (password.length !in 6..12) {
             return FieldState(
                 text = password,
-                validation = InputValidation.ERROR,
+                validation = Input.ERROR,
                 stateMessage = "A senha deve conter entre 6 e 12 caracteres"
             )
         }
 
         return FieldState(
             text = password,
-            validation = InputValidation.VALID
+            validation = Input.VALID
         )
     }
 
@@ -29,22 +29,22 @@ object LoginValidator {
         if (!email.isEmailFormat()) {
             return FieldState(
                 text = email,
-                validation = InputValidation.ERROR,
+                validation = Input.ERROR,
                 stateMessage = "Formato de email inválido"
             )
         }
 
         return FieldState(
             text = email,
-            validation = InputValidation.VALID
+            validation = Input.VALID
         )
     }
 
     fun getButtonState(
-        passwordValidation: InputValidation,
-        emailValidation: InputValidation
-    ): Boolean = passwordValidation == InputValidation.VALID
-            && emailValidation == InputValidation.VALID
+        passwordValidation: Input,
+        emailValidation: Input
+    ): Boolean = passwordValidation == Input.VALID
+            && emailValidation == Input.VALID
 
 
 }

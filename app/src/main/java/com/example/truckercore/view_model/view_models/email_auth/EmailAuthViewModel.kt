@@ -6,7 +6,6 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_app.dat
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
-import com.example.truckercore.model.shared.utils.expressions.mapAppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError

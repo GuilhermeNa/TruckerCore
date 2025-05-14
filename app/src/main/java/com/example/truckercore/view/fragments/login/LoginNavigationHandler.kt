@@ -25,8 +25,8 @@ class LoginNavigationHandler: KoinComponent{
 
         is LoginEffect.Error -> NotificationActivity.newInstance(
             context = context,
-            errorHeader = effect.error.name,
-            errorBody = effect.error.userMessage
+            title = effect.error.name,
+            message = effect.error.userMessage
         )
 
         else -> throw IllegalArgumentException("Unsupported navigation effect: ${effect::class.qualifiedName}")

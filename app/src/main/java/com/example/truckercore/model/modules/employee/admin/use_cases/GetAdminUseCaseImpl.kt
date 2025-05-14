@@ -6,8 +6,8 @@ import com.example.truckercore.model.modules.employee.admin.data.AdminDto
 import com.example.truckercore.model.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.model.modules.employee.admin.specification.AdminSpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore.model.shared.utils.sealeds.getOrReturn
-import com.example.truckercore.model.shared.utils.sealeds.handleErrorResponse
+import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.handleErrorResponse
 
 class GetAdminUseCaseImpl(
     private val dataRepository: DataRepository

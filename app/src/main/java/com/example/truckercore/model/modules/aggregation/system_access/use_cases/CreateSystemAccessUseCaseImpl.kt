@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.aggregation.system_access.use_cases
 
 import com.example.truckercore.model.errors.exceptions.AppException
-import com.example.truckercore.model.errors.exceptions.TechnicalException
+import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.instructions.Put
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository.InstructionExecutorRepository

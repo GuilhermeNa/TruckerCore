@@ -6,7 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-class SignInErrCodeTest {
+class SignInUseCaseErrCodeTest {
 
     @ParameterizedTest(name = "Code: {0}")
     @MethodSource("provideErrorCodes")

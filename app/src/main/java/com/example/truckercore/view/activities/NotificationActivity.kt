@@ -60,13 +60,13 @@ class NotificationActivity : AppCompatActivity() {
         fun newInstance(
             context: Context,
             gifRes: Int? = null,
-            errorHeader: String,
-            errorBody: String
+            title: String,
+            message: String
         ): Intent =
             Intent(context, NotificationActivity::class.java).apply {
                 putExtra(GIF_RESOURCE, gifRes)
-                putExtra(HEADER_MESSAGE, errorHeader)
-                putExtra(BODY_MESSAGE, errorBody)
+                putExtra(HEADER_MESSAGE, title)
+                putExtra(BODY_MESSAGE, message)
             }
     }
 

@@ -4,7 +4,6 @@ import com.example.truckercore._utils.classes.AppResponse
 import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.UserCategory
 
 /**
  * Repository interface that defines authentication-related operations used by the application layer.
@@ -51,23 +50,6 @@ interface AuthenticationRepository {
      * ```
      */
     suspend fun sendEmailVerification(): AppResult<Unit>
-
-    /**
-     * Updates the profile of the currently authenticated user.
-     *
-     * @param profile The new [UserCategory] containing updated display name, photo, etc.
-     * @return [AppResult] wrapping `Unit` on success or an [AuthenticationAppException] on failure.
-     *
-     * ### Example:
-     * ```
-     * val result = authRepository.updateUserProfile(profile)
-     * when (result) {
-     *     is AppResult.Success -> { /* Profile updated successfully */ }
-     *     is AppResult.Failure -> { /* Handle result.error */ }
-     * }
-     * ```
-     */
-    suspend fun updateUserProfile(profile: UserCategory): AppResult<Unit>
 
     /**
      * Signs in the user with the provided email and password.
@@ -118,11 +100,11 @@ interface AuthenticationRepository {
      */
     fun signOut()
 
-    fun thereIsLoggedUser(): AppResult<Boolean>
+    fun thereIsLoggedUser(): Boolean
 
     fun getUserEmail(): AppResponse<Email>
 
-    fun isEmailVerified(): AppResult<Boolean>
+    fun isEmailVerified(): Boolean
 
     suspend fun sendPasswordResetEmail(email: Email): AppResult<Unit>
 

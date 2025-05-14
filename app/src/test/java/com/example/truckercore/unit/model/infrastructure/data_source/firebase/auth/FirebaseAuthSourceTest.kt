@@ -3,7 +3,7 @@ package com.example.truckercore.unit.model.infrastructure.data_source.firebase.a
 import com.example.truckercore._test_data_provider.TestCredentialProvider
 import com.example.truckercore._test_data_provider.TestFirebaseAuthProvider
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthErrorMapper
+import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSource
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
@@ -57,7 +57,7 @@ class FirebaseAuthSourceTest : KoinTest {
             modules(
                 module {
                     single<FirebaseAuth> { mockk(relaxed = true) }
-                    single { FirebaseAuthErrorMapper() }
+                    single { FirebaseAuthSourceErrorMapper() }
                     single { FirebaseAuthSource(get(), get()) }
                 }
             )

@@ -13,11 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/frag_continue_register_layout_button"
-        android:layout_margin="16dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             style="@style/textEmphasis"
@@ -73,7 +73,7 @@
             android:layout_marginTop="8dp"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
-            android:text="Nome informado"
+            android:text="@string/name_not_informed"
             app:drawableLeftCompat="@drawable/level_list_status_icons" />
     </LinearLayout>
 
@@ -83,9 +83,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frag_continue_register_layout_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_continue_register_layout_text">
+        >
 
         <Button
             android:id="@+id/frag_continue_register_finish_register_button"

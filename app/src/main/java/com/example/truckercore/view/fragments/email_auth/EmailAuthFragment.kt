@@ -25,6 +25,7 @@ import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragSt
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserInputValidationResult
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -89,9 +90,9 @@ class EmailAuthFragment : CloseAppFragment() {
      * Handles successful account creation by updating the UI and navigating to the next screen.
      */
     private fun handleSuccessState() {
-/*        stateHandler.setSuccessState()
-        val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToUserNameFragment()
-        navigateTo(direction)*/
+        /*        stateHandler.setSuccessState()
+                val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToUserNameFragment()
+                navigateTo(direction)*/
     }
 
     /**
@@ -134,8 +135,8 @@ class EmailAuthFragment : CloseAppFragment() {
                 onFatalError = { name, message ->
                     val intent = NotificationActivity.newInstance(
                         context = requireContext(),
-                        errorHeader = name,
-                        errorBody = message
+                        title = name,
+                        message = message
                     )
                     startActivity(intent)
                     requireActivity().finish()
@@ -173,8 +174,8 @@ class EmailAuthFragment : CloseAppFragment() {
      * Navigates to the login screen for users who already have an account.
      */
     private fun handleAlreadyHaveAccountButtonClicked() {
-   /*     val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
-        navigateTo(direction)*/
+        /*     val direction = EmailAuthFragmentDirections.actionEmailAuthFragmentToLoginFragment()
+             navigateTo(direction)*/
     }
 
     //----------------------------------------------------------------------------------------------
@@ -185,7 +186,7 @@ class EmailAuthFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        _stateHandler = EmailAuthStateHandler(this,binding)
+        _stateHandler = EmailAuthStateHandler(this, binding)
         return binding.root
     }
 

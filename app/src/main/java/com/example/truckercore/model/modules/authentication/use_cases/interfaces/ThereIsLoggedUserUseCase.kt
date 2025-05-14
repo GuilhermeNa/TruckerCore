@@ -12,6 +12,6 @@ interface ThereIsLoggedUserUseCase {
      *
      * @see [AuthenticationRepository.thereIsLoggedUser]
      */
-    operator fun invoke(): AppResult<Boolean>
+    operator fun invoke(): Boolean
 
 }

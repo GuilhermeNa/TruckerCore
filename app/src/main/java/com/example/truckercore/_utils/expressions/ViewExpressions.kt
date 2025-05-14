@@ -1,18 +1,18 @@
 package com.example.truckercore._utils.expressions
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.load
 import com.example.truckercore.R
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 
 /**
  * Extension function for `View` that animates the view sliding in from the bottom.
@@ -62,20 +62,6 @@ fun List<View>.clearFocusIfNeeded() {
     this.forEach { v ->
         if (v.hasFocus()) v.clearFocus()
     }
-}
-
-fun View.showSnackBarGreen(text: String) {
-    Snackbar.make(this, text, Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(Color.parseColor("#004908FF"))
-        .setTextColor(Color.parseColor("#FFFFFF"))
-        .show()
-}
-
-fun View.showSnackBarRed(text: String) {
-    Snackbar.make(this, text, Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(Color.parseColor("#FF0000"))
-        .setTextColor(Color.parseColor("#FFFFFF"))
-        .show()
 }
 
 fun ImageView.loadGif(url: Any? = null, context: Context) {

@@ -2,7 +2,7 @@ package com.example.truckercore._utils.classes
 
 data class FieldState(
     val text: String = "",
-    val validation: InputValidation = InputValidation.NEUTRAL,
+    val validation: Input = Input.NEUTRAL,
     val stateMessage: String = ""
 ) {
 
@@ -12,14 +12,14 @@ data class FieldState(
         onNeutral: () -> Unit = {}
     ) {
         when (validation) {
-            InputValidation.NEUTRAL -> onNeutral()
-            InputValidation.ERROR -> onError(stateMessage)
-            InputValidation.VALID -> onValid(stateMessage)
+            Input.NEUTRAL -> onNeutral()
+            Input.ERROR -> onError(stateMessage)
+            Input.VALID -> onValid(stateMessage)
         }
     }
 
 }
 
-enum class InputValidation {
+enum class Input {
     NEUTRAL, ERROR, VALID;
 }
