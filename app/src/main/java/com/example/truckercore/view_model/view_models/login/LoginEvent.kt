@@ -1,6 +1,5 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore._utils.classes.AppResult
 
 sealed class LoginEvent {

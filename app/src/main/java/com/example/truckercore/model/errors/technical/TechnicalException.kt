@@ -1,6 +1,6 @@
-package com.example.truckercore.model.errors.exceptions.technical
+package com.example.truckercore.model.errors.technical
 
-import com.example.truckercore.model.errors.exceptions.AppException
+import com.example.truckercore.model.errors.AppException
 
 sealed class TechnicalException(message: String? = null, cause: Throwable? = null) :
     AppException(message, cause) {

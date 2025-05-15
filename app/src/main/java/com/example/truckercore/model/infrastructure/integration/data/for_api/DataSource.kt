@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_api
 
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -23,8 +23,8 @@ import kotlinx.coroutines.flow.Flow
  * @see DataSourceSpecificationInterpreter
  * @see DataSourceErrorMapper
  */
-abstract class DataSource<R1, R2>(
-    protected val interpreter: DataSourceSpecificationInterpreter<R1, R2>,
+abstract class DataSource(
+    protected val interpreter: DataSourceSpecificationInterpreter,
     protected val errorMapper: DataSourceErrorMapper
 ) {
 

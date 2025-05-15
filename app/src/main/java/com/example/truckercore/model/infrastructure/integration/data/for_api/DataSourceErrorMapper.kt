@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_api
 
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.DataSourceException
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 
 /**
  * Maps backend-specific exceptions into standardized [DataSourceException]s recognized by the application.

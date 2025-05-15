@@ -1,26 +1,27 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.data
 
 import com.example.truckercore._utils.expressions.safeEmit
-import com.example.truckercore._utils.expressions.safeInterpretOrEmit
 import com.example.truckercore._utils.expressions.toDto
 import com.example.truckercore._utils.expressions.toList
+import com.example.truckercore.model.infrastructure.data_source.firebase.data.api_specification.ApiDocumentReferenceSpecification
+import com.example.truckercore.model.infrastructure.data_source.firebase.data.api_specification.ApiQuerySpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_api.data.contracts.ApiSpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.Query
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDataSource(
-    errorMapper: FirestoreErrorMapper,
-    interpreter: FirestoreSpecInterpreter
-) : DataSource<DocumentReference, Query>(interpreter, errorMapper) {
+    errorMapper: FirestoreDataSourceErrorMapper,
+    interpreter: FirestoreSpecificationInterpreter
+) : DataSource(interpreter, errorMapper) {
 
     override suspend fun <T : BaseDto> findById(spec: Specification<T>): T? = try {
-        val docReference = interpreter.interpretIdSearch(spec)
+        val docReference = getApiSpecification<ApiDocumentReferenceSpecification>(spec).document
         val docSnap = docReference.get().await()
         docSnap.toDto(spec.dtoClass)
     } catch (e: Exception) {
@@ -28,7 +29,7 @@ class FirestoreDataSource(
     }
 
     override suspend fun <T : BaseDto> findAllBy(spec: Specification<T>): List<T>? = try {
-        val query = interpreter.interpretFilterSearch(spec)
+        val query = getApiSpecification<ApiQuerySpecification>(spec).query
         val querySnap = query.get().await()
         querySnap.toList(spec.dtoClass)
     } catch (e: Exception) {
@@ -36,12 +37,14 @@ class FirestoreDataSource(
     }
 
     override fun <T : BaseDto> flowOneBy(spec: Specification<T>): Flow<T?> = callbackFlow {
-        val docReference = safeInterpretOrEmit(
-            block = { interpreter.interpretIdSearch(spec) },
-            error = { errorMapper(it, spec) }
-        ) ?: return@callbackFlow
+        val document = try {
+            getApiSpecification<ApiDocumentReferenceSpecification>(spec).document
+        } catch (e: Exception) {
+            this.close(errorMapper(e, spec))
+            return@callbackFlow
+        }
 
-        val listener = docReference.addSnapshotListener { docSnap, error ->
+        val listener = document.addSnapshotListener { docSnap, error ->
             if (error != null) {
                 this.close(errorMapper(error, spec))
                 return@addSnapshotListener
@@ -56,10 +59,12 @@ class FirestoreDataSource(
     }
 
     override fun <T : BaseDto> flowAllBy(spec: Specification<T>): Flow<List<T>?> = callbackFlow {
-        val query = safeInterpretOrEmit(
-            block = { interpreter.interpretFilterSearch(spec) },
-            error = { errorMapper(it, spec) }
-        ) ?: return@callbackFlow
+        val query = try {
+            getApiSpecification<ApiQuerySpecification>(spec).query
+        } catch (e: Exception) {
+            this.close(errorMapper(e, spec))
+            return@callbackFlow
+        }
 
         val listener = query.addSnapshotListener { querySnap, error ->
             if (error != null) {
@@ -73,6 +78,18 @@ class FirestoreDataSource(
         }
 
         awaitClose { listener.remove() }
+    }
+
+    private inline fun <reified T : ApiSpecification> getApiSpecification(spec: Specification<*>): T {
+        val result = spec.entityId?.let {
+            interpreter.byId(it, spec.collection)
+        } ?: interpreter.byFilter(spec.getFilter(), spec.collection)
+
+        if (result !is T) throw SpecificationException(
+            "Expected ${T::class.simpleName}, but got ${result::class.simpleName}"
+        )
+
+        return result
     }
 
 }

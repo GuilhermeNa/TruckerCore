@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules._contracts.mapper
 
-import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
+import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore.model.modules._contracts.BaseEntity
 

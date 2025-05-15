@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.repository
 
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore._utils.classes.AppResponse
 import kotlinx.coroutines.flow.Flow

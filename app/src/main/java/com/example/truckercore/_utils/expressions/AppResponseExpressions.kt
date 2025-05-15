@@ -1,8 +1,8 @@
 package com.example.truckercore._utils.expressions
 
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore.model.errors.exceptions.AppException
-import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
+import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.technical.TechnicalException
 
 fun <T> AppResponse<T>.getOrNull(): T? {
     return when (this) {

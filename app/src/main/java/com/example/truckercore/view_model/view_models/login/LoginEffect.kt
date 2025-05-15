@@ -1,7 +1,5 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore.model.errors.ErrorCode
-
 sealed class LoginEffect {
 
     data object ClearFocusAndHideKeyboard : LoginEffect()

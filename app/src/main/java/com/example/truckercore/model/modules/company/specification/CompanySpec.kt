@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.company.specification
 
 import com.example.truckercore.model.configs.collections.Collection
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Filter
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 import com.example.truckercore.model.modules.company.data.CompanyDto
 import com.example.truckercore.model.modules.company.data.CompanyID
 
@@ -14,7 +14,7 @@ class CompanySpec(
 
     override val collection = Collection.COMPANY
 
-    override fun getFilters(): List<Filter> {
+    override fun getFilter(): List<Filter> {
         TODO()
     }
 

@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions
 
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 
 /**
  * Exception thrown when there is an error related to interpreting the [Specification].

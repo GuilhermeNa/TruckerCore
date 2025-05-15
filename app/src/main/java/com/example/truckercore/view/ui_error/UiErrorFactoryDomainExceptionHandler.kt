@@ -1,6 +1,6 @@
 package com.example.truckercore.view.ui_error
 
-import com.example.truckercore.model.errors.exceptions.domain.DomainException
+import com.example.truckercore.model.errors.domain.DomainException
 
 object UiErrorFactoryDomainExceptionHandler {
 

@@ -1,6 +1,6 @@
 package com.example.truckercore._utils.classes
 
-import com.example.truckercore.model.errors.exceptions.AppException
+import com.example.truckercore.model.errors.AppException
 
 sealed class AppResult<out T> {
 

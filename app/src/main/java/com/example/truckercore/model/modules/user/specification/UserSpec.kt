@@ -2,9 +2,9 @@ package com.example.truckercore.model.modules.user.specification
 
 import com.example.truckercore.model.configs.collections.Collection
 import com.example.truckercore.model.configs.enums.Field
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.filters.WhereEqual
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Filter
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereEqual
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.company.data.CompanyID
@@ -22,7 +22,7 @@ data class UserSpec(
 
     override val collection = Collection.USER
 
-    override fun getFilters(): List<Filter> {
+    override fun getFilter(): List<Filter> {
         val ml = mutableListOf<Filter>()
 
         uid?.let { ml.add(WhereEqual(Field.UID, it.value)) }

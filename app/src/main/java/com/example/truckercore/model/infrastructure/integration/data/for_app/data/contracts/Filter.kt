@@ -1,4 +1,4 @@
-package com.example.truckercore.model.infrastructure.integration.data.for_app.specification
+package com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts
 
 import com.example.truckercore.model.configs.enums.Field
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSourceSpecificationInterpreter

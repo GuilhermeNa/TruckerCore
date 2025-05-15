@@ -8,7 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.model.errors.AppExceptionOld
 import com.example.truckercore.model.shared.utils.expressions.handleOnUi
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore._utils.expressions.clearFocusIfNeeded

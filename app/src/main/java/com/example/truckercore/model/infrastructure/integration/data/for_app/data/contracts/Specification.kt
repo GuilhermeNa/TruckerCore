@@ -1,9 +1,11 @@
-package com.example.truckercore.model.infrastructure.integration.data.for_app.specification
+package com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts
 
 import com.example.truckercore.model.configs.collections.Collection
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions.SpecificationException
-import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.configs.collections.CollectionResolver
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.collections.SearchFilter
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
+import com.example.truckercore.model.modules._contracts.ID
 
 /**
  * Defines the structure for querying data in a type-safe and declarative way.
@@ -33,37 +35,17 @@ import com.example.truckercore.model.infrastructure.integration.data.for_app.con
  * @property entityId The optional identifier for unique entity lookups.
  * @property id Returns the [entityId] value or throws [SpecificationException] if it's null.
  * @property collection The target collection where the entity/entities are stored.
- * @property collectionName Convenience property to get the name of the collection.
+ * @property collection Convenience property to get the name of the collection.
  * @see Filter
  * @see SpecificationException
  */
 interface Specification<T : BaseDto> {
 
-    /**
-     * The class of the Data Transfer Object this specification expects.
-     */
-    val dtoClass: Class<T>
-
-    /**
-     * Optional unique identifier of the entity to retrieve.
-     * Used in single-entity queries.
-     */
     val entityId: ID?
 
-    /**
-     * Non-null version of [entityId], throws [SpecificationException] if null.
-     * Useful for forcing the presence of an ID in ID-based lookups.
-     */
-    val id: String
-        get() = entityId?.value ?: throw SpecificationException(
-            "The specification does not contain a valid entity ID: $this"
-        )
+    val dtoClass: Class<T>
 
-    /**
-     * The collection where the data is located.
-     */
-    val collection: Collection
-    val collectionName: String get() = collection.name
+    val collection: Collection get() = CollectionResolver(dtoClass)
 
     /**
      * Builds a dynamic list of [Filter] to apply in multi-entity queries.
@@ -84,6 +66,12 @@ interface Specification<T : BaseDto> {
      * @see Filter
      * @return A list of filters to apply to the query. Returns an empty list if no filtering is required.
      */
-    fun getFilters(): List<Filter>
+    fun getFilter(): SearchFilter
+
+    fun validate() {
+        if (entityId == null && getFilter().isEmpty) throw SpecificationException(
+            "The specification should contain at least one search parameter."
+        )
+    }
 
 }

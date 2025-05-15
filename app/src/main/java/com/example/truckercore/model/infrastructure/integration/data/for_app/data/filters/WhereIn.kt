@@ -1,7 +1,7 @@
-package com.example.truckercore.model.infrastructure.integration.data.for_app.specification.filters
+package com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters
 
 import com.example.truckercore.model.configs.enums.Field
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Filter
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Filter
 
 /**
  * Represents a filter that checks if a field's value is contained within a given list.

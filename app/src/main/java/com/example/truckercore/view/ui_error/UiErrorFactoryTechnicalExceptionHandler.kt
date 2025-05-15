@@ -1,6 +1,6 @@
 package com.example.truckercore.view.ui_error
 
-import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
+import com.example.truckercore.model.errors.technical.TechnicalException
 
 object UiErrorFactoryTechnicalExceptionHandler {
 

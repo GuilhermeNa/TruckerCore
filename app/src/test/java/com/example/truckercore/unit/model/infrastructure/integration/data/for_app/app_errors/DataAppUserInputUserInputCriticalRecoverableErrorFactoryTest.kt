@@ -4,7 +4,7 @@ import com.example.truckercore.model.infrastructure.integration.data.for_api.exc
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.NetworkException
-import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.DataAppErrorFactory
+import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepositoryErrorFactory
 import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.error_codes.DataFindErrCode
 import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.error_codes.DataFlowErrCode
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class DataAppUserInputUserInputCriticalRecoverableErrorFactoryTest {
 
-    private val factory = DataAppErrorFactory()
+    private val factory = DataRepositoryErrorFactory()
 
     //----------------------------------------------------------------------------------------------
     // Testing handleFindError

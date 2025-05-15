@@ -29,4 +29,13 @@ object CollectionResolver {
         }
     }
 
+    operator fun <T: BaseDto> invoke(clazz: Class<T>): Collection {
+        return when(clazz) {
+            CompanyDto::class.java -> Collection.COMPANY
+            UserDto::class.java -> Collection.USER
+            AdminDto::class.java -> Collection.ADMIN
+            else -> throw CollectionException("Unsupported DTO type: ${clazz::class.simpleName}")
+        }
+    }
+
 }

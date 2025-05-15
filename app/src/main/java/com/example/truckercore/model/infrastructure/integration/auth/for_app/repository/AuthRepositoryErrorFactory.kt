@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.repository
 
-import com.example.truckercore.model.errors.exceptions.infra.AuthErrorCode
-import com.example.truckercore.model.errors.exceptions.infra.InfraException
+import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
+import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidUserException

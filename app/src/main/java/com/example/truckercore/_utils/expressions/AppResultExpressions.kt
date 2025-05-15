@@ -3,7 +3,7 @@ package com.example.truckercore._utils.expressions
 import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.AppResult.Error
 import com.example.truckercore._utils.classes.AppResult.Success
-import com.example.truckercore.model.errors.exceptions.AppException
+import com.example.truckercore.model.errors.AppException
 
 inline fun <T, R> AppResult<T>.mapAppResult(
     onSuccess: (data: T) -> R,

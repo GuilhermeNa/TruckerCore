@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.aggregation.session.use_cases
 import com.example.truckercore._utils.classes.AppResponse
 import com.example.truckercore._utils.expressions.getOrNull
 import com.example.truckercore._utils.expressions.getOrReturn
-import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
+import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.modules.aggregation.session.data.Session
 import com.example.truckercore.model.modules.authentication.data.UID

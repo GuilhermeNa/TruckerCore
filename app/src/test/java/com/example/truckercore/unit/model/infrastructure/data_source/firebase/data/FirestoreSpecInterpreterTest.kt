@@ -3,7 +3,7 @@ package com.example.truckercore.unit.model.infrastructure.data_source.firebase.d
 import com.example.truckercore._test_data_provider.TestFirestoreDataProvider
 import com.example.truckercore._test_data_provider.TestSpecificationProvider
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreSpecInterpreter
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions.SpecificationException
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import com.google.firebase.firestore.FirebaseFirestore
 import io.mockk.every
 import io.mockk.mockk

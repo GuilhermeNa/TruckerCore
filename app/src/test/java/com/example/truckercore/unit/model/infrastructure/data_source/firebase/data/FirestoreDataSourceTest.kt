@@ -7,14 +7,14 @@ import com.example.truckercore._test_data_provider.fake_objects.FakeID
 import com.example.truckercore._test_utils.mockStaticTask
 import com.example.truckercore._test_utils.mockStaticTextUtil
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreDataSource
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreErrorMapper
+import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreDataSourceErrorMapper
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreSpecInterpreter
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InterpreterException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.NetworkException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.UnknownException
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions.SpecificationException
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -57,7 +57,7 @@ class FirestoreDataSourceTest : KoinTest {
             modules(
                 module {
                     single<FirestoreSpecInterpreter> { mockk(relaxed = true) }
-                    single { FirestoreErrorMapper() }
+                    single { FirestoreDataSourceErrorMapper() }
                     single { FirestoreDataSource(get(), get()) }
                 }
             )

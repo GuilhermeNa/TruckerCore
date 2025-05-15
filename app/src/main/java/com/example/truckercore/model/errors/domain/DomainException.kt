@@ -1,6 +1,6 @@
-package com.example.truckercore.model.errors.exceptions.domain
+package com.example.truckercore.model.errors.domain
 
-import com.example.truckercore.model.errors.exceptions.AppException
+import com.example.truckercore.model.errors.AppException
 
 sealed class DomainException(message: String? = null, cause: Throwable? = null) :
     AppException(message, cause) {

@@ -1,7 +1,6 @@
 package com.example.truckercore.view_model.view_models.splash
 
 import com.example.truckercore.model.configs.flavor.contracts.Flavor
-import com.example.truckercore.model.errors.ErrorCode
 
 /**
  * Represents one-time effects emitted by the Splash screen's ViewModel.

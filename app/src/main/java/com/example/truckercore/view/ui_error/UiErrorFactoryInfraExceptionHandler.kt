@@ -1,7 +1,7 @@
 package com.example.truckercore.view.ui_error
 
-import com.example.truckercore.model.errors.exceptions.infra.AuthErrorCode
-import com.example.truckercore.model.errors.exceptions.infra.InfraException
+import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
+import com.example.truckercore.model.errors.infra.InfraException
 
 object UiErrorFactoryInfraExceptionHandler {
 

@@ -1,9 +1,9 @@
 package com.example.truckercore.view.ui_error
 
-import com.example.truckercore.model.errors.exceptions.AppException
-import com.example.truckercore.model.errors.exceptions.domain.DomainException
-import com.example.truckercore.model.errors.exceptions.infra.InfraException
-import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
+import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.model.errors.domain.DomainException
+import com.example.truckercore.model.errors.infra.InfraException
+import com.example.truckercore.model.errors.technical.TechnicalException
 
 object UiErrorFactory {
 

@@ -1,6 +1,6 @@
-package com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions
+package com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions
 
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 
 /**
  * Exception thrown when a [Specification] is invalid or cannot be interpreted correctly.

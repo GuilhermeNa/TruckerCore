@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules._contracts
 
-import com.example.truckercore.model.errors.exceptions.domain.DomainException
+import com.example.truckercore.model.errors.domain.DomainException
 import java.util.UUID
 
 interface ID {

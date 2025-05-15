@@ -3,7 +3,7 @@ package com.example.truckercore.model.configs.di
 import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreDataSource
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreErrorMapper
+import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreDataSourceErrorMapper
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreSpecInterpreter
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.FirestoreInstructionExecutor
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.FirestoreInstructionInterpreter
@@ -26,7 +26,7 @@ val firebaseModule = module {
     single { Firebase.storage }
 
     // Data Source
-    single<DataSourceErrorMapper> { FirestoreErrorMapper() }
+    single<DataSourceErrorMapper> { FirestoreDataSourceErrorMapper() }
     single<DataSourceSpecificationInterpreter<*, *>> { FirestoreSpecInterpreter(get()) }
     single<DataSource<*, *>> { FirestoreDataSource(get(), get()) }
 

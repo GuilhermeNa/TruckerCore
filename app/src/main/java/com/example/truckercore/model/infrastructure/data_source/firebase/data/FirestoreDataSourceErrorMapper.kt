@@ -7,11 +7,11 @@ import com.example.truckercore.model.infrastructure.integration.data.for_api.exc
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.NetworkException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.UnknownException
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.Specification
-import com.example.truckercore.model.infrastructure.integration.data.for_app.specification.exceptions.SpecificationException
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import com.google.firebase.FirebaseNetworkException
 
-class FirestoreErrorMapper : DataSourceErrorMapper {
+class FirestoreDataSourceErrorMapper : DataSourceErrorMapper {
 
     override operator fun invoke(e: Throwable, spec: Specification<*>): DataSourceException {
         val dataException = when (e) {

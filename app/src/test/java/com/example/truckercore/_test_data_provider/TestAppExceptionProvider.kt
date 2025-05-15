@@ -1,8 +1,5 @@
 package com.example.truckercore._test_data_provider
 
-import com.example.truckercore.model.errors.AppExceptionOld
-import com.example.truckercore.model.errors.ErrorCode
-
 class TestAppExceptionProvider {
 
     data class TestErrorCode(

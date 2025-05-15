@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.employee.admin.factory
 
-import com.example.truckercore.model.errors.exceptions.domain.DomainException
+import com.example.truckercore.model.errors.domain.DomainException
 import com.example.truckercore.model.modules.employee._shared.EmployeeForm
 import com.example.truckercore.model.modules.employee.admin.data.Admin
 import com.example.truckercore.model.modules.employee.admin.data.AdminID
