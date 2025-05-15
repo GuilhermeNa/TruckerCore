@@ -2,6 +2,8 @@ package com.example.truckercore.model.errors.exceptions.infra
 
 sealed class AuthErrorCode : InfraErrorCode {
 
+    data object SessionInactive: AuthErrorCode()
+
     sealed class CreateUserWithEmail : AuthErrorCode() {
         data object TaskFailure : CreateUserWithEmail()
         data object WeakPassword : CreateUserWithEmail()
@@ -11,7 +13,6 @@ sealed class AuthErrorCode : InfraErrorCode {
     }
 
     sealed class EmailVerification : AuthErrorCode() {
-        data object SessionInactive : EmailVerification()
         data object TaskFailure : EmailVerification()
         data object Unknown : EmailVerification()
     }

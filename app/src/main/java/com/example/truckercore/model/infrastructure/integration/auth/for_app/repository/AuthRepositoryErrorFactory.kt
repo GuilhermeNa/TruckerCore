@@ -1,6 +1,5 @@
 package com.example.truckercore.model.infrastructure.integration.auth.for_app.repository
 
-import com.example.truckercore._utils.classes.InvalidEmailException
 import com.example.truckercore.model.errors.exceptions.infra.AuthErrorCode
 import com.example.truckercore.model.errors.exceptions.infra.InfraException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.AuthSourceException
@@ -57,7 +56,7 @@ object AuthRepositoryErrorFactory {
         if (e is NetworkException) return InfraException.NetworkUnavailable()
 
         val infraErrCode = when (e) {
-            is SessionInactiveException -> AuthErrorCode.EmailVerification.SessionInactive
+            is SessionInactiveException -> AuthErrorCode.SessionInactive
             is TaskFailureException -> AuthErrorCode.EmailVerification.TaskFailure
             else -> AuthErrorCode.EmailVerification.Unknown
         }
@@ -103,15 +102,27 @@ object AuthRepositoryErrorFactory {
         )
     }
 
-    fun observingEmail(e: Exception): InfraException {
-        return if (e is NetworkException) InfraException.NetworkUnavailable()
-        else InfraException.AuthError(
-            code = AuthErrorCode.ObservingEmailValidation,
+    fun observingEmail(e: Throwable): InfraException {
+        if (e is NetworkException) return InfraException.NetworkUnavailable()
+
+        val errorCode = when (e) {
+            is SessionInactiveException -> AuthErrorCode.SessionInactive
+            else -> AuthErrorCode.ObservingEmailValidation
+        }
+
+        return InfraException.AuthError(
+            code = errorCode,
             message = "Authentication Repository received an error from AuthSource while observing email validation.",
             cause = e
         )
-
     }
+
+    fun accessLoggedUser(e: Throwable): InfraException =
+        InfraException.AuthError(
+            code = AuthErrorCode.SessionInactive,
+            message = "Authentication Repository received an error from AuthSource trying to access current user.",
+            cause = e
+        )
 
 }
 

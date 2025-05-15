@@ -66,6 +66,10 @@ class FirebaseAuthSource(
         return getLoggedUser().email
     }
 
+    override fun getUid(): String {
+        return getLoggedUser().uid
+    }
+
     override fun isEmailVerified(): Boolean {
         return getLoggedUser().isEmailVerified
     }

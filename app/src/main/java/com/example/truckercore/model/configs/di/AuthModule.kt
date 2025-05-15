@@ -4,6 +4,7 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_app.rep
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManagerImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.CreateUserWithEmailUseCaseImpl
+import com.example.truckercore.model.modules.authentication.use_cases.implementations.GetUidUseCaseImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.GetUserEmailUseCaseImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.IsEmailVerifiedUseCaseImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.ObserveEmailValidationUseCaseImpl
@@ -13,6 +14,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.implementa
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.SignOutUseCaseImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.ThereIsLoggedUserUseCaseImpl
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.CreateUserWithEmailUseCase
+import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUidUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUserEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.IsEmailVerifiedUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
@@ -26,7 +28,7 @@ import org.koin.dsl.module
 val authModule = module {
     single { AuthRepositoryErrorFactory }
     single<AuthManager> {
-        AuthManagerImpl(get(), get(), get(), get(), get(), get(), get(), get(), get())
+        AuthManagerImpl(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 
     single<SignInUseCase> { SignInUseCaseImpl(get()) }
@@ -38,4 +40,5 @@ val authModule = module {
     single<SignOutUseCase> { SignOutUseCaseImpl(get()) }
     single<CreateUserWithEmailUseCase> { CreateUserWithEmailUseCaseImpl(get()) }
     single<GetUserEmailUseCase> { GetUserEmailUseCaseImpl(get()) }
+    single<GetUidUseCase> { GetUidUseCaseImpl(get()) }
 }

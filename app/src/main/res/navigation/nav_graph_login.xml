@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/forgetPasswordFragment">
+    app:startDestination="@id/userNameFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -88,6 +88,9 @@
             app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/verifyingEmailFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_verifyingEmailFragment_to_userNameFragment"
+            app:destination="@id/userNameFragment" />
     </fragment>
     <fragment
         android:id="@+id/continueRegisterFragment"
@@ -110,6 +113,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popUpTo="@id/continueRegisterFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_continueRegisterFragment_to_userNameFragment"
+            app:destination="@id/userNameFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -143,6 +149,11 @@
         android:name="com.example.truckercore.view.fragments.forget_password.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
+    <fragment
+        android:id="@+id/userNameFragment"
+        android:name="com.example.truckercore.view.fragments.user_name.UserNameFragment"
+        android:label="fragment_user_name"
+        tools:layout="@layout/fragment_user_name" />
 
 
 </navigation>

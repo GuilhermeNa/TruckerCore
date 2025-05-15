@@ -7,6 +7,7 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore.model.modules.authentication.data.UID
 
 /**
  * Interface representing the authentication service.
@@ -37,12 +38,14 @@ interface AuthManager {
 
     fun getUserEmail(): AppResponse<Email>
 
-    fun isEmailVerified(): Boolean
+    fun isEmailVerified(): AppResult<Boolean>
 
     fun signOut()
 
     suspend fun signIn(credential: EmailCredential): AppResult<Unit>
 
     suspend fun resetPassword(email: Email): AppResult<Unit>
+
+    fun getUID(): AppResult<UID>
 
 }

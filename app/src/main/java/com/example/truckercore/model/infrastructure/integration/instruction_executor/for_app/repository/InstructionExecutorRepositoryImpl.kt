@@ -1,13 +1,12 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository
 
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.ApiInstructionExecutor
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.ExecutorAppErrorFactory
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.InstructionExecutorRepositoryErrorFactory
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore._utils.classes.AppResult
 
 class InstructionExecutorRepositoryImpl(
-    private val executor: ApiInstructionExecutor,
-    private val appErrorFactory: ExecutorAppErrorFactory
+    private val executor: ApiInstructionExecutor
 ) : InstructionExecutorRepository {
 
     companion object {
@@ -20,7 +19,7 @@ class InstructionExecutorRepositoryImpl(
             executor.invoke(deque)
             AppResult.Success(Unit)
         } catch (e: Exception) {
-            appErrorFactory("$ERROR_MESSAGE $deque", e)
+            InstructionExecutorRepositoryErrorFactory("$ERROR_MESSAGE $deque", e)
         }
     }
 

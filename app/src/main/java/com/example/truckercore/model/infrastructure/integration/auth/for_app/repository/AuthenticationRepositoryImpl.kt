@@ -5,21 +5,21 @@ import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
+import com.example.truckercore.model.modules.authentication.data.UID
 
 class AuthenticationRepositoryImpl(
     private val authSource: AuthSource,
     private val errorFactory: AuthRepositoryErrorFactory
 ) : AuthenticationRepository {
 
-    override suspend fun createUserWithEmail(
-        email: Email, password: Password
-    ): AppResult<Unit> = try {
-        authSource.createUserWithEmail(email, password)
-        AppResult.Success(Unit)
-    } catch (e: Exception) {
-        val appError = errorFactory.creatingUser(e)
-        AppResult.Error(appError)
-    }
+    override suspend fun createUserWithEmail(email: Email, password: Password): AppResult<Unit> =
+        try {
+            authSource.createUserWithEmail(email, password)
+            AppResult.Success(Unit)
+        } catch (e: Exception) {
+            val appError = errorFactory.creatingUser(e)
+            AppResult.Error(appError)
+        }
 
     override suspend fun sendEmailVerification(): AppResult<Unit> = try {
         authSource.sendEmailVerification()
@@ -53,14 +53,21 @@ class AuthenticationRepositoryImpl(
         return authSource.thereIsLoggedUser()
     }
 
-    override fun getUserEmail(): AppResponse<Email> {
-        return authSource.getUserEmail()?.let {
-            AppResponse.Success(Email.from(it))
-        } ?: AppResponse.Empty
+    override fun getUserEmail(): AppResponse<Email> = try {
+        authSource.getUserEmail()
+            ?.let { AppResponse.Success(Email.from(it)) }
+            ?: AppResponse.Empty
+    } catch (e: Exception) {
+        val appError = errorFactory.accessLoggedUser(e)
+        AppResponse.Error(appError)
     }
 
-    override fun isEmailVerified(): Boolean {
-        return authSource.isEmailVerified()
+    override fun isEmailVerified(): AppResult<Boolean> = try {
+        val result = authSource.isEmailVerified()
+        AppResult.Success(result)
+    } catch (e: Exception) {
+        val appError = errorFactory.accessLoggedUser(e)
+        AppResult.Error(appError)
     }
 
     override suspend fun sendPasswordResetEmail(email: Email): AppResult<Unit> = try {
@@ -68,6 +75,14 @@ class AuthenticationRepositoryImpl(
         AppResult.Success(Unit)
     } catch (e: Exception) {
         val appError = errorFactory.recoveringEmail(e)
+        AppResult.Error(appError)
+    }
+
+    override fun getUid(): AppResult<UID> = try {
+        val uid = authSource.getUid()
+        AppResult.Success(UID(uid))
+    } catch (e: Exception) {
+        val appError = errorFactory.accessLoggedUser(e)
         AppResult.Error(appError)
     }
 

@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.aggregation.system_access.use_cases
+package com.example.truckercore.model.modules.aggregation.system_access.use_cases.implementations
 
 import com.example.truckercore.model.errors.exceptions.AppException
 import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
@@ -12,6 +12,7 @@ import com.example.truckercore.model.modules.company.mapper.CompanyMapper
 import com.example.truckercore.model.modules.employee._shared.EmployeeMapper
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore._utils.classes.AppResult
+import com.example.truckercore.model.modules.aggregation.system_access.use_cases.interfaces.CreateNewSystemAccessUseCase
 
 class CreateSystemAccessUseCaseImpl(
     private val instructionExecutor: InstructionExecutorRepository

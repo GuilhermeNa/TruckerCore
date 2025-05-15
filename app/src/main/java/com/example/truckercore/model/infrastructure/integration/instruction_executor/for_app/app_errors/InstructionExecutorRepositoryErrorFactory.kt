@@ -1,6 +1,5 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors
 
-import com.example.truckercore.model.errors.ErrorFactory
 import com.example.truckercore.model.errors.exceptions.infra.InfraException
 import com.example.truckercore.model.errors.exceptions.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
@@ -19,7 +18,7 @@ import com.example.truckercore._utils.classes.AppResult
  * The resulting [ExecutorAppException] objects help maintain unified error handling across
  * UI, logging, and monitoring systems during instruction execution workflows.
  */
-class ExecutorAppErrorFactory : ErrorFactory {
+object InstructionExecutorRepositoryErrorFactory {
 
     /**
      * Handles exceptions thrown during instruction execution.

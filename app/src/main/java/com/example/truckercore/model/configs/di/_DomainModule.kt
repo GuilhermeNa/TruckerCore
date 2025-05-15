@@ -10,5 +10,7 @@ val domainModules = listOf(
     serviceModule,
     utilModule,
     userModule,
-    employeeModule
+    employeeModule,
+    systemAccessModule,
+    sessionModule
 )

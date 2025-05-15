@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.aggregation.system_access.use_cases
+package com.example.truckercore.model.modules.aggregation.system_access.use_cases.interfaces
 
 import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
 import com.example.truckercore._utils.classes.AppResult

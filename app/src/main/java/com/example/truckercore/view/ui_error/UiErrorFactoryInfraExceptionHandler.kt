@@ -19,7 +19,6 @@ object UiErrorFactoryInfraExceptionHandler {
         AuthErrorCode.CreateUserWithEmail.TaskFailure -> UiError.Critical()
         AuthErrorCode.CreateUserWithEmail.Unknown -> UiError.Critical()
 
-        AuthErrorCode.EmailVerification.SessionInactive -> UiError.Recoverable.Custom("Nenhum usuário está logado. Faça login novamente.")
         AuthErrorCode.EmailVerification.TaskFailure -> UiError.Critical()
         AuthErrorCode.EmailVerification.Unknown -> UiError.Critical()
 
@@ -34,6 +33,8 @@ object UiErrorFactoryInfraExceptionHandler {
         AuthErrorCode.SignInWithEmail.TaskFailure -> UiError.Critical()
         AuthErrorCode.SignInWithEmail.TooManyRequests -> UiError.Recoverable.Custom("Limite de tentativas excedido. Aguarde um momento e tente novamente.")
         AuthErrorCode.SignInWithEmail.Unknown -> UiError.Critical()
+
+        AuthErrorCode.SessionInactive -> UiError.Recoverable.SessionInactive
     }
 
     /* private fun handleDatabaseError(code: DatabaseErrorCode): UiError {

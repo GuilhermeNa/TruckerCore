@@ -4,6 +4,7 @@ sealed class UiError {
 
     sealed class Recoverable(open val message: String) : UiError() {
         data object Network : Recoverable("Falha de conexão.")
+        data object SessionInactive: Recoverable("Usuário desconectado. Faça o Login novamente.")
         data object Unauthorized : Recoverable("Usuário não autorizado.")
         data class Custom(override val message: String) : Recoverable(message)
     }

@@ -4,6 +4,7 @@ import com.example.truckercore._utils.classes.AppResponse
 import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.Password
+import com.example.truckercore.model.modules.authentication.data.UID
 
 /**
  * Repository interface that defines authentication-related operations used by the application layer.
@@ -104,8 +105,10 @@ interface AuthenticationRepository {
 
     fun getUserEmail(): AppResponse<Email>
 
-    fun isEmailVerified(): Boolean
+    fun isEmailVerified(): AppResult<Boolean>
 
     suspend fun sendPasswordResetEmail(email: Email): AppResult<Unit>
+
+    fun getUid(): AppResult<UID>
 
 }

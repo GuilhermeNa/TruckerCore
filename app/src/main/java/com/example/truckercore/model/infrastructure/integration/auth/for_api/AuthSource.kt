@@ -102,4 +102,6 @@ abstract class AuthSource(protected val errorMapper: AuthSourceErrorMapper) {
 
     abstract suspend fun sendPasswordResetEmail(email: Email)
 
+    abstract fun getUid(): String
+
 }

@@ -2,13 +2,17 @@ package com.example.truckercore.view_model.view_models.user_name
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore._utils.classes.AppResult
+import com.example.truckercore._utils.expressions.extractData
+import com.example.truckercore._utils.expressions.handleUiError
+import com.example.truckercore._utils.expressions.launch
+import com.example.truckercore._utils.expressions.mapAppResult
+import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
+import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
+import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.model.shared.utils.expressions.isNameFormat
-import com.example.truckercore._utils.classes.FullName
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.truckercore.view.ui_error.UiErrorFactory
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -27,172 +31,63 @@ import kotlinx.coroutines.launch
  */
 class UserNameViewModel(
     private val preferences: PreferencesRepository,
-    private val authService: AuthManager
+    private val accessManager: SystemAccessManager,
+    private val authManager: AuthManager,
+    private val flavorService: FlavorService
 ) : ViewModel() {
 
-    // State Flow for holding and exposing the current state of the fragment
-    private val _fragState: MutableStateFlow<UserNameFragState> =
-        MutableStateFlow(UserNameFragState.Initial)
-    val state get() = _fragState.asStateFlow()
+    private val stateManager = UserNameUiStateManager()
+    val state get() = stateManager.state.asStateFlow()
 
-    // Shared Flow for holding and exposing fragment events like button clicks, etc.
-    private val _fragEvent = MutableSharedFlow<UserNameFragEvent>()
-    val event get() = _fragEvent.asSharedFlow()  // Exposed immutable SharedFlow
-
-    // Shared Flow for handling UI effects such as navigation or UI updates
-    private val _effect = MutableSharedFlow<UserNameFragEffect>()
-    val effect get() = _effect.asSharedFlow()
-
-    // Instance of InputValidator to validate the user input for the profile update
-    private val inputValidator = InputValidator()
+    private val effectManager = UserNameEffectManager()
+    val effect get() = effectManager.effect.asSharedFlow()
 
     //----------------------------------------------------------------------------------------------
+    fun onEvent(event: UserNameEvent) {
+        when (event) {
+            // Ui Events
+            is UserNameEvent.UiEvent.TextChanged -> stateManager.updateName(event.text)
 
-    /**
-     * Attempts to validate the user input (username), and updates the state accordingly.
-     * If the input is valid, it proceeds to update the user's profile. If the input is invalid,
-     * it sets an error state for the fragment.
-     *
-     * @param name The input username from the user.
-     */
-    fun tryUpdateProfile(name: String) {
-        viewModelScope.launch {
-            setState(UserNameFragState.Updating)
-
-            delay(500) // Optional UI delay for user experience
-
-            // Validate the input username
-            val validationResult = inputValidator.invoke(name)
-            if (validationResult != null) {
-                // If the input is invalid, update the state with an error message
-                setState(UserNameFragState.UserInputError(validationResult))
-                return@launch
+            UserNameEvent.UiEvent.FabCLicked -> {
+                stateManager.setCreatingSystemAccessState()
+                createSystemAccess()
             }
 
-            delay(500) // Optional UI delay for user experience
+            //System Events
+            UserNameEvent.SystemEvent.SystemCreationSuccess -> stateManager.setSuccessState()
 
-            // Create a UserProfile object for updating
+            is UserNameEvent.SystemEvent.SystemCreationFailed -> {
 
-            // Attempt to update the username and set the appropriate effect based on the result
-         /*   val newEffect = result.mapAppResult(
-                onSuccess = {
-                    markNameStepComplete()
-                    setState(UserNameFragState.Initial)
-                    UserNameFragEffect.ProfileUpdated
-                },
-                onError = { e ->
-                    UserNameFragEffect.ProfileUpdateFailed(e)
-                }
-            )
-            setEffect(newEffect)*/
+                UiErrorFactory(event.e).handleUiError(
+                    onRecoverable = {
+                        stateManager.setAwaitingInputState()
+                        launch { effectManager.setRecoverableErrorEffect(it) }
+                    },
+                    onCritical = { stateManager.setCriticalErrorState(it) }
+                )
+            }
         }
     }
 
-/*
-    */
-/**
-     * Calls the authentication service to update the user's profile with the provided user profile.
-     *
-     * @param profile The user profile containing the new full name to be updated.
-     * @return The result of the update operation.
-     *//*
-
-    private suspend fun updateUserName(profile: UserCategory) = authService.updateUserName(profile)
-*/
-
-    /**
-     * Sets a new event for the fragment to trigger UI actions such as clicks.
-     * This communicates between the ViewModel and the Fragment to trigger specific actions.
-     *
-     * @param newEvent The event that needs to be emitted (e.g., FAB click).
-     */
-    fun setEvent(newEvent: UserNameFragEvent) {
+    private fun createSystemAccess() {
         viewModelScope.launch {
-            _fragEvent.emit(newEvent)
+            val email = authManager.getUserEmail().extractData()
+            val uid = authManager.getUID().extractData()
+            val role = flavorService.getRole()
+            val name = stateManager.getName()
+
+            val form = SystemAccessForm(uid, role, name, email)
+
+            val result = accessManager.createSystemAccess(form)
+            val newEvent = handleResult(result)
+            onEvent(newEvent)
         }
     }
 
-    /**
-     * Updates the state of the fragment. The UI will be updated based on the new state.
-     * This function is called to update the fragment's state in response to different events.
-     *
-     * @param newState The new state to be set for the fragment.
-     */
-    private fun setState(newState: UserNameFragState) {
-        _fragState.value = newState
-    }
-
-    /**
-     * Emits an effect to update the UI, trigger navigation, or show feedback based on the result.
-     *
-     * @param newEffect The effect to be emitted (e.g., profile update success).
-     */
-    private fun setEffect(newEffect: UserNameFragEffect) {
-        viewModelScope.launch {
-            _effect.emit(newEffect)
-        }
-    }
-
-    private fun markNameStepComplete() {
-        viewModelScope.launch {
-          /*  preferences.markStepAsCompleted(RegistrationStep.Name)*/
-        }
-    }
-
-}
-
-/**
- * A helper class to validate the user input for the username field.
- * The validation rules include:
- * - The username must not be empty.
- * - The username must contain at least two words.
- * - The length must be between 5 and 29 characters.
- * - Each word must contain only valid characters (letters only).
- */
-private class InputValidator {
-
-    /**
-     * Validates the input username string against predefined rules.
-     *
-     * - If the name is empty, returns an error message for empty input.
-     * - If the name consists of only one word, returns an error message requesting a full name.
-     * - If the length of the name is not within the acceptable range (5-29 characters), returns an error.
-     * - If any word in the name contains invalid characters (anything other than letters), returns an error.
-     *
-     * @param name The user input string to be validated.
-     * @return A validation error message or null if the input is valid.
-     */
-    operator fun invoke(name: String): String? {
-        val wordArr = name.split(" ")
-
-        return when {
-            name.isEmpty() -> NAME_EMPTY
-            wordArr.size == 1 -> COMPLETE_NAME_REQUIRED
-            !name.sizeIsValid() -> INVALID_SIZE
-            name.isAnyWordInWrongFormat() -> INVALID_NAME
-            else -> null
-        }
-    }
-
-    /**
-     * Checks if the length of the input string is valid (between 5 and 29 characters).
-     */
-    private fun String.sizeIsValid(): Boolean = length in 5..29
-
-    /**
-     * Checks if any word in the input string contains invalid characters.
-     * A valid word should only contain letters (A-Z, a-z).
-     */
-    private fun String.isAnyWordInWrongFormat(): Boolean {
-        val wordArr = this.split(" ")
-        return wordArr.any { !it.isNameFormat() }
-    }
-
-    companion object {
-        private const val NAME_EMPTY = "Field is required."
-        private const val INVALID_NAME = "Invalid format, only letters are allowed."
-        private const val INVALID_SIZE = "Name must be between 5 and 30 characters."
-        private const val COMPLETE_NAME_REQUIRED = "Please enter your full name."
-    }
+    private fun handleResult(result: AppResult<Unit>): UserNameEvent =
+        result.mapAppResult(
+            onSuccess = { UserNameEvent.SystemEvent.SystemCreationSuccess },
+            onError = { UserNameEvent.SystemEvent.SystemCreationFailed(it) }
+        )
 
 }

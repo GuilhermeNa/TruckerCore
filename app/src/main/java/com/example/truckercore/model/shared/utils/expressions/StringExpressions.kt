@@ -48,6 +48,12 @@ fun String.isEmailFormat(): Boolean {
     return this.matches(emailRegex)
 }
 
+fun String.isFullNameFormat(): Boolean {
+    val trimmed = this.trim()
+    val parts = trimmed.split("\\s+".toRegex())
+    return parts.size >= 2 && trimmed.matches("[\\p{L} ]+".toRegex())
+}
+
 /**
  * Extension function that removes all blank spaces from the string.
  * @receiver String The string from which spaces should be removed.
