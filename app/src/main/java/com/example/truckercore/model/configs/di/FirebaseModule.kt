@@ -1,10 +1,10 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSource
+import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreDataSource
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreDataSourceErrorMapper
-import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreSpecInterpreter
+import com.example.truckercore.model.infrastructure.data_source.firebase.data.FirestoreSpecificationInterpreter
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.FirestoreInstructionExecutor
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.FirestoreInstructionInterpreter
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
@@ -27,11 +27,11 @@ val firebaseModule = module {
 
     // Data Source
     single<DataSourceErrorMapper> { FirestoreDataSourceErrorMapper() }
-    single<DataSourceSpecificationInterpreter<*, *>> { FirestoreSpecInterpreter(get()) }
-    single<DataSource<*, *>> { FirestoreDataSource(get(), get()) }
+    single<DataSourceSpecificationInterpreter> { FirestoreSpecificationInterpreter(get()) }
+    single<DataSource> { FirestoreDataSource(get(), get()) }
 
     // Auth Source
-    single<AuthSourceErrorMapper> { FirebaseAuthSourceErrorMapper }
+    single<AuthSourceErrorMapper> { FirebaseAuthSourceErrorMapper() }
     single<AuthSource> { FirebaseAuthSource(get(), get()) }
 
     // Writer Source

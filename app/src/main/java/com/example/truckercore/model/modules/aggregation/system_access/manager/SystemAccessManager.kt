@@ -8,6 +8,6 @@ interface SystemAccessManager {
 
     suspend fun createSystemAccess(form: SystemAccessForm): AppResult<Unit>
 
-    suspend fun isAccessSystemComplete(uid: UID): AppResult<Boolean>
+    suspend fun isUserRegistered(uid: UID): AppResult<Boolean>
 
 }

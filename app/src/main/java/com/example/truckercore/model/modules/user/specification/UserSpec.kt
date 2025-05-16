@@ -1,8 +1,7 @@
 package com.example.truckercore.model.modules.user.specification
 
-import com.example.truckercore.model.configs.collections.Collection
 import com.example.truckercore.model.configs.enums.Field
-import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Filter
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.collections.SearchFilter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereEqual
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
@@ -20,16 +19,14 @@ data class UserSpec(
 
     override val dtoClass = UserDto::class.java
 
-    override val collection = Collection.USER
+    override fun getFilter(): SearchFilter {
+        val searchFilter = SearchFilter()
 
-    override fun getFilter(): List<Filter> {
-        val ml = mutableListOf<Filter>()
+        uid?.let { searchFilter.add(WhereEqual(Field.UID, it.value)) }
+        companyId?.let { searchFilter.add(WhereEqual(Field.COMPANY_ID, it.value)) }
+        category?.let { searchFilter.add(WhereEqual(Field.CATEGORY, it)) }
 
-        uid?.let { ml.add(WhereEqual(Field.UID, it.value)) }
-        companyId?.let { ml.add(WhereEqual(Field.COMPANY_ID, it.value)) }
-        category?.let { ml.add(WhereEqual(Field.CATEGORY, it)) }
-
-        return ml
+        return searchFilter
     }
 
 }

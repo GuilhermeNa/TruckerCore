@@ -6,6 +6,8 @@ import com.example.truckercore._utils.expressions.toList
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.api_specification.ApiDocumentReferenceSpecification
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.api_specification.ApiQuerySpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
+import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSourceErrorMapper
+import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSourceSpecificationInterpreter
 import com.example.truckercore.model.infrastructure.integration.data.for_api.data.contracts.ApiSpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
@@ -16,8 +18,8 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class FirestoreDataSource(
-    errorMapper: FirestoreDataSourceErrorMapper,
-    interpreter: FirestoreSpecificationInterpreter
+    errorMapper: DataSourceErrorMapper,
+    interpreter: DataSourceSpecificationInterpreter
 ) : DataSource(interpreter, errorMapper) {
 
     override suspend fun <T : BaseDto> findById(spec: Specification<T>): T? = try {
@@ -78,18 +80,6 @@ class FirestoreDataSource(
         }
 
         awaitClose { listener.remove() }
-    }
-
-    private inline fun <reified T : ApiSpecification> getApiSpecification(spec: Specification<*>): T {
-        val result = spec.entityId?.let {
-            interpreter.byId(it, spec.collection)
-        } ?: interpreter.byFilter(spec.getFilter(), spec.collection)
-
-        if (result !is T) throw SpecificationException(
-            "Expected ${T::class.simpleName}, but got ${result::class.simpleName}"
-        )
-
-        return result
     }
 
 }

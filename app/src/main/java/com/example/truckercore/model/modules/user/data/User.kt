@@ -17,13 +17,8 @@ data class User(
 ) : Entity, Authenticable, Authorizable {
 
     val uidValue get() = uid.value
-
     val idValue get() = id.value
-
     val profileRole get() = profile.role
-
     val companyIdValue get() = companyId.value
-
-
 
 }

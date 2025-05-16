@@ -154,6 +154,11 @@
         android:name="com.example.truckercore.view.fragments.user_name.UserNameFragment"
         android:label="fragment_user_name"
         tools:layout="@layout/fragment_user_name" />
+    <fragment
+        android:id="@+id/preparingAmbientFragment"
+        android:name="com.example.truckercore.view.fragments.preparing_ambient.PreparingAmbientFragment"
+        android:label="fragment_preparing_ambient"
+        tools:layout="@layout/fragment_preparing_ambient" />
 
 
 </navigation>

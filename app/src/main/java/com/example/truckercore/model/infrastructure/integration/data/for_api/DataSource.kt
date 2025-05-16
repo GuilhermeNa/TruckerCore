@@ -1,7 +1,9 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_api
 
+import com.example.truckercore.model.infrastructure.integration.data.for_api.data.contracts.ApiSpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -116,4 +118,15 @@ abstract class DataSource(
      */
     abstract fun <T : BaseDto> flowAllBy(spec: Specification<T>): Flow<List<T>?>
 
+    protected inline fun <reified T : ApiSpecification> getApiSpecification(spec: Specification<*>): T {
+        val result = spec.entityId?.let {
+            interpreter.byId(it, spec.collection)
+        } ?: interpreter.byFilter(spec.getFilter(), spec.collection)
+
+        if (result !is T) throw SpecificationException(
+            "Expected ${T::class.simpleName}, but got ${result::class.simpleName}"
+        )
+
+        return result
+    }
 }

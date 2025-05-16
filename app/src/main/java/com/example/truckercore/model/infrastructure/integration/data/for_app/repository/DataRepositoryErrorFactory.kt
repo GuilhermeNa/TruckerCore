@@ -1,11 +1,12 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.repository
 
-import com.example.truckercore._utils.classes.AppResponse
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.infra.InfraException
-import com.example.truckercore.model.errors.technical.TechnicalException
+import com.example.truckercore.model.errors.infra.error_code.DatabaseErrorCode
+import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InterpreterException
+import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
+import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.NetworkException
-import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.DataAppException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 
 /**
@@ -19,7 +20,7 @@ import com.example.truckercore.model.infrastructure.integration.data.for_app.dat
  * The returned error objects are used consistently throughout the application
  * to ensure unified error handling in UI and logging systems.
  */
-class DataRepositoryErrorFactory : ErrorFactory {
+class DataRepositoryErrorFactory {
 
     companion object {
         private const val FIND_ONE_ERR_MSG =
@@ -32,7 +33,6 @@ class DataRepositoryErrorFactory : ErrorFactory {
             "Failed to observe flow for all entities by specification."
     }
 
-
     fun findingOne(spec: Specification<*>, t: Throwable): AppException {
         return get(FIND_ONE_ERR_MSG, spec, t)
     }
@@ -40,6 +40,7 @@ class DataRepositoryErrorFactory : ErrorFactory {
     fun findingAll(spec: Specification<*>, t: Throwable): AppException {
         return get(FIND_ALL_ERR_MSG, spec, t)
     }
+
     fun flowingOne(spec: Specification<*>, t: Throwable): AppException {
         return get(FLOW_ONE_ERR_MSG, spec, t)
     }
@@ -49,13 +50,19 @@ class DataRepositoryErrorFactory : ErrorFactory {
     }
 
     private fun get(message: String, spec: Specification<*>, cause: Throwable): AppException {
-        val errMessage = "$message $spec"
-        val error = when (cause) {
-            is NetworkException -> InfraException.NetworkUnavailable()
-            is DataAppException -> InfraException.DatabaseError(message, cause)
-            else -> TechnicalException.Unknown(message, cause)
+        if (cause is NetworkException) return InfraException.NetworkUnavailable()
+
+        val errorCode = when (cause) {
+            is InterpreterException -> DatabaseErrorCode.ImplementationError
+            is InvalidDataException -> DatabaseErrorCode.ApiError
+            is MappingException -> DatabaseErrorCode.ImplementationError
+            else -> DatabaseErrorCode.Unknown
         }
-        return AppResponse.Error(error)
+        return InfraException.DatabaseError(
+            code = errorCode,
+            message = "$message $spec",
+            cause = cause
+        )
     }
 
 }

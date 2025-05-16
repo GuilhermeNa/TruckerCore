@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
-object FirebaseAuthSourceErrorMapper : AuthSourceErrorMapper {
+class FirebaseAuthSourceErrorMapper : AuthSourceErrorMapper {
 
     override fun creatingUserWithEmail(e: Throwable): AuthSourceException {
         return when (e) {
