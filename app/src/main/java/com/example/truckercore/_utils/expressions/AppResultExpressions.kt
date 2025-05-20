@@ -13,6 +13,13 @@ inline fun <T, R> AppResult<T>.mapAppResult(
     is Error -> onError(exception)
 }
 
+inline fun <T> AppResult<T>.getOrElse(
+    orElse: (Error) -> Nothing
+): T = when (this) {
+    is Success -> this.data
+    is Error -> orElse(this)
+}
+
 fun <T> AppResult<T>.handleAppResult(
     onSuccess: (data: T) -> Unit,
     onError: (e: AppException) -> Unit

@@ -11,3 +11,5 @@ sealed class AppResponse<out T> {
     data class Error(val exception: AppException) : AppResponse<Nothing>()
 
 }
+
+class AppResponseException(message: String): Exception(message)

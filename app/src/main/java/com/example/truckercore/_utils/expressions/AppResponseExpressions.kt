@@ -1,6 +1,7 @@
 package com.example.truckercore._utils.expressions
 
 import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._utils.classes.AppResponseException
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.technical.TechnicalException
 
@@ -22,7 +23,7 @@ inline fun <R, T> AppResponse<T>.mapAppResponse(
     is AppResponse.Empty -> onEmpty()
 }
 
-inline fun <T> AppResponse<T>.getOrReturn(
+inline fun <T> AppResponse<T>.getOrElse(
     onFailure: (AppResponse<Nothing>) -> Nothing
 ): T = when (this) {
     is AppResponse.Success -> data
@@ -32,14 +33,14 @@ inline fun <T> AppResponse<T>.getOrReturn(
 
 fun <T> AppResponse<T>.extractData() =
     if (this is AppResponse.Success) this.data
-    else throw ClassCastException(
+    else throw AppResponseException(
         "Cannot extract data: Response is not of type AppResponse.Success." +
                 " Actual response is $this."
     )
 
 fun <T> AppResponse<T>.extractError() =
     if (this is AppResponse.Error) this.exception
-    else throw ClassCastException(
+    else throw AppResponseException(
         "Cannot extract exception: Response is not of type AppResponse.Error." +
                 " Actual response is $this."
     )

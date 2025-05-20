@@ -13,6 +13,7 @@ import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore._utils.expressions.clearFocusIfNeeded
 import com.example.truckercore._utils.expressions.hideKeyboard
 import com.example.truckercore._utils.expressions.showToast
+import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
@@ -126,9 +127,9 @@ class EmailAuthFragment : CloseAppFragment() {
     /**
      * Handles failures during user creation and determines whether to show a toast or navigate to an error screen.
      */
-    private fun handleUserCreationFailedEffect(error: AppExceptionOld) {
+    private fun handleUserCreationFailedEffect(error: AppException) {
         viewModel.setState(WaitingInput)
-        error.errorCode.let { ec ->
+    /*    error.errorCode.let { ec ->
             ec.handleOnUi(
                 onRecoverable = { message -> showToast(message) },
                 onFatalError = { name, message ->
@@ -141,7 +142,7 @@ class EmailAuthFragment : CloseAppFragment() {
                     requireActivity().finish()
                 }
             )
-        }
+        }*/
     }
 
     /**

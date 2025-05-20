@@ -17,7 +17,7 @@ sealed class LoginEvent {
         data class AuthenticationResult(val result: AppResult<Unit>) : SystemEvent()
         data object UserRegistered: SystemEvent()
         data object UserAwaitingRegister: SystemEvent()
-        data class AuthError(val error: AppExceptionOld): SystemEvent()
+       // data class AuthError(val error: AppExceptionOld): SystemEvent()
     }
 
 }

@@ -11,7 +11,7 @@ sealed class LoginEffect {
         data object ForgetPassword : Navigation()
     }
 
-    data class Error(val error: ErrorCode) : LoginEffect()
+   // data class Error(val error: ErrorCode) : LoginEffect()
 
     fun isFragmentNavigation() = this is Navigation.CompleteRegister ||
             this is Navigation.NewAccount ||

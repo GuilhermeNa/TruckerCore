@@ -5,7 +5,7 @@ import com.example.truckercore.model.infrastructure.data_source.firebase.writer.
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.contracts.ApiInstructionInterpreter
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.data.collections.ApiInstructionQueue
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.data.contracts.ApiInstruction
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InstructionInterpreterException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InterpreterException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.instructions.Put
@@ -33,7 +33,7 @@ class FirestoreInstructionInterpreter(
             is Put -> getFirebaseSetByPut(instruction)
             is Remove -> getFirebaseDelete(instruction)
             is Update -> getFirebaseSetByUpdate(instruction)
-            else -> throw InstructionInterpreterException(
+            else -> throw InterpreterException(
                 "Unsupported instruction type: ${instruction::class.simpleName}"
             )
         }

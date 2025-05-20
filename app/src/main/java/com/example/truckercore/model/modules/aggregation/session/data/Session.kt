@@ -5,9 +5,9 @@ import com.example.truckercore.model.modules.authentication.contracts.Authentica
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.user._contracts.UserEligible
 
-data class  Session(
+data class Session(
     val uid: UID,
-    val user: Authenticable?,
-    val company: SystemManager?,
-    val person: UserEligible<*>?
+    val user: Authenticable,
+    val company: SystemManager,
+    val person: UserEligible<*>
 )

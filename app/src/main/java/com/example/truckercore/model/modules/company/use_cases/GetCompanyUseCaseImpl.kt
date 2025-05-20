@@ -6,7 +6,7 @@ import com.example.truckercore.model.modules.company.data.CompanyDto
 import com.example.truckercore.model.modules.company.mapper.CompanyMapper
 import com.example.truckercore.model.modules.company.specification.CompanySpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.getOrElse
 import com.example.truckercore._utils.expressions.handleErrorResponse
 
 class GetCompanyUseCaseImpl(
@@ -16,7 +16,7 @@ class GetCompanyUseCaseImpl(
     override suspend fun invoke(spec: CompanySpec): AppResponse<Company> =
         try {
             dataRepository.findOneBy(spec)
-                .getOrReturn { unsuccessful -> return unsuccessful }
+                .getOrElse { unsuccessful -> return unsuccessful }
                 .let { dto -> getSuccessResponse(dto) }
 
         } catch (e: Exception) {

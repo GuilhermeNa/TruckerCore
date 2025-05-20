@@ -6,7 +6,7 @@ import com.example.truckercore.model.modules.employee.admin.data.AdminDto
 import com.example.truckercore.model.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.model.modules.employee.admin.specification.AdminSpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.getOrElse
 import com.example.truckercore._utils.expressions.handleErrorResponse
 
 class GetAdminUseCaseImpl(
@@ -16,7 +16,7 @@ class GetAdminUseCaseImpl(
     override suspend fun invoke(spec: AdminSpec): AppResponse<Admin> =
         try {
             dataRepository.findOneBy(spec)
-                .getOrReturn { unsuccessful -> return unsuccessful }
+                .getOrElse { unsuccessful -> return unsuccessful }
                 .let { dto -> getSuccessResponse(dto) }
 
         } catch (e: Exception) {

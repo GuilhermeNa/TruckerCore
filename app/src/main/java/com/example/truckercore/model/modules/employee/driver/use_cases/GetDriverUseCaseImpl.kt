@@ -6,7 +6,7 @@ import com.example.truckercore.model.modules.employee.driver.data.DriverDto
 import com.example.truckercore.model.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.model.modules.employee.driver.specification.DriverSpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.getOrElse
 import com.example.truckercore._utils.expressions.handleErrorResponse
 
 class GetDriverUseCaseImpl(
@@ -16,7 +16,7 @@ class GetDriverUseCaseImpl(
     override suspend fun invoke(spec: DriverSpec): AppResponse<Driver> =
         try {
             dataRepository.findOneBy(spec)
-                .getOrReturn { unsuccessful -> return unsuccessful }
+                .getOrElse { unsuccessful -> return unsuccessful }
                 .let { getSuccessResponse(it) }
 
         } catch (e: Exception) {

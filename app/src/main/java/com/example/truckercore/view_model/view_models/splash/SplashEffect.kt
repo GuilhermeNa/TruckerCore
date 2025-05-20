@@ -48,12 +48,12 @@ sealed class SplashEffect {
         }
     }
 
-    /**
+/*    *
      * Represents an error that occurred during splash processing.
      *
      * @param error The domain-specific error code containing user-facing messages.
-     */
-    data class Error(val error: ErrorCode) : SplashEffect()
+
+    data class Error(val error: ErrorCode) : SplashEffect()*/
 
     //----------------------------------------------------------------------------------------------
     /**

@@ -2,6 +2,7 @@ package com.example.truckercore.model.modules.employee.driver.specification
 
 import com.example.truckercore.model.configs.collections.Collection
 import com.example.truckercore.model.configs.enums.Field
+import com.example.truckercore.model.infrastructure.integration.data.for_app.data.collections.SearchFilter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Filter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereEqual
@@ -18,12 +19,12 @@ data class DriverSpec(
 
     override val collection = Collection.DRIVER
 
-    override fun getFilter(): List<Filter> {
-        val ml = mutableListOf<Filter>()
+    override fun getFilter(): SearchFilter {
+        val searchFilter = SearchFilter()
 
-        userId?.let { ml.add(WhereEqual(Field.USER_ID, it.value)) }
+        userId?.let { searchFilter.add(WhereEqual(Field.USER_ID, it.value)) }
 
-        return ml
+        return searchFilter
     }
 
 }

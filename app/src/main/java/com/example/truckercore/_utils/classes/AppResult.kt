@@ -12,3 +12,5 @@ sealed class AppResult<out T> {
 
     val isError get(): Boolean = this is Error
 }
+
+class AppResultException(message: String) : Exception(message)

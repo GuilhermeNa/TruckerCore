@@ -9,8 +9,10 @@ sealed class InfraException(message: String? = null, cause: Throwable? = null) :
 
     class NetworkUnavailable : InfraException()
 
-    class WriterError(message: String? = null, cause: Throwable? = null) :
-        InfraException(message, cause)
+    class WriterError(
+        message: String? = null,
+        cause: Throwable? = null
+    ): InfraException(message, cause)
 
     class DatabaseError(
         val code: DatabaseErrorCode,

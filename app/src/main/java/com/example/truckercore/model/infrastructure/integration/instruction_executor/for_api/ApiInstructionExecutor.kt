@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.integration.instruction_exe
 
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.contracts.ApiInstructionInterpreter
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.data.contracts.ApiInstruction
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InstructionInterpreterException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.InterpreterException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections.InstructionDeque
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
 
@@ -36,7 +36,7 @@ abstract class ApiInstructionExecutor(
      *
      * @param deque An [InstructionDeque] with instructions to execute.
      * @throws InvalidInstructionException if validation fails
-     * @throws InstructionInterpreterException for interpreter or execution errors
+     * @throws InterpreterException for interpreter or execution errors
      */
     abstract suspend operator fun invoke(deque: InstructionDeque)
 

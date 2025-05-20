@@ -6,6 +6,9 @@ sealed class PreparingAmbientUiState {
 
     data object Success : PreparingAmbientUiState()
 
-    data object Error : PreparingAmbientUiState()
+    sealed class UiError: PreparingAmbientUiState() {
+        data object UIDNotFound: UiError()
+        data object SessionNotFound: UiError()
+    }
 
 }

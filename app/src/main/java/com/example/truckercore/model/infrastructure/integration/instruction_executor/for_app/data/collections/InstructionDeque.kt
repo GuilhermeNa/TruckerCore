@@ -1,7 +1,7 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.collections
 
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InvalidInstructionException
+import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InstructionException
 
 class InstructionDeque {
 
@@ -16,11 +16,11 @@ class InstructionDeque {
     fun forEach(action: (Instruction) -> Unit) = _deque.forEach { action(it) }
 
     fun validate() {
-        if (_deque.isEmpty()) throw InvalidInstructionException(
+        if (_deque.isEmpty()) throw InstructionException(
             "Instruction deque must not be empty. At least one instruction is required for execution."
         )
 
-        if (hasDuplicates()) throw InvalidInstructionException(
+        if (hasDuplicates()) throw InstructionException(
             "Duplicate instructions found in the deque."
         )
     }

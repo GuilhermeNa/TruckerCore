@@ -8,7 +8,7 @@ import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore.model.modules.user.specification.UserSpec
 import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrReturn
+import com.example.truckercore._utils.expressions.getOrElse
 
 class GetUserUserCaseImpl(
     private val dataRepository: DataRepository
@@ -18,7 +18,7 @@ class GetUserUserCaseImpl(
         try {
 
             dataRepository.findOneBy(spec)
-                .getOrReturn { return it }
+                .getOrElse { return it }
                 .let { getSuccessResponse(it) }
 
         } catch (e: AppException) {

@@ -71,8 +71,8 @@ class SplashViewModel(
                 onEvent(InfoLoadedEvent)
 
             } catch (e: Exception) {
-                if (e is AppExceptionOld) setEffect(SplashEffect.Error(e.errorCode))
-                else throw UnknownError("An unknown error occurred while loading user info.")
+              //  if (e is AppExceptionOld) setEffect(SplashEffect.Error(e.errorCode))
+              //  else throw UnknownError("An unknown error occurred while loading user info.")
             }
         }
     }
