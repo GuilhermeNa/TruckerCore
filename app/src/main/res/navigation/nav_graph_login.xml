@@ -127,19 +127,21 @@
         android:name="com.example.truckercore.view.fragments.preparing_ambient.PreparingAmbientFragment"
         android:label="fragment_preparing_ambient"
         tools:layout="@layout/fragment_preparing_ambient" />
-    <action android:id="@+id/action_global_continueRegisterFragment" app:destination="@id/continueRegisterFragment"
+    <action android:id="@+id/action_global_continueRegisterFragment"
+        app:destination="@id/continueRegisterFragment"
         app:enterAnim="@anim/slide_in_top"
         app:exitAnim="@anim/slide_out_bottom"
         app:popUpTo="@id/nav_graph_login"
         app:popUpToInclusive="true" />
     <action
-        android:id="@+id/action_global_loginFragment2"
+        android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment"
         app:enterAnim="@anim/slide_in_bottom"
         app:exitAnim="@anim/slide_out_top"
         app:popUpTo="@id/nav_graph_login"
         app:popUpToInclusive="true" />
-    <action android:id="@+id/action_global_emailAuthFragment" app:destination="@id/emailAuthFragment"
+    <action android:id="@+id/action_global_emailAuthFragment"
+        app:destination="@id/emailAuthFragment"
         app:enterAnim="@anim/slide_in_top"
         app:exitAnim="@anim/slide_out_bottom"
         app:popUpTo="@id/nav_graph_login"

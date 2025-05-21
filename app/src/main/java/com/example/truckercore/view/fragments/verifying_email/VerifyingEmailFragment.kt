@@ -37,9 +37,9 @@ class VerifyingEmailFragment : Fragment() {
         }
 
         fun navigateToEmailAuth() {
-            val direction = VerifyingEmailFragmentDirections
+           /* val direction = VerifyingEmailFragmentDirections
                 .actionVerifyingEmailFragmentToEmailAuthFragment()
-            navigateToDirection(direction)
+            navigateToDirection(direction)*/
         }
 
         BottomSheetVerifyingEmail(

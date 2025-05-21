@@ -13,12 +13,12 @@ class LoginNavigationHandler: KoinComponent{
 
     private val flavorService: FlavorService by inject()
 
-    fun getDirection(effect: LoginEffect): NavDirections = when (effect) {
+/*    fun getDirection(effect: LoginEffect): NavDirections = when (effect) {
         LoginEffect.Navigation.CompleteRegister -> LoginFragmentDirections.actionLoginFragmentToContinueRegisterFragment()
         LoginEffect.Navigation.ForgetPassword -> LoginFragmentDirections.actionLoginFragmentToForgetPasswordFragment()
         LoginEffect.Navigation.NewAccount -> LoginFragmentDirections.actionLoginFragmentToEmailAuthFragment()
         else -> throw IllegalArgumentException("Unsupported navigation effect: ${effect::class.qualifiedName}")
-    }
+    }*/
 
  /*   fun getIntent(effect: LoginEffect, context: Context): Intent = when (effect) {
         is LoginEffect.Navigation.EnterSystem -> flavorService.enterSystemIntent(context)

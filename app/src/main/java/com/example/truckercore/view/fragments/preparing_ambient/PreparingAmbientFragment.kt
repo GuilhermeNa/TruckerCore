@@ -53,15 +53,15 @@ class PreparingAmbientFragment : Fragment() {
                         }
 
                         PreparingAmbientUiState.UiError.SessionNotFound -> {
-                            val direction = PreparingAmbientFragmentDirections
+                          /*  val direction = PreparingAmbientFragmentDirections
                                 .actionPreparingAmbientFragmentToUserNameFragment()
-                            navigateToDirection(direction)
+                            navigateToDirection(direction)*/
                         }
 
                         PreparingAmbientUiState.UiError.UIDNotFound -> {
-                            val direction = PreparingAmbientFragmentDirections
+                           /* val direction = PreparingAmbientFragmentDirections
                                 .actionPreparingAmbientFragmentToLoginFragment()
-                            navigateToDirection(direction)
+                            navigateToDirection(direction)*/
                         }
                     }
                 }

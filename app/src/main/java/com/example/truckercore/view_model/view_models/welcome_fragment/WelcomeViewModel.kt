@@ -1,17 +1,10 @@
 package com.example.truckercore.view_model.view_models.welcome_fragment
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.view_model.states.WelcomeFragState
-import com.example.truckercore.view_model.states.WelcomeFragState.Initial
-import com.example.truckercore.view_model.states.WelcomeFragState.Stage
-import com.example.truckercore.view_model.states.WelcomeFragState.Success
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import com.example.truckercore.view_model._base.BaseViewModel
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeUiState.Stage
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeUiState.Success
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 private const val GENERIC_ERROR_MESSAGE =
     "Um erro ocorreu durante o carregamento de recursos de imagem ou texto."
@@ -21,19 +14,14 @@ private const val GENERIC_ERROR_MESSAGE =
  * It holds the data, state, and event management for the fragment, including interaction with the ViewModel's logic
  * related to the ViewPager position, page data, and fragment UI stages.
  */
-class WelcomeFragmentViewModel(
+class WelcomeViewModel(
     private val flavorService: FlavorService
-) : ViewModel() {
+) : BaseViewModel() {
 
     // Fragment State --------------------------------------------------------------
     // MutableStateFlow that holds the current state of the fragment.
-    private val _fragmentState: MutableStateFlow<WelcomeFragState> = MutableStateFlow(Initial)
-    val fragmentState get() = _fragmentState.asStateFlow()
-
-    // Fragment Event --------------------------------------------------------------
-    // MutableSharedFlow to emit events that the fragment will react to.
-    private val _fragmentEvent = MutableSharedFlow<WelcomeFragEvent>()
-    val fragmentEvent get() = _fragmentEvent.asSharedFlow()
+    private val stateManager = WelcomeUiStateManager(flavorService.getWelcomePagerData())
+    val state get() = stateManager.state.asStateFlow()
 
     // ViewPager last position ------------------------------------------------------
     // Holds the last position of the ViewPager to manage UI state.
@@ -44,37 +32,11 @@ class WelcomeFragmentViewModel(
     // Initialization block to setup the initial fragment state based on the provided flavor.
     // If an error occurs, it updates the fragment state with an error message.
     //----------------------------------------------------------------------------------------------
-    init {
-        try {
-            val state = Success(
-                data = buildFragData(),
-                uiStage = Stage.UserInFirsPage
-            )
 
-            updateFragmentState(state)
+    fun onEvent(event: WelcomeEvent) {
+       if(event is WelcomeEvent.PagerChanged) {
 
-        } catch (e: Exception) {
-            /*  updateFragmentState(
-                  WelcomeFragState.Error(
-                      type = ErrorType.UnknownError,
-                      message = GENERIC_ERROR_MESSAGE
-                  )
-              )*/
-        }
-    }
-
-    /**
-     * Builds the fragment data based on the provided flavor.
-     * It returns a list of WelcomePagerData representing the data to be shown in the ViewPager.
-     */
-    private fun buildFragData(): List<WelcomePagerData> =
-        flavorService.getWelcomePagerData()
-
-    /**
-     * Updates the current state of the fragment with the new state.
-     */
-    private fun updateFragmentState(newState: WelcomeFragState) {
-        _fragmentState.value = newState
+       }
     }
 
     /**
@@ -105,18 +67,7 @@ class WelcomeFragmentViewModel(
         updateFragmentState(newState)
     }
 
-    /**
-     * Emits a new event to the fragment's event flow.
-     */
-    fun setEvent(newEvent: WelcomeFragEvent) {
-        viewModelScope.launch {
-            _fragmentEvent.emit(newEvent)
-        }
+    fun isInLastPage(): Boolean {
+
     }
-
-    /**
-     * Returns the current UI stage of the fragment (e.g., first page, last page, or intermediate pages).
-     */
-    fun getUiStage() = (_fragmentState.value as Success).uiStage
-
 }

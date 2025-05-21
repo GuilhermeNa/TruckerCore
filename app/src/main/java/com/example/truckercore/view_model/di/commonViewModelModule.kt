@@ -11,7 +11,7 @@ import com.example.truckercore.view_model.view_models.login.LoginViewModel
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentViewModel
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -24,7 +24,7 @@ val commonViewModelModule = module {
     viewModel<LoginViewModel> { LoginViewModel(get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
-    viewModel<WelcomeFragmentViewModel> { WelcomeFragmentViewModel(get()) }
+    viewModel<WelcomeViewModel> { WelcomeViewModel(get()) }
     viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get(), get(), get(), get()) }
     viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get()) }

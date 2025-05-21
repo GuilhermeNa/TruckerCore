@@ -61,7 +61,7 @@ class LoginFragment : CloseAppFragment() {
     }
 
     private suspend fun setFragmentEventsManager() {
-        viewModel.effect.collect { effect ->
+       /* viewModel.effect.collect { effect ->
             if (effect is LoginEffect.ClearFocusAndHideKeyboard) {
                 stateHandler.hideKeyboardAndClearFocus(this)
                 return@collect
@@ -75,7 +75,7 @@ class LoginFragment : CloseAppFragment() {
 
          //   val intent = navigationHandler.getIntent(effect, requireContext())
         //    navigateToActivity(intent, true)
-        }
+        }*/
     }
 
     //----------------------------------------------------------------------------------------------

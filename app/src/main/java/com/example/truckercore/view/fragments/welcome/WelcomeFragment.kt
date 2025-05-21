@@ -8,30 +8,25 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import com.example.truckercore.R
 import com.example.truckercore._utils.enums.Direction
-import com.example.truckercore.databinding.FragmentWelcomeBinding
-import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore._utils.expressions.slideInBottom
 import com.example.truckercore._utils.expressions.slideOutBottom
+import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.view.fragments._base.CloseAppFragment
-import com.example.truckercore.view_model.states.WelcomeFragState.Error
-import com.example.truckercore.view_model.states.WelcomeFragState.Initial
-import com.example.truckercore.view_model.states.WelcomeFragState.Stage
-import com.example.truckercore.view_model.states.WelcomeFragState.Success
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.LeftFabCLicked
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.RightFabClicked
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragEvent.TopButtonClicked
-import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeFragmentViewModel
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeEvent.LeftFabCLicked
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeEvent.RightFabClicked
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeEvent.TopButtonClicked
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeUiState
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeUiState.Stage
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeUiState.Success
+import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 /**
  * WelcomeFragment is a Fragment that represents the welcome screen of the application.
@@ -45,7 +40,7 @@ class WelcomeFragment : CloseAppFragment() {
     private val binding get() = _binding!!
 
     // ViewModel && Args ---------------------------------------------------------------------------
-    private val viewModel: WelcomeFragmentViewModel by viewModel()
+    private val viewModel: WelcomeViewModel by viewModel()
 
     // ViewPager -----------------------------------------------------------------------------------
     private var viewPager: ViewPager2? = null
@@ -76,11 +71,13 @@ class WelcomeFragment : CloseAppFragment() {
      */
     private fun CoroutineScope.setFragmentStateManager() {
         this.launch {
-            viewModel.fragmentState.collect { state ->
-                when (state) {
-                    is Initial -> Unit
-                    is Success -> handleSuccessState(state)
-                    is Error -> handleErrorState(state)
+            viewModel.state.collect { state ->
+
+                when (state.status) {
+                    WelcomeUiState.Status.FirstPage -> TODO()
+                    WelcomeUiState.Status.IntermediatePage -> TODO()
+                    WelcomeUiState.Status.LastPage -> TODO()
+                    is WelcomeUiState.Status.Error -> TODO()
                 }
             }
         }
@@ -126,14 +123,14 @@ class WelcomeFragment : CloseAppFragment() {
      * Handles errors by showing a notification activity and finishing the current activity.
      */
     private fun handleErrorState(state: Error) {
-       /* val intent = NotificationActivity.newInstance(
-            context = requireContext(),
-            gifRes = R.drawable.gif_error,
-            errorHeader = state.type.getFieldName(),
-            errorBody = state.message
-        )
-        startActivity(intent)
-        requireActivity().finish()*/
+        /* val intent = NotificationActivity.newInstance(
+             context = requireContext(),
+             gifRes = R.drawable.gif_error,
+             errorHeader = state.type.getFieldName(),
+             errorBody = state.message
+         )
+         startActivity(intent)
+         requireActivity().finish()*/
     }
 
     /**
@@ -149,14 +146,6 @@ class WelcomeFragment : CloseAppFragment() {
         }
     }
 
-    /**
-     * Changes the ViewPager's current item based on the direction (forward or back).
-     */
-    private fun paginateViewPager(direction: Direction) {
-        viewPager?.run {
-            setCurrentItem(currentItem + direction.value, true)
-        }
-    }
 
     /**
      * Handles the right FAB click event.
@@ -204,7 +193,7 @@ class WelcomeFragment : CloseAppFragment() {
         super.onViewCreated(view, savedInstanceState)
         setRightFabListener()
         setLeftFabListener()
-        setButtonListener()
+        setTopButtonListener()
     }
 
     /**
@@ -212,7 +201,8 @@ class WelcomeFragment : CloseAppFragment() {
      */
     private fun setRightFabListener() {
         binding.fragWelcomeRightFab.setOnClickListener {
-            viewModel.setEvent(RightFabClicked)
+            if (viewModel.isInLastPage()) //TODO(navega)
+            else paginateViewPager(Direction.Forward)
         }
     }
 
@@ -221,16 +211,27 @@ class WelcomeFragment : CloseAppFragment() {
      */
     private fun setLeftFabListener() {
         binding.fragWelcomeLeftFab.setOnClickListener {
-            viewModel.setEvent(LeftFabCLicked)
+            paginateViewPager(Direction.Back)
         }
     }
 
     /**
+     * Changes the ViewPager's current item based on the direction (forward or back).
+     */
+    private fun paginateViewPager(direction: Direction) {
+        viewPager?.run {
+            setCurrentItem(currentItem + direction.value, true)
+        }
+    }
+
+
+    /**
      * Sets up the listener for the jump button click event.
      */
-    private fun setButtonListener() {
+    private fun setTopButtonListener() {
         binding.fragWelcomeJumpButton.setOnClickListener {
-            viewModel.setEvent(TopButtonClicked)
+            val direction = WelcomeFragmentDirections.actionWelcomeFragmentToEmailAuthFragment()
+            navigateToDirection(direction)
         }
     }
 

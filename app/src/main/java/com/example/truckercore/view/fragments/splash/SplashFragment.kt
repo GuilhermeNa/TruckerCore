@@ -115,21 +115,23 @@ class SplashFragment : CloseAppFragment() {
     }
 
     private fun getNavDirection(state: SplashUiState.Navigating): NavDirections {
-        return  SplashFragmentDirections.actionGlobalContinueRegisterFragment()
-       /* return when(state) {
-            SplashUiState.Navigating.ContinueRegister -> {
-                SplashFragmentDirections.actionSplashFragmentToContinueRegisterFragment()
-            }
-            SplashUiState.Navigating.Login -> {
-                SplashFragmentDirections.actionSplashFragmentToLoginFragment()
-            }
-            SplashUiState.Navigating.PreparingAmbient -> {
-                SplashFragmentDirections.actionSplashFragmentToPreparingAmbientFragment()
-            }
+        return when (state) {
             SplashUiState.Navigating.Welcome -> {
                 SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
             }
-        }*/
+
+            SplashUiState.Navigating.Login -> {
+                SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+            }
+
+            SplashUiState.Navigating.PreparingAmbient -> {
+                SplashFragmentDirections.actionSplashFragmentToPreparingAmbientFragment()
+            }
+
+            SplashUiState.Navigating.ContinueRegister -> {
+                SplashFragmentDirections.actionGlobalContinueRegisterFragment()
+            }
+        }
     }
 
     private suspend fun setEffectManager() {
