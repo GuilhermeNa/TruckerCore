@@ -73,8 +73,8 @@ class LoginFragment : CloseAppFragment() {
                 return@collect
             }
 
-            val intent = navigationHandler.getIntent(effect, requireContext())
-            navigateToActivity(intent, true)
+         //   val intent = navigationHandler.getIntent(effect, requireContext())
+        //    navigateToActivity(intent, true)
         }
     }
 

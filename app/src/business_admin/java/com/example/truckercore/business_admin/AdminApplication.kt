@@ -2,9 +2,7 @@ package com.example.truckercore.business_admin
 
 import android.app.Application
 import com.example.truckercore.business_admin.config.di.adminModules
-import com.example.truckercore.business_admin.config.flavor.FlavorAdminStrategy
-import com.example.truckercore.model.configs.di.domainModules
-import com.example.truckercore.model.configs.flavor.FlavorService
+import com.example.truckercore.model.configs.di.modelModules
 import com.example.truckercore.view_model.di.commonViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -22,7 +20,7 @@ class AdminApplication : Application() {
     }
 
     private fun getKoinModules(): List<Module> =
-        domainModules
+        modelModules
             .plus(commonViewModelModule)
             .plus(adminModules)
 

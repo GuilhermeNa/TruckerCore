@@ -24,8 +24,7 @@ class InstructionExecutorRepositoryImpl(
             AppResult.Success(Unit)
         } catch (e: Exception) {
             AppLogger.e(getName(), "$ERROR_MESSAGE $deque")
-            val appError = errorFactory(e)
-            AppResult.Error(appError)
+            AppResult.Error(errorFactory(e))
         }
     }
 

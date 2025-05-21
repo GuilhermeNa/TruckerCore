@@ -5,5 +5,5 @@ import com.example.truckercore.model.modules.aggregation.session.use_cases.GetSe
 import org.koin.dsl.module
 
 val sessionModule = module {
-    single<GetSessionInfoUseCase> { GetSessionInfoUseCaseImpl(get(), get(), get(), get(), get()) }
+    single<GetSessionInfoUseCase> { GetSessionInfoUseCaseImpl(get(), get(), get(), get(), get(), get()) }
 }

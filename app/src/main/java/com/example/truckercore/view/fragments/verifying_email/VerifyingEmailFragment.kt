@@ -10,13 +10,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
-import com.example.truckercore.model.shared.utils.expressions.handleOnUi
-import com.example.truckercore.model.shared.utils.expressions.logError
-import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.dialogs.BottomSheetVerifyingEmail
 import com.example.truckercore._utils.expressions.navigateToDirection
-import com.example.truckercore._utils.expressions.onLifecycleState
-import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEffect
+import com.example.truckercore._utils.expressions.ifResumedOrElse
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailUiState
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
@@ -111,7 +107,7 @@ class VerifyingEmailFragment : Fragment() {
 
     private fun CoroutineScope.setFragmentEffectManager() {
         launch {
-            viewModel.effect.collect { effect ->
+         /*   viewModel.effect.collect { effect ->
                 if (effect is VerifyingEmailEffect.Error) {
                     effect.error.errorCode.handleOnUi(
                         onRecoverable = { message -> logError(message) },
@@ -126,15 +122,15 @@ class VerifyingEmailFragment : Fragment() {
                         }
                     )
                 }
-            }
+            }*/
         }
     }
 
     private suspend fun setCounterStateManager() {
         viewModel.counterFlow.collect { value ->
-            onLifecycleState(
+            ifResumedOrElse(
                 resumed = { stateHandler.incrementProgress(value, true) },
-                anyOther = { stateHandler.incrementProgress(value, false) }
+                orElse = { stateHandler.incrementProgress(value, false) }
             )
         }
     }

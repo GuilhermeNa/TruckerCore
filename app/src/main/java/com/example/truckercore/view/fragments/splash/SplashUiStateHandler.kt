@@ -16,11 +16,9 @@ class SplashUiStateHandler(
     private val textView: TextView
 ) {
 
-    /** ID of the second UI state in MotionLayout */
-    val secondUiState = R.id.frag_verifying_email_state_2
-
-    /** ID of the third UI state in MotionLayout */
-    val thirdUiState = R.id.frag_verifying_email_state_3
+    // Ui States
+    val loadingUiState = R.id.frag_verifying_email_state_2
+    val navigationUiState = R.id.frag_verifying_email_state_3
 
     /**
      * Updates the splash text view with the app's flavor description.
@@ -34,16 +32,16 @@ class SplashUiStateHandler(
     /**
      * Triggers the first visual transition to the second state (animated).
      */
-    fun runFirstUiTransition() {
-        motionLayout.transitionToState(secondUiState)
+    fun transitionToLoadingState() {
+        motionLayout.transitionToState(loadingUiState)
     }
 
     /**
      * Instantly jumps to the second UI state without animation.
      * Useful when restoring state after lifecycle changes.
      */
-    fun jumpToSecondUiState() {
-        motionLayout.jumpToState(secondUiState)
+    fun jumpToLoadingState() {
+        motionLayout.jumpToState(loadingUiState)
     }
 
     /**
@@ -51,16 +49,17 @@ class SplashUiStateHandler(
      * Note: You are transitioning to the second state again.
      *       Consider renaming or adjusting if this is intentional.
      */
-    fun runSecondUiTransition() {
-        motionLayout.transitionToState(secondUiState)
+    fun transitionToNavigationState() {
+        motionLayout.transitionToState(navigationUiState)
     }
 
     /**
      * Instantly jumps to the third UI state.
      */
-    fun jumpToThirdUiState() {
-        motionLayout.jumpToState(thirdUiState)
+    fun jumpToNavigationState() {
+        motionLayout.jumpToState(navigationUiState)
     }
+
 
 }
 

@@ -66,12 +66,18 @@ fun Fragment.popBackStack() {
     navController.popBackStack()
 }
 
-inline fun Fragment.onLifecycleState(
+inline fun Fragment.ifResumedOrElse(
     resumed: () -> Unit = {},
-    anyOther: () -> Unit = {}
+    orElse: () -> Unit = {}
 ) {
     if (this.lifecycle.currentState == Lifecycle.State.RESUMED) resumed()
-    else anyOther()
+    else orElse()
+}
+
+inline fun Fragment.doIfRecreating(
+    run: () -> Unit = {},
+) {
+    if (this.lifecycle.currentState != Lifecycle.State.RESUMED) run()
 }
 
 /**

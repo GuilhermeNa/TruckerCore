@@ -2,7 +2,7 @@ package com.example.truckercore._test_data_provider
 
 class TestAppExceptionProvider {
 
-    data class TestErrorCode(
+  /*  data class TestErrorCode(
         override val name: String = "TEST_ERROR",
         override val userMessage: String = "Expected an user friendly message.",
         override val logMessage: String = "Expected a log message.",
@@ -23,6 +23,6 @@ class TestAppExceptionProvider {
         message = code.logMessage,
         cause = cause,
         errorCode = code
-    )
+    )*/
 
 }

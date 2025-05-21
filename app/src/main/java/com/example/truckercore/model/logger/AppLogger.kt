@@ -1,7 +1,6 @@
 package com.example.truckercore.model.logger
 
 import android.util.Log
-import com.google.firebase.appcheck.BuildConfig
 
 /**
  * AppLogger is a centralized logging utility for the application.
@@ -30,6 +29,7 @@ import com.google.firebase.appcheck.BuildConfig
  */
 object AppLogger {
 
+    private const val M_LOG = "mLog:"
     private const val DEFAULT_TAG = "AppLogger"
 
     /**
@@ -41,7 +41,8 @@ object AppLogger {
      * @param message The debug message to log.
      */
     fun d(tag: String = DEFAULT_TAG, message: String) {
-        if (BuildConfig.DEBUG) Log.d("[$tag]", message)
+        // if (BuildConfig.DEBUG)
+        Log.d("$M_LOG [$tag]", message)
     }
 
     /**
@@ -53,7 +54,8 @@ object AppLogger {
      * @param message The informational message to log.
      */
     fun i(tag: String = DEFAULT_TAG, message: String) {
-        if (BuildConfig.DEBUG) Log.i("[$tag]", message)
+        //if (BuildConfig.DEBUG)
+        Log.i("$M_LOG [$tag]", message)
     }
 
     /**
@@ -65,7 +67,8 @@ object AppLogger {
      * @param message The warning message to log.
      */
     fun w(tag: String = DEFAULT_TAG, message: String) {
-        if (BuildConfig.DEBUG) Log.w("[$tag]", message)
+        // if (BuildConfig.DEBUG)
+        Log.w("$M_LOG [$tag]", message)
     }
 
     /**
@@ -77,7 +80,7 @@ object AppLogger {
      * @param throwable An optional Throwable to include with the error log.
      */
     fun e(tag: String = DEFAULT_TAG, message: String, throwable: Throwable? = null) {
-        Log.e("[$tag]", message, throwable)
+        Log.e("$M_LOG [$tag]", message, throwable)
     }
 
     /**
@@ -89,7 +92,7 @@ object AppLogger {
      * @param throwable An optional Throwable to include with the log.
      */
     fun wtf(tag: String = DEFAULT_TAG, message: String, throwable: Throwable? = null) {
-        Log.wtf("[$tag]", message, throwable)
+        Log.wtf("$M_LOG [$tag]", message, throwable)
     }
 
 }

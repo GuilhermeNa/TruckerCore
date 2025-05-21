@@ -26,9 +26,47 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:634916806417:android:45bdad7e214126f7c336b0",
+        "android_client_info": {
+          "package_name": "com.example.truckercore.business_admin.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBByStJ8sfI_nmmBl-Gm1xWmMAviVkoyH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:634916806417:android:55278bc5660f1aa3c336b0",
         "android_client_info": {
           "package_name": "com.example.truckercore.business_driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBByStJ8sfI_nmmBl-Gm1xWmMAviVkoyH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634916806417:android:c2cbc168b5a10027c336b0",
+        "android_client_info": {
+          "package_name": "com.example.truckercore.business_driver.debug"
         }
       },
       "oauth_client": [],

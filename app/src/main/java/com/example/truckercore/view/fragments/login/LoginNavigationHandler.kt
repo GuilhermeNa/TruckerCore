@@ -20,7 +20,7 @@ class LoginNavigationHandler: KoinComponent{
         else -> throw IllegalArgumentException("Unsupported navigation effect: ${effect::class.qualifiedName}")
     }
 
-    fun getIntent(effect: LoginEffect, context: Context): Intent = when (effect) {
+ /*   fun getIntent(effect: LoginEffect, context: Context): Intent = when (effect) {
         is LoginEffect.Navigation.EnterSystem -> flavorService.enterSystemIntent(context)
 
         is LoginEffect.Error -> NotificationActivity.newInstance(
@@ -30,6 +30,6 @@ class LoginNavigationHandler: KoinComponent{
         )
 
         else -> throw IllegalArgumentException("Unsupported navigation effect: ${effect::class.qualifiedName}")
-    }
+    }*/
 
 }

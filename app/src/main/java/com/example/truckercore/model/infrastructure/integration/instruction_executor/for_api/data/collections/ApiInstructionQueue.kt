@@ -21,7 +21,7 @@ class ApiInstructionQueue {
         )
     }
 
-    fun forEach(action:(ApiInstruction) -> Unit) {
+    fun forEach(action: (ApiInstruction) -> Unit) {
         _deque.forEach { action(it) }
     }
 

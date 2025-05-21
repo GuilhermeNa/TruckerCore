@@ -27,7 +27,6 @@ private typealias EnterClick = LoginEvent.UiEvent.EnterButtonClick
 private typealias AuthResult = LoginEvent.SystemEvent.AuthenticationResult
 private typealias UserRegistered = LoginEvent.SystemEvent.UserRegistered
 private typealias AwaitingRegister = LoginEvent.SystemEvent.UserAwaitingRegister
-private typealias AuthError = LoginEvent.SystemEvent.AuthError
 
 // Aliases para efeitos
 private typealias ClearFocusEffect = LoginEffect.ClearFocusAndHideKeyboard
@@ -35,7 +34,7 @@ private typealias NavigateToForgetPassword = LoginEffect.Navigation.ForgetPasswo
 private typealias NavigateToNewAccount = LoginEffect.Navigation.NewAccount
 private typealias NavigateToSystem = LoginEffect.Navigation.EnterSystem
 private typealias NavigateToCompleteRegister = LoginEffect.Navigation.CompleteRegister
-private typealias ShowErrorEffect = LoginEffect.Error
+
 
 class LoginViewModel(private val authService: AuthManager) : ViewModel() {
 
@@ -63,7 +62,7 @@ class LoginViewModel(private val authService: AuthManager) : ViewModel() {
             is AuthResult -> handleResult(event.result)
             is UserRegistered -> setEffect(NavigateToSystem)
             is AwaitingRegister -> setEffect(NavigateToCompleteRegister)
-            is AuthError -> setEffect(ShowErrorEffect(event.error.errorCode))
+          //  is AuthError -> setEffect(ShowErrorEffect(event.error.errorCode))
 
         }
     }

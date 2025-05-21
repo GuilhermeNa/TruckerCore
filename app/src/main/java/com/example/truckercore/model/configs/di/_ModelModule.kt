@@ -2,7 +2,7 @@ package com.example.truckercore.model.configs.di
 
 import serviceModule
 
-val domainModules = listOf(
+val modelModules = listOf(
     firebaseModule,
     authModule,
     securityModule,

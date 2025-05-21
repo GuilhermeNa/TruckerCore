@@ -7,12 +7,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.model.shared.utils.expressions.handleOnUi
-import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore._utils.expressions.clearFocusIfNeeded
 import com.example.truckercore._utils.expressions.hideKeyboard
-import com.example.truckercore._utils.expressions.showToast
+import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
@@ -25,7 +22,6 @@ import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragSt
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserInputValidationResult
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

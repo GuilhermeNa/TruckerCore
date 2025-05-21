@@ -19,7 +19,7 @@ class SplashNavigationHandler {
      * @return A [NavDirections] instance for use with the Navigation Component.
      * @throws UnsupportedSplashEffectException If the effect does not map to a fragment navigation.
      */
-    fun getDirection(effect: SplashEffect): NavDirections = when (effect) {
+   /* fun getDirection(effect: SplashEffect): NavDirections = when (effect) {
         is SplashEffect.FirstTimeAccess ->
             SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
 
@@ -30,7 +30,7 @@ class SplashNavigationHandler {
             SplashFragmentDirections.actionSplashFragmentToContinueRegisterFragment()
 
         else -> throw UnsupportedSplashEffectException(effect)
-    }
+    }*/
 
     /**
      * Returns an [Intent] based on the given [SplashEffect], for use when navigating to an Activity.
@@ -40,7 +40,7 @@ class SplashNavigationHandler {
      * @return An [Intent] pointing to the destination activity.
      * @throws UnsupportedSplashEffectException If the effect does not map to an activity intent.
      */
-    fun getIntent(effect: SplashEffect, context: Context): Intent = when (effect) {
+/*    fun getIntent(effect: SplashEffect, context: Context): Intent = when (effect) {
         is SplashEffect.Error -> {
             NotificationActivity.newInstance(
                 context = context,
@@ -50,7 +50,7 @@ class SplashNavigationHandler {
         }
 
         else -> throw UnsupportedSplashEffectException(effect)
-    }
+    }*/
 }
 
 

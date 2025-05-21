@@ -1,8 +1,7 @@
 package com.example.truckercore.business_driver
 
 import android.app.Application
-import com.example.truckercore.model.configs.build.FlavorProvider
-import com.example.truckercore.model.configs.di.koinModules
+import com.example.truckercore.model.configs.di.modelModules
 import com.example.truckercore.view_model.di.commonViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -19,6 +18,6 @@ class DriverApplication: Application() {
         }
     }
 
-    private fun getKoinModules(): List<Module> = koinModules.plus(commonViewModelModule)
+    private fun getKoinModules(): List<Module> = modelModules.plus(commonViewModelModule)
 
 }

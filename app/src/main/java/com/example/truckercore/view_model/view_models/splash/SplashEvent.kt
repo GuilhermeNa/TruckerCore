@@ -7,21 +7,24 @@ package com.example.truckercore.view_model.view_models.splash
  * the ViewModel and the UI (Splash screen).
  */
 sealed class SplashEvent {
+
     /**
      * Represents UI-related events that are triggered based on user interactions or animations.
      */
-    sealed class UiEvent : SplashEvent() {
+    sealed class UiEvent : SplashEvent()
+    {
+        data object Initialized: UiEvent()
         /**
          * Indicates that the first animation has completed.
          * This event should be triggered once the first animation finishes.
          */
-        data object FirstAnimComplete : UiEvent()
+        data object TransitionToLoadingComplete : UiEvent()
 
         /**
          * Indicates that the second animation has completed.
          * This event should be triggered once the second animation finishes.
          */
-        data object SecondAnimComplete : UiEvent()
+        data object TransitionToNavigation : UiEvent()
     }
 
     /**
@@ -34,4 +37,5 @@ sealed class SplashEvent {
          */
         data object UserInfoLoaded : SystemEvent()
     }
+
 }

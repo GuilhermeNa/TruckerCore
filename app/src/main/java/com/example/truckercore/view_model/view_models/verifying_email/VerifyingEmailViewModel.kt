@@ -19,7 +19,6 @@ private typealias VerifyingState = VerifyingEmailUiState.Verifying
 private typealias VerifiedState = VerifyingEmailUiState.Verified
 private typealias TimeOutState = VerifyingEmailUiState.TimeOut
 
-private typealias ErrorEffect = VerifyingEmailEffect.Error
 
 private typealias StartEvent = VerifyingEmailEvent.UiEvent.StartVerification
 private typealias RetryEvent = VerifyingEmailEvent.UiEvent.RetryVerification

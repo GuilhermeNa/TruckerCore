@@ -13,6 +13,8 @@ class FlavorService(private val strategy: FlavorStrategy) {
 
     fun getFlavor(): Flavor = strategy.getFlavor()
 
+    fun getAppName(): String = getFlavor().appName
+
     fun enterSystemIntent(context: Context): Intent = strategy.enterSystemIntent(context)
 
     fun getWelcomePagerData(): List<WelcomePagerData> = strategy.getWelcomePagerData()
