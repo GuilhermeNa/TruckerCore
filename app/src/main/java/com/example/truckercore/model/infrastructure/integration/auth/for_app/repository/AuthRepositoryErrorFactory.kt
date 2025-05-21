@@ -32,7 +32,7 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_api.exc
  * }
  * ```
  */
-object AuthRepositoryErrorFactory {
+class AuthRepositoryErrorFactory {
 
     fun creatingUser(e: Throwable): InfraException {
         if (e is NetworkException) return InfraException.NetworkUnavailable()

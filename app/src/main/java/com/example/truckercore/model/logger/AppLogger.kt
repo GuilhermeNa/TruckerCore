@@ -1,6 +1,7 @@
 package com.example.truckercore.model.logger
 
 import android.util.Log
+import com.example.truckercore._utils.expressions.getClassName
 
 /**
  * AppLogger is a centralized logging utility for the application.
@@ -80,7 +81,11 @@ object AppLogger {
      * @param throwable An optional Throwable to include with the error log.
      */
     fun e(tag: String = DEFAULT_TAG, message: String, throwable: Throwable? = null) {
-        Log.e("$M_LOG [$tag]", message, throwable)
+        val logMessage = throwable?.let { t ->
+            "$message ${t.getClassName()} - ${t.message}"
+        } ?: message
+
+        Log.e("$M_LOG [$tag]", logMessage)
     }
 
     /**

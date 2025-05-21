@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 class SplashEffectManager {
 
-    private val _effect : MutableSharedFlow<SplashEffect> = MutableSharedFlow()
+    private val _effect: MutableSharedFlow<SplashEffect> = MutableSharedFlow()
     val effect get() = _effect
 
     suspend fun setTransitionToLoading() {

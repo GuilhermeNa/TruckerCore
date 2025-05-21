@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
-import com.example.truckercore.view.ui_state.UiState
+import com.example.truckercore._utils.classes.contracts.UiState
 
 /**
  * Represents the UI state for the Continue Register screen.

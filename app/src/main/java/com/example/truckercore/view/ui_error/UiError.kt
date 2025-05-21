@@ -2,17 +2,18 @@ package com.example.truckercore.view.ui_error
 
 sealed class UiError {
 
-    sealed class Recoverable(open val message: String) : UiError() {
-        data object Network : Recoverable("Falha de conexão.")
-        data object SessionInactive: Recoverable("Usuário desconectado. Faça o Login novamente.")
-        data object Unauthorized : Recoverable("Usuário não autorizado.")
-        data class Custom(override val message: String) : Recoverable(message)
-    }
+    sealed class Recoverable(open val message: String) : UiError()
 
     data class Critical(
-        val title: String = "Ocorreu um erro",
-        val message: String = "Algo deu errado. Por favor, tente novamente.\n" +
-                "Se o problema persistir, entre em contato com o suporte."
+        val title: String = DEFAULT_CRITICAL_TITLE,
+        val message: String = DEFAULT_CRITICAL_MESSAGE
     ) : UiError()
+
+    private companion object {
+        private const val DEFAULT_CRITICAL_TITLE = "Ocorreu um erro"
+        private const val DEFAULT_CRITICAL_MESSAGE =
+            "Algo deu errado. Por favor, tente novamente.\n" +
+                    "Se o problema persistir, entre em contato com o suporte."
+    }
 
 }

@@ -3,7 +3,7 @@ package com.example.truckercore.model.modules.aggregation.session.use_cases
 import com.example.truckercore._utils.classes.AppResponse
 import com.example.truckercore._utils.classes.AppResult
 import com.example.truckercore._utils.expressions.extractError
-import com.example.truckercore._utils.expressions.getName
+import com.example.truckercore._utils.expressions.getClassName
 import com.example.truckercore._utils.expressions.getOrElse
 import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
@@ -55,7 +55,7 @@ class GetSessionInfoUseCaseImpl(
                 return@invoke AppResult.Error(it.extractError())
             }
 
-            AppLogger.d(getName(), SUCCESS_MSG)
+            AppLogger.d(getClassName(), SUCCESS_MSG)
             AppResult.Success(
                 Session(
                     uid = uid,

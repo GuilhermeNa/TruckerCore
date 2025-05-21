@@ -11,3 +11,9 @@ inline fun UiError.handleUiError(
         is UiError.Recoverable -> onRecoverable(this)
     }
 }
+
+inline fun UiError.doIfCritical(
+    run: (UiError.Critical) -> Unit
+) {
+    if(this is UiError.Critical) run(this)
+}

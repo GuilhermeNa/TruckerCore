@@ -13,5 +13,4 @@ val systemAccessModule = module {
 
     single<IsUserRegisteredInSystemUseCase> { IsUserRegisteredInSystemUseCaseImpl(get()) }
     single<CreateNewSystemAccessUseCase> { CreateSystemAccessUseCaseImpl(get()) }
-
 }

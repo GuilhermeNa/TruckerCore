@@ -18,15 +18,6 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_splashFragment_to_emailAuthFragment"
-            app:destination="@id/emailAuthFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_splashFragment_to_continueRegisterFragment"
             app:destination="@id/continueRegisterFragment"
             app:enterAnim="@anim/slide_in_bottom"

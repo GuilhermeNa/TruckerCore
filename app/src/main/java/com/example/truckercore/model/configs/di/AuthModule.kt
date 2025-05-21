@@ -26,7 +26,6 @@ import com.example.truckercore.model.modules.authentication.use_cases.interfaces
 import org.koin.dsl.module
 
 val authModule = module {
-    single { AuthRepositoryErrorFactory }
     single<AuthManager> {
         AuthManagerImpl(get(), get(), get(), get(), get(), get(), get(), get(), get(), get())
     }

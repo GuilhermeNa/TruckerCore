@@ -8,11 +8,16 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
+import com.example.truckercore._utils.expressions.doIfCritical
 import com.example.truckercore._utils.expressions.doIfRecreating
-import com.example.truckercore._utils.expressions.getName
+import com.example.truckercore._utils.expressions.logEffect
+import com.example.truckercore._utils.expressions.logState
+import com.example.truckercore._utils.expressions.navigateToActivity
+import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.model.logger.AppLogger
+import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view_model.view_models.splash.SplashEffect
 import com.example.truckercore.view_model.view_models.splash.SplashEvent
@@ -33,13 +38,12 @@ class SplashFragment : CloseAppFragment() {
     private val flavorService: FlavorService by inject()
 
     private var stateHandler: SplashUiStateHandler? = null
-    private val navigationHandler by lazy { SplashNavigationHandler() }
 
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
             val event = when (currentId) {
                 stateHandler?.loadingUiState -> SplashEvent.UiEvent.TransitionToLoadingComplete
-                stateHandler?.navigationUiState -> SplashEvent.UiEvent.TransitionToNavigation
+                stateHandler?.navigationUiState -> SplashEvent.UiEvent.TransitionToNavigationComplete
                 else -> throw NotImplementedError(
                     "SplashFragment completed transition listener unimplemented with id: $currentId."
                 )
@@ -47,8 +51,8 @@ class SplashFragment : CloseAppFragment() {
             viewModel.onEvent(event)
         }
 
-        // ---> UNUSED <--- //
         override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
+
         override fun onTransitionChange(
             motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float
         ) {
@@ -58,7 +62,6 @@ class SplashFragment : CloseAppFragment() {
             motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float
         ) {
         }
-
     }
 
     //----------------------------------------------------------------------------------------------
@@ -77,7 +80,7 @@ class SplashFragment : CloseAppFragment() {
     private fun CoroutineScope.setUiStateManager() {
         launch {
             viewModel.uiState.collect { state ->
-                AppLogger.d(this@SplashFragment.getName(), "State: $state")
+                logState(this@SplashFragment, state)
 
                 when (state) {
                     SplashUiState.Initial -> {
@@ -89,64 +92,48 @@ class SplashFragment : CloseAppFragment() {
                         stateHandler?.jumpToLoadingState()
                     }
 
-                    SplashUiState.Navigating -> {
+                    is SplashUiState.Navigating -> {
                         doIfRecreating {
                             stateHandler?.bindAppName(flavorService.getAppName())
                             stateHandler?.jumpToNavigationState()
                         }
-
+                        navigateToDirection(getNavDirection(state))
                     }
+
+                    is SplashUiState.Error -> state.uiError.doIfCritical {
+                        val intent = NotificationActivity.newInstance(
+                            context = requireContext(),
+                            title = it.title,
+                            message = it.message
+                        )
+                        navigateToActivity(intent, true)
+                    }
+
                 }
-                /*  when (state) {
-                  is SplashUiState.Initial -> ifResumedOrElse(
-                      resumed = {
-                          // Expected flow: the user opens the app and waits for the animation to finish.
-                          // The animation listener will notify the ViewModel that
-                          // the FirstAnim event was completed.
-                          stateHandler?.bindAppName(flavorService.getAppName())
-                          stateHandler?.transitionToSecondState()
-                      },
-                      orElse = {
-                          // Unexpected flow: the user opens the app and closes it before
-                          // the first transition is completed.
-                          // The FirstAnim event must be triggered outside the animation listener.
-                          viewModel.onEvent(SplashEvent.UiEvent.TransitionToLoadingComplete)
-                      }
-                  )
+            }
+        }
+    }
 
-                  is SplashUiState.Loading -> {
-                      // Intermediate state. This ensures that the view is correctly recreated
-                      // when the user leaves and returns to the fragment while in the loading state.
-                      if (lifecycle.currentState != Lifecycle.State.RESUMED) {
-                          stateHandler?.bindAppName(flavorService.getAppName())
-                          stateHandler?.jumpToSecondState()
-                      }
-                  }
-
-                  is SplashUiState.Loaded -> {
-                      ifResumedOrElse(
-                          resumed = {
-                              // Expected flow: after the data is loaded, the app runs the second
-                              // animation, and the listener marks it as complete in the ViewModel.
-                              stateHandler?.transitionToThirdState()
-                          },
-                          orElse = {
-                              // Unexpected flow: the user closes the app before the second transition is completed.
-                              // The SecondAnim event must be triggered outside the animation listener.
-                              stateHandler?.bindAppName(flavorService.getFlavor().appName)
-                              stateHandler?.jumpToThirdState()
-                              viewModel.onEvent(SplashEvent.UiEvent.SecondAnimComplete)
-                          }
-                      )
-                  }
-              }*/
+    private fun getNavDirection(state: SplashUiState.Navigating): NavDirections {
+        return when(state) {
+            SplashUiState.Navigating.ContinueRegister -> {
+                SplashFragmentDirections.actionSplashFragmentToContinueRegisterFragment()
+            }
+            SplashUiState.Navigating.Login -> {
+                SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+            }
+            SplashUiState.Navigating.PreparingAmbient -> {
+                SplashFragmentDirections.actionSplashFragmentToPreparingAmbientFragment()
+            }
+            SplashUiState.Navigating.Welcome -> {
+                SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
             }
         }
     }
 
     private suspend fun setEffectManager() {
         viewModel.effect.collect { effect ->
-            AppLogger.d(this@SplashFragment.getName(), "Effect: $effect")
+            logEffect(this@SplashFragment, effect)
 
             when (effect) {
                 SplashEffect.TransitionToLoading -> stateHandler?.transitionToLoadingState()

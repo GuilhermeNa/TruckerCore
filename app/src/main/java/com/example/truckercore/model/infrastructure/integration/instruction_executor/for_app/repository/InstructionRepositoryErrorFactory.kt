@@ -1,13 +1,13 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository
 
-import com.example.truckercore._utils.expressions.getName
+import com.example.truckercore._utils.expressions.getClassName
 import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InterpreterException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.ApiInstructionException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.exceptions.InstructionException
 import com.example.truckercore.model.logger.AppLogger
 
-class InstructionExecutorErrorFactory {
+class InstructionRepositoryErrorFactory {
 
     operator fun invoke(e: Exception): InfraException.WriterError {
         val message = when (e) {
@@ -27,7 +27,7 @@ class InstructionExecutorErrorFactory {
 
     private fun logDebug(e: Exception) {
         AppLogger.d(
-            getName(),
+            getClassName(),
             "$LOG_MESSAGE ${e::class.simpleName} - ${e.message}"
         )
     }

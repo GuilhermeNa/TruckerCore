@@ -20,7 +20,7 @@ val commonViewModelModule = module {
     single { UserPreferencesDataStore(androidContext()) }
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
 
-    viewModel<SplashViewModel> { SplashViewModel(get(), get(), get()) }
+    viewModel<SplashViewModel> { SplashViewModel(get(), get(), get(), get()) }
     viewModel<LoginViewModel> { LoginViewModel(get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }

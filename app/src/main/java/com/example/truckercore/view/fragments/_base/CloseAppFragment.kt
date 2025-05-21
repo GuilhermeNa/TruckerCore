@@ -5,9 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import com.example.truckercore._utils.expressions.getName
 import com.example.truckercore._utils.expressions.showToast
-import com.example.truckercore.model.logger.AppLogger
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

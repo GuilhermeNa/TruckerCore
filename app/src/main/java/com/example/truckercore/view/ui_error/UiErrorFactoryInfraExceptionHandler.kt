@@ -5,7 +5,7 @@ import com.example.truckercore.model.errors.infra.InfraException
 
 object UiErrorFactoryInfraExceptionHandler {
 
-    operator fun invoke(e: InfraException): UiError = when (e) {
+   /* operator fun invoke(e: InfraException): UiError = when (e) {
         is InfraException.NetworkUnavailable -> UiError.Recoverable.Network
         is InfraException.AuthError -> handleAuthError(e.code)
         is InfraException.DatabaseError -> TODO()
@@ -34,8 +34,8 @@ object UiErrorFactoryInfraExceptionHandler {
         AuthErrorCode.SignInWithEmail.TooManyRequests -> UiError.Recoverable.Custom("Limite de tentativas excedido. Aguarde um momento e tente novamente.")
         AuthErrorCode.SignInWithEmail.Unknown -> UiError.Critical()
 
-        AuthErrorCode.SessionInactive -> UiError.Recoverable.SessionInactive
-    }
+        AuthErrorCode.SessionInactive -> UiError.Recoverable.SessionInactive*/
+    //}
 
     /* private fun handleDatabaseError(code: DatabaseErrorCode): UiError {
          TODO()

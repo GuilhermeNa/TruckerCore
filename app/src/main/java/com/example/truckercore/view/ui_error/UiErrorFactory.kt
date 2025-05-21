@@ -8,12 +8,13 @@ import com.example.truckercore.model.errors.technical.TechnicalException
 object UiErrorFactory {
 
     operator fun invoke(e: AppException): UiError {
-        return when (e) {
+       TODO()
+        /* return when (e) {
             is InfraException -> UiErrorFactoryInfraExceptionHandler(e)
             is DomainException -> UiErrorFactoryDomainExceptionHandler(e)
             is TechnicalException -> UiErrorFactoryTechnicalExceptionHandler(e)
             else -> TODO()
-        }
+        }*/
     }
 
 }

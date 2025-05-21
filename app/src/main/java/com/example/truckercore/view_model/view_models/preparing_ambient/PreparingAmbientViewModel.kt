@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.preparing_ambient
 
 import androidx.lifecycle.ViewModel
-import com.example.truckercore._utils.expressions.getName
+import com.example.truckercore._utils.expressions.getClassName
 import com.example.truckercore._utils.expressions.getOrElse
 import com.example.truckercore._utils.expressions.launch
 import com.example.truckercore.model.errors.AppException
@@ -32,22 +32,22 @@ class PreparingAmbientViewModel(
     }
 
     private fun handleLoadSessionEvent() {
-        AppLogger.d(getName(), LOAD_SESSION_MSG)
+        AppLogger.d(getClassName(), LOAD_SESSION_MSG)
         loadSession()
     }
 
     private fun handleSessionLoadedEvent() {
-        AppLogger.d(getName(), SESSION_LOADED_MSG)
+        AppLogger.d(getClassName(), SESSION_LOADED_MSG)
         stateManager.setSuccessState()
     }
 
     private fun handleSessionError(exception: AppException) {
-        AppLogger.d(getName(), "$RECEIVED_SESSION_ERROR_MSG $exception")
+        AppLogger.d(getClassName(), "$RECEIVED_SESSION_ERROR_MSG $exception")
         stateManager.setSessionErrorState()
     }
 
     private fun handleUidError(exception: AppException) {
-        AppLogger.d(getName(), "$RECEIVED_UID_ERROR_MSG $exception")
+        AppLogger.d(getClassName(), "$RECEIVED_UID_ERROR_MSG $exception")
         stateManager.setUidErrorState()
     }
 

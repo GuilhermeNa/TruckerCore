@@ -1,3 +1,3 @@
 package com.example.truckercore._utils.expressions
 
-fun Any.getName(): String = this.javaClass.simpleName
+fun Any.getClassName(): String = this.javaClass.simpleName
