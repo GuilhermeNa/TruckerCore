@@ -115,7 +115,8 @@ class SplashFragment : CloseAppFragment() {
     }
 
     private fun getNavDirection(state: SplashUiState.Navigating): NavDirections {
-        return when(state) {
+        return  SplashFragmentDirections.actionGlobalContinueRegisterFragment()
+       /* return when(state) {
             SplashUiState.Navigating.ContinueRegister -> {
                 SplashFragmentDirections.actionSplashFragmentToContinueRegisterFragment()
             }
@@ -128,7 +129,7 @@ class SplashFragment : CloseAppFragment() {
             SplashUiState.Navigating.Welcome -> {
                 SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
             }
-        }
+        }*/
     }
 
     private suspend fun setEffectManager() {
