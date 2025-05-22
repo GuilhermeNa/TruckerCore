@@ -8,7 +8,6 @@ import com.example.truckercore._utils.expressions.doIfResumedOrElse
 import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.configs.enums.Tag
-import com.example.truckercore.view.dialogs.LoadingDialog
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserInputValidationResult
 
 /**
@@ -17,7 +16,7 @@ import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserIn
  *
  * This class isolates view logic from the fragment to make it more modular and testable.
  */
-class EmailAuthStateHandler(
+class EmailAuthUiStateHandler(
     private val fragment: EmailAuthFragment,
     private val binding: FragmentEmailAuthBinding
 ) {
@@ -25,25 +24,8 @@ class EmailAuthStateHandler(
     // The context of fragment
     private val context = binding.root.context
 
-    // Dialog used to indicate a loading state during user creation
-    private val dialog by lazy { LoadingDialog(context) }
-
     // Handles UI transitions using MotionLayout
     private val transitionHandler = EmailAuthTransitionHandler(fragment, binding.fragEmailAuthMain)
-
-    /**
-     * Shows a loading dialog to indicate that the user creation process is ongoing.
-     */
-    fun setCreatingState() {
-        dialog.show()
-    }
-
-    /**
-     * Dismisses the loading dialog once the user creation is complete.
-     */
-    fun setSuccessState() {
-        dialog.dismiss()
-    }
 
     /**
      * Displays validation errors on the UI and triggers the appropriate transition state.
@@ -55,7 +37,7 @@ class EmailAuthStateHandler(
         validationResult: EmailAuthUserInputValidationResult,
         lifecycleState: Lifecycle.State
     ) {
-        dialog.dismiss()
+
         bindErrorMessage(validationResult)
         transitionHandler.invoke(validationResult.errorCode)
     }
@@ -69,10 +51,6 @@ class EmailAuthStateHandler(
         fields.forEach { (view, error) ->
             error?.let { view.text = error }
         }
-    }
-
-    fun dismissDialog() {
-        if (dialog.isShowing) dialog.dismiss()
     }
 
 }

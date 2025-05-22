@@ -12,9 +12,12 @@ import com.example.truckercore._utils.classes.ButtonState
 import com.example.truckercore._utils.enums.Direction
 import com.example.truckercore._utils.expressions.doIfResumed
 import com.example.truckercore._utils.expressions.doIfResumedOrElse
+import com.example.truckercore._utils.expressions.getClassName
+import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentWelcomeBinding
+import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view.ui_error.UiError
@@ -33,16 +36,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class WelcomeFragment : CloseAppFragment() {
 
-    // Binding --------------------------------------------------------------
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
 
     private var stateHandler: WelcomeUiStateHandler? = null
 
-    // ViewModel && Args ---------------------------------------------------------------------------
     private val viewModel: WelcomeViewModel by viewModel()
 
-    // ViewPager -----------------------------------------------------------------------------------
     private var viewPager: ViewPager2? = null
     private var pagerAdapter: WelcomePagerAdapter? = null
     private val pagerListener = object : ViewPager2.OnPageChangeCallback() {
@@ -70,6 +70,8 @@ class WelcomeFragment : CloseAppFragment() {
     private fun CoroutineScope.setFragmentStateManager() {
         this.launch {
             viewModel.state.collect { state ->
+                logState(this@WelcomeFragment, state)
+
                 handleUiErrorIfHas(state.uiError)
                 handleViewPager(state.data)
                 handleLeftFab(state.fabState)
@@ -98,7 +100,7 @@ class WelcomeFragment : CloseAppFragment() {
             viewPager?.run {
                 adapter = pagerAdapter
                 registerOnPageChangeCallback(pagerListener)
-                setCurrentItem(viewModel.pagerPos, false)
+                setCurrentItem(viewModel.pagerPos(), false)
                 TabLayoutMediator(binding.fragWelcomeTabLayout, this) { _, _ -> }.attach()
             }
         }
@@ -135,9 +137,27 @@ class WelcomeFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRightFabListener()
-        setLeftFabListener()
         setTopButtonListener()
+        setLeftFabListener()
+        setRightFabListener()
+    }
+
+    /**
+     * Sets up the listener for the jump button click event.
+     */
+    private fun setTopButtonListener() {
+        binding.fragWelcomeJumpButton.setOnClickListener {
+            navigateToEmailAuth()
+        }
+    }
+
+    /**
+     * Sets up the listener for the left FAB click event.
+     */
+    private fun setLeftFabListener() {
+        binding.fragWelcomeLeftFab.setOnClickListener {
+            paginateViewPager(Direction.Back)
+        }
     }
 
     /**
@@ -152,13 +172,12 @@ class WelcomeFragment : CloseAppFragment() {
         }
     }
 
-    /**
-     * Sets up the listener for the left FAB click event.
-     */
-    private fun setLeftFabListener() {
-        binding.fragWelcomeLeftFab.setOnClickListener {
-            paginateViewPager(Direction.Back)
-        }
+    private fun navigateToEmailAuth() {
+        //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
+
+        val direction = WelcomeFragmentDirections
+            .actionWelcomeFragmentToEmailAuthFragment()
+        navigateToDirection(direction)
     }
 
     /**
@@ -168,23 +187,6 @@ class WelcomeFragment : CloseAppFragment() {
         viewPager?.run {
             setCurrentItem(currentItem + direction.value, true)
         }
-    }
-
-    /**
-     * Sets up the listener for the jump button click event.
-     */
-    private fun setTopButtonListener() {
-        binding.fragWelcomeJumpButton.setOnClickListener {
-            navigateToEmailAuth()
-        }
-    }
-
-    private fun navigateToEmailAuth() {
-        //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
-
-        val direction = WelcomeFragmentDirections
-            .actionWelcomeFragmentToEmailAuthFragment()
-        navigateToDirection(direction)
     }
 
     //----------------------------------------------------------------------------------------------

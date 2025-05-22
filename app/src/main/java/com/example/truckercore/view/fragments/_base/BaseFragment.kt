@@ -10,41 +10,41 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppLogger.d(getClassName(), FRAGMENT_STATE_CREATE)
+        AppLogger.d(getClassName(), LIFECYCLE_CREATE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AppLogger.d(getClassName(), FRAGMENT_STATE_VIEW_CREATED)
+        AppLogger.d(getClassName(), LIFECYCLE_VIEW_CREATED)
     }
 
     override fun onStart() {
         super.onStart()
-        AppLogger.d(getClassName(), FRAGMENT_STATE_START)
+        AppLogger.d(getClassName(), LIFECYCLE_START)
     }
 
     override fun onResume() {
         super.onResume()
-        AppLogger.d(getClassName(), FRAGMENT_STATE_RESUME)
+        AppLogger.d(getClassName(), LIFECYCLE_RESUME)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        AppLogger.d(getClassName(), FRAGMENT_STATE_DESTROY_VIEW)
+        AppLogger.d(getClassName(), LIFECYCLE_DESTROY_VIEW)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        AppLogger.d(getClassName(), FRAGMENT_STATE_DESTROY)
+        AppLogger.d(getClassName(), LIFECYCLE_DESTROY)
     }
 
     private companion object {
-        private const val FRAGMENT_STATE_CREATE = "Fragment State: ON_CREATE"
-        private const val FRAGMENT_STATE_VIEW_CREATED = "Fragment State: ON_VIEW_CREATED"
-        private const val FRAGMENT_STATE_START = "Fragment State: ON_START"
-        private const val FRAGMENT_STATE_RESUME = "Fragment State: ON_RESUME"
-        private const val FRAGMENT_STATE_DESTROY_VIEW = "Fragment State: ON_DESTROY_VIEW"
-        private const val FRAGMENT_STATE_DESTROY = "Fragment State: ON_DESTROY"
+        private const val LIFECYCLE_CREATE = "Fragment Lifecycle: ON_CREATE"
+        private const val LIFECYCLE_VIEW_CREATED = "Fragment Lifecycle: ON_VIEW_CREATED"
+        private const val LIFECYCLE_START = "Fragment Lifecycle: ON_START"
+        private const val LIFECYCLE_RESUME = "Fragment Lifecycle: ON_RESUME"
+        private const val LIFECYCLE_DESTROY_VIEW = "Fragment Lifecycle: ON_DESTROY_VIEW"
+        private const val LIFECYCLE_DESTROY = "Fragment Lifecycle: ON_DESTROY"
     }
 
 }

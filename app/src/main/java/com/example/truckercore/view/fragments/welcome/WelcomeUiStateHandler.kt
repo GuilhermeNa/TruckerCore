@@ -21,5 +21,4 @@ class WelcomeUiStateHandler(private val fab: FloatingActionButton) {
         if (!fab.isVisible) fab.visibility = VISIBLE
     }
 
-
 }

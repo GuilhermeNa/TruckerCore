@@ -11,14 +11,15 @@ import com.example.truckercore._utils.expressions.clearFocusIfNeeded
 import com.example.truckercore._utils.expressions.hideKeyboard
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.view.dialogs.LoadingDialog
 import com.example.truckercore.view.fragments._base.CloseAppFragment
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEffect
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.AlreadyHaveAccountButtonCLicked
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragEvent.CreateAccountButtonClicked
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Creating
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.Success
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.UserInputError
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthFragState.WaitingInput
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthEffect
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthEvent
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthEvent.AlreadyHaveAccountButtonCLicked
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUiState.AwaitingInput
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUiState.Creating
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUiState.Success
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUiState.UserInputError
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthUserInputValidationResult
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -37,8 +38,9 @@ class EmailAuthFragment : CloseAppFragment() {
     private val binding get() = _binding!!
 
     // Handles UI-specific logic and updates for this fragment
-    private var _stateHandler: EmailAuthStateHandler? = null
-    private val stateHandler get() = _stateHandler!!
+    private var stateHandler: EmailAuthUiStateHandler? = null
+
+    private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
     // ViewModel that contains state, effects, and events related to authentication logic
     private val viewModel: EmailAuthViewModel by viewModel()
@@ -66,7 +68,7 @@ class EmailAuthFragment : CloseAppFragment() {
         launch {
             viewModel.state.collect { state ->
                 when (state) {
-                    is WaitingInput -> stateHandler.dismissDialog()
+                    is AwaitingInput -> stateHandler.dismissDialog()
                     is Creating -> handleCreatingState()
                     is Success -> handleSuccessState()
                     is UserInputError -> handleUserInputErrorState(state.validationResult)
@@ -105,8 +107,8 @@ class EmailAuthFragment : CloseAppFragment() {
         launch {
             viewModel.effect.collect { effect ->
                 when (effect) {
-                    is EmailAuthFragEffect.UserCreated -> handleUserCreatedEffect()
-                    is EmailAuthFragEffect.UserCreationFailed ->
+                    is EmailAuthEffect.UserCreated -> handleUserCreatedEffect()
+                    is EmailAuthEffect.UserCreationFailed ->
                         handleUserCreationFailedEffect(effect.error)
                 }
             }
@@ -124,46 +126,21 @@ class EmailAuthFragment : CloseAppFragment() {
      * Handles failures during user creation and determines whether to show a toast or navigate to an error screen.
      */
     private fun handleUserCreationFailedEffect(error: AppException) {
-        viewModel.setState(WaitingInput)
-    /*    error.errorCode.let { ec ->
-            ec.handleOnUi(
-                onRecoverable = { message -> showToast(message) },
-                onFatalError = { name, message ->
-                    val intent = NotificationActivity.newInstance(
-                        context = requireContext(),
-                        title = name,
-                        message = message
-                    )
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
-            )
-        }*/
-    }
-
-    /**
-     * Collects user interaction events and triggers corresponding UI and ViewModel logic.
-     */
-    private suspend fun setFragmentEventsManager() {
-        viewModel.event.collect { event ->
-            when (event) {
-                is CreateAccountButtonClicked -> handleCreateButtonClicked()
-                is AlreadyHaveAccountButtonCLicked -> handleAlreadyHaveAccountButtonClicked()
-            }
-        }
-    }
-
-    /**
-     * Initiates account creation by collecting user input and passing it to the ViewModel.
-     */
-    private fun handleCreateButtonClicked() {
-        hideKeyboardAndClearFocus()
-        viewModel.setState(Creating)
-
-        val email = binding.fragEmailAuthEmailEditText.text.toString()
-        val password = binding.fragEmailAuthPasswordEditText.text.toString()
-        val confirmation = binding.fragEmailAuthConfirmPasswordEditText.text.toString()
-        viewModel.tryToAuthenticate(email, password, confirmation)
+        viewModel.setState(AwaitingInput)
+        /*    error.errorCode.let { ec ->
+                ec.handleOnUi(
+                    onRecoverable = { message -> showToast(message) },
+                    onFatalError = { name, message ->
+                        val intent = NotificationActivity.newInstance(
+                            context = requireContext(),
+                            title = name,
+                            message = message
+                        )
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
+                )
+            }*/
     }
 
     /**
@@ -182,7 +159,7 @@ class EmailAuthFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        _stateHandler = EmailAuthStateHandler(this, binding)
+        stateHandler = EmailAuthUiStateHandler(this, binding)
         return binding.root
     }
 
@@ -191,7 +168,7 @@ class EmailAuthFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRegisterButtonListener()
+        setCreateButtonListener()
         setAlreadyRegisteredButtonListener()
         setMainLayoutClickListener()
     }
@@ -220,9 +197,16 @@ class EmailAuthFragment : CloseAppFragment() {
     /**
      * Sets the click listener for the "Register" button to trigger the account creation process.
      */
-    private fun setRegisterButtonListener() {
-        binding.fragEmailAuthRegisterButton.setOnClickListener {
-            viewModel.setEvent(CreateAccountButtonClicked)
+    private fun setCreateButtonListener() = with(binding) {
+        fragEmailAuthRegisterButton.setOnClickListener {
+            val form = EmailAuthForm(
+                email = fragEmailAuthEmailEditText.text.toString(),
+                password = fragEmailAuthPasswordEditText.text.toString(),
+                confirmation = fragEmailAuthConfirmPasswordEditText.text.toString()
+            )
+            val clickEvent = EmailAuthEvent.UiEvent.Click.ButtonCreate(form)
+
+            viewModel.onEvent(clickEvent)
         }
     }
 
@@ -240,7 +224,7 @@ class EmailAuthFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-        _stateHandler = null
+        stateHandler = null
         _binding = null
     }
 }
