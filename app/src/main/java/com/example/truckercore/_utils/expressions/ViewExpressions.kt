@@ -21,11 +21,12 @@ import com.google.android.material.textfield.TextInputEditText
  *
  * @receiver View - The view on which this function is invoked.
  */
-fun View.slideInBottom() {
+fun View.slideInBottom(duration: Long? = null) {
     // Checks if the view is not already visible before applying the animation.
     if (visibility != VISIBLE) {
         // Loads the slide-in animation from the resource.
         val animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
+        duration?.let { animation.duration = duration }
 
         // Makes the view visible.
         visibility = VISIBLE

@@ -13,4 +13,10 @@ class WelcomeUiStateManager(pagerData: List<WelcomePagerData>) {
         _state.value = newState
     }
 
+    fun isLastPage() = state.value.isLastPage()
+
+    fun updatePagerPosition(position: Int) {
+
+    }
+
 }

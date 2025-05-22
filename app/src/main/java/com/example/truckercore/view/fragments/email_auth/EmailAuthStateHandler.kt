@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.Lifecycle
 import com.example.truckercore.R
-import com.example.truckercore._utils.expressions.ifResumedOrElse
+import com.example.truckercore._utils.expressions.doIfResumedOrElse
 import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.model.configs.enums.Tag
@@ -114,7 +114,7 @@ private class EmailAuthTransitionHandler(
      * Starts the UI transition to the given state.
      */
     private fun startTransition(transitionState: Int) {
-        fragment.ifResumedOrElse(
+        fragment.doIfResumedOrElse(
             resumed = { layout.transitionToState(transitionState, 200) },
             orElse = { layout.jumpToState(transitionState) }
         )

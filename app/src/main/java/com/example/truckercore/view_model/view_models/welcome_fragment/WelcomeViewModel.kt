@@ -18,24 +18,16 @@ class WelcomeViewModel(
     private val flavorService: FlavorService
 ) : BaseViewModel() {
 
-    // Fragment State --------------------------------------------------------------
-    // MutableStateFlow that holds the current state of the fragment.
     private val stateManager = WelcomeUiStateManager(flavorService.getWelcomePagerData())
     val state get() = stateManager.state.asStateFlow()
-
-    // ViewPager last position ------------------------------------------------------
-    // Holds the last position of the ViewPager to manage UI state.
-    private var _lastPagerPos: Int = 0
-    val pagerPos get() = _lastPagerPos
 
     //----------------------------------------------------------------------------------------------
     // Initialization block to setup the initial fragment state based on the provided flavor.
     // If an error occurs, it updates the fragment state with an error message.
     //----------------------------------------------------------------------------------------------
-
     fun onEvent(event: WelcomeEvent) {
        if(event is WelcomeEvent.PagerChanged) {
-
+            stateManager.updatePagerPosition(event.position)
        }
     }
 
@@ -67,7 +59,6 @@ class WelcomeViewModel(
         updateFragmentState(newState)
     }
 
-    fun isInLastPage(): Boolean {
+    fun isLastPage(): Boolean = stateManager.isLastPage()
 
-    }
 }

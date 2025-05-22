@@ -11,8 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view.dialogs.BottomSheetVerifyingEmail
-import com.example.truckercore._utils.expressions.navigateToDirection
-import com.example.truckercore._utils.expressions.ifResumedOrElse
+import com.example.truckercore._utils.expressions.doIfResumedOrElse
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailUiState
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
@@ -128,7 +127,7 @@ class VerifyingEmailFragment : Fragment() {
 
     private suspend fun setCounterStateManager() {
         viewModel.counterFlow.collect { value ->
-            ifResumedOrElse(
+            doIfResumedOrElse(
                 resumed = { stateHandler.incrementProgress(value, true) },
                 orElse = { stateHandler.incrementProgress(value, false) }
             )

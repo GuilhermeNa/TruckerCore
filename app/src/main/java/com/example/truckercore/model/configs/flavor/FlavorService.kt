@@ -11,7 +11,7 @@ class FlavorService(private val strategy: FlavorStrategy) {
 
     fun getRole(): Role = strategy.getRole()
 
-    fun getFlavor(): Flavor = strategy.getFlavor()
+    private fun getFlavor(): Flavor = strategy.getFlavor()
 
     fun getAppName(): String = getFlavor().appName
 
