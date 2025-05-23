@@ -3,7 +3,6 @@ package com.example.truckercore.view_model.view_models.user_name
 import com.example.truckercore._utils.classes.ButtonState
 import com.example.truckercore._utils.classes.FieldState
 import com.example.truckercore._utils.classes.FullName
-import com.example.truckercore._utils.classes.Input
 import com.example.truckercore.model.shared.utils.expressions.isFullNameFormat
 import com.example.truckercore.view.ui_error.UiError
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,19 +15,19 @@ class UserNameUiStateManager {
     fun updateName(text: String) {
         val (fieldState, fabState) = when {
             text.isEmpty() -> Pair(
-                FieldState(text = text, validation = Input.NEUTRAL),
+                FieldState(text = text, status = FieldState.Input.NEUTRAL),
                 ButtonState(false)
             )
 
             text.isFullNameFormat() -> Pair(
-                FieldState(text = text, validation = Input.VALID),
+                FieldState(text = text, status = FieldState.Input.VALID),
                 ButtonState(true)
             )
 
             else -> Pair(
                 FieldState(
-                    text = text, validation = Input.ERROR,
-                    stateMessage = "Digite nome e sobrenome."
+                    text = text, status = FieldState.Input.ERROR,
+                    message = "Digite nome e sobrenome."
                 ),
                 ButtonState(false)
             )

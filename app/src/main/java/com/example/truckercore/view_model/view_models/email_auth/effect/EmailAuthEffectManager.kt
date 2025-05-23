@@ -1,7 +1,6 @@
-package com.example.truckercore.view_model.view_models.email_auth
+package com.example.truckercore.view_model.view_models.email_auth.effect
 
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 
 class EmailAuthEffectManager {
 

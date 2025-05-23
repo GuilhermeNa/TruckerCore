@@ -3,7 +3,6 @@ package com.example.truckercore.view_model.view_models.forget_password
 import com.example.truckercore._utils.classes.ButtonState
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.FieldState
-import com.example.truckercore._utils.classes.Input
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 import com.example.truckercore.view.ui_error.UiError
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,20 +36,20 @@ class ForgetPasswordUiStateManager {
     fun updateEmail(text: String) {
         val (fieldState, buttonState) = when {
             text.isEmpty() -> Pair(
-                FieldState(text, Input.NEUTRAL),
+                FieldState(text, FieldState.Input.NEUTRAL),
                 ButtonState(isEnabled = false)
             )
 
             text.isEmailFormat() -> Pair(
-                FieldState(text, Input.VALID),
+                FieldState(text, FieldState.Input.VALID),
                 ButtonState(isEnabled = true)
             )
 
             else -> Pair(
                 FieldState(
                     text = text,
-                    validation = Input.ERROR,
-                    stateMessage = "Formato de email inválido."
+                    status = FieldState.Input.ERROR,
+                    message = "Formato de email inválido."
                 ),
                 ButtonState(isEnabled = false)
             )

@@ -7,8 +7,6 @@ import com.example.truckercore._utils.classes.Password
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore._utils.classes.AppResult
-import com.example.truckercore._utils.expressions.launch
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -103,8 +101,8 @@ private class LoginStateFlowHandler {
         val newPasswordState = LoginValidator.getPasswordState(password)
 
         val newButtonState = LoginValidator.getButtonState(
-            emailValidation = emailState.validation,
-            passwordValidation = newPasswordState.validation,
+            emailValidation = emailState.status,
+            passwordValidation = newPasswordState.status,
         )
 
         val newState = _state.value.copy(
@@ -119,8 +117,8 @@ private class LoginStateFlowHandler {
         val newEmailState = LoginValidator.getEmailState(email)
 
         val newButtonState = LoginValidator.getButtonState(
-            emailValidation = newEmailState.validation,
-            passwordValidation = passwordState.validation,
+            emailValidation = newEmailState.status,
+            passwordValidation = passwordState.status,
         )
 
         val newState = _state.value.copy(

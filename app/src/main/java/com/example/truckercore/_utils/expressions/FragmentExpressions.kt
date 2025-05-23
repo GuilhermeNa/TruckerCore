@@ -98,6 +98,12 @@ fun Fragment.hideKeyboard() {
     if (isKeyboardOpen) inputMethodManager.hideSoftInputFromWindow(requireView().windowToken, 0)
 }
 
+fun Fragment.isKeyboardVisible(): Boolean {
+    val inputMethodManager =
+        this.requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    return inputMethodManager.isAcceptingText
+}
+
 fun Fragment.hideKeyboardAndClearFocus(vararg view: View) {
     this.hideKeyboard()
     view.forEach { v -> if (v.hasFocus()) v.clearFocus() }

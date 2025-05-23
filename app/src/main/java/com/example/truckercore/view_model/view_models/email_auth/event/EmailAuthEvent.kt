@@ -1,7 +1,6 @@
-package com.example.truckercore.view_model.view_models.email_auth
+package com.example.truckercore.view_model.view_models.email_auth.event
 
 import com.example.truckercore._utils.classes.contracts.Event
-import com.example.truckercore.view.fragments.email_auth.EmailAuthForm
 
 /**
  * EmailAuthFragEvent represents user-driven UI events in the EmailAuthFragment.
@@ -11,13 +10,16 @@ sealed class EmailAuthEvent : Event {
 
     // Eventos relacionados a interação do usuário como clicks e toques
     sealed class UiEvent : EmailAuthEvent() {
-        sealed class Touch : UiEvent() {
-            data object Background : UiEvent()
+        sealed class Click : UiEvent() {
+            data object Background : Click()
+            data object ButtonCreate : Click()
+            data object ButtonAlreadyHaveAccount : Click()
         }
 
-        sealed class Click : UiEvent() {
-            data class ButtonCreate(val form: EmailAuthForm) : Click()
-            data object ButtonAlreadyHaveAccount : Click()
+        sealed class Typing : UiEvent() {
+            data class EmailTextChange(val text: String) : Typing()
+            data class PasswordTextChange(val text: String) : Typing()
+            data class ConfirmationTextChange(val text: String) : Typing()
         }
 
     }
@@ -26,8 +28,9 @@ sealed class EmailAuthEvent : Event {
     sealed class SystemEvent : EmailAuthEvent() {
         data object Success : SystemEvent()
 
-        sealed class Failures : SystemEvent() {
+        sealed class Failure : SystemEvent() {
             data object InputValidationError : SystemEvent()
+
             data object ApiResultError : SystemEvent()
         }
 

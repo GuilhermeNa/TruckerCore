@@ -59,12 +59,6 @@ fun View.slideOutBottom(vis: Int, duration: Long? = null) {
     }
 }
 
-fun List<View>.clearFocusIfNeeded() {
-    this.forEach { v ->
-        if (v.hasFocus()) v.clearFocus()
-    }
-}
-
 fun ImageView.loadGif(url: Any? = null, context: Context) {
     fun getGifLoader(context: Context): ImageLoader {
         val imageLoaderGifSupport = ImageLoader.Builder(context)
