@@ -13,15 +13,17 @@ import com.example.truckercore._utils.expressions.doIfResumedOrElse
 import com.example.truckercore._utils.expressions.hideKeyboardAndClearFocus
 import com.example.truckercore._utils.expressions.logEffect
 import com.example.truckercore._utils.expressions.logState
+import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
+import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.dialogs.LoadingDialog
 import com.example.truckercore.view.fragments._base.CloseAppFragment
+import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.email_auth.effect.EmailAuthEffect
 import com.example.truckercore.view_model.view_models.email_auth.event.EmailAuthEvent
 import com.example.truckercore.view_model.view_models.email_auth.uiState.EmailAuthUiState
-import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -80,7 +82,7 @@ class EmailAuthFragment : CloseAppFragment() {
     private fun handleUiStatus(uiStatus: EmailAuthUiState.Status) {
         when (uiStatus) {
             EmailAuthUiState.Status.AwaitingInput.Default -> {
-                val stateId = R.id.initial
+                val stateId = R.id.frag_email_auth_state_0
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
                     orElse = { stateHandler?.jumpToState(stateId) }
@@ -88,7 +90,7 @@ class EmailAuthFragment : CloseAppFragment() {
             }
 
             EmailAuthUiState.Status.AwaitingInput.Ready -> {
-                val stateId = R.id.initial
+                val stateId = R.id.frag_email_auth_state_0
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
                     orElse = { stateHandler?.jumpToState(stateId) }
@@ -152,9 +154,26 @@ class EmailAuthFragment : CloseAppFragment() {
             }
 
 
-            EmailAuthUiState.Status.Creating -> TODO()
-            is EmailAuthUiState.Status.Error -> TODO()
-            EmailAuthUiState.Status.Success -> TODO()
+            EmailAuthUiState.Status.Creating -> {
+                dialog.show()
+            }
+
+            is EmailAuthUiState.Status.Error -> {
+                dialog.dismissIfShowing()
+                val intent = NotificationActivity.newInstance(
+                    context = requireContext(),
+                    title = uiStatus.uiError.title,
+                    message = uiStatus.uiError.message
+                )
+                navigateToActivity(intent, true)
+            }
+
+            EmailAuthUiState.Status.Success -> {
+                dialog.dismissIfShowing()
+                val direction = EmailAuthFragmentDirections
+                    .actionEmailAuthFragmentToVerifyingEmailFragment()
+                navigateToDirection(direction)
+            }
         }
     }
 
@@ -177,6 +196,7 @@ class EmailAuthFragment : CloseAppFragment() {
                     }
 
                     is EmailAuthEffect.ShowErrorMessage -> {
+                        dialog.dismissIfShowing()
                         showRedSnackBar(effect.message)
                     }
                 }
@@ -226,7 +246,7 @@ class EmailAuthFragment : CloseAppFragment() {
     // Notifica ao viewmodel que houve um evento de toque no background
     private fun setBackgroundClickListener() {
         binding.fragEmailAuthMain.setOnClickListener {
-                viewModel.onEvent(EmailAuthEvent.UiEvent.Click.Background)
+            viewModel.onEvent(EmailAuthEvent.UiEvent.Click.Background)
         }
     }
 

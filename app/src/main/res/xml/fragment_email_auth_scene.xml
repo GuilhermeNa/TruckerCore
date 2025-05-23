@@ -5,11 +5,11 @@
 
     <Transition
         android:id="@+id/transaction_teste"
-        motion:constraintSetStart="@id/initial"
+        motion:constraintSetStart="@id/frag_email_auth_state_0"
         motion:constraintSetEnd="@+id/frag_email_auth_state_1"
         motion:duration="200"/>
 
-    <ConstraintSet android:id="@+id/initial">
+    <ConstraintSet android:id="@+id/frag_email_auth_state_0">
     </ConstraintSet>
 
     <!-- Email error -->
