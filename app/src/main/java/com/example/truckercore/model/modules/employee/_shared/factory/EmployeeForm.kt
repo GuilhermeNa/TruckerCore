@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.employee._shared
+package com.example.truckercore.model.modules.employee._shared.factory
 
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.FullName

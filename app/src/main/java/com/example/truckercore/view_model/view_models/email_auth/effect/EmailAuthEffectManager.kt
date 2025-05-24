@@ -7,13 +7,16 @@ class EmailAuthEffectManager {
     private val _effect: MutableSharedFlow<EmailAuthEffect> = MutableSharedFlow()
     val effect get() = _effect
 
-
     suspend fun setClearFocusAndHideKeyboardEffect() {
         setEffect(EmailAuthEffect.ClearFocusAndHideKeyboard)
     }
 
     suspend fun setNavigateToLoginEffect() {
         setEffect(EmailAuthEffect.NavigateToLogin)
+    }
+
+    suspend fun setErrorMessageEffect(message: String) {
+        setEffect(EmailAuthEffect.ShowErrorMessage(message))
     }
 
     private suspend fun setEffect(newEffect: EmailAuthEffect) {

@@ -1,13 +1,13 @@
 package com.example.truckercore.model.modules.employee.autonomous.factory
 
 import com.example.truckercore.model.errors.domain.DomainException
-import com.example.truckercore.model.modules._contracts.ID
-import com.example.truckercore.model.modules.employee._shared.EmployeeForm
+import com.example.truckercore.model.modules._shared.contracts.entity.ID
+import com.example.truckercore.model.modules.employee._shared.factory.EmployeeForm
 import com.example.truckercore.model.modules.employee.autonomous.data.AutID
 import com.example.truckercore.model.modules.employee.autonomous.data.Autonomous
 import com.example.truckercore.model.modules.user._contracts.eligible_state.Active
 import com.example.truckercore.model.modules.user._contracts.eligible_state.Unregistered
-import com.example.truckercore.model.shared.enums.Persistence
+import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 object AutonomousFactory {
 
@@ -21,8 +21,8 @@ object AutonomousFactory {
             id = AutID(ID.generate()),
             companyId = form.companyId,
             name = form.name,
-            persistence = Persistence.ACTIVE,
-            state = Unregistered(),
+            persistence = PersistenceState.ACTIVE,
+            eligibleState = Unregistered(),
             email = form.email,
             userId = null
         )
@@ -36,8 +36,8 @@ object AutonomousFactory {
             id = AutID.generate(),
             companyId = form.companyId,
             name = form.name,
-            persistence = Persistence.ACTIVE,
-            state = Active(),
+            persistence = PersistenceState.ACTIVE,
+            eligibleState = Active(),
             email = validEmail,
             userId = validUserId
         )

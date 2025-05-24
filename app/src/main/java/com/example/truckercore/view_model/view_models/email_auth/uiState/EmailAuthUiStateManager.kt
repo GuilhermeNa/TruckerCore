@@ -51,4 +51,9 @@ class EmailAuthUiStateManager {
         password = Password.from(value.passwordField.text)
     )
 
+    fun setDefaultState() {
+        val newState = value.copy(status = EmailAuthUiState.Status.AwaitingInput.Ready)
+        setState(newState)
+    }
+
 }

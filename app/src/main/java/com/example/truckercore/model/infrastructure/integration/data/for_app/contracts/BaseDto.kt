@@ -1,8 +1,8 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.contracts
 
-import com.example.truckercore.model.shared.enums.Persistence
+import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 interface BaseDto {
     val id: String?
-    val persistence: Persistence?
+    val persistence: PersistenceState?
 }

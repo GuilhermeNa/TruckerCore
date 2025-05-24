@@ -1,14 +1,8 @@
 package com.example.truckercore.model.modules.aggregation.system_access.factory
 
-import com.example.truckercore.model.infrastructure.security.contracts.SystemManager
-import com.example.truckercore.model.modules.authentication.contracts.Authenticable
 import com.example.truckercore.model.modules.company.data.Company
-import com.example.truckercore.model.modules.company.data.CompanyDto
-import com.example.truckercore.model.modules.employee._contracts.Employee
-import com.example.truckercore.model.modules.employee._contracts.EmployeeDto
-import com.example.truckercore.model.modules.user._contracts.UserEligible
+import com.example.truckercore.model.modules.employee._shared.contracts.Employee
 import com.example.truckercore.model.modules.user.data.User
-import com.example.truckercore.model.modules.user.data.UserDto
 
 /**
  * Data class representing the result of a successful system access creation process.

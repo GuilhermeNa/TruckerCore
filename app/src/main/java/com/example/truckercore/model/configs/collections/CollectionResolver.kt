@@ -1,7 +1,7 @@
 package com.example.truckercore.model.configs.collections
 
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
-import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.modules._shared.contracts.entity.ID
 import com.example.truckercore.model.modules.company.data.CompanyDto
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.employee.admin.data.AdminDto

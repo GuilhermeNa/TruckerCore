@@ -3,24 +3,23 @@ package com.example.truckercore.model.modules.employee.admin.data
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.FullName
 import com.example.truckercore.model.configs.annotations.InternalUseOnly
-import com.example.truckercore.model.modules._contracts.Entity
+import com.example.truckercore.model.modules._shared.contracts.entity.Entity
 import com.example.truckercore.model.modules.company.data.CompanyID
-import com.example.truckercore.model.modules.employee._contracts.Employee
+import com.example.truckercore.model.modules.employee._shared.contracts.Employee
 import com.example.truckercore.model.modules.user._contracts.UserEligible
 import com.example.truckercore.model.modules.user._contracts.eligible_state.EligibleState
-import com.example.truckercore.model.modules.user._contracts.eligible_state.Unregistered
 import com.example.truckercore.model.modules.user.data.UserID
-import com.example.truckercore.model.shared.enums.Persistence
+import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 data class Admin(
     override val id: AdminID,
     override val name: FullName,
     override val companyId: CompanyID,
-    override val persistence: Persistence,
+    override val persistenceState: PersistenceState,
     override val email: Email?,
     override val userId: UserID?,
-    override val state: EligibleState
-) : Entity, Employee, UserEligible<Admin> {
+    override val eligibleState: EligibleState
+) : Entity<Admin>, Employee, UserEligible<Admin> {
 
     val companyIdValue get() = companyId.value
     val userIdValue get() = userId?.value
@@ -33,20 +32,25 @@ data class Admin(
         return this.copy(
             email = email ?: this.email,
             userId = userId ?: this.userId,
-            state = state
+            eligibleState = state
         )
     }
 
+    @InternalUseOnly
+    override fun copyWith(persistence: PersistenceState): Admin {
+        return this.copy(persistenceState = persistence)
+    }
+
     override fun registerSystemUser(newEmail: Email, newUserId: UserID): Admin {
-        return state.register(newEmail, newUserId, this)
+        return eligibleState.register(newEmail, newUserId, this)
     }
 
     override fun suspendSystemUser(): Admin {
-        return state.suspend(this)
+        return eligibleState.suspend(this)
     }
 
     override fun reactivateSystemUser(): Admin {
-        return state.reactivate(this)
+        return eligibleState.reactivate(this)
     }
 
 }

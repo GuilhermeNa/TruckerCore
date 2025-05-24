@@ -4,13 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.expressions.extractData
-import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
+import com.example.truckercore._utils.expressions.mapAppResult
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view_model.use_cases.CounterUseCase
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
@@ -22,11 +20,10 @@ private typealias TimeOutState = VerifyingEmailUiState.TimeOut
 
 private typealias StartEvent = VerifyingEmailEvent.UiEvent.StartVerification
 private typealias RetryEvent = VerifyingEmailEvent.UiEvent.RetryVerification
-private typealias TaskCompleteEvent = VerifyingEmailEvent.InternalEvent.TaskComplete
-private typealias TimeOutEvent = VerifyingEmailEvent.InternalEvent.CounterTimeOut
+private typealias TaskCompleteEvent = VerifyingEmailEvent.SystemEvent.TaskComplete
+private typealias TimeOutEvent = VerifyingEmailEvent.SystemEvent.CounterTimeOut
 
 class VerifyingEmailViewModel(
-    private val preferences: PreferencesRepository,
     private val counterUseCase: CounterUseCase,
     private val authService: AuthManager
 ) : ViewModel() {
@@ -38,12 +35,11 @@ class VerifyingEmailViewModel(
         MutableStateFlow(VerifyingState)
     val state get() = _state.asStateFlow()
 
-    // Effect
-    private val _effect = MutableSharedFlow<VerifyingEmailEffect>()
-    val effect get() = _effect.asSharedFlow()
-
-
     //-----------------------------------------------------------------------------------------------
+    init {
+        onEvent(VerifyingEmailEvent.UiEvent.StartVerification)
+    }
+
     fun onEvent(event: VerifyingEmailEvent) {
         when (event) {
             is StartEvent -> startVerification()
@@ -61,7 +57,7 @@ class VerifyingEmailViewModel(
             setState(VerifyingState)
 
             val counterJob = async { counterUseCase.startCounter() }
-            val observeJob = async { observeEmailValidation() }
+            val observeJob = async { authService.observeEmailValidation() }
 
             select {
                 counterJob.onAwait {
@@ -77,39 +73,20 @@ class VerifyingEmailViewModel(
     }
 
     private fun handleVerificationResult(event: TaskCompleteEvent) {
-        /* event.result.mapAppResult(
+         event.result.mapAppResult(
              onSuccess = {
-                 markEmailVerificationStepComplete()
                  setState(VerifiedState)
              },
-             onError = { setEffect(ErrorEffect(it)) }
-         )*/
+             onError = {
+                 setState(VerifyingEmailUiState.ApiError)
+             }
+         )
     }
-
-    private fun markEmailVerificationStepComplete() {
-        viewModelScope.launch {
-            /*  preferences.markStepAsCompleted(RegistrationStep.EmailVerified)*/
-        }
-    }
-
-    private suspend fun observeEmailValidation() = authService.observeEmailValidation()
 
     private fun setState(newState: VerifyingEmailUiState) {
         _state.value = newState
     }
 
-    private fun setEffect(newEffect: VerifyingEmailEffect) {
-        viewModelScope.launch {
-            _effect.emit(newEffect)
-        }
-    }
-
     fun getEmail(): Email = authService.getUserEmail().extractData()
-
-    fun resetUserRegistration() {
-        viewModelScope.launch {
-            /* preferences.resetUserRegistration()*/
-        }
-    }
 
 }

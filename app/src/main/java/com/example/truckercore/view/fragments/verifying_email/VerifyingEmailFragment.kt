@@ -9,9 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.truckercore._utils.expressions.doIfResumedOrElse
+import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view.dialogs.BottomSheetVerifyingEmail
-import com.example.truckercore._utils.expressions.doIfResumedOrElse
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailEvent
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailUiState
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
@@ -26,8 +27,7 @@ class VerifyingEmailFragment : Fragment() {
     val binding get() = _binding!!
 
     // Fragment Handlers
-    private var _stateHandler: VerifyingEmailUiStateHandler? = null
-    private val stateHandler get() = _stateHandler!!
+    private var stateHandler: VerifyingEmailUiStateHandler? = null
 
     // Bottom Sheet
     private val bottomSheet by lazy {
@@ -36,17 +36,14 @@ class VerifyingEmailFragment : Fragment() {
         }
 
         fun navigateToEmailAuth() {
-           /* val direction = VerifyingEmailFragmentDirections
-                .actionVerifyingEmailFragmentToEmailAuthFragment()
-            navigateToDirection(direction)*/
+            val direction = VerifyingEmailFragmentDirections
+                .actionGlobalEmailAuthFragment()
+            navigateToDirection(direction)
         }
 
         BottomSheetVerifyingEmail(
             onRetry = { retry() },
-            onChangeEmail = {
-                viewModel.resetUserRegistration()
-                navigateToEmailAuth()
-            }
+            onChangeEmail = { navigateToEmailAuth() }
         )
     }
 
@@ -54,21 +51,24 @@ class VerifyingEmailFragment : Fragment() {
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionStarted(
             motionLayout: MotionLayout?, startId: Int, endId: Int
-        ) {}
+        ) {
+        }
 
         override fun onTransitionChange(
             motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float
-        ) {}
+        ) {
+        }
 
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-       /*     val direction = VerifyingEmailFragmentDirections
-                .actionVerifyingEmailFragmentToPreparingAmbientFragment()
-            navigateTo(direction)*/
+            val direction = VerifyingEmailFragmentDirections
+                .actionVerifyingEmailFragmentToUserNameFragment()
+            navigateToDirection(direction)
         }
 
         override fun onTransitionTrigger(
             motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float
-        ) {}
+        ) {
+        }
 
     }
 
@@ -80,56 +80,33 @@ class VerifyingEmailFragment : Fragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.onEvent(VerifyingEmailEvent.UiEvent.StartVerification)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 setFragmentStateManager()
-                setFragmentEffectManager()
                 setCounterStateManager()
             }
         }
     }
 
-    private fun CoroutineScope.setFragmentStateManager() {
-        launch {
-            viewModel.state.collect { state ->
-                stateHandler.render(state)
-                if (state is VerifyingEmailUiState.TimeOut) {
-                    bottomSheet.show(
-                        requireActivity().supportFragmentManager,
-                        BottomSheetVerifyingEmail.TAG
-                    )
-                }
-            }
+    private fun CoroutineScope.setFragmentStateManager() = launch {
+        viewModel.state.collect { state ->
+            stateHandler?.render(state)
+            if (state is VerifyingEmailUiState.TimeOut) showBottomSheet()
         }
     }
 
-    private fun CoroutineScope.setFragmentEffectManager() {
-        launch {
-         /*   viewModel.effect.collect { effect ->
-                if (effect is VerifyingEmailEffect.Error) {
-                    effect.error.errorCode.handleOnUi(
-                        onRecoverable = { message -> logError(message) },
-                        onFatalError = { name, message ->
-                            val intent = NotificationActivity.newInstance(
-                                context = requireContext(),
-                                title = name,
-                                message = message
-                            )
-                            startActivity(intent)
-                            requireActivity().finish()
-                        }
-                    )
-                }
-            }*/
-        }
+    private fun showBottomSheet() {
+        bottomSheet.show(
+            requireActivity().supportFragmentManager,
+            BottomSheetVerifyingEmail.TAG
+        )
     }
 
     private suspend fun setCounterStateManager() {
         viewModel.counterFlow.collect { value ->
             doIfResumedOrElse(
-                resumed = { stateHandler.incrementProgress(value, true) },
-                orElse = { stateHandler.incrementProgress(value, false) }
+                resumed = { stateHandler?.animateProgress(value) },
+                orElse = { stateHandler?.jumpToProgress(value) }
             )
         }
     }
@@ -142,7 +119,7 @@ class VerifyingEmailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentVerifyingEmailBinding.inflate(layoutInflater)
-        _stateHandler = VerifyingEmailUiStateHandler(viewModel.getEmail().value, binding)
+        stateHandler = VerifyingEmailUiStateHandler(viewModel.getEmail().value, binding)
         return binding.root
     }
 
@@ -165,7 +142,7 @@ class VerifyingEmailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         removeTransitionListener()
-        _stateHandler = null
+        stateHandler = null
         _binding = null
     }
 

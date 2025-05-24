@@ -27,13 +27,7 @@ sealed class EmailAuthEvent : Event {
     // Eventos relacionados ao sistema como validação de dados e resposta de API
     sealed class SystemEvent : EmailAuthEvent() {
         data object Success : SystemEvent()
-
-        sealed class Failure : SystemEvent() {
-            data object InputValidationError : SystemEvent()
-
-            data object ApiResultError : SystemEvent()
-        }
-
+        data class ApiResultError(val e: Exception) : SystemEvent()
     }
 
 }

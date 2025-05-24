@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.employee.admin.mapper
 
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.FullName
-import com.example.truckercore.model.modules._contracts.mapper.Mapper
+import com.example.truckercore.model.modules._shared.contracts.mapper.Mapper
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.employee.admin.data.Admin
 import com.example.truckercore.model.modules.employee.admin.data.AdminDto
@@ -16,11 +16,11 @@ object AdminMapper : Mapper<Admin, AdminDto> {
             AdminDto(
                 id = entity.idValue,
                 companyId = entity.companyIdValue,
-                persistence = entity.persistence,
+                persistence = entity.persistenceState,
                 name = entity.nameValue,
                 email = entity.emailValue,
                 userId = entity.userIdValue,
-                state = entity.state
+                state = entity.eligibleState
             )
         } catch (e: Exception) {
             handleError(entity, e)
@@ -34,8 +34,8 @@ object AdminMapper : Mapper<Admin, AdminDto> {
                 companyId = CompanyID(dto.companyId!!),
                 email = dto.email?.let { Email.from(it) },
                 userId = dto.userId?.let { UserID(it) },
-                persistence = dto.persistence!!,
-                state = dto.state!!
+                persistenceState = dto.persistence!!,
+                eligibleState = dto.state!!
             )
         } catch (e: Exception) {
             handleError(dto, e)

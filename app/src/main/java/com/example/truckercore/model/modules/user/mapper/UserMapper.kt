@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.user.mapper
 
-import com.example.truckercore.model.modules._contracts.mapper.Mapper
+import com.example.truckercore.model.modules._shared.contracts.mapper.Mapper
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.user.data.User

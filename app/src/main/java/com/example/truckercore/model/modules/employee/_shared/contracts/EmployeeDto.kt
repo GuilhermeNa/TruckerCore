@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.employee._contracts
+package com.example.truckercore.model.modules.employee._shared.contracts
 
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
 

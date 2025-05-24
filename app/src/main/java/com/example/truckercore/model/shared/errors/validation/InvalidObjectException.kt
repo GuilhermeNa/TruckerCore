@@ -1,7 +1,7 @@
 package com.example.truckercore.model.shared.errors.validation
 
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
-import com.example.truckercore.model.modules._contracts.Entity
+import com.example.truckercore.model.modules._shared.contracts.entity.Entity
 
 /**
  * Custom exception class that represents an error when an object (either an entity or a DTO)

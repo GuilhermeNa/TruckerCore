@@ -1,6 +1,5 @@
 package com.example.truckercore.view.fragments.user_name
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -103,7 +102,7 @@ class UserNameFragment : CloseAppFragment() {
     // onViewCreated -------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBackgroundTouchListener()
+        setBackgroundClickListener()
         setNameChangedListener()
         setFabClickListener()
     }
@@ -115,14 +114,9 @@ class UserNameFragment : CloseAppFragment() {
         }
     }
 
-    /**
-     * Sets the listener for the background click event.
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setBackgroundTouchListener() {
-        binding.fragUserNameMain.setOnTouchListener { _, _ ->
+    private fun setBackgroundClickListener() {
+        binding.fragUserNameMain.setOnClickListener {
             hideKeyboardAndClearFocus(binding.fragUserNameLayout)
-            true
         }
     }
 

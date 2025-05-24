@@ -24,7 +24,7 @@ class EmailAuthUiStateHandler(
 
     fun handleEmailField(fieldState: FieldState) {
         if (fieldState.status == FieldState.Input.ERROR) {
-            if (emailError.text.isBlank()) emailError.text = fieldState.message
+            if (emailError.text != fieldState.message) emailError.text = fieldState.message
         } else {
             if (emailError.text.isNotBlank()) emailError.text = ""
         }
@@ -32,7 +32,7 @@ class EmailAuthUiStateHandler(
 
     fun handlePasswordField(fieldState: FieldState) {
         if (fieldState.status == FieldState.Input.ERROR) {
-            if (passwordError.text.isBlank()) passwordError.text = fieldState.message
+            if (passwordError.text != fieldState.message) passwordError.text = fieldState.message
         } else {
             if (passwordError.text.isNotBlank()) passwordError.text = ""
         }
@@ -40,7 +40,7 @@ class EmailAuthUiStateHandler(
 
     fun handleConfirmationField(fieldState: FieldState) {
         if (fieldState.status == FieldState.Input.ERROR) {
-            if (confirmationError.text.isBlank()) confirmationError.text = fieldState.message
+            if (confirmationError.text != fieldState.message) confirmationError.text = fieldState.message
         } else {
             if (confirmationError.text.isNotBlank()) confirmationError.text = null
         }

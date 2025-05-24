@@ -2,7 +2,7 @@ package com.example.truckercore.view.ui_error
 
 sealed class UiError {
 
-    sealed class Recoverable(open val message: String) : UiError()
+    data class Recoverable(val message: String) : UiError()
 
     data class Critical(
         val title: String = DEFAULT_CRITICAL_TITLE,

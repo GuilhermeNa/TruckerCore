@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.employee._shared
 
 import com.example.truckercore.model.errors.technical.TechnicalException
-import com.example.truckercore.model.modules.employee._contracts.Employee
-import com.example.truckercore.model.modules.employee._contracts.EmployeeDto
+import com.example.truckercore.model.modules.employee._shared.contracts.Employee
+import com.example.truckercore.model.modules.employee._shared.contracts.EmployeeDto
 import com.example.truckercore.model.modules.employee.admin.mapper.AdminMapper
 import com.example.truckercore.model.modules.employee.admin.data.Admin
 import com.example.truckercore.model.modules.employee.autonomous.data.Autonomous

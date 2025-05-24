@@ -9,10 +9,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore._utils.expressions.navigateToActivity
-import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentPreparingAmbientBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
+import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.dialogs.LoadingDialog
+import com.example.truckercore.view.ui_error.UiError
 import com.example.truckercore.view_model.view_models.preparing_ambient.PreparingAmbientUiState
 import com.example.truckercore.view_model.view_models.preparing_ambient.PreparingAmbientViewModel
 import kotlinx.coroutines.launch
@@ -52,16 +53,13 @@ class PreparingAmbientFragment : Fragment() {
                             navigateToActivity(intent, true)
                         }
 
-                        PreparingAmbientUiState.UiError.SessionNotFound -> {
-                          /*  val direction = PreparingAmbientFragmentDirections
-                                .actionPreparingAmbientFragmentToUserNameFragment()
-                            navigateToDirection(direction)*/
-                        }
-
-                        PreparingAmbientUiState.UiError.UIDNotFound -> {
-                           /* val direction = PreparingAmbientFragmentDirections
-                                .actionPreparingAmbientFragmentToLoginFragment()
-                            navigateToDirection(direction)*/
+                        is PreparingAmbientUiState.UiError -> {
+                            val intent = NotificationActivity.newInstance(
+                                context = requireContext(),
+                                title = UiError.Critical().title,
+                                message = UiError.Critical().message
+                            )
+                            navigateToActivity(intent, true)
                         }
                     }
                 }

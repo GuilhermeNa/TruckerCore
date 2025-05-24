@@ -1,7 +1,7 @@
 package com.example.truckercore.model.z_to_delete
 
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
-import com.example.truckercore.model.modules._contracts.Entity
+import com.example.truckercore.model.modules._shared.contracts.entity.Entity
 
 /**
  * An interface that defines the contract for mapping between [Dto] and [Entity] objects.

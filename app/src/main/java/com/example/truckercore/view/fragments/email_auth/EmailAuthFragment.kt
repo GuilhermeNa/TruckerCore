@@ -97,7 +97,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status1 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.Email -> {
                 val stateId = R.id.frag_email_auth_state_1
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
@@ -105,7 +105,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status2 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.Pass -> {
                 val stateId = R.id.frag_email_auth_state_2
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
@@ -113,7 +113,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status3 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.Conf -> {
                 val stateId = R.id.frag_email_auth_state_3
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
@@ -121,7 +121,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status4 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.EmailAndPass -> {
                 val stateId = R.id.frag_email_auth_state_4
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
@@ -129,7 +129,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status5 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.EmailAndConf -> {
                 val stateId = R.id.frag_email_auth_state_5
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
@@ -137,7 +137,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status6 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.PassAndConf -> {
                 val stateId = R.id.frag_email_auth_state_6
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },
@@ -145,7 +145,7 @@ class EmailAuthFragment : CloseAppFragment() {
                 )
             }
 
-            EmailAuthUiState.Status.AwaitingInput.InputError.Status7 -> {
+            EmailAuthUiState.Status.AwaitingInput.InputError.EmailPassAndConf -> {
                 val stateId = R.id.frag_email_auth_state_7
                 doIfResumedOrElse(
                     resumed = { stateHandler?.transitionToState(stateId) },

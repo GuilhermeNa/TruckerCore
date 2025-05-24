@@ -5,7 +5,7 @@ import com.example.truckercore.model.infrastructure.security.data.Profile
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.modules.user.data.User
 import com.example.truckercore.model.modules.user.data.UserID
-import com.example.truckercore.model.shared.enums.Persistence
+import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 object UserFactory {
 
@@ -15,7 +15,7 @@ object UserFactory {
             companyId = form.companyId,
             uid = form.uid,
             profile = getProfile(form.role),
-            persistence = Persistence.ACTIVE
+            persistence = PersistenceState.ACTIVE
         )
     }
 

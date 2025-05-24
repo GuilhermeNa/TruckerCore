@@ -4,13 +4,11 @@ import com.example.truckercore.model.configs.collections.Collection
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.api_specification.ApiDocumentReferenceSpecification
 import com.example.truckercore.model.infrastructure.data_source.firebase.data.api_specification.ApiQuerySpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSourceSpecificationInterpreter
-import com.example.truckercore.model.infrastructure.integration.data.for_api.data.contracts.ApiSpecification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.collections.SearchFilter
-import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereEqual
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereIn
-import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.modules._shared.contracts.entity.ID
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 

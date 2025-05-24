@@ -2,13 +2,13 @@ package com.example.truckercore.model.modules.employee.driver.data
 
 import com.example.truckercore._utils.classes.Email
 import com.example.truckercore._utils.classes.FullName
-import com.example.truckercore.model.modules._contracts.Entity
+import com.example.truckercore.model.modules._shared.contracts.entity.Entity
 import com.example.truckercore.model.modules.company.data.CompanyID
-import com.example.truckercore.model.modules.employee._contracts.Employee
+import com.example.truckercore.model.modules.employee._shared.contracts.Employee
 import com.example.truckercore.model.modules.user._contracts.UserEligible
 import com.example.truckercore.model.modules.user._contracts.eligible_state.EligibleState
 import com.example.truckercore.model.modules.user.data.UserID
-import com.example.truckercore.model.shared.enums.Persistence
+import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 data class Driver(
     override val id: DriverID,
@@ -16,8 +16,8 @@ data class Driver(
     override val email: Email?,
     override val companyId: CompanyID,
     override val userId: UserID?,
-    override val persistence: Persistence,
-    override val state: EligibleState
+    override val persistence: PersistenceState,
+    override val eligibleState: EligibleState
 ) : Entity, Employee, UserEligible<Driver> {
 
     val companyIdValue get() = companyId.value
@@ -30,20 +30,20 @@ data class Driver(
         return this.copy(
             email = email ?: this.email,
             userId = userId ?: this.userId,
-            state = state
+            eligibleState = state
         )
     }
 
     override fun registerSystemUser(newEmail: Email, newUserId: UserID): Driver {
-        return state.register(newEmail, newUserId, this)
+        return eligibleState.register(newEmail, newUserId, this)
     }
 
     override fun suspendSystemUser(): Driver {
-        return state.suspend(this)
+        return eligibleState.suspend(this)
     }
 
     override fun reactivateSystemUser(): Driver {
-        return state.reactivate(this)
+        return eligibleState.reactivate(this)
     }
 
 }

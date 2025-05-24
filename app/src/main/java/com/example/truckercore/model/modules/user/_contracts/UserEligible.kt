@@ -9,7 +9,7 @@ interface UserEligible<T : UserEligible<T>> {
 
     val userId: UserID?
 
-    val state: EligibleState
+    val eligibleState: EligibleState
 
     @InternalUseOnly
     fun copyWith(

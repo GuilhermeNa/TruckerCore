@@ -1,6 +1,6 @@
 package com.example.truckercore.model.shared.value_classes
 
-import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.modules._shared.contracts.entity.ID
 import com.example.truckercore.model.shared.value_classes.exceptions.InvalidGenericIdException
 
 @JvmInline

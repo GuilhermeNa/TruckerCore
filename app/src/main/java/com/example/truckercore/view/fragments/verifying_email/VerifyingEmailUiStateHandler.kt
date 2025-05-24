@@ -23,8 +23,13 @@ class VerifyingEmailUiStateHandler(
         binding.fragVerifyingEmailTextEmail.text = email
     }
 
-    fun incrementProgress(value: Int, animated: Boolean) {
-        binding.fragVerifyingEmailProgressbar.setProgressCompat((PROGRESS_MAX - value), animated)
+    fun animateProgress(value: Int) {
+        binding.fragVerifyingEmailProgressbar.setProgressCompat((PROGRESS_MAX - value), true)
+        binding.fragVerifyingEmailTimer.text = "$value"
+    }
+
+    fun jumpToProgress(value: Int) {
+        binding.fragVerifyingEmailProgressbar.setProgressCompat((PROGRESS_MAX - value), false)
         binding.fragVerifyingEmailTimer.text = "$value"
     }
 

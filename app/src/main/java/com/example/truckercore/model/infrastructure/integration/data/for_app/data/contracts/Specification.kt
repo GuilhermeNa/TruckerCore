@@ -5,7 +5,7 @@ import com.example.truckercore.model.configs.collections.CollectionResolver
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.collections.SearchFilter
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
-import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.modules._shared.contracts.entity.ID
 
 /**
  * Defines the structure for querying data in a type-safe and declarative way.

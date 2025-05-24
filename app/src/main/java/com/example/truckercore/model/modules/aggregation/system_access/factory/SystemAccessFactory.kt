@@ -4,10 +4,10 @@ import com.example.truckercore.model.modules.company.data.CompanyDto
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.infrastructure.security.data.Key
 import com.example.truckercore.model.modules.company.factory.CompanyFactory
-import com.example.truckercore.model.modules.employee._contracts.Employee
-import com.example.truckercore.model.modules.employee._contracts.EmployeeDto
-import com.example.truckercore.model.modules.employee._shared.EmployeeFactory
-import com.example.truckercore.model.modules.employee._shared.EmployeeForm
+import com.example.truckercore.model.modules.employee._shared.contracts.Employee
+import com.example.truckercore.model.modules.employee._shared.contracts.EmployeeDto
+import com.example.truckercore.model.modules.employee._shared.factory.EmployeeFactory
+import com.example.truckercore.model.modules.employee._shared.factory.EmployeeForm
 import com.example.truckercore.model.modules.user.data.User
 import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.data.UserID

@@ -1,8 +1,8 @@
-package com.example.truckercore.model.modules.employee._shared
+package com.example.truckercore.model.modules.employee._shared.factory
 
 import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
-import com.example.truckercore.model.modules.employee._contracts.Employee
+import com.example.truckercore.model.modules.employee._shared.contracts.Employee
 import com.example.truckercore.model.modules.employee.admin.factory.AdminFactory
 import com.example.truckercore.model.modules.employee.autonomous.factory.AutonomousFactory
 import com.example.truckercore.model.modules.employee.driver.factory.DriverFactory

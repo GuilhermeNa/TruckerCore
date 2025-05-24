@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.employee.driver.data
 
-import com.example.truckercore.model.modules._contracts.ID
+import com.example.truckercore.model.modules._shared.contracts.entity.ID
 
 @JvmInline
 value class DriverID(override val value: String): ID {

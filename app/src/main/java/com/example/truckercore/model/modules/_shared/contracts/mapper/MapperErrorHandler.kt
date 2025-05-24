@@ -1,19 +1,18 @@
-package com.example.truckercore.model.modules._contracts.mapper
+package com.example.truckercore.model.modules._shared.contracts.mapper
 
-import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
-import com.example.truckercore.model.modules._contracts.BaseEntity
+import com.example.truckercore.model.modules._shared.contracts.entity.BaseEntity
 
 interface MapperErrorHandler {
 
     fun handleError(dto: BaseDto, e: Throwable): Nothing {
         val message = "$DTO_ERR_MSG $dto"
-        throw TechnicalException.MappingDtoToEntity(message, e)
+        throw MapperException(message, e)
     }
 
-    fun handleError(entity: BaseEntity, e: Throwable): Nothing {
+    fun handleError(entity: BaseEntity<*>, e: Throwable): Nothing {
         val message = "$ENTITY_ERR_MSG $entity"
-        throw TechnicalException.MappingEntityToDto(message, e)
+        throw MapperException(message, e)
     }
 
     companion object {
