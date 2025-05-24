@@ -1,22 +1,22 @@
-package com.example.truckercore.model.modules.fleet.truck.data
+package com.example.truckercore.model.modules.fleet.dump.data
 
 import com.example.truckercore.model.configs.annotations.InternalUseOnly
 import com.example.truckercore.model.modules._shared.contracts.entity.Entity
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.fleet._shared.Plate
-import com.example.truckercore.model.modules.fleet._shared.contracts.self_propelled.SelfPropelled
+import com.example.truckercore.model.modules.fleet._shared.contracts.towable.SemiTrailer
 
-data class Truck(
-    override val id: TruckID,
+data class Dump(
+    override val id: DumpID,
     override val companyId: CompanyID,
     override val persistenceState: PersistenceState,
     override val plate: Plate
-): Entity<Truck>, SelfPropelled {
+): Entity<Dump>, SemiTrailer {
 
     @InternalUseOnly
-    override fun copyWith(persistence: PersistenceState): Truck {
-        return copy(persistenceState = persistence)
+    override fun copyWith(persistence: PersistenceState): Dump {
+        return this.copy(persistenceState = persistence)
     }
 
 }

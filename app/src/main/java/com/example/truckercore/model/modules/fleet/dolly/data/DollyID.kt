@@ -5,7 +5,6 @@ import com.example.truckercore.model.modules._shared.contracts.entity.ID
 @JvmInline
 value class DollyID(override val value: String): ID {
 
-
     init {
         validate()
     }
