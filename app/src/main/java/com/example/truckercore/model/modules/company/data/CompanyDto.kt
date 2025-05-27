@@ -5,7 +5,7 @@ import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 data class CompanyDto(
     override val id: String? = null,
-    override val persistence: PersistenceState? = null,
+    override val persistenceState: PersistenceState? = null,
     val keysRegistry: Set<String>? = null
 ): BaseDto {
 

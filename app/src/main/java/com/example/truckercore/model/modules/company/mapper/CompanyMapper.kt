@@ -12,7 +12,7 @@ object CompanyMapper : Mapper<Company, CompanyDto> {
         try {
             CompanyDto(
                 id = entity.idVal,
-                persistence = entity.persistenceState,
+                persistenceState = entity.persistenceState,
                 keysRegistry = entity.keysValue
             )
         } catch (e: Exception) {
@@ -23,7 +23,7 @@ object CompanyMapper : Mapper<Company, CompanyDto> {
         try {
             Company(
                 id = CompanyID(dto.id!!),
-                persistenceState = dto.persistence!!,
+                persistenceState = dto.persistenceState!!,
                 keysRegistry = ValidKeysRegistry.from(dto.keysRegistry!!)
             )
         } catch (e: Exception) {

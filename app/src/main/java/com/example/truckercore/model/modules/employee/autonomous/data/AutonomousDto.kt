@@ -7,7 +7,7 @@ import com.example.truckercore.model.modules._shared.enums.PersistenceState
 data class AutonomousDto(
     override val id: String? = null,
     override val companyId: String? = null,
-    override val persistence: PersistenceState? = null,
+    override val persistenceState: PersistenceState? = null,
     override val name: String? = null,
     override val email: String? = null,
     val userId: String? = null,

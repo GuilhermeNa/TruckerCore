@@ -9,7 +9,7 @@ data class AdminDto(
     override val name: String? = null,
     override val companyId: String? = null,
     override val email: String? = null,
-    override val persistence: PersistenceState? = null,
+    override val persistenceState: PersistenceState? = null,
     val userId: String? = null,
     val state: EligibleState? = null
 ) : EmployeeDto {

@@ -8,7 +8,7 @@ data class UserDto(
     val uid: String? = null,
     override val id: String? = null,
     override val companyId: String? = null,
-    override val persistence: PersistenceState? = null,
+    override val persistenceState: PersistenceState? = null,
     val profile: Profile? = null
 ) : Dto {
 

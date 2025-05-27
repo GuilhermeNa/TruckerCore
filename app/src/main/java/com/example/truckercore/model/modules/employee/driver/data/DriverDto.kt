@@ -7,7 +7,7 @@ import com.example.truckercore.model.modules.user._contracts.eligible_state.Elig
 data class DriverDto(
     override val id: String? = null,
     override val companyId: String? = null,
-    override val persistence: PersistenceState? = null,
+    override val persistenceState: PersistenceState? = null,
     override val name: String? = null,
     override val email: String? = null,
     val userId: String? = null,

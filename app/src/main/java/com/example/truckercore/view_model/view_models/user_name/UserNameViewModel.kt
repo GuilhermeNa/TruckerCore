@@ -45,19 +45,26 @@ class UserNameViewModel(
     //----------------------------------------------------------------------------------------------
     fun onEvent(event: UserNameEvent) {
         when (event) {
-            // Ui Events
-            is UserNameEvent.UiEvent.TextChanged -> stateManager.updateName(event.text)
+            is UserNameEvent.UiEvent -> handleUiEvent(event)
+            is UserNameEvent.SystemEvent -> handleSystemEvent(event)
+        }
+    }
 
+    private fun handleUiEvent(event: UserNameEvent.UiEvent) {
+        when (event) {
+            is UserNameEvent.UiEvent.TextChanged -> stateManager.updateName(event.text)
             UserNameEvent.UiEvent.FabCLicked -> {
                 stateManager.setCreatingSystemAccessState()
                 createSystemAccess()
             }
+        }
+    }
 
-            //System Events
+    private fun handleSystemEvent(event: UserNameEvent.SystemEvent) {
+        when (event) {
             UserNameEvent.SystemEvent.SystemCreationSuccess -> stateManager.setSuccessState()
 
             is UserNameEvent.SystemEvent.SystemCreationFailed -> {
-
                 UiErrorFactory(event.e).handleUiError(
                     onRecoverable = {
                         stateManager.setAwaitingInputState()

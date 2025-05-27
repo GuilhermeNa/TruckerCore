@@ -4,5 +4,5 @@ import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 interface BaseDto {
     val id: String?
-    val persistence: PersistenceState?
+    val persistenceState: PersistenceState?
 }

@@ -39,8 +39,8 @@ class UserNameUiStateHandler(
 
     private fun handleFab(buttonState: ButtonState) {
         when (buttonState.isEnabled) {
-            true ->  fab.show()
-            false ->    fab.hide()
+            true -> fab.show()
+            false -> fab.hide()
         }
     }
 

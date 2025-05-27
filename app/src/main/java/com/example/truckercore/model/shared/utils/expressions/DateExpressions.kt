@@ -1,5 +1,6 @@
 package com.example.truckercore.model.shared.utils.expressions
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
@@ -22,4 +23,14 @@ fun Date.toLocalDateTime(): LocalDateTime {
 fun LocalDateTime.toDate(): Date {
     val atZone = this.atZone(ZoneId.systemDefault())
     return Date.from(atZone.toInstant())
+}
+
+fun LocalDate.toDate(): Date {
+    return Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant())
+}
+
+fun Date.toLocalDate(): LocalDate {
+    return this.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
 }

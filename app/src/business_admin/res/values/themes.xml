@@ -1,0 +1,8 @@
+<resources>
+  <style name="Theme.TruckerCore.NoActionBar" >
+  <item name="windowActionBar">false</item>
+  <item name="windowNoTitle">true</item>
+</style>
+  <style name="Theme.TruckerCore.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+  <style name="Theme.TruckerCore.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

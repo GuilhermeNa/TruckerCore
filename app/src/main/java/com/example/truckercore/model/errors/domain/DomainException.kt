@@ -6,9 +6,6 @@ import com.example.truckercore.model.errors.domain.error_code.RuleViolatedErrorC
 sealed class DomainException(message: String? = null, cause: Throwable? = null) :
     AppException(message, cause) {
 
-    class InvalidForCreation(message: String? = null, cause: Throwable? = null) :
-        DomainException(message, cause)
-
     class RuleViolated(
         val code: RuleViolatedErrorCode,
         message: String? = null,

@@ -6,7 +6,7 @@ import com.example.truckercore.model.infrastructure.integration.data.for_app.con
 data class NotificationDto(
     override val id: String? = null,
     override val companyId: String? = null,
-    override val persistence: PersistenceState? = null,
+    override val persistenceState: PersistenceState? = null,
     val title: String? = null,
     val message: String? = null,
     @field:JvmField

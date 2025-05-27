@@ -15,7 +15,7 @@ object UserMapper : Mapper<User, UserDto> {
                 uid = entity.uidValue,
                 id = entity.idValue,
                 companyId = entity.companyIdValue,
-                persistence = entity.persistence,
+                persistenceState = entity.persistence,
                 profile = entity.profile
             )
         } catch (e: Exception) {
@@ -28,7 +28,7 @@ object UserMapper : Mapper<User, UserDto> {
                 uid = UID(dto.uid!!),
                 id = UserID(dto.id!!),
                 companyId = CompanyID(dto.companyId!!),
-                persistence = dto.persistence!!,
+                persistence = dto.persistenceState!!,
                 profile = dto.profile!!
             )
         } catch (e: Exception) {

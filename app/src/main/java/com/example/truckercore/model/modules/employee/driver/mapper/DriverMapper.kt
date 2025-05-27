@@ -16,7 +16,7 @@ object DriverMapper : Mapper<Driver, DriverDto> {
             DriverDto(
                 id = entity.idValue,
                 companyId = entity.companyIdValue,
-                persistence = entity.persistence,
+                persistenceState = entity.persistence,
                 name = entity.nameValue,
                 email = entity.emailValue,
                 userId = entity.userIdValue,
@@ -34,7 +34,7 @@ object DriverMapper : Mapper<Driver, DriverDto> {
                 companyId = CompanyID(dto.companyId!!),
                 email = dto.email?.let { Email.from(it) },
                 userId = dto.userId?.let { UserID(it) },
-                persistence = dto.persistence!!,
+                persistence = dto.persistenceState!!,
                 eligibleState = dto.state!!
             )
         } catch (e: Exception) {
