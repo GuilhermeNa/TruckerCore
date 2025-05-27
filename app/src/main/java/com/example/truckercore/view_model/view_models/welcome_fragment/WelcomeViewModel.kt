@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.welcome_fragment
 
 import com.example.truckercore._utils.expressions.logEvent
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.view_model._base.BaseViewModel
+import com.example.truckercore.view_model._base.LoggerViewModel
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
  * It holds the data, state, and event management for the fragment, including interaction with the ViewModel's logic
  * related to the ViewPager position, page data, and fragment UI stages.
  */
-class WelcomeViewModel(flavorService: FlavorService) : BaseViewModel() {
+class WelcomeViewModel(flavorService: FlavorService) : LoggerViewModel() {
 
     private val stateManager = WelcomeUiStateManager(flavorService.getWelcomePagerData())
     val state get() = stateManager.state.asStateFlow()

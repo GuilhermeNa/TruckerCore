@@ -50,5 +50,6 @@
     <string name="recover_password_message">Te enviaremos um email para alteração de senha</string>
     <string name="send">Enviar</string>
     <string name="name_not_informed">Nome informado</string>
+    <string name="employee">Funcionários</string>
 
 </resources>

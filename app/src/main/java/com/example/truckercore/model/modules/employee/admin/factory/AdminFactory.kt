@@ -7,6 +7,7 @@ import com.example.truckercore.model.modules.employee.admin.data.AdminID
 import com.example.truckercore.model.modules.user._contracts.eligible_state.Active
 import com.example.truckercore.model.modules.user._contracts.eligible_state.Unregistered
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
+import com.example.truckercore.model.modules._shared.exceptions.FactoryException
 
 object AdminFactory {
 
@@ -28,8 +29,8 @@ object AdminFactory {
     }
 
     fun registered(form: EmployeeForm): Admin {
-        val validEmail = form.email ?: throw DomainException.InvalidForCreation(MISSING_EMAIL_MESSAGE)
-        val validUserId = form.userId ?: throw DomainException.InvalidForCreation(MISSING_USER_ID_MESSAGE)
+        val validEmail = form.email ?: throw FactoryException(MISSING_EMAIL_MESSAGE)
+        val validUserId = form.userId ?: throw FactoryException(MISSING_USER_ID_MESSAGE)
 
         return Admin(
             id = AdminID.generate(),

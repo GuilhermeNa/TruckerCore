@@ -12,13 +12,12 @@ data class User(
     override val uid: UID,
     override val id: UserID,
     override val companyId: CompanyID,
-    override val persistence: PersistenceState,
+    override val persistenceState: PersistenceState,
     override val profile: Profile
-) : Entity, Authenticable, Authorizable {
+) : Entity<User>, Authenticable, Authorizable {
 
-    val uidValue get() = uid.value
-    val idValue get() = id.value
-    val profileRole get() = profile.role
-    val companyIdValue get() = companyId.value
+    override fun copyWith(persistence: PersistenceState): User {
+        return copy(persistenceState = persistence)
+    }
 
 }

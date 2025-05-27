@@ -2,16 +2,14 @@ package com.example.truckercore.view.activities
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.truckercore.R
 
 class LoginActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -26,4 +24,5 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
 }

@@ -37,7 +37,7 @@ object SystemAccessFactory {
     operator fun invoke(form: SystemAccessForm): SystemAccessResult {
         val company = CompanyFactory()
         val user = createUser(form, company.id)
-        company.registerKey(Key(user.idValue))
+        company.registerKey(Key(user.id.value))
 
         return SystemAccessResult(
             company = company,

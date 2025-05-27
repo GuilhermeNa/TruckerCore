@@ -10,14 +10,16 @@ import com.example.truckercore.model.modules._shared.contracts.entity.Entity
 data class Notification(
     override val id: NotificationID,
     override val companyId: CompanyID,
-    override val persistence: PersistenceState,
+    override val persistenceState: PersistenceState,
     val relatedEntity: RelatedEntity?,
     val recipient: Recipient,
     val title: String,
     val message: String,
     val isReadBy: List<String> = emptyList(), //
-) : Entity {
+) : Entity<Notification> {
 
-
+    override fun copyWith(persistence: PersistenceState): Notification {
+       return copy(persistenceState = persistence)
+    }
 
 }

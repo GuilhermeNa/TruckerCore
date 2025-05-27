@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import com.example.truckercore._utils.expressions.showToast
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -12,8 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
-private const val PRESS_AGAIN_TO_EXIT = "Pression novamente para sair"
 
 /**
  * Abstract [Fragment] that handles the back press event to prompt the user for confirmation
@@ -24,7 +21,7 @@ private const val PRESS_AGAIN_TO_EXIT = "Pression novamente para sair"
  * The user is shown a toast message, asking them to press back again to confirm exit. If the
  * user confirms, the app will close.
  */
-abstract class CloseAppFragment : BaseFragment() {
+abstract class CloseAppFragment : LoggerFragment() {
 
     /**
      * Lazy-initialized instance of [ExitAppManager] to handle the logic of app exit confirmation.
@@ -79,6 +76,9 @@ abstract class CloseAppFragment : BaseFragment() {
     }
 
 }
+
+
+private const val PRESS_AGAIN_TO_EXIT = "Pression novamente para sair"
 
 // Default timer value in milliseconds (5 seconds)
 private const val DEFAULT_TIMER = 5000L

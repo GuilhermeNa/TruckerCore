@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".business_admin.view.activities.ui.home.HomeFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_home_card_employee"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="0dp"
+        android:clickable="true"
+        app:cardElevation="11dp"
+        android:translationZ="11dp"
+        android:layout_margin="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_gradient_primary">
+
+            <ImageView
+                android:id="@+id/frag_home_card_employee_img"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.4"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/img_motorista"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/frag_home_card_employee_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/employee"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                style="@style/textEmphasis"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/frag_home_card_employee_message"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:text="Você tem 3 funcionários cadastrados"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frag_home_card_employee_header"
+                app:layout_constraintStart_toEndOf="@id/frag_home_card_employee_img"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
+                android:textColor="@color/white"
+                style="@style/textDefault"
+                android:textSize="12sp"
+                android:gravity="center" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_home_card_employee"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="0dp"
+        android:clickable="true"
+        app:cardElevation="11dp"
+        android:translationZ="11dp"
+        android:layout_margin="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_gradient_primary">
+
+            <ImageView
+                android:id="@+id/frag_home_card_employee_img"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.4"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/img_motorista"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/frag_home_card_employee_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/employee"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                style="@style/textEmphasis"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/frag_home_card_employee_message"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:text="Você tem 3 funcionários cadastrados"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frag_home_card_employee_header"
+                app:layout_constraintStart_toEndOf="@id/frag_home_card_employee_img"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
+                android:textColor="@color/white"
+                style="@style/textDefault"
+                android:textSize="12sp"
+                android:gravity="center" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frag_home_card_employee"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="0dp"
+        android:clickable="true"
+        app:cardElevation="11dp"
+        android:translationZ="11dp"
+        android:layout_margin="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_gradient_primary">
+
+            <ImageView
+                android:id="@+id/frag_home_card_employee_img"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.4"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/img_motorista"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                android:id="@+id/frag_home_card_employee_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/employee"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                style="@style/textEmphasis"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/frag_home_card_employee_message"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:text="Você tem 3 funcionários cadastrados"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frag_home_card_employee_header"
+                app:layout_constraintStart_toEndOf="@id/frag_home_card_employee_img"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
+                android:textColor="@color/white"
+                style="@style/textDefault"
+                android:textSize="12sp"
+                android:gravity="center" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

@@ -12,10 +12,10 @@ object UserMapper : Mapper<User, UserDto> {
     override fun toDto(entity: User): UserDto =
         try {
             UserDto(
-                uid = entity.uidValue,
-                id = entity.idValue,
-                companyId = entity.companyIdValue,
-                persistenceState = entity.persistence,
+                uid = entity.uid.value,
+                id = entity.id.value,
+                companyId = entity.companyId.value,
+                persistenceState = entity.persistenceState,
                 profile = entity.profile
             )
         } catch (e: Exception) {
@@ -28,7 +28,7 @@ object UserMapper : Mapper<User, UserDto> {
                 uid = UID(dto.uid!!),
                 id = UserID(dto.id!!),
                 companyId = CompanyID(dto.companyId!!),
-                persistence = dto.persistenceState!!,
+                persistenceState = dto.persistenceState!!,
                 profile = dto.profile!!
             )
         } catch (e: Exception) {

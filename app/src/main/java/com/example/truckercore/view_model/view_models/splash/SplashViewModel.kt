@@ -6,11 +6,10 @@ import com.example.truckercore._utils.expressions.getOrElse
 import com.example.truckercore._utils.expressions.launch
 import com.example.truckercore._utils.expressions.logEvent
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.infrastructure.security.service.PermissionService
 import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view_model._base.BaseViewModel
+import com.example.truckercore.view_model._base.LoggerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +19,7 @@ class SplashViewModel(
     private val authService: AuthManager,
     private val preferences: PreferencesRepository,
     private val systemAccessManager: SystemAccessManager
-) : BaseViewModel() {
+) : LoggerViewModel() {
 
     private val stateManager = SplashUiStateManager()
     val uiState get() = stateManager.uiState.asStateFlow()
@@ -35,32 +34,36 @@ class SplashViewModel(
     //----------------------------------------------------------------------------------------------
     fun onEvent(event: SplashEvent) {
         logEvent(this@SplashViewModel, event)
-
         when (event) {
-            // Ui Events
+            is SplashEvent.UiEvent -> handleUiEvent(event)
+            is SplashEvent.SystemEvent -> handleSystemEvent(event)
+        }
+    }
+
+    private fun handleUiEvent(event: SplashEvent.UiEvent) {
+        when (event) {
             SplashEvent.UiEvent.Initialized -> {
                 launch { effectManager.setTransitionToLoading() }
             }
-
             SplashEvent.UiEvent.TransitionToLoadingComplete -> {
                 stateManager.setLoadingState()
                 loadUserInfo()
             }
-
             SplashEvent.UiEvent.TransitionToNavigationComplete -> {
                 stateManager.setNavigatingState()
             }
+        }
+    }
 
-            // System Events
+    private fun handleSystemEvent(event: SplashEvent.SystemEvent) {
+        when (event) {
             is SplashEvent.SystemEvent.ReceivedApiSuccess -> {
                 stateManager.holdDirection(event.direction)
                 launch { effectManager.setTransitionToNavigation() }
             }
-
             is SplashEvent.SystemEvent.Error -> {
                 stateManager.setErrorState()
             }
-
         }
     }
 
@@ -68,7 +71,7 @@ class SplashViewModel(
         viewModelScope.launch {
             delay(1000)
             try {
-                val direction = when {
+                val direction = when  {
                     isFirstAccess() -> SplashUiState.Navigating.Welcome
                     sessionNotFound() -> SplashUiState.Navigating.Login
                     isUserRegisterComplete() -> SplashUiState.Navigating.PreparingAmbient

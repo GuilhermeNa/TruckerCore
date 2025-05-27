@@ -7,6 +7,7 @@ import com.example.truckercore.model.modules.employee.driver.data.DriverID
 import com.example.truckercore.model.modules.user._contracts.eligible_state.Active
 import com.example.truckercore.model.modules.user._contracts.eligible_state.Unregistered
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
+import com.example.truckercore.model.modules._shared.exceptions.FactoryException
 
 object DriverFactory {
 
@@ -21,21 +22,21 @@ object DriverFactory {
             companyId = form.companyId,
             name = form.name,
             email = form.email,
-            persistence = PersistenceState.ACTIVE,
+            persistenceState = PersistenceState.ACTIVE,
             eligibleState = Unregistered(),
             userId = null
         )
     }
 
     fun registered(form: EmployeeForm): Driver {
-        val validEmail = form.email ?: throw DomainException.InvalidForCreation(MISSING_EMAIL_MESSAGE)
-        val validUserId = form.userId ?: throw DomainException.InvalidForCreation(MISSING_USER_ID_MESSAGE)
+        val validEmail = form.email ?: throw FactoryException(MISSING_EMAIL_MESSAGE)
+        val validUserId = form.userId ?: throw FactoryException(MISSING_USER_ID_MESSAGE)
 
         return Driver(
             id = DriverID.generate(),
             companyId = form.companyId,
             name = form.name,
-            persistence = PersistenceState.ACTIVE,
+            persistenceState = PersistenceState.ACTIVE,
             eligibleState = Active(),
             email = validEmail,
             userId = validUserId

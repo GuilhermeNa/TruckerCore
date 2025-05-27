@@ -15,6 +15,7 @@ import com.example.truckercore._utils.expressions.logEffect
 import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
+import com.example.truckercore.business_admin.view.activities.MainActivity
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view.activities.NotificationActivity
@@ -165,6 +166,7 @@ class SplashFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navigateToActivity(MainActivity::class.java, true)
         setTransitionListener()
     }
 

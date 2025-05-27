@@ -15,7 +15,7 @@ object UserFactory {
             companyId = form.companyId,
             uid = form.uid,
             profile = getProfile(form.role),
-            persistence = PersistenceState.ACTIVE
+            persistenceState = PersistenceState.ACTIVE
         )
     }
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.truckercore._utils.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
 
-abstract class BaseViewModel: ViewModel() {
+abstract class LoggerViewModel: ViewModel() {
 
     init {
         AppLogger.d(getClassName(), VM_INITIALIZED)

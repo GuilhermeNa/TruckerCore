@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.truckercore._utils.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
 
-abstract class BaseFragment : Fragment() {
+abstract class LoggerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -78,7 +78,7 @@ class GetSessionInfoUseCaseImpl(
     private suspend fun getCompanyAndEligibleAsync(user: User) = coroutineScope {
         AsyncResponses(
             companyDef = async { getCompany(user.companyId) },
-            eligibleDef = async { getEligible(user.id, user.profileRole) }
+            eligibleDef = async { getEligible(user.id, user.profile.role) }
         )
     }
 

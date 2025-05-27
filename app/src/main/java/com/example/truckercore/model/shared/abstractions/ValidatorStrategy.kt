@@ -19,20 +19,20 @@ internal abstract class ValidatorStrategy : ValidatorStrategyI {
      */
     protected abstract fun processDtoValidationRules(dto: Dto)
 
-    /**
+/*    *//**
      * Processes the validation rules for an [Entity] object.
      * This method must be implemented by the subclass to define the specific validation logic for the [Entity].
      *
      * @param entity The [Entity] object to be validated.
-     */
+     *//*
     protected abstract fun processEntityValidationRules(entity: Entity)
 
-    /**
+    *//**
      * Processes the validation rules for an [Entity] object when it is being created.
      * This method must be implemented by the subclass to define the specific validation logic for entity creation.
      *
      * @param entity The [Entity] object to be validated for creation.
-     */
-    protected abstract fun processEntityCreationRules(entity: Entity)
+     *//*
+    protected abstract fun processEntityCreationRules(entity: Entity)*/
 
 }

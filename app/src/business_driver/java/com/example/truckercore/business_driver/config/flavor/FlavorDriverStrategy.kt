@@ -17,7 +17,12 @@ class FlavorDriverStrategy : FlavorStrategy {
         Intent(context, MainActivity::class.java)
 
     override fun getWelcomePagerData(): List<WelcomePagerData> {
-        TODO("Not yet implemented")
+        return listOf(
+            WelcomePagerData.welcomeData(),
+            WelcomePagerData.documentData(),
+            WelcomePagerData.integrationData(),
+            WelcomePagerData.inProgressData()
+        )
     }
 
 }

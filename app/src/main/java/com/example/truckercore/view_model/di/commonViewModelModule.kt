@@ -25,7 +25,7 @@ val commonViewModelModule = module {
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<WelcomeViewModel> { WelcomeViewModel(get()) }
-    viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get(), get()) }
+    viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get(), get(), get(), get()) }
     viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get()) }
     viewModel<ForgetPasswordViewModel> { ForgetPasswordViewModel(get()) }

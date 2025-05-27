@@ -14,12 +14,12 @@ object DriverMapper : Mapper<Driver, DriverDto> {
     override fun toDto(entity: Driver): DriverDto =
         try {
             DriverDto(
-                id = entity.idValue,
-                companyId = entity.companyIdValue,
-                persistenceState = entity.persistence,
-                name = entity.nameValue,
-                email = entity.emailValue,
-                userId = entity.userIdValue,
+                id = entity.id.value,
+                companyId = entity.companyId.value,
+                persistenceState = entity.persistenceState,
+                name = entity.name.value,
+                email = entity.email?.value,
+                userId = entity.userId?.value,
                 state = entity.eligibleState
             )
         } catch (e: Exception) {
@@ -34,7 +34,7 @@ object DriverMapper : Mapper<Driver, DriverDto> {
                 companyId = CompanyID(dto.companyId!!),
                 email = dto.email?.let { Email.from(it) },
                 userId = dto.userId?.let { UserID(it) },
-                persistence = dto.persistenceState!!,
+                persistenceState = dto.persistenceState!!,
                 eligibleState = dto.state!!
             )
         } catch (e: Exception) {

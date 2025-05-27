@@ -23,6 +23,6 @@ sealed class ValidatorInput {
      *
      * @param entity The Entity object to be validated.
      */
-    data class EntityInput(val entity: Entity): ValidatorInput()
+    data class EntityInput(val entity: Entity<*>): ValidatorInput()
 
 }
