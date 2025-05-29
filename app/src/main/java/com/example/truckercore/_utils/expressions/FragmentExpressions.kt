@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
@@ -23,6 +24,10 @@ import com.google.android.material.snackbar.Snackbar
 fun Fragment.navigateToDirection(direction: NavDirections) {
     val navController = Navigation.findNavController(this.requireView())
     navController.navigate(direction)
+}
+
+fun Fragment.navController(): NavController {
+    return Navigation.findNavController(this.requireView())
 }
 
 fun Fragment.navigateToActivity(

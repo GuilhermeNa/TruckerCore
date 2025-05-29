@@ -17,9 +17,12 @@ import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentWelcomeBinding
+import com.example.truckercore.model.configs.flavor.contracts.FlavorStrategy
 import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.fragments._base.CloseAppFragment
+import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigator
+import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorImpl
 import com.example.truckercore.view.ui_error.UiError
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeEvent
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
@@ -27,6 +30,8 @@ import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeVi
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -38,6 +43,13 @@ class WelcomeFragment : CloseAppFragment() {
 
     private var _binding: FragmentWelcomeBinding? = null
     private val binding get() = _binding!!
+
+    private val flavorService: FlavorStrategy by inject()
+
+    private val navigator: WelcomeNavigator by lazy {
+        val strategy = flavorService.getWelcomeNavigatorStrategy()
+        WelcomeNavigatorImpl(strategy)
+    }
 
     private var stateHandler: WelcomeUiStateHandler? = null
 
@@ -174,10 +186,10 @@ class WelcomeFragment : CloseAppFragment() {
 
     private fun navigateToEmailAuth() {
         //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
-
+/*
         val direction = WelcomeFragmentDirections
             .actionWelcomeFragmentToEmailAuthFragment()
-        navigateToDirection(direction)
+        navigateToDirection(direction)*/
     }
 
     /**

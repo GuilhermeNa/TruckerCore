@@ -1,6 +1,5 @@
 package com.example.truckercore.model.configs.di
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthRepositoryErrorFactory
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManagerImpl
 import com.example.truckercore.model.modules.authentication.use_cases.implementations.CreateUserWithEmailUseCaseImpl

@@ -51,5 +51,8 @@
     <string name="send">Enviar</string>
     <string name="name_not_informed">Nome informado</string>
     <string name="employee">Funcionários</string>
+    <string name="fleet">Frota</string>
+    <string name="documents">Documentos</string>
+    <string name="driver">Motorista</string>
 
 </resources>

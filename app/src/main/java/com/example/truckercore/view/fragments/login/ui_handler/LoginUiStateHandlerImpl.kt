@@ -1,11 +1,11 @@
-package com.example.truckercore.view.fragments.login
+package com.example.truckercore.view.fragments.login.ui_handler
 
 import androidx.fragment.app.Fragment
 import com.example.truckercore._utils.classes.FieldState
 import com.example.truckercore._utils.expressions.hideKeyboardAndClearFocus
 import com.example.truckercore.databinding.FragmentLoginBinding
 
-class LoginUiStateHandler(private val binding: FragmentLoginBinding) {
+class LoginUiStateHandlerImpl(private val binding: FragmentLoginBinding): LoginUiStateHandler {
 
     fun handlePassword(passwordState: FieldState) {
         passwordState.handle(
