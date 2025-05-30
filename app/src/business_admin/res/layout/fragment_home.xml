@@ -11,13 +11,13 @@
         android:id="@+id/frag_home_card_employee"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="0dp"
-        android:clickable="true"
-        app:cardElevation="11dp"
-        android:translationZ="11dp"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/primaryVar">
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:translationZ="11dp"
+        app:cardBackgroundColor="@color/primaryVar"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="11dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -27,41 +27,41 @@
                 android:id="@+id/frag_home_card_employee_img"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintWidth_percent="0.4"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
+                android:src="@drawable/img_motorista"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/img_motorista"
-                android:importantForAccessibility="no" />
+                app:layout_constraintWidth_percent="0.4" />
 
             <TextView
                 android:id="@+id/frag_home_card_employee_header"
+                style="@style/textEmphasis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/employee"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/employee"
                 android:textColor="@color/white"
-                style="@style/textEmphasis"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/frag_home_card_employee_message"
+                style="@style/textDefault"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                tools:text="Você tem 3 funcionários cadastrados"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frag_home_card_employee_header"
-                app:layout_constraintStart_toEndOf="@id/frag_home_card_employee_img"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_margin="16dp"
+                android:gravity="center"
                 android:textColor="@color/white"
-                style="@style/textDefault"
                 android:textSize="12sp"
-                android:gravity="center" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/frag_home_card_employee_img"
+                app:layout_constraintTop_toBottomOf="@id/frag_home_card_employee_header"
+                tools:text="Você tem 3 funcionários cadastrados" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -70,13 +70,13 @@
         android:id="@+id/frag_home_card_truck"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_margin="16dp"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="0dp"
         android:clickable="true"
-        app:cardElevation="11dp"
-        app:cardBackgroundColor="@color/primaryVar"
         android:translationZ="11dp"
-        android:layout_margin="16dp">
+        app:cardBackgroundColor="@color/primaryVar"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="11dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -86,41 +86,41 @@
                 android:id="@+id/frag_home_card_truck_img"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintWidth_percent="0.4"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-               app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:src="@drawable/img_fleet"
-                android:importantForAccessibility="no" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.4" />
 
             <TextView
                 android:id="@+id/frag_home_card_truck_header"
+                style="@style/textEmphasis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fleet"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:text="@string/fleet"
                 android:textColor="@color/white"
-                style="@style/textEmphasis"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/frag_home_card_truck_message"
+                style="@style/textDefault"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                tools:text="Você tem 8 items cadastrados"
-                app:layout_constraintTop_toBottomOf="frahhomef"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/frag_home_card_truck_img"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_margin="16dp"
-                android:textColor="@color/white"
-                style="@style/textDefault"
-                android:textSize="12sp"
-                android:gravity="center" />
+                app:layout_constraintTop_toBottomOf="@id/frag_home_card_truck_header"
+                tools:text="Você tem 8 items cadastrados" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -129,13 +129,13 @@
         android:id="@+id/frag_home_card_document"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:layout_margin="16dp"
         android:layout_marginTop="16dp"
-        app:cardCornerRadius="0dp"
         android:clickable="true"
-        app:cardElevation="11dp"
-        app:cardBackgroundColor="@color/primaryVar"
         android:translationZ="11dp"
-        android:layout_margin="16dp">
+        app:cardBackgroundColor="@color/primaryVar"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="11dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -145,41 +145,41 @@
                 android:id="@+id/frag_home_card_document_img"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintWidth_percent="0.4"
+                android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
+                android:src="@drawable/img_documents"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/img_documents"
-                android:importantForAccessibility="no" />
+                app:layout_constraintWidth_percent="0.4" />
 
             <TextView
                 android:id="@+id/frag_home_card_document_header"
+                style="@style/textEmphasis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/documents"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/documents"
                 android:textColor="@color/white"
-                style="@style/textEmphasis"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/frag_home_card_document_message"
+                style="@style/textDefault"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                tools:text="Você tem 5 documentos registrados"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frag_home_card_document_header"
-                app:layout_constraintStart_toEndOf="@id/frag_home_card_document_img"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_margin="16dp"
+                android:gravity="center"
                 android:textColor="@color/white"
-                style="@style/textDefault"
                 android:textSize="12sp"
-                android:gravity="center" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/frag_home_card_document_img"
+                app:layout_constraintTop_toBottomOf="@id/frag_home_card_document_header"
+                tools:text="Você tem 5 documentos registrados" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

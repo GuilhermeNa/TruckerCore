@@ -1,8 +1,10 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore._utils.classes.AppResult
+import com.example.truckercore._utils.classes.contracts.Event
+import com.example.truckercore.model.errors.AppException
+import com.example.truckercore.view.ui_error.UiError
 
-sealed class LoginEvent {
+sealed class LoginEvent : Event {
 
     sealed class UiEvent : LoginEvent() {
         data class EmailFieldChanged(val text: String) : UiEvent()
@@ -14,10 +16,12 @@ sealed class LoginEvent {
     }
 
     sealed class SystemEvent : LoginEvent() {
-        data class AuthenticationResult(val result: AppResult<Unit>) : SystemEvent()
-        data object UserRegistered: SystemEvent()
-        data object UserAwaitingRegister: SystemEvent()
-       // data class AuthError(val error: AppExceptionOld): SystemEvent()
+        sealed class LoginTask: SystemEvent() {
+            data object Executing : LoginTask()
+            data object Success : LoginTask()
+            data class CriticalError(val e: UiError.Critical) : LoginTask()
+            data class RecoverableError(val e: UiError.Recoverable): LoginTask()
+        }
     }
 
 }

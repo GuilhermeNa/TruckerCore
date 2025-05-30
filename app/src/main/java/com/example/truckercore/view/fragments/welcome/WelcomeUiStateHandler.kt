@@ -6,19 +6,29 @@ import androidx.core.view.isVisible
 import com.example.truckercore._utils.expressions.slideInBottom
 import com.example.truckercore._utils.expressions.slideOutBottom
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.lang.ref.WeakReference
 
-class WelcomeUiStateHandler(private val fab: FloatingActionButton) {
+class WelcomeUiStateHandler {
+
+    private var _fab: WeakReference<FloatingActionButton>? = null
+
+    private fun getFab(): FloatingActionButton =
+        requireNotNull(_fab?.get()) { "FAB was not set or already collected." }
+
+    fun setFab(fab: FloatingActionButton) {
+        _fab = WeakReference(fab)
+    }
 
     fun animateLeftFabIn() {
-        fab.slideInBottom(200)
+        getFab().slideInBottom(200)
     }
 
     fun animateLeftFabOut() {
-        fab.slideOutBottom(INVISIBLE, 200)
+        getFab().slideOutBottom(INVISIBLE, 200)
     }
 
     fun showLeftFab() {
-        if (!fab.isVisible) fab.visibility = VISIBLE
+        if (!getFab().isVisible) getFab().visibility = VISIBLE
     }
 
 }

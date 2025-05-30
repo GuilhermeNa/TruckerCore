@@ -26,6 +26,11 @@ fun Fragment.navigateToDirection(direction: NavDirections) {
     navController.navigate(direction)
 }
 
+fun Fragment.navigateToDirection(direction: Int) {
+    val navController = Navigation.findNavController(this.requireView())
+    navController.navigate(direction)
+}
+
 fun Fragment.navController(): NavController {
     return Navigation.findNavController(this.requireView())
 }

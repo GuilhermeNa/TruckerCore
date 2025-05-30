@@ -12,14 +12,11 @@ import com.example.truckercore._utils.classes.ButtonState
 import com.example.truckercore._utils.enums.Direction
 import com.example.truckercore._utils.expressions.doIfResumed
 import com.example.truckercore._utils.expressions.doIfResumedOrElse
-import com.example.truckercore._utils.expressions.getClassName
 import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.model.configs.flavor.contracts.FlavorStrategy
-import com.example.truckercore.model.logger.AppLogger
-import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.fragments._base.CloseAppFragment
 import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigator
 import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorImpl
@@ -30,7 +27,6 @@ import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeVi
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -50,8 +46,9 @@ class WelcomeFragment : CloseAppFragment() {
         val strategy = flavorService.getWelcomeNavigatorStrategy()
         WelcomeNavigatorImpl(strategy)
     }
-
-    private var stateHandler: WelcomeUiStateHandler? = null
+    private val stateHandler: WelcomeUiStateHandler by lazy {
+        WelcomeUiStateHandler()
+    }
 
     private val viewModel: WelcomeViewModel by viewModel()
 
@@ -93,11 +90,7 @@ class WelcomeFragment : CloseAppFragment() {
 
     private fun handleUiErrorIfHas(uiError: UiError.Critical?) {
         uiError?.let {
-            val intent = NotificationActivity.newInstance(
-                context = requireContext(),
-                title = it.title,
-                message = it.message
-            )
+            val intent = navigator.notificationActivityIntent(requireContext())
             navigateToActivity(intent, true)
         }
     }
@@ -124,11 +117,11 @@ class WelcomeFragment : CloseAppFragment() {
     private fun handleLeftFab(fabState: ButtonState) {
         when (fabState.isEnabled) {
             true -> doIfResumedOrElse(
-                resumed = { stateHandler?.animateLeftFabIn() },
-                orElse = { stateHandler?.showLeftFab() }
+                resumed = { stateHandler.animateLeftFabIn() },
+                orElse = { stateHandler.showLeftFab() }
             )
 
-            false -> doIfResumed { stateHandler?.animateLeftFabOut() }
+            false -> doIfResumed { stateHandler.animateLeftFabOut() }
         }
     }
 
@@ -140,7 +133,7 @@ class WelcomeFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentWelcomeBinding.inflate(layoutInflater)
-        stateHandler = WelcomeUiStateHandler(binding.fragWelcomeLeftFab)
+        stateHandler.setFab(binding.fragWelcomeLeftFab)
         return binding.root
     }
 
@@ -159,7 +152,7 @@ class WelcomeFragment : CloseAppFragment() {
      */
     private fun setTopButtonListener() {
         binding.fragWelcomeJumpButton.setOnClickListener {
-            navigateToEmailAuth()
+            navigateToNextNavDirection()
         }
     }
 
@@ -178,18 +171,16 @@ class WelcomeFragment : CloseAppFragment() {
     private fun setRightFabListener() {
         binding.fragWelcomeRightFab.setOnClickListener {
             when (viewModel.isLastPage()) {
-                true -> navigateToEmailAuth()
+                true -> navigateToNextNavDirection()
                 false -> paginateViewPager(Direction.Forward)
             }
         }
     }
 
-    private fun navigateToEmailAuth() {
+    private fun navigateToNextNavDirection() {
         //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
-/*
-        val direction = WelcomeFragmentDirections
-            .actionWelcomeFragmentToEmailAuthFragment()
-        navigateToDirection(direction)*/
+        val direction = navigator.nextNavDirection()
+        navigateToDirection(direction)
     }
 
     /**
@@ -207,7 +198,6 @@ class WelcomeFragment : CloseAppFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         removeViewPagerReference()
-        stateHandler = null
         _binding = null
     }
 

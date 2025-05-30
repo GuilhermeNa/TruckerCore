@@ -3,7 +3,7 @@ package com.example.truckercore.business_driver.view.fragments.splash_driver.nav
 import android.content.Context
 import android.content.Intent
 import androidx.navigation.NavController
-import com.example.truckercore.business_driver.view.fragments.splash_driver.navigator.SplashDriverFragmentDirections
+import com.example.truckercore.business_driver.view.fragments.splash_driver.SplashDriverFragmentDirections
 import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.ui_error.UiError
 

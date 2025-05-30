@@ -1,7 +1,12 @@
 package com.example.truckercore.view.fragments.welcome.navigator
 
+import android.content.Context
+import android.content.Intent
+
 interface WelcomeNavigator {
 
-    fun nextDirection(): Int
+    fun nextNavDirection(): Int
+
+    fun notificationActivityIntent(context: Context): Intent
 
 }

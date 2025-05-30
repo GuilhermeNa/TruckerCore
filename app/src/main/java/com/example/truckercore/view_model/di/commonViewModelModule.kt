@@ -8,6 +8,7 @@ import com.example.truckercore.view_model.view_models.continue_register.Continue
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordViewModel
 import com.example.truckercore.view_model.view_models.login.LoginViewModel
+import com.example.truckercore.view_model.view_models.login.LoginViewUseCase
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
@@ -19,6 +20,7 @@ import org.koin.dsl.module
 val commonViewModelModule = module {
     single { UserPreferencesDataStore(androidContext()) }
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
+    single<LoginViewUseCase> { LoginViewUseCase(get()) }
 
     viewModel<SplashViewModel> { SplashViewModel(get(), get(), get()) }
     viewModel<LoginViewModel> { LoginViewModel(get()) }

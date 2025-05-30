@@ -8,7 +8,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.truckercore._utils.expressions.hideKeyboardAndClearFocus
+import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.navController
+import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view.dialogs.LoadingDialog
@@ -17,9 +20,9 @@ import com.example.truckercore.view.fragments.login.navigator.LoginNavigator
 import com.example.truckercore.view.fragments.login.navigator.LoginNavigatorImpl
 import com.example.truckercore.view.fragments.login.ui_handler.LoginUiStateHandler
 import com.example.truckercore.view.fragments.login.ui_handler.LoginUiStateHandlerImpl
-import com.example.truckercore.view_model.view_models.login.LoginEffect
 import com.example.truckercore.view_model.view_models.login.LoginEvent
 import com.example.truckercore.view_model.view_models.login.LoginViewModel
+import com.example.truckercore.view_model.view_models.login.effect.LoginEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -36,19 +39,7 @@ class LoginFragment : CloseAppFragment() {
         val strategy = flavorService.getLoginNavigatorStrategy(navController())
         LoginNavigatorImpl(strategy)
     }
-
-/*
-    private val stateHandler: LoginUiStateHandler by lazy {
-        LoginUiStateHandlerImpl()
-    }
-*/
-
-
-
-
-
-    private val navigationHandler by lazy { LoginNavigationHandler() }
-
+    private val stateHandler: LoginUiStateHandler by lazy { LoginUiStateHandlerImpl() }
     private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
     private val viewModel: LoginViewModel by viewModel()
@@ -61,40 +52,44 @@ class LoginFragment : CloseAppFragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 setUiStateManager()
-                setEventManager()
-
+                setEffectManager()
             }
         }
     }
 
     private fun CoroutineScope.setUiStateManager() {
         launch {
-            /*viewModel.state.collect { state ->
-                stateHandler?.handleEmail(state.email)
-                stateHandler?.handlePassword(state.password)
-                stateHandler?.handleEnterButton(state.buttonEnabled)
-
-                if (state.loading) dialog.show()
-                else dialog.dismissIfShowing()
-            }*/
+            viewModel.stateFlow.collect { state ->
+                logState(this@LoginFragment, state)
+                stateHandler.handleEmail(state.email)
+                stateHandler.handlePassword(state.password)
+                stateHandler.handleEnterButton(state.buttonEnabled)
+                handleDialog(state.loading)
+            }
         }
     }
 
-    private suspend fun setEventManager() {
-        viewModel.effect.collect { effect ->
-            if (effect is LoginEffect.ClearFocusAndHideKeyboard) {
-               // stateHandler.hideKeyboardAndClearFocus(this)
-                return@collect
-            }
+    private fun handleDialog(loading: Boolean) {
+        if (loading) dialog.show()
+        else dialog.dismissIfShowing()
+    }
 
-            if (effect.isFragmentNavigation()) {
-             /*   val direction = navigationHandler.getDirection(effect)
-                navigateToDirection(direction)*/
-                return@collect
-            }
+    private suspend fun setEffectManager() {
+        viewModel.effectFlow.collect { effect ->
+            when (effect) {
+                LoginEffect.ClearFocusAndHideKeyboard -> {
+                    val views = stateHandler.getFocusableViews()
+                    hideKeyboardAndClearFocus(*views)
+                }
 
-         //   val intent = navigationHandler.getIntent(effect, requireContext())
-        //    navigateToActivity(intent, true)
+                LoginEffect.NavigateToForgetPassword -> navigator.navigateToForgetPassword()
+                LoginEffect.NavigateToMain -> navigator.getMainActivityIntent(requireContext())
+                LoginEffect.NavigateToNewUser -> navigator.navigateToEmailAuth()
+                LoginEffect.NavigateToNotification ->
+                    navigator.getNotificationActivityIntent(requireContext())
+
+                is LoginEffect.ShowToast -> showRedSnackBar(effect.message)
+            }
         }
     }
 
@@ -106,7 +101,7 @@ class LoginFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(layoutInflater)
-       /* _stateHandler = LoginUiStateHandlerImpl(binding)*/
+        stateHandler.initialize(binding)
         return binding.root
     }
 
@@ -169,7 +164,6 @@ class LoginFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-       // _stateHandler = null
         _binding = null
     }
 

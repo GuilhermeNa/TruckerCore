@@ -1,0 +1,24 @@
+package com.example.truckercore.business_admin.config.flavor
+
+import android.content.Context
+import android.content.Intent
+import com.example.truckercore.R
+import com.example.truckercore.view.activities.NotificationActivity
+import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorStrategy
+import com.example.truckercore.view.ui_error.UiError
+
+class AdminWelcomeNavigatorStrategy: WelcomeNavigatorStrategy {
+
+    override fun nextNavigationDirection(): Int {
+        return R.id.action_welcomeFragment_to_emailAuthFragment
+    }
+
+    override fun notificationActivityIntent(context: Context): Intent {
+        return NotificationActivity.newInstance(
+            context = context,
+            title = UiError.Critical().title,
+            message = UiError.Critical().title
+        )
+    }
+
+}

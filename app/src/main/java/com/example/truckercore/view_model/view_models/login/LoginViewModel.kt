@@ -1,141 +1,64 @@
 package com.example.truckercore.view_model.view_models.login
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.Password
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
-import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore._utils.classes.AppResult
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.truckercore._utils.expressions.logEvent
+import com.example.truckercore.view.ui_error.map
+import com.example.truckercore.view_model._base.LoggerViewModel
+import com.example.truckercore.view_model.view_models.login.effect.LoginEffectManager
+import com.example.truckercore.view_model.view_models.login.state.LoginStateManager
 import kotlinx.coroutines.launch
 
-// Aliases para eventos de UI
-private typealias EmailChanged = LoginEvent.UiEvent.EmailFieldChanged
-private typealias PasswordChanged = LoginEvent.UiEvent.PasswordFieldChanged
-private typealias BackgroundClick = LoginEvent.UiEvent.BackGroundCLick
-private typealias ForgetPasswordClick = LoginEvent.UiEvent.ForgetPasswordButtonClick
-private typealias NewAccountClick = LoginEvent.UiEvent.NewAccountButtonClick
-private typealias EnterClick = LoginEvent.UiEvent.EnterButtonClick
+class LoginViewModel(private val loginUseCase: LoginViewUseCase) : LoggerViewModel() {
 
-// Aliases para eventos de sistema
-private typealias AuthResult = LoginEvent.SystemEvent.AuthenticationResult
-private typealias UserRegistered = LoginEvent.SystemEvent.UserRegistered
-private typealias AwaitingRegister = LoginEvent.SystemEvent.UserAwaitingRegister
+    private val stateManager = LoginStateManager()
+    val stateFlow get() = stateManager.stateFlow
 
-// Aliases para efeitos
-private typealias ClearFocusEffect = LoginEffect.ClearFocusAndHideKeyboard
-private typealias NavigateToForgetPassword = LoginEffect.Navigation.ForgetPassword
-private typealias NavigateToNewAccount = LoginEffect.Navigation.NewAccount
-private typealias NavigateToSystem = LoginEffect.Navigation.EnterSystem
-private typealias NavigateToCompleteRegister = LoginEffect.Navigation.CompleteRegister
+    private val effectManager = LoginEffectManager()
+    val effectFlow get() = effectManager.effectFlow
 
-
-class LoginViewModel(private val authService: AuthManager) : ViewModel() {
-
-    private val stateHandler = LoginStateFlowHandler()
-    val state get() = stateHandler.state.asStateFlow()
-
-    private val _effect = MutableSharedFlow<LoginEffect>()
-    val effect get() = _effect.asSharedFlow()
-
+    //----------------------------------------------------------------------------------------------
     fun onEvent(event: LoginEvent) {
+        logEvent(this@LoginViewModel, event)
         when (event) {
-            // Ui Events
-            is EmailChanged -> stateHandler.updateEmail(event.text)
-            is PasswordChanged-> stateHandler.updatePassword(event.text)
-            is BackgroundClick -> setEffect(ClearFocusEffect)
-            is ForgetPasswordClick -> setEffect(NavigateToForgetPassword)
-            is NewAccountClick -> setEffect(NavigateToNewAccount)
-            is EnterClick -> {
-                setEffect(NavigateToSystem)
-                //stateHandler.loading()
-                //tryToLogin()
+            is LoginEvent.UiEvent -> handleUiEvent(event)
+            is LoginEvent.SystemEvent -> handleSystemEvent(event)
+        }
+    }
+
+    private fun handleUiEvent(event: LoginEvent.UiEvent) {
+        when (event) {
+            is LoginEvent.UiEvent.EmailFieldChanged -> stateManager.updateComponentsOnEmailChange(event.text)
+            is LoginEvent.UiEvent.PasswordFieldChanged -> stateManager.updateComponentsOnPasswordChange(event.text)
+            LoginEvent.UiEvent.BackGroundCLick -> effectManager.setCLearFocusAndHideKeyboardEffect()
+            LoginEvent.UiEvent.ForgetPasswordButtonClick -> effectManager.setNavigateToForgetPasswordEffect()
+            LoginEvent.UiEvent.NewAccountButtonClick -> effectManager.setNavigateToNewUserEffect()
+            LoginEvent.UiEvent.EnterButtonClick -> {
+                onEvent(LoginEvent.SystemEvent.LoginTask.Executing)
+                tryToLogin()
             }
+        }
+    }
 
-            // System Events
-            is AuthResult -> handleResult(event.result)
-            is UserRegistered -> setEffect(NavigateToSystem)
-            is AwaitingRegister -> setEffect(NavigateToCompleteRegister)
-          //  is AuthError -> setEffect(ShowErrorEffect(event.error.errorCode))
-
+    private fun handleSystemEvent(event: LoginEvent.SystemEvent) {
+        when (event) {
+            LoginEvent.SystemEvent.LoginTask.Executing -> stateManager.setLoadingState()
+            LoginEvent.SystemEvent.LoginTask.Success -> effectManager.setNavigateToMainEffect()
+            is LoginEvent.SystemEvent.LoginTask.CriticalError -> effectManager.setNavigateToNotificationEffect()
+            is LoginEvent.SystemEvent.LoginTask.RecoverableError -> effectManager.setShowToastEffect(event.e.message)
         }
     }
 
     private fun tryToLogin() {
         viewModelScope.launch {
-            val result = authService.signIn(getCredential())
-            onEvent(AuthResult(result))
-        }
-    }
-
-    private fun handleResult(loginResult: AppResult<Unit>) {
-
-    }
-
-    private fun getCredential(): EmailCredential {
-        val email = Email.from(stateHandler.state.value.email.text)
-        val password = Password.from(stateHandler.state.value.password.text)
-        return EmailCredential(email, password)
-    }
-
-    private fun setEffect(newEffect: LoginEffect) {
-        viewModelScope.launch {
-            _effect.emit(newEffect)
+            val credentials = stateManager.getCredential()
+            val result = loginUseCase(credentials).map(
+                onSuccess = { LoginEvent.SystemEvent.LoginTask.Success },
+                onRecoverableError = { LoginEvent.SystemEvent.LoginTask.RecoverableError(it) },
+                onCriticalError = { LoginEvent.SystemEvent.LoginTask.CriticalError(it) }
+            )
+            onEvent(result)
         }
     }
 
 }
 
-private class LoginStateFlowHandler {
-
-    private val _state: MutableStateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
-    private val passwordState get() = state.value.password
-    private val emailState get() = state.value.email
-    val state get() = _state
-
-    fun updatePassword(password: String) {
-        val newPasswordState = LoginValidator.getPasswordState(password)
-
-        val newButtonState = LoginValidator.getButtonState(
-            emailValidation = emailState.status,
-            passwordValidation = newPasswordState.status,
-        )
-
-        val newState = _state.value.copy(
-            password = newPasswordState,
-            buttonEnabled = newButtonState
-        )
-
-        setState(newState)
-    }
-
-    fun updateEmail(email: String) {
-        val newEmailState = LoginValidator.getEmailState(email)
-
-        val newButtonState = LoginValidator.getButtonState(
-            emailValidation = newEmailState.status,
-            passwordValidation = passwordState.status,
-        )
-
-        val newState = _state.value.copy(
-            email = newEmailState,
-            buttonEnabled = newButtonState
-        )
-
-        setState(newState)
-    }
-
-    fun loading() {
-        val newState = _state.value.copy(loading = true)
-        setState(newState)
-    }
-
-    private fun setState(newState: LoginUiState) {
-        _state.value = newState
-    }
-
-}

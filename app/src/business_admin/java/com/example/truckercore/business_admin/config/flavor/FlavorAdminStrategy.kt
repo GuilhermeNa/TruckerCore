@@ -6,9 +6,14 @@ import androidx.navigation.NavController
 import com.example.truckercore.business_admin.view.activities.MainActivity
 import com.example.truckercore.model.configs.flavor.contracts.FlavorStrategy
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
+import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorStrategy
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 
 class FlavorAdminStrategy : FlavorStrategy {
+
+    override fun getWelcomeNavigatorStrategy(): WelcomeNavigatorStrategy {
+        return AdminWelcomeNavigatorStrategy()
+    }
 
     override fun getLoginNavigatorStrategy(navController: NavController) =
         AdminLoginNavigatorStrategy(navController)

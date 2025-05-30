@@ -1,5 +1,7 @@
 package com.example.truckercore.view.ui_error
 
+import java.security.InvalidParameterException
+
 sealed class UiError {
 
     data class Recoverable(val message: String) : UiError()
@@ -16,4 +18,23 @@ sealed class UiError {
                     "Se o problema persistir, entre em contato com o suporte."
     }
 
+}
+
+sealed class UiResponse {
+
+    data object Success : UiResponse()
+
+    data class Error(val e: UiError) : UiResponse()
+
+}
+
+fun <R> UiResponse.map(
+    onSuccess: () -> R,
+    onCriticalError: (UiError.Critical) -> R,
+    onRecoverableError: (UiError.Recoverable) -> R
+): R = when {
+    this is UiResponse.Success -> onSuccess()
+    this is UiResponse.Error && this.e is UiError.Recoverable -> onRecoverableError(this.e)
+    this is UiResponse.Error && this.e is UiError.Critical -> onCriticalError(this.e)
+    else -> throw InvalidParameterException()
 }
