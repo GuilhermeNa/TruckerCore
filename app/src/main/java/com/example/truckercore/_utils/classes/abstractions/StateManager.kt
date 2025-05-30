@@ -9,9 +9,9 @@ abstract class StateManager<T: UiState>(initialState: T) {
     private val _stateFlow: MutableStateFlow<T> = MutableStateFlow(initialState)
     val stateFlow get() = _stateFlow.asStateFlow()
 
-    fun getStateValue(): T = _stateFlow.value
+    protected fun getStateValue(): T = _stateFlow.value
 
-    fun setState(state: T) {
+    protected fun setState(state: T) {
         _stateFlow.value = state
     }
 

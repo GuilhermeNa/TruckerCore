@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.navigation.NavController
 import com.example.truckercore.R
+import com.example.truckercore._utils.classes.ui_component.ButtonComponent
+import com.example.truckercore._utils.classes.ui_component.Visibility
 import com.example.truckercore.business_driver.view.activities.MainActivity
-import com.example.truckercore.view.fragments.login.navigator.LoginNavigatorStrategy
+import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
 import java.security.InvalidParameterException
 
-class DriverLoginNavigatorStrategy(private val navController: NavController):
-    LoginNavigatorStrategy {
+class DriverLoginFragmentStrategy(private val navController: NavController) :
+    LoginFragmentStrategy {
 
     override fun navigateToEmailAuth() {
         throw InvalidParameterException()
@@ -21,5 +23,9 @@ class DriverLoginNavigatorStrategy(private val navController: NavController):
 
     override fun getMainActivityIntent(context: Context): Intent =
         Intent(context, MainActivity::class.java)
+
+    override fun getNewAccountButtonComponent(): ButtonComponent {
+        return ButtonComponent(isEnabled = false, visibility = Visibility.GONE)
+    }
 
 }

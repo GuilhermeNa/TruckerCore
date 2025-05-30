@@ -2,68 +2,81 @@ package com.example.truckercore.view_model.view_models.forget_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._utils.classes.AppResult
-import com.example.truckercore._utils.expressions.handleUiError
-import com.example.truckercore._utils.expressions.launch
-import com.example.truckercore._utils.expressions.mapAppResult
-import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view.ui_error.UiErrorFactory
+import com.example.truckercore.view.ui_error.mapResult
+import com.example.truckercore.view_model.view_models.forget_password.effect.ForgetPasswordEffectManager
+import com.example.truckercore.view_model.view_models.forget_password.state.ForgetPasswordUiStateManager
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ForgetPasswordViewModel(private val authManager: AuthManager) : ViewModel() {
+class ForgetPasswordViewModel(
+    private val resetPasswordUseCase: ResetPasswordViewUseCase
+) : ViewModel() {
 
     private val stateManager = ForgetPasswordUiStateManager()
-    val uiState get() = stateManager.uiState.asStateFlow()
+    val stateFlow get() = stateManager.stateFlow
 
     private val effectManager = ForgetPasswordEffectManager()
-    val effect get() = effectManager.effect.asSharedFlow()
+    val effectFlow get() = effectManager.effectFlow
 
-    fun onEvent(newEvent: ForgetPasswordEvent) {
-        when (newEvent) {
-            is ForgetPasswordEvent.UiEvent.EmailTextChange -> {
-                stateManager.updateEmail(newEvent.text)
-            }
+    //----------------------------------------------------------------------------------------------
+    fun onEvent(event: ForgetPasswordEvent) {
+        when (event) {
+            is ForgetPasswordEvent.UiEvent -> handleUiEvent(event)
+            is ForgetPasswordEvent.SystemEvent -> handleSystemEvent(event)
+        }
+    }
 
-            is ForgetPasswordEvent.UiEvent.SendButtonClicked -> {
-                stateManager.setSendingEmailState()
+    private fun handleUiEvent(event: ForgetPasswordEvent.UiEvent) {
+        when (event) {
+            is ForgetPasswordEvent.UiEvent.Typing.EmailText ->
+                stateManager.updateComponentsOnEmailChange(event.text)
+
+            is ForgetPasswordEvent.UiEvent.Click.SendButton ->
+                onEvent(ForgetPasswordEvent.SystemEvent.SendEmailTask.Executing)
+
+            ForgetPasswordEvent.UiEvent.Click.Background ->
+                effectManager.setClearKeyboardAndFocusEffect()
+        }
+    }
+
+    private fun handleSystemEvent(event: ForgetPasswordEvent.SystemEvent) {
+        when (event) {
+            ForgetPasswordEvent.SystemEvent.SendEmailTask.Executing -> {
+                stateManager.setLoadingState()
                 sendRecoverEmail()
             }
 
-            is ForgetPasswordEvent.SystemEvent.EmailSent -> {
-                stateManager.setSuccessState()
+            ForgetPasswordEvent.SystemEvent.SendEmailTask.Success ->
+                effectManager.setNavigateBackStackEffect()
+
+            ForgetPasswordEvent.SystemEvent.SendEmailTask.CriticalError -> {
+                effectManager.setNavigateToNotificationEffect()
             }
 
-            is ForgetPasswordEvent.SystemEvent.EmailFailed -> {
-                newEvent.uiError.handleUiError(
-                    onRecoverable = {
-                        stateManager.setAwaitingInputState()
-                        launch { effectManager.setRecoverableError(it) }
-                    },
-                    onCritical = { stateManager.setCriticalErrorState(it) }
-                )
+            is ForgetPasswordEvent.SystemEvent.SendEmailTask.RecoverableError -> {
+                stateManager.setIdleState()
+                effectManager.setShowToastEffect(event.e.message)
             }
+
         }
     }
 
     private fun sendRecoverEmail() {
         viewModelScope.launch {
+            delay(500)
+
             val email = stateManager.getEmail()
-            val result = authManager.resetPassword(email)
-            val newEvent = handleResult(result)
-            delay(2000)
+            val newEvent = resetPasswordUseCase(email).mapResult(
+                onSuccess = { ForgetPasswordEvent.SystemEvent.SendEmailTask.Success },
+                onCriticalError = { ForgetPasswordEvent.SystemEvent.SendEmailTask.CriticalError },
+                onRecoverableError = {
+                    ForgetPasswordEvent.SystemEvent.SendEmailTask.RecoverableError(it)
+                }
+            )
+
+            delay(500)
             onEvent(newEvent)
         }
     }
-
-    private fun handleResult(result: AppResult<Unit>): ForgetPasswordEvent = result.mapAppResult(
-        onSuccess = { ForgetPasswordEvent.SystemEvent.EmailSent },
-        onError = { e ->
-            val uiError = UiErrorFactory(e)
-            ForgetPasswordEvent.SystemEvent.EmailFailed(uiError)
-        }
-    )
 
 }

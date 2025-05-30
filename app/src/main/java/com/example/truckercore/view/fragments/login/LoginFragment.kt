@@ -9,13 +9,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore._utils.expressions.hideKeyboardAndClearFocus
+import com.example.truckercore._utils.expressions.logEffect
 import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.navController
+import com.example.truckercore._utils.expressions.navigateToActivity
 import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view.dialogs.LoadingDialog
 import com.example.truckercore.view.fragments._base.CloseAppFragment
+import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
 import com.example.truckercore.view.fragments.login.navigator.LoginNavigator
 import com.example.truckercore.view.fragments.login.navigator.LoginNavigatorImpl
 import com.example.truckercore.view.fragments.login.ui_handler.LoginUiStateHandler
@@ -23,6 +26,8 @@ import com.example.truckercore.view.fragments.login.ui_handler.LoginUiStateHandl
 import com.example.truckercore.view_model.view_models.login.LoginEvent
 import com.example.truckercore.view_model.view_models.login.LoginViewModel
 import com.example.truckercore.view_model.view_models.login.effect.LoginEffect
+import com.example.truckercore.view_model.view_models.login.state.LoginUiState
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -35,11 +40,12 @@ class LoginFragment : CloseAppFragment() {
 
     private val flavorService: FlavorService by inject()
 
-    private val navigator: LoginNavigator by lazy {
-        val strategy = flavorService.getLoginNavigatorStrategy(navController())
-        LoginNavigatorImpl(strategy)
-    }
+    private val strategy: LoginFragmentStrategy by lazy { flavorService.getLoginFragmentStrategy(navController()) }
+
+    private val navigator: LoginNavigator by lazy { LoginNavigatorImpl(strategy) }
+
     private val stateHandler: LoginUiStateHandler by lazy { LoginUiStateHandlerImpl() }
+
     private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
     private val viewModel: LoginViewModel by viewModel()
@@ -61,37 +67,48 @@ class LoginFragment : CloseAppFragment() {
         launch {
             viewModel.stateFlow.collect { state ->
                 logState(this@LoginFragment, state)
-                stateHandler.handleEmail(state.email)
-                stateHandler.handlePassword(state.password)
-                stateHandler.handleEnterButton(state.buttonEnabled)
-                handleDialog(state.loading)
+
+                stateHandler.handleEmailComponent(state.emailComponent)
+                stateHandler.handlePasswordComponent(state.passComponent)
+                stateHandler.handleEnterBtnComponent(state.enterBtnComponent)
+                stateHandler.handleNewAccountBtnComponent(strategy.getNewAccountButtonComponent())
+                handleDialog(state.status)
             }
         }
     }
 
-    private fun handleDialog(loading: Boolean) {
-        if (loading) dialog.show()
+    private fun handleDialog(status: LoginUiState.Status) {
+        if (status.isLoading) dialog.show()
         else dialog.dismissIfShowing()
     }
 
     private suspend fun setEffectManager() {
         viewModel.effectFlow.collect { effect ->
+            logEffect(this@LoginFragment, effect)
+
             when (effect) {
-                LoginEffect.ClearFocusAndHideKeyboard -> {
-                    val views = stateHandler.getFocusableViews()
-                    hideKeyboardAndClearFocus(*views)
+                LoginEffect.ClearFocusAndHideKeyboard -> hideKeyboardAndClearFocus(*getFocusableViews())
+                LoginEffect.NavigateToForgetPassword -> navigator.navigateToForgetPassword()
+                LoginEffect.NavigateToNewUser -> navigator.navigateToEmailAuth()
+                is LoginEffect.ShowToast -> showRedSnackBar(effect.message)
+
+                LoginEffect.NavigateToMain -> {
+                    val intent = navigator.getMainActivityIntent(requireContext())
+                    navigateToActivity(intent, true)
                 }
 
-                LoginEffect.NavigateToForgetPassword -> navigator.navigateToForgetPassword()
-                LoginEffect.NavigateToMain -> navigator.getMainActivityIntent(requireContext())
-                LoginEffect.NavigateToNewUser -> navigator.navigateToEmailAuth()
-                LoginEffect.NavigateToNotification ->
-                    navigator.getNotificationActivityIntent(requireContext())
-
-                is LoginEffect.ShowToast -> showRedSnackBar(effect.message)
+                LoginEffect.NavigateToNotification -> {
+                    val intent = navigator.getNotificationActivityIntent(requireContext())
+                    navigateToActivity(intent, true)
+                }
             }
         }
     }
+
+    private fun getFocusableViews(): Array<TextInputLayout> = arrayOf(
+        binding.fragLoginEmailLayout,
+        binding.fragLoginPasswordLayout
+    )
 
     //----------------------------------------------------------------------------------------------
     // onCreateView
@@ -110,6 +127,9 @@ class LoginFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val intent = navigator.getMainActivityIntent(requireContext())
+        navigateToActivity(intent, true)
+
         setBackgroundViewsClickListener()
         setEnterButtonClickListener()
         setNewAccountButtonClickListener()
@@ -121,41 +141,41 @@ class LoginFragment : CloseAppFragment() {
     private fun setEmailChangeListener() {
         binding.fragLoginEmailText.addTextChangedListener { editable ->
             val text = editable.toString()
-            viewModel.onEvent(LoginEvent.UiEvent.EmailFieldChanged(text))
+            viewModel.onEvent(LoginEvent.UiEvent.Typing.EmailField(text))
         }
     }
 
     private fun setPasswordChangeListener() {
         binding.fragLoginPasswordText.addTextChangedListener { editable ->
             val text = editable.toString()
-            viewModel.onEvent(LoginEvent.UiEvent.PasswordFieldChanged(text))
+            viewModel.onEvent(LoginEvent.UiEvent.Typing.PasswordField(text))
         }
     }
 
     private fun setBackgroundViewsClickListener() {
         binding.fragLoginBackground.setOnClickListener {
-            viewModel.onEvent(LoginEvent.UiEvent.BackGroundCLick)
+            viewModel.onEvent(LoginEvent.UiEvent.Click.Background)
         }
         binding.fragLoginCard.setOnClickListener {
-            viewModel.onEvent(LoginEvent.UiEvent.BackGroundCLick)
+            viewModel.onEvent(LoginEvent.UiEvent.Click.Background)
         }
     }
 
     private fun setEnterButtonClickListener() {
         binding.fragLoginEnterButton.setOnClickListener {
-            viewModel.onEvent(LoginEvent.UiEvent.EnterButtonClick)
+            viewModel.onEvent(LoginEvent.UiEvent.Click.EnterButton)
         }
     }
 
     private fun setNewAccountButtonClickListener() {
         binding.fragLoginNewAccountButton.setOnClickListener {
-            viewModel.onEvent(LoginEvent.UiEvent.NewAccountButtonClick)
+            viewModel.onEvent(LoginEvent.UiEvent.Click.NewAccountButton)
         }
     }
 
     private fun setForgetPasswordButtonClickListener() {
         binding.fragLoginForgetPasswordButton.setOnClickListener {
-            viewModel.onEvent(LoginEvent.UiEvent.ForgetPasswordButtonClick)
+            viewModel.onEvent(LoginEvent.UiEvent.Click.RecoverPasswordButton)
         }
     }
 
@@ -164,7 +184,7 @@ class LoginFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+         _binding = null
     }
 
 }

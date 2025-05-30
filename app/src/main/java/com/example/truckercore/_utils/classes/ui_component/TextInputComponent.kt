@@ -5,7 +5,8 @@ data class TextInputComponent(
     val errorText: String? = null,
     val helperText: String? = null,
     val isValid: Boolean = false,
-    override val visibility: Visibility = Visibility.VISIBLE
+    override val visibility: Visibility = Visibility.VISIBLE,
+    override val isEnabled: Boolean = true
 ): UiComponent {
 
     fun hasError() = errorText != null

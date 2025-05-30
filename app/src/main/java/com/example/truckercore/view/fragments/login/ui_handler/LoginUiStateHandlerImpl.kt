@@ -4,36 +4,37 @@ import com.example.truckercore._utils.classes.ui_component.ButtonComponent
 import com.example.truckercore._utils.classes.ui_component.TextInputComponent
 import com.example.truckercore._utils.classes.ui_component.ViewBinder
 import com.example.truckercore.databinding.FragmentLoginBinding
+import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
 
 class LoginUiStateHandlerImpl : LoginUiStateHandler {
 
-    private val viewBinder = ViewBinder()
+    private val viewBinder = ViewBinder
 
     private var _binding: WeakReference<FragmentLoginBinding>? = null
-    private fun getBinding() =
-        requireNotNull(_binding?.get()) { "Binding was not set or already collected." }
+    private fun getBinding() = requireNotNull(_binding?.get()) {
+        "Binding was not set or already collected."
+    }
 
     override fun initialize(binding: FragmentLoginBinding) {
         _binding = WeakReference(binding)
     }
 
-    override fun handleEmail(emailInputComponent: TextInputComponent) {
+    override fun handleEmailComponent(emailInputComponent: TextInputComponent) {
         viewBinder.bindTextInput(emailInputComponent, getBinding().fragLoginEmailLayout)
     }
 
-    override fun handlePassword(passwordInputComponent: TextInputComponent) {
-        viewBinder.bindTextInput(passwordInputComponent, getBinding().fragLoginEmailLayout)
+    override fun handlePasswordComponent(passwordInputComponent: TextInputComponent) {
+        viewBinder.bindTextInput(passwordInputComponent, getBinding().fragLoginPasswordLayout)
     }
 
-    override fun handleEnterButton(buttonComponent: ButtonComponent) {
+    override fun handleEnterBtnComponent(buttonComponent: ButtonComponent) {
         viewBinder.bindButton(buttonComponent, getBinding().fragLoginEnterButton)
     }
 
-    override fun getFocusableViews(): Array<TextInputLayout> = arrayOf(
-        getBinding().fragLoginEmailLayout,
-        getBinding().fragLoginPasswordLayout
-    )
+    override fun handleNewAccountBtnComponent(buttonComponent: ButtonComponent) {
+        viewBinder.bindButton(buttonComponent, getBinding().fragLoginNewAccountButton)
+    }
 
 }

@@ -1,50 +1,19 @@
 package com.example.truckercore.view.fragments.forget_password
 
-import android.widget.Button
-import com.example.truckercore._utils.classes.ButtonState
-import com.example.truckercore._utils.classes.FieldState
-import com.google.android.material.textfield.TextInputLayout
+import com.example.truckercore._utils.classes.abstractions.UiStateHandler
+import com.example.truckercore._utils.classes.ui_component.ButtonComponent
+import com.example.truckercore._utils.classes.ui_component.TextInputComponent
+import com.example.truckercore.databinding.FragmentForgetPasswordBinding
 
-class ForgetPasswordUiStateHandler(
-    private val emailLayout: TextInputLayout,
-    private val button: Button
-) {
+class ForgetPasswordUiStateHandler : UiStateHandler<FragmentForgetPasswordBinding>() {
 
-    fun handleButton(buttonState: ButtonState) {
-        when (buttonState.isEnabled) {
-            true -> enableButton()
-            false -> disableButton()
-        }
+    fun handlePasswordComponent(passComponent: TextInputComponent) {
+        bindInputLayout(passComponent, getBinding().fragForgetPassLayout)
     }
 
-    private fun enableButton() {
-        if (!button.isEnabled) button.isEnabled = true
-    }
-
-    private fun disableButton() {
-        if (button.isEnabled) button.isEnabled = false
-    }
-
-    fun handleEmailLayout(emailField: FieldState) {
-        emailField.handle(
-            onValid = { hideEmailError() },
-            onError = ::showEmailError,
-            onNeutral = { hideEmailError() }
-        )
-    }
-
-    private fun showEmailError(message: String) {
-        if (emailLayout.error == null) {
-            emailLayout.error = message
-            emailLayout.errorIconDrawable = null
-        }
-    }
-
-    private fun hideEmailError() {
-        if (emailLayout.error != null) {
-            emailLayout.error = null
-            emailLayout.errorIconDrawable = null
-        }
+    fun handleButtonComponent(buttonComponent: ButtonComponent) {
+        bindButton(buttonComponent, getBinding().fragForgetPassButton)
     }
 
 }
+

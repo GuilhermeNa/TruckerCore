@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import com.example.truckercore.business_driver.view.activities.MainActivity
 import com.example.truckercore.model.configs.flavor.contracts.FlavorStrategy
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
-import com.example.truckercore.view.fragments.login.navigator.LoginNavigatorStrategy
+import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
 import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorStrategy
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 
@@ -16,8 +16,8 @@ class FlavorDriverStrategy : FlavorStrategy {
         return DriverWelcomeNavigatorStrategy()
     }
 
-    override fun getLoginNavigatorStrategy(navController: NavController): LoginNavigatorStrategy {
-        return DriverLoginNavigatorStrategy(navController)
+    override fun getLoginNavigatorStrategy(navController: NavController): LoginFragmentStrategy {
+        return DriverLoginFragmentStrategy(navController)
     }
 
     override fun getRole() = Role.DRIVER

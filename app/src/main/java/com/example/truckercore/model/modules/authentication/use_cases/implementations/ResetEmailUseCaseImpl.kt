@@ -13,5 +13,4 @@ class ResetEmailUseCaseImpl(
         return repository.sendPasswordResetEmail(email)
     }
 
-
 }

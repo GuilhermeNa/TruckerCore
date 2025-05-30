@@ -9,12 +9,12 @@ interface LoginUiStateHandler {
 
     fun initialize(binding: FragmentLoginBinding)
 
-    fun handleEmail(emailInputComponent: TextInputComponent)
+    fun handleEmailComponent(emailInputComponent: TextInputComponent)
 
-    fun handlePassword(passwordInputComponent: TextInputComponent)
+    fun handlePasswordComponent(passwordInputComponent: TextInputComponent)
 
-    fun handleEnterButton(buttonComponent: ButtonComponent)
+    fun handleEnterBtnComponent(buttonComponent: ButtonComponent)
 
-    fun getFocusableViews(): Array<TextInputLayout>
+    fun handleNewAccountBtnComponent(buttonComponent: ButtonComponent)
 
 }

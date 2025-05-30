@@ -54,5 +54,6 @@
     <string name="fleet">Frota</string>
     <string name="documents">Documentos</string>
     <string name="driver">Motorista</string>
+    <string name="home">Início</string>
 
 </resources>

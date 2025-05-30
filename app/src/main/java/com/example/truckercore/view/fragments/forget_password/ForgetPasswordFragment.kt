@@ -1,39 +1,39 @@
 package com.example.truckercore.view.fragments.forget_password
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.truckercore._utils.expressions.hideKeyboardAndClearFocus
-import com.example.truckercore._utils.expressions.navigateToActivity
-import com.example.truckercore._utils.expressions.popBackStack
+import com.example.truckercore._utils.expressions.logEffect
+import com.example.truckercore._utils.expressions.logState
 import com.example.truckercore._utils.expressions.showGreenSnackBar
 import com.example.truckercore._utils.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentForgetPasswordBinding
-import com.example.truckercore.view.activities.NotificationActivity
 import com.example.truckercore.view.dialogs.LoadingDialog
-import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordEffect
+import com.example.truckercore.view.fragments._base.LoggerFragment
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordEvent
-import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordUiState
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordViewModel
+import com.example.truckercore.view_model.view_models.forget_password.effect.ForgetPasswordEffect
+import com.example.truckercore.view_model.view_models.forget_password.state.ForgetPasswordUiState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ForgetPasswordFragment : Fragment() {
+class ForgetPasswordFragment : LoggerFragment() {
 
     private var _binding: FragmentForgetPasswordBinding? = null
     private val binding get() = _binding!!
 
-    private var stateHandler: ForgetPasswordUiStateHandler? = null
+    private val stateHandler by lazy { ForgetPasswordUiStateHandler() }
+
+    private val navigator by lazy { ForgetPasswordNavigator(findNavController()) }
 
     private val dialog by lazy { LoadingDialog(requireContext()) }
 
@@ -54,41 +54,38 @@ class ForgetPasswordFragment : Fragment() {
 
     private fun CoroutineScope.setUiStateManager() {
         launch {
-            viewModel.uiState.collect { state ->
-                stateHandler?.handleButton(state.buttonState)
-                stateHandler?.handleEmailLayout(state.emailField)
-
-                if(!state.isSendingEmail()) dialog.dismissIfShowing()
-
-                when (state.status) {
-                    ForgetPasswordUiState.Status.AwaitingInput -> Unit
-
-                    is ForgetPasswordUiState.Status.CriticalError -> {
-                        val intent = NotificationActivity.newInstance(
-                            context = requireContext(),
-                            title = state.status.uiError.title,
-                            message = state.status.uiError.message
-                        )
-                        navigateToActivity(intent, true)
-                    }
-
-                    ForgetPasswordUiState.Status.SendingEmail -> dialog.show()
-
-                    ForgetPasswordUiState.Status.Success -> {
-                        showGreenSnackBar(state.successMessage())
-                        delay(1500)
-                        popBackStack()
-                    }
-                }
-
+            viewModel.stateFlow.collect { state ->
+                logState(this@ForgetPasswordFragment, state)
+                stateHandler.handlePasswordComponent(state.passwordComponent)
+                stateHandler.handleButtonComponent(state.buttonComponent)
+                handleStatus(state.status)
             }
         }
     }
 
+    private fun handleStatus(status: ForgetPasswordUiState.Status) {
+        if (status.isLoading()) dialog.show()
+        else dialog.dismissIfShowing()
+    }
+
     private suspend fun setEffectManager() {
-        viewModel.effect.collect { effect ->
-            if(effect is ForgetPasswordEffect.RecoverableError) {
-                showRedSnackBar(effect.message)
+        viewModel.effectFlow.collect { effect ->
+            logEffect(this@ForgetPasswordFragment, effect)
+
+            when (effect) {
+                ForgetPasswordEffect.ClearKeyboardAndFocus ->
+                    hideKeyboardAndClearFocus(binding.fragForgetPassLayout)
+
+                is ForgetPasswordEffect.ShowMessage ->
+                    showRedSnackBar(effect.message)
+
+                ForgetPasswordEffect.Navigate.BackStack -> {
+                    showGreenSnackBar("Email de recuperação enviado")
+                    navigator.popBackStack()
+                }
+
+                ForgetPasswordEffect.Navigate.ToNotification ->
+                    navigator.navigateToNotification(requireContext(), requireActivity())
             }
         }
     }
@@ -101,10 +98,7 @@ class ForgetPasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentForgetPasswordBinding.inflate(layoutInflater)
-        stateHandler = ForgetPasswordUiStateHandler(
-            binding.fragForgetPassLayout,
-            binding.fragForgetPassButton
-        )
+        stateHandler.initialize(binding)
         return binding.root
     }
 
@@ -115,7 +109,7 @@ class ForgetPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setButtonClickListener()
         setEmailTextChangeListener()
-        setBackgroundTouchListener()
+        setBackgroundClickListener()
         setKeyboardActionDoneListener()
     }
 
@@ -128,24 +122,22 @@ class ForgetPasswordFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setBackgroundTouchListener() {
-        binding.fragForgetPassBg.setOnTouchListener { _, _ ->
-            hideKeyboardAndClearFocus(binding.fragForgetPassLayout)
-            true
+    private fun setBackgroundClickListener() {
+        binding.fragForgetPassBg.setOnClickListener {
+            viewModel.onEvent(ForgetPasswordEvent.UiEvent.Click.Background)
         }
     }
 
     private fun setButtonClickListener() {
         binding.fragForgetPassButton.setOnClickListener {
-            viewModel.onEvent(ForgetPasswordEvent.UiEvent.SendButtonClicked)
+            viewModel.onEvent(ForgetPasswordEvent.UiEvent.Click.SendButton)
         }
     }
 
     private fun setEmailTextChangeListener() {
         binding.fragForgetPassText.addTextChangedListener {
             val text = it.toString()
-            viewModel.onEvent(ForgetPasswordEvent.UiEvent.EmailTextChange(text))
+            viewModel.onEvent(ForgetPasswordEvent.UiEvent.Typing.EmailText(text))
         }
     }
 
@@ -154,7 +146,6 @@ class ForgetPasswordFragment : Fragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-        stateHandler = null
         _binding = null
     }
 

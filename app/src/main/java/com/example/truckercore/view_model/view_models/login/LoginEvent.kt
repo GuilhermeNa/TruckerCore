@@ -7,12 +7,16 @@ import com.example.truckercore.view.ui_error.UiError
 sealed class LoginEvent : Event {
 
     sealed class UiEvent : LoginEvent() {
-        data class EmailFieldChanged(val text: String) : UiEvent()
-        data class PasswordFieldChanged(val text: String) : UiEvent()
-        data object BackGroundCLick : UiEvent()
-        data object EnterButtonClick : UiEvent()
-        data object NewAccountButtonClick : UiEvent()
-        data object ForgetPasswordButtonClick : UiEvent()
+        sealed class Typing: UiEvent() {
+            data class EmailField(val text: String) : Typing()
+            data class PasswordField(val text: String) : Typing()
+        }
+        sealed class Click: UiEvent() {
+            data object Background : Click()
+            data object EnterButton : Click()
+            data object NewAccountButton : Click()
+            data object RecoverPasswordButton : Click()
+        }
     }
 
     sealed class SystemEvent : LoginEvent() {

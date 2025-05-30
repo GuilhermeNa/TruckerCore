@@ -44,7 +44,7 @@ fun String.isNameFormat(): Boolean = this.matches("[\\p{L} ]+".toRegex())
  * @return `true` if the string matches a valid email format; `false` otherwise.
  */
 fun String.isEmailFormat(): Boolean {
-    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{3,}$".toRegex()
     return this.matches(emailRegex)
 }
 

@@ -7,7 +7,7 @@ import android.view.View.VISIBLE
 import android.widget.Button
 import com.google.android.material.textfield.TextInputLayout
 
-class ViewBinder {
+object ViewBinder {
 
     fun bindTextInput(textInput: TextInputComponent, view: TextInputLayout) {
         if (textInput.errorText != view.error) {
@@ -20,30 +20,45 @@ class ViewBinder {
     }
 
     fun bindButton(button: ButtonComponent, view: Button) {
-        if (button.isEnabled && !view.isEnabled) {
-            view.isEnabled = true
-        }
+        handleEnable(button, view)
         handleVisibility(button, view)
     }
 
-    private fun handleVisibility(uiComponent: UiComponent, view: View) {
+    private fun handleEnable(component: UiComponent, view: View) {
+
+        fun shouldBeEnabled(component: UiComponent, view: View): Boolean {
+            return component.isEnabled && !view.isEnabled
+        }
+
+        fun shouldBeDisabled(component: UiComponent, view: View): Boolean {
+            return !component.isEnabled && view.isEnabled
+        }
+
         when {
-            shouldSetVisible(uiComponent, view) -> view.visibility = VISIBLE
-            shouldSetInvisible(uiComponent, view) -> view.visibility = INVISIBLE
-            shouldSetGone(uiComponent, view) -> view.visibility = VISIBLE
+            shouldBeEnabled(component, view) -> view.isEnabled = true
+            shouldBeDisabled(component, view) -> view.isEnabled = false
         }
     }
 
-    private fun shouldSetVisible(uiComponent: UiComponent, view: View): Boolean {
-        return (uiComponent.visibility == Visibility.VISIBLE) && view.visibility != VISIBLE
-    }
+    private fun handleVisibility(uiComponent: UiComponent, view: View) {
 
-    private fun shouldSetInvisible(uiComponent: UiComponent, view: View): Boolean {
-        return (uiComponent.visibility == Visibility.INVISIBLE) && view.visibility != INVISIBLE
-    }
+        fun shouldSetVisible(uiComponent: UiComponent, view: View): Boolean {
+            return (uiComponent.visibility == Visibility.VISIBLE) && view.visibility != VISIBLE
+        }
 
-    private fun shouldSetGone(uiComponent: UiComponent, view: View): Boolean {
-        return (uiComponent.visibility == Visibility.GONE) && view.visibility != GONE
+        fun shouldSetInvisible(uiComponent: UiComponent, view: View): Boolean {
+            return (uiComponent.visibility == Visibility.INVISIBLE) && view.visibility != INVISIBLE
+        }
+
+        fun shouldSetGone(uiComponent: UiComponent, view: View): Boolean {
+            return (uiComponent.visibility == Visibility.GONE) && view.visibility != GONE
+        }
+
+        when {
+            shouldSetVisible(uiComponent, view) -> view.visibility = VISIBLE
+            shouldSetInvisible(uiComponent, view) -> view.visibility = INVISIBLE
+            shouldSetGone(uiComponent, view) -> view.visibility = GONE
+        }
     }
 
 }

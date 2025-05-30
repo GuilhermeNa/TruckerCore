@@ -7,20 +7,20 @@ import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view.ui_error.UiError
-import com.example.truckercore.view.ui_error.UiResponse
+import com.example.truckercore.view.ui_error.UiResult
 
 class LoginViewUseCase(private val authService: AuthManager) {
 
-    suspend operator fun invoke(credentials: EmailCredential): UiResponse {
+    suspend operator fun invoke(credentials: EmailCredential): UiResult {
             return authService.signIn(credentials).mapAppResult(
-                onSuccess = { UiResponse.Success },
+                onSuccess = { UiResult.Success },
                 onError = { handleError(it) }
             )
     }
 
-    private fun handleError(e: AppException): UiResponse {
+    private fun handleError(e: AppException): UiResult {
         if (e is InfraException.NetworkUnavailable) {
-            return UiResponse.Error(
+            return UiResult.Error(
                 UiError.Recoverable(MSG_NETWORK_ERROR)
             )
         }
@@ -34,17 +34,17 @@ class LoginViewUseCase(private val authService: AuthManager) {
                 AuthErrorCode.SignInWithEmail.Unknown -> UiError.Critical(MSG_UNKNOWN_AUTH_ERROR)
             }
 
-            return UiResponse.Error(uiError)
+            return UiResult.Error(uiError)
         }
 
-        return UiResponse.Error(
+        return UiResult.Error(
             UiError.Critical(MSG_GENERIC_UNKNOWN_ERROR)
         )
     }
 
     companion object {
         private const val MSG_NETWORK_ERROR =
-            "Falha na conexão. Verifique sua internet e tente novamente."
+            "Falha na conexão. Verifique sua conexão com a internet e tente novamente."
 
         private const val MSG_INVALID_CREDENTIAL =
             "E-mail ou senha incorretos."

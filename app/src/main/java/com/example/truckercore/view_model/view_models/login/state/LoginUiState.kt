@@ -11,7 +11,7 @@ import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 data class LoginUiState(
     val emailComponent: TextInputComponent = TextInputComponent(),
     val passComponent: TextInputComponent = TextInputComponent(),
-    val buttonComponent: ButtonComponent = ButtonComponent(),
+    val enterBtnComponent: ButtonComponent = ButtonComponent(isEnabled = false),
     val status: Status = Status.Idle
 ) : UiState {
 
@@ -31,13 +31,13 @@ data class LoginUiState(
     fun updateEmail(email: String): LoginUiState {
         val newEmailComponent = getUpdatedEmailComponent(email)
         val newButtonComponent = getButtonComponent(updatedEmail = newEmailComponent)
-        return this.copy(emailComponent = newEmailComponent, buttonComponent = newButtonComponent)
+        return this.copy(emailComponent = newEmailComponent, enterBtnComponent = newButtonComponent)
     }
 
     fun updatePassword(password: String): LoginUiState {
         val newPasswordComponent = getUpdatedPasswordComponent(password)
-        val newButtonComponent = getButtonComponent(updatedEmail = newPasswordComponent)
-        return this.copy(passComponent = newPasswordComponent, buttonComponent = newButtonComponent)
+        val newButtonComponent = getButtonComponent(updatedPass = newPasswordComponent)
+        return this.copy(passComponent = newPasswordComponent, enterBtnComponent = newButtonComponent)
     }
 
     private fun getUpdatedEmailComponent(email: String): TextInputComponent = when {
@@ -74,13 +74,22 @@ data class LoginUiState(
         private const val MSG_VALID_EMAIL = "Formato de email válido"
         private const val MSG_INVALID_EMAIL = "Formato de email inválido"
 
-        private const val MSG_VALID_PASS = "Formato de senha válido"
-        private const val MSG_INVALID_PASS = "Formato de senha inválido"
+        private const val MSG_VALID_PASS = "Formato de senha válida"
+        private const val MSG_INVALID_PASS = "Senha deve ter entre 6 e 12 caracteres"
     }
 
     sealed class Status {
         data object Idle : Status()
         data object Loading : Status()
+
+        val isLoading get() = this is Loading
+    }
+
+    override fun toString(): String {
+        return "EmailComponent (isValid: ${emailComponent.isValid}, hasError: ${emailComponent.hasError()}) | " +
+                "PasswordComponent(isValid: ${passComponent.isValid}, hasError: ${passComponent.hasError()}) | " +
+                "EnterButtonComponent(isEnabled: ${enterBtnComponent.isEnabled}) | " +
+                "Status($status)"
     }
 
 }

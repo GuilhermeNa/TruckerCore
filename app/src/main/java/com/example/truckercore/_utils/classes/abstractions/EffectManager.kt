@@ -11,7 +11,7 @@ abstract class EffectManager<T: Effect> {
     private val _effectChannel = Channel<T>(Channel.BUFFERED)
     val effectFlow = _effectChannel.receiveAsFlow()
 
-    fun trySend(effect: T) {
+    protected fun trySend(effect: T) {
         val result = _effectChannel.trySend(effect)
         if (!result.isSuccess) {
             AppLogger.e(getClassName(), "Channel failed on emit effect: $effect.")

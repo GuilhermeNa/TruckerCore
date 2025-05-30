@@ -20,21 +20,21 @@ sealed class UiError {
 
 }
 
-sealed class UiResponse {
+sealed class UiResult {
 
-    data object Success : UiResponse()
+    data object Success : UiResult()
 
-    data class Error(val e: UiError) : UiResponse()
+    data class Error(val e: UiError) : UiResult()
 
 }
 
-fun <R> UiResponse.map(
+fun <R> UiResult.mapResult(
     onSuccess: () -> R,
     onCriticalError: (UiError.Critical) -> R,
     onRecoverableError: (UiError.Recoverable) -> R
 ): R = when {
-    this is UiResponse.Success -> onSuccess()
-    this is UiResponse.Error && this.e is UiError.Recoverable -> onRecoverableError(this.e)
-    this is UiResponse.Error && this.e is UiError.Critical -> onCriticalError(this.e)
+    this is UiResult.Success -> onSuccess()
+    this is UiResult.Error && this.e is UiError.Recoverable -> onRecoverableError(this.e)
+    this is UiResult.Error && this.e is UiError.Critical -> onCriticalError(this.e)
     else -> throw InvalidParameterException()
 }
