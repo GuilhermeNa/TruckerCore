@@ -1,15 +1,20 @@
 package com.example.truckercore.view_model.view_models.login
 
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._utils.expressions.logEvent
-import com.example.truckercore.view.ui_error.mapResult
-import com.example.truckercore.view_model._base.LoggerViewModel
+import com.example.truckercore._shared.expressions.launch
+import com.example.truckercore._shared.expressions.logEvent
+import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
+import com.example.truckercore.view._shared.ui_error.mapResult
+import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
 import com.example.truckercore.view_model.view_models.login.effect.LoginEffectManager
 import com.example.truckercore.view_model.view_models.login.state.LoginStateManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val loginUseCase: LoginViewUseCase) : LoggerViewModel() {
+class LoginViewModel(
+    private val loginUseCase: LoginViewUseCase,
+    private val preferencesRepository: PreferencesRepository
+) : LoggerViewModel() {
 
     private val stateManager = LoginStateManager()
     val stateFlow get() = stateManager.stateFlow
@@ -42,6 +47,10 @@ class LoginViewModel(private val loginUseCase: LoginViewUseCase) : LoggerViewMod
             LoginEvent.UiEvent.Click.Background ->
                 effectManager.setCLearFocusAndHideKeyboardEffect()
 
+            is LoginEvent.UiEvent.Click.CheckBox -> {
+                stateManager.updateComponentsOnCheckBoxChange(event.isChecked)
+            }
+
             LoginEvent.UiEvent.Click.EnterButton ->
                 onEvent(LoginEvent.SystemEvent.LoginTask.Executing)
 
@@ -50,6 +59,8 @@ class LoginViewModel(private val loginUseCase: LoginViewUseCase) : LoggerViewMod
 
             LoginEvent.UiEvent.Click.RecoverPasswordButton ->
                 effectManager.setNavigateToForgetPasswordEffect()
+
+
         }
     }
 
@@ -60,8 +71,11 @@ class LoginViewModel(private val loginUseCase: LoginViewUseCase) : LoggerViewMod
                 tryToLogin()
             }
 
-            LoginEvent.SystemEvent.LoginTask.Success ->
+            LoginEvent.SystemEvent.LoginTask.Success -> launch {
+                val isChecked = stateManager.getCheckBoxState()
+                preferencesRepository.setKeepLogged(isChecked)
                 effectManager.setNavigateToMainEffect()
+            }
 
             is LoginEvent.SystemEvent.LoginTask.CriticalError ->
                 effectManager.setNavigateToNotificationEffect()

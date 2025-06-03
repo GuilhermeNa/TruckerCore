@@ -2,17 +2,16 @@ package com.example.truckercore.view_model.view_models.user_name
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._utils.classes.AppResult
-import com.example.truckercore._utils.expressions.extractData
-import com.example.truckercore._utils.expressions.handleUiError
-import com.example.truckercore._utils.expressions.launch
-import com.example.truckercore._utils.expressions.mapAppResult
+import com.example.truckercore._shared.classes.AppResult
+import com.example.truckercore._shared.expressions.extractData
+import com.example.truckercore._shared.expressions.handleUiError
+import com.example.truckercore._shared.expressions.launch
+import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
 import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view.ui_error.UiErrorFactory
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

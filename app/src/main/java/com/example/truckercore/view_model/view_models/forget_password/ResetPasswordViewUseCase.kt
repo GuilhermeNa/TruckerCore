@@ -1,13 +1,13 @@
 package com.example.truckercore.view_model.view_models.forget_password
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.expressions.mapAppResult
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view.ui_error.UiError
-import com.example.truckercore.view.ui_error.UiResult
+import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiResult
 
 class ResetPasswordViewUseCase(private val authManager: AuthManager) {
 

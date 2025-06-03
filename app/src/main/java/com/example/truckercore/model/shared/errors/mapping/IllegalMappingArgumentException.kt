@@ -1,7 +1,5 @@
 package com.example.truckercore.model.shared.errors.mapping
 
-import kotlin.reflect.KProperty0
-
 /**
  * Custom exception class used to handle errors related to invalid arguments passed during the mapping process.
  * This exception is thrown when there is a mismatch between the expected and received classes for a mapping operation.

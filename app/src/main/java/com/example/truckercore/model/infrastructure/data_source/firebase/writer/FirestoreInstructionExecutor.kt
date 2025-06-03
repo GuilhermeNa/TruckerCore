@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.writer
 
-import com.example.truckercore._utils.expressions.getClassName
+import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.infrastructure.data_source.firebase.writer.api_instructions.contracts.Transactional
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.ApiInstructionExecutor
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.contracts.ApiInstructionInterpreter

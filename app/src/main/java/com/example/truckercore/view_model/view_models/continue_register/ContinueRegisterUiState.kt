@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
-import com.example.truckercore._utils.classes.contracts.UiState
+import com.example.truckercore.view_model._shared._contracts.State
 
 /**
  * Represents the UI state for the Continue Register screen.
@@ -13,7 +13,7 @@ import com.example.truckercore._utils.classes.contracts.UiState
  *
  * Used to drive UI rendering in a reactive and type-safe way.
  */
-sealed class ContinueRegisterUiState : UiState {
+sealed class ContinueRegisterUiState : State {
 
     /** The initial or in-progress state when data is being loaded. */
     data object Loading : ContinueRegisterUiState()

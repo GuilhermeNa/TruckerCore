@@ -26,7 +26,7 @@ val commonViewModelModule = module {
     single { LoginViewUseCase(get()) }
 
     viewModel<SplashViewModel> { SplashViewModel(get(), get(), get()) }
-    viewModel<LoginViewModel> { LoginViewModel(get()) }
+    viewModel<LoginViewModel> { LoginViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<WelcomeViewModel> { WelcomeViewModel(get()) }

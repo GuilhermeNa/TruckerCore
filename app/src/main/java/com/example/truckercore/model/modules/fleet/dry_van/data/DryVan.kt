@@ -1,8 +1,7 @@
 package com.example.truckercore.model.modules.fleet.dry_van.data
 
 import com.example.truckercore.model.configs.annotations.InternalUseOnly
-import com.example.truckercore.model.modules._shared.contracts.entity.Entity
-import com.example.truckercore.model.modules._shared.contracts.entity.ID
+import com.example.truckercore.model.modules._shared._contracts.entity.Entity
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnitID
 import com.example.truckercore.model.modules.company.data.CompanyID

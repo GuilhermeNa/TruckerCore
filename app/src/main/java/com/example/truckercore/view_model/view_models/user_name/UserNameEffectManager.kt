@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.user_name
 
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class UserNameEffectManager {

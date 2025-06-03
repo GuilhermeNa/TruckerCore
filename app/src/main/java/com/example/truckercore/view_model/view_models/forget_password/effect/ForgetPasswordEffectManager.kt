@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.forget_password.effect
 
-import com.example.truckercore._utils.classes.abstractions.EffectManager
+import com.example.truckercore.view_model._shared._base.managers.EffectManager
 
 class ForgetPasswordEffectManager : EffectManager<ForgetPasswordEffect>() {
 

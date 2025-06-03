@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.forget_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.view.ui_error.mapResult
+import com.example.truckercore.view._shared.ui_error.mapResult
 import com.example.truckercore.view_model.view_models.forget_password.effect.ForgetPasswordEffectManager
 import com.example.truckercore.view_model.view_models.forget_password.state.ForgetPasswordUiStateManager
 import kotlinx.coroutines.delay
@@ -46,8 +46,10 @@ class ForgetPasswordViewModel(
                 sendRecoverEmail()
             }
 
-            ForgetPasswordEvent.SystemEvent.SendEmailTask.Success ->
+            ForgetPasswordEvent.SystemEvent.SendEmailTask.Success -> {
+                stateManager
                 effectManager.setNavigateBackStackEffect()
+            }
 
             ForgetPasswordEvent.SystemEvent.SendEmailTask.CriticalError -> {
                 effectManager.setNavigateToNotificationEffect()

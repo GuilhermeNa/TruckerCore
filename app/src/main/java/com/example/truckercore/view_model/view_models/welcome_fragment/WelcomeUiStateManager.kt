@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.welcome_fragment
 
-import com.example.truckercore._utils.classes.ButtonState
+import com.example.truckercore._shared.classes.ButtonState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class WelcomeUiStateManager(pagerData: List<WelcomePagerData>) {

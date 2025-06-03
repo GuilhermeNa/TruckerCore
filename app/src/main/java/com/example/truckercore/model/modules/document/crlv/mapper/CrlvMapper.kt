@@ -1,9 +1,9 @@
 package com.example.truckercore.model.modules.document.crlv.mapper
 
-import com.example.truckercore._utils.classes.Url
-import com.example.truckercore._utils.classes.validity.Validity
-import com.example.truckercore._utils.classes.validity.ValidityDto
-import com.example.truckercore.model.modules._shared.contracts.mapper.Mapper
+import com.example.truckercore._shared.classes.Url
+import com.example.truckercore._shared.classes.validity.Validity
+import com.example.truckercore._shared.classes.validity.ValidityDto
+import com.example.truckercore.model.modules._shared._contracts.mapper.Mapper
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.document.crlv.data.Crlv
 import com.example.truckercore.model.modules.document.crlv.data.CrlvDto

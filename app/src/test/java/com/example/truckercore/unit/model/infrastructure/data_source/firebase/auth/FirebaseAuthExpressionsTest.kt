@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore._utils.expressions.awaitSuccessOrThrow
+import com.example.truckercore._shared.expressions.awaitSuccessOrThrow
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.UnknownException

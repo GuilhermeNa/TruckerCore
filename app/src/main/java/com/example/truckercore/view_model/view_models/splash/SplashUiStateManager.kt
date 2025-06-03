@@ -1,8 +1,8 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import com.example.truckercore._utils.expressions.getClassName
+import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SplashUiStateManager {

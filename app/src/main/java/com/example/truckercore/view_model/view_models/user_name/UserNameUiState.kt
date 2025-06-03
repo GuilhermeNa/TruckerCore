@@ -1,9 +1,9 @@
 package com.example.truckercore.view_model.view_models.user_name
 
-import com.example.truckercore._utils.classes.ButtonState
-import com.example.truckercore._utils.classes.FieldState
+import com.example.truckercore._shared.classes.ButtonState
+import com.example.truckercore._shared.classes.FieldState
 import com.example.truckercore.view.fragments.user_name.UserNameFragment
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 
 /**
  * Sealed class to represent the different states of the [UserNameFragment].

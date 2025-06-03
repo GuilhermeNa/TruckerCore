@@ -2,7 +2,7 @@ package com.example.truckercore.model.infrastructure.integration.instruction_exe
 
 import com.example.truckercore.model.configs.collections.CollectionResolver
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
-import com.example.truckercore.model.modules._shared.contracts.entity.ID
+import com.example.truckercore.model.modules._shared._contracts.entity.ID
 
 /**
  * Data class representing an "UpdateFields" instruction, which is used to update specific fields of an item

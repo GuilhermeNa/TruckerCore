@@ -9,9 +9,9 @@
         app:startDestination="@id/homeDriverFragment">
         <fragment
             android:id="@+id/homeDriverFragment"
-            android:name="com.example.truckercore.business_driver.view.fragments.nav_home.home.HomeDriverFragment"
+            android:name="com.example.truckercore.business_driver.view.fragments.nav_home.home.HomeFragment"
             android:label="fragment_home_driver"
-            tools:layout="@layout/fragment_home_driver" />
+            tools:layout="@layout/fragment_home" />
     </navigation>
     <navigation android:id="@+id/navDocument"
         app:startDestination="@id/documentListFragment">

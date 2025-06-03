@@ -108,6 +108,7 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.country.picker)
     implementation(libs.otp.view)
+    implementation(libs.shimmer)
 
 }
 

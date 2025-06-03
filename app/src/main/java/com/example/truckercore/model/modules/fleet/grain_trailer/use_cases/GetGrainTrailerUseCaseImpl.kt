@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.fleet.grain_trailer.use_cases
 
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getClassName
-import com.example.truckercore._utils.expressions.getOrElse
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.expressions.getClassName
+import com.example.truckercore._shared.expressions.getOrElse
 import com.example.truckercore.model.errors.domain.DomainException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepository
 import com.example.truckercore.model.logger.AppLogger

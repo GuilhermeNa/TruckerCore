@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.verifying_email
 
-import com.example.truckercore._utils.classes.AppResult
+import com.example.truckercore._shared.classes.AppResult
 
 sealed class  VerifyingEmailEvent {
 

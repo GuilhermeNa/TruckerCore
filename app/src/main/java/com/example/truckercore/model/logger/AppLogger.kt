@@ -1,7 +1,7 @@
 package com.example.truckercore.model.logger
 
 import android.util.Log
-import com.example.truckercore._utils.expressions.getClassName
+import com.example.truckercore._shared.expressions.getClassName
 
 /**
  * AppLogger is a centralized logging utility for the application.

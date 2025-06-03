@@ -5,9 +5,9 @@ import com.example.truckercore.model.modules.employee.driver.data.Driver
 import com.example.truckercore.model.modules.employee.driver.data.DriverDto
 import com.example.truckercore.model.modules.employee.driver.mapper.DriverMapper
 import com.example.truckercore.model.modules.employee.driver.specification.DriverSpec
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrElse
-import com.example.truckercore._utils.expressions.handleErrorResponse
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.expressions.getOrElse
+import com.example.truckercore._shared.expressions.handleErrorResponse
 
 class GetDriverUseCaseImpl(
     private val dataRepository: DataRepository

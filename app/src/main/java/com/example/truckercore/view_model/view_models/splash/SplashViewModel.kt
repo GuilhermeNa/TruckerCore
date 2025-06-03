@@ -1,15 +1,15 @@
 package com.example.truckercore.view_model.view_models.splash
 
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._utils.expressions.getClassName
-import com.example.truckercore._utils.expressions.getOrElse
-import com.example.truckercore._utils.expressions.launch
-import com.example.truckercore._utils.expressions.logEvent
+import com.example.truckercore._shared.expressions.getClassName
+import com.example.truckercore._shared.expressions.getOrElse
+import com.example.truckercore._shared.expressions.launch
+import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view_model._base.LoggerViewModel
+import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow

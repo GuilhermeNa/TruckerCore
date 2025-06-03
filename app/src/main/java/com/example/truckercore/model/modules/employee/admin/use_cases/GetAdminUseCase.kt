@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.employee.admin.use_cases
 
 import com.example.truckercore.model.modules.employee.admin.data.Admin
 import com.example.truckercore.model.modules.employee.admin.specification.AdminSpec
-import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResponse
 
 interface GetAdminUseCase {
 

@@ -1,10 +1,10 @@
 package com.example.truckercore.view_model.view_models.user_name
 
-import com.example.truckercore._utils.classes.ButtonState
-import com.example.truckercore._utils.classes.FieldState
-import com.example.truckercore._utils.classes.FullName
+import com.example.truckercore._shared.classes.ButtonState
+import com.example.truckercore._shared.classes.FieldState
+import com.example.truckercore._shared.classes.FullName
 import com.example.truckercore.model.shared.utils.expressions.isFullNameFormat
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class UserNameUiStateManager {

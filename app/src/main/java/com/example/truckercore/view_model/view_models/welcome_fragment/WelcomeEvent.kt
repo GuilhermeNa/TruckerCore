@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.welcome_fragment
 
-import com.example.truckercore._utils.classes.contracts.Event
+import com.example.truckercore.view_model._shared._contracts.Event
 
 sealed class WelcomeEvent: Event {
 

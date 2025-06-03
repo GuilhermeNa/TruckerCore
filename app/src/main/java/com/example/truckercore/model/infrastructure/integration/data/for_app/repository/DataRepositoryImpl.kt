@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.data.for_app.repository
 
-import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResponse
 import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.BaseDto
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification

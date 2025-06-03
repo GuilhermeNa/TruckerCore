@@ -4,9 +4,9 @@ import com.example.truckercore.model.infrastructure.integration.auth.for_app.dat
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ObserveEmailValidationUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.SendVerificationEmailUseCase
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.ThereIsLoggedUserUseCase
-import com.example.truckercore._utils.classes.AppResult
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResult
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.AppResponse
 import com.example.truckercore.model.modules.authentication.data.UID
 
 /**

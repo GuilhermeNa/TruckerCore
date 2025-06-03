@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.forget_password.state
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.abstractions.StateManager
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore.view_model._shared._base.managers.StateManager
 
 class ForgetPasswordUiStateManager :
     StateManager<ForgetPasswordUiState>(initialState = ForgetPasswordUiState()) {

@@ -7,8 +7,8 @@ import com.example.truckercore.model.modules.user.data.User
 import com.example.truckercore.model.modules.user.data.UserDto
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore.model.modules.user.specification.UserSpec
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrElse
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.expressions.getOrElse
 
 class GetUserUserCaseImpl(
     private val dataRepository: DataRepository

@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
 import androidx.lifecycle.ViewModel
-import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._shared.classes.Email
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.model.modules.user.manager.UserManager
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,10 +1,10 @@
 package com.example.truckercore.view_model.view_models.email_auth
 
 import androidx.lifecycle.ViewModel
-import com.example.truckercore._utils.expressions.handleUiError
-import com.example.truckercore._utils.expressions.launch
-import com.example.truckercore._utils.expressions.logEvent
-import com.example.truckercore._utils.expressions.mapAppResult
+import com.example.truckercore._shared.expressions.handleUiError
+import com.example.truckercore._shared.expressions.launch
+import com.example.truckercore._shared.expressions.logEvent
+import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view_model.view_models.email_auth.effect.EmailAuthEffectManager

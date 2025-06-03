@@ -1,8 +1,7 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore._utils.classes.contracts.Event
-import com.example.truckercore.model.errors.AppException
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view_model._shared._contracts.Event
+import com.example.truckercore.view._shared.ui_error.UiError
 
 sealed class LoginEvent : Event {
 
@@ -12,6 +11,7 @@ sealed class LoginEvent : Event {
             data class PasswordField(val text: String) : Typing()
         }
         sealed class Click: UiEvent() {
+            data class CheckBox(val isChecked: Boolean): Click()
             data object Background : Click()
             data object EnterButton : Click()
             data object NewAccountButton : Click()

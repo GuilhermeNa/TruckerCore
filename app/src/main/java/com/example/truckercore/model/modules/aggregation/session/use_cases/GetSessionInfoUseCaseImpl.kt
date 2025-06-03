@@ -1,10 +1,10 @@
 package com.example.truckercore.model.modules.aggregation.session.use_cases
 
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.classes.AppResult
-import com.example.truckercore._utils.expressions.extractError
-import com.example.truckercore._utils.expressions.getClassName
-import com.example.truckercore._utils.expressions.getOrElse
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResult
+import com.example.truckercore._shared.expressions.extractError
+import com.example.truckercore._shared.expressions.getClassName
+import com.example.truckercore._shared.expressions.getOrElse
 import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.logger.AppLogger

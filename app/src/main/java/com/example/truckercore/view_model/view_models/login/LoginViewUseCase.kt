@@ -1,13 +1,13 @@
 package com.example.truckercore.view_model.view_models.login
 
-import com.example.truckercore._utils.expressions.mapAppResult
+import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view.ui_error.UiError
-import com.example.truckercore.view.ui_error.UiResult
+import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiResult
 
 class LoginViewUseCase(private val authService: AuthManager) {
 

@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.aggregation.session.use_cases
 
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.classes.AppResponseException
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResponseException
 import com.example.truckercore.model.errors.domain.DomainException
 import com.example.truckercore.model.errors.domain.error_code.RuleViolatedErrorCode
 import com.example.truckercore.model.logger.AppLogger

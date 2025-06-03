@@ -1,14 +1,18 @@
 package com.example.truckercore.business_admin.config.flavor
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import androidx.navigation.NavController
+import com.example.truckercore.view_model._shared.components.ButtonComponent
+import com.example.truckercore.view_model._shared.components.Visibility
 import com.example.truckercore.business_admin.view.activities.MainActivity
 import com.example.truckercore.view.fragments.login.LoginFragmentDirections
-import com.example.truckercore.view.fragments.login.navigator.LoginNavigatorStrategy
+import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
+import java.lang.ref.WeakReference
+
 
 class AdminLoginNavigatorStrategy(private val navController: NavController) :
-    LoginNavigatorStrategy {
+    LoginFragmentStrategy {
 
     override fun navigateToEmailAuth() {
         val direction = LoginFragmentDirections.actionGlobalEmailAuthFragment()
@@ -20,7 +24,16 @@ class AdminLoginNavigatorStrategy(private val navController: NavController) :
         navController.navigate(direction)
     }
 
-    override fun getMainActivityIntent(context: Context): Intent =
-        Intent(context, MainActivity::class.java)
+    override fun navigateToMain(nActivity: WeakReference<Activity>) {
+        nActivity.get()?.let { activity ->
+            val intent = Intent(activity, MainActivity::class.java)
+            activity.startActivity(intent)
+            activity.finish()
+        } ?: throw throw IllegalArgumentException("Activity was not set or already collected.")
+    }
+
+    override fun getNewAccountButtonComponent(): ButtonComponent {
+        return ButtonComponent(isEnabled = true, visibility = Visibility.VISIBLE)
+    }
 
 }

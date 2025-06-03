@@ -1,8 +1,8 @@
 package com.example.truckercore.model.infrastructure.data_source.firebase.auth
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.Password
-import com.example.truckercore._utils.expressions.awaitSuccessOrThrow
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.Password
+import com.example.truckercore._shared.expressions.awaitSuccessOrThrow
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSourceErrorMapper
 import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException

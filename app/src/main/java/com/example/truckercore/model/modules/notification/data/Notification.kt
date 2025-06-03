@@ -5,7 +5,7 @@ import com.example.truckercore.model.modules.notification.data_helper.Notificati
 import com.example.truckercore.model.modules.notification.data_helper.Recipient
 import com.example.truckercore.model.modules.notification.data_helper.RelatedEntity
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
-import com.example.truckercore.model.modules._shared.contracts.entity.Entity
+import com.example.truckercore.model.modules._shared._contracts.entity.Entity
 
 data class Notification(
     override val id: NotificationID,

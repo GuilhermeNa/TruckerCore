@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.email_auth
 
 import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 
 object EmailAuthApiErrorHandler {
 

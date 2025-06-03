@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -15,11 +15,6 @@
             app:destination="@id/welcomeFragment"
             app:enterAnim="@anim/slide_in_top"
             app:exitAnim="@anim/slide_out_bottom"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_splashFragment_to_preparingAmbientFragment"
-            app:destination="@id/preparingAmbientFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
@@ -90,21 +85,16 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.truckercore.view.fragments.login.LoginFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_forgetPasswordFragment"
             app:destination="@id/forgetPasswordFragment"
-            app:enterAnim="@anim/slide_in_top"
-            app:exitAnim="@anim/slide_out_bottom"
-            app:popEnterAnim="@anim/slide_in_bottom"
-            app:popExitAnim="@anim/slide_out_top" />
-        <action
-            android:id="@+id/action_loginFragment_to_preparingAmbientFragment"
-            app:destination="@id/preparingAmbientFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
@@ -115,18 +105,7 @@
         android:id="@+id/userNameFragment"
         android:name="com.example.truckercore.view.fragments.user_name.UserNameFragment"
         android:label="fragment_user_name"
-        tools:layout="@layout/fragment_user_name" >
-        <action
-            android:id="@+id/action_userNameFragment_to_preparingAmbientFragment"
-            app:destination="@id/preparingAmbientFragment"
-            app:popUpTo="@id/userNameFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/preparingAmbientFragment"
-        android:name="com.example.truckercore.view.fragments.preparing_ambient.PreparingAmbientFragment"
-        android:label="fragment_preparing_ambient"
-        tools:layout="@layout/fragment_preparing_ambient" />
+        tools:layout="@layout/fragment_user_name" />
     <action android:id="@+id/action_global_continueRegisterFragment"
         app:destination="@id/continueRegisterFragment"
         app:enterAnim="@anim/slide_in_top"

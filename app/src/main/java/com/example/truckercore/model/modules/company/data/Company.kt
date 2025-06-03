@@ -4,7 +4,7 @@ import com.example.truckercore.model.configs.annotations.InternalUseOnly
 import com.example.truckercore.model.infrastructure.security.data.Key
 import com.example.truckercore.model.infrastructure.security.contracts.SystemManager
 import com.example.truckercore.model.infrastructure.security.data.collections.ValidKeysRegistry
-import com.example.truckercore.model.modules._shared.contracts.entity.BaseEntity
+import com.example.truckercore.model.modules._shared._contracts.entity.BaseEntity
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 
 data class Company(

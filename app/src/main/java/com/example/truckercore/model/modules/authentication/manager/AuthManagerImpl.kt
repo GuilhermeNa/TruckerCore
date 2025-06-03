@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.authentication.manager
 
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.classes.AppResult
-import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResult
+import com.example.truckercore._shared.classes.Email
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.CreateUserWithEmailUseCase

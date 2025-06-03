@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.fleet.truck.use_cases
 
-import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._shared.classes.AppResponse
 import com.example.truckercore.model.modules.fleet.truck.TruckSpec
 import com.example.truckercore.model.modules.fleet.truck.data.Truck
 

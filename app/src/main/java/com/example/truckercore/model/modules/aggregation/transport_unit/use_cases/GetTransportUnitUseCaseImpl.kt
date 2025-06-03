@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.aggregation.transport_unit.use_cases
 
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getClassName
-import com.example.truckercore._utils.expressions.getOrNull
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.expressions.getClassName
+import com.example.truckercore._shared.expressions.getOrNull
 import com.example.truckercore.model.errors.domain.DomainException
 import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnit

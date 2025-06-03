@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.aggregation.transport_unit.factory
 
-import com.example.truckercore._utils.expressions.getClassName
+import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
-import com.example.truckercore.model.modules._shared.contracts.factory.Factory
+import com.example.truckercore.model.modules._shared._contracts.factory.Factory
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnit
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnitID
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.collection.AttachedUnits

@@ -1,7 +1,6 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import com.example.truckercore._utils.classes.contracts.Event
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view_model._shared._contracts.Event
 
 /**
  * Represents events triggered by the splash screen's UI or system.

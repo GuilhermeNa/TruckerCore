@@ -2,7 +2,7 @@ package com.example.truckercore.model.modules.user.data
 
 import com.example.truckercore.model.infrastructure.security.contracts.Authorizable
 import com.example.truckercore.model.infrastructure.security.data.Profile
-import com.example.truckercore.model.modules._shared.contracts.entity.Entity
+import com.example.truckercore.model.modules._shared._contracts.entity.Entity
 import com.example.truckercore.model.modules.authentication.contracts.Authenticable
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.company.data.CompanyID

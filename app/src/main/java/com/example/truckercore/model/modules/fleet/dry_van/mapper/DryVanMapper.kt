@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.fleet.dry_van.mapper
 
-import com.example.truckercore.model.modules._shared.contracts.mapper.Mapper
+import com.example.truckercore.model.modules._shared._contracts.mapper.Mapper
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnitID
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.fleet._shared.Plate

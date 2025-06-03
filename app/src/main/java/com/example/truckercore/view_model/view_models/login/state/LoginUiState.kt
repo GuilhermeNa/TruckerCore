@@ -1,19 +1,25 @@
 package com.example.truckercore.view_model.view_models.login.state
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.Password
-import com.example.truckercore._utils.classes.contracts.UiState
-import com.example.truckercore._utils.classes.ui_component.ButtonComponent
-import com.example.truckercore._utils.classes.ui_component.TextInputComponent
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.Password
+import com.example.truckercore.view_model._shared._contracts.State
+import com.example.truckercore.view_model._shared.components.ButtonComponent
+import com.example.truckercore.view_model._shared.components.CheckBoxComponent
+import com.example.truckercore.view_model._shared.components.TextInputComponent
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
 
 data class LoginUiState(
     val emailComponent: TextInputComponent = TextInputComponent(),
     val passComponent: TextInputComponent = TextInputComponent(),
+    val checkComponent: CheckBoxComponent = CheckBoxComponent(isChecked = true),
     val enterBtnComponent: ButtonComponent = ButtonComponent(isEnabled = false),
     val status: Status = Status.Idle
-) : UiState {
+) : State {
+
+    fun getCheckBoxState(): Boolean {
+        return checkComponent.isChecked
+    }
 
     fun getCredential() = EmailCredential(
         Email.from(emailComponent.text),
@@ -37,7 +43,14 @@ data class LoginUiState(
     fun updatePassword(password: String): LoginUiState {
         val newPasswordComponent = getUpdatedPasswordComponent(password)
         val newButtonComponent = getButtonComponent(updatedPass = newPasswordComponent)
-        return this.copy(passComponent = newPasswordComponent, enterBtnComponent = newButtonComponent)
+        return this.copy(
+            passComponent = newPasswordComponent,
+            enterBtnComponent = newButtonComponent
+        )
+    }
+
+    fun updateCheckBox(isChecked: Boolean): LoginUiState {
+        return copy(checkComponent = CheckBoxComponent(isChecked))
     }
 
     private fun getUpdatedEmailComponent(email: String): TextInputComponent = when {
@@ -86,7 +99,7 @@ data class LoginUiState(
     }
 
     override fun toString(): String {
-        return "EmailComponent (isValid: ${emailComponent.isValid}, hasError: ${emailComponent.hasError()}) | " +
+        return "EmailComponent(isValid: ${emailComponent.isValid}, hasError: ${emailComponent.hasError()}) | " +
                 "PasswordComponent(isValid: ${passComponent.isValid}, hasError: ${passComponent.hasError()}) | " +
                 "EnterButtonComponent(isEnabled: ${enterBtnComponent.isEnabled}) | " +
                 "Status($status)"

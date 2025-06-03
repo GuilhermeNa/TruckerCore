@@ -5,9 +5,9 @@ import com.example.truckercore.model.modules.employee.autonomous.data.Autonomous
 import com.example.truckercore.model.modules.employee.autonomous.data.AutonomousDto
 import com.example.truckercore.model.modules.employee.autonomous.mapper.AutonomousMapper
 import com.example.truckercore.model.modules.employee.autonomous.specification.AutonomousSpec
-import com.example.truckercore._utils.classes.AppResponse
-import com.example.truckercore._utils.expressions.getOrElse
-import com.example.truckercore._utils.expressions.handleErrorResponse
+import com.example.truckercore._shared.classes.AppResponse
+import com.example.truckercore._shared.expressions.getOrElse
+import com.example.truckercore._shared.expressions.handleErrorResponse
 
 class GetAutonomousUseCaseImpl(
     private val dataRepository: DataRepository

@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.document.crlv.data
 
-import com.example.truckercore._utils.classes.Url
-import com.example.truckercore._utils.classes.validity.Validity
-import com.example.truckercore.model.modules._shared.contracts.entity.Entity
+import com.example.truckercore._shared.classes.Url
+import com.example.truckercore._shared.classes.validity.Validity
+import com.example.truckercore.model.modules._shared._contracts.entity.Entity
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.document._shared.Document

@@ -1,6 +1,6 @@
 package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository
 
-import com.example.truckercore._utils.expressions.getClassName
+import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InterpreterException
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.exceptions.ApiInstructionException

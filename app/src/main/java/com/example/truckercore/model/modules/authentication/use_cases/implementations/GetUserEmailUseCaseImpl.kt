@@ -2,8 +2,8 @@ package com.example.truckercore.model.modules.authentication.use_cases.implement
 
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
 import com.example.truckercore.model.modules.authentication.use_cases.interfaces.GetUserEmailUseCase
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.AppResponse
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.AppResponse
 
 class GetUserEmailUseCaseImpl(
     private val authRepository: AuthenticationRepository

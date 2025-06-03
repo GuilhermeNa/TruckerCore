@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item> <!-- ou sua cor desejada -->
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/montserrat</item>
     </style>
 
     <!-- ======================================================================================= -->

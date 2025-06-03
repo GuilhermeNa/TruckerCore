@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.employee.autonomous.factory
 
-import com.example.truckercore.model.modules._shared.contracts.entity.ID
+import com.example.truckercore.model.modules._shared._contracts.entity.ID
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 import com.example.truckercore.model.modules._shared.exceptions.FactoryException
 import com.example.truckercore.model.modules.employee._shared.factory.EmployeeForm

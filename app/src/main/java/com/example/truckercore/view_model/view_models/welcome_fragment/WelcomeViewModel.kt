@@ -1,8 +1,8 @@
 package com.example.truckercore.view_model.view_models.welcome_fragment
 
-import com.example.truckercore._utils.expressions.logEvent
+import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.view_model._base.LoggerViewModel
+import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
 import kotlinx.coroutines.flow.asStateFlow
 
 /**

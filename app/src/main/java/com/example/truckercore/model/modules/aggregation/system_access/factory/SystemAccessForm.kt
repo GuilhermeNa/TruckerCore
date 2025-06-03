@@ -1,7 +1,7 @@
 package com.example.truckercore.model.modules.aggregation.system_access.factory
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.FullName
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.FullName
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.model.modules.authentication.data.UID
 

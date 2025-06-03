@@ -1,10 +1,10 @@
 package com.example.truckercore.view_model.view_models.email_auth.uiState
 
-import com.example.truckercore._utils.classes.ButtonState
-import com.example.truckercore._utils.classes.FieldState
-import com.example.truckercore._utils.classes.contracts.UiState
+import com.example.truckercore._shared.classes.ButtonState
+import com.example.truckercore._shared.classes.FieldState
+import com.example.truckercore.view_model._shared._contracts.State
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 
 data class EmailAuthUiState(
     val emailField: FieldState = FieldState(),
@@ -12,7 +12,7 @@ data class EmailAuthUiState(
     val confirmationField: FieldState = FieldState(),
     val createButton: ButtonState = ButtonState(false),
     val status: Status = Status.AwaitingInput.Default
-) : UiState {
+) : State {
 
     fun updateEmail(email: String): EmailAuthUiState {
         val (status, message) = when {

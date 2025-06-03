@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.forget_password
 
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 
 sealed class ForgetPasswordEvent {
 

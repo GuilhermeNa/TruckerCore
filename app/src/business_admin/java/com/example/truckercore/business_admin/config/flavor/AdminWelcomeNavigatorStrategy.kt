@@ -3,9 +3,9 @@ package com.example.truckercore.business_admin.config.flavor
 import android.content.Context
 import android.content.Intent
 import com.example.truckercore.R
-import com.example.truckercore.view.activities.NotificationActivity
+import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorStrategy
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 
 class AdminWelcomeNavigatorStrategy: WelcomeNavigatorStrategy {
 

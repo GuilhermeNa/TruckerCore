@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.user._contracts.eligible_state
 
-import com.example.truckercore._utils.classes.Email
+import com.example.truckercore._shared.classes.Email
 import com.example.truckercore.model.modules.user._contracts.UserEligible
 import com.example.truckercore.model.modules.user.data.UserID
 import com.example.truckercore.model.modules.user.exceptions.EligibleStateException

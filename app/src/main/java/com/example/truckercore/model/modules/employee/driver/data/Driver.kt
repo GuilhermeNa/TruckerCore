@@ -1,8 +1,8 @@
 package com.example.truckercore.model.modules.employee.driver.data
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.FullName
-import com.example.truckercore.model.modules._shared.contracts.entity.Entity
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.FullName
+import com.example.truckercore.model.modules._shared._contracts.entity.Entity
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 import com.example.truckercore.model.modules.aggregation.transport_unit.contracts.Conductor
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnitID

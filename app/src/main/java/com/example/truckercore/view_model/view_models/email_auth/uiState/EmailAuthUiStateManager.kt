@@ -1,9 +1,9 @@
 package com.example.truckercore.view_model.view_models.email_auth.uiState
 
-import com.example.truckercore._utils.classes.Email
-import com.example.truckercore._utils.classes.Password
+import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.classes.Password
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view._shared.ui_error.UiError
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EmailAuthUiStateManager {

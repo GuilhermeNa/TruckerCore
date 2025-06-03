@@ -1,15 +1,12 @@
 package com.example.truckercore.model.modules.fleet.grain_trailer.mapper
 
-import com.example.truckercore.model.modules._shared.contracts.mapper.Mapper
+import com.example.truckercore.model.modules._shared._contracts.mapper.Mapper
 import com.example.truckercore.model.modules.aggregation.transport_unit.data.TransportUnitID
 import com.example.truckercore.model.modules.company.data.CompanyID
 import com.example.truckercore.model.modules.fleet._shared.Plate
 import com.example.truckercore.model.modules.fleet.grain_trailer.data.GrainTrailer
 import com.example.truckercore.model.modules.fleet.grain_trailer.data.GrainTrailerDto
 import com.example.truckercore.model.modules.fleet.grain_trailer.data.GrainTrailerID
-import com.example.truckercore.model.modules.fleet.truck.data.Truck
-import com.example.truckercore.model.modules.fleet.truck.data.TruckID
-import com.example.truckercore.model.modules.fleet.truck.mapper.TruckMapper
 
 object GrainTrailerMapper: Mapper<GrainTrailer, GrainTrailerDto> {
 

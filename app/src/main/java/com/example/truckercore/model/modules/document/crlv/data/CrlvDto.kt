@@ -1,6 +1,6 @@
 package com.example.truckercore.model.modules.document.crlv.data
 
-import com.example.truckercore._utils.classes.validity.ValidityDto
+import com.example.truckercore._shared.classes.validity.ValidityDto
 import com.example.truckercore.model.infrastructure.integration.data.for_app.contracts.Dto
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
 

@@ -8,7 +8,7 @@ import com.example.truckercore.model.infrastructure.integration.data.for_app.dat
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.exceptions.SpecificationException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereEqual
 import com.example.truckercore.model.infrastructure.integration.data.for_app.data.filters.WhereIn
-import com.example.truckercore.model.modules._shared.contracts.entity.ID
+import com.example.truckercore.model.modules._shared._contracts.entity.ID
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 

@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import com.example.truckercore._utils.classes.contracts.Effect
+import com.example.truckercore.view_model._shared._contracts.Effect
 
 
 sealed class SplashEffect: Effect {

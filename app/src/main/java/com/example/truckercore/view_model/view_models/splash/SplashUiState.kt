@@ -1,9 +1,9 @@
 package com.example.truckercore.view_model.view_models.splash
 
-import com.example.truckercore._utils.classes.contracts.UiState
-import com.example.truckercore.view.ui_error.UiError
+import com.example.truckercore.view_model._shared._contracts.State
+import com.example.truckercore.view._shared.ui_error.UiError
 
-sealed class SplashUiState : UiState {
+sealed class SplashUiState : State {
 
     data object Initial : SplashUiState()
 
