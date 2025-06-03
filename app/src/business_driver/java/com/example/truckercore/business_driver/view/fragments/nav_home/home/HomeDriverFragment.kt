@@ -23,4 +23,5 @@ class HomeDriverFragment : CloseAppFragment() {
         return inflater.inflate(R.layout.fragment_home_driver, container, false)
     }
 
+
 }

@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navHome"
-        android:icon="@drawable/img_fleet"
+        android:icon="@drawable/layer_list_icon_home"
         android:title="@string/home"/>
     <item
         android:id="@+id/navDocument"
-        android:icon="@drawable/icon_doc"
+        android:icon="@drawable/layer_list_icon_document"
         android:title="@string/documents"/>
 </menu>
