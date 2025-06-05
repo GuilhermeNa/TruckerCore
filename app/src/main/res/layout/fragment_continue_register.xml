@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.fragments.continue_register.ContinueRegisterFragment">
+    tools:context=".view.nav_login.fragments.continue_register.ContinueRegisterFragment">
 
     <LinearLayout
         android:id="@+id/frag_continue_register_layout_text"

@@ -1,18 +1,31 @@
 <resources>
+    <!-- ======================================================================================= -->
     <!-- Base application theme. -->
-    <style name="Theme.TruckerCore" parent="Theme.Material3.DayNight"   >
+    <!-- ======================================================================================= -->
+    <style name="Theme.TruckerCore" parent="Theme.Material3.DayNight">
+
+        <item name="android:colorBackground">@color/lightBackground</item>
+
+
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primaryVar</item>
+        <item name="colorPrimary">@color/darkBlue</item>
+        <item name="colorPrimaryVariant">@color/lightBlue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorSecondaryVariant">@color/secondaryVar</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/darkRed</item>
+        <item name="colorSecondaryVariant">@color/lightRed</item>
+        <item name="colorOnSecondary">@color/light</item>
+
+        <!-- Other colors -->
+        <item name="backgroundColor">@color/lightBackground</item>
+        <item name="textColor">@color/dark</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item> <!-- ou sua cor desejada -->
+
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/montserrat</item>
+
     </style>
 
     <!-- ======================================================================================= -->
@@ -27,6 +40,19 @@
         <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for fabs -->
+    <!-- ======================================================================================= -->
+    <style name="fabPrimary">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="fabSecondary">
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="tint">@color/white</item>
     </style>
 
     <!-- ======================================================================================= -->
@@ -80,31 +106,6 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:background">@drawable/button_transparent</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
-    </style>
-
-    <!-- ======================================================================================= -->
-    <!-- Base fonts for fabs -->
-    <!-- ======================================================================================= -->
-    <style name="fabPrimary">
-        <item name="android:backgroundTint">@color/primaryVar</item>
-        <item name="tint">@color/white</item>
-    </style>
-
-    <style name="fabSecondary">
-        <item name="android:backgroundTint">@color/secondaryVar</item>
-        <item name="tint">?attr/colorOnSecondary</item>
-    </style>
-
-    <style name="EXTENDED_FAB_PRIMARY">
-        <item name="android:backgroundTint">@color/primaryVar</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="iconTint">@color/white</item>
-    </style>
-
-    <style name="EXTENDED_FAB_SECONDARY">
-        <item name="android:backgroundTint">@color/secondaryVar</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="iconTint">@color/white</item>
     </style>
 
     <!-- ======================================================================================= -->

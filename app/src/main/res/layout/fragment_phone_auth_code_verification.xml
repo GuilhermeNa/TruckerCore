@@ -41,7 +41,7 @@
         android:id="@+id/frag_phone_auth_code_verification_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:activeColor="@color/secondaryVar"
+        app:activeColor="@color/lightRed"
         app:autoFocusEnabled="false"
         app:digits="6"
         app:fontFamily="@font/roboto_medium"
@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_phone_auth_code_verification_title_layout"
         app:layout_constraintVertical_bias="0.15"
-        app:passiveColor="@color/secondary"
+        app:passiveColor="@color/darkRed"
         app:textColor="@color/white"
         app:textSize="22" />
 

@@ -6,7 +6,7 @@ import com.example.truckercore._shared.classes.Email
 import com.example.truckercore._shared.expressions.extractData
 import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view_model.use_cases.CounterUseCase
+import com.example.truckercore.view_model._shared.use_cases.CounterUseCase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

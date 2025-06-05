@@ -1,4 +1,4 @@
-package com.example.truckercore.view_model.use_cases
+package com.example.truckercore.view_model._shared.use_cases
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay

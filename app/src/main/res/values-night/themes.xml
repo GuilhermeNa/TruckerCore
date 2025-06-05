@@ -1,31 +1,61 @@
 <resources>
+
+    <!-- ======================================================================================= -->
     <!-- Base application theme. -->
-    <style name="Theme.TruckerCore" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- ======================================================================================= -->
+    <style name="Theme.TruckerCore" parent="Theme.Material3.Dark">
+
+        <item name="android:colorBackground">@color/darkBackground</item>
+
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#850a16</item>
-        <item name="colorPrimaryVariant">#C57D8E</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimary">@color/darkRed</item>
+        <item name="colorPrimaryVariant">@color/lightRed</item>
+        <item name="colorOnPrimary">@color/light</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#004aad</item>
-        <item name="colorSecondaryVariant">#0088CC</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorSecondary">@color/darkBlue</item>
+        <item name="colorSecondaryVariant">@color/lightBlue</item>
+        <item name="colorOnSecondary">@color/dark</item>
+
+        <!-- Other colors -->
+        <item name="backgroundColor">@color/darkBackground</item>
+        <item name="textColor">@color/light</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item> <!-- ou sua cor desejada -->
+
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/montserrat</item>
+
     </style>
 
-    <!-- Activity without action bar. -->
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for activities -->
+    <!-- ======================================================================================= -->
     <style name="Theme.TruckerCore.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Activity without action bar. -->
     <style name="Theme.TruckerCore.FullScreen">
         <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for fabs -->
+    <!-- ======================================================================================= -->
+    <style name="fabPrimary">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="fabSecondary">
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="tint">@color/white</item>
+    </style>
+
 
     <!-- Base fonts for text -->
     <style name="textDefault">
@@ -39,11 +69,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- FABS -->
-    <style name="fabPrimary">
-        <item name="android:backgroundTint">?attr/colorSecondaryVariant</item>
-        <item name="tint">?attr/colorOnSecondary</item>
-    </style>
+
 
     <!-- Buttons -->
     <style name="buttonPrimary">

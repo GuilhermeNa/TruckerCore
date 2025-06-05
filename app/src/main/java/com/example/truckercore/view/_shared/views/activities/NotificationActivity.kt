@@ -57,6 +57,12 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val DEFAULT_CRITICAL_TITLE = "Ocorreu um erro"
+
+        private const val DEFAULT_CRITICAL_MESSAGE =
+            "Algo deu errado. Por favor, tente novamente.\n" +
+                    "Se o problema persistir, entre em contato com o suporte."
+
         fun newInstance(
             context: Context,
             gifRes: Int? = null,

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.welcome.WelcomeFragment">
+    tools:context=".view.nav_login.fragments.welcome.WelcomeFragment">
 
     <Button
         android:id="@+id/frag_welcome_jump_button"
@@ -16,8 +16,7 @@
         android:drawableEnd="@drawable/icon_arrow_forward"
         android:text="@string/jump"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/frag_welcome_pager"
@@ -45,12 +44,12 @@
         android:id="@+id/frag_welcome_left_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/fabSecondary"
         android:layout_margin="16dp"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/icon_arrow_back"
-        android:visibility="invisible"/>
+        app:srcCompat="@drawable/icon_arrow_back"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/frag_welcome_right_fab"

@@ -6,6 +6,8 @@ import androidx.navigation.NavController
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
 import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorStrategy
+import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginFragmentStrategy
+import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigatorStrategy
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 
 interface FlavorStrategy {

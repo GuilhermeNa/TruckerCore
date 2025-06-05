@@ -11,8 +11,8 @@ interface Navigator {
         nActivity.get()?.let { activity ->
             val intent = NotificationActivity.newInstance(
                 context = activity,
-                title = ViewError.Critical().title,
-                message = ViewError.Critical().message
+                title = ViewError.Critical.title,
+                message = ViewError.Critical.message
             )
             activity.startActivity(intent)
             activity.finish()
