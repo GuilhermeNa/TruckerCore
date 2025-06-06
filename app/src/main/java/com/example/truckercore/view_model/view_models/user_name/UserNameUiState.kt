@@ -2,8 +2,7 @@ package com.example.truckercore.view_model.view_models.user_name
 
 import com.example.truckercore._shared.classes.ButtonState
 import com.example.truckercore._shared.classes.FieldState
-import com.example.truckercore.view.fragments.user_name.UserNameFragment
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 /**
  * Sealed class to represent the different states of the [UserNameFragment].
@@ -19,7 +18,7 @@ data class UserNameUiState(
         data object AwaitingInput : Status()
         data object CreatingSystemAccess : Status()
         data object Success : Status()
-        data class CriticalError(val uiError: UiError.Critical) : Status()
+        data class CriticalError(val uiError: ViewError.Critical) : Status()
     }
 
 }

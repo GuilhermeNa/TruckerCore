@@ -17,9 +17,11 @@ import com.example.truckercore._shared.expressions.navigateToActivity
 import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
+import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
+import com.example.truckercore.view._shared.expressions.forcePortraitOrientation
+import com.example.truckercore.view._shared.expressions.unspecifiedOrientation
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
-import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.email_auth.effect.EmailAuthEffect
 import com.example.truckercore.view_model.view_models.email_auth.event.EmailAuthEvent
@@ -160,11 +162,7 @@ class EmailAuthFragment : CloseAppFragment() {
 
             is EmailAuthUiState.Status.Error -> {
                 dialog.dismissIfShowing()
-                val intent = NotificationActivity.newInstance(
-                    context = requireContext(),
-                    title = uiStatus.uiError.title,
-                    message = uiStatus.uiError.message
-                )
+                val intent = NotificationActivity.newInstance(context = requireContext())
                 navigateToActivity(intent, true)
             }
 
@@ -220,13 +218,7 @@ class EmailAuthFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        stateHandler = EmailAuthUiStateHandler(
-            motionLayout = binding.fragEmailAuthMain,
-            emailError = binding.fragEmailAuthEmailError,
-            passwordError = binding.fragEmailAuthPasswordError,
-            confirmationError = binding.fragEmailAuthConfirmationError,
-            button = binding.fragEmailAuthRegisterButton
-        )
+        stateHandler = EmailAuthUiStateHandler(button = binding.fragEmailAuthRegisterButton)
         return binding.root
     }
 

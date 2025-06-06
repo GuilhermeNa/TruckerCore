@@ -9,16 +9,6 @@ import com.example.truckercore.R
 import com.example.truckercore._shared.expressions.loadGif
 import com.example.truckercore.databinding.ActivityNotificationBinding
 
-private const val HEADER_MESSAGE = "error_header"
-
-private const val NULL_HEADER_MESSAGE = "Error header message is null."
-
-private const val BODY_MESSAGE = "error_body"
-
-private const val NULL_BODY_MESSAGE = "Error body message is null."
-
-private const val GIF_RESOURCE = "gif_resource"
-
 class NotificationActivity : AppCompatActivity() {
 
     private var _binding: ActivityNotificationBinding? = null
@@ -42,21 +32,27 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun animateGif() {
-        val gif = intent.getIntExtra(GIF_RESOURCE, R.drawable.gif_unknown)
+        val gif = intent.getIntExtra(GIF_TAG, R.drawable.gif_unknown)
         binding.actErrorImage.loadGif(gif, this)
     }
 
     private fun bindTitleMessage() {
-        val message = intent.getStringExtra(HEADER_MESSAGE) ?: NULL_HEADER_MESSAGE
+        val message = intent.getStringExtra(HEADER_TAG) ?: DEFAULT_CRITICAL_TITLE
         binding.actErrorTitle.text = message
     }
 
     private fun bindBodyMessage() {
-        val message = intent.getStringExtra(BODY_MESSAGE) ?: NULL_BODY_MESSAGE
+        val message = intent.getStringExtra(MESSAGE_TAG) ?: DEFAULT_CRITICAL_MESSAGE
         binding.actErrorMessage.text = message
     }
 
     companion object {
+        private const val HEADER_TAG = "error_header"
+
+        private const val MESSAGE_TAG = "error_body"
+
+        private const val GIF_TAG = "gif_resource"
+
         private const val DEFAULT_CRITICAL_TITLE = "Ocorreu um erro"
 
         private const val DEFAULT_CRITICAL_MESSAGE =
@@ -66,13 +62,13 @@ class NotificationActivity : AppCompatActivity() {
         fun newInstance(
             context: Context,
             gifRes: Int? = null,
-            title: String,
-            message: String
+            title: String? = null,
+            message: String ? = null
         ): Intent =
             Intent(context, NotificationActivity::class.java).apply {
-                putExtra(GIF_RESOURCE, gifRes)
-                putExtra(HEADER_MESSAGE, title)
-                putExtra(BODY_MESSAGE, message)
+                putExtra(GIF_TAG, gifRes)
+                putExtra(HEADER_TAG, title)
+                putExtra(MESSAGE_TAG, message)
             }
     }
 

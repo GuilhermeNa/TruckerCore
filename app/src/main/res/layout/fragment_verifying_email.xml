@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient_primary"
     app:layoutDescription="@xml/fragment_verifying_email_scene"
-    tools:context=".view.fragments.verifying_email.VerifyingEmailFragment">
+    tools:context=".view.nav_login.fragments.verifying_email.VerifyingEmailFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/white" />
+        app:tint="?attr/colorOnPrimary" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_verifying_email_guideline"
@@ -45,17 +45,15 @@
             android:layout_height="match_parent"
             android:max="61"
             android:progress="0"
-            app:indicatorColor="@color/green"
+            app:indicatorColor="?attr/colorSecondary"
             app:indicatorTrackGapSize="0dp"
-            app:trackColor="@color/darkTransparent"
+            app:trackColor="@color/transparentDialog"
             app:trackCornerRadius="1dp" />
 
         <TextView
             android:id="@+id/frag_verifying_email_timer"
-            style="@style/textEmphasis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,12 +63,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.card.MaterialCardView
+        app:cardBackgroundColor="?attr/colorSecondaryVariant"
         android:id="@+id/frag_verifying_email_card_check"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginTop="16dp"
         android:animateLayoutChanges="true"
-        android:backgroundTint="@color/green"
         android:translationZ="11dp"
         android:visibility="invisible"
         app:cardCornerRadius="50dp"
@@ -86,19 +84,18 @@
             android:layout_margin="16dp"
             android:importantForAccessibility="no"
             android:src="@drawable/icon_check"
-            app:tint="@color/ic_launcher_background" />
+            app:tint="?attr/colorOnSecondary" />
 
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/frag_verifying_email_text_header_valid"
-        style="@style/textEmphasis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:textColor="?attr/colorOnPrimary"
         android:text="@string/email_valid"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="@dimen/textMedium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -106,27 +103,25 @@
 
     <TextView
         android:id="@+id/frag_verifying_email_text_header_validating"
-        style="@style/textEmphasis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/validating_email"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="@dimen/textMedium"
         android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
 
     <TextView
         android:id="@+id/frag_verifying_email_text_email"
-        style="@style/textDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="11sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="@dimen/textSmall"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -135,19 +130,17 @@
 
     <TextView
         android:id="@+id/frag_verifying_email_text_body"
-        style="@style/textDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/validating_email_description"
-        android:textColor="@color/white"
-        android:textSize="11sp"
+        android:textSize="@dimen/textSmall"
         android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_email" />
-
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
 

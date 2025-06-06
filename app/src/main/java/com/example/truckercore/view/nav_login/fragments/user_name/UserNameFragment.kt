@@ -64,11 +64,7 @@ class UserNameFragment : CloseAppFragment() {
 
                     is UserNameUiState.Status.CriticalError -> {
                         dialog.dismissIfShowing()
-                        val intent = NotificationActivity.newInstance(
-                            context = requireContext(),
-                            title = state.status.uiError.title,
-                            message = state.status.uiError.message
-                        )
+                        val intent = NotificationActivity.newInstance(context = requireContext())
                         navigateToActivity(intent, true)
                     }
 

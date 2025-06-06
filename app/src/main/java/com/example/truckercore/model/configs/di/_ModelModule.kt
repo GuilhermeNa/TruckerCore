@@ -8,7 +8,6 @@ val modelModules = listOf(
     securityModule,
     repositoriesModule,
     serviceModule,
-    utilModule,
     userModule,
     employeeModule,
     systemAccessModule,

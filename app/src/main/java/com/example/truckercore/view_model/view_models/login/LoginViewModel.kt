@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.view._shared.ui_error.mapResult
 import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
+import com.example.truckercore.view_model._shared.expressions.mapResult
 import com.example.truckercore.view_model.view_models.login.effect.LoginEffectManager
 import com.example.truckercore.view_model.view_models.login.state.LoginStateManager
 import kotlinx.coroutines.delay

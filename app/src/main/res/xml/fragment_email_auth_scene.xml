@@ -20,21 +20,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_email_card"
+
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
         <Constraint
             android:id="@+id/frag_email_auth_pass_card"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_email_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
     </ConstraintSet>
 
     <!-- Password error -->
@@ -48,8 +47,8 @@
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
         <Constraint
             android:id="@+id/frag_email_auth_confirmation_card"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -58,8 +57,8 @@
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
     </ConstraintSet>
 
     <!-- Confirmation error -->
@@ -71,16 +70,16 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card"
-            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintStart_toStartOf="@id/frag_email_auth_confirmation_card"
+            motion:layout_constraintEnd_toStartOf="@id/frag_email_auth_confirmation_card"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
     </ConstraintSet>
 
     <!-- Email && Password error -->
     <ConstraintSet android:id="@+id/frag_email_auth_state_4"
         motion:deriveConstraintsFrom="@+id/frag_email_auth_state_1">
-
         <Constraint
             android:id="@+id/frag_email_auth_password_error"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -90,8 +89,8 @@
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
         <Constraint
             android:id="@+id/frag_email_auth_confirmation_card"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -100,25 +99,24 @@
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
     </ConstraintSet>
 
     <!-- Email && Confirmation error -->
     <ConstraintSet android:id="@+id/frag_email_auth_state_5"
         motion:deriveConstraintsFrom="@+id/frag_email_auth_state_1">
-
         <Constraint
             android:id="@+id/frag_email_auth_confirmation_error"
-            motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card"
-            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintStart_toStartOf="@id/frag_email_auth_confirmation_card"
+            motion:layout_constraintEnd_toEndOf="@id/frag_email_auth_confirmation_card"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
     </ConstraintSet>
 
     <!-- Password && Confirmation error -->
@@ -126,15 +124,15 @@
 
         <Constraint
             android:id="@+id/frag_email_auth_password_error"
-            motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
             motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
         <Constraint
             android:id="@+id/frag_email_auth_confirmation_card"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -143,19 +141,19 @@
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_pass_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
         <Constraint
             android:id="@+id/frag_email_auth_confirmation_error"
-            motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card"
-            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintStart_toStartOf="@id/frag_email_auth_confirmation_card"
+            motion:layout_constraintEnd_toEndOf="@id/frag_email_auth_confirmation_card"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
     </ConstraintSet>
 
     <!-- Email && Password && Confirmation error -->
@@ -171,8 +169,8 @@
             motion:layout_constraintTop_toBottomOf="@id/frag_email_auth_confirmation_card"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp" />
     </ConstraintSet>
 
 </MotionScene>

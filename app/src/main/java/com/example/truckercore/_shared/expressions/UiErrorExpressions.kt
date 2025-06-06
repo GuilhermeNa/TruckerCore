@@ -1,19 +1,19 @@
 package com.example.truckercore._shared.expressions
 
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
-inline fun UiError.handleUiError(
-    onRecoverable: (UiError.Recoverable) -> Unit,
-    onCritical: (UiError.Critical) -> Unit
+inline fun ViewError.handleUiError(
+    onRecoverable: (ViewError.Recoverable) -> Unit,
+    onCritical: (ViewError.Critical) -> Unit
 ) {
     when (this) {
-        is UiError.Critical -> onCritical(this)
-        is UiError.Recoverable -> onRecoverable(this)
+        is ViewError.Critical -> onCritical(this)
+        is ViewError.Recoverable -> onRecoverable(this)
     }
 }
 
-inline fun UiError.doIfCritical(
-    run: (UiError.Critical) -> Unit
+inline fun ViewError.doIfCritical(
+    run: (ViewError.Critical) -> Unit
 ) {
-    if(this is UiError.Critical) run(this)
+    if (this is ViewError.Critical) run(this)
 }

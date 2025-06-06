@@ -2,12 +2,12 @@ package com.example.truckercore.view_model.view_models.welcome_fragment
 
 import com.example.truckercore._shared.classes.ButtonState
 import com.example.truckercore.view_model._shared._contracts.State
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 data class WelcomeUiState(
     val pagerPos: Int = 0,
     val fabState: ButtonState = ButtonState(false),
-    val uiError: UiError.Critical? = null,
+    val uiError: ViewError.Critical? = null,
     val data: List<WelcomePagerData>
 ) : State {
 

@@ -17,8 +17,8 @@ import com.example.truckercore._shared.expressions.navigateToActivity
 import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
+import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view_model.view_models.splash.SplashEffect
 import com.example.truckercore.view_model.view_models.splash.SplashEvent
 import com.example.truckercore.view_model.view_models.splash.SplashUiState
@@ -101,11 +101,7 @@ class SplashFragment : CloseAppFragment() {
                     }
 
                     is SplashUiState.Error -> state.uiError.doIfCritical {
-                        val intent = NotificationActivity.newInstance(
-                            context = requireContext(),
-                            title = it.title,
-                            message = it.message
-                        )
+                        val intent = NotificationActivity.newInstance(context = requireContext())
                         navigateToActivity(intent, true)
                     }
 
@@ -125,7 +121,7 @@ class SplashFragment : CloseAppFragment() {
             }
 
             SplashUiState.Navigating.PreparingAmbient -> {
-                SplashFragmentDirections.actionSplashFragmentToPreparingAmbientFragment()
+                TODO()
             }
 
             SplashUiState.Navigating.ContinueRegister -> {

@@ -3,7 +3,7 @@ package com.example.truckercore.view_model.view_models.email_auth.uiState
 import com.example.truckercore._shared.classes.Email
 import com.example.truckercore._shared.classes.Password
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class EmailAuthUiStateManager {
@@ -38,7 +38,7 @@ class EmailAuthUiStateManager {
     }
 
     fun setUiErrorState() {
-        val newState = value.copy(status = EmailAuthUiState.Status.Error(UiError.Critical()))
+        val newState = value.copy(status = EmailAuthUiState.Status.Error(ViewError.Critical))
         setState(newState)
     }
 

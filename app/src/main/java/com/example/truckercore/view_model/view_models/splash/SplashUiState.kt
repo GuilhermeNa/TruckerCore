@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.splash
 
 import com.example.truckercore.view_model._shared._contracts.State
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 sealed class SplashUiState : State {
 
@@ -16,6 +16,6 @@ sealed class SplashUiState : State {
         data object PreparingAmbient: Navigating()
     }
 
-    data class Error(val uiError: UiError) : SplashUiState()
+    data class Error(val uiError: ViewError) : SplashUiState()
 
 }

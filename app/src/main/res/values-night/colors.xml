@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ======================================================================================= -->
+    <!--  Base App Colors -->
+    <!-- ======================================================================================= -->
+    <color name="colorPrimary">#035876</color>
+    <color name="colorPrimaryVariant">#052B38</color>
+    <color name="colorOnPrimary">#D7D7D7</color>
+
+    <color name="colorSecondary">#81C784</color>
+    <color name="colorSecondaryVariant">#2E7D32</color>
+    <color name="colorOnSecondary">#000000</color>
+
+    <color name="colorSurface">#121212</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorSurfaceVariant">#1E1E1E</color>
+    <color name="colorOnSurfaceVariant">#CCCCCC</color>
+
+    <color name="colorPrimaryContainer">#1B5E20</color>
+    <color name="colorOnPrimaryContainer">#A5D6A7</color>
+    <color name="colorSecondaryContainer">#5B0D0A</color>
+    <color name="colorOnSecondaryContainer">#FFDAD6</color>
+
+    <color name="colorError">@android:color/holo_red_light</color>
+
+    <color name="colorBackground">#121212</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+
+    <!-- ======================================================================================= -->
+    <!-- Other Colors -->
+    <!-- ======================================================================================= -->
+    <color name="transparentDialog">#44000000</color>
+    <color name="shimmer">#C2C2C2</color>
+
+</resources>

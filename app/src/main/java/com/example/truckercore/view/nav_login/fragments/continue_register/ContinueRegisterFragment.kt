@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
 import com.example.truckercore.R
-import com.example.truckercore.databinding.FragmentContinueRegisterBinding
 import com.example.truckercore._shared.expressions.navigateToDirection
+import com.example.truckercore.databinding.FragmentContinueRegisterBinding
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiModel
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiState
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel

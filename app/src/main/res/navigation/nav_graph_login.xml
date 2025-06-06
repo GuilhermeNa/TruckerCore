@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.truckercore.view.fragments.splash.SplashFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.truckercore.view.fragments.welcome.WelcomeFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.welcome.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/emailAuthFragment"
-        android:name="com.example.truckercore.view.fragments.email_auth.EmailAuthFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.email_auth.EmailAuthFragment"
         android:label="fragment_email_auth"
         tools:layout="@layout/fragment_email_auth" >
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/verifyingEmailFragment"
-        android:name="com.example.truckercore.view.fragments.verifying_email.VerifyingEmailFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.verifying_email.VerifyingEmailFragment"
         android:label="fragment_verifying_email"
         tools:layout="@layout/fragment_verifying_email" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/continueRegisterFragment"
-        android:name="com.example.truckercore.view.fragments.continue_register.ContinueRegisterFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.continue_register.ContinueRegisterFragment"
         android:label="fragment_continue_register"
         tools:layout="@layout/fragment_continue_register" >
         <action
@@ -98,12 +98,12 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
-        android:name="com.example.truckercore.view.fragments.forget_password.ForgetPasswordFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.forget_password.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
     <fragment
         android:id="@+id/userNameFragment"
-        android:name="com.example.truckercore.view.fragments.user_name.UserNameFragment"
+        android:name="com.example.truckercore.view.nav_login.fragments.user_name.UserNameFragment"
         android:label="fragment_user_name"
         tools:layout="@layout/fragment_user_name" />
     <action android:id="@+id/action_global_continueRegisterFragment"

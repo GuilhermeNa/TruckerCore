@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.login
 
 import com.example.truckercore.view_model._shared._contracts.Event
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 sealed class LoginEvent : Event {
 
@@ -23,8 +23,8 @@ sealed class LoginEvent : Event {
         sealed class LoginTask: SystemEvent() {
             data object Executing : LoginTask()
             data object Success : LoginTask()
-            data class CriticalError(val e: UiError.Critical) : LoginTask()
-            data class RecoverableError(val e: UiError.Recoverable): LoginTask()
+            data class CriticalError(val e: ViewError.Critical) : LoginTask()
+            data class RecoverableError(val e: ViewError.Recoverable): LoginTask()
         }
     }
 

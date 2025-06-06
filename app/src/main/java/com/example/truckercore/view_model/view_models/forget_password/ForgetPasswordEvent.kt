@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.forget_password
 
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 sealed class ForgetPasswordEvent {
 
@@ -19,7 +19,7 @@ sealed class ForgetPasswordEvent {
             data object Executing : SendEmailTask()
             data object Success : SystemEvent()
             data object CriticalError : SystemEvent()
-            data class RecoverableError(val e: UiError.Recoverable) : SystemEvent()
+            data class RecoverableError(val e: ViewError.Recoverable) : SystemEvent()
         }
     }
 

@@ -18,9 +18,9 @@ import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.model.configs.flavor.contracts.FlavorStrategy
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigator
-import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorImpl
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigator
+import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigatorImpl
+import com.example.truckercore.view_model._shared.helpers.ViewError
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeEvent
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomePagerData
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeViewModel
@@ -88,7 +88,7 @@ class WelcomeFragment : CloseAppFragment() {
         }
     }
 
-    private fun handleUiErrorIfHas(uiError: UiError.Critical?) {
+    private fun handleUiErrorIfHas(uiError: ViewError.Critical?) {
         uiError?.let {
             val intent = navigator.notificationActivityIntent(requireContext())
             navigateToActivity(intent, true)

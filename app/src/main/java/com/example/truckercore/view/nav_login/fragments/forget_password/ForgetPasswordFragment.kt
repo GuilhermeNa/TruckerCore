@@ -18,6 +18,8 @@ import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentForgetPasswordBinding
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
 import com.example.truckercore.view._shared._base.fragments.LoggerFragment
+import com.example.truckercore.view._shared.expressions.forcePortraitOrientation
+import com.example.truckercore.view._shared.expressions.unspecifiedOrientation
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordEvent
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordViewModel
 import com.example.truckercore.view_model.view_models.forget_password.effect.ForgetPasswordEffect
@@ -88,7 +90,7 @@ class ForgetPasswordFragment : LoggerFragment() {
                 }
 
                 ForgetPasswordEffect.Navigate.ToNotification ->
-                    navigator.navigateToNotification(requireContext(), requireActivity())
+                    navigator.navigateToNotification(requireActivity())
             }
         }
     }

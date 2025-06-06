@@ -4,7 +4,7 @@ import com.example.truckercore._shared.classes.ButtonState
 import com.example.truckercore._shared.classes.FieldState
 import com.example.truckercore._shared.classes.FullName
 import com.example.truckercore.model.shared.utils.expressions.isFullNameFormat
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class UserNameUiStateManager {
@@ -47,7 +47,7 @@ class UserNameUiStateManager {
         _state.value = _state.value.copy(status = UserNameUiState.Status.Success)
     }
 
-    fun setCriticalErrorState(uiError: UiError.Critical) {
+    fun setCriticalErrorState(uiError: ViewError.Critical) {
         _state.value = _state.value.copy(status = UserNameUiState.Status.CriticalError(uiError))
     }
 

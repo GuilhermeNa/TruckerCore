@@ -15,12 +15,15 @@ import com.example.truckercore._shared.expressions.navController
 import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
-import com.example.truckercore.view.fragments.login.navigator.LoginNavigator
-import com.example.truckercore.view.fragments.login.navigator.LoginNavigatorImpl
-import com.example.truckercore.view.fragments.login.ui_handler.LoginUiStateHandlerImpl
+import com.example.truckercore.view._shared.expressions.forcePortraitOrientation
+import com.example.truckercore.view._shared.expressions.unspecifiedOrientation
+import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
+import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginFragmentStrategy
+import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginNavigator
+import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginNavigatorImpl
+import com.example.truckercore.view.nav_login.fragments.login.ui_handler.LoginUiStateHandler
+import com.example.truckercore.view.nav_login.fragments.login.ui_handler.LoginUiStateHandlerImpl
 import com.example.truckercore.view_model.view_models.login.LoginEvent
 import com.example.truckercore.view_model.view_models.login.LoginViewModel
 import com.example.truckercore.view_model.view_models.login.effect.LoginEffect
@@ -45,7 +48,7 @@ class LoginFragment : CloseAppFragment() {
     }
 
     private val navigator: LoginNavigator by lazy { LoginNavigatorImpl(strategy) }
-    private val stateHandler: com.example.truckercore.view.nav_login.fragments.login.ui_handler.LoginUiStateHandler by lazy { LoginUiStateHandlerImpl() }
+    private val stateHandler: LoginUiStateHandler by lazy { LoginUiStateHandlerImpl() }
 
     private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
@@ -103,7 +106,7 @@ class LoginFragment : CloseAppFragment() {
                     navigator.navigateToMain(WeakReference(this.requireActivity()))
 
                 LoginEffect.NavigateToNotification ->
-                    navigator.navigateToNotification(WeakReference(this.requireActivity()))
+                    navigator.navigateToNotification(requireActivity())
             }
         }
     }

@@ -6,32 +6,35 @@ import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view._shared.ui_error.UiError
-import com.example.truckercore.view._shared.ui_error.UiResult
+import com.example.truckercore.view_model._shared.helpers.ViewError
+import com.example.truckercore.view_model._shared.helpers.ViewResult
 
 class ResetPasswordViewUseCase(private val authManager: AuthManager) {
 
-    suspend operator fun invoke(email: Email): UiResult =
+    suspend operator fun invoke(email: Email): ViewResult =
         authManager.resetPassword(email).mapAppResult(
-            onSuccess = { UiResult.Success },
+            onSuccess = { ViewResult.Success },
             onError = { handleError(it) }
         )
 
-    private fun handleError(e: AppException): UiResult.Error {
+    private fun handleError(e: AppException): ViewResult.Error {
         if (e is InfraException.NetworkUnavailable) {
-            return UiResult.Error(UiError.Recoverable(MSG_NETWORK_ERROR))
+            return ViewResult.Error(ViewError.Recoverable(MSG_NETWORK_ERROR))
         }
 
         if (e is InfraException.AuthError && e.code is AuthErrorCode.RecoverEmail) {
             val uiError = when (e.code) {
-                AuthErrorCode.RecoverEmail.InvalidEmail -> UiError.Recoverable(MSG_INVALID_CREDENTIAL)
-                AuthErrorCode.RecoverEmail.TaskFailure -> UiError.Critical()
-                AuthErrorCode.RecoverEmail.Unknown -> UiError.Critical()
+                AuthErrorCode.RecoverEmail.InvalidEmail -> ViewError.Recoverable(
+                    MSG_INVALID_CREDENTIAL
+                )
+
+                AuthErrorCode.RecoverEmail.TaskFailure -> ViewError.Critical
+                AuthErrorCode.RecoverEmail.Unknown -> ViewError.Critical
             }
-            return UiResult.Error(uiError)
+            return ViewResult.Error(uiError)
         }
 
-        return UiResult.Error(UiError.Critical())
+        return ViewResult.Error(ViewError.Critical)
     }
 
     companion object {

@@ -6,39 +6,39 @@ import com.example.truckercore.model.errors.infra.InfraException
 import com.example.truckercore.model.errors.infra.error_code.AuthErrorCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.view._shared.ui_error.UiError
-import com.example.truckercore.view._shared.ui_error.UiResult
+import com.example.truckercore.view_model._shared.helpers.ViewError
+import com.example.truckercore.view_model._shared.helpers.ViewResult
 
 class LoginViewUseCase(private val authService: AuthManager) {
 
-    suspend operator fun invoke(credentials: EmailCredential): UiResult {
+    suspend operator fun invoke(credentials: EmailCredential): ViewResult {
             return authService.signIn(credentials).mapAppResult(
-                onSuccess = { UiResult.Success },
+                onSuccess = { ViewResult.Success },
                 onError = { handleError(it) }
             )
     }
 
-    private fun handleError(e: AppException): UiResult {
+    private fun handleError(e: AppException): ViewResult {
         if (e is InfraException.NetworkUnavailable) {
-            return UiResult.Error(
-                UiError.Recoverable(MSG_NETWORK_ERROR)
+            return ViewResult.Error(
+                ViewError.Recoverable(MSG_NETWORK_ERROR)
             )
         }
 
         if (e is InfraException.AuthError && e.code is AuthErrorCode.SignInWithEmail) {
             val uiError = when (e.code) {
-                AuthErrorCode.SignInWithEmail.InvalidCredential -> UiError.Recoverable(MSG_INVALID_CREDENTIAL)
-                AuthErrorCode.SignInWithEmail.InvalidUser -> UiError.Recoverable(MSG_INVALID_USER)
-                AuthErrorCode.SignInWithEmail.TaskFailure -> UiError.Critical(MSG_TASK_FAILURE)
-                AuthErrorCode.SignInWithEmail.TooManyRequests -> UiError.Recoverable(MSG_TOO_MANY_REQUESTS)
-                AuthErrorCode.SignInWithEmail.Unknown -> UiError.Critical(MSG_UNKNOWN_AUTH_ERROR)
+                AuthErrorCode.SignInWithEmail.InvalidCredential -> ViewError.Recoverable(MSG_INVALID_CREDENTIAL)
+                AuthErrorCode.SignInWithEmail.InvalidUser -> ViewError.Recoverable(MSG_INVALID_USER)
+                AuthErrorCode.SignInWithEmail.TaskFailure -> ViewError.Critical
+                AuthErrorCode.SignInWithEmail.TooManyRequests -> ViewError.Recoverable(MSG_TOO_MANY_REQUESTS)
+                AuthErrorCode.SignInWithEmail.Unknown -> ViewError.Critical
             }
 
-            return UiResult.Error(uiError)
+            return ViewResult.Error(uiError)
         }
 
-        return UiResult.Error(
-            UiError.Critical(MSG_GENERIC_UNKNOWN_ERROR)
+        return ViewResult.Error(
+            ViewError.Critical
         )
     }
 

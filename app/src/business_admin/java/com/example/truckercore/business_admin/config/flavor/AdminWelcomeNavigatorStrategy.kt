@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import com.example.truckercore.R
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
-import com.example.truckercore.view.fragments.welcome.navigator.WelcomeNavigatorStrategy
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigatorStrategy
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 class AdminWelcomeNavigatorStrategy: WelcomeNavigatorStrategy {
 
@@ -14,11 +14,7 @@ class AdminWelcomeNavigatorStrategy: WelcomeNavigatorStrategy {
     }
 
     override fun notificationActivityIntent(context: Context): Intent {
-        return NotificationActivity.newInstance(
-            context = context,
-            title = UiError.Critical().title,
-            message = UiError.Critical().title
-        )
+        return NotificationActivity.newInstance(context = context)
     }
 
 }

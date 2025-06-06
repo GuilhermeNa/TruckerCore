@@ -8,5 +8,5 @@
     <dimen name="textSmall">11sp</dimen>
     <dimen name="textMedium">14sp</dimen>
     <dimen name="textBig">18sp</dimen>
-
+    <dimen name="textExtraBig">22sp</dimen>
 </resources>

@@ -6,10 +6,9 @@ import androidx.navigation.NavController
 import com.example.truckercore.view_model._shared.components.ButtonComponent
 import com.example.truckercore.view_model._shared.components.Visibility
 import com.example.truckercore.business_admin.view.activities.MainActivity
-import com.example.truckercore.view.fragments.login.LoginFragmentDirections
-import com.example.truckercore.view.fragments.login.navigator.LoginFragmentStrategy
+import com.example.truckercore.view.nav_login.fragments.login.LoginFragmentDirections
+import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginFragmentStrategy
 import java.lang.ref.WeakReference
-
 
 class AdminLoginNavigatorStrategy(private val navController: NavController) :
     LoginFragmentStrategy {

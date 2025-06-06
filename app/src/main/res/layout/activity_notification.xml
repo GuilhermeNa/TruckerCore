@@ -22,7 +22,8 @@
 
     <TextView
         android:id="@+id/act_error_title"
-        style="@style/textEmphasis"
+        android:textSize="@dimen/textExtraBig"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="56dp"
@@ -37,7 +38,7 @@
 
     <TextView
         android:id="@+id/act_error_message"
-        style="@style/textDefault"
+        android:textSize="@dimen/textMedium"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="26dp"
@@ -53,7 +54,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        style="@style/fabPrimary"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

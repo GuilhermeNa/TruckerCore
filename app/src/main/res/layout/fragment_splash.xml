@@ -7,8 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/fragment_splash_scene"
-    tools:context=".view.nav_login.fragments.splash.SplashFragment"
-    android:background="?attr/backgroundColor">
+    tools:context=".view.nav_login.fragments.splash.SplashFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_splash_guideline"
@@ -24,7 +23,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/shape_circular"
-        android:backgroundTint="@color/darkRed"
+        android:backgroundTint="@android:color/holo_red_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,14 +41,14 @@
 
     <TextView
         android:id="@+id/frag_splash_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Trucker"
-        android:textColor="?attr/textColor"
-        android:textSize="50sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="@id/frag_splash_logo"
         app:layout_constraintStart_toEndOf="@id/frag_splash_guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/frag_splash_logo" />
 
     <ProgressBar
         android:id="@+id/frag_splash_progressbar"

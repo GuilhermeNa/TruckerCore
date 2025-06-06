@@ -1,30 +1,33 @@
 <resources>
-
     <!-- ======================================================================================= -->
     <!-- Base application theme. -->
     <!-- ======================================================================================= -->
     <style name="Theme.TruckerCore" parent="Theme.Material3.Dark">
 
-        <item name="android:colorBackground">@color/darkBackground</item>
+        <item name="colorPrimary">@color/colorPrimary</item> <!-- Azul claro -->
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/darkRed</item>
-        <item name="colorPrimaryVariant">@color/lightRed</item>
-        <item name="colorOnPrimary">@color/light</item>
+        <item name="colorSecondary">@color/colorSecondary</item> <!-- Verde claro -->
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/darkBlue</item>
-        <item name="colorSecondaryVariant">@color/lightBlue</item>
-        <item name="colorOnSecondary">@color/dark</item>
+        <item name="colorSurface">@color/colorSurface</item> <!-- Fundo escuro dos cards/dialogs -->
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
 
-        <!-- Other colors -->
-        <item name="backgroundColor">@color/darkBackground</item>
-        <item name="textColor">@color/light</item>
+        <!-- Para FAB, botões elevados -->
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
 
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">@android:color/transparent</item> <!-- ou sua cor desejada -->
+        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnSecondaryContainer</item>
 
-        <!-- Customize your theme here. -->
+        <item name="colorError">@color/colorError</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="fontFamily">@font/montserrat</item>
 
     </style>
@@ -44,50 +47,31 @@
     </style>
 
     <!-- ======================================================================================= -->
-    <!-- Base fonts for fabs -->
+    <!-- Buttons && Fabs-->
     <!-- ======================================================================================= -->
-    <style name="fabPrimary">
-        <item name="android:backgroundTint">?attr/colorPrimary</item>
-        <item name="tint">@color/white</item>
+    <style name="buttonPrimary" parent="Widget.Material3.Button"/>
+
+    <style name="buttonSecondary" parent="Widget.Material3.Button">
+        <item name ="backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="textColor">?attr/colorOnPrimary</item>
     </style>
-
-    <style name="fabSecondary">
-        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
-        <item name="tint">@color/white</item>
-    </style>
-
-
-    <!-- Base fonts for text -->
-    <style name="textDefault">
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:textSize">@dimen/textMedium</item>
-    </style>
-
-    <style name="textEmphasis">
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:textSize">@dimen/textBig</item>
+    <style name="buttonTertiary" parent="Widget.Material3.Button.IconButton">
         <item name="android:textStyle">bold</item>
     </style>
 
-
-
-    <!-- Buttons -->
-    <style name="buttonPrimary">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/textMedium</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:background">@drawable/button_primary</item>
+    <style name="fabSecondary" parent="Widget.Material3.FloatingActionButton.Secondary">
+        <item name="backgroundTint">?attr/colorSecondaryContainer</item>
+        <item name="tint">?attr/colorOnSecondaryContainer</item>
+        <item name="fabSize">mini</item>
     </style>
 
-    <style name="buttonTransparent">
-        <item name="android:textColor">@color/grey</item>
-        <item name="android:drawableTint">@color/grey</item>
-        <item name="android:textSize">@dimen/textMedium</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:background">@drawable/button_transparent</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+    <!-- ======================================================================================= -->
+    <!-- Base fonts for dialogs -->
+    <!-- ======================================================================================= -->
+    <style name="dialogLoadingBg">
+        <item name="android:background">@drawable/background_circle</item>
+        <item name="android:backgroundTint">@color/transparentDialog</item>
+        <item name="android:padding">4dp</item>
     </style>
 
 </resources>

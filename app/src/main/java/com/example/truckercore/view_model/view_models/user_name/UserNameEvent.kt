@@ -1,7 +1,6 @@
 package com.example.truckercore.view_model.view_models.user_name
 
 import com.example.truckercore.model.errors.AppException
-import com.example.truckercore.view.fragments.user_name.UserNameFragment
 
 /**
  * Sealed class to represent various events that can be triggered in the [UserNameFragment].

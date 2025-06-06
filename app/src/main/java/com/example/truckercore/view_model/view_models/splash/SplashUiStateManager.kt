@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.splash
 
 import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class SplashUiStateManager {
@@ -21,7 +21,7 @@ class SplashUiStateManager {
             ::direction.isInitialized -> direction
             else -> {
                 AppLogger.e(getClassName(), DIRECTION_UNINITIALIZED)
-                SplashUiState.Error(UiError.Critical())
+                SplashUiState.Error(ViewError.Critical)
             }
         }
 
@@ -33,7 +33,7 @@ class SplashUiStateManager {
     }
 
     fun setErrorState() {
-        _uiState.value = SplashUiState.Error(UiError.Critical())
+        _uiState.value = SplashUiState.Error(ViewError.Critical)
     }
 
     companion object {

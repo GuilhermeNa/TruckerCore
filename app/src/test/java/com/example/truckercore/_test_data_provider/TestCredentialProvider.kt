@@ -13,7 +13,7 @@ class TestCredentialProvider {
 
     val password = Password.from("123456")
 
-    val userProfile = UserCategory(fullName = name)
+   // val userProfile = UserCategory(fullName = name)
 
     val credential = EmailCredential(
         email = email,

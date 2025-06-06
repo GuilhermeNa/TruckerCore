@@ -1,7 +1,7 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
-import com.example.truckercore.view.fragments.continue_register.ContinueRegisterDirection
-import com.example.truckercore.view.fragments.continue_register.ContinueRegisterImageLevel
+import com.example.truckercore.view.nav_login.fragments.continue_register.ContinueRegisterDirection
+import com.example.truckercore.view.nav_login.fragments.continue_register.ContinueRegisterImageLevel
 
 /**
  * UI model representing the data required to render the Continue Register screen.

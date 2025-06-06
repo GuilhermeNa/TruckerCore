@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore._shared.classes.AppResult
 import com.example.truckercore._shared.expressions.extractData
-import com.example.truckercore._shared.expressions.handleUiError
-import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
@@ -64,13 +62,7 @@ class UserNameViewModel(
             UserNameEvent.SystemEvent.SystemCreationSuccess -> stateManager.setSuccessState()
 
             is UserNameEvent.SystemEvent.SystemCreationFailed -> {
-                UiErrorFactory(event.e).handleUiError(
-                    onRecoverable = {
-                        stateManager.setAwaitingInputState()
-                        launch { effectManager.setRecoverableErrorEffect(it) }
-                    },
-                    onCritical = { stateManager.setCriticalErrorState(it) }
-                )
+
             }
         }
     }

@@ -4,7 +4,7 @@ import com.example.truckercore._shared.classes.ButtonState
 import com.example.truckercore._shared.classes.FieldState
 import com.example.truckercore.view_model._shared._contracts.State
 import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
-import com.example.truckercore.view._shared.ui_error.UiError
+import com.example.truckercore.view_model._shared.helpers.ViewError
 
 data class EmailAuthUiState(
     val emailField: FieldState = FieldState(),
@@ -169,7 +169,7 @@ data class EmailAuthUiState(
         data object Success : Status()
 
         // Etado acionado quando recebo algum erro irrecuperavel e o app precisa ser fechdao
-        data class Error(val uiError: UiError.Critical) : Status()
+        data class Error(val uiError: ViewError.Critical) : Status()
     }
 
     companion object {

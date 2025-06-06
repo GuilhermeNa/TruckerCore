@@ -2,7 +2,7 @@ package com.example.truckercore.view_model.view_models.forget_password
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.view._shared.ui_error.mapResult
+import com.example.truckercore.view_model._shared.expressions.mapResult
 import com.example.truckercore.view_model.view_models.forget_password.effect.ForgetPasswordEffectManager
 import com.example.truckercore.view_model.view_models.forget_password.state.ForgetPasswordUiStateManager
 import kotlinx.coroutines.delay
