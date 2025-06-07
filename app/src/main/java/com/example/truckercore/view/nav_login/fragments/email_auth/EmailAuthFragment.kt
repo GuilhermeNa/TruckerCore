@@ -4,28 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.R
-import com.example.truckercore._shared.expressions.doIfResumedOrElse
+import androidx.navigation.fragment.findNavController
 import com.example.truckercore._shared.expressions.hideKeyboardAndClearFocus
 import com.example.truckercore._shared.expressions.logEffect
 import com.example.truckercore._shared.expressions.logState
-import com.example.truckercore._shared.expressions.navigateToActivity
-import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.forcePortraitOrientation
-import com.example.truckercore.view._shared.expressions.unspecifiedOrientation
-import com.example.truckercore.view._shared.views.activities.NotificationActivity
+import com.example.truckercore.view._shared.expressions.launchOnFragment
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.email_auth.effect.EmailAuthEffect
 import com.example.truckercore.view_model.view_models.email_auth.event.EmailAuthEvent
-import com.example.truckercore.view_model.view_models.email_auth.uiState.EmailAuthUiState
+import com.example.truckercore.view_model.view_models.email_auth.uiState.EmailAuthUiStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,16 +30,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class EmailAuthFragment : CloseAppFragment() {
 
-    // Binding reference for the fragment's views
     private var _binding: FragmentEmailAuthBinding? = null
     private val binding get() = _binding!!
 
-    // Handles UI-specific logic and updates for this fragment
-    private var stateHandler: EmailAuthUiStateHandler? = null
+    private val stateHandler by lazy { EmailAuthStateHandler() }
+
+    private val navigator by lazy { EmailAuthNavigator(findNavController()) }
 
     private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
-    // ViewModel that contains state, effects, and events related to authentication logic
     private val viewModel: EmailAuthViewModel by viewModel()
 
     //----------------------------------------------------------------------------------------------
@@ -54,12 +46,9 @@ class EmailAuthFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Observes ViewModel's state, effects, and events while lifecycle is in STARTED state
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setFragmentStateManager()
-                setFragmentEffectManager()
-            }
+        launchOnFragment {
+            setFragmentStateManager()
+            setFragmentEffectManager()
         }
     }
 
@@ -71,133 +60,38 @@ class EmailAuthFragment : CloseAppFragment() {
         launch {
             viewModel.state.collect { state ->
                 logState(this@EmailAuthFragment, state)
-
+                stateHandler.handleUiComponents(state.components)
                 handleUiStatus(state.status)
-                stateHandler?.handleEmailField(state.emailField)
-                stateHandler?.handlePasswordField(state.passwordField)
-                stateHandler?.handleConfirmationField(state.confirmationField)
-                stateHandler?.handleCreateButton(state.createButton)
             }
         }
     }
 
-    private fun handleUiStatus(uiStatus: EmailAuthUiState.Status) {
-        when (uiStatus) {
-            EmailAuthUiState.Status.AwaitingInput.Default -> {
-                val stateId = R.id.frag_email_auth_state_0
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.Ready -> {
-                val stateId = R.id.frag_email_auth_state_0
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.Email -> {
-                val stateId = R.id.frag_email_auth_state_1
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.Pass -> {
-                val stateId = R.id.frag_email_auth_state_2
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.Conf -> {
-                val stateId = R.id.frag_email_auth_state_3
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.EmailAndPass -> {
-                val stateId = R.id.frag_email_auth_state_4
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.EmailAndConf -> {
-                val stateId = R.id.frag_email_auth_state_5
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.PassAndConf -> {
-                val stateId = R.id.frag_email_auth_state_6
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-            EmailAuthUiState.Status.AwaitingInput.InputError.EmailPassAndConf -> {
-                val stateId = R.id.frag_email_auth_state_7
-                doIfResumedOrElse(
-                    resumed = { stateHandler?.transitionToState(stateId) },
-                    orElse = { stateHandler?.jumpToState(stateId) }
-                )
-            }
-
-
-            EmailAuthUiState.Status.Creating -> {
-                dialog.show()
-            }
-
-            is EmailAuthUiState.Status.Error -> {
-                dialog.dismissIfShowing()
-                val intent = NotificationActivity.newInstance(context = requireContext())
-                navigateToActivity(intent, true)
-            }
-
-            EmailAuthUiState.Status.Success -> {
-                dialog.dismissIfShowing()
-                val direction = EmailAuthFragmentDirections
-                    .actionEmailAuthFragmentToVerifyingEmailFragment()
-                navigateToDirection(direction)
-            }
-        }
+    private fun handleUiStatus(status: EmailAuthUiStatus) {
+        if (status.isCreating()) dialog.show()
+        else dialog.dismissIfShowing()
     }
 
     /**
      * Collects and handles side effects emitted by the ViewModel, such as success or failure messages.
      */
-    private fun CoroutineScope.setFragmentEffectManager() {
-        launch {
-            viewModel.effect.collect { effect ->
-                logEffect(this@EmailAuthFragment, effect)
+    private suspend fun setFragmentEffectManager() {
+        viewModel.effect.collect { effect ->
+            logEffect(this@EmailAuthFragment, effect)
+            when (effect) {
+                EmailAuthEffect.ClearFocusAndHideKeyboard ->
+                    hideKeyboardAndClearFocus()
 
-                when (effect) {
-                    EmailAuthEffect.ClearFocusAndHideKeyboard -> {
-                        hideKeyboardAndClearFocus()
-                    }
+                EmailAuthEffect.NavigateToLogin ->
+                    navigator.navigateToLogin()
 
-                    EmailAuthEffect.NavigateToLogin -> {
-                        val direction = EmailAuthFragmentDirections.actionGlobalLoginFragment()
-                        navigateToDirection(direction)
-                    }
+                EmailAuthEffect.NavigateToNotification ->
+                    navigator.navigateToNotification(requireActivity())
 
-                    is EmailAuthEffect.ShowErrorMessage -> {
-                        dialog.dismissIfShowing()
-                        showRedSnackBar(effect.message)
-                    }
-                }
+                EmailAuthEffect.NavigateToVerifyEmail ->
+                    navigator.navigateToVerifyEmail()
+
+                is EmailAuthEffect.ShowToast ->
+                    showRedSnackBar(effect.message)
             }
         }
     }
@@ -218,7 +112,7 @@ class EmailAuthFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEmailAuthBinding.inflate(layoutInflater)
-        stateHandler = EmailAuthUiStateHandler(button = binding.fragEmailAuthRegisterButton)
+        stateHandler.initialize(binding)
         return binding.root
     }
 
@@ -233,6 +127,7 @@ class EmailAuthFragment : CloseAppFragment() {
         setEmailTextChangeListener()
         setPasswordTextChangeListener()
         setConfirmationTextChangeListener()
+        setImeOptionsClickListener()
     }
 
     // Notifica ao viewmodel que houve um evento de toque no background
@@ -278,12 +173,20 @@ class EmailAuthFragment : CloseAppFragment() {
         }
     }
 
+    private fun setImeOptionsClickListener() {
+        binding.fragEmailAuthConfirmPasswordEditText.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                v.clearFocus()
+                true
+            } else false
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
     // onDestroyView()
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-        stateHandler = null
         _binding = null
     }
 

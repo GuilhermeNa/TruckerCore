@@ -8,7 +8,6 @@ import com.example.truckercore.view_model._shared._contracts.Event
  */
 sealed class EmailAuthEvent : Event {
 
-    // Eventos relacionados a interação do usuário como clicks e toques
     sealed class UiEvent : EmailAuthEvent() {
         sealed class Click : UiEvent() {
             data object Background : Click()
@@ -21,13 +20,15 @@ sealed class EmailAuthEvent : Event {
             data class PasswordTextChange(val text: String) : Typing()
             data class ConfirmationTextChange(val text: String) : Typing()
         }
-
     }
 
-    // Eventos relacionados ao sistema como validação de dados e resposta de API
     sealed class SystemEvent : EmailAuthEvent() {
-        data object Success : SystemEvent()
-        data class ApiResultError(val e: Exception) : SystemEvent()
+        sealed class AuthTask : SystemEvent() {
+            data object Executing : AuthTask()
+            data object Success : AuthTask()
+            data object CriticalError : AuthTask()
+            data class RecoverableError(val message: String) : AuthTask()
+        }
     }
 
 }

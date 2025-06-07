@@ -1,26 +1,27 @@
 package com.example.truckercore.view_model.view_models.email_auth.effect
 
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.truckercore.view_model._shared._base.managers.EffectManager
 
-class EmailAuthEffectManager {
+class EmailAuthEffectManager : EffectManager<EmailAuthEffect>() {
 
-    private val _effect: MutableSharedFlow<EmailAuthEffect> = MutableSharedFlow()
-    val effect get() = _effect
-
-    suspend fun setClearFocusAndHideKeyboardEffect() {
-        setEffect(EmailAuthEffect.ClearFocusAndHideKeyboard)
+    fun setClearFocusAndHideKeyboardEffect() {
+        trySend(EmailAuthEffect.ClearFocusAndHideKeyboard)
     }
 
-    suspend fun setNavigateToLoginEffect() {
-        setEffect(EmailAuthEffect.NavigateToLogin)
+    fun setNavigateToLoginEffect() {
+        trySend(EmailAuthEffect.NavigateToLogin)
     }
 
-    suspend fun setErrorMessageEffect(message: String) {
-        setEffect(EmailAuthEffect.ShowErrorMessage(message))
+    fun setNavigateToVerifyEmailEffect() {
+        trySend(EmailAuthEffect.NavigateToVerifyEmail)
     }
 
-    private suspend fun setEffect(newEffect: EmailAuthEffect) {
-        _effect.emit(newEffect)
+    fun setShowToastEffect(message: String) {
+        trySend(EmailAuthEffect.ShowToast(message))
+    }
+
+    fun setNavigateToNotification() {
+        trySend(EmailAuthEffect.NavigateToNotification)
     }
 
 }

@@ -1,59 +1,35 @@
 package com.example.truckercore.view_model.view_models.email_auth.uiState
 
-import com.example.truckercore._shared.classes.Email
-import com.example.truckercore._shared.classes.Password
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.data.EmailCredential
-import com.example.truckercore.view_model._shared.helpers.ViewError
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.truckercore.view_model._shared._base.managers.StateManager
 
-class EmailAuthUiStateManager {
+class EmailAuthUiStateManager : StateManager<EmailAuthUiState>(initialState = EmailAuthUiState()) {
 
-    private val _state = MutableStateFlow(EmailAuthUiState())
-    private val value get() = _state.value
-    val state get() = _state
-
-    fun updateEmailText(email: String) {
-        val newState = value.updateEmail(email)
+    fun updateComponentsOnEmailChange(email: String) {
+        val newState = getStateValue().updateEmail(email)
         setState(newState)
     }
 
-    fun updatePasswordText(password: String) {
-        val newState = value.updatePassword(password)
+    fun updateComponentsOnPasswordChange(password: String) {
+        val newState = getStateValue().updatePassword(password)
         setState(newState)
     }
 
-    fun updateConfirmationText(confirmation: String) {
-        val newState = value.updateConfirmation(confirmation)
+    fun updateComponentsOnConfirmationChange(confirmation: String) {
+        val newState = getStateValue().updateConfirmation(confirmation)
         setState(newState)
     }
 
     fun setCreatingState() {
-        val newState = value.copy(status = EmailAuthUiState.Status.Creating)
+        val newState = getStateValue().creating()
         setState(newState)
     }
 
-    fun setSuccessState() {
-        val newState = value.copy(status = EmailAuthUiState.Status.Success)
+    fun setIdleState() {
+        val newState = getStateValue().idle()
         setState(newState)
     }
 
-    fun setUiErrorState() {
-        val newState = value.copy(status = EmailAuthUiState.Status.Error(ViewError.Critical))
-        setState(newState)
-    }
-
-    private fun setState(newState: EmailAuthUiState) {
-        _state.value = newState
-    }
-
-    fun getCredential() = EmailCredential(
-        email = Email.from(value.emailField.text),
-        password = Password.from(value.passwordField.text)
-    )
-
-    fun setDefaultState() {
-        val newState = value.copy(status = EmailAuthUiState.Status.AwaitingInput.Ready)
-        setState(newState)
-    }
+    fun getCredential(): EmailCredential = getStateValue().getCredential()
 
 }

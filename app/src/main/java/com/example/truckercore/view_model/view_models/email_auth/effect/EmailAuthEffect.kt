@@ -11,8 +11,12 @@ sealed class EmailAuthEffect: Effect {
 
     data object ClearFocusAndHideKeyboard : EmailAuthEffect()
 
+    data class ShowToast(val message: String): EmailAuthEffect()
+
+    data object NavigateToNotification: EmailAuthEffect()
+
     data object NavigateToLogin : EmailAuthEffect()
 
-    data class ShowErrorMessage(val message: String) : EmailAuthEffect()
+    data object NavigateToVerifyEmail: EmailAuthEffect()
 
 }

@@ -23,20 +23,18 @@
     <LinearLayout
         android:id="@+id/frag_email_auth_text_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
+        android:paddingTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_header"
-        app:layout_constraintBottom_toTopOf="@id/frag_email_auth_buttons_layout">
+        app:layout_constraintTop_toBottomOf="@id/frag_email_auth_header">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_email_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_marginHorizontal="32dp"
             app:errorEnabled="true"
             android:hint="@string/email"
@@ -57,6 +55,7 @@
             android:id="@+id/frag_email_auth_password_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle"
@@ -81,6 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="4dp"
             app:endIconMode="password_toggle"
             app:errorEnabled="true"
             app:startIconDrawable="@drawable/icon_check">
