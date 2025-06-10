@@ -20,7 +20,7 @@ class EmailAuthEffectManager : EffectManager<EmailAuthEffect>() {
         trySend(EmailAuthEffect.ShowToast(message))
     }
 
-    fun setNavigateToNotification() {
+    fun setNavigateToNotificationEffect() {
         trySend(EmailAuthEffect.NavigateToNotification)
     }
 

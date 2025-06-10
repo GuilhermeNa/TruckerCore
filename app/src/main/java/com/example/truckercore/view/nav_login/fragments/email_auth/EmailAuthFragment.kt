@@ -177,7 +177,7 @@ class EmailAuthFragment : CloseAppFragment() {
         binding.fragEmailAuthConfirmPasswordEditText.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 v.clearFocus()
-                true
+                false
             } else false
         }
     }

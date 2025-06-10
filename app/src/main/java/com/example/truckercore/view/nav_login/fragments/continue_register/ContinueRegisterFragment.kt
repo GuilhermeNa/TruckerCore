@@ -16,7 +16,7 @@ import com.example.truckercore.R
 import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiModel
-import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiState
+import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterState
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,7 +29,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * - See whether their email is verified.
  * - Check if a user account exists for the email.
  *
- * The UI is driven by a [ContinueRegisterViewModel] which exposes a [StateFlow] of [ContinueRegisterUiState].
+ * The UI is driven by a [ContinueRegisterViewModel] which exposes a [StateFlow] of [ContinueRegisterState].
  * Depending on the UI state, the fragment updates the UI or triggers navigation events.
  *
  * Responsibilities:
@@ -56,18 +56,19 @@ class ContinueRegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.initialize()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
+             /*   viewModel.uiState.collect { state ->
                     when (state) {
-                        ContinueRegisterUiState.Loading -> Unit
-                        ContinueRegisterUiState.Error -> navigateToEmailAuthFragment()
-                        is ContinueRegisterUiState.Success -> {
+                        ContinueRegisterState.Loading -> Unit
+                        ContinueRegisterState.Error -> navigateToEmailAuthFragment()
+                        is ContinueRegisterState.Success -> {
                             _uiModel = state.data
                             bind()
                         }
                     }
-                }
+                }*/
             }
         }
     }

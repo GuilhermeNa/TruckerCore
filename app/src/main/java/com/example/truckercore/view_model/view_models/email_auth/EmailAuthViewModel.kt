@@ -66,7 +66,7 @@ class EmailAuthViewModel(private val authViewUseCase: AuthenticationViewUseCase)
                 effectManager.setNavigateToVerifyEmailEffect()
 
             EmailAuthEvent.SystemEvent.AuthTask.CriticalError ->
-                effectManager.setNavigateToNotification()
+                effectManager.setNavigateToNotificationEffect()
 
             is EmailAuthEvent.SystemEvent.AuthTask.RecoverableError -> {
                 stateManager.setIdleState()

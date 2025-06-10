@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".view.nav_login.fragments.continue_register.ContinueRegisterFragment">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/frag_continue_register_card_shimmer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/frag_continue_register_card"
+        app:layout_constraintTop_toTopOf="@id/frag_continue_register_card"
+        app:layout_constraintEnd_toEndOf="@id/frag_continue_register_card"
+        app:layout_constraintBottom_toBottomOf="@id/frag_continue_register_card"
+        android:background="@color/shimmer"/>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/frag_continue_register_card"
         android:layout_width="0dp"
@@ -17,7 +27,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.50">
+        app:layout_constraintHeight_percent="0.50"
+        android:visibility="invisible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,6 +98,42 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/frag_continue_register_layout_button_shimmer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frag_continue_register_card_shimmer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/shimmer"
+                android:layout_marginHorizontal="48dp"
+                android:layout_marginBottom="24dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/shimmer"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginBottom="24dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/shimmer"
+                android:layout_marginHorizontal="48dp"/>
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <LinearLayout
         android:id="@+id/frag_continue_register_layout_button"
         android:layout_width="match_parent"
@@ -96,7 +143,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_continue_register_card"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible">
 
         <Button
             style="@style/buttonPrimary"

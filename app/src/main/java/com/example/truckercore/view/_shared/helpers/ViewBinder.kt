@@ -16,9 +16,14 @@ object ViewBinder {
     fun bindTextInput(textInput: TextInputComponent, view: TextInputLayout) {
         if (textInput.errorText != view.error) {
             view.error = textInput.errorText
+            view.helperText = null
+            if(view.endIconDrawable != null) {
+                view.errorIconDrawable = null
+            }
         }
         if (textInput.helperText != view.helperText) {
             view.helperText = textInput.helperText
+            view.error = null
         }
         handleVisibility(textInput, view)
     }
@@ -44,24 +49,24 @@ object ViewBinder {
         }
     }
 
-    private fun handleVisibility(uiComponent: UiComponent, view: View) {
+    private fun handleVisibility(component: UiComponent, view: View) {
 
-        fun shouldSetVisible(uiComponent: UiComponent, view: View): Boolean {
-            return (uiComponent.visibility == Visibility.VISIBLE) && view.visibility != VISIBLE
+        fun shouldSetVisible(component: UiComponent, view: View): Boolean {
+            return (component.visibility == Visibility.VISIBLE) && view.visibility != VISIBLE
         }
 
-        fun shouldSetInvisible(uiComponent: UiComponent, view: View): Boolean {
-            return (uiComponent.visibility == Visibility.INVISIBLE) && view.visibility != INVISIBLE
+        fun shouldSetInvisible(component: UiComponent, view: View): Boolean {
+            return (component.visibility == Visibility.INVISIBLE) && view.visibility != INVISIBLE
         }
 
-        fun shouldSetGone(uiComponent: UiComponent, view: View): Boolean {
-            return (uiComponent.visibility == Visibility.GONE) && view.visibility != GONE
+        fun shouldSetGone(component: UiComponent, view: View): Boolean {
+            return (component.visibility == Visibility.GONE) && view.visibility != GONE
         }
 
         when {
-            shouldSetVisible(uiComponent, view) -> view.visibility = VISIBLE
-            shouldSetInvisible(uiComponent, view) -> view.visibility = INVISIBLE
-            shouldSetGone(uiComponent, view) -> view.visibility = GONE
+            shouldSetVisible(component, view) -> view.visibility = VISIBLE
+            shouldSetInvisible(component, view) -> view.visibility = INVISIBLE
+            shouldSetGone(component, view) -> view.visibility = GONE
         }
     }
 
