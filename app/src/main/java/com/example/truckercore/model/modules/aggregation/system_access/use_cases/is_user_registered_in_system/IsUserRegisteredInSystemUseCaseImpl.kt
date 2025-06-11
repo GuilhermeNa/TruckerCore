@@ -1,9 +1,8 @@
-package com.example.truckercore.model.modules.aggregation.system_access.use_cases.implementations
+package com.example.truckercore.model.modules.aggregation.system_access.use_cases.is_user_registered_in_system
 
 import com.example.truckercore._shared.classes.AppResult
 import com.example.truckercore._shared.expressions.mapAppResponse
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepository
-import com.example.truckercore.model.modules.aggregation.system_access.use_cases.interfaces.IsUserRegisteredInSystemUseCase
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.user.specification.UserSpec
 

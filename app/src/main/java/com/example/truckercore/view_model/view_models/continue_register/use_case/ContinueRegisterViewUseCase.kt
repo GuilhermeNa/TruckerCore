@@ -1,16 +1,32 @@
 package com.example.truckercore.view_model.view_models.continue_register.use_case
 
+import com.example.truckercore._shared.expressions.extractData
+import com.example.truckercore.model.modules.aggregation.system_access.use_cases.is_user_registered_in_system.IsUserRegisteredInSystemUseCase
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.model.modules.user.manager.UserManager
-import com.example.truckercore.view_model._shared.helpers.ViewResult
+import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterDirection
 
 class ContinueRegisterViewUseCase(
     private val authManager: AuthManager,
-    //private val userManager: UserManager
+    private val isUserRegistered: IsUserRegisteredInSystemUseCase
 ) {
 
-    operator fun invoke(): ViewResult {
-        TODO()
+    suspend operator fun invoke(
+        verifyEmail: () -> ContinueRegisterDirection,
+        userName: () -> ContinueRegisterDirection,
+        complete: () -> ContinueRegisterDirection
+    ) = when {
+        !isVerified() -> verifyEmail()
+        !userRegistered() -> userName()
+        else -> complete()
+    }
+
+    private fun isVerified(): Boolean {
+        return authManager.isEmailVerified().extractData()
+    }
+
+    private suspend fun userRegistered(): Boolean {
+        val uid = authManager.getUID().extractData()
+        return isUserRegistered(uid).extractData()
     }
 
 }

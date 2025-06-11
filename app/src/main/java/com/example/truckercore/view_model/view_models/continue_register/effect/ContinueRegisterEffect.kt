@@ -6,12 +6,17 @@ sealed class ContinueRegisterEffect : Effect {
 
     data class ShowErrorMessage(val message: String) : ContinueRegisterEffect()
 
-    data object NavigateToCreateNewEmail : ContinueRegisterEffect()
+    sealed class Navigation : ContinueRegisterEffect() {
 
-    data object NavigateToVerifyEmail : ContinueRegisterEffect()
+        data object ToEmailAuth : Navigation()
 
-    data object NavigateToRegisterName : ContinueRegisterEffect()
+        data object ToVerifyEmail : Navigation()
 
-    data object NavigateToNotification: ContinueRegisterEffect()
+        data object ToUserName : Navigation()
+
+        data object ToNotification : Navigation()
+
+        data object ToLogin : Navigation()
+    }
 
 }

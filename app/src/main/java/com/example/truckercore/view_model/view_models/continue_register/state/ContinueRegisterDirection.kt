@@ -1,4 +1,4 @@
-package com.example.truckercore.view.nav_login.fragments.continue_register
+package com.example.truckercore.view_model.view_models.continue_register.state
 
 /**
  * Represents the possible navigation directions after the user completes the
@@ -8,6 +8,5 @@ package com.example.truckercore.view.nav_login.fragments.continue_register
  * - [CREATE_USER]: Navigates the user to a screen where a new user account is created.
  */
 enum class ContinueRegisterDirection {
-    VERIFY_EMAIL,
-    CREATE_USER
+    VERIFY_EMAIL, CREATE_USER, LOGIN
 }

@@ -20,6 +20,11 @@ inline fun <T> AppResult<T>.getOrElse(
     is Error -> orElse(this)
 }
 
+fun <T> AppResult<T>.getOrNull(): T? {
+    return if (this is Success) this.data
+    else null
+}
+
 fun <T> AppResult<T>.handleAppResult(
     onSuccess: (data: T) -> Unit,
     onError: (e: AppException) -> Unit

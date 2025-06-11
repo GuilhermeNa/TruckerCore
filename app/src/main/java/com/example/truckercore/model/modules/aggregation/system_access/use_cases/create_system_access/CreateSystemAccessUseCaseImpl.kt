@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.aggregation.system_access.use_cases.implementations
+package com.example.truckercore.model.modules.aggregation.system_access.use_cases.create_system_access
 
 import com.example.truckercore.model.errors.AppException
 import com.example.truckercore.model.errors.technical.TechnicalException
@@ -12,11 +12,10 @@ import com.example.truckercore.model.modules.company.mapper.CompanyMapper
 import com.example.truckercore.model.modules.employee._shared.EmployeeMapper
 import com.example.truckercore.model.modules.user.mapper.UserMapper
 import com.example.truckercore._shared.classes.AppResult
-import com.example.truckercore.model.modules.aggregation.system_access.use_cases.interfaces.CreateNewSystemAccessUseCase
 
 class CreateSystemAccessUseCaseImpl(
     private val instructionExecutor: InstructionExecutorRepository
-) : CreateNewSystemAccessUseCase {
+) : CreateSystemAccessUseCase {
 
     override suspend fun invoke(form: SystemAccessForm): AppResult<Unit> =
         try {

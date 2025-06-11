@@ -15,9 +15,9 @@ import androidx.navigation.NavDirections
 import com.example.truckercore.R
 import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
-import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterUiModel
 import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterState
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
+import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterDirection
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,12 +43,6 @@ class ContinueRegisterFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ContinueRegisterViewModel by viewModel()
-
-    private var _uiModel: ContinueRegisterUiModel? = null
-    private val uiModel
-        get() = requireNotNull(_uiModel) {
-            "Expected direction is null. Probably it was not initialized correctly."
-        }
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle - OnCreate

@@ -21,7 +21,7 @@ val commonViewModelModule = module {
     single { ResetPasswordViewUseCase(get()) }
     single { LoginViewUseCase(get()) }
     single { AuthenticationViewUseCase(get()) }
-    single { ContinueRegisterViewUseCase(get()) }
+    single { ContinueRegisterViewUseCase(get(), get()) }
     factory { CounterUseCase() }
 
     viewModel<SplashViewModel> { SplashViewModel(get(), get(), get()) }
@@ -30,7 +30,7 @@ val commonViewModelModule = module {
     viewModel<WelcomeViewModel> { WelcomeViewModel(get()) }
     viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get(), get(), get(), get()) }
-    viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get()) }
+    viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get(), get()) }
     viewModel<ForgetPasswordViewModel> { ForgetPasswordViewModel(get()) }
 
 

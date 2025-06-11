@@ -1,31 +1,17 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
-import com.example.truckercore._shared.classes.Email
+import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
-import com.example.truckercore.model.modules.user.manager.UserManager
 import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
 import com.example.truckercore.view_model.view_models.continue_register.effect.ContinueRegisterEffectManager
 import com.example.truckercore.view_model.view_models.continue_register.event.ContinueRegisterEvent
-import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterState
+import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterDirection
 import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterStateManager
 import com.example.truckercore.view_model.view_models.continue_register.use_case.ContinueRegisterViewUseCase
 
-/**
- * ViewModel responsible for managing the state of the Continue Register screen.
- *
- * It interacts with [AuthManager] to fetch the current user's email and verification status,
- * and with [UserManager] to check whether a user with the given email already exists.
- *
- * The ViewModel exposes a [StateFlow] of [ContinueRegisterState] to represent
- * different UI states: loading, success with data, or error.
- *
- * When initialized, it automatically attempts to load the required UI data.
- *
- * @property authService Provides authentication-related operations.
- * @property userService Provides user-related operations.
- */
 class ContinueRegisterViewModel(
+    private val authManager: AuthManager,
     private val continueRegisterViewUseCase: ContinueRegisterViewUseCase
 ) : LoggerViewModel() {
 
@@ -35,11 +21,18 @@ class ContinueRegisterViewModel(
     private val effectManager = ContinueRegisterEffectManager()
     val effectFlow = effectManager.effectFlow
 
+    //----------------------------------------------------------------------------------------------
     fun initialize() {
-        onEvent(ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Executing)
+        val newEvent = if (authManager.thereIsLoggedUser()) {
+            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Execute
+        } else {
+            ContinueRegisterEvent.SystemEvent.InvalidState
+        }
+
+        onEvent(newEvent)
     }
 
-    fun onEvent(newEvent: ContinueRegisterEvent) {
+    private fun onEvent(newEvent: ContinueRegisterEvent) {
         logEvent(this@ContinueRegisterViewModel, newEvent)
         when (newEvent) {
             is ContinueRegisterEvent.UiEvent -> handleUiEvent(newEvent)
@@ -50,79 +43,58 @@ class ContinueRegisterViewModel(
     private fun handleUiEvent(newEvent: ContinueRegisterEvent.UiEvent) {
         when (newEvent) {
             ContinueRegisterEvent.UiEvent.Click.FinishRegisterButton -> {
-
+                when (stateManager.getDirection()) {
+                    ContinueRegisterDirection.VERIFY_EMAIL -> effectManager.setNavigateToVerifyEmailEffect()
+                    ContinueRegisterDirection.CREATE_USER -> effectManager.setNavigateToUserNameEffect()
+                    ContinueRegisterDirection.LOGIN -> effectManager.setNavigateToLoginEffect()
+                }
             }
 
-            ContinueRegisterEvent.UiEvent.Click.NewRegisterButton ->
-                effectManager.setNavigateToCreateEmailEffect()
+            ContinueRegisterEvent.UiEvent.Click.NewRegisterButton -> {
+                authManager.signOut()
+                effectManager.setNavigateToEmailAuthEffect()
+            }
 
         }
     }
 
     private fun handleSystemEvent(newEvent: ContinueRegisterEvent.SystemEvent) {
         when (newEvent) {
-            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Executing -> checkUserRegisterStatus()
-
-            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Success -> {
-
+            ContinueRegisterEvent.SystemEvent.InvalidState -> {
+                effectManager.setShowErrorMessageEffect(NO_LOGGED_USER_UI_MSG)
+                effectManager.setNavigateToLoginEffect()
             }
 
-            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.CriticalError -> {
+            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Execute ->
+                checkUserRegisterStatus()
 
-            }
+            is ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Success ->
+                stateManager.setIdleState(newEvent.direction)
 
-            is ContinueRegisterEvent.SystemEvent.CheckRegisterTask.RecoverableError -> {
+            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.CriticalError ->
+                effectManager.setNavigateToNotificationEffect()
 
-            }
+            is ContinueRegisterEvent.SystemEvent.CheckRegisterTask.RecoverableError ->
+                effectManager.setShowErrorMessageEffect(newEvent.message)
+
         }
     }
 
     private fun checkUserRegisterStatus() {
+        launch {
+            val direction = continueRegisterViewUseCase(
+                verifyEmail = { ContinueRegisterDirection.VERIFY_EMAIL },
+                userName = { ContinueRegisterDirection.CREATE_USER },
+                complete = { ContinueRegisterDirection.LOGIN }
+            )
 
+            val newEvent = ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Success(direction)
+            onEvent(newEvent)
+        }
     }
 
-    /**
-     * Loads the required UI data by:
-     * - Fetching the current user's email.
-     * - Checking if the email is verified.
-     * - Determining if a user with this email already exists.
-     *
-     * Updates the UI state accordingly.
-     */
-    private fun loadUiData() {
-        /* viewModelScope.launch {
-             val email = authService.getUserEmail().mapAppResponse(
-                 onSuccess = { it },
-                 onError = {
-                     _uiState.value = ContinueRegisterUiState.Error
-                     return@launch
-                 }
-             )
-
-             val verifiedStatus = getVerifiedStatus()
-             val userExists = getNameStatus(email)
-
-             _uiState.value = ContinueRegisterUiState.Success(
-                 ContinueRegisterUiModel(
-                     email = email.value,
-                     verified = verifiedStatus,
-                     userExists = userExists
-                 )
-             )
-         }*/
-    }
-
-    /*   private fun getVerifiedStatus() = authService.isEmailVerified()*/
-    private suspend fun getNameStatus(email: Email) = false
-
-    /* userService.hasUserWithEmail(email).isSuccess*/
-
-    /**
-     * Clears the currently signed-in user.
-     * Typically used when user data is invalid or needs to be reset.
-     */
-    fun clearCurrentUser() {
-        //  authService.signOut()
+    private companion object {
+        private const val NO_LOGGED_USER_UI_MSG = "Faça o login novamente"
     }
 
 }

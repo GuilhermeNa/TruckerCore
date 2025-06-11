@@ -1,4 +1,4 @@
-package com.example.truckercore.model.modules.aggregation.system_access.use_cases.interfaces
+package com.example.truckercore.model.modules.aggregation.system_access.use_cases.create_system_access
 
 import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
 import com.example.truckercore._shared.classes.AppResult
@@ -16,7 +16,7 @@ import com.example.truckercore._shared.classes.AppResult
  * @param form The form containing user input data required for access creation.
  * @return [AppResult] representing the outcome of the operation.
  */
-interface CreateNewSystemAccessUseCase {
+interface CreateSystemAccessUseCase {
 
     suspend operator fun invoke(form: SystemAccessForm): AppResult<Unit>
 
