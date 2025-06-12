@@ -1,7 +1,6 @@
 package com.example.truckercore.model.configs.flavor.contracts
 
-import android.content.Context
-import android.content.Intent
+import android.app.Activity
 import androidx.navigation.NavController
 import com.example.truckercore.model.infrastructure.security.data.enums.Role
 import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginFragmentStrategy
@@ -18,7 +17,7 @@ interface FlavorStrategy {
 
     fun getFlavor(): Flavor
 
-    fun enterSystemIntent(context: Context): Intent
+    fun navigateToMain(current: Activity)
 
     fun getWelcomePagerData(): List<WelcomePagerData>
 

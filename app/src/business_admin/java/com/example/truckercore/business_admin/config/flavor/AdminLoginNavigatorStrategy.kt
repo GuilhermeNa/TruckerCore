@@ -23,14 +23,6 @@ class AdminLoginNavigatorStrategy(private val navController: NavController) :
         navController.navigate(direction)
     }
 
-    override fun navigateToMain(nActivity: WeakReference<Activity>) {
-        nActivity.get()?.let { activity ->
-            val intent = Intent(activity, MainActivity::class.java)
-            activity.startActivity(intent)
-            activity.finish()
-        } ?: throw throw IllegalArgumentException("Activity was not set or already collected.")
-    }
-
     override fun getNewAccountButtonComponent(): ButtonComponent {
         return ButtonComponent(isEnabled = true, visibility = Visibility.VISIBLE)
     }

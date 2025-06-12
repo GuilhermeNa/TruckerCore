@@ -5,19 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore._shared.expressions.hideKeyboardAndClearFocus
 import com.example.truckercore._shared.expressions.navigateToActivity
 import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentUserNameBinding
+import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragment
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
-import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view_model.view_models.user_name.UserNameEffect
+import com.example.truckercore.view_model.view_models.user_name.effect.UserNameEffect
 import com.example.truckercore.view_model.view_models.user_name.UserNameEvent
-import com.example.truckercore.view_model.view_models.user_name.UserNameUiState
+import com.example.truckercore.view_model.view_models.user_name.state.UserNameState
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -25,26 +23,21 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UserNameFragment : CloseAppFragment() {
 
-    // Binding reference to the fragment's views
     private var _binding: FragmentUserNameBinding? = null
     val binding get() = _binding!!
 
-    // The StateHandler is responsible for managing the UI state updates
-    private var stateHandler: UserNameUiStateHandler? = null
-
-    // ViewModel responsible for business logic and state management of the fragment
-    private val viewModel: UserNameViewModel by viewModel()
+    private val stateHandler: UserNameStateHandler by lazy { UserNameStateHandler() }
 
     private val dialog by lazy { LoadingDialog(requireContext()) }
+
+    private val viewModel: UserNameViewModel by viewModel()
 
     // onCreate ------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setFragmentStateManager()
-                setFragmentEffectManager()
-            }
+        launchOnFragment {
+            setStateManager()
+            setEffectManager()
         }
     }
 
@@ -52,23 +45,23 @@ class UserNameFragment : CloseAppFragment() {
      * Manages the state changes from the ViewModel and updates the UI accordingly.
      * Responds to valid name and error states.
      */
-    private fun CoroutineScope.setFragmentStateManager() {
+    private fun CoroutineScope.setStateManager() {
         launch {
             viewModel.state.collect { state ->
                 stateHandler?.handleUiComponents(state.fieldState, state.fabState)
 
                 when (state.status) {
-                    UserNameUiState.Status.AwaitingInput -> dialog.dismissIfShowing()
+                    UserNameState.Status.AwaitingInput -> dialog.dismissIfShowing()
 
-                    UserNameUiState.Status.CreatingSystemAccess -> dialog.show()
+                    UserNameState.Status.CreatingSystemAccess -> dialog.show()
 
-                    is UserNameUiState.Status.CriticalError -> {
+                    is UserNameState.Status.CriticalError -> {
                         dialog.dismissIfShowing()
                         val intent = NotificationActivity.newInstance(context = requireContext())
                         navigateToActivity(intent, true)
                     }
 
-                    UserNameUiState.Status.Success -> dialog.dismissIfShowing()
+                    UserNameState.Status.Success -> dialog.dismissIfShowing()
                 }
             }
         }
@@ -77,7 +70,7 @@ class UserNameFragment : CloseAppFragment() {
     /**
      * Manages the effects from ViewModel interactions.
      */
-    private suspend fun setFragmentEffectManager() {
+    private suspend fun setEffectManager() {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is UserNameEffect.RecoverableError -> showRedSnackBar(effect.message)
@@ -91,7 +84,7 @@ class UserNameFragment : CloseAppFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUserNameBinding.inflate(layoutInflater)
-        stateHandler = UserNameUiStateHandler(binding.fragUserNameLayout, binding.fragUserNameFab)
+        stateHandler = UserNameStateHandler(binding.fragUserNameLayout, binding.fragUserNameFab)
         return binding.root
     }
 

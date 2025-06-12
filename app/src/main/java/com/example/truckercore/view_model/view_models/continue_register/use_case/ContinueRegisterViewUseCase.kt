@@ -1,6 +1,7 @@
 package com.example.truckercore.view_model.view_models.continue_register.use_case
 
 import com.example.truckercore._shared.expressions.extractData
+import com.example.truckercore._shared.expressions.getOrElse
 import com.example.truckercore.model.modules.aggregation.system_access.use_cases.is_user_registered_in_system.IsUserRegisteredInSystemUseCase
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterDirection
@@ -26,7 +27,7 @@ class ContinueRegisterViewUseCase(
 
     private suspend fun userRegistered(): Boolean {
         val uid = authManager.getUID().extractData()
-        return isUserRegistered(uid).extractData()
+        return isUserRegistered(uid).getOrElse { return false }
     }
 
 }

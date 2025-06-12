@@ -1,5 +1,6 @@
 package com.example.truckercore.business_admin.config.flavor
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.navigation.NavController
@@ -22,8 +23,12 @@ class FlavorAdminStrategy : FlavorStrategy {
 
     override fun getFlavor() = Admin()
 
-    override fun enterSystemIntent(context: Context): Intent =
-        Intent(context, MainActivity::class.java)
+    override fun navigateToMain(current: Activity) {
+        val intent = Intent(current, MainActivity::class.java)
+        current.startActivity(intent)
+        current.finish()
+    }
+
 
     override fun getWelcomePagerData(): List<WelcomePagerData> {
         return listOf(

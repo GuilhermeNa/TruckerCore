@@ -1,5 +1,6 @@
 package com.example.truckercore.view_model.view_models.continue_register
 
+import com.example.truckercore._shared.expressions.extractData
 import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
@@ -9,6 +10,7 @@ import com.example.truckercore.view_model.view_models.continue_register.event.Co
 import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterDirection
 import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterStateManager
 import com.example.truckercore.view_model.view_models.continue_register.use_case.ContinueRegisterViewUseCase
+import kotlinx.coroutines.delay
 
 class ContinueRegisterViewModel(
     private val authManager: AuthManager,
@@ -23,20 +25,28 @@ class ContinueRegisterViewModel(
 
     //----------------------------------------------------------------------------------------------
     fun initialize() {
-        val newEvent = if (authManager.thereIsLoggedUser()) {
-            ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Execute
-        } else {
-            ContinueRegisterEvent.SystemEvent.InvalidState
-        }
+        launch {
+            delay(2000)
+            val newEvent = if (authManager.thereIsLoggedUser()) {
+                ContinueRegisterEvent.SystemEvent.InitializationTask.ValidRequirements
+            } else {
+                ContinueRegisterEvent.SystemEvent.InitializationTask.InvalidRequirements
+            }
 
-        onEvent(newEvent)
+            onEvent(newEvent)
+        }
     }
 
-    private fun onEvent(newEvent: ContinueRegisterEvent) {
+    fun onEvent(newEvent: ContinueRegisterEvent) {
         logEvent(this@ContinueRegisterViewModel, newEvent)
         when (newEvent) {
             is ContinueRegisterEvent.UiEvent -> handleUiEvent(newEvent)
-            is ContinueRegisterEvent.SystemEvent -> handleSystemEvent(newEvent)
+
+            is ContinueRegisterEvent.SystemEvent.InitializationTask ->
+                handleInitializationEvent(newEvent)
+
+            is ContinueRegisterEvent.SystemEvent.CheckRegisterTask ->
+                handleCheckRegisterEvent(newEvent)
         }
     }
 
@@ -58,13 +68,27 @@ class ContinueRegisterViewModel(
         }
     }
 
-    private fun handleSystemEvent(newEvent: ContinueRegisterEvent.SystemEvent) {
+    private fun handleInitializationEvent(
+        newEvent: ContinueRegisterEvent.SystemEvent.InitializationTask
+    ) {
         when (newEvent) {
-            ContinueRegisterEvent.SystemEvent.InvalidState -> {
+            is ContinueRegisterEvent.SystemEvent.InitializationTask.InvalidRequirements -> {
                 effectManager.setShowErrorMessageEffect(NO_LOGGED_USER_UI_MSG)
                 effectManager.setNavigateToLoginEffect()
             }
 
+            is ContinueRegisterEvent.SystemEvent.InitializationTask.ValidRequirements -> {
+                val email = authManager.getUserEmail().extractData()
+                stateManager.updateEmailComponent(email)
+                onEvent(ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Execute)
+            }
+        }
+    }
+
+    private fun handleCheckRegisterEvent(
+        newEvent: ContinueRegisterEvent.SystemEvent.CheckRegisterTask
+    ) {
+        when (newEvent) {
             ContinueRegisterEvent.SystemEvent.CheckRegisterTask.Execute ->
                 checkUserRegisterStatus()
 
@@ -76,7 +100,6 @@ class ContinueRegisterViewModel(
 
             is ContinueRegisterEvent.SystemEvent.CheckRegisterTask.RecoverableError ->
                 effectManager.setShowErrorMessageEffect(newEvent.message)
-
         }
     }
 

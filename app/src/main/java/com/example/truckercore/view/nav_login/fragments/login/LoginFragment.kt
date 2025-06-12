@@ -42,9 +42,7 @@ class LoginFragment : CloseAppFragment() {
 
     private val flavorService: FlavorService by inject()
     private val strategy: LoginFragmentStrategy by lazy {
-        flavorService.getLoginFragmentStrategy(
-            navController()
-        )
+        flavorService.getLoginFragmentStrategy(navController())
     }
 
     private val navigator: LoginNavigator by lazy { LoginNavigatorImpl(strategy) }
@@ -103,7 +101,7 @@ class LoginFragment : CloseAppFragment() {
                     showRedSnackBar(effect.message)
 
                 LoginEffect.NavigateToMain ->
-                    navigator.navigateToMain(WeakReference(this.requireActivity()))
+                    flavorService.navigateToMain(requireActivity())
 
                 LoginEffect.NavigateToNotification ->
                     navigator.navigateToNotification(requireActivity())

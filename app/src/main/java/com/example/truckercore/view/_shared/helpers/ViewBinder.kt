@@ -5,10 +5,12 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
+import android.widget.TextView
 import com.example.truckercore.view_model._shared.components.Visibility
 import com.example.truckercore.view_model._shared.components.ButtonComponent
 import com.example.truckercore.view_model._shared.components.TextInputComponent
 import com.example.truckercore.view_model._shared._contracts.UiComponent
+import com.example.truckercore.view_model._shared.components.TextComponent
 import com.google.android.material.textfield.TextInputLayout
 
 object ViewBinder {
@@ -68,6 +70,10 @@ object ViewBinder {
             shouldSetInvisible(component, view) -> view.visibility = INVISIBLE
             shouldSetGone(component, view) -> view.visibility = GONE
         }
+    }
+
+    fun bindText(component: TextComponent, view: TextView) {
+       view.text = component.text
     }
 
 }

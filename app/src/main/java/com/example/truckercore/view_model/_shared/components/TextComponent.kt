@@ -2,7 +2,8 @@ package com.example.truckercore.view_model._shared.components
 
 import com.example.truckercore.view_model._shared._contracts.UiComponent
 
-data class ButtonComponent(
+class TextComponent(
+    val text: String = "",
     override val isEnabled: Boolean = true,
     override val visibility: Visibility = Visibility.VISIBLE
 ) : UiComponent

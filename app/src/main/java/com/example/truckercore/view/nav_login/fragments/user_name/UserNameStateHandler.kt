@@ -2,13 +2,12 @@ package com.example.truckercore.view.nav_login.fragments.user_name
 
 import com.example.truckercore._shared.classes.ButtonState
 import com.example.truckercore._shared.classes.FieldState
+import com.example.truckercore.databinding.FragmentUserNameBinding
+import com.example.truckercore.view._shared._base.handlers.StateHandler
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 
-class UserNameUiStateHandler(
-    private val nameLayout: TextInputLayout,
-    private val fab: FloatingActionButton
-) {
+class UserNameStateHandler: StateHandler<FragmentUserNameBinding>() {
 
     fun handleUiComponents(fieldState: FieldState, fabState: ButtonState) {
         handleNameLayout(fieldState)

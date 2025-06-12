@@ -5,10 +5,10 @@ import com.example.truckercore.view._shared.views.activities.NotificationActivit
 
 interface Navigator {
 
-    fun navigateToNotification(activity: Activity) {
-        val intent = NotificationActivity.newInstance(context = activity)
-        activity.startActivity(intent)
-        activity.finish()
+    fun navigateToNotification(current: Activity) {
+        val intent = NotificationActivity.newInstance(context = current)
+        current.startActivity(intent)
+        current.finish()
     }
 
 }

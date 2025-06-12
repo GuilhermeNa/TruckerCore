@@ -1,5 +1,6 @@
 package com.example.truckercore.view_model.view_models.continue_register.state
 
+import com.example.truckercore._shared.classes.Email
 import com.example.truckercore.model.shared.errors.InvalidStateException
 import com.example.truckercore.view_model._shared._base.managers.StateManager
 
@@ -13,6 +14,11 @@ class ContinueRegisterStateManager :
 
     fun getDirection(): ContinueRegisterDirection {
         return getStateValue().direction ?: throw InvalidStateException(INVALID_DIRECTION_LOG_MSG)
+    }
+
+    fun updateEmailComponent(email: Email) {
+        val newState = getStateValue().updateEmail(email)
+        setState(newState)
     }
 
     companion object {

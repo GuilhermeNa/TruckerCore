@@ -69,7 +69,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/email_registered"
-                app:drawableLeftCompat="@drawable/level_list_status_icons" />
+                app:drawableLeftCompat="@drawable/icon_check" />
 
             <TextView
                 android:id="@+id/frag_continue_register_verified_status_text"
@@ -80,7 +80,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/email_verified"
-                app:drawableLeftCompat="@drawable/level_list_status_icons" />
+                app:drawableLeftCompat="@drawable/icon_indeterminate" />
 
             <TextView
                 android:id="@+id/frag_continue_register_name_status_text"
@@ -91,7 +91,7 @@
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/name_not_informed"
-                app:drawableLeftCompat="@drawable/level_list_status_icons" />
+                app:drawableLeftCompat="@drawable/icon_indeterminate" />
 
         </LinearLayout>
 

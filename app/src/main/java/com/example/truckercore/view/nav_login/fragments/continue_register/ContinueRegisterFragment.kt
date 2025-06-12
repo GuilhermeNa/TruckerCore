@@ -1,46 +1,38 @@
 package com.example.truckercore.view.nav_login.fragments.continue_register
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavDirections
-import com.example.truckercore.R
-import com.example.truckercore._shared.expressions.navigateToDirection
+import androidx.navigation.fragment.findNavController
+import com.example.truckercore._shared.expressions.logEffect
+import com.example.truckercore._shared.expressions.logState
+import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
-import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterState
+import com.example.truckercore.model.configs.flavor.FlavorService
+import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragment
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
-import com.example.truckercore.view_model.view_models.continue_register.state.ContinueRegisterDirection
+import com.example.truckercore.view_model.view_models.continue_register.effect.ContinueRegisterEffect
+import com.example.truckercore.view_model.view_models.continue_register.event.ContinueRegisterEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-/**
- * Fragment responsible for displaying the Continue Register screen.
- *
- * This screen allows the user to:
- * - View their current email.
- * - See whether their email is verified.
- * - Check if a user account exists for the email.
- *
- * The UI is driven by a [ContinueRegisterViewModel] which exposes a [StateFlow] of [ContinueRegisterState].
- * Depending on the UI state, the fragment updates the UI or triggers navigation events.
- *
- * Responsibilities:
- * - Observes the ViewModel state and updates the UI accordingly.
- * - Shows status indicators using level-list drawables.
- * - Handles user actions like "continue" or "change email".
- */
-class ContinueRegisterFragment : Fragment() {
+class ContinueRegisterFragment : CloseAppFragment() {
 
     private var _binding: FragmentContinueRegisterBinding? = null
     private val binding get() = _binding!!
+
+    private val navigator: ContinueRegisterNavigator by lazy {
+        val flavorService: FlavorService by inject()
+        ContinueRegisterNavigator(findNavController(), flavorService)
+    }
+
+    private val stateHandler: ContinueRegisterStateHandler by lazy {
+        ContinueRegisterStateHandler()
+    }
 
     private val viewModel: ContinueRegisterViewModel by viewModel()
 
@@ -51,95 +43,46 @@ class ContinueRegisterFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-             /*   viewModel.uiState.collect { state ->
-                    when (state) {
-                        ContinueRegisterState.Loading -> Unit
-                        ContinueRegisterState.Error -> navigateToEmailAuthFragment()
-                        is ContinueRegisterState.Success -> {
-                            _uiModel = state.data
-                            bind()
-                        }
-                    }
-                }*/
+        launchOnFragment {
+            setStateManager()
+            setEffectManager()
+        }
+    }
+
+    private fun CoroutineScope.setStateManager() {
+        launch {
+            viewModel.stateFlow.collect { state ->
+                logState(this@ContinueRegisterFragment, state)
+                if (state.isIdle()) {
+                    stateHandler.handleUiComponents(requireContext(), state)
+                    stateHandler.replaceShimmerForContent()
+                }
             }
         }
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // UI Binding
-    // ---------------------------------------------------------------------------------------------
+    private suspend fun setEffectManager() {
+        viewModel.effectFlow.collect { effect ->
+            logEffect(this@ContinueRegisterFragment, effect)
+            when (effect) {
+                ContinueRegisterEffect.Navigation.ToEmailAuth ->
+                    navigator.navigateToEmailAuth()
 
-    private fun bind() {
-        bindEmail()
-        bindEmailStatus()
-        bindVerifiedStatus()
-        bindUserExistsStatus()
-    }
+                ContinueRegisterEffect.Navigation.ToLogin ->
+                    navigator.navigateToLogin()
 
-    private fun bindUserExistsStatus() {
-        val expectedLevel = uiModel.expectedUserExistsImageLevel
-        val imageLevel = getImageLevel(expectedLevel)
-        binding.fragContinueRegisterNameStatusText.setDrawableLevel(imageLevel)
-    }
+                ContinueRegisterEffect.Navigation.ToNotification ->
+                    navigator.navigateToNotification(requireActivity())
 
-    private fun bindVerifiedStatus() {
-        val expectedLevel = uiModel.expectedVerifiedImageLevel
-        val imageLevel = getImageLevel(expectedLevel)
-        binding.fragContinueRegisterVerifiedStatusText.setDrawableLevel(imageLevel)
-    }
+                ContinueRegisterEffect.Navigation.ToUserName ->
+                    navigator.navigateToUserName()
 
-    private fun bindEmailStatus() {
-        val imageLevel = getImageLevel(ContinueRegisterImageLevel.DONE)
-        binding.fragContinueRegisterEmailStatusText.setDrawableLevel(imageLevel)
-    }
+                ContinueRegisterEffect.Navigation.ToVerifyEmail ->
+                    navigator.navigateToVerifyEmail()
 
-    private fun bindEmail() {
-        binding.fragContinueRegisterEmailText.text = uiModel.email
-    }
-
-    private fun getImageLevel(level: ContinueRegisterImageLevel): Drawable? {
-        return ContextCompat.getDrawable(
-            requireContext(),
-            R.drawable.level_list_status_icons
-        )?.apply { setLevel(level.value) }
-    }
-
-    private fun TextView.setDrawableLevel(imageLevel: Drawable?) {
-        setCompoundDrawablesRelativeWithIntrinsicBounds(imageLevel, null, null, null)
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Navigation
-    // ---------------------------------------------------------------------------------------------
-
-    private fun navigateToEmailAuthFragment() {
-        viewModel.clearCurrentUser()
-        val direction = ContinueRegisterFragmentDirections
-            .actionContinueRegisterFragmentToEmailAuthFragment()
-        navigateToDirection(direction)
-    }
-
-    private fun setOnContinueCLickListener() {
-        binding.fragContinueRegisterFinishRegisterButton.setOnClickListener {
-            navigateToDirection(getContinueRegisterDirection())
-        }
-    }
-
-    private fun getContinueRegisterDirection(): NavDirections {
-        val expectedDirection = uiModel.expectedNavigationDirection
-        return when (expectedDirection) {
-            ContinueRegisterDirection.VERIFY_EMAIL -> ContinueRegisterFragmentDirections
-                .actionContinueRegisterFragmentToVerifyingEmailFragment()
-
-            ContinueRegisterDirection.CREATE_USER -> TODO()
-        }
-    }
-
-    private fun setOnNewEmailClickListener() {
-        binding.fragContinueRegisterNewEmailButton.setOnClickListener {
-            navigateToEmailAuthFragment()
+                is ContinueRegisterEffect.ShowErrorMessage ->
+                    showRedSnackBar(effect.message)
+            }
         }
     }
 
@@ -152,6 +95,7 @@ class ContinueRegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentContinueRegisterBinding.inflate(layoutInflater)
+        stateHandler.initialize(binding)
         return binding.root
     }
 
@@ -159,6 +103,18 @@ class ContinueRegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setOnContinueCLickListener()
         setOnNewEmailClickListener()
+    }
+
+    private fun setOnContinueCLickListener() {
+        binding.fragContinueRegisterFinishRegisterButton.setOnClickListener {
+            viewModel.onEvent(ContinueRegisterEvent.UiEvent.Click.FinishRegisterButton)
+        }
+    }
+
+    private fun setOnNewEmailClickListener() {
+        binding.fragContinueRegisterNewEmailButton.setOnClickListener {
+            viewModel.onEvent(ContinueRegisterEvent.UiEvent.Click.NewRegisterButton)
+        }
     }
 
     override fun onDestroyView() {

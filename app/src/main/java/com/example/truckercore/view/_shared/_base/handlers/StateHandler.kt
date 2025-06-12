@@ -1,10 +1,12 @@
 package com.example.truckercore.view._shared._base.handlers
 
 import android.widget.Button
+import android.widget.TextView
 import androidx.viewbinding.ViewBinding
 import com.example.truckercore.view_model._shared.components.ButtonComponent
 import com.example.truckercore.view_model._shared.components.TextInputComponent
 import com.example.truckercore.view._shared.helpers.ViewBinder
+import com.example.truckercore.view_model._shared.components.TextComponent
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
 
@@ -28,6 +30,10 @@ abstract class StateHandler<T : ViewBinding> {
 
     protected fun bindButton(component: ButtonComponent, view: Button) {
         binder.bindButton(component, view)
+    }
+
+    protected fun bindText(component: TextComponent, view: TextView) {
+        binder.bindText(component, view)
     }
 
 }

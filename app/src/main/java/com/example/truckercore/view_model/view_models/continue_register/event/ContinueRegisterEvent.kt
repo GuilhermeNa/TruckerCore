@@ -14,7 +14,11 @@ sealed class ContinueRegisterEvent : Event {
     }
 
     sealed class SystemEvent : ContinueRegisterEvent() {
-        data object InvalidState : SystemEvent()
+        sealed class InitializationTask : SystemEvent() {
+            data object InvalidRequirements : InitializationTask()
+            data object ValidRequirements : InitializationTask()
+        }
+
         sealed class CheckRegisterTask : SystemEvent() {
             data object Execute : CheckRegisterTask()
             data class Success(val direction: ContinueRegisterDirection) : CheckRegisterTask()

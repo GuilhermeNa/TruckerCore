@@ -5,7 +5,6 @@ import android.content.Intent
 import com.example.truckercore.R
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigatorStrategy
-import com.example.truckercore.view_model._shared.helpers.ViewError
 
 class AdminWelcomeNavigatorStrategy: WelcomeNavigatorStrategy {
 

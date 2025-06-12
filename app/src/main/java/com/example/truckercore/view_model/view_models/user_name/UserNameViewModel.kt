@@ -1,6 +1,5 @@
 package com.example.truckercore.view_model.view_models.user_name
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore._shared.classes.AppResult
 import com.example.truckercore._shared.expressions.extractData
@@ -10,8 +9,10 @@ import com.example.truckercore.model.infrastructure.integration.preferences.Pref
 import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
 import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
+import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
+import com.example.truckercore.view_model.view_models.user_name.effect.UserNameEffectManager
+import com.example.truckercore.view_model.view_models.user_name.state.UserNameStateManager
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -31,19 +32,30 @@ class UserNameViewModel(
     private val accessManager: SystemAccessManager,
     private val authManager: AuthManager,
     private val flavorService: FlavorService
-) : ViewModel() {
+) : LoggerViewModel() {
 
-    private val stateManager = UserNameUiStateManager()
-    val state get() = stateManager.state.asStateFlow()
+    private val stateManager = UserNameStateManager()
+    val stateFlow get() = stateManager.stateFlow
 
     private val effectManager = UserNameEffectManager()
-    val effect get() = effectManager.effect.asSharedFlow()
+    val effectFlow get() = effectManager.effectFlow
 
     //----------------------------------------------------------------------------------------------
-    fun onEvent(event: UserNameEvent) {
-        when (event) {
-            is UserNameEvent.UiEvent -> handleUiEvent(event)
-            is UserNameEvent.SystemEvent -> handleSystemEvent(event)
+    fun onUiEvent(uiEvent: UserNameEvent.UiEvent) {
+        when(uiEvent){
+            UserNameEvent.UiEvent.FabCLicked ->
+                onCreateSystemTaskEvent(UserNameEvent.SystemEvent.CreateSystemTask.Execute)
+
+            is UserNameEvent.UiEvent.TextChanged -> TODO()
+        }
+    }
+
+    private fun onCreateSystemTaskEvent(taskEvent: UserNameEvent.SystemEvent.CreateSystemTask) {
+        when(taskEvent) {
+            UserNameEvent.SystemEvent.CreateSystemTask.Execute -> TODO()
+            UserNameEvent.SystemEvent.CreateSystemTask.Success -> TODO()
+            UserNameEvent.SystemEvent.CreateSystemTask.CriticalError -> TODO()
+            UserNameEvent.SystemEvent.CreateSystemTask.RecoverableError -> TODO()
         }
     }
 
