@@ -10,12 +10,18 @@ import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
+import com.example.truckercore.view_model.view_models.splash.effect.SplashEffectManager
+import com.example.truckercore.view_model.view_models.splash.event.SplashEvent
+import com.example.truckercore.view_model.view_models.splash.state.SplashState
+import com.example.truckercore.view_model.view_models.splash.state.SplashUiStateManager
+import com.example.truckercore.view_model.view_models.splash.use_case.SplashViewUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
+    private val splashViewUseCase: SplashViewUseCase,
     private val authService: AuthManager,
     private val preferences: PreferencesRepository,
     private val systemAccessManager: SystemAccessManager
@@ -32,6 +38,10 @@ class SplashViewModel(
     }
 
     //----------------------------------------------------------------------------------------------
+    fun initialize() {
+
+    }
+
     fun onEvent(event: SplashEvent) {
         logEvent(this@SplashViewModel, event)
         when (event) {
@@ -72,10 +82,10 @@ class SplashViewModel(
             delay(1000)
             try {
                 val direction = when  {
-                    isFirstAccess() -> SplashUiState.Navigating.Welcome
-                    sessionNotFound() -> SplashUiState.Navigating.Login
-                    isUserRegisterComplete() -> SplashUiState.Navigating.PreparingAmbient
-                    else -> SplashUiState.Navigating.ContinueRegister
+                    isFirstAccess() -> SplashState.Navigating.Welcome
+                    sessionNotFound() -> SplashState.Navigating.Login
+                    isUserRegisterComplete() -> SplashState.Navigating.PreparingAmbient
+                    else -> SplashState.Navigating.ContinueRegister
                 }
 
                 val newEvent = SplashEvent.SystemEvent.ReceivedApiSuccess(direction)
@@ -101,7 +111,7 @@ class SplashViewModel(
     }
 
     private fun sessionNotFound(): Boolean {
-        return authService.thereIsLoggedUser()
+        return !authService.thereIsLoggedUser()
     }
 
     private suspend fun isUserRegisterComplete(): Boolean {

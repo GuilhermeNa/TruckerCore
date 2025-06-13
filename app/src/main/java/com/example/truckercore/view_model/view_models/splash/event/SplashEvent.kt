@@ -1,4 +1,4 @@
-package com.example.truckercore.view_model.view_models.splash
+package com.example.truckercore.view_model.view_models.splash.event
 
 import com.example.truckercore.view_model._shared._contracts.Event
 
@@ -15,16 +15,7 @@ sealed class SplashEvent: Event {
      */
     sealed class UiEvent : SplashEvent() {
         data object Initialized: UiEvent()
-        /**
-         * Indicates that the first animation has completed.
-         * This event should be triggered once the first animation finishes.
-         */
         data object TransitionToLoadingComplete : UiEvent()
-
-        /**
-         * Indicates that the second animation has completed.
-         * This event should be triggered once the second animation finishes.
-         */
         data object TransitionToNavigationComplete : UiEvent()
     }
 
@@ -32,14 +23,11 @@ sealed class SplashEvent: Event {
      * Represents system-related events triggered based on the loading or state of the system.
      */
     sealed class SystemEvent : SplashEvent() {
-        /**
-         * Indicates that user information has been loaded and is ready for use.
-         * This event may be used to transition to another screen or update UI.
-         */
-        data class ReceivedApiSuccess(val direction: SplashUiState.Navigating) : SystemEvent()
-
-        data object Error: SystemEvent()
-
+        sealed class LoadUserTask: SystemEvent() {
+            data object Execute: LoadUserTask()
+            data object Success: LoadUserTask()
+            data object CriticalError: LoadUserTask()
+        }
     }
 
 }

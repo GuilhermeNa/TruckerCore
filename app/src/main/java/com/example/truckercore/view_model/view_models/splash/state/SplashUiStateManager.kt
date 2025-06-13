@@ -1,4 +1,4 @@
-package com.example.truckercore.view_model.view_models.splash
+package com.example.truckercore.view_model.view_models.splash.state
 
 import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class SplashUiStateManager {
 
-    private var _uiState: MutableStateFlow<SplashUiState> = MutableStateFlow(SplashUiState.Initial)
+    private var _uiState: MutableStateFlow<SplashState> = MutableStateFlow(SplashState.Initial)
     val uiState get() = _uiState
 
-    private lateinit var direction: SplashUiState.Navigating
+    private lateinit var direction: SplashState.Navigating
 
     fun setLoadingState() {
-        _uiState.value = SplashUiState.Loading
+        _uiState.value = SplashState.Loading
     }
 
     fun setNavigatingState() {
@@ -21,19 +21,19 @@ class SplashUiStateManager {
             ::direction.isInitialized -> direction
             else -> {
                 AppLogger.e(getClassName(), DIRECTION_UNINITIALIZED)
-                SplashUiState.Error(ViewError.Critical)
+                SplashState.Error(ViewError.Critical)
             }
         }
 
         _uiState.value = newState
     }
 
-    fun holdDirection(stateDirection: SplashUiState.Navigating) {
+    fun holdDirection(stateDirection: SplashState.Navigating) {
         direction = stateDirection
     }
 
     fun setErrorState() {
-        _uiState.value = SplashUiState.Error(ViewError.Critical)
+        _uiState.value = SplashState.Error(ViewError.Critical)
     }
 
     companion object {

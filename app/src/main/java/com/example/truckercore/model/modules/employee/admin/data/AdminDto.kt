@@ -3,6 +3,7 @@ package com.example.truckercore.model.modules.employee.admin.data
 import com.example.truckercore.model.modules.employee._shared.contracts.EmployeeDto
 import com.example.truckercore.model.modules.user._contracts.eligible_state.EligibleState
 import com.example.truckercore.model.modules._shared.enums.PersistenceState
+import com.example.truckercore.model.modules.user._contracts.eligible_state.EligibleStateDto
 
 data class AdminDto(
     override val id: String? = null,
@@ -11,7 +12,7 @@ data class AdminDto(
     override val email: String? = null,
     override val persistenceState: PersistenceState? = null,
     val userId: String? = null,
-    val state: EligibleState? = null
+    val state: EligibleStateDto? = null
 ) : EmployeeDto {
 
 }

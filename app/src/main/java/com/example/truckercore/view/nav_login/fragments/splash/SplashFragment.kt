@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
 import com.example.truckercore._shared.expressions.doIfCritical
 import com.example.truckercore._shared.expressions.doIfRecreating
@@ -18,10 +15,11 @@ import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragment
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
-import com.example.truckercore.view_model.view_models.splash.SplashEffect
-import com.example.truckercore.view_model.view_models.splash.SplashEvent
-import com.example.truckercore.view_model.view_models.splash.SplashUiState
+import com.example.truckercore.view_model.view_models.splash.effect.SplashEffect
+import com.example.truckercore.view_model.view_models.splash.event.SplashEvent
+import com.example.truckercore.view_model.view_models.splash.state.SplashState
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -69,30 +67,28 @@ class SplashFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setUiStateManager()
-                setEffectManager()
-            }
+        launchOnFragment {
+            setStateManager()
+            setEffectManager()
         }
     }
 
-    private fun CoroutineScope.setUiStateManager() {
+    private fun CoroutineScope.setStateManager() {
         launch {
             viewModel.uiState.collect { state ->
                 logState(this@SplashFragment, state)
 
                 when (state) {
-                    SplashUiState.Initial -> {
+                    SplashState.Initial -> {
                         stateHandler?.bindAppName(flavorService.getAppName())
                     }
 
-                    SplashUiState.Loading -> doIfRecreating {
+                    SplashState.Loading -> doIfRecreating {
                         stateHandler?.bindAppName(flavorService.getAppName())
                         stateHandler?.jumpToLoadingState()
                     }
 
-                    is SplashUiState.Navigating -> {
+                    is SplashState.Navigating -> {
                         doIfRecreating {
                             stateHandler?.bindAppName(flavorService.getAppName())
                             stateHandler?.jumpToNavigationState()
@@ -100,7 +96,7 @@ class SplashFragment : CloseAppFragment() {
                         navigateToDirection(getNavDirection(state))
                     }
 
-                    is SplashUiState.Error -> state.uiError.doIfCritical {
+                    is SplashState.Error -> state.uiError.doIfCritical {
                         val intent = NotificationActivity.newInstance(context = requireContext())
                         navigateToActivity(intent, true)
                     }
@@ -110,21 +106,21 @@ class SplashFragment : CloseAppFragment() {
         }
     }
 
-    private fun getNavDirection(state: SplashUiState.Navigating): NavDirections {
+    private fun getNavDirection(state: SplashState.Navigating): NavDirections {
         return when (state) {
-            SplashUiState.Navigating.Welcome -> {
+            SplashState.Navigating.Welcome -> {
                 SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
             }
 
-            SplashUiState.Navigating.Login -> {
+            SplashState.Navigating.Login -> {
                 SplashFragmentDirections.actionSplashFragmentToLoginFragment()
             }
 
-            SplashUiState.Navigating.PreparingAmbient -> {
+            SplashState.Navigating.PreparingAmbient -> {
                 TODO()
             }
 
-            SplashUiState.Navigating.ContinueRegister -> {
+            SplashState.Navigating.ContinueRegister -> {
                 SplashFragmentDirections.actionGlobalContinueRegisterFragment()
             }
         }

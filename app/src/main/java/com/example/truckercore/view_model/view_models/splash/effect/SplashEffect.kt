@@ -1,4 +1,4 @@
-package com.example.truckercore.view_model.view_models.splash
+package com.example.truckercore.view_model.view_models.splash.effect
 
 import com.example.truckercore.view_model._shared._contracts.Effect
 
