@@ -13,7 +13,7 @@ object CompanyMapper : Mapper<Company, CompanyDto> {
             CompanyDto(
                 id = entity.idVal,
                 persistenceState = entity.persistenceState,
-                keysRegistry = entity.keysValue
+                keysRegistry = entity.keysValue.toList()
             )
         } catch (e: Exception) {
             handleError(entity, e)

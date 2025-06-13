@@ -17,6 +17,12 @@ class ValidKeysRegistry(private val _data: MutableSet<Key> = mutableSetOf()) {
             val keys = stringKeys.mapTo(mutableSetOf()) { Key(it) }
             return ValidKeysRegistry(_data = keys)
         }
+
+        fun from(stringKeys: List<String>): ValidKeysRegistry {
+            val keys = stringKeys.mapTo(mutableSetOf()) { Key(it) }
+            return ValidKeysRegistry(_data = keys)
+        }
+
     }
 
 }

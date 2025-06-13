@@ -1,5 +1,8 @@
 package com.example.truckercore.model.modules.user.mapper
 
+import com.example.truckercore.model.infrastructure.security.data.Profile
+import com.example.truckercore.model.infrastructure.security.data.ProfileDto
+import com.example.truckercore.model.infrastructure.security.data.collections.PermissionSet
 import com.example.truckercore.model.modules._shared._contracts.mapper.Mapper
 import com.example.truckercore.model.modules.authentication.data.UID
 import com.example.truckercore.model.modules.company.data.CompanyID
@@ -16,11 +19,18 @@ object UserMapper : Mapper<User, UserDto> {
                 id = entity.id.value,
                 companyId = entity.companyId.value,
                 persistenceState = entity.persistenceState,
-                profile = entity.profile
+                profile = entity.profile.toDto()
             )
         } catch (e: Exception) {
             handleError(entity, e)
         }
+
+    private fun Profile.toDto(): ProfileDto {
+        return ProfileDto(
+            this.role,
+            this.permissions.data().toList()
+        )
+    }
 
     override fun toEntity(dto: UserDto): User =
         try {
@@ -29,10 +39,17 @@ object UserMapper : Mapper<User, UserDto> {
                 id = UserID(dto.id!!),
                 companyId = CompanyID(dto.companyId!!),
                 persistenceState = dto.persistenceState!!,
-                profile = dto.profile!!
+                profile = dto.profile!!.toEntity()
             )
         } catch (e: Exception) {
             handleError(dto, e)
         }
+
+    private fun ProfileDto.toEntity(): Profile {
+        return Profile(
+            role!!,
+            PermissionSet(permissions!!.toSet())
+        )
+    }
 
 }

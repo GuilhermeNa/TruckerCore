@@ -5,6 +5,7 @@ import com.example.truckercore.view_model._shared._contracts.Effect
 sealed class UserNameEffect : Effect {
 
     sealed class Navigation: UserNameEffect() {
+        data object ToLogin : Navigation()
         data object ToMain : Navigation()
         data object ToNotification : Navigation()
     }

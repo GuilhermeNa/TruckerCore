@@ -1,37 +1,25 @@
 package com.example.truckercore.view_model.view_models.user_name
 
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._shared.classes.AppResult
-import com.example.truckercore._shared.expressions.extractData
-import com.example.truckercore._shared.expressions.mapAppResult
-import com.example.truckercore.model.configs.flavor.FlavorService
-import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.modules.aggregation.system_access.factory.SystemAccessForm
-import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
+import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
+import com.example.truckercore.view_model._shared.expressions.mapResult
 import com.example.truckercore.view_model.view_models.user_name.effect.UserNameEffectManager
+import com.example.truckercore.view_model.view_models.user_name.event.UserNameEvent
 import com.example.truckercore.view_model.view_models.user_name.state.UserNameStateManager
-import kotlinx.coroutines.flow.asSharedFlow
+import com.example.truckercore.view_model.view_models.user_name.use_case.UserNameViewUseCase
 import kotlinx.coroutines.launch
 
-/**
- * ViewModel that manages the business logic and state for the UserNameFragment.
- * This ViewModel handles the user input validation, updates the state of the fragment,
- * and manages the interaction between the fragment's UI and the business logic.
- *
- * It provides the fragment with the following:
- * - The current state of the fragment.
- * - The events triggered by the fragment.
- * - The effects that can be emitted to update the UI or navigate.
- *
- * @param authService An instance of AuthService to interact with the authentication service.
- */
+private typealias InvalidRequirements = UserNameEvent.SystemEvent.Initialization.InvalidRequirements
+private typealias ExecuteCreationTask = UserNameEvent.SystemEvent.CreateSystemTask.Execute
+private typealias CreationTaskSuccess = UserNameEvent.SystemEvent.CreateSystemTask.Success
+private typealias CreationTaskCriticalError = UserNameEvent.SystemEvent.CreateSystemTask.CriticalError
+private typealias CreationTaskRecoverableError = UserNameEvent.SystemEvent.CreateSystemTask.RecoverableError
+
 class UserNameViewModel(
-    private val preferences: PreferencesRepository,
-    private val accessManager: SystemAccessManager,
     private val authManager: AuthManager,
-    private val flavorService: FlavorService
+    private val userNameViewUseCase: UserNameViewUseCase
 ) : LoggerViewModel() {
 
     private val stateManager = UserNameStateManager()
@@ -41,63 +29,73 @@ class UserNameViewModel(
     val effectFlow get() = effectManager.effectFlow
 
     //----------------------------------------------------------------------------------------------
-    fun onUiEvent(uiEvent: UserNameEvent.UiEvent) {
-        when(uiEvent){
-            UserNameEvent.UiEvent.FabCLicked ->
-                onCreateSystemTaskEvent(UserNameEvent.SystemEvent.CreateSystemTask.Execute)
-
-            is UserNameEvent.UiEvent.TextChanged -> TODO()
+    fun initialize() {
+        if (!authManager.thereIsLoggedUser()) {
+            onEvent(InvalidRequirements)
         }
     }
 
-    private fun onCreateSystemTaskEvent(taskEvent: UserNameEvent.SystemEvent.CreateSystemTask) {
-        when(taskEvent) {
-            UserNameEvent.SystemEvent.CreateSystemTask.Execute -> TODO()
-            UserNameEvent.SystemEvent.CreateSystemTask.Success -> TODO()
-            UserNameEvent.SystemEvent.CreateSystemTask.CriticalError -> TODO()
-            UserNameEvent.SystemEvent.CreateSystemTask.RecoverableError -> TODO()
+    fun onEvent(newEvent: UserNameEvent) {
+        logEvent(this@UserNameViewModel, newEvent)
+        when (newEvent) {
+            is UserNameEvent.SystemEvent.Initialization -> handleInitEvent(newEvent)
+            is UserNameEvent.UiEvent -> handleUiEvent(newEvent)
+            is UserNameEvent.SystemEvent.CreateSystemTask -> handleCreateTaskEvent(newEvent)
         }
     }
 
-    private fun handleUiEvent(event: UserNameEvent.UiEvent) {
-        when (event) {
-            is UserNameEvent.UiEvent.TextChanged -> stateManager.updateName(event.text)
-            UserNameEvent.UiEvent.FabCLicked -> {
-                stateManager.setCreatingSystemAccessState()
+    private fun handleInitEvent(initEvent: UserNameEvent.SystemEvent.Initialization) {
+        if (initEvent is InvalidRequirements) {
+            effectManager.setShowMessageEffect(USER_NOT_LOGGED_MSG)
+            effectManager.setNavigateToLoginEffect()
+        }
+    }
+
+    private fun handleUiEvent(uiEvent: UserNameEvent.UiEvent) {
+        when (uiEvent) {
+            UserNameEvent.UiEvent.FabCLicked -> onEvent(ExecuteCreationTask)
+
+            is UserNameEvent.UiEvent.TextChanged ->
+                stateManager.updateComponentsOnNameChange(uiEvent.text)
+        }
+    }
+
+    private fun handleCreateTaskEvent(taskEvent: UserNameEvent.SystemEvent.CreateSystemTask) {
+        when (taskEvent) {
+            UserNameEvent.SystemEvent.CreateSystemTask.Execute -> {
+                stateManager.setCreatingState()
                 createSystemAccess()
             }
-        }
-    }
 
-    private fun handleSystemEvent(event: UserNameEvent.SystemEvent) {
-        when (event) {
-            UserNameEvent.SystemEvent.SystemCreationSuccess -> stateManager.setSuccessState()
+            UserNameEvent.SystemEvent.CreateSystemTask.Success -> {
+                effectManager.setNavigateToMainEffect()
+            }
 
-            is UserNameEvent.SystemEvent.SystemCreationFailed -> {
+            UserNameEvent.SystemEvent.CreateSystemTask.CriticalError -> {
+                effectManager.setNavigateToNotificationEffect()
+            }
 
+            is UserNameEvent.SystemEvent.CreateSystemTask.RecoverableError -> {
+                stateManager.setIdleState()
+                effectManager.setShowMessageEffect(taskEvent.message)
             }
         }
     }
 
     private fun createSystemAccess() {
         viewModelScope.launch {
-            val email = authManager.getUserEmail().extractData()
-            val uid = authManager.getUID().extractData()
-            val role = flavorService.getRole()
             val name = stateManager.getName()
-
-            val form = SystemAccessForm(uid, role, name, email)
-
-            val result = accessManager.createSystemAccess(form)
-            val newEvent = handleResult(result)
+            val newEvent = userNameViewUseCase(name).mapResult(
+                onSuccess = { CreationTaskSuccess },
+                onCriticalError = { CreationTaskCriticalError },
+                onRecoverableError = { CreationTaskRecoverableError(it.message) }
+            )
             onEvent(newEvent)
         }
     }
 
-    private fun handleResult(result: AppResult<Unit>): UserNameEvent =
-        result.mapAppResult(
-            onSuccess = { UserNameEvent.SystemEvent.SystemCreationSuccess },
-            onError = { UserNameEvent.SystemEvent.SystemCreationFailed(it) }
-        )
+    private companion object {
+        private const val USER_NOT_LOGGED_MSG = "Faça o Login novamente"
+    }
 
 }

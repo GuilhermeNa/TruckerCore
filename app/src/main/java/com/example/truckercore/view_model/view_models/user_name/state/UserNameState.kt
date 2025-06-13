@@ -8,23 +8,18 @@ import com.example.truckercore.view_model._shared._contracts.State
  */
 data class UserNameState(
     val components: UserNameComponents = UserNameComponents(),
-    val status: Status = Status.Idle
+    val status: UserNameStatus = UserNameStatus.Idle
 ) : State {
 
-    fun idle() = updateStatus(Status.Idle)
+    fun idle() = updateStatus(UserNameStatus.Idle)
 
-    fun creating() = updateStatus(Status.Creating)
+    fun creating() = updateStatus(UserNameStatus.Creating)
 
-    private fun updateStatus(newStatus: Status) = copy(status = newStatus)
+    private fun updateStatus(newStatus: UserNameStatus) = copy(status = newStatus)
 
     fun updateName(name: String): UserNameState {
         val newComponents = components.updateName(name)
         return copy(components = newComponents)
-    }
-
-    sealed class Status {
-        data object Idle : Status()
-        data object Creating : Status()
     }
 
 }

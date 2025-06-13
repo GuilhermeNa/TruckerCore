@@ -31,9 +31,7 @@ class CreateSystemAccessUseCaseImpl(
         } catch (e: AppException) {
             AppResult.Error(e)
         } catch (e: Exception) {
-            val error = TechnicalException.Unknown(
-                "$UNEXPECTED_ERROR_MESSAGE $form", e
-            )
+            val error = TechnicalException.Unknown("$UNEXPECTED_ERROR_MESSAGE $form", e)
             AppResult.Error(error)
         }
 

@@ -16,8 +16,6 @@ import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.forcePortraitOrientation
-import com.example.truckercore.view._shared.expressions.unspecifiedOrientation
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
 import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginFragmentStrategy
 import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginNavigator
@@ -33,7 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.ref.WeakReference
 
 class LoginFragment : CloseAppFragment() {
 

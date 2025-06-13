@@ -10,7 +10,9 @@ import com.example.truckercore.view_model._shared.components.Visibility
 import com.example.truckercore.view_model._shared.components.ButtonComponent
 import com.example.truckercore.view_model._shared.components.TextInputComponent
 import com.example.truckercore.view_model._shared._contracts.UiComponent
+import com.example.truckercore.view_model._shared.components.FabComponent
 import com.example.truckercore.view_model._shared.components.TextComponent
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 
 object ViewBinder {
@@ -31,6 +33,11 @@ object ViewBinder {
     }
 
     fun bindButton(button: ButtonComponent, view: Button) {
+        handleEnable(button, view)
+        handleVisibility(button, view)
+    }
+
+    fun bindFab(button: FabComponent, view: FloatingActionButton) {
         handleEnable(button, view)
         handleVisibility(button, view)
     }
