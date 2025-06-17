@@ -1,18 +1,35 @@
 package com.example.truckercore.view_model.view_models.splash.effect
 
-import kotlinx.coroutines.flow.MutableSharedFlow
+import com.example.truckercore.view_model._shared._base.managers.EffectManager
 
-class SplashEffectManager {
+class SplashEffectManager : EffectManager<SplashEffect>() {
 
-    private val _effect: MutableSharedFlow<SplashEffect> = MutableSharedFlow()
-    val effect get() = _effect
-
-    suspend fun setTransitionToLoading() {
-        _effect.emit(SplashEffect.TransitionToLoading)
+    fun setTransitionToLoading() {
+        trySend(SplashEffect.Transition.ToLoading)
     }
 
-    suspend fun setTransitionToNavigation() {
-        _effect.emit(SplashEffect.TransitionToNavigation)
+    fun setTransitionToLoaded() {
+        trySend(SplashEffect.Transition.ToLoaded)
+    }
+
+    fun setNavigateToNotificationEffect() {
+        trySend(SplashEffect.Navigate.ToNotification)
+    }
+
+    fun setNavigateToLoginEffect() {
+        trySend(SplashEffect.Navigate.ToLogin)
+    }
+
+    fun setNavigateToWelcomeEffect() {
+        trySend(SplashEffect.Navigate.ToWelcome)
+    }
+
+    fun setNavigateToContinueEffect() {
+        trySend(SplashEffect.Navigate.ToContinue)
+    }
+
+    fun setNavigateToMainEffect() {
+        trySend(SplashEffect.Navigate.ToMain)
     }
 
 }

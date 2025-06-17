@@ -10,6 +10,7 @@ import com.example.truckercore.view_model.view_models.forget_password.ResetPassw
 import com.example.truckercore.view_model.view_models.login.LoginViewModel
 import com.example.truckercore.view_model.view_models.login.LoginViewUseCase
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
+import com.example.truckercore.view_model.view_models.splash.use_case.SplashViewUseCase
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
 import com.example.truckercore.view_model.view_models.user_name.use_case.UserNameViewUseCase
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
@@ -19,6 +20,7 @@ import org.koin.dsl.module
 
 val commonViewModelModule = module {
 
+    single { SplashViewUseCase(get(), get(), get()) }
     single { ResetPasswordViewUseCase(get()) }
     single { LoginViewUseCase(get()) }
     single { AuthenticationViewUseCase(get()) }
@@ -26,7 +28,7 @@ val commonViewModelModule = module {
     single { UserNameViewUseCase(get(), get(), get()) }
     factory { CounterUseCase() }
 
-    viewModel<SplashViewModel> { SplashViewModel(get(), get(), get()) }
+    viewModel<SplashViewModel> { SplashViewModel(get(), get()) }
     viewModel<LoginViewModel> { LoginViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get()) }
     viewModel<WelcomeViewModel> { WelcomeViewModel(get()) }

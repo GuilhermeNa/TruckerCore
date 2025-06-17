@@ -19,7 +19,7 @@ class UserNameViewUseCase(
     private val flavorService: FlavorService
 ) {
 
-    suspend operator fun invoke(name: FullName): ViewResult {
+    suspend operator fun invoke(name: FullName): ViewResult<Unit> {
         val email = authManager.getUserEmail().extractData()
         val uid = authManager.getUID().extractData()
         val role = flavorService.getRole()
@@ -27,12 +27,12 @@ class UserNameViewUseCase(
         val form = SystemAccessForm(uid, role, name, email)
 
         return accessManager.createSystemAccess(form).mapAppResult(
-            onSuccess = { ViewResult.Success },
+            onSuccess = { ViewResult.Success(Unit) },
             onError = { handleError(it) }
         )
     }
 
-    private fun handleError(e: AppException): ViewResult {
+    private fun handleError(e: AppException): ViewResult<Unit> {
         val viewError =
             if (e is InfraException.NetworkUnavailable) {
                 ViewError.Recoverable("Falha na conexão, tente novamente.")

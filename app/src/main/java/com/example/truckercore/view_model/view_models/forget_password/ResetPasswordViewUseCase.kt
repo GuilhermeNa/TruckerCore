@@ -11,9 +11,9 @@ import com.example.truckercore.view_model._shared.helpers.ViewResult
 
 class ResetPasswordViewUseCase(private val authManager: AuthManager) {
 
-    suspend operator fun invoke(email: Email): ViewResult =
+    suspend operator fun invoke(email: Email): ViewResult<Unit> =
         authManager.resetPassword(email).mapAppResult(
-            onSuccess = { ViewResult.Success },
+            onSuccess = { ViewResult.Success(Unit) },
             onError = { handleError(it) }
         )
 

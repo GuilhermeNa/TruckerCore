@@ -1,33 +1,31 @@
 package com.example.truckercore.view_model.view_models.splash.event
 
 import com.example.truckercore.view_model._shared._contracts.Event
+import com.example.truckercore.view_model.view_models.splash.use_case.SplashDirection
 
-/**
- * Represents events triggered by the splash screen's UI or system.
- *
- * These events are used to communicate state changes or actions between
- * the ViewModel and the UI (Splash screen).
- */
-sealed class SplashEvent: Event {
+sealed class SplashEvent : Event {
 
-    /**
-     * Represents UI-related events that are triggered based on user interactions or animations.
-     */
-    sealed class UiEvent : SplashEvent() {
-        data object Initialized: UiEvent()
-        data object TransitionToLoadingComplete : UiEvent()
-        data object TransitionToNavigationComplete : UiEvent()
-    }
+    sealed class UiTransition : SplashEvent() {
+        sealed class ToLoading : UiTransition() {
+            data object Start : ToLoading()
+            data object End : ToLoading()
+        }
 
-    /**
-     * Represents system-related events triggered based on the loading or state of the system.
-     */
-    sealed class SystemEvent : SplashEvent() {
-        sealed class LoadUserTask: SystemEvent() {
-            data object Execute: LoadUserTask()
-            data object Success: LoadUserTask()
-            data object CriticalError: LoadUserTask()
+        sealed class ToLoaded : UiTransition() {
+            data object Start : ToLoaded()
+            data object End : ToLoaded()
         }
     }
+
+    sealed class SystemEvent : SplashEvent() {
+        data object Initialize : SystemEvent()
+
+        sealed class LoadUserTask : SystemEvent() {
+            data object Execute : LoadUserTask()
+            data class Success(val direction: SplashDirection) : LoadUserTask()
+            data object CriticalError : LoadUserTask()
+        }
+    }
+
 
 }

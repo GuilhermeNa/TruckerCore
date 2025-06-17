@@ -1,132 +1,112 @@
 package com.example.truckercore.view_model.view_models.splash
 
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore._shared.expressions.getClassName
-import com.example.truckercore._shared.expressions.getOrElse
-import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.logEvent
-import com.example.truckercore.model.infrastructure.integration.preferences.PreferencesRepository
-import com.example.truckercore.model.logger.AppLogger
-import com.example.truckercore.model.modules.aggregation.system_access.manager.SystemAccessManager
-import com.example.truckercore.model.modules.authentication.manager.AuthManager
+import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
+import com.example.truckercore.view_model._shared.expressions.mapResult
 import com.example.truckercore.view_model.view_models.splash.effect.SplashEffectManager
 import com.example.truckercore.view_model.view_models.splash.event.SplashEvent
-import com.example.truckercore.view_model.view_models.splash.state.SplashState
-import com.example.truckercore.view_model.view_models.splash.state.SplashUiStateManager
+import com.example.truckercore.view_model.view_models.splash.state.SplashStateManager
+import com.example.truckercore.view_model.view_models.splash.use_case.SplashDirection
 import com.example.truckercore.view_model.view_models.splash.use_case.SplashViewUseCase
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val splashViewUseCase: SplashViewUseCase,
-    private val authService: AuthManager,
-    private val preferences: PreferencesRepository,
-    private val systemAccessManager: SystemAccessManager
+    private val flavorService: FlavorService
 ) : LoggerViewModel() {
 
-    private val stateManager = SplashUiStateManager()
-    val uiState get() = stateManager.uiState.asStateFlow()
+    private val stateManager = SplashStateManager()
+    val stateFlow get() = stateManager.stateFlow
 
     private val effectManager = SplashEffectManager()
-    val effect get() = effectManager.effect.asSharedFlow()
-
-    init {
-        onEvent(SplashEvent.UiEvent.Initialized)
-    }
+    val effectFlow get() = effectManager.effectFlow
 
     //----------------------------------------------------------------------------------------------
     fun initialize() {
-
+        onEvent(SplashEvent.SystemEvent.Initialize)
     }
 
-    fun onEvent(event: SplashEvent) {
-        logEvent(this@SplashViewModel, event)
-        when (event) {
-            is SplashEvent.UiEvent -> handleUiEvent(event)
-            is SplashEvent.SystemEvent -> handleSystemEvent(event)
+    fun notifyLoadingTransitionEnd() {
+        onEvent(SplashEvent.UiTransition.ToLoading.End)
+    }
+
+    fun notifyLoadedTransitionEnd() {
+        onEvent(SplashEvent.UiTransition.ToLoaded.End)
+    }
+
+    private fun onEvent(newEvent: SplashEvent) {
+        logEvent(this, newEvent)
+        when (newEvent) {
+            is SplashEvent.UiTransition.ToLoading -> handleUiTransitionToLoading(newEvent)
+            is SplashEvent.UiTransition.ToLoaded -> handleUiTransitionToLoaded(newEvent)
+            is SplashEvent.SystemEvent.Initialize -> handleInitializationEvent()
+            is SplashEvent.SystemEvent.LoadUserTask -> handleLoadUserTask(newEvent)
         }
     }
 
-    private fun handleUiEvent(event: SplashEvent.UiEvent) {
-        when (event) {
-            SplashEvent.UiEvent.Initialized -> {
-                launch { effectManager.setTransitionToLoading() }
+    private fun handleUiTransitionToLoading(transitionEvent: SplashEvent.UiTransition.ToLoading) {
+        when (transitionEvent) {
+            SplashEvent.UiTransition.ToLoading.Start -> effectManager.setTransitionToLoading()
+            SplashEvent.UiTransition.ToLoading.End -> onEvent(SplashEvent.SystemEvent.LoadUserTask.Execute)
+        }
+    }
+
+    private fun handleUiTransitionToLoaded(transitionEvent: SplashEvent.UiTransition.ToLoaded) {
+        when (transitionEvent) {
+            SplashEvent.UiTransition.ToLoaded.Start -> effectManager.setTransitionToLoaded()
+            SplashEvent.UiTransition.ToLoaded.End -> {
+                val direction = stateManager.getDirection()
+                when (direction) {
+                    SplashDirection.WELCOME -> effectManager.setNavigateToWelcomeEffect()
+                    SplashDirection.LOGIN -> effectManager.setNavigateToLoginEffect()
+                    SplashDirection.MAIN -> effectManager.setNavigateToMainEffect()
+                    SplashDirection.CONTINUE_REGISTER -> effectManager.setNavigateToContinueEffect()
+                }
             }
-            SplashEvent.UiEvent.TransitionToLoadingComplete -> {
+        }
+    }
+
+    private fun handleInitializationEvent() {
+        val appName = flavorService.getAppName()
+        stateManager.updateAppNameComponent(appName)
+        onEvent(SplashEvent.UiTransition.ToLoading.Start)
+    }
+
+    private fun handleLoadUserTask(taskEvent: SplashEvent.SystemEvent.LoadUserTask) {
+        when (taskEvent) {
+            SplashEvent.SystemEvent.LoadUserTask.Execute -> {
                 stateManager.setLoadingState()
                 loadUserInfo()
             }
-            SplashEvent.UiEvent.TransitionToNavigationComplete -> {
-                stateManager.setNavigatingState()
-            }
-        }
-    }
 
-    private fun handleSystemEvent(event: SplashEvent.SystemEvent) {
-        when (event) {
-            is SplashEvent.SystemEvent.ReceivedApiSuccess -> {
-                stateManager.holdDirection(event.direction)
-                launch { effectManager.setTransitionToNavigation() }
+            is SplashEvent.SystemEvent.LoadUserTask.Success -> {
+                stateManager.setLoadedState(taskEvent.direction)
+                onEvent(SplashEvent.UiTransition.ToLoaded.Start)
             }
-            is SplashEvent.SystemEvent.Error -> {
-                stateManager.setErrorState()
+
+            SplashEvent.SystemEvent.LoadUserTask.CriticalError -> {
+                effectManager.setNavigateToNotificationEffect()
             }
         }
     }
 
     private fun loadUserInfo() {
         viewModelScope.launch {
-            delay(1000)
-            try {
-                val direction = when  {
-                    isFirstAccess() -> SplashState.Navigating.Welcome
-                    sessionNotFound() -> SplashState.Navigating.Login
-                    isUserRegisterComplete() -> SplashState.Navigating.PreparingAmbient
-                    else -> SplashState.Navigating.ContinueRegister
-                }
-
-                val newEvent = SplashEvent.SystemEvent.ReceivedApiSuccess(direction)
-                AppLogger.d(this@SplashViewModel.getClassName(), "$LOAD_INFO_SUCCESS $direction")
-                onEvent(newEvent)
-
-            } catch (e: Exception) {
-                AppLogger.e(this@SplashViewModel.getClassName(), LOAD_INFO_ERROR, e)
-                onEvent(SplashEvent.SystemEvent.Error)
-            }
+            delay(TIMER)
+            val newEvent = splashViewUseCase.invoke().mapResult(
+                onSuccess = { SplashEvent.SystemEvent.LoadUserTask.Success(it) },
+                onCriticalError = { SplashEvent.SystemEvent.LoadUserTask.CriticalError },
+                onRecoverableError = { SplashEvent.SystemEvent.LoadUserTask.CriticalError }
+            )
+            onEvent(newEvent)
         }
     }
 
-    private suspend fun isFirstAccess(): Boolean {
-        val isFirstAccess = preferences.isFirstAccess()
-        val hasLoggedUser = authService.thereIsLoggedUser()
-
-        if (isFirstAccess && hasLoggedUser) {
-            authService.signOut()
-        }
-
-        return isFirstAccess
-    }
-
-    private fun sessionNotFound(): Boolean {
-        return !authService.thereIsLoggedUser()
-    }
-
-    private suspend fun isUserRegisterComplete(): Boolean {
-        // Check if Email is Verified
-        val isEmailVerified = authService.isEmailVerified().getOrElse { throw it.exception }
-        if (!isEmailVerified) return false
-
-        // Check if user have been registered in system
-        val uid = authService.getUID().getOrElse { throw it.exception }
-        return systemAccessManager.isUserRegistered(uid).getOrElse { throw it.exception }
-    }
-
-    companion object {
-        private const val LOAD_INFO_ERROR = "Failed on loading user info."
-        private const val LOAD_INFO_SUCCESS = "Success on loading user info. Direction:"
+    private companion object {
+        private const val TIMER = 1000L
     }
 
 }

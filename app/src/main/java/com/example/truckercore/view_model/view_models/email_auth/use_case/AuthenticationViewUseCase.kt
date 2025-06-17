@@ -11,9 +11,9 @@ import com.example.truckercore.view_model._shared.helpers.ViewResult
 
 class AuthenticationViewUseCase(private val authManager: AuthManager) {
 
-    suspend operator fun invoke(credential: EmailCredential): ViewResult {
+    suspend operator fun invoke(credential: EmailCredential): ViewResult<Unit> {
         return authManager.createUserWithEmail(credential).mapAppResult(
-            onSuccess = { ViewResult.Success },
+            onSuccess = { ViewResult.Success(Unit) },
             onError = { handleError(it) }
         )
     }

@@ -1,9 +1,11 @@
 package com.example.truckercore.view_model._shared.helpers
 
-sealed class ViewResult {
+sealed class ViewResult<out T> {
 
-    data object Success : ViewResult()
+    data class Success<T>(val data: T) : ViewResult<T>()
 
-    data class Error(val e: ViewError) : ViewResult()
+    data class Error(val e: ViewError) : ViewResult<Nothing>()
+
+    fun isSuccess() = this is Success
 
 }

@@ -11,14 +11,14 @@ import com.example.truckercore.view_model._shared.helpers.ViewResult
 
 class LoginViewUseCase(private val authService: AuthManager) {
 
-    suspend operator fun invoke(credentials: EmailCredential): ViewResult {
+    suspend operator fun invoke(credentials: EmailCredential): ViewResult<Unit> {
             return authService.signIn(credentials).mapAppResult(
-                onSuccess = { ViewResult.Success },
+                onSuccess = { ViewResult.Success(Unit) },
                 onError = { handleError(it) }
             )
     }
 
-    private fun handleError(e: AppException): ViewResult {
+    private fun handleError(e: AppException): ViewResult<Unit> {
         if (e is InfraException.NetworkUnavailable) {
             return ViewResult.Error(
                 ViewError.Recoverable(MSG_NETWORK_ERROR)

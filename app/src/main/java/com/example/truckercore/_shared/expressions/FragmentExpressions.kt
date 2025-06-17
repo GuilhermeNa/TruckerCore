@@ -90,9 +90,7 @@ inline fun Fragment.doIfResumed(
     if (this.lifecycle.currentState == Lifecycle.State.RESUMED) run()
 }
 
-inline fun Fragment.doIfRecreating(
-    run: () -> Unit = {},
-) {
+inline fun Fragment.doIfRecreating(run: () -> Unit) {
     if (this.lifecycle.currentState != Lifecycle.State.RESUMED) run()
 }
 

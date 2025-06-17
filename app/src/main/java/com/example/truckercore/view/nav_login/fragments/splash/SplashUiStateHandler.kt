@@ -1,8 +1,11 @@
 package com.example.truckercore.view.nav_login.fragments.splash
 
-import android.widget.TextView
-import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.truckercore.R
+import com.example.truckercore.databinding.FragmentSplashBinding
+import com.example.truckercore.view._shared._base.handlers.StateHandler
+import com.example.truckercore.view_model._shared.components.TextComponent
+import com.example.truckercore.view_model.view_models.splash.effect.SplashEffect
+import com.example.truckercore.view_model.view_models.splash.state.SplashStatus
 
 /**
  * Responsible for handling MotionLayout transitions and binding UI elements
@@ -11,55 +14,34 @@ import com.example.truckercore.R
  * This class encapsulates all UI logic related to animations and text,
  * keeping the Fragment clean and focused on state handling.
  */
-class SplashUiStateHandler(
-    private val motionLayout: MotionLayout,
-    private val textView: TextView
-) {
+class SplashUiStateHandler : StateHandler<FragmentSplashBinding>() {
 
     // Ui States
+    private val initialUiState = R.id.frag_verifying_email_state_1
     val loadingUiState = R.id.frag_verifying_email_state_2
-    val navigationUiState = R.id.frag_verifying_email_state_3
+    val loadedUiState = R.id.frag_verifying_email_state_3
 
-    /**
-     * Updates the splash text view with the app's flavor description.
-     *
-     * @param flavor The app flavor to be displayed.
-     */
-    fun bindAppName(appName: String) {
-        textView.text = appName
+    fun handleNameComponent(nameComponent: TextComponent) {
+        bindText(nameComponent, getBinding().fragSplashName)
     }
 
-    /**
-     * Triggers the first visual transition to the second state (animated).
-     */
-    fun transitionToLoadingState() {
-        motionLayout.transitionToState(loadingUiState)
+    fun handleStatus(status: SplashStatus) {
+        val state = when (status) {
+            SplashStatus.Initial -> null
+            SplashStatus.Loading -> loadingUiState
+            SplashStatus.Loaded -> loadedUiState
+        }
+        state?.let { getBinding().motionLayout.jumpToState(it) }
+
     }
 
-    /**
-     * Instantly jumps to the second UI state without animation.
-     * Useful when restoring state after lifecycle changes.
-     */
-    fun jumpToLoadingState() {
-        motionLayout.jumpToState(loadingUiState)
+    fun handleTransition(transitionEffect: SplashEffect.Transition) {
+        val transition = when (transitionEffect) {
+            SplashEffect.Transition.ToLoading -> loadingUiState
+            SplashEffect.Transition.ToLoaded -> loadedUiState
+        }
+        getBinding().motionLayout.transitionToState(transition)
     }
-
-    /**
-     * Triggers the second visual transition.
-     * Note: You are transitioning to the second state again.
-     *       Consider renaming or adjusting if this is intentional.
-     */
-    fun transitionToNavigationState() {
-        motionLayout.transitionToState(navigationUiState)
-    }
-
-    /**
-     * Instantly jumps to the third UI state.
-     */
-    fun jumpToNavigationState() {
-        motionLayout.jumpToState(navigationUiState)
-    }
-
 
 }
 
