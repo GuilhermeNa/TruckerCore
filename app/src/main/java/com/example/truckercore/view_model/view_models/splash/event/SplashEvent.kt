@@ -5,27 +5,30 @@ import com.example.truckercore.view_model.view_models.splash.use_case.SplashDire
 
 sealed class SplashEvent : Event {
 
-    sealed class UiTransition : SplashEvent() {
-        sealed class ToLoading : UiTransition() {
-            data object Start : ToLoading()
-            data object End : ToLoading()
+    sealed class TransitionEnd : SplashEvent() {
+        data object ToLoading : TransitionEnd() {
+            override fun toString() = "TransitionEnd -> ToLoading"
         }
 
-        sealed class ToLoaded : UiTransition() {
-            data object Start : ToLoaded()
-            data object End : ToLoaded()
+        data class ToLoaded(val direction: SplashDirection) : TransitionEnd() {
+            override fun toString() = "TransitionEnd -> ToLoaded(direction=$direction)"
         }
     }
 
     sealed class SystemEvent : SplashEvent() {
-        data object Initialize : SystemEvent()
+        data class Initialize(val appName: String) : SystemEvent() {
+            override fun toString() = "SystemEvent -> Initialize(appName=\"$appName\")"
+        }
 
         sealed class LoadUserTask : SystemEvent() {
-            data object Execute : LoadUserTask()
-            data class Success(val direction: SplashDirection) : LoadUserTask()
-            data object CriticalError : LoadUserTask()
+            data object Success : LoadUserTask() {
+                override fun toString() = "LoadUserTask -> Success"
+            }
+
+            data object CriticalError : LoadUserTask() {
+                override fun toString() = "LoadUserTask -> CriticalError"
+            }
         }
     }
-
 
 }

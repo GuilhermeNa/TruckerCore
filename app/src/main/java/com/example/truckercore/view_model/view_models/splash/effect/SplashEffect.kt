@@ -1,21 +1,48 @@
 package com.example.truckercore.view_model.view_models.splash.effect
 
 import com.example.truckercore.view_model._shared._contracts.Effect
-
+import com.example.truckercore.view_model.view_models.splash.event.SplashEvent
 
 sealed class SplashEffect : Effect {
 
-    sealed class Transition : SplashEffect() {
-        data object ToLoading : Transition()
-        data object ToLoaded : Transition()
+    sealed class UiEffect : SplashEffect() {
+
+        sealed class Transition : UiEffect() {
+            data object ToLoading : Transition() {
+                override fun toString() = "Transition -> ToLoading"
+            }
+
+            data object ToLoaded : Transition() {
+                override fun toString() = "Transition -> ToLoaded"
+            }
+        }
+
+        sealed class Navigate : UiEffect() {
+            data object ToWelcome : Navigate() {
+                override fun toString() = "Navigate -> ToWelcome"
+            }
+
+            data object ToContinue : Navigate() {
+                override fun toString() = "Navigate -> ToContinue"
+            }
+
+            data object ToLogin : Navigate() {
+                override fun toString() = "Navigate -> ToLogin"
+            }
+
+            data object ToMain : Navigate() {
+                override fun toString() = "Navigate -> ToMain"
+            }
+
+            data object ToNotification : Navigate() {
+                override fun toString() = "Navigate -> ToNotification"
+            }
+        }
     }
 
-    sealed class Navigate : SplashEffect() {
-        data object ToMain : Navigate()
-        data object ToLogin : Navigate()
-        data object ToWelcome : Navigate()
-        data object ToContinue : Navigate()
-        data object ToNotification : Navigate()
+    sealed class SystemEffect : SplashEffect() {
+        data object ExecuteLoadUserTask : SystemEffect() {
+            override fun toString() = "SystemEffect -> ExecuteLoadUserTask"
+        }
     }
-
 }

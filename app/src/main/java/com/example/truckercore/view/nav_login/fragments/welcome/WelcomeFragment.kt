@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.example.truckercore._shared.classes.ButtonState
-import com.example.truckercore.view._shared.helpers.Direction
 import com.example.truckercore._shared.expressions.doIfResumed
 import com.example.truckercore._shared.expressions.doIfResumedOrElse
 import com.example.truckercore._shared.expressions.logState
@@ -18,6 +17,7 @@ import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.model.configs.flavor.contracts.FlavorStrategy
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
+import com.example.truckercore.view._shared.helpers.Direction
 import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigator
 import com.example.truckercore.view.nav_login.fragments.welcome.navigator.WelcomeNavigatorImpl
 import com.example.truckercore.view_model._shared.helpers.ViewError
@@ -54,6 +54,7 @@ class WelcomeFragment : CloseAppFragment() {
 
     private var viewPager: ViewPager2? = null
     private var pagerAdapter: WelcomePagerAdapter? = null
+
     private val pagerListener = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)

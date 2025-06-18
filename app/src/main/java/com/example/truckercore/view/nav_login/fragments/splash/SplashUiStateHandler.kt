@@ -32,13 +32,12 @@ class SplashUiStateHandler : StateHandler<FragmentSplashBinding>() {
             SplashStatus.Loaded -> loadedUiState
         }
         state?.let { getBinding().motionLayout.jumpToState(it) }
-
     }
 
-    fun handleTransition(transitionEffect: SplashEffect.Transition) {
+    fun handleTransition(transitionEffect: SplashEffect.UiEffect.Transition) {
         val transition = when (transitionEffect) {
-            SplashEffect.Transition.ToLoading -> loadingUiState
-            SplashEffect.Transition.ToLoaded -> loadedUiState
+            SplashEffect.UiEffect.Transition.ToLoading -> loadingUiState
+            SplashEffect.UiEffect.Transition.ToLoaded -> loadedUiState
         }
         getBinding().motionLayout.transitionToState(transition)
     }

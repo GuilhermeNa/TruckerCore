@@ -169,11 +169,11 @@
                 motion:percentX="0.5"
                 motion:percentY="0.5" />
             <KeyAttribute
-                android:alpha="1"
+                android:alpha="0.5"
                 motion:framePosition="80"
                 motion:motionTarget="@+id/frag_splash_name" />
             <KeyPosition
-                motion:framePosition="70"
+                motion:framePosition="75"
                 motion:keyPositionType="parentRelative"
                 motion:motionTarget="@+id/frag_splash_name"
                 motion:percentX="0.5"
@@ -212,7 +212,7 @@
                 motion:percentY="0.5" />
             <KeyAttribute
                 motion:motionTarget="@+id/frag_splash_name"
-                motion:framePosition="70"
+                motion:framePosition="75"
                 android:alpha="0" />
         </KeyFrameSet>
     </Transition>

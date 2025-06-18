@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
-import com.example.truckercore._shared.expressions.doIfRecreating
 import com.example.truckercore._shared.expressions.logEffect
 import com.example.truckercore._shared.expressions.logState
 import com.example.truckercore._shared.expressions.navigateToDirection
@@ -14,8 +13,8 @@ import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
 import com.example.truckercore.view._shared.expressions.launchOnFragment
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
-import com.example.truckercore.view_model.view_models.splash.effect.SplashEffect
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
+import com.example.truckercore.view_model.view_models.splash.effect.SplashEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,8 +31,8 @@ class SplashFragment : CloseAppFragment() {
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
             when (currentId) {
-                stateHandler.loadingUiState -> viewModel.notifyLoadingTransitionEnd()
-                stateHandler.loadedUiState -> viewModel.notifyLoadedTransitionEnd()
+                stateHandler.loadingUiState -> viewModel.toLoadingTransitionEnd()
+                stateHandler.loadedUiState -> viewModel.toLoadedTransitionEnd()
                 else -> throw NotImplementedError("$UI_STATE_ERROR_MSG $currentId.")
             }
         }
@@ -66,19 +65,18 @@ class SplashFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.initialize()
         launchOnFragment {
-            setStateManager()
+            setStateManager(savedInstanceState)
             setEffectManager()
         }
     }
 
-    private fun CoroutineScope.setStateManager() {
+    private fun CoroutineScope.setStateManager(savedInstanceState: Bundle?) {
         launch {
             viewModel.stateFlow.collect { state ->
                 logState(this@SplashFragment, state)
                 stateHandler.handleNameComponent(state.nameComponent)
-                 doIfRecreating { stateHandler.handleStatus(state.status) }
+                doIfRecreatingView(savedInstanceState) { stateHandler.handleStatus(state.status) }
             }
         }
     }
@@ -86,33 +84,38 @@ class SplashFragment : CloseAppFragment() {
     private suspend fun setEffectManager() {
         viewModel.effectFlow.collect { effect ->
             logEffect(this@SplashFragment, effect)
-            when(effect) {
-                is SplashEffect.Transition -> stateHandler.handleTransition(effect)
-                is SplashEffect.Navigate -> handleNavigation(effect)
+            when (effect) {
+                is SplashEffect.UiEffect.Transition -> stateHandler.handleTransition(effect)
+                is SplashEffect.UiEffect.Navigate -> handleNavigation(effect)
+                else -> Unit
             }
         }
     }
 
-    private fun handleNavigation(effect: SplashEffect.Navigate) {
-        when(effect) {
-            SplashEffect.Navigate.ToContinue -> {
+    private fun handleNavigation(effect: SplashEffect.UiEffect.Navigate) {
+        when (effect) {
+            SplashEffect.UiEffect.Navigate.ToContinue -> {
                 val direction = SplashFragmentDirections.actionGlobalContinueRegisterFragment()
                 navigateToDirection(direction)
             }
-            SplashEffect.Navigate.ToLogin -> {
+
+            SplashEffect.UiEffect.Navigate.ToLogin -> {
                 val direction = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
                 navigateToDirection(direction)
             }
-            SplashEffect.Navigate.ToMain -> {
+
+            SplashEffect.UiEffect.Navigate.ToMain -> {
                 val direction = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
                 navigateToDirection(direction)
             }
-            SplashEffect.Navigate.ToNotification -> {
+
+            SplashEffect.UiEffect.Navigate.ToNotification -> {
                 val intent = Intent(requireActivity(), NotificationActivity::class.java)
                 requireActivity().startActivity(intent)
                 requireActivity().finish()
             }
-            SplashEffect.Navigate.ToWelcome -> {
+
+            SplashEffect.UiEffect.Navigate.ToWelcome -> {
                 val direction = SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
                 navigateToDirection(direction)
             }
@@ -141,6 +144,14 @@ class SplashFragment : CloseAppFragment() {
 
     private fun setTransitionListener() {
         binding.motionLayout.setTransitionListener(transitionListener)
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // On Save Instance State
+    //----------------------------------------------------------------------------------------------
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        registerFragmentCreated(outState)
     }
 
     //----------------------------------------------------------------------------------------------

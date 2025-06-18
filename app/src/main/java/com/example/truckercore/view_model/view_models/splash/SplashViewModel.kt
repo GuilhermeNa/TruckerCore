@@ -1,13 +1,18 @@
 package com.example.truckercore.view_model.view_models.splash
 
 import androidx.lifecycle.viewModelScope
+import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore._shared.expressions.logEvent
 import com.example.truckercore.model.configs.flavor.FlavorService
+import com.example.truckercore.model.logger.AppLogger
+import com.example.truckercore.view_model._shared._base.managers.EffectManagerII
+import com.example.truckercore.view_model._shared._base.managers.StateManagerII
 import com.example.truckercore.view_model._shared._base.view_model.LoggerViewModel
+import com.example.truckercore.view_model._shared.expressions.handleResult
 import com.example.truckercore.view_model._shared.expressions.mapResult
-import com.example.truckercore.view_model.view_models.splash.effect.SplashEffectManager
+import com.example.truckercore.view_model.view_models.splash.effect.SplashEffect
 import com.example.truckercore.view_model.view_models.splash.event.SplashEvent
-import com.example.truckercore.view_model.view_models.splash.state.SplashStateManager
+import com.example.truckercore.view_model.view_models.splash.state.SplashState
 import com.example.truckercore.view_model.view_models.splash.use_case.SplashDirection
 import com.example.truckercore.view_model.view_models.splash.use_case.SplashViewUseCase
 import kotlinx.coroutines.delay
@@ -18,94 +23,74 @@ class SplashViewModel(
     private val flavorService: FlavorService
 ) : LoggerViewModel() {
 
-    private val stateManager = SplashStateManager()
+    private val stateManager = StateManagerII(SplashState())
     val stateFlow get() = stateManager.stateFlow
 
-    private val effectManager = SplashEffectManager()
+    private val effectManager = EffectManagerII<SplashEffect>()
     val effectFlow get() = effectManager.effectFlow
 
+    private lateinit var direction: SplashDirection
+
+    private val reducer = SplashReducer()
+
     //----------------------------------------------------------------------------------------------
-    fun initialize() {
-        onEvent(SplashEvent.SystemEvent.Initialize)
+    init {
+        val appName = flavorService.getAppName()
+        val event = SplashEvent.SystemEvent.Initialize(appName)
+        onEvent(event)
     }
 
-    fun notifyLoadingTransitionEnd() {
-        onEvent(SplashEvent.UiTransition.ToLoading.End)
+    fun toLoadingTransitionEnd() {
+        val event = SplashEvent.TransitionEnd.ToLoading
+        onEvent(event)
     }
 
-    fun notifyLoadedTransitionEnd() {
-        onEvent(SplashEvent.UiTransition.ToLoaded.End)
+    fun toLoadedTransitionEnd() {
+        val event = SplashEvent.TransitionEnd.ToLoaded(direction)
+        onEvent(event)
     }
 
     private fun onEvent(newEvent: SplashEvent) {
         logEvent(this, newEvent)
-        when (newEvent) {
-            is SplashEvent.UiTransition.ToLoading -> handleUiTransitionToLoading(newEvent)
-            is SplashEvent.UiTransition.ToLoaded -> handleUiTransitionToLoaded(newEvent)
-            is SplashEvent.SystemEvent.Initialize -> handleInitializationEvent()
-            is SplashEvent.SystemEvent.LoadUserTask -> handleLoadUserTask(newEvent)
-        }
-    }
-
-    private fun handleUiTransitionToLoading(transitionEvent: SplashEvent.UiTransition.ToLoading) {
-        when (transitionEvent) {
-            SplashEvent.UiTransition.ToLoading.Start -> effectManager.setTransitionToLoading()
-            SplashEvent.UiTransition.ToLoading.End -> onEvent(SplashEvent.SystemEvent.LoadUserTask.Execute)
-        }
-    }
-
-    private fun handleUiTransitionToLoaded(transitionEvent: SplashEvent.UiTransition.ToLoaded) {
-        when (transitionEvent) {
-            SplashEvent.UiTransition.ToLoaded.Start -> effectManager.setTransitionToLoaded()
-            SplashEvent.UiTransition.ToLoaded.End -> {
-                val direction = stateManager.getDirection()
-                when (direction) {
-                    SplashDirection.WELCOME -> effectManager.setNavigateToWelcomeEffect()
-                    SplashDirection.LOGIN -> effectManager.setNavigateToLoginEffect()
-                    SplashDirection.MAIN -> effectManager.setNavigateToMainEffect()
-                    SplashDirection.CONTINUE_REGISTER -> effectManager.setNavigateToContinueEffect()
+        reducer.reduce(stateManager.currentState(), newEvent).handleResult(
+            state = { stateManager.update(it) },
+            effect = {
+                when (it) {
+                    is SplashEffect.SystemEffect.ExecuteLoadUserTask -> loadUserInfo()
+                    else -> effectManager.trySend(it)
                 }
             }
-        }
-    }
-
-    private fun handleInitializationEvent() {
-        val appName = flavorService.getAppName()
-        stateManager.updateAppNameComponent(appName)
-        onEvent(SplashEvent.UiTransition.ToLoading.Start)
-    }
-
-    private fun handleLoadUserTask(taskEvent: SplashEvent.SystemEvent.LoadUserTask) {
-        when (taskEvent) {
-            SplashEvent.SystemEvent.LoadUserTask.Execute -> {
-                stateManager.setLoadingState()
-                loadUserInfo()
-            }
-
-            is SplashEvent.SystemEvent.LoadUserTask.Success -> {
-                stateManager.setLoadedState(taskEvent.direction)
-                onEvent(SplashEvent.UiTransition.ToLoaded.Start)
-            }
-
-            SplashEvent.SystemEvent.LoadUserTask.CriticalError -> {
-                effectManager.setNavigateToNotificationEffect()
-            }
-        }
+        )
     }
 
     private fun loadUserInfo() {
+        AppLogger.d(getClassName(), TASK_LAUNCH)
         viewModelScope.launch {
             delay(TIMER)
             val newEvent = splashViewUseCase.invoke().mapResult(
-                onSuccess = { SplashEvent.SystemEvent.LoadUserTask.Success(it) },
-                onCriticalError = { SplashEvent.SystemEvent.LoadUserTask.CriticalError },
-                onRecoverableError = { SplashEvent.SystemEvent.LoadUserTask.CriticalError }
+                onSuccess = { direction ->
+                    AppLogger.d(this@SplashViewModel.getClassName(), TASK_SUCCESS)
+                    this@SplashViewModel.direction = direction
+                    SplashEvent.SystemEvent.LoadUserTask.Success
+                },
+                onCriticalError = {
+                    AppLogger.d(this@SplashViewModel.getClassName(), TASK_CRITICAL_ERROR)
+                    SplashEvent.SystemEvent.LoadUserTask.CriticalError
+                                  },
+                onRecoverableError = {
+                    AppLogger.d(this@SplashViewModel.getClassName(), TASK_RECOVERABLE_ERROR)
+                    SplashEvent.SystemEvent.LoadUserTask.CriticalError
+                }
             )
             onEvent(newEvent)
         }
     }
 
     private companion object {
+        private const val TASK_LAUNCH = "Task: LoadUserInfo -> Launched"
+        private const val TASK_SUCCESS = "Task: LoadUserInfo -> Success"
+        private const val TASK_CRITICAL_ERROR = "Task: LoadUserInfo -> Critical Error"
+        private const val TASK_RECOVERABLE_ERROR = "Task: LoadUserInfo -> Recoverable Error"
         private const val TIMER = 1000L
     }
 

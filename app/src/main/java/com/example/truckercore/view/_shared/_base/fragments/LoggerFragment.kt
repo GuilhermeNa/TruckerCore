@@ -5,8 +5,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
+import com.example.truckercore.view._shared._base.handlers.InstanceStateHandler
 
-abstract class LoggerFragment : Fragment() {
+abstract class LoggerFragment : Fragment(), InstanceStateHandler {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,11 @@ abstract class LoggerFragment : Fragment() {
         AppLogger.d(getClassName(), LIFECYCLE_DESTROY_VIEW)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        AppLogger.d(getClassName(), LIFECYCLE_SAVE_INSTANCE_STATE)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         AppLogger.d(getClassName(), LIFECYCLE_DESTROY)
@@ -44,7 +50,16 @@ abstract class LoggerFragment : Fragment() {
         private const val LIFECYCLE_START = "Fragment Lifecycle: ON_START"
         private const val LIFECYCLE_RESUME = "Fragment Lifecycle: ON_RESUME"
         private const val LIFECYCLE_DESTROY_VIEW = "Fragment Lifecycle: ON_DESTROY_VIEW"
+        private const val LIFECYCLE_SAVE_INSTANCE_STATE= "Fragment Lifecycle: ON_SAVE_INSTANCE"
         private const val LIFECYCLE_DESTROY = "Fragment Lifecycle: ON_DESTROY"
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    protected inline fun doIfRecreatingView(savedInstanceState: Bundle?, block: () -> Unit) {
+        if(isRecreating(savedInstanceState, lifecycle.currentState)) {
+            block()
+        }
     }
 
 }
