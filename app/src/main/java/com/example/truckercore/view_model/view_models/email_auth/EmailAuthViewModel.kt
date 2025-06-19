@@ -10,8 +10,9 @@ import com.example.truckercore.view_model.view_models.email_auth.uiState.EmailAu
 import com.example.truckercore.view_model.view_models.email_auth.use_case.AuthenticationViewUseCase
 import kotlinx.coroutines.delay
 
-class EmailAuthViewModel(private val authViewUseCase: AuthenticationViewUseCase) :
-    LoggerViewModel() {
+class EmailAuthViewModel(
+    private val authViewUseCase: AuthenticationViewUseCase
+) : LoggerViewModel() {
 
     private val stateManager = EmailAuthUiStateManager()
     val state get() = stateManager.stateFlow

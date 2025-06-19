@@ -32,10 +32,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_email_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
+            android:imeOptions="actionNext"
             app:errorEnabled="true"
             android:hint="@string/email"
             app:startIconDrawable="@drawable/icon_email">
@@ -44,7 +45,6 @@
                 android:id="@+id/frag_email_auth_email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 android:maxLines="1" />
@@ -53,7 +53,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_password_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/frag_email_auth_confirm_password_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"

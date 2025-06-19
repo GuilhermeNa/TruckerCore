@@ -145,7 +145,7 @@ class LoginFragment : CloseAppFragment() {
     }
 
     private fun setCheckBoxClickListener() {
-        binding.fragLoginCheckbox.addOnCheckedStateChangedListener { checkBox, _ ->
+        binding.fragLoginCheckbox.setOnCheckedChangeListener { checkBox, _ ->
             val isChecked = checkBox.isChecked
             viewModel.onEvent(LoginEvent.UiEvent.Click.CheckBox(isChecked))
         }

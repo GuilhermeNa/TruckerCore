@@ -31,7 +31,7 @@ val commonViewModelModule = module {
     viewModel<SplashViewModel> { SplashViewModel(get(), get()) }
     viewModel<LoginViewModel> { LoginViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get()) }
-    viewModel<WelcomeViewModel> { WelcomeViewModel(get()) }
+    viewModel<WelcomeViewModel> { WelcomeViewModel(get(), get()) }
     viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get()) }
     viewModel<UserNameViewModel> { UserNameViewModel(get(), get()) }
     viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get(), get()) }

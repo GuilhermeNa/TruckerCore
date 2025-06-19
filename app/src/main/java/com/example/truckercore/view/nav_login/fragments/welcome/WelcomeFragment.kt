@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.example.truckercore._shared.classes.ButtonState
-import com.example.truckercore._shared.expressions.doIfResumed
 import com.example.truckercore._shared.expressions.doIfResumedOrElse
 import com.example.truckercore._shared.expressions.logState
 import com.example.truckercore._shared.expressions.navigateToActivity
@@ -122,7 +121,7 @@ class WelcomeFragment : CloseAppFragment() {
                 orElse = { stateHandler.showLeftFab() }
             )
 
-            false -> doIfResumed { stateHandler.animateLeftFabOut() }
+            false -> doIfResumedView { stateHandler.animateLeftFabOut() }
         }
     }
 
@@ -179,7 +178,7 @@ class WelcomeFragment : CloseAppFragment() {
     }
 
     private fun navigateToNextNavDirection() {
-        //PreferenceDataStore.getInstance().setAppAlreadyAccessed(requireContext())
+        viewModel.setAppAlreadyAccessed()
         val direction = navigator.nextNavDirection()
         navigateToDirection(direction)
     }

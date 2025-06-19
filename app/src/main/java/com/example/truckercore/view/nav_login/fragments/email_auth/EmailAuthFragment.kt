@@ -140,13 +140,18 @@ class EmailAuthFragment : CloseAppFragment() {
     // Notifica ao viewModel um evento de click no botao "Criar conta".
     private fun setCreateButtonListener() = with(binding) {
         fragEmailAuthRegisterButton.setOnClickListener {
-            val clickEvent = EmailAuthEvent.UiEvent.Click.ButtonCreate
-            viewModel.onEvent(clickEvent)
+            fragEmailAuthConfirmPasswordEditText.clearFocus()
+            creationRequested()
         }
     }
 
+    private fun creationRequested() {
+        val clickEvent = EmailAuthEvent.UiEvent.Click.ButtonCreate
+        viewModel.onEvent(clickEvent)
+    }
+
     // Notifica ao viewModel um evento de click no botao "Já tenho conta".
-    private fun setAlreadyRegisteredButtonListener() {
+    private fun setAlreadyRegisteredButtonListener()  {
         binding.fragEmailAuthAlreadyRegisteredButton.setOnClickListener {
             viewModel.onEvent(EmailAuthEvent.UiEvent.Click.ButtonAlreadyHaveAccount)
         }
@@ -154,22 +159,28 @@ class EmailAuthFragment : CloseAppFragment() {
 
     private fun setEmailTextChangeListener() {
         binding.fragEmailAuthEmailEditText.addTextChangedListener { editable ->
-            val text = editable.toString()
-            viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.EmailTextChange(text))
+            doIfResumedView {
+                val text = editable.toString()
+                viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.EmailTextChange(text))
+            }
         }
     }
 
     private fun setPasswordTextChangeListener() {
         binding.fragEmailAuthPasswordEditText.addTextChangedListener { editable ->
-            val text = editable.toString()
-            viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.PasswordTextChange(text))
+            doIfResumedView {
+                val text = editable.toString()
+                viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.PasswordTextChange(text))
+            }
         }
     }
 
     private fun setConfirmationTextChangeListener() {
         binding.fragEmailAuthConfirmPasswordEditText.addTextChangedListener { editable ->
-            val text = editable.toString()
-            viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.ConfirmationTextChange(text))
+            doIfResumedView {
+                val text = editable.toString()
+                viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.ConfirmationTextChange(text))
+            }
         }
     }
 
