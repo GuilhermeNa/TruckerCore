@@ -32,4 +32,9 @@ class EmailAuthUiStateManager : StateManager<EmailAuthUiState>(initialState = Em
 
     fun getCredential(): EmailCredential = getStateValue().getCredential()
 
+    fun setCreatedState() {
+        val newState = getStateValue().created()
+        setState(newState)
+    }
+
 }

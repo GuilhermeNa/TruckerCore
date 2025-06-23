@@ -28,7 +28,10 @@ data class EmailAuthUiComponents(
         val password = passwordComponent.text
         val updatedConfirmation = componentFactory.confirmation(confirmation, password)
         val updatedButton = createButtonComponent(newConfirmation = updatedConfirmation)
-        return copy(confirmationComponent = updatedConfirmation, createButtonComponent = updatedButton)
+        return copy(
+            confirmationComponent = updatedConfirmation,
+            createButtonComponent = updatedButton
+        )
     }
 
     private fun createButtonComponent(
@@ -40,5 +43,8 @@ data class EmailAuthUiComponents(
         passwordComponent = newPassword ?: passwordComponent,
         confirmationComponent = newConfirmation ?: confirmationComponent
     )
+
+    fun disableButton(): EmailAuthUiComponents =
+        this.copy(createButtonComponent = ButtonComponent(isEnabled = false))
 
 }

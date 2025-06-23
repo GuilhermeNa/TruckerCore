@@ -63,8 +63,10 @@ class EmailAuthViewModel(
                 tryToAuthenticate()
             }
 
-            EmailAuthEvent.SystemEvent.AuthTask.Success ->
+            EmailAuthEvent.SystemEvent.AuthTask.Success -> {
                 effectManager.setNavigateToVerifyEmailEffect()
+                stateManager.setCreatedState()
+            }
 
             EmailAuthEvent.SystemEvent.AuthTask.CriticalError ->
                 effectManager.setNavigateToNotificationEffect()

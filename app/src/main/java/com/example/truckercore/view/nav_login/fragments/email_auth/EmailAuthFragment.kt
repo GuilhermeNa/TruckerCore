@@ -151,7 +151,7 @@ class EmailAuthFragment : CloseAppFragment() {
     }
 
     // Notifica ao viewModel um evento de click no botao "Já tenho conta".
-    private fun setAlreadyRegisteredButtonListener()  {
+    private fun setAlreadyRegisteredButtonListener() {
         binding.fragEmailAuthAlreadyRegisteredButton.setOnClickListener {
             viewModel.onEvent(EmailAuthEvent.UiEvent.Click.ButtonAlreadyHaveAccount)
         }

@@ -45,4 +45,5 @@ sealed class SplashEffect : Effect {
             override fun toString() = "SystemEffect -> ExecuteLoadUserTask"
         }
     }
+
 }

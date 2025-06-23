@@ -17,6 +17,12 @@ data class EmailAuthUiState(
 
     fun creating() = updateStatus(EmailAuthUiStatus.Creating)
 
+    fun created(): EmailAuthUiState {
+        val newComponents = components.disableButton()
+        val newStatus = EmailAuthUiStatus.Created
+        return copy(components = newComponents, status = newStatus)
+    }
+
     fun updateEmail(email: String): EmailAuthUiState {
         val newComponents = components.updateEmail(email)
         return updateComponents(newComponents)

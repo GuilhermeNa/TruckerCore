@@ -1,16 +1,16 @@
 package com.example.truckercore.view.nav_login.fragments.verifying_email
 
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
-import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailUiState
+import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailState
 
 class VerifyingEmailUiStateHandler(
     private val email: String,
     private val binding: FragmentVerifyingEmailBinding
 ) {
 
-    fun render(state: VerifyingEmailUiState) {
+    fun render(state: VerifyingEmailState) {
         when (state) {
-            is VerifyingEmailUiState.Verified -> runTransition()
+            is VerifyingEmailState.Verified -> runTransition()
             else -> bindEmailText()
         }
     }

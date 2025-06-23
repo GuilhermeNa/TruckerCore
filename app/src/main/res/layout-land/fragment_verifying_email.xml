@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+    android:id="@+id/frag_verifying_email_motion_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient_primary"
+    app:layoutDescription="@xml/fragment_verifying_email_scene"
+    tools:context=".view.nav_login.fragments.verifying_email.VerifyingEmailFragment">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="16dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/o_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:tint="?attr/colorOnPrimary" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/frag_verifying_email_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frag_verifying_email_layout_timer"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.2">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/frag_verifying_email_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="61"
+            android:progress="0"
+            app:indicatorColor="?attr/colorSecondary"
+            app:indicatorTrackGapSize="0dp"
+            app:trackColor="@color/transparentDialog"
+            app:trackCornerRadius="1dp" />
+
+        <TextView
+            android:id="@+id/frag_verifying_email_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="59" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        app:cardBackgroundColor="?attr/colorSecondaryVariant"
+        android:id="@+id/frag_verifying_email_card_check"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
+        android:animateLayoutChanges="true"
+        android:translationZ="11dp"
+        android:visibility="invisible"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="11dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintStart_toStartOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/icon_check"
+            app:tint="?attr/colorOnSecondary" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/frag_verifying_email_text_header_valid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:text="@string/email_valid"
+        android:textSize="@dimen/textMedium"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintStart_toStartOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
+
+    <TextView
+        android:id="@+id/frag_verifying_email_text_header_validating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/validating_email"
+        android:textSize="@dimen/textMedium"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintStart_toStartOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
+
+    <TextView
+        android:id="@+id/frag_verifying_email_text_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="@dimen/textSmall"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintStart_toStartOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_header_validating"
+        tools:text="received@email.com" />
+
+    <TextView
+        android:id="@+id/frag_verifying_email_text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/validating_email_description"
+        android:textSize="@dimen/textSmall"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintStart_toStartOf="@id/frag_verifying_email_card_check"
+        app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_email" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
+
+
