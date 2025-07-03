@@ -13,6 +13,8 @@ fun <T> AppResponse<T>.getOrNull(): T? {
     }
 }
 
+fun <T> AppResponse<T>.get() = (this as AppResponse.Success).data
+
 inline fun <R, T> AppResponse<T>.mapAppResponse(
     onSuccess: (data: T) -> R,
     onEmpty: () -> R,

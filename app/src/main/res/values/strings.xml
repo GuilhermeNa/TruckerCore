@@ -55,5 +55,6 @@
     <string name="documents">Documentos</string>
     <string name="driver">Motorista</string>
     <string name="home">Início</string>
+    <string name="check_connection">Verificar conexão</string>
 
 </resources>

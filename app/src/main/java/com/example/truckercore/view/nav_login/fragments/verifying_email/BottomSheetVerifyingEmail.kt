@@ -19,7 +19,7 @@ class BottomSheetVerifyingEmail : BottomSheetDialogFragment() {
 
     private var listener: BottomSheetVerifyingEmailListener? = null
 
-    //----------------------------------------------------------------------------------------------
+   //----------------------------------------------------------------------------------------------
     // On Create View
     //----------------------------------------------------------------------------------------------
     override fun onAttach(context: Context) {
@@ -93,18 +93,15 @@ class BottomSheetVerifyingEmail : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
         listener = null
     }
 
     companion object {
-        const val TAG = "BottomSheetVerifyingEmail"
+         const val TAG = "BottomSheetVerifyingEmail"
     }
-
-    fun alreadyShown(): Boolean = try {
-        parentFragmentManager.findFragmentByTag(TAG) != null
-    } catch (_: Exception) {
-        false
-    }
-
 
 }

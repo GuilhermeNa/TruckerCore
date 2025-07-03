@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  * The user is shown a toast message, asking them to press back again to confirm exit. If the
  * user confirms, the app will close.
  */
-abstract class CloseAppFragment : LoggerFragment() {
+abstract class CloseAppFragment : BaseFragment() {
 
     /**
      * Lazy-initialized instance of [ExitAppManager] to handle the logic of app exit confirmation.

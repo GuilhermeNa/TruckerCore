@@ -16,7 +16,7 @@ import com.example.truckercore._shared.expressions.logState
 import com.example.truckercore._shared.expressions.showGreenSnackBar
 import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentForgetPasswordBinding
-import com.example.truckercore.view._shared._base.fragments.LoggerFragment
+import com.example.truckercore.view._shared._base.fragments.BaseFragment
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordEvent
 import com.example.truckercore.view_model.view_models.forget_password.ForgetPasswordViewModel
@@ -27,7 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ForgetPasswordFragment : LoggerFragment() {
+class ForgetPasswordFragment : BaseFragment() {
 
     private var _binding: FragmentForgetPasswordBinding? = null
     private val binding get() = _binding!!

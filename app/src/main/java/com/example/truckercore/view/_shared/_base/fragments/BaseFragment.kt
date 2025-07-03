@@ -8,7 +8,7 @@ import com.example.truckercore._shared.expressions.getClassName
 import com.example.truckercore.model.logger.AppLogger
 import com.example.truckercore.view._shared._base.handlers.InstanceStateHandler
 
-abstract class LoggerFragment : Fragment(), InstanceStateHandler {
+abstract class BaseFragment : Fragment(), InstanceStateHandler {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,7 @@ abstract class LoggerFragment : Fragment(), InstanceStateHandler {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        registerFragmentCreated(outState)
         AppLogger.d(getClassName(), LIFECYCLE_SAVE_INSTANCE_STATE)
     }
 
@@ -56,15 +57,18 @@ abstract class LoggerFragment : Fragment(), InstanceStateHandler {
     }
 
     //----------------------------------------------------------------------------------------------
-
     protected inline fun doIfRecreatingView(savedInstanceState: Bundle?, block: () -> Unit) {
         if (isRecreating(savedInstanceState, lifecycle.currentState)) {
             block()
         }
     }
 
-    protected fun doIfResumedView(block: () -> Unit) {
+    protected inline fun doIfResumedView(block: () -> Unit) {
         if (this.lifecycle.currentState == Lifecycle.State.RESUMED) block()
+    }
+
+    protected inline fun doOnInitialization(savedInstanceState: Bundle?, block: () -> Unit) {
+        if(isFirstExecution(savedInstanceState)) block()
     }
 
 }

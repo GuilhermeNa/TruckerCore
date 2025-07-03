@@ -147,14 +147,6 @@ class SplashFragment : CloseAppFragment() {
     }
 
     //----------------------------------------------------------------------------------------------
-    // On Save Instance State
-    //----------------------------------------------------------------------------------------------
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        registerFragmentCreated(outState)
-    }
-
-    //----------------------------------------------------------------------------------------------
     // On Destroy View
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {

@@ -6,7 +6,7 @@ import com.example.truckercore.view._shared.views.activities.NotificationActivit
 import com.example.truckercore.view_model._shared._base.view_model.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-abstract class MainFragment : LoggerFragment() {
+abstract class MainFragment : BaseFragment() {
 
     private val mainViewModel: MainViewModel by viewModel()
 

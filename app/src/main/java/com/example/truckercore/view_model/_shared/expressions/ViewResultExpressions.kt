@@ -23,6 +23,8 @@ fun <T> ViewResult<T>.getOrElse(orElse: (ViewError) -> Nothing): T =
         is ViewResult.Error -> orElse(this.e)
     }
 
+fun <T> ViewResult<T>.get() = (this as ViewResult.Success).data
+
 fun <T> ViewResult<T>.handleResult(
     onSuccess: (T) -> Unit,
     onCriticalError: (ViewError.Critical) -> Unit,
