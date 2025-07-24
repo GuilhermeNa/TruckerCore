@@ -19,7 +19,7 @@
 
 
     <string name="enter_code">Digite o código de verificação</string>
-    <string name="verify">Verificar</string>
+    <string name="try_again">Tente novamente</string>
     <string name="already_have_a_code">Já tenho um código</string>
     <string name="name">Nome</string>
     <string name="surname">Sobrenome</string>
@@ -55,6 +55,7 @@
     <string name="documents">Documentos</string>
     <string name="driver">Motorista</string>
     <string name="home">Início</string>
-    <string name="check_connection">Verificar conexão</string>
+    <string name="connection_error_header">Erro de rede</string>
+    <string name="connection_error_body">Verifique sua conexão com a internet e tente novamente</string>
 
 </resources>

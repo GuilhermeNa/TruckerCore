@@ -1,24 +1,32 @@
 package com.example.truckercore.view_model.view_models.verifying_email
 
-import androidx.lifecycle.ViewModel
-import com.example.truckercore._shared.classes.AppResult
+ import androidx.lifecycle.ViewModel
 import com.example.truckercore._shared.expressions.getOrNull
 import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.logEvent
-import com.example.truckercore._shared.expressions.mapAppResult
 import com.example.truckercore.model.modules.authentication.manager.AuthManager
 import com.example.truckercore.view_model._shared._base.managers.EffectManagerII
 import com.example.truckercore.view_model._shared._base.managers.StateManagerII
-import com.example.truckercore.view_model._shared.expressions.get
 import com.example.truckercore.view_model._shared.expressions.handleResult
 import com.example.truckercore.view_model._shared.expressions.mapResult
+import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailEffect
+import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailSystemEffect
 import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailUiEffect
-import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailSystemEvent
-import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailUiEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailClickEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailInitializationEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailSendEmailEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailVerificationEvent
 import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailState
-import com.example.truckercore.view_model.view_models.verifying_email.use_cases.EmailValidation
 import com.example.truckercore.view_model.view_models.verifying_email.use_cases.SendVerificationEmailViewUseCase
 import com.example.truckercore.view_model.view_models.verifying_email.use_cases.VerifyEmailViewUseCase
+
+private typealias SuccessOnInitialization = VerifyingEmailInitializationEvent.Success
+private typealias ErrorOnInitialization = VerifyingEmailInitializationEvent.Error
+
+private typealias OnRetryCLicked = VerifyingEmailClickEvent.OnRetry
+private typealias OnCreateNewEmailClicked = VerifyingEmailClickEvent.OnCreateNewAccount
+private typealias OnCheckConnectionClicked = VerifyingEmailClickEvent.OnCheckConnection
 
 class VerifyingEmailViewModel(
     private val authManager: AuthManager,
@@ -40,71 +48,65 @@ class VerifyingEmailViewModel(
     fun initialize() {
         val email = authManager.getUserEmail().getOrNull()
 
-        val event =
-            if (email != null) VerifyingEmailSystemEvent.Initialize(email)
-            else VerifyingEmailSystemEvent.InitializationError
+        val initializationEvent =
+            if (email != null) SuccessOnInitialization(email)
+            else ErrorOnInitialization
 
-        onSystemEvent(event)
-    }
-
-    private fun onSystemEvent(event: VerifyingEmailSystemEvent) {
-        logEvent(this, event)
-        reducer.reduce(stateManager.currentState(), event).handleResult {
-
-        }
-    }
-
-    private fun sendVerificationEmail(): Unit = launch {
-        sendEmailUseCase().mapResult(
-            onSuccess = { },
-            onCriticalError = { },
-            onRecoverableError = { }
-        )
-    }
-
-    private fun startVerification(): Unit = launch {
-        val result = verifyEmailUseCase().get()
-        val event = when (result) {
-            EmailValidation.Valid -> TODO("Ativar animação de conclusão")
-            EmailValidation.Error -> TODO("Navegar para activity de erro")
-            EmailValidation.Timeout -> TODO("Exibir Dialog com opções")
-        }
-        onEvent(event)
-    }
-
-
-
-    private fun onUiEvent(uiEvent: VerifyingEmailUiEvent) {
-
-    }
-
-    fun transitionEnd() {
-        onEvent(VerifyingEmailEvent.UiEvent.TransitionEnd)
-    }
-
-    fun retry() {
-        onEvent(VerifyingEmailEvent.UiEvent.Click.Retry)
+        onEvent(initializationEvent)
     }
 
     private fun onEvent(event: VerifyingEmailEvent) {
         logEvent(this, event)
         reducer.reduce(stateManager.currentState(), event).handleResult(
             state = { stateManager.update(it) },
-            effect = ::handleEffect
+            effect = { handleEffect(it) }
         )
     }
 
     private fun handleEffect(effect: VerifyingEmailEffect) {
+        // Inner Functions --
+        fun handleSystemEffect(systemEffect: VerifyingEmailSystemEffect) {
+            when (systemEffect) {
+                VerifyingEmailSystemEffect.LaunchSendEmailTask -> launchSendEmailTask()
+                VerifyingEmailSystemEffect.LaunchCheckEmailTask -> launchCheckEmailTask()
+            }
+        }
+
+        // --
         when (effect) {
-            VerifyingEmailEffect.SystemEffect.ExecuteVerificationTask -> startVerification()
-            else -> effectManager.trySend(effect)
+            is VerifyingEmailSystemEffect -> handleSystemEffect(effect)
+            is VerifyingEmailUiEffect -> effectManager.trySend(effect)
         }
     }
 
+    private fun launchSendEmailTask(): Unit = launch {
+        val sendEmailEvent = sendEmailUseCase().mapResult(
+            onSuccess = { VerifyingEmailSendEmailEvent.Success },
+            onCriticalError = { VerifyingEmailSendEmailEvent.CriticalError },
+            onRecoverableError = { VerifyingEmailSendEmailEvent.NoConnection }
+        )
+        onEvent(sendEmailEvent)
+    }
 
-    private fun getEventFromResult(result: AppResult<Unit>) = result.mapAppResult(
-        onSuccess = { VerifyingEmailEvent.SystemEvent.VerificationTask.Success },
-        onError = { VerifyingEmailEvent.SystemEvent.VerificationTask.CriticalError }
-    )
+    private fun launchCheckEmailTask(): Unit = launch {
+        val verificationEvent = verifyEmailUseCase().mapResult(
+            onSuccess = { VerifyingEmailVerificationEvent.Success },
+            onCriticalError = { VerifyingEmailVerificationEvent.CriticalError },
+            onRecoverableError = { VerifyingEmailVerificationEvent.Timeout }
+        )
+        onEvent(verificationEvent)
+    }
+
+    fun retry() {
+        onEvent(OnRetryCLicked)
+    }
+
+    fun createAnotherEmail() {
+        onEvent(OnCreateNewEmailClicked)
+    }
+
+    fun checkConnection() {
+        onEvent(OnCheckConnectionClicked)
+    }
 
 }

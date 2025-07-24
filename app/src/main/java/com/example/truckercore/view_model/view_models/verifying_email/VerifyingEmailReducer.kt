@@ -1,14 +1,18 @@
 package com.example.truckercore.view_model.view_models.verifying_email
 
-import com.example.truckercore.model.errors.technical.TechnicalException
 import com.example.truckercore.view_model._shared._base.reducer.BaseReducer
 import com.example.truckercore.view_model._shared._base.reducer.ReducerResult
 import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailEffect
 import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailSystemEffect
 import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailUiEffect
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailClickEvent
 import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailInitializationEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailSendEmailEvent
 import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailSystemEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailTransitionEvent
 import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailUiEvent
+import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailVerificationEvent
 import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailState
 
 class VerifyingEmailReducer :
@@ -20,77 +24,87 @@ class VerifyingEmailReducer :
     ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> = when (event) {
         is VerifyingEmailSystemEvent -> handleSystemEvent(state, event)
         is VerifyingEmailUiEvent -> handleUiEvent(event)
-        else -> throw TechnicalException.NotImplemented()
+        else -> throw NotImplementedError()
     }
 
-    private fun handleSystemEvent(state: VerifyingEmailState, event: VerifyingEmailSystemEvent) =
-        when (event) {
-            is VerifyingEmailSystemEvent.Initialize -> {
-                val newState = state.initialize(event.email)
-                val systemEffect = VerifyingEmailSystemEffect.LaunchSendEmailTask
-                resultWithStateAndEffect(newState, systemEffect)
-            }
-            VerifyingEmailSystemEvent.InitializationError -> {
-                val uiEffect = VerifyingEmailUiEffect.NavigateToErrorActivity
-                resultWithEffect(uiEffect)
-            }
-            VerifyingEmailSystemEvent.EmailSentSuccess -> {
-                val newState = state.waitingVerification()
-                val systemEffect = VerifyingEmailSystemEffect.LaunchCheckEmailTask
-                resultWithStateAndEffect(newState, systemEffect)
-            }
-            VerifyingEmailSystemEvent.EmailSendCriticalError -> {
+    // --- System Events ---
+    private fun handleSystemEvent(
+        state: VerifyingEmailState,
+        event: VerifyingEmailSystemEvent
+    ) = when (event) {
+        is VerifyingEmailInitializationEvent.Success -> applyInitializationState(state, event)
+        VerifyingEmailInitializationEvent.Error -> sendNavigateToErrorEffect()
 
-            }
-            VerifyingEmailSystemEvent.EmailSendFailedNoConnection -> TODO()
+        VerifyingEmailSendEmailEvent.Success -> applyWaitingForVerificationState(state)
+        VerifyingEmailSendEmailEvent.CriticalError -> sendNavigateToErrorEffect()
+        VerifyingEmailSendEmailEvent.NoConnection -> applyNoConnectionState(state)
 
-          /*  is VerifyingEmailEvent.SystemEvent.InitializationTask.Success -> {
-                val newState = state.initialize(event.email)
-                val newEffect = VerifyingEmailEffect.SystemEffect.ExecuteVerificationTask
-                resultWithStateAndEffect(newState, newEffect)
-            }
+        VerifyingEmailVerificationEvent.Success -> applyVerifiedState(state)
+        VerifyingEmailVerificationEvent.CriticalError -> sendNavigateToErrorEffect()
+        VerifyingEmailVerificationEvent.Timeout -> sendShowBottomSheetEffect()
+        else -> throw NotImplementedError()
+    }
 
-            VerifyingEmailEvent.SystemEvent.InitializationTask.CriticalError -> {
-                val newEffect = VerifyingEmailEffect.UiEffect.NavigateToNotification
-                resultWithEffect(newEffect)
-            }
+    // --- UI Events ---
+    private fun handleUiEvent(event: VerifyingEmailUiEvent) = when (event) {
+        VerifyingEmailClickEvent.OnCheckConnection -> launchSendEmailTaskEffect()
+        VerifyingEmailClickEvent.OnCreateNewAccount -> sendNavigateToNewEmailEffect()
+        VerifyingEmailClickEvent.OnRetry -> launchSendEmailTaskEffect()
+        VerifyingEmailTransitionEvent.TransitionComplete -> sendNavigateToCreateNameEffect()
+        else -> throw NotImplementedError()
+    }
 
-            is VerifyingEmailEvent.SystemEvent.VerificationTask.Success -> {
-                val newState = state.verified()
-                val newEffect = VerifyingEmailEffect.UiEffect.TransitionToEnd
-                resultWithStateAndEffect(newState, newEffect)
-            }
+    // --- State-only reducers ---
+    private fun applyVerifiedState(
+        state: VerifyingEmailState
+    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        val newState = state.verified()
+        return resultWithState(newState)
+    }
 
-            VerifyingEmailEvent.SystemEvent.VerificationTask.CriticalError -> {
-                val newEffect = VerifyingEmailEffect.UiEffect.NavigateToNotification
-                resultWithEffect(newEffect)
-            }
+    private fun applyNoConnectionState(
+        state: VerifyingEmailState
+    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        val newState = state.noConnection()
+        return resultWithState(newState)
+    }
 
-            VerifyingEmailEvent.SystemEvent.CounterTask.TimeOut -> {
-                val newState = state.timeout()
-                resultWithState(newState)
-            }*/
+    private fun applyWaitingForVerificationState(
+        state: VerifyingEmailState
+    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        val newState = state.waitingVerification()
+        val effect = VerifyingEmailSystemEffect.LaunchCheckEmailTask
+        return resultWithStateAndEffect(newState, effect)
+    }
 
-        }
+    private fun applyInitializationState(
+        state: VerifyingEmailState,
+        event: VerifyingEmailInitializationEvent.Success
+    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        val newState = state.initialize(event.email)
+        val effect = VerifyingEmailSystemEffect.LaunchSendEmailTask
+        return resultWithStateAndEffect(newState, effect)
+    }
 
-    private fun handleUiEvent(event: VerifyingEmailUiEvent) =
-        when (event) {
-            VerifyingEmailEvent.UiEvent.Click.Retry -> {
-                val newEffect = VerifyingEmailEffect.SystemEffect.ExecuteVerificationTask
-                resultWithEffect(newEffect)
-            }
+    // --- Effect-only reducers ---
+    private fun sendNavigateToErrorEffect(): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        return resultWithEffect(VerifyingEmailUiEffect.NavigateToErrorActivity)
+    }
 
-            VerifyingEmailEvent.UiEvent.Click.CreateAnother -> {
-                val newEffect = VerifyingEmailEffect.UiEffect.NavigateToUserName
-                resultWithEffect(newEffect)
-            }
+    private fun sendShowBottomSheetEffect(): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        return resultWithEffect(VerifyingEmailUiEffect.ShowBottomSheet)
+    }
 
-            VerifyingEmailEvent.UiEvent.TransitionEnd -> {
-                val newEffect = VerifyingEmailEffect.UiEffect.NavigateToUserName
-                resultWithEffect(newEffect)
-            }
-        }
+    private fun sendNavigateToCreateNameEffect(): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        return resultWithEffect(VerifyingEmailUiEffect.NavigateToCreateNameFragment)
+    }
 
+    private fun sendNavigateToNewEmailEffect(): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        return resultWithEffect(VerifyingEmailUiEffect.NavigateToCreateNewEmailFragment)
+    }
 
+    private fun launchSendEmailTaskEffect(): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        return resultWithEffect(VerifyingEmailSystemEffect.LaunchSendEmailTask)
+    }
 
 }

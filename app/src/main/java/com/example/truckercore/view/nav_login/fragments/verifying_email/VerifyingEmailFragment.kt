@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.truckercore._shared.expressions.doIfResumedOrElse
 import com.example.truckercore._shared.expressions.logState
-import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
 import com.example.truckercore.view._shared.expressions.launchOnFragment
@@ -29,25 +28,12 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     // Transition Listener
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-            viewModel.transitionEnd()
+           // viewModel.transitionEnd()
         }
 
         override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
-        override fun onTransitionChange(
-            motionLayout: MotionLayout?,
-            startId: Int,
-            endId: Int,
-            progress: Float
-        ) {
-        }
-
-        override fun onTransitionTrigger(
-            motionLayout: MotionLayout?,
-            triggerId: Int,
-            positive: Boolean,
-            progress: Float
-        ) {
-        }
+        override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
+        override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
     }
 
     // ViewModel
@@ -145,10 +131,17 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTransitionListener()
+        setCheckConnectionClickListener()
     }
 
     private fun setTransitionListener() {
        // binding.fragVerifyingEmailMotionLayout.addTransitionListener(transitionListener)
+    }
+
+    private fun setCheckConnectionClickListener() {
+        binding.fragVerifyingEmailButton.setOnClickListener {
+            viewModel.checkConnection()
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -172,10 +165,11 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     }
 
     override fun onChangeEmail() {
-        val direction = VerifyingEmailFragmentDirections
-            .actionGlobalEmailAuthFragment()
-        navigateToDirection(direction)
+        viewModel.createAnotherEmail()
     }
 
+/*    val direction = VerifyingEmailFragmentDirections
+        .actionGlobalEmailAuthFragment()
+    navigateToDirection(direction)*/
 }
 
