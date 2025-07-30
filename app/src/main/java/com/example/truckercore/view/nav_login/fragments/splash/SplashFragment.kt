@@ -11,7 +11,7 @@ import com.example.truckercore._shared.expressions.logState
 import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.launchOnFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragmentLifecycle
 import com.example.truckercore.view._shared.views.activities.NotificationActivity
 import com.example.truckercore.view_model.view_models.splash.SplashViewModel
 import com.example.truckercore.view_model.view_models.splash.effect.SplashEffect
@@ -65,7 +65,7 @@ class SplashFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchOnFragment {
+        launchOnFragmentLifecycle {
             setStateManager(savedInstanceState)
             setEffectManager()
         }

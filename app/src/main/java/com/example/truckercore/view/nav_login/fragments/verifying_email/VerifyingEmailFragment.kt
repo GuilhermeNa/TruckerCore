@@ -9,7 +9,7 @@ import com.example.truckercore._shared.expressions.doIfResumedOrElse
 import com.example.truckercore._shared.expressions.logState
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.launchOnFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragmentLifecycle
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
 import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailStatus
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +45,7 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         doOnInitialization(savedInstanceState) { viewModel.initialize() }
-        launchOnFragment {
+        launchOnFragmentLifecycle {
             setStateManager(savedInstanceState)
             setEffectManager()
             setCounterStateManager()
@@ -131,17 +131,10 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTransitionListener()
-        setCheckConnectionClickListener()
     }
 
     private fun setTransitionListener() {
        // binding.fragVerifyingEmailMotionLayout.addTransitionListener(transitionListener)
-    }
-
-    private fun setCheckConnectionClickListener() {
-        binding.fragVerifyingEmailButton.setOnClickListener {
-            viewModel.checkConnection()
-        }
     }
 
     //----------------------------------------------------------------------------------------------

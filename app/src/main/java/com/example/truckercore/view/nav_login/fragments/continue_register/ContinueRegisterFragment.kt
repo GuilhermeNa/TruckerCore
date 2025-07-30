@@ -11,7 +11,7 @@ import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.launchOnFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragmentLifecycle
 import com.example.truckercore.view_model.view_models.continue_register.ContinueRegisterViewModel
 import com.example.truckercore.view_model.view_models.continue_register.effect.ContinueRegisterEffect
 import com.example.truckercore.view_model.view_models.continue_register.event.ContinueRegisterEvent
@@ -43,7 +43,7 @@ class ContinueRegisterFragment : CloseAppFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize()
-        launchOnFragment {
+        launchOnFragmentLifecycle {
             setStateManager()
             setEffectManager()
         }

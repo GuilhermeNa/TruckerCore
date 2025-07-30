@@ -7,7 +7,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-fun Fragment.launchOnFragment(block: suspend CoroutineScope.() -> Unit) {
+fun Fragment.launchOnFragmentLifecycle(block: suspend CoroutineScope.() -> Unit) {
     lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.STARTED) {
             block(this@repeatOnLifecycle)

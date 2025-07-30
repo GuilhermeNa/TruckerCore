@@ -4,7 +4,7 @@
     <!--  Base App Colors -->
     <!-- ======================================================================================= -->
     <color name="colorPrimary">#035876</color>
-    <color name="colorPrimaryVariant">#052B38</color>
+    <color name="colorPrimaryVariant">#035876</color>
     <color name="colorOnPrimary">#D7D7D7</color>
 
     <color name="colorSecondary">#81C784</color>

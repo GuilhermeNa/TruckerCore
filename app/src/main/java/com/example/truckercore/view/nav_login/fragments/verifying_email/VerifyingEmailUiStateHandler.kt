@@ -12,11 +12,11 @@ class VerifyingEmailUiStateHandler : StateHandler<FragmentVerifyingEmailBinding>
     }
 
     fun jumpToEnd() {
-        getBinding().fragVerifyingEmailMotionLayout.jumpToState(R.id.frag_verifying_email_scene_end)
+      //  getBinding().fragVerifyingEmailMotionLayout.jumpToState(R.id.frag_verifying_email_scene_end)
     }
 
     fun transitionToEnd() {
-        getBinding().fragVerifyingEmailMotionLayout.transitionToEnd()
+     //   getBinding().fragVerifyingEmailMotionLayout.transitionToEnd()
     }
 
     fun animateProgress(value: Int) {

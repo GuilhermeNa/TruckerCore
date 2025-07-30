@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view._shared.views.fragments.NoConnectionFragment"
+    tools:context=".view._shared.views.fragments.no_connection.NoConnectionFragment"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_gravity="center">
@@ -24,12 +24,29 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="8dp"/>
 
-    <Button
-        android:id="@+id/frag_no_connection_button"
-        style="@style/buttonTertiary"
+    <FrameLayout
+        android:id="@+id/frag_no_connection_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/try_again"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="32dp">
+
+        <Button
+            android:id="@+id/frag_no_connection_button"
+            style="@style/buttonTertiary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/try_again"/>
+
+        <ProgressBar
+            android:id="@+id/frag_no_connection_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleSmall"
+            android:indeterminateDrawable="@drawable/progress_bar_gradient"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
 
 </LinearLayout>

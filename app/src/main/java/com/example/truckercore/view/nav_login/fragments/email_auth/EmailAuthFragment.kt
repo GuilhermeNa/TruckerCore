@@ -13,7 +13,7 @@ import com.example.truckercore._shared.expressions.logState
 import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.launchOnFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragmentLifecycle
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
 import com.example.truckercore.view_model.view_models.email_auth.EmailAuthViewModel
 import com.example.truckercore.view_model.view_models.email_auth.effect.EmailAuthEffect
@@ -46,7 +46,7 @@ class EmailAuthFragment : CloseAppFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchOnFragment {
+        launchOnFragmentLifecycle {
             setFragmentStateManager()
             setFragmentEffectManager()
         }

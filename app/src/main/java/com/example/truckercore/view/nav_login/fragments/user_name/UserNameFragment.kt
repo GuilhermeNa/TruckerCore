@@ -13,7 +13,7 @@ import com.example.truckercore._shared.expressions.showRedSnackBar
 import com.example.truckercore.databinding.FragmentUserNameBinding
 import com.example.truckercore.model.configs.flavor.FlavorService
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.view._shared.expressions.launchOnFragment
+import com.example.truckercore.view._shared.expressions.launchOnFragmentLifecycle
 import com.example.truckercore.view._shared.expressions.navigateToNotification
 import com.example.truckercore.view._shared.helpers.ViewBinder
 import com.example.truckercore.view._shared.views.dialogs.LoadingDialog
@@ -42,7 +42,7 @@ class UserNameFragment : CloseAppFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.initialize()
-        launchOnFragment {
+        launchOnFragmentLifecycle {
             setStateManager()
             setEffectManager()
         }
