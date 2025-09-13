@@ -104,7 +104,7 @@ class GetSessionInfoUseCaseImpl(
                 getDriverUseCase(spec)
             }
 
-            Role.MANAGER -> AppResponse.Error(
+            Role.MANAGER -> AppResponse.Failure(
                 TechnicalException.NotImplemented(NOT_IMPLEMENTED_MSG)
             )
         }

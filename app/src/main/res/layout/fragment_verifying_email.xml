@@ -7,6 +7,7 @@
     android:background="@drawable/background_gradient_primary"
     tools:context=".view.nav_login.fragments.verifying_email.VerifyingEmailFragment">
 
+    <!-- Email image -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="75dp"
@@ -36,6 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_guideline">
 
+        <!-- Shimmer layout -->
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/frag_verifying_email_shimmer"
             android:layout_width="wrap_content"
@@ -78,6 +80,7 @@
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
+        <!-- Timer layout -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/frag_verifying_email_layout_timer"
             android:layout_width="80dp"
@@ -111,6 +114,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Email valid layout -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/frag_verifying_email_card_check"
             android:layout_width="75dp"
@@ -137,6 +141,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Email checked text -->
         <TextView
             android:id="@+id/frag_verifying_email_text_header"
             android:layout_width="wrap_content"
@@ -151,6 +156,7 @@
             app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check"
             tools:text="@string/email_valid" />
 
+        <!-- Checking email text layout -->
         <LinearLayout
             android:id="@+id/frag_verifying_email_helper_text_layout"
             android:layout_width="wrap_content"

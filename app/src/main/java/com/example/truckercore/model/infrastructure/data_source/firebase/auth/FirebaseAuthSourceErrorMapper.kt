@@ -63,6 +63,16 @@ class FirebaseAuthSourceErrorMapper : AuthSourceErrorMapper {
                 message = "The Task failed while sending email verification."
             )
 
+            is FirebaseTooManyRequestsException -> TooManyRequestsException(
+                message = "Too many requests while sending email verification.",
+                cause = e
+            )
+
+            is FirebaseNetworkException -> NetworkException(
+                message = "Network error during sending verification email.",
+                cause = e
+            )
+
             else -> UnknownException(
                 message = "An unknown error occurred while sending email verification.",
                 cause = e

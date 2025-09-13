@@ -1,22 +1,70 @@
 package com.example.truckercore.view.nav_login.fragments.verifying_email
 
-import com.example.truckercore.R
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view._shared._base.handlers.StateHandler
 import com.example.truckercore.view_model._shared.components.TextComponent
+import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailState
+import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailStatus
 
 class VerifyingEmailUiStateHandler : StateHandler<FragmentVerifyingEmailBinding>() {
 
-    fun handleComponent(emailComponent: TextComponent) {
-        getBinding().fragVerifyingEmailTextEmail.text = emailComponent.text
+    fun bind(state: VerifyingEmailState) {
+        bindEmail(state.email)
+        bindStatus(state.status)
     }
 
-    fun jumpToEnd() {
-      //  getBinding().fragVerifyingEmailMotionLayout.jumpToState(R.id.frag_verifying_email_scene_end)
+    private fun bindEmail(email: TextComponent) {
+        getBinding().fragVerifyingEmailTextEmail.text = email.text
     }
 
-    fun transitionToEnd() {
-     //   getBinding().fragVerifyingEmailMotionLayout.transitionToEnd()
+    private fun bindStatus(status: VerifyingEmailStatus) {
+        when (status) {
+            VerifyingEmailStatus.Idle -> {
+                showShimmer(true)
+                showWaitingVerificationLayout(false)
+                showVerifiedLayout(false)
+            }
+
+            VerifyingEmailStatus.WaitingForVerification -> {
+                showShimmer(false)
+                showWaitingVerificationLayout(true)
+                showVerifiedLayout(false)
+            }
+
+            VerifyingEmailStatus.EmailVerified -> {
+                showShimmer(false)
+                showWaitingVerificationLayout(false)
+                showVerifiedLayout(true)
+            }
+        }
+    }
+
+    private fun showShimmer(show: Boolean) {
+        val shimmer = getBinding().fragVerifyingEmailShimmer
+
+        if (show) {
+            shimmer.visibility = VISIBLE
+            shimmer.showShimmer(true)
+        }
+        else {
+            shimmer.visibility = GONE
+            shimmer.hideShimmer()
+        }
+    }
+
+    private fun showVerifiedLayout(show: Boolean) {
+        val visibility = if (show) VISIBLE else INVISIBLE
+        getBinding().fragVerifyingEmailCardCheck.visibility = visibility
+        getBinding().fragVerifyingEmailTextHeader.visibility = visibility
+    }
+
+    private fun showWaitingVerificationLayout(show: Boolean) {
+        val visibility = if (show) VISIBLE else INVISIBLE
+        getBinding().fragVerifyingEmailLayoutTimer.visibility = visibility
+        getBinding().fragVerifyingEmailHelperTextLayout.visibility = visibility
     }
 
     fun animateProgress(value: Int) {

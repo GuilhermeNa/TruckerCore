@@ -1,6 +1,6 @@
 package com.example.truckercore.view_model.view_models.verifying_email
 
- import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.example.truckercore._shared.expressions.getOrNull
 import com.example.truckercore._shared.expressions.launch
 import com.example.truckercore._shared.expressions.logEvent
@@ -17,6 +17,7 @@ import com.example.truckercore.view_model.view_models.verifying_email.event.Veri
 import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailInitializationEvent
 import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailSendEmailEvent
 import com.example.truckercore.view_model.view_models.verifying_email.event.VerifyingEmailVerificationEvent
+import com.example.truckercore.view_model.view_models.verifying_email.reducer.VerifyingEmailReducer
 import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailState
 import com.example.truckercore.view_model.view_models.verifying_email.use_cases.SendVerificationEmailViewUseCase
 import com.example.truckercore.view_model.view_models.verifying_email.use_cases.VerifyEmailViewUseCase
@@ -26,7 +27,6 @@ private typealias ErrorOnInitialization = VerifyingEmailInitializationEvent.Erro
 
 private typealias OnRetryCLicked = VerifyingEmailClickEvent.OnRetry
 private typealias OnCreateNewEmailClicked = VerifyingEmailClickEvent.OnCreateNewAccount
-private typealias OnCheckConnectionClicked = VerifyingEmailClickEvent.OnCheckConnection
 
 class VerifyingEmailViewModel(
     private val authManager: AuthManager,
@@ -45,13 +45,14 @@ class VerifyingEmailViewModel(
     private val reducer = VerifyingEmailReducer()
 
     //----------------------------------------------------------------------------------------------
-    fun initialize() {
-        val email = authManager.getUserEmail().getOrNull()
+    init {
+        fetchEmail()
+    }
 
-        val initializationEvent =
-            if (email != null) SuccessOnInitialization(email)
-            else ErrorOnInitialization
-
+    private fun fetchEmail() {
+        val initializationEvent = authManager.getUserEmail().getOrNull()?.let { email ->
+            SuccessOnInitialization(email)
+        } ?: ErrorOnInitialization
         onEvent(initializationEvent)
     }
 
@@ -64,17 +65,12 @@ class VerifyingEmailViewModel(
     }
 
     private fun handleEffect(effect: VerifyingEmailEffect) {
-        // Inner Functions --
-        fun handleSystemEffect(systemEffect: VerifyingEmailSystemEffect) {
-            when (systemEffect) {
+        when (effect) {
+            is VerifyingEmailSystemEffect -> when (effect) {
                 VerifyingEmailSystemEffect.LaunchSendEmailTask -> launchSendEmailTask()
                 VerifyingEmailSystemEffect.LaunchCheckEmailTask -> launchCheckEmailTask()
             }
-        }
 
-        // --
-        when (effect) {
-            is VerifyingEmailSystemEffect -> handleSystemEffect(effect)
             is VerifyingEmailUiEffect -> effectManager.trySend(effect)
         }
     }
@@ -103,10 +99,6 @@ class VerifyingEmailViewModel(
 
     fun createAnotherEmail() {
         onEvent(OnCreateNewEmailClicked)
-    }
-
-    fun checkConnection() {
-        onEvent(OnCheckConnectionClicked)
     }
 
 }

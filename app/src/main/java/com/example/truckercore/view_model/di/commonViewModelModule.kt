@@ -14,6 +14,7 @@ import com.example.truckercore.view_model.view_models.splash.use_case.SplashView
 import com.example.truckercore.view_model.view_models.user_name.UserNameViewModel
 import com.example.truckercore.view_model.view_models.user_name.use_case.UserNameViewUseCase
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
+import com.example.truckercore.view_model.view_models.verifying_email.use_cases.SendVerificationEmailViewUseCase
 import com.example.truckercore.view_model.view_models.verifying_email.use_cases.VerifyEmailViewUseCase
 import com.example.truckercore.view_model.view_models.welcome_fragment.WelcomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -28,7 +29,9 @@ val commonViewModelModule = module {
     single { ContinueRegisterViewUseCase(get(), get()) }
     single { UserNameViewUseCase(get(), get(), get()) }
     single { VerifyEmailViewUseCase(get(), get()) }
+    single { SendVerificationEmailViewUseCase(get()) }
     factory { CounterUseCase() }
+
 
     viewModel<SplashViewModel> { SplashViewModel(get(), get()) }
     viewModel<LoginViewModel> { LoginViewModel(get(), get()) }

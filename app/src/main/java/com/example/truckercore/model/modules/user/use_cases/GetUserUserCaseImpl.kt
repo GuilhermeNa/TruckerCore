@@ -22,9 +22,9 @@ class GetUserUserCaseImpl(
                 .let { getSuccessResponse(it) }
 
         } catch (e: AppException) {
-            AppResponse.Error(e)
+            AppResponse.Failure(e)
         } catch (e: Exception) {
-            AppResponse.Error(
+            AppResponse.Failure(
                 TechnicalException.Unknown("$UNEXPECTED_ERROR_MESSAGE $spec", e)
             )
         }

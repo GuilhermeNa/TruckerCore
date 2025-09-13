@@ -5,37 +5,60 @@ import com.example.truckercore.view_model._shared._contracts.Event
 
 interface VerifyingEmailEvent : Event
 
+//--------------------------------------------------------------------------------------------------
+// System Events
+//--------------------------------------------------------------------------------------------------
 interface VerifyingEmailSystemEvent : VerifyingEmailEvent
 
-interface VerifyingEmailUiEvent : VerifyingEmailEvent
-
-// System Events --
-
 sealed class VerifyingEmailInitializationEvent : VerifyingEmailSystemEvent {
-    data class Success(val email: Email) : VerifyingEmailInitializationEvent()
-    data object Error : VerifyingEmailInitializationEvent()
+    data class Success(val email: Email) : VerifyingEmailInitializationEvent() {
+        override fun toString(): String = "InitializationEvent.Success(email=$email)"
+    }
+    data object Error : VerifyingEmailInitializationEvent() {
+        override fun toString(): String = "InitializationEvent.Error"
+    }
 }
 
 sealed class VerifyingEmailSendEmailEvent : VerifyingEmailSystemEvent {
-    data object Success : VerifyingEmailSendEmailEvent()
-    data object CriticalError : VerifyingEmailSendEmailEvent()
-    data object NoConnection : VerifyingEmailSendEmailEvent()
+    data object Success : VerifyingEmailSendEmailEvent() {
+        override fun toString(): String = "SendEmailEvent.Success"
+    }
+    data object CriticalError : VerifyingEmailSendEmailEvent() {
+        override fun toString(): String = "SendEmailEvent.CriticalError"
+    }
+    data object NoConnection : VerifyingEmailSendEmailEvent() {
+        override fun toString(): String = "SendEmailEvent.NoConnection"
+    }
 }
 
 sealed class VerifyingEmailVerificationEvent : VerifyingEmailSystemEvent {
-    data object Success : VerifyingEmailVerificationEvent()
-    data object Timeout : VerifyingEmailVerificationEvent()
-    data object CriticalError : VerifyingEmailVerificationEvent()
+    data object Success : VerifyingEmailVerificationEvent() {
+        override fun toString(): String = "VerificationEvent.Success"
+    }
+    data object Timeout : VerifyingEmailVerificationEvent() {
+        override fun toString(): String = "VerificationEvent.Timeout"
+    }
+    data object CriticalError : VerifyingEmailVerificationEvent() {
+        override fun toString(): String = "VerificationEvent.CriticalError"
+    }
 }
 
-// Ui Events --
+//--------------------------------------------------------------------------------------------------
+// Ui Events
+//--------------------------------------------------------------------------------------------------
+interface VerifyingEmailUiEvent : VerifyingEmailEvent
 
 sealed class VerifyingEmailClickEvent : VerifyingEmailUiEvent {
-    data object OnRetry : VerifyingEmailClickEvent()
-    data object OnCreateNewAccount : VerifyingEmailClickEvent()
-    data object OnCheckConnection : VerifyingEmailClickEvent()
+    data object OnRetry : VerifyingEmailClickEvent() {
+        override fun toString(): String = "ClickEvent.OnRetry"
+    }
+    data object OnCreateNewAccount : VerifyingEmailClickEvent() {
+        override fun toString(): String = "ClickEvent.OnCreateNewAccount"
+    }
 }
 
 sealed class VerifyingEmailTransitionEvent : VerifyingEmailUiEvent {
-    data object TransitionComplete : VerifyingEmailTransitionEvent()
+    data object TransitionComplete : VerifyingEmailTransitionEvent() {
+        override fun toString(): String = "TransitionEvent.TransitionComplete"
+    }
 }

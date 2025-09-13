@@ -18,7 +18,7 @@ class DataRepositoryImpl(
         handleDataSourceData(data)
     } catch (e: Exception) {
         val appError = errorFactory.findingOne(spec, e)
-        AppResponse.Error(appError)
+        AppResponse.Failure(appError)
     }
 
     override suspend fun <T : BaseDto> findAllBy(spec: Specification<T>): AppResponse<List<T>> =
@@ -27,7 +27,7 @@ class DataRepositoryImpl(
             handleDataSourceData(data)
         } catch (e: Exception) {
             val appError = errorFactory.findingAll(spec, e)
-            AppResponse.Error(appError)
+            AppResponse.Failure(appError)
         }
 
     override fun <T : BaseDto> flowOneBy(spec: Specification<T>): Flow<AppResponse<T>> =
@@ -35,7 +35,7 @@ class DataRepositoryImpl(
             .map { handleDataSourceData(it) }
             .catch {
                 val appError = errorFactory.flowingOne(spec, it)
-                emit(AppResponse.Error(appError))
+                emit(AppResponse.Failure(appError))
             }
 
     override fun <T : BaseDto> flowAllBy(spec: Specification<T>): Flow<AppResponse<List<T>>> =
@@ -43,7 +43,7 @@ class DataRepositoryImpl(
             .map { handleDataSourceData(it) }
             .catch {
                 val appError = errorFactory.flowingAll(spec, it)
-                emit(AppResponse.Error(appError))
+                emit(AppResponse.Failure(appError))
             }
 
     private fun <T> handleDataSourceData(data: T?): AppResponse<T> =

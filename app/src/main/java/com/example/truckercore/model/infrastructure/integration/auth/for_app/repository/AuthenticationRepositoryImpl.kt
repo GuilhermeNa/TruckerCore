@@ -59,7 +59,7 @@ class AuthenticationRepositoryImpl(
             ?: AppResponse.Empty
     } catch (e: Exception) {
         val appError = errorFactory.accessLoggedUser(e)
-        AppResponse.Error(appError)
+        AppResponse.Failure(appError)
     }
 
     override fun isEmailVerified(): AppResult<Boolean> = try {

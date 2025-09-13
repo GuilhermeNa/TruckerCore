@@ -28,11 +28,11 @@ class GetDryVanUseCaseImpl(
     private fun handleError(
         spec: DryVanSpec,
         e: Throwable
-    ): AppResponse.Error {
+    ): AppResponse.Failure {
         val message = "An unknown error occurred while searching a DryVan with spec: $spec."
         val domainException = DomainException.Unknown(message, e)
         AppLogger.e(getClassName(), message, e)
-        return AppResponse.Error(domainException)
+        return AppResponse.Failure(domainException)
     }
 
 }

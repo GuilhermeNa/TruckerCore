@@ -1,4 +1,4 @@
-package com.example.truckercore.view_model.view_models.verifying_email
+package com.example.truckercore.view_model.view_models.verifying_email.reducer
 
 import com.example.truckercore.view_model._shared._base.reducer.BaseReducer
 import com.example.truckercore.view_model._shared._base.reducer.ReducerResult
@@ -37,7 +37,7 @@ class VerifyingEmailReducer :
 
         VerifyingEmailSendEmailEvent.Success -> applyWaitingForVerificationState(state)
         VerifyingEmailSendEmailEvent.CriticalError -> sendNavigateToErrorEffect()
-        VerifyingEmailSendEmailEvent.NoConnection -> applyNoConnectionState(state)
+        VerifyingEmailSendEmailEvent.NoConnection -> sendNavigateToNoConnectionEffect()
 
         VerifyingEmailVerificationEvent.Success -> applyVerifiedState(state)
         VerifyingEmailVerificationEvent.CriticalError -> sendNavigateToErrorEffect()
@@ -47,7 +47,6 @@ class VerifyingEmailReducer :
 
     // --- UI Events ---
     private fun handleUiEvent(event: VerifyingEmailUiEvent) = when (event) {
-        VerifyingEmailClickEvent.OnCheckConnection -> launchSendEmailTaskEffect()
         VerifyingEmailClickEvent.OnCreateNewAccount -> sendNavigateToNewEmailEffect()
         VerifyingEmailClickEvent.OnRetry -> launchSendEmailTaskEffect()
         VerifyingEmailTransitionEvent.TransitionComplete -> sendNavigateToCreateNameEffect()
@@ -55,23 +54,19 @@ class VerifyingEmailReducer :
     }
 
     // --- State-only reducers ---
-    private fun applyVerifiedState(
-        state: VerifyingEmailState
-    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+    private fun applyVerifiedState(state: VerifyingEmailState):
+            ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
         val newState = state.verified()
         return resultWithState(newState)
     }
 
-    private fun applyNoConnectionState(
-        state: VerifyingEmailState
-    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
-        val newState = state.noConnection()
-        return resultWithState(newState)
+    private fun sendNavigateToNoConnectionEffect():
+            ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+        return resultWithEffect(VerifyingEmailUiEffect.NavigateToNoConnectionFragment)
     }
 
-    private fun applyWaitingForVerificationState(
-        state: VerifyingEmailState
-    ): ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
+    private fun applyWaitingForVerificationState(state: VerifyingEmailState):
+            ReducerResult<VerifyingEmailState, VerifyingEmailEffect> {
         val newState = state.waitingVerification()
         val effect = VerifyingEmailSystemEffect.LaunchCheckEmailTask
         return resultWithStateAndEffect(newState, effect)

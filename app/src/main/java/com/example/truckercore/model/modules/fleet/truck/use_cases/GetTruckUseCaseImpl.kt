@@ -29,11 +29,11 @@ class GetTruckUseCaseImpl(
     private fun handleError(
         spec: TruckSpec,
         e: Throwable
-    ): AppResponse.Error {
+    ): AppResponse.Failure {
         val message = "An unknown error occurred while searching a Truck with spec: $spec."
         val domainException = DomainException.Unknown(message, e)
         AppLogger.e(getClassName(), message, e)
-        return AppResponse.Error(domainException)
+        return AppResponse.Failure(domainException)
     }
 
 }

@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.truckercore._shared.expressions.doIfResumedOrElse
+import com.example.truckercore._shared.expressions.logEffect
 import com.example.truckercore._shared.expressions.logState
+import com.example.truckercore._shared.expressions.navigateToActivity
+import com.example.truckercore._shared.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.view._shared._base.fragments.CloseAppFragment
 import com.example.truckercore.view._shared.expressions.launchOnFragmentLifecycle
+import com.example.truckercore.view._shared.views.activities.NotificationActivity
+import com.example.truckercore.view._shared.views.fragments.no_connection.NoConnectionFragment
 import com.example.truckercore.view_model.view_models.verifying_email.VerifyingEmailViewModel
-import com.example.truckercore.view_model.view_models.verifying_email.state.VerifyingEmailStatus
+import com.example.truckercore.view_model.view_models.verifying_email.effect.VerifyingEmailUiEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,12 +33,25 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     // Transition Listener
     private val transitionListener = object : MotionLayout.TransitionListener {
         override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-           // viewModel.transitionEnd()
+            // viewModel.transitionEnd()
         }
 
         override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
-        override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-        override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
+        override fun onTransitionChange(
+            motionLayout: MotionLayout?,
+            startId: Int,
+            endId: Int,
+            progress: Float
+        ) {
+        }
+
+        override fun onTransitionTrigger(
+            motionLayout: MotionLayout?,
+            triggerId: Int,
+            positive: Boolean,
+            progress: Float
+        ) {
+        }
     }
 
     // ViewModel
@@ -44,7 +62,6 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        doOnInitialization(savedInstanceState) { viewModel.initialize() }
         launchOnFragmentLifecycle {
             setStateManager(savedInstanceState)
             setEffectManager()
@@ -55,54 +72,47 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     private fun CoroutineScope.setStateManager(savedInstanceState: Bundle?) = launch {
         viewModel.stateFLow.collect { state ->
             logState(this@VerifyingEmailFragment, state)
-           // stateHandler.handleComponent(state.emailComponent)
-            handleStatus(savedInstanceState, state.status)
+            stateHandler.bind(state)
         }
     }
 
-    private fun handleStatus(savedInstanceState: Bundle?, state: VerifyingEmailStatus) {
-    /*    when (state) {
-            VerifyingEmailStatus.Idle -> Unit
+    private fun CoroutineScope.setEffectManager() = launch {
+        viewModel.effectFlow.collect { effect ->
+            logEffect(this@VerifyingEmailFragment, effect)
+            when (effect) {
+                VerifyingEmailUiEffect.NavigateToCreateNameFragment -> {
+                    val direction = VerifyingEmailFragmentDirections
+                        .actionVerifyingEmailFragmentToUserNameFragment()
+                    navigateToDirection(direction)
+                }
 
-            VerifyingEmailStatus.TimeOut -> {
-                if (childFragmentManager.findFragmentByTag(BottomSheetVerifyingEmail.TAG) == null) {
+                VerifyingEmailUiEffect.NavigateToCreateNewEmailFragment -> {
+                    val direction = VerifyingEmailFragmentDirections
+                        .actionGlobalEmailAuthFragment()
+                    navigateToDirection(direction)
+                }
+
+                VerifyingEmailUiEffect.NavigateToErrorActivity -> {
+                    val intent = NotificationActivity.newInstance(requireContext())
+                    navigateToActivity(intent, true)
+                }
+
+                VerifyingEmailUiEffect.NavigateToNoConnectionFragment -> {
+                    setNoConnectionListener()
+                    val direction = VerifyingEmailFragmentDirections
+                        .actionGlobalNoConnectionFragmentNavLogin()
+                    navigateToDirection(direction)
+                }
+
+                VerifyingEmailUiEffect.ShowBottomSheet -> {
                     BottomSheetVerifyingEmail().show(
                         childFragmentManager,
                         BottomSheetVerifyingEmail.TAG
                     )
                 }
             }
-
-            VerifyingEmailStatus.Verified -> {
-                doIfRecreatingView(savedInstanceState) { stateHandler.jumpToEnd() }
-            }
-        }*/
-    }
-
-    private fun CoroutineScope.setEffectManager() = launch {
-        /*    viewModel.effectFlow.collect { effect ->
-                logEffect(this@VerifyingEmailFragment, effect)
-                when (effect) {
-                    VerifyingEmailEffect.UiEffect.NavigateToNotification -> {
-                        val direction = VerifyingEmailFragmentDirections
-                            .actionVerifyingEmailFragmentToUserNameFragment()
-                        navigateToDirection(direction)
-                    }
-
-                    VerifyingEmailEffect.UiEffect.NavigateToUserName -> {
-                        val direction = VerifyingEmailFragmentDirections
-                            .actionVerifyingEmailFragmentToUserNameFragment()
-                        navigateToDirection(direction)
-                    }
-
-                    VerifyingEmailEffect.UiEffect.TransitionToEnd -> {
-                        stateHandler.transitionToEnd()
-                    }
-
-                    else -> Unit
-                }
-            }*/
         }
+    }
 
     private suspend fun setCounterStateManager() {
         viewModel.counterFlow.collect { value ->
@@ -110,6 +120,15 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
                 resumed = { stateHandler.animateProgress(value) },
                 orElse = { stateHandler.jumpToProgress(value) }
             )
+        }
+    }
+
+    private fun setNoConnectionListener() {
+        NoConnectionFragment.setResultListener(
+            parentFragmentManager,
+            viewLifecycleOwner
+        ) { connected ->
+            if (connected) viewModel.retry()
         }
     }
 
@@ -134,7 +153,7 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     }
 
     private fun setTransitionListener() {
-       // binding.fragVerifyingEmailMotionLayout.addTransitionListener(transitionListener)
+        // binding.fragVerifyingEmailMotionLayout.addTransitionListener(transitionListener)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -147,7 +166,7 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
     }
 
     private fun removeTransitionListener() {
-      //  binding.fragVerifyingEmailMotionLayout.removeTransitionListener(transitionListener)
+        //  binding.fragVerifyingEmailMotionLayout.removeTransitionListener(transitionListener)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -161,8 +180,5 @@ class VerifyingEmailFragment : CloseAppFragment(), BottomSheetVerifyingEmailList
         viewModel.createAnotherEmail()
     }
 
-/*    val direction = VerifyingEmailFragmentDirections
-        .actionGlobalEmailAuthFragment()
-    navigateToDirection(direction)*/
 }
 

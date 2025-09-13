@@ -26,11 +26,11 @@ class GetGrainTrailerUseCaseImpl(
         return AppResponse.Success(grainTrailer)
     }
 
-    private fun handleError(spec: GrainTrailerSpec, e: Throwable): AppResponse.Error {
+    private fun handleError(spec: GrainTrailerSpec, e: Throwable): AppResponse.Failure {
         val message = "An unknown error occurred while searching a GrainTrailer with spec: $spec."
         val domainException = DomainException.Unknown(message, e)
         AppLogger.e(getClassName(), message, e)
-        return AppResponse.Error(domainException)
+        return AppResponse.Failure(domainException)
     }
 
 }

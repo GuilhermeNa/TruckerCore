@@ -25,11 +25,11 @@ class GetDollyUseCaseImpl(
         return AppResponse.Success(truck)
     }
 
-    private fun handleError(spec: DollySpec, e: Throwable): AppResponse.Error {
+    private fun handleError(spec: DollySpec, e: Throwable): AppResponse.Failure {
         val message = "An unknown error occurred while searching a Dolly with spec: $spec."
         val domainException = DomainException.Unknown(message, e)
         AppLogger.e(getClassName(), message, e)
-        return AppResponse.Error(domainException)
+        return AppResponse.Failure(domainException)
     }
 
 }

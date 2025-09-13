@@ -56,7 +56,7 @@ class GetTransportUnitUseCaseImpl(
             val message = "$ERROR_MESSAGE $transportUnitId"
             AppLogger.e(getClassName(), message)
             val error = DomainException.Unknown(message, e)
-            AppResponse.Error(error)
+            AppResponse.Failure(error)
         }
     }
 
