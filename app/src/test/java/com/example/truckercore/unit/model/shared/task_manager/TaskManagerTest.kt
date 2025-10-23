@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.shared.task_manager
 
-import com.example.truckercore.model.z_to_delete.task_manager.TaskManager
-import com.example.truckercore.model.z_to_delete.task_manager.TaskManagerImpl
+import com.example.truckercore.data.z_to_delete.task_manager.TaskManager
+import com.example.truckercore.data.z_to_delete.task_manager.TaskManagerImpl
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

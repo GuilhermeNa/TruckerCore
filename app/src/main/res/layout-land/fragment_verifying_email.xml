@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient_primary"
-    tools:context=".view.nav_login.fragments.verifying_email.VerifyingEmailFragment">
+    tools:context=".presentation.nav_login.fragments.verifying_email.VerifyingEmailFragment">
 
     <ImageView
         android:id="@+id/imageView"

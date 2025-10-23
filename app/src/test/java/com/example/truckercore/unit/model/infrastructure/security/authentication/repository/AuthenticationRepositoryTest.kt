@@ -9,7 +9,7 @@ import com.example.truckercore.model.infrastructure.security.authentication.app_
 import com.example.truckercore.model.infrastructure.security.authentication.app_errors.error_codes.UpdateUserProfileErrCode
 import com.example.truckercore.model.infrastructure.data_source.firebase.exceptions.NullFirebaseUserException
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
+import com.example.truckercore.model.infrastructure.repository.auth.contracts.AuthenticationRepository
 import com.example.truckercore.model.infrastructure.security.authentication.repository.AuthenticationRepositoryImpl
 import com.example.truckercore._utils.classes.AppResult
 import com.google.firebase.auth.FirebaseUser

@@ -1,10 +1,10 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore._shared.expressions.awaitSuccessOrThrow
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.UnknownException
+import com.example.truckercore.core.expressions.awaitSuccessOrThrow
+import com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.TaskFailureException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.UnknownException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -68,8 +68,8 @@ class FirebaseAuthExpressionsTest {
             }
 
             // Act && Assert
-            assertThrows<InvalidCredentialsException> {
-                task.awaitSuccessOrThrow { InvalidCredentialsException() }
+            assertThrows<com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException> {
+                task.awaitSuccessOrThrow { com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException() }
             }
 
         }

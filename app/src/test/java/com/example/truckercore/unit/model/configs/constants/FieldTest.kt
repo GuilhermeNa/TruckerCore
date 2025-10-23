@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.configs.constants
 
-import com.example.truckercore.model.configs.enums.Field
+import com.example.truckercore.core.config.enums.Field
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -14,18 +14,18 @@ class FieldTest {
     // Setup
     //----------------------------------------------------------------------------------------------
     private val expectedCollection = listOf(
-        Field.ID,
-        Field.COMPANY_ID,
-        Field.CATEGORY
+        com.example.truckercore.core.config.enums.Field.ID,
+        com.example.truckercore.core.config.enums.Field.COMPANY_ID,
+        com.example.truckercore.core.config.enums.Field.CATEGORY
     )
 
     companion object {
 
         @JvmStatic
         fun provideFieldAndExpectedName() = arrayOf(
-            Arguments.of(Field.ID, "id"),
-            Arguments.of(Field.COMPANY_ID, "companyId"),
-            Arguments.of(Field.CATEGORY, "category")
+            Arguments.of(com.example.truckercore.core.config.enums.Field.ID, "id"),
+            Arguments.of(com.example.truckercore.core.config.enums.Field.COMPANY_ID, "companyId"),
+            Arguments.of(com.example.truckercore.core.config.enums.Field.CATEGORY, "category")
         )
 
     }
@@ -35,14 +35,14 @@ class FieldTest {
     //----------------------------------------------------------------------------------------------
     @Test
     fun `should have the expected collection size`() {
-        val collectionSize = Field.entries.size
+        val collectionSize = com.example.truckercore.core.config.enums.Field.entries.size
         val expectedSize = expectedCollection.size
         assertEquals(expectedSize, collectionSize)
     }
 
     @Test
     fun `should have the expected entries`() {
-        val containsAll = expectedCollection.containsAll(Field.entries)
+        val containsAll = expectedCollection.containsAll(com.example.truckercore.core.config.enums.Field.entries)
         assertTrue(containsAll)
     }
 
@@ -51,7 +51,7 @@ class FieldTest {
     //----------------------------------------------------------------------------------------------
     @ParameterizedTest
     @MethodSource("provideFieldAndExpectedName")
-    fun `should return the expected name`(field: Field, expectedName: String) {
+    fun `should return the expected name`(field: com.example.truckercore.core.config.enums.Field, expectedName: String) {
         assertEquals(field.getName(), expectedName)
     }
 

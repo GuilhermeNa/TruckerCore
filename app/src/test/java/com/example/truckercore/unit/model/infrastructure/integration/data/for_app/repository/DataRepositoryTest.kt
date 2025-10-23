@@ -3,8 +3,8 @@ package com.example.truckercore.unit.model.infrastructure.integration.data.for_a
 
 import com.example.truckercore._test_data_provider.fake_objects.FakeDto
 import com.example.truckercore._test_data_provider.fake_objects.FakeSpec
-import com.example.truckercore.model.infrastructure.integration.data.for_api.DataSource
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.NetworkException
+import com.example.truckercore.model.infrastructure.data_source.data.abstractions.DataSource
+import com.example.truckercore.model.infrastructure.data_source.data.exceptions.NetworkException
 import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.error_codes.DataFindErrCode
 import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.error_codes.DataFlowErrCode

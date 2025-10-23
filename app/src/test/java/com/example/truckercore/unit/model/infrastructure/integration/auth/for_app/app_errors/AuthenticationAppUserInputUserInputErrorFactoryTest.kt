@@ -1,13 +1,13 @@
 /*
 package com.example.truckercore.unit.model.infrastructure.integration.auth.for_app.app_errors
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.NetworkException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TooManyRequestsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.UserCollisionException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.WeakPasswordException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.InvalidCredentialsException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.NetworkException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.SessionInactiveException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.TaskFailureException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.TooManyRequestsException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.UserCollisionException
+import com.example.truckercore.model.infrastructure.data_source.auth.exceptions.errors.WeakPasswordException
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.NewEmailErrCode
 import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode

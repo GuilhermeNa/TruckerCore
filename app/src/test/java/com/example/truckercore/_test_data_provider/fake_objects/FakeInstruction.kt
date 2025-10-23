@@ -1,10 +1,9 @@
 package com.example.truckercore._test_data_provider.fake_objects
 
-import com.example.truckercore.model.configs.collections.Collection
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.data.contracts.Instruction
+import com.example.truckercore.data.infrastructure.repository.writer.contracts.Instruction
 
 data class FakeInstruction(
-    val collection: Collection
+    val collection: com.example.truckercore.core.config.collections.AppCollection
 ): Instruction {
     override fun getId(): String {
         TODO("Not yet implemented")

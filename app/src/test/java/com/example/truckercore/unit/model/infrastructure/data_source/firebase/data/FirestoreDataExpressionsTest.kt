@@ -3,13 +3,13 @@ package com.example.truckercore.unit.model.infrastructure.data_source.firebase.d
 import com.example.truckercore._test_data_provider.TestDtoProvider
 import com.example.truckercore._test_data_provider.TestFirestoreDataProvider
 import com.example.truckercore._test_data_provider.fake_objects.FakeDto
-import com.example.truckercore._shared.expressions.safeEmit
-import com.example.truckercore._shared.expressions.safeInterpretOrEmit
-import com.example.truckercore._shared.expressions.toDto
-import com.example.truckercore._shared.expressions.toList
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.UnknownException
+import com.example.truckercore.core.expressions.safeEmit
+import com.example.truckercore.core.expressions.safeInterpretOrEmit
+import com.example.truckercore.core.expressions.toDto
+import com.example.truckercore.core.expressions.toList
+import com.example.truckercore.data.data_source.data.errors.data_source_exceptions.InvalidDataException
+import com.example.truckercore.data.infrastructure.data_source.data.errors.data_source_exceptions.MappingException
+import com.example.truckercore.data.infrastructure.data_source.data.errors.data_source_exceptions.UnknownException
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -100,7 +100,7 @@ class FirestoreDataExpressionsTest {
     fun `toDto should throw InvalidDataException when snapshot is null`() {
         val docSnap: DocumentSnapshot? = null
 
-        assertThrows<InvalidDataException> {
+        assertThrows<com.example.truckercore.data.data_source.data.errors.data_source_exceptions.InvalidDataException> {
             docSnap.toDto(FakeDto::class.java)
         }
     }

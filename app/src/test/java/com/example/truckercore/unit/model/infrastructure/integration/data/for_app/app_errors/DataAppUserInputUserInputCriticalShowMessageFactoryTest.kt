@@ -1,12 +1,12 @@
 package com.example.truckercore.unit.model.infrastructure.integration.data.for_app.app_errors
 
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InterpreterException
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.InvalidDataException
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.MappingException
-import com.example.truckercore.model.infrastructure.integration.data.for_api.exceptions.NetworkException
-import com.example.truckercore.model.infrastructure.integration.data.for_app.repository.DataRepositoryErrorFactory
-import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.error_codes.DataFindErrCode
-import com.example.truckercore.model.infrastructure.integration.data.for_app.app_errors.error_codes.DataFlowErrCode
+import com.example.truckercore.data.infrastructure.data_source.data.errors.data_source_exceptions.InterpreterException
+import com.example.truckercore.data.data_source.data.errors.data_source_exceptions.InvalidDataException
+import com.example.truckercore.data.infrastructure.data_source.data.errors.data_source_exceptions.MappingException
+import com.example.truckercore.data.infrastructure.data_source.data.errors.data_source_exceptions.NetworkException
+import com.example.truckercore.data.infrastructure.repository.data.error_factory.DataRepositoryErrorFactory
+import com.example.truckercore.data.infrastructure.integration.data.for_app.app_errors.error_codes.DataFindErrCode
+import com.example.truckercore.data.infrastructure.integration.data.for_app.app_errors.error_codes.DataFlowErrCode
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -34,7 +34,10 @@ class DataAppUserInputUserInputCriticalShowMessageFactoryTest {
     @Test
     fun `handleFindError should map InvalidDataException to InvalidData`() {
         // Arrange
-        val ex = InvalidDataException("Received invalid data")
+        val ex =
+            com.example.truckercore.data.data_source.data.errors.data_source_exceptions.InvalidDataException(
+                "Received invalid data"
+            )
 
         // Act
         val result = factory.handleFindError(ex)
@@ -107,7 +110,10 @@ class DataAppUserInputUserInputCriticalShowMessageFactoryTest {
     @Test
     fun `handleFlowError should map InvalidDataException to InvalidData`() {
         // Arrange
-        val ex = InvalidDataException("Flow emitted invalid data")
+        val ex =
+            com.example.truckercore.data.data_source.data.errors.data_source_exceptions.InvalidDataException(
+                "Flow emitted invalid data"
+            )
 
         // Act
         val result = factory.handleFlowError(ex)

@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.integration.auth.for_app.app_errors.error_codes
 
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.UpdateUserProfileErrCode
+import com.example.truckercore.data.infrastructure.integration.auth.for_app.app_errors.error_codes.UpdateUserProfileErrCode
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

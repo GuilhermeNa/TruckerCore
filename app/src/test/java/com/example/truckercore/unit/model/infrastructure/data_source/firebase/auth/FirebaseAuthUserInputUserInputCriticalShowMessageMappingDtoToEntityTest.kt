@@ -1,15 +1,15 @@
 package com.example.truckercore.unit.model.infrastructure.data_source.firebase.auth
 
 import com.example.truckercore._test_utils.mockStaticTextUtil
-import com.example.truckercore.model.infrastructure.data_source.firebase.auth.FirebaseAuthSourceErrorMapper
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.NetworkException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TooManyRequestsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.UnknownException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.UserCollisionException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.WeakPasswordException
+import com.example.truckercore.data.data_source.auth.impl.FirebaseAuthSourceErrorMapperImpl
+import com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.NetworkException
+import com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.TaskFailureException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.TooManyRequestsException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.UnknownException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.UserCollisionException
+import com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.WeakPasswordException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -27,7 +27,8 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
     //----------------------------------------------------------------------------------------------
     // Setup
     //----------------------------------------------------------------------------------------------
-    private val mapper = FirebaseAuthSourceErrorMapper()
+    private val mapper =
+        com.example.truckercore.data.data_source.auth.impl.FirebaseAuthSourceErrorMapperImpl()
 
     @BeforeEach
     fun setup() {
@@ -52,7 +53,7 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
         val ex = FirebaseAuthWeakPasswordException("reason", "weak password", "email")
         val result = mapper.creatingUserWithEmail(ex)
 
-        assertTrue(result is WeakPasswordException)
+        assertTrue(result is com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.WeakPasswordException)
         assertEquals(result.cause, ex)
         assertEquals(
             "The password provided is too weak. Please choose a stronger password.",
@@ -65,7 +66,7 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
         val ex = FirebaseAuthInvalidCredentialsException("error", "Invalid credentials")
         val result = mapper.creatingUserWithEmail(ex)
 
-        assertTrue(result is InvalidCredentialsException)
+        assertTrue(result is com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException)
         assertEquals(result.cause, ex)
         assertEquals(
             "The email address or password is invalid. " +
@@ -117,10 +118,11 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
     //----------------------------------------------------------------------------------------------
     @Test
     fun `sendingEmailVerification should map SessionInactiveException`() {
-        val ex = SessionInactiveException()
+        val ex =
+            com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException()
         val result = mapper.sendingEmailVerification(ex)
 
-        assertTrue(result is SessionInactiveException)
+        assertTrue(result is com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException)
         assertNull(result.cause)
         assertEquals(
             "The user profile is invalid or incomplete for sending email verification.",
@@ -172,10 +174,11 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
 
     @Test
     fun `updatingProfile should map SessionInactiveException`() {
-        val ex = SessionInactiveException()
+        val ex =
+            com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException()
         val result = mapper.updatingProfile(ex)
 
-        assertTrue(result is SessionInactiveException)
+        assertTrue(result is com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException)
         assertNull(result.cause)
         assertEquals(
             "The data provided for updating the profile is invalid.",
@@ -217,7 +220,7 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
         val ex = FirebaseAuthInvalidUserException("code", "user not found")
         val result = mapper.signingInWithEmail(ex)
 
-        assertTrue(result is InvalidCredentialsException)
+        assertTrue(result is com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException)
         assertEquals(ex, result.cause)
         assertEquals(
             "The user account was not found or may have been deleted. " +
@@ -231,7 +234,7 @@ class FirebaseAuthUserInputUserInputCriticalShowMessageMappingDtoToEntityTest {
         val ex = FirebaseAuthInvalidCredentialsException("code", "invalid credentials")
         val result = mapper.signingInWithEmail(ex)
 
-        assertTrue(result is InvalidCredentialsException)
+        assertTrue(result is com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException)
         assertEquals(ex, result.cause)
         assertEquals(
             "Invalid email or password. Please try again.",

@@ -1,6 +1,6 @@
 package com.example.truckercore.unit.model.infrastructure.integration.writer.for_app.app_errors.error_codes
 
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
+import com.example.truckercore.data.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments

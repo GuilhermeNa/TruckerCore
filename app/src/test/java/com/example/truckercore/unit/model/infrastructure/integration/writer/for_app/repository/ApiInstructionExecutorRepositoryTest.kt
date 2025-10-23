@@ -2,7 +2,7 @@
 package com.example.truckercore.unit.model.infrastructure.integration.writer.for_app.repository
 
 import com.example.truckercore._test_data_provider.fake_objects.FakeInstruction
-import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.ApiInstructionExecutor
+import com.example.truckercore.model.infrastructure.data_source.writer.impl.ApiInstructionExecutor
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.ExecutorAppErrorFactory
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.app_errors.error_codes.ExecuteInstructionErrCode
 import com.example.truckercore.model.infrastructure.integration.instruction_executor.for_app.repository.InstructionExecutorRepository

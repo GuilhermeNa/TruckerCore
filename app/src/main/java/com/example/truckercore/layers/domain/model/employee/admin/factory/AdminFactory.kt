@@ -1,0 +1,45 @@
+package com.example.truckercore.layers.domain.model.employee.admin.factory
+
+import com.example.truckercore.data.modules.employee._shared.factory.EmployeeForm
+import com.example.truckercore.data.modules.employee.admin.data.Admin
+import com.example.truckercore.data.modules.employee.admin.data.AdminID
+import com.example.truckercore.data.modules.user._contracts.eligible_state.Active
+import com.example.truckercore.data.modules.user._contracts.eligible_state.Unregistered
+import com.example.truckercore.data.modules._shared.enums.PersistenceState
+import com.example.truckercore.data.modules._shared.exceptions.FactoryException
+
+object AdminFactory {
+
+    private const val MISSING_EMAIL_MESSAGE =
+        "To register an Admin with system access, an email must be provided."
+    private const val MISSING_USER_ID_MESSAGE =
+        "To register an Admin with system access, a user ID must be provided."
+
+    operator fun invoke(form: EmployeeForm): Admin {
+        return Admin(
+            id = AdminID.generate(),
+            companyId = form.companyId,
+            name = form.name,
+            email = form.email,
+            persistenceState = PersistenceState.ACTIVE,
+            eligibleState = Unregistered(),
+            userId = null
+        )
+    }
+
+    fun registered(form: EmployeeForm): Admin {
+        val validEmail = form.email ?: throw FactoryException(MISSING_EMAIL_MESSAGE)
+        val validUserId = form.userId ?: throw FactoryException(MISSING_USER_ID_MESSAGE)
+
+        return Admin(
+            id = AdminID.generate(),
+            companyId = form.companyId,
+            name = form.name,
+            persistenceState = PersistenceState.ACTIVE,
+            eligibleState = Active(),
+            email = validEmail,
+            userId = validUserId
+        )
+    }
+
+}

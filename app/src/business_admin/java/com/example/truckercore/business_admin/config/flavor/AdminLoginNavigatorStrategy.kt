@@ -1,14 +1,10 @@
 package com.example.truckercore.business_admin.config.flavor
 
-import android.app.Activity
-import android.content.Intent
 import androidx.navigation.NavController
-import com.example.truckercore.view_model._shared.components.ButtonComponent
-import com.example.truckercore.view_model._shared.components.Visibility
-import com.example.truckercore.business_admin.view.activities.MainActivity
-import com.example.truckercore.view.nav_login.fragments.login.LoginFragmentDirections
-import com.example.truckercore.view.nav_login.fragments.login.navigator.LoginFragmentStrategy
-import java.lang.ref.WeakReference
+import com.example.truckercore.domain._shared.components.ButtonComponent
+import com.example.truckercore.domain._shared.components.Visibility
+import com.example.truckercore.presentation.nav_login.fragments.login.LoginFragmentDirections
+import com.example.truckercore.presentation.nav_login.fragments.login.navigator.LoginFragmentStrategy
 
 class AdminLoginNavigatorStrategy(private val navController: NavController) :
     LoginFragmentStrategy {

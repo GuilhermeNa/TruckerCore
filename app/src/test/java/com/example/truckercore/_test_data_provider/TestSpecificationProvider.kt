@@ -2,10 +2,10 @@ package com.example.truckercore._test_data_provider
 
 import com.example.truckercore._test_data_provider.fake_objects.FakeID
 import com.example.truckercore._test_data_provider.fake_objects.FakeSpec
-import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Filter
-import com.example.truckercore.model.infrastructure.integration.data.for_app.data.contracts.Specification
-import com.example.truckercore.model.modules.user.specification.UserSpec
-import com.example.truckercore.model.modules.user.data.UserID
+import com.example.truckercore.data.infrastructure.repository.data.contracts.Filter
+import com.example.truckercore.data.infrastructure.repository.data.contracts.Specification
+import com.example.truckercore.data.modules.user.specification.UserSpec
+import com.example.truckercore.data.modules.user.data.UserID
 import io.mockk.every
 import io.mockk.mockk
 

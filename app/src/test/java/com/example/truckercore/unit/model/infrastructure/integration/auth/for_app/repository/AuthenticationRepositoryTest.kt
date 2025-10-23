@@ -1,19 +1,19 @@
 package com.example.truckercore.unit.model.infrastructure.integration.auth.for_app.repository
 
 import com.example.truckercore._test_data_provider.TestCredentialProvider
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.AuthSource
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.InvalidCredentialsException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.SessionInactiveException
-import com.example.truckercore.model.infrastructure.integration.auth.for_api.exceptions.TaskFailureException
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthRepositoryErrorFactory
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.NewEmailErrCode
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.SendEmailVerificationErrCode
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.SignInErrCode
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.app_errors.error_codes.UpdateUserProfileErrCode
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepository
-import com.example.truckercore.model.infrastructure.integration.auth.for_app.repository.AuthenticationRepositoryImpl
-import com.example.truckercore._shared.classes.AppResult
+import com.example.truckercore.data.infrastructure.data_source.auth.abstractions.AuthSource
+import com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException
+import com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException
+import com.example.truckercore.data.infrastructure.data_source.auth.errors.auth_source_exceptions.TaskFailureException
+import com.example.truckercore.data.infrastructure.repository.auth.error_factory.AuthRepositoryErrorFactory
+import com.example.truckercore.data.infrastructure.integration.auth.for_app.app_errors.error_codes.NewEmailErrCode
+import com.example.truckercore.data.infrastructure.integration.auth.for_app.app_errors.error_codes.ObserveEmailValidationErrCode
+import com.example.truckercore.data.infrastructure.integration.auth.for_app.app_errors.error_codes.SendEmailVerificationErrCode
+import com.example.truckercore.data.infrastructure.integration.auth.for_app.app_errors.error_codes.SignInErrCode
+import com.example.truckercore.data.infrastructure.integration.auth.for_app.app_errors.error_codes.UpdateUserProfileErrCode
+import com.example.truckercore.data.infrastructure.repository.auth.contracts.AuthenticationRepository
+import com.example.truckercore.data.infrastructure.repository.auth.impl.AuthenticationRepositoryImpl
+import com.example.truckercore.core.classes.AppResult
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -193,7 +193,8 @@ class AuthenticationRepositoryTest : KoinTest {
     fun `observeEmailValidation should return Error when exception is thrown by AuthSource`() =
         runBlocking {
             // Arrange
-            val exception = SessionInactiveException()
+            val exception =
+                com.example.truckercore.data.data_source.auth.errors.auth_source_exceptions.SessionInactiveException()
 
             coEvery { authSource.observeEmailValidation() } throws exception
 
@@ -234,7 +235,8 @@ class AuthenticationRepositoryTest : KoinTest {
             // Arrange
             val email = provider.email
             val password = provider.password
-            val exception = InvalidCredentialsException()
+            val exception =
+                com.example.truckercore.layers.data.data_source.auth.errors.auth_source_exceptions.InvalidCredentialsException()
 
             coEvery { authSource.signInWithEmail(email, password) } throws exception
 

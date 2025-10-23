@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment2"
-        android:name="com.example.truckercore.view.fragments.welcome.WelcomeFragment"
+        android:name="com.example.truckercore.presentation.fragments.welcome.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment2"
-        android:name="com.example.truckercore.view.fragments.login.LoginFragment"
+        android:name="com.example.truckercore.presentation.fragments.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment2"
-        android:name="com.example.truckercore.view.fragments.forget_password.ForgetPasswordFragment"
+        android:name="com.example.truckercore.presentation.fragments.forget_password.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
 </navigation>

@@ -1,3 +1,0 @@
-package com.example.truckercore.model.infrastructure.integration.instruction_executor.for_api.data.contracts
-
-interface ApiInstruction

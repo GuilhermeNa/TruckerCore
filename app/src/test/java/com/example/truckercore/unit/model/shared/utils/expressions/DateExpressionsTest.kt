@@ -1,7 +1,7 @@
 package com.example.truckercore.unit.model.shared.utils.expressions
 
-import com.example.truckercore.model.shared.utils.expressions.toDate
-import com.example.truckercore.model.shared.utils.expressions.toLocalDateTime
+import com.example.truckercore.data.shared.utils.expressions.toDate
+import com.example.truckercore.data.shared.utils.expressions.toLocalDateTime
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test

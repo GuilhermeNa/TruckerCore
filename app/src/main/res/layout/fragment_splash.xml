@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/fragment_splash_scene"
-    tools:context=".view.nav_login.fragments.splash.SplashFragment">
+    tools:context=".presentation.nav_login.fragments.splash.SplashFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_splash_guideline"

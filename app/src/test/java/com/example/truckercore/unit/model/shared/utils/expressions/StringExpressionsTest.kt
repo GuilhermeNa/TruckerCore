@@ -1,9 +1,9 @@
 package com.example.truckercore.unit.model.shared.utils.expressions
 
-import com.example.truckercore.model.shared.utils.expressions.capitalizeEveryFirstChar
-import com.example.truckercore.model.shared.utils.expressions.isEmailFormat
-import com.example.truckercore.model.shared.utils.expressions.isNameFormat
-import com.example.truckercore.model.shared.utils.expressions.removeBlank
+import com.example.truckercore.data.shared.utils.expressions.capitalizeEveryFirstChar
+import com.example.truckercore.data.shared.utils.expressions.isEmailFormat
+import com.example.truckercore.data.shared.utils.expressions.isNameFormat
+import com.example.truckercore.data.shared.utils.expressions.removeBlank
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
