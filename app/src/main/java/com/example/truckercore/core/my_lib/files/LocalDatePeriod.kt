@@ -1,3 +1,3 @@
 package com.example.truckercore.core.my_lib.files
 
-const val ONE_SEC: Long = 1000L
+const val ONE_MONTH: Long = 30

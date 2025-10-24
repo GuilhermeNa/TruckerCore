@@ -3,7 +3,7 @@ package com.example.truckercore.layers.data.data_source.auth
 import com.example.truckercore.core.error.core.ErrorMapper
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Password
-import com.example.truckercore.core.my_lib.files.TIMER_1_SEC
+import com.example.truckercore.core.my_lib.files.ONE_SEC
 
 /**
  * Abstract interface for handling authentication operations with a remote backend (e.g., Firebase).
@@ -88,7 +88,7 @@ abstract class AuthSource(protected val errorMapper: ErrorMapper) {
      *
      * @throws AuthSourceException If the session is inactive or an unexpected error occurs.
      */
-    abstract suspend fun observeEmailValidation(refreshTime: Long = TIMER_1_SEC)
+    abstract suspend fun observeEmailValidation(refreshTime: Long = ONE_SEC)
 
     /**
      * Signs out the currently authenticated user.

@@ -19,20 +19,12 @@ data class Rig(
 ) : Entity {
 
     fun assignDriver(newDriver: Driver): Rig {
-        if (driver != null) throw DomainException.RuleViolation("")
+        if (driver != null) throw DomainException.RuleViolation(ERROR_MSG)
         return copy(driver = newDriver)
     }
 
     fun replaceDriver(newDriver: Driver): Rig {
         return copy(driver = newDriver)
-    }
-
-    fun attachTrailer(newTrailers: Set<Trailer>) {
-        TODO()
-    }
-
-    fun detachAllTrailers(): Rig {
-        return copy(trailers = emptySet())
     }
 
     fun isDriverAssigned(): Boolean {
@@ -41,6 +33,10 @@ data class Rig(
 
     fun areTrailersAssigned(): Boolean {
         return trailers.isNotEmpty()
+    }
+
+    private companion object {
+        private const val ERROR_MSG = "A driver is already assigned to this rig."
     }
 
 }

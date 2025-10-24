@@ -8,8 +8,10 @@ import com.example.truckercore.layers.domain.base.others.Renavam
 import com.example.truckercore.layers.domain.base.others.YearModel
 import com.example.truckercore.layers.domain.model.crlv.Crlv
 import com.example.truckercore.layers.domain.model.crlv.CrlvCollection
+import com.example.truckercore.layers.domain.base.others.Color
 
 abstract class TransportUnit(
+    open val color: Color,
     open val plate: Plate,
     open val chassi: Chassi? = null,
     open val renavam: Renavam? = null,
@@ -20,8 +22,12 @@ abstract class TransportUnit(
 
     fun addCrlv(crlv: Crlv) = crlvCollection.add(crlv)
 
-    fun getCrlvs(): Set<Crlv> = crlvCollection.all
+    fun getCrlvs(): List<Crlv> = crlvCollection.toList()
+
+    fun anyActiveCrlv(): Boolean = crlvCollection.anyActive()
 
     fun getActiveCrlv(): Crlv? =  crlvCollection.getActiveCrlv()
+
+    fun hasCrlvExpiringSoon(): Boolean = crlvCollection.hasCrlvExpiringSoon()
 
 }
