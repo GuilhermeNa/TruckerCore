@@ -12,7 +12,7 @@ object CompanyMapper : Mapper<CompanyDto, Company> {
     override fun toDto(entity: Company): CompanyDto = try {
         CompanyDto(
             id = entity.idVal,
-            persistenceState = entity.persistence,
+            persistenceState = entity.status,
             keysRegistry = entity.keysValue.toList()
         )
     } catch (e: Exception) {
@@ -22,7 +22,7 @@ object CompanyMapper : Mapper<CompanyDto, Company> {
     override fun toEntity(dto: CompanyDto): Company = try {
         Company(
             id = CompanyID(dto.id!!),
-            persistence = dto.persistenceState!!,
+            status = dto.persistenceState!!,
             keysCollection = ValidKeysRegistry.from(dto.keysRegistry!!)
         )
     } catch (e: Exception) {

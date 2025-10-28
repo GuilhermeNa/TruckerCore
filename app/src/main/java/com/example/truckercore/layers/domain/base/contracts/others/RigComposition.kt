@@ -4,6 +4,6 @@ import com.example.truckercore.layers.domain.base.ids.RigID
 
 interface RigComposition {
 
-    val rigID: RigID
+    val rigID: RigID?
 
 }

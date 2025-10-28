@@ -19,7 +19,7 @@ object UserMapper : Mapper<User, UserDto> {
                 uid = entity.uid.value,
                 id = entity.id.value,
                 companyId = entity.companyId.value,
-                persistenceState = entity.persistence,
+                persistenceState = entity.status,
                 profile = entity.profile.toDto()
             )
         } catch (e: Exception) {
@@ -39,7 +39,7 @@ object UserMapper : Mapper<User, UserDto> {
                 uid = UID(dto.uid!!),
                 id = UserID(dto.id!!),
                 companyId = CompanyID(dto.companyId!!),
-                persistence = dto.persistenceState!!,
+                status = dto.persistenceState!!,
                 profile = dto.profile!!.toEntity()
             )
         } catch (e: Exception) {

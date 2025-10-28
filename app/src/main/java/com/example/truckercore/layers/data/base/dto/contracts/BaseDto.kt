@@ -1,8 +1,8 @@
 package com.example.truckercore.layers.data.base.dto.contracts
 
-import com.example.truckercore.layers.domain.base.enums.PersistenceState
+import com.example.truckercore.layers.domain.base.enums.Status
 
 interface BaseDto {
     val id: String?
-    val persistenceState: PersistenceState?
+    val persistenceState: Status?
 }
