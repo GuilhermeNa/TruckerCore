@@ -7,19 +7,20 @@ class HitchCollection(
 ): DomainCollection<Hitch> {
 
     override fun add(item: Hitch) {
-        TODO("Not yet implemented")
+        dataSet.add(item)
     }
 
     override fun addAll(items: List<Hitch>) {
-        TODO("Not yet implemented")
+        dataSet.addAll(items)
     }
 
     override fun toList(): List<Hitch> {
-        TODO("Not yet implemented")
+        return dataSet.toList()
     }
 
-    fun getActive(): Hitch? {
-        TODO("Not yet implemented")
+    fun overlapsAny(other: Hitch): Boolean {
+        if (dataSet.isEmpty()) return false
+        return dataSet.any { it.overlaps(other.period) }
     }
 
 }

@@ -17,6 +17,6 @@ data class DriverAssignment(
     val period: Period
 ): Entity {
 
-
+    fun overlaps(other: Period): Boolean = period.overlaps(other)
 
 }

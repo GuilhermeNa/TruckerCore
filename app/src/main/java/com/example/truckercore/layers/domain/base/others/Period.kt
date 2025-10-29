@@ -9,7 +9,9 @@ data class Period(
 ) {
 
     init {
-        validate()
+        if (fromDate >= toDate) {
+            throw DomainException.RuleViolation(ERROR_MESSAGE)
+        }
     }
 
     val isCurrent: Boolean
@@ -22,11 +24,11 @@ data class Period(
 
     fun hasExpiration(): Boolean = toDate != null
 
-    private fun validate() {
-        if (fromDate >= toDate) {
-            throw DomainException.RuleViolation(ERROR_MESSAGE)
-        }
-    }
+    fun overlaps(other: Period): Boolean =
+        toDate?.let {
+            (fromDate <= other.toDate) && (it >= other.fromDate)
+        } ?: false
+
 
     private companion object {
         private const val ERROR_MESSAGE =

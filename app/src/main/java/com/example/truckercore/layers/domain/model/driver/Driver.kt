@@ -1,5 +1,6 @@
 package com.example.truckercore.layers.domain.model.driver
 
+import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.layers.domain.base.contracts.others.Employee
@@ -19,15 +20,27 @@ data class Driver(
     override val email: Email,
 ) : Employee {
 
-    private val licenseCollection = DriveLicenseCollection()
+    private val licenses = DriveLicenseCollection()
 
-    fun addLicense(license: DriveLicense) =
-        licenseCollection.add(license)
+    fun initLicensesFromDatabase(dbLicenses: List<DriveLicense>) {
+        dbLicenses.forEach { registerLicense(it) }
+    }
 
-    fun getActiveLicense(): DriveLicense? =
-        licenseCollection.getActive()
+    fun registerLicense(license: DriveLicense) {
+        if (licenses.overlapsAny(license)) {
+            throw DomainException.RuleViolation(LICENSE_OVERLAPS_ERROR)
+        } else licenses.add(license)
+    }
 
-    fun hasLicenseExpiringSoon(): Boolean =
-        licenseCollection.hasExpiringSoon()
+    fun getActiveLicense(): DriveLicense? = licenses.getActive()
+
+    fun hasLicenseExpiringSoon(withinDays: Long): Boolean = licenses.hasExpiringSoon(withinDays)
+
+    companion object {
+        private const val LICENSE_OVERLAPS_ERROR =
+            "Cannot register License: the provided document period overlaps with an existing License."
+
+    }
 
 }
+

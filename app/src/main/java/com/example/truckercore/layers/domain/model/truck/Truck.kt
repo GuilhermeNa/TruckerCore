@@ -1,5 +1,6 @@
 package com.example.truckercore.layers.domain.model.truck
 
+import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.layers.domain.base.abstractions.Vehicle
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
@@ -37,12 +38,15 @@ data class Truck(
     // Tachographs
     // --------------------------------------------------------
 
-    fun initTachographsFromDatabase(drivers: List<DriverAssignment>) {
-        drivers.forEach { driverAssignments.add(it) }
-        // ou, se quiser validar também, usar assignDriver(it)
+    fun initTachographsFromDatabase(dbTachographs: List<Tachograph>) {
+        dbTachographs.forEach { registerTachograph(it) }
     }
 
-    fun registerTachographs(item: Tachograph) = tachographs.add(item)
+    fun registerTachograph(tachograph: Tachograph) {
+        if (tachographs.overlapsAny(tachograph)) {
+            throw DomainException.RuleViolation(TACHOGRAPH_OVERLAPS_ERROR)
+        } else tachographs.add(tachograph)
+    }
 
     fun getActiveTachograph(): Tachograph? = tachographs.getActive()
 
@@ -53,16 +57,39 @@ data class Truck(
     // DriverAssignments
     // --------------------------------------------------------
 
-    fun assignDriver(items: List<DriverAssignment>) = driverAssignments.addAll(items)
+    fun initDriverAssignmentsFromDatabase(dbDriverAssignments: List<DriverAssignment>) {
+        dbDriverAssignments.forEach { assignDriver(it) }
+    }
 
-    fun getActiveDriverAssignment(): DriverAssignment? = driverAssignments.getActive()
+    fun assignDriver(driverAssignment: DriverAssignment) {
+        if (driverAssignments.overlapsAny(driverAssignment)) {
+            throw DomainException.RuleViolation(DRIVER_ASSIGNMENT_OVERLAPS_ERROR)
+        } else driverAssignments.add(driverAssignment)
+    }
 
     // --------------------------------------------------------
     // Hitches
     // --------------------------------------------------------
 
-    fun attachHitch(items: List<Hitch>) = hitches.addAll(items)
+    fun initHitchesFromDatabase(dbHitches: List<Hitch>) {
+        dbHitches.forEach { attachHitch(it) }
+    }
 
-    fun getActiveHitch(): Hitch? = hitches.getActive()
+    fun attachHitch(hitch: Hitch) {
+        if (hitches.overlapsAny(hitch)) {
+            throw DomainException.RuleViolation(HITCH_OVERLAPS_ERROR)
+        } else hitches.add(hitch)
+    }
+
+    companion object {
+        private const val TACHOGRAPH_OVERLAPS_ERROR =
+            "Cannot register Tachograph: the provided document period overlaps with an existing Tachograph."
+
+        private const val DRIVER_ASSIGNMENT_OVERLAPS_ERROR =
+            "Cannot register Driver Assignment: the provided assignment period overlaps with an existing Driver Assignment."
+
+        private const val HITCH_OVERLAPS_ERROR =
+            "Cannot register Hitch: the provided attachment period overlaps with an existing Hitch."
+    }
 
 }

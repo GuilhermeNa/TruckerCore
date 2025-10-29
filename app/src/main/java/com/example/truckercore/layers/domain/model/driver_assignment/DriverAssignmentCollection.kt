@@ -3,24 +3,24 @@ package com.example.truckercore.layers.domain.model.driver_assignment
 import com.example.truckercore.layers.domain.base.contracts.others.DomainCollection
 
 class DriverAssignmentCollection(
-    private val dataSet: Set<DriverAssignment> = emptySet()
-): DomainCollection<DriverAssignment> {
+    private val dataSet: MutableSet<DriverAssignment> = mutableSetOf()
+) : DomainCollection<DriverAssignment> {
 
     override fun add(item: DriverAssignment) {
-        TODO("Not yet implemented")
+        dataSet.add(item)
     }
 
     override fun addAll(items: List<DriverAssignment>) {
-        TODO("Not yet implemented")
+        dataSet.addAll(items)
     }
-
 
     override fun toList(): List<DriverAssignment> {
-        TODO("Not yet implemented")
+        return dataSet.toList()
     }
 
-    fun getActive(): DriverAssignment? {
-        TODO("Not yet implemented")
+    fun overlapsAny(other: DriverAssignment): Boolean {
+        if (dataSet.isEmpty()) return false
+        return dataSet.any { it.overlaps(other.period) }
     }
 
 }

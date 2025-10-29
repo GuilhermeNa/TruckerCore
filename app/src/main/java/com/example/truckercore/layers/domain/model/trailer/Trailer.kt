@@ -20,8 +20,4 @@ data class Trailer(
     override val chassi: Chassi?,
     override val renavam: Renavam?,
     override val yearModel: YearModel?
-) : Vehicle(color, plate, chassi, renavam, yearModel) {
-
-
-
-}
+) : Vehicle(color, plate, chassi, renavam, yearModel)
