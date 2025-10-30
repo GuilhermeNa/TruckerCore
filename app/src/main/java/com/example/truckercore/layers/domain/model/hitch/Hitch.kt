@@ -16,8 +16,4 @@ data class Hitch(
     override val period: Period,
     val truckId: TruckID,
     val trailerIds: Set<TrailerID>
-) : Entity, DateRange {
-
-
-
-}
+) : Entity, DateRange

@@ -20,7 +20,7 @@ abstract class DocumentCollection<T : Document>(
 
     fun anyActive(): Boolean = dataSet.any { it.isCurrent }
 
-    fun getActive(): T? = dataSet.firstOrNull { it.isCurrent }
+    fun getCurrent(): T? = dataSet.firstOrNull { it.isCurrent }
 
     fun hasExpiringSoon(withinDays: Long): Boolean {
         val today = LocalDate.now()

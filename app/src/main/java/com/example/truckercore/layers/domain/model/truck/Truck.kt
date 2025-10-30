@@ -2,11 +2,11 @@ package com.example.truckercore.layers.domain.model.truck
 
 import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.layers.domain.base.abstractions.Vehicle
+import com.example.truckercore.layers.domain.base.enums.Color
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.ids.TruckID
 import com.example.truckercore.layers.domain.base.others.Chassi
-import com.example.truckercore.layers.domain.base.enums.Color
 import com.example.truckercore.layers.domain.base.others.Plate
 import com.example.truckercore.layers.domain.base.others.Renavam
 import com.example.truckercore.layers.domain.base.others.YearModel
@@ -42,13 +42,13 @@ data class Truck(
         dbTachographs.forEach { registerTachograph(it) }
     }
 
-    fun registerTachograph(tachograph: Tachograph) {
+    private fun registerTachograph(tachograph: Tachograph) {
         if (tachographs.overlapsAny(tachograph)) {
             throw DomainException.RuleViolation(TACHOGRAPH_OVERLAPS_ERROR)
         } else tachographs.add(tachograph)
     }
 
-    fun getActiveTachograph(): Tachograph? = tachographs.getActive()
+    fun getCurrentTachograph(): Tachograph? = tachographs.getCurrent()
 
     fun hasTachographExpiringSoon(withinDays: Long): Boolean =
         tachographs.hasExpiringSoon(withinDays)
@@ -61,7 +61,7 @@ data class Truck(
         dbDriverAssignments.forEach { assignDriver(it) }
     }
 
-    fun assignDriver(driverAssignment: DriverAssignment) {
+    private fun assignDriver(driverAssignment: DriverAssignment) {
         if (driverAssignments.overlapsAny(driverAssignment)) {
             throw DomainException.RuleViolation(DRIVER_ASSIGNMENT_OVERLAPS_ERROR)
         } else driverAssignments.add(driverAssignment)
@@ -75,13 +75,29 @@ data class Truck(
         dbHitches.forEach { attachHitch(it) }
     }
 
-    fun attachHitch(hitch: Hitch) {
+    private fun attachHitch(hitch: Hitch) {
         if (hitches.overlapsAny(hitch)) {
             throw DomainException.RuleViolation(HITCH_OVERLAPS_ERROR)
         } else hitches.add(hitch)
     }
 
+    fun getCurrentHitch(): Hitch? {
+        val current = hitches.getCurrent()
+
+        if (current.size > CURRENT_HITCH_MAX) throw DomainException.RuleViolation(
+            CURRENT_HITCH_MAX_ERROR_MSG
+        )
+
+        return current.firstOrNull()
+    }
+
     companion object {
+
+        private const val CURRENT_HITCH_MAX = 1
+
+        private const val CURRENT_HITCH_MAX_ERROR_MSG =
+            "A truck cannot have more than one active hitch at the same time."
+
         private const val TACHOGRAPH_OVERLAPS_ERROR =
             "Cannot register Tachograph: the provided document period overlaps with an existing Tachograph."
 
@@ -90,6 +106,7 @@ data class Truck(
 
         private const val HITCH_OVERLAPS_ERROR =
             "Cannot register Hitch: the provided attachment period overlaps with an existing Hitch."
+
     }
 
 }

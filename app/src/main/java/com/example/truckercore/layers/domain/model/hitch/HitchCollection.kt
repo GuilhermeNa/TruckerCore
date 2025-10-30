@@ -1,11 +1,13 @@
 package com.example.truckercore.layers.domain.model.hitch
 
+import com.example.truckercore.layers.domain.base.contracts.entity.ID
 import com.example.truckercore.layers.domain.base.contracts.others.DomainCollection
 
 class HitchCollection(
-    private val dataSet: MutableSet<Hitch> = mutableSetOf()
-): DomainCollection<Hitch> {
+    private val dataSet: MutableSet<Hitch> = mutableSetOf(),
+) : DomainCollection<Hitch> {
 
+    override val data get() = dataSet.toSet()
     override fun add(item: Hitch) {
         dataSet.add(item)
     }
@@ -14,13 +16,14 @@ class HitchCollection(
         dataSet.addAll(items)
     }
 
-    override fun toList(): List<Hitch> {
-        return dataSet.toList()
-    }
-
     fun overlapsAny(other: Hitch): Boolean {
         if (dataSet.isEmpty()) return false
         return dataSet.any { it.overlaps(other.period) }
     }
+
+    override fun findBy(id: ID): Hitch? =
+        dataSet.firstOrNull { hitch -> hitch.id == id }
+
+    fun getCurrent(): List<Hitch> = dataSet.filter { it.isCurrent }
 
 }

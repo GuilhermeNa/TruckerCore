@@ -32,7 +32,7 @@ data class Driver(
         } else licenses.add(license)
     }
 
-    fun getActiveLicense(): DriveLicense? = licenses.getActive()
+    fun getActiveLicense(): DriveLicense? = licenses.getCurrent()
 
     fun hasLicenseExpiringSoon(withinDays: Long): Boolean = licenses.hasExpiringSoon(withinDays)
 

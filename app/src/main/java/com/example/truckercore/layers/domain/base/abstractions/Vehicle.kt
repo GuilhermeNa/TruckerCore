@@ -30,7 +30,7 @@ abstract class Vehicle(
         } else crlvs.add(crlv)
     }
 
-    fun getActiveCrlv(): Crlv? = crlvs.getActive()
+    fun getActiveCrlv(): Crlv? = crlvs.getCurrent()
 
     fun hasCrlvExpiringSoon(withinDays: Long): Boolean = crlvs.hasExpiringSoon(withinDays)
 
