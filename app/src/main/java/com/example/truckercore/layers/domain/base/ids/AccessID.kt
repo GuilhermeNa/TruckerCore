@@ -3,14 +3,14 @@ package com.example.truckercore.layers.domain.base.ids
 import com.example.truckercore.layers.domain.base.contracts.entity.ID
 
 @JvmInline
-value class TruckID(override val value: String) : VehicleID {
+value class AccessID(override val value: String) : ID {
 
     init {
         validate()
     }
 
     companion object {
-        fun create() = TruckID(ID.generateRandomUUID())
+        fun create() = AccessID(ID.generateRandomUUID())
     }
 
 }

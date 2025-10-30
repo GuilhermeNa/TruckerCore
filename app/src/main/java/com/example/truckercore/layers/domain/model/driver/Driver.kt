@@ -39,7 +39,6 @@ data class Driver(
     companion object {
         private const val LICENSE_OVERLAPS_ERROR =
             "Cannot register License: the provided document period overlaps with an existing License."
-
     }
 
 }

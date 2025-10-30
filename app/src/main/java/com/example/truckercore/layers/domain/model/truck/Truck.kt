@@ -6,7 +6,7 @@ import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.ids.TruckID
 import com.example.truckercore.layers.domain.base.others.Chassi
-import com.example.truckercore.layers.domain.base.others.Color
+import com.example.truckercore.layers.domain.base.enums.Color
 import com.example.truckercore.layers.domain.base.others.Plate
 import com.example.truckercore.layers.domain.base.others.Renavam
 import com.example.truckercore.layers.domain.base.others.YearModel

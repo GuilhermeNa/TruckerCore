@@ -3,10 +3,9 @@ package com.example.truckercore.layers.domain.model.trailer
 import com.example.truckercore.layers.domain.base.abstractions.Vehicle
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
-import com.example.truckercore.layers.domain.base.ids.RigID
 import com.example.truckercore.layers.domain.base.ids.TrailerID
 import com.example.truckercore.layers.domain.base.others.Chassi
-import com.example.truckercore.layers.domain.base.others.Color
+import com.example.truckercore.layers.domain.base.enums.Color
 import com.example.truckercore.layers.domain.base.others.Plate
 import com.example.truckercore.layers.domain.base.others.Renavam
 import com.example.truckercore.layers.domain.base.others.YearModel

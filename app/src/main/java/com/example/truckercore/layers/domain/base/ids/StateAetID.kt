@@ -10,7 +10,7 @@ value class StateAetID(override val value: String) : ID {
     }
 
     companion object {
-        fun generate() = StateAetID(ID.generateRandomUUID())
+        fun create() = StateAetID(ID.generateRandomUUID())
     }
 
 }

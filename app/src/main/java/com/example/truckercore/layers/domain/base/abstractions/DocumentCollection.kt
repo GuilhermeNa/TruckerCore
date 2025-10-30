@@ -18,9 +18,9 @@ abstract class DocumentCollection<T : Document>(
 
     override fun toList(): List<T> = dataSet.toList()
 
-    fun anyActive(): Boolean = dataSet.any { it.isActive }
+    fun anyActive(): Boolean = dataSet.any { it.isCurrent }
 
-    fun getActive(): T? = dataSet.firstOrNull { it.isActive }
+    fun getActive(): T? = dataSet.firstOrNull { it.isCurrent }
 
     fun hasExpiringSoon(withinDays: Long): Boolean {
         val today = LocalDate.now()

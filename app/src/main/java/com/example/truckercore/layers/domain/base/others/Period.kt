@@ -15,14 +15,7 @@ data class Period(
     }
 
     val isCurrent: Boolean
-        get() {
-            return toDate?.let {
-                val today = LocalDate.now()
-                return today in fromDate..toDate
-            } ?: true
-        }
-
-    fun hasExpiration(): Boolean = toDate != null
+        get() = toDate?.let { LocalDate.now() in fromDate..it } ?: true
 
     fun overlaps(other: Period): Boolean =
         toDate?.let {
