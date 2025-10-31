@@ -1,9 +1,8 @@
-package com.example.truckercore.layers.domain.departments.fleet.collections
+package com.example.truckercore.layers.domain.departments.fleet
 
 import com.example.truckercore.layers.domain.base.contracts.entity.ID
 import com.example.truckercore.layers.domain.base.contracts.others.DomainCollection
 import com.example.truckercore.layers.domain.base.others.Plate
-import com.example.truckercore.layers.domain.departments.fleet.objects.Rig
 
 class RigCollection(
     private val dataSet: MutableSet<Rig> = mutableSetOf()

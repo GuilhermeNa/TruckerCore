@@ -17,7 +17,7 @@ data class Tachograph(
     override val url: Url,
     val truckID: TruckID,
     val type: TachographType
-) : Entity, Document {
+) : Document {
 
 
 }

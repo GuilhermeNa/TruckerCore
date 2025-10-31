@@ -8,6 +8,7 @@ class HitchCollection(
 ) : DomainCollection<Hitch> {
 
     override val data get() = dataSet.toSet()
+
     override fun add(item: Hitch) {
         dataSet.add(item)
     }

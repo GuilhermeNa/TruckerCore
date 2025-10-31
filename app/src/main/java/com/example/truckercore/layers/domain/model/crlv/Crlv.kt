@@ -6,7 +6,7 @@ import com.example.truckercore.layers.domain.base.contracts.others.Document
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.ids.CrlvID
-import com.example.truckercore.layers.domain.base.ids.VehicleID
+import com.example.truckercore.layers.domain.base.contracts.entity.VehicleID
 import com.example.truckercore.layers.domain.base.others.Period
 
 data class Crlv(
@@ -16,4 +16,4 @@ data class Crlv(
     override val status: Status,
     override val period: Period,
     val vehicleId: VehicleID
-) : Entity, Document
+) : Document

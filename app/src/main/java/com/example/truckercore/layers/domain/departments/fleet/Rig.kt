@@ -1,7 +1,6 @@
-package com.example.truckercore.layers.domain.departments.fleet.objects
+package com.example.truckercore.layers.domain.departments.fleet
 
 import com.example.truckercore.layers.domain.base.others.Plate
-import com.example.truckercore.layers.domain.model.driver.Driver
 import com.example.truckercore.layers.domain.model.trailer.Trailer
 import com.example.truckercore.layers.domain.model.truck.Truck
 

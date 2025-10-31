@@ -1,11 +1,10 @@
 package com.example.truckercore.layers.domain.departments.fleet
 
 import com.example.truckercore.core.error.DomainException
+import com.example.truckercore.layers.domain.base.abstractions.Vehicle
 import com.example.truckercore.layers.domain.base.others.Plate
-import com.example.truckercore.layers.domain.departments.fleet.collections.RigCollection
-import com.example.truckercore.layers.domain.departments.fleet.collections.TrailerCollection
-import com.example.truckercore.layers.domain.departments.fleet.collections.TruckCollection
-import com.example.truckercore.layers.domain.departments.fleet.objects.Rig
+import com.example.truckercore.layers.domain.model.trailer.TrailerCollection
+import com.example.truckercore.layers.domain.model.truck.TruckCollection
 import com.example.truckercore.layers.domain.model.hitch.Hitch
 import com.example.truckercore.layers.domain.model.trailer.Trailer
 import com.example.truckercore.layers.domain.model.truck.Truck
@@ -22,25 +21,9 @@ class FleetDepartment {
     // Initialize
     //----------------------------------------------------------------------------------------------
     fun initFromDatabase(truckList: List<Truck>, trailerList: List<Trailer>) {
-        registerTrucks(truckList)
-        registerTrailers(trailerList)
+        truckList.forEach(::registerTruck)
+        trailerList.forEach(::registerTrailer)
         assembleRigs()
-    }
-
-    private fun registerTrucks(truckList: List<Truck>) {
-        truckList.forEach { truck ->
-            if (trucks.contains(truck.plate)) {
-                throw DomainException.RuleViolation(REGISTER_TRUCK_ERROR_MSG)
-            } else trucks.add(truck)
-        }
-    }
-
-    private fun registerTrailers(trailerList: List<Trailer>) {
-        trailerList.forEach { trailer ->
-            if (trailers.contains(trailer.plate)) {
-                throw DomainException.RuleViolation(REGISTER_TRAILER_ERROR_MSG)
-            } else trailers.add(trailer)
-        }
     }
 
     private fun assembleRigs() {
@@ -61,6 +44,24 @@ class FleetDepartment {
     //
     //----------------------------------------------------------------------------------------------
 
+    fun registerTruck(truck: Truck) {
+        if (alreadyContains(truck)) {
+            throw DomainException.RuleViolation(REGISTER_TRUCK_ERROR_MSG)
+        } else trucks.add(truck)
+    }
+
+    fun registerTrailer(trailer: Trailer) {
+        if (alreadyContains(trailer)) {
+            throw DomainException.RuleViolation(REGISTER_TRAILER_ERROR_MSG)
+        } else trailers.add(trailer)
+    }
+
+    private fun alreadyContains(vehicle: Vehicle) = when (vehicle) {
+        is Truck -> trucks.contains(vehicle.plate)
+        is Trailer -> trailers.contains(vehicle.plate)
+        else -> throw IllegalArgumentException(UNSUPPORTED_VEHICLE_ERROR_MSG)
+    }
+
     fun findRigBy(plate: Plate): Rig? = rigs.findBy(plate)
 
     fun findTruckBy(plate: Plate): Truck? = trucks.findBy(plate)
@@ -68,6 +69,9 @@ class FleetDepartment {
     fun findTrailerBy(plate: Plate): Trailer? = trailers.findBy(plate)
 
     companion object {
+
+        private const val UNSUPPORTED_VEHICLE_ERROR_MSG =
+            "Cannot check registration: unsupported vehicle type."
 
         private const val TRAILER_NOT_FOUND_ERROR_MSG = "Trailer not found for hitch."
 

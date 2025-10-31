@@ -16,7 +16,7 @@ data class StateAet(
     override val companyId: CompanyID,
     override val status: Status,
     val uf: Uf
-) : Entity, Document {
+) : Document {
 
 
 }

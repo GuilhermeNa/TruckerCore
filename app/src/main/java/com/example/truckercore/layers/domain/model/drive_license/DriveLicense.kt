@@ -16,4 +16,4 @@ data class DriveLicense(
     override val url: Url,
     override val status: Status,
     val driverID: DriverID
-) : Entity, Document
+) : Document

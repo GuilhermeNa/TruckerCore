@@ -14,7 +14,7 @@ data class FederalAet(
     override val companyId: CompanyID,
     override val status: Status,
     override val period: Period
-) : Entity, Document {
+) : Document {
 
 
 }
