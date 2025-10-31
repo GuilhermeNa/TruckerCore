@@ -1,5 +1,12 @@
 package com.example.truckercore.layers.domain.use_case.user
 
+import com.example.truckercore.layers.data.base.dto.impl.UserDto
+import com.example.truckercore.layers.data.base.mapper.impl.UserMapper
+import com.example.truckercore.layers.data.base.outcome.DataOutcome
+import com.example.truckercore.layers.data.base.specification.specs_impl.UserSpec
+import com.example.truckercore.layers.data.repository.data.DataRepository
+import com.example.truckercore.layers.domain.model.user.User
+
 
 interface GetUserUserCase {
 
@@ -11,8 +18,8 @@ class GetUserUserCaseImpl(
     private val dataRepository: DataRepository
 ) : GetUserUserCase {
 
-    override suspend fun invoke(spec: UserSpec): DataOutcome<User> =
-        try {
+    override suspend fun invoke(spec: UserSpec): DataOutcome<User> = TODO()
+   /*     try {
 
             dataRepository.findOneBy(spec)
                 .getOrElse { return it }
@@ -22,9 +29,9 @@ class GetUserUserCaseImpl(
             DataOutcome.Failure(e)
         } catch (e: Exception) {
             DataOutcome.Failure(
-                com.example.truckercore.core.error.classes.technical.TechnicalException.Unknown("$UNEXPECTED_ERROR_MESSAGE $spec", e)
+               TechnicalException.Unknown("$UNEXPECTED_ERROR_MESSAGE $spec", e)
             )
-        }
+        }*/
 
     private fun getSuccessResponse(dto: UserDto): DataOutcome.Success<User> {
         val user = UserMapper.toEntity(dto)

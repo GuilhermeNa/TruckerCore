@@ -39,7 +39,7 @@ data class Truck(
     // --------------------------------------------------------
 
     fun initTachographsFromDatabase(dbTachographs: List<Tachograph>) {
-        dbTachographs.forEach { registerTachograph(it) }
+        dbTachographs.forEach(::registerTachograph)
     }
 
     private fun registerTachograph(tachograph: Tachograph) {
