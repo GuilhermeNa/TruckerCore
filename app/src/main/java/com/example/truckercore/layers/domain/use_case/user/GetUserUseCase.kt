@@ -7,7 +7,6 @@ import com.example.truckercore.layers.data.base.specification.specs_impl.UserSpe
 import com.example.truckercore.layers.data.repository.data.DataRepository
 import com.example.truckercore.layers.domain.model.user.User
 
-
 interface GetUserUserCase {
 
     suspend operator fun invoke(spec: UserSpec): DataOutcome<User>

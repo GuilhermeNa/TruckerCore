@@ -1,9 +1,9 @@
 package com.example.truckercore.core.my_lib.expressions
 
 import com.example.truckercore.infra.logger.AppLogger
-import com.example.truckercore.layers.presentation.viewmodels._shared._contracts.Effect
-import com.example.truckercore.layers.presentation.viewmodels._shared._contracts.Event
-import com.example.truckercore.layers.presentation.viewmodels._shared._contracts.State
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Effect
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Event
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.State
 
 fun logState(clazz: Any, uiState: State) {
     AppLogger.d(clazz.getClassName(), "State: $uiState")

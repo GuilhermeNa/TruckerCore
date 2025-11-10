@@ -1,27 +1,24 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.splash.state
 
-import com.example.truckercore.domain._shared.components.TextComponent
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.State
+import com.example.truckercore.layers.presentation.viewmodels.base.components.TextComponent
 
 data class SplashState(
     val nameComponent: TextComponent = TextComponent(),
-    val status: com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashStatus = com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashStatus.Initial
-) : com.example.truckercore.presentation.viewmodels._shared._contracts.State {
+    val status: SplashStatus = SplashStatus.Initial
+) : State {
 
-    fun updateName(appName: String): com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashState {
+    fun updateName(appName: String): SplashState {
         val newNameComponent = nameComponent.updateText(appName)
         return copy(nameComponent = newNameComponent)
     }
 
-    fun loading(): com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashState {
-        return copy(status = com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashStatus.Loading)
+    fun loading(): SplashState {
+        return copy(status = SplashStatus.Loading)
     }
 
-    fun loaded(): com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashState {
-        return copy(status = com.example.truckercore.presentation.viewmodels.view_models.splash.state.SplashStatus.Loaded)
-    }
-
-    override fun toString(): String {
-        return "SplashState(name=\"${nameComponent.text}\", status=$status)"
+    fun loaded(): SplashState {
+        return copy(status = SplashStatus.Loaded)
     }
 
 }

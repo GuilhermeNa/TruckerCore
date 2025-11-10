@@ -64,3 +64,20 @@ inline fun <T> DataOutcome<T>.handle(
         is DataOutcome.Failure -> onFailure(exception)
     }
 }
+
+fun <T> DataOutcome<T>.isNotSuccess(): Boolean = this !is DataOutcome.Success
+
+fun <T> DataOutcome<T>.onFailure(action: (AppException) -> Unit): DataOutcome<T> {
+    if (this is DataOutcome.Failure) action(this.exception)
+    return this
+}
+
+fun <T> DataOutcome<T>.onRequired(action: (T) -> Unit): DataOutcome<T> {
+    if (this is DataOutcome.Success) action(this.data)
+    return this
+}
+
+fun <T> DataOutcome<T>.onSuccess(action: (T) -> Unit): DataOutcome<T> {
+    if (this is DataOutcome.Success) action(this.data)
+    return this
+}

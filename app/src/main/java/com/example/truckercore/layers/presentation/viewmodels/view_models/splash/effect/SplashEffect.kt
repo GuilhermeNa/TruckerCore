@@ -1,6 +1,6 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.splash.effect
 
-import com.example.truckercore.domain._shared._contracts.Effect
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Effect
 
 sealed class SplashEffect : Effect {
 
@@ -16,33 +16,31 @@ sealed class SplashEffect : Effect {
             }
         }
 
-        sealed class Navigate : UiEffect() {
-            data object ToWelcome : Navigate() {
+        sealed class Navigation : UiEffect() {
+            data object ToWelcome : Navigation() {
                 override fun toString() = "Navigate -> ToWelcome"
             }
 
-            data object ToContinue : Navigate() {
+            data object ToContinue : Navigation() {
                 override fun toString() = "Navigate -> ToContinue"
             }
 
-            data object ToLogin : Navigate() {
+            data object ToLogin : Navigation() {
                 override fun toString() = "Navigate -> ToLogin"
             }
 
-            data object ToMain : Navigate() {
+            data object ToMain : Navigation() {
                 override fun toString() = "Navigate -> ToMain"
             }
 
-            data object ToNotification : Navigate() {
+            data object ToNotification : Navigation() {
                 override fun toString() = "Navigate -> ToNotification"
             }
         }
     }
 
     sealed class SystemEffect : SplashEffect() {
-        data object ExecuteLoadUserTask : SystemEffect() {
-            override fun toString() = "SystemEffect -> ExecuteLoadUserTask"
-        }
+        data object ExecuteLoadUserTask : SystemEffect()
     }
 
 }

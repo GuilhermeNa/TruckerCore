@@ -16,7 +16,7 @@ object CollectionResolver {
             is CompanyDto -> AppCollection.COMPANY
             is UserDto -> AppCollection.USER
             is AdminDto -> AppCollection.ADMIN
-            else -> throw CollectionException("Unsupported DTO type: ${dto::class.simpleName}")
+            else -> throw IllegalArgumentException("Unsupported DTO type: ${dto::class.simpleName}")
         }
     }
 
@@ -25,7 +25,7 @@ object CollectionResolver {
             is CompanyID -> AppCollection.COMPANY
             is UserID -> AppCollection.USER
             is AdminID -> AppCollection.ADMIN
-            else -> throw CollectionException("Unsupported ID type: ${id::class.simpleName}")
+            else -> throw IllegalArgumentException("Unsupported ID type: ${id::class.simpleName}")
         }
     }
 
@@ -34,7 +34,7 @@ object CollectionResolver {
             CompanyDto::class.java -> AppCollection.COMPANY
             UserDto::class.java -> AppCollection.USER
             AdminDto::class.java -> AppCollection.ADMIN
-            else -> throw CollectionException("Unsupported Class type: ${clazz::class.simpleName}")
+            else -> throw IllegalArgumentException("Unsupported Class type: ${clazz::class.simpleName}")
         }
     }
 

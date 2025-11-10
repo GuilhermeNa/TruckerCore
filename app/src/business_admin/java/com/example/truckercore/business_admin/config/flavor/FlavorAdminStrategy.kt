@@ -5,9 +5,6 @@ import android.content.Intent
 import androidx.navigation.NavController
 import com.example.truckercore.business_admin.view.activities.MainActivity
 import com.example.truckercore.core.config.flavor.FlavorStrategy
-import com.example.truckercore.data.infrastructure.security.data.enums.Role
-import com.example.truckercore.presentation.nav_login.fragments.welcome.navigator.WelcomeNavigatorStrategy
-import com.example.truckercore.domain.view_models.welcome_fragment.WelcomePagerData
 
 class FlavorAdminStrategy : FlavorStrategy {
 

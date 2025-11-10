@@ -26,7 +26,7 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
     }
 
     override fun thereIsLoggedUser(): DataOutcome<Boolean> =
-        DataOutcome.Success(authSource.thereIsLoggedUser())
+        DataOutcome.Success(authSource.hasLoggedUser())
 
     override fun getUserEmail(): DataOutcome<Email> =
         runSafeSearch {

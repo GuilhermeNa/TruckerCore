@@ -2,11 +2,13 @@ package com.example.truckercore.layers.data.data_source.auth
 
 import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.my_lib.classes.Email
+import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.classes.Password
-import com.example.truckercore.layers.data.data_source.auth.expressions.awaitSuccessOrThrow
 import com.example.truckercore.core.my_lib.expressions.cancelJob
+import com.example.truckercore.layers.data.data_source.auth.expressions.awaitSuccessOrThrow
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -58,7 +60,20 @@ class AuthSourceImpl(
 
     override fun signOut() = auth.signOut()
 
-    override fun thereIsLoggedUser(): Boolean = auth.currentUser?.let { true } ?: false
+    override fun updateName(name: Name) {
+        TODO("Not yet implemented")
+        userProfileChangeRequest {
+            displayName = ""
+
+        }
+    }
+
+    override fun isNameDefined(): Boolean {
+        TODO("Not yet implemented")
+        auth.currentUser.updateProfile()
+    }
+
+    override fun hasLoggedUser(): Boolean = auth.currentUser?.let { true } ?: false
 
     override fun getUserEmail(): String? {
         return getLoggedUser().email
@@ -73,6 +88,8 @@ class AuthSourceImpl(
     }
 
     private fun getLoggedUser(): FirebaseUser {
+
+
         return auth.currentUser ?: throw DomainException.UserNotFound()
     }
 

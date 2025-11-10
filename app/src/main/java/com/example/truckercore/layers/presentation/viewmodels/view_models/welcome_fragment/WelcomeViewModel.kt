@@ -1,10 +1,16 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment
 
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.core.expressions.logEvent
-import com.example.truckercore.data.infrastructure.repository.preferences.contracts.PreferencesRepository
-import com.example.truckercore.presentation.viewmodels._shared._base.view_model.LoggerViewModel
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.truckercore.core.config.flavor.FlavorService
+import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.EffectManager
+import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.StateManager
+import com.example.truckercore.layers.presentation.viewmodels.base.abstractions.BaseViewModel
+import com.example.truckercore.layers.presentation.viewmodels.base.expressions.handleResult
+import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.effect.WelcomeFragmentEffect
+import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.event.WelcomeFragmentEvent
+import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.reducer.WelcomeFragmentReducer
+import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.state.WelcomeFragmentState
 import kotlinx.coroutines.launch
 
 /**
@@ -14,26 +20,35 @@ import kotlinx.coroutines.launch
  */
 class WelcomeViewModel(
     private val preferences: PreferencesRepository,
-    flavorService: com.example.truckercore.core.config.flavor.FlavorService
-) : com.example.truckercore.presentation.viewmodels._shared._base.view_model.LoggerViewModel() {
+    flavorService: FlavorService
+) : BaseViewModel() {
 
-    private val stateManager = WelcomeUiStateManager(flavorService.getWelcomePagerData())
-    val state get() = stateManager.state.asStateFlow()
-
-    //----------------------------------------------------------------------------------------------
-    fun onEvent(event: WelcomeEvent) {
-        logEvent(this@WelcomeViewModel, event)
-
-        if (event is WelcomeEvent.PagerChanged) {
-            stateManager.updatePagerPosition(event.position)
-        }
+    private val initialUiState by lazy {
+        WelcomeFragmentState(
+            data = flavorService.getWelcomeFragmentPagerData()
+        )
     }
 
-    fun isLastPage() = stateManager.isLastPage()
+    private val stateManager = StateManager(initialUiState)
+    val stateFlow get() = stateManager.stateFlow
 
-    fun pagerPos() = stateManager.pagerPos()
+    private val effectManager = EffectManager<WelcomeFragmentEffect>()
+    val effectFlow get() = effectManager.effectFlow
 
-    fun setAppAlreadyAccessed() {
+    private val reducer = WelcomeFragmentReducer()
+
+    //----------------------------------------------------------------------------------------------
+
+    fun onEvent(event: WelcomeFragmentEvent) {
+        reducer.reduce(stateManager.currentState(), event).handleResult(
+            state = stateManager::update,
+            effect = effectManager::trySend
+        )
+    }
+
+    fun currentPagerPosition() = stateManager.currentState().pagerPos
+
+    fun markFirstAccessCompleteOnPreferences() {
         viewModelScope.launch {
             preferences.setFirstAccessComplete()
         }

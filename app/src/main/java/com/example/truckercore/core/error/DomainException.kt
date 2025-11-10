@@ -5,10 +5,15 @@ import com.example.truckercore.core.error.core.AppException
 sealed class DomainException(
     message: String? = null,
     cause: Throwable? = null
-): AppException(message, cause) {
+) : AppException(message, cause) {
 
     class Unknown(
         message: String = "An unknown error occurred.",
+        cause: Throwable? = null
+    ) : DomainException(message, cause)
+
+    class UnauthorizedAccess(
+        message: String = "User does not have the necessary permission to perform this action.",
         cause: Throwable? = null
     ) : DomainException(message, cause)
 

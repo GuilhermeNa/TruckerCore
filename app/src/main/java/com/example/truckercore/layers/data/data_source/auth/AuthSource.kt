@@ -2,6 +2,7 @@ package com.example.truckercore.layers.data.data_source.auth
 
 import com.example.truckercore.core.error.core.ErrorMapper
 import com.example.truckercore.core.my_lib.classes.Email
+import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.classes.Password
 import com.example.truckercore.core.my_lib.files.ONE_SEC
 
@@ -95,7 +96,11 @@ abstract class AuthSource(protected val errorMapper: ErrorMapper) {
      */
     abstract fun signOut()
 
-    abstract fun thereIsLoggedUser(): Boolean
+    abstract fun updateName(name: Name)
+
+    abstract fun isNameDefined(): Boolean
+
+    abstract fun hasLoggedUser(): Boolean
 
     abstract fun getUserEmail(): String?
 
