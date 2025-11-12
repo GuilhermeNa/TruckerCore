@@ -1,11 +1,12 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.effect
 
-import com.example.truckercore.presentation.viewmodels._shared._base.managers.EffectManager
+import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.EffectManager
+import com.example.truckercore.layers.presentation.viewmodels.view_models.login.effect.LoginEffect
 
-class EmailAuthEffectManager : com.example.truckercore.presentation.viewmodels._shared._base.managers.EffectManager<com.example.truckercore.presentation.viewmodels.view_models.email_auth.effect.EmailAuthEffect>() {
+class EmailAuthEffectManager : EffectManager<EmailAuthEffect>() {
 
     fun setClearFocusAndHideKeyboardEffect() {
-        trySend(com.example.truckercore.presentation.viewmodels.view_models.email_auth.effect.EmailAuthEffect.ClearFocusAndHideKeyboard)
+        trySend(LoginEffect.ClearFocusAndHideKeyboard)
     }
 
     fun setNavigateToLoginEffect() {

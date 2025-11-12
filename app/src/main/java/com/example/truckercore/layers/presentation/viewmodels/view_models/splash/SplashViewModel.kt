@@ -12,7 +12,7 @@ import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRe
 import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.EffectManager
 import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.StateManager
 import com.example.truckercore.layers.presentation.viewmodels.base.abstractions.BaseViewModel
-import com.example.truckercore.layers.presentation.viewmodels.base.expressions.handleResult
+import com.example.truckercore.layers.presentation.viewmodels.base.expressions.handle
 import com.example.truckercore.layers.presentation.viewmodels.view_models.splash.effect.SplashEffect
 import com.example.truckercore.layers.presentation.viewmodels.view_models.splash.event.SplashEvent
 import com.example.truckercore.layers.presentation.viewmodels.view_models.splash.state.SplashState
@@ -57,7 +57,7 @@ class SplashViewModel(
     }
 
     private fun onEvent(newEvent: SplashEvent) {
-        reducer.reduce(stateManager.currentState(), newEvent).handleResult(
+        reducer.reduce(stateManager.currentState(), newEvent).handle(
             state = stateManager::update,
             effect = ::handleEffect
         )

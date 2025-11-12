@@ -1,16 +1,16 @@
-package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.uiState
+package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state
 
 import com.example.truckercore.core.classes.Email
 import com.example.truckercore.core.classes.EmailCredential
-import com.example.truckercore.presentation.viewmodels._shared._contracts.State
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.State
 
 private typealias Components = com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiComponents
 private typealias Status = com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiStatus
 
-data class EmailAuthUiState(
+data class EmailAuthFragmentState(
     val components: com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.Components = com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.Components(),
     val status: com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.Status = com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiStatus.Idle
-) : com.example.truckercore.presentation.viewmodels._shared._contracts.State {
+) : State {
 
     fun idle() = updateStatus(com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiStatus.Idle)
 

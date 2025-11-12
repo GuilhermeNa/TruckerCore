@@ -4,7 +4,7 @@ import com.example.truckercore.layers.presentation.viewmodels.base._base.reducer
 import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Effect
 import com.example.truckercore.layers.presentation.viewmodels.base._contracts.State
 
-fun <S : State, E : Effect> ReducerResult<S, E>.handleResult(
+fun <S : State, E : Effect> ReducerResult<S, E>.handle(
     state: (S) -> Unit = {},
     effect: (E) -> Unit = {}
 ) = when (this) {

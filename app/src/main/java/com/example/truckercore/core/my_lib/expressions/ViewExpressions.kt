@@ -1,6 +1,7 @@
 package com.example.truckercore.core.my_lib.expressions
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.View.VISIBLE
@@ -11,6 +12,7 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.load
 import com.example.truckercore.R
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Extension function for `View` that animates the view sliding in from the bottom.
@@ -73,3 +75,5 @@ fun ImageView.loadGif(url: Any? = null, context: Context) {
     val imageLoaderGifSupport = getGifLoader(context)
     load(url, imageLoaderGifSupport)
 }
+
+

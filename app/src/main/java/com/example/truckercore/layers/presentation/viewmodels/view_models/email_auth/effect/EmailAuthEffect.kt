@@ -1,22 +1,19 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.effect
 
-import com.example.truckercore.domain._shared._contracts.Effect
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Effect
 
-/**
- * EmailAuthFragEffect defines one-time UI side effects triggered by the EmailAuthViewModel.
- * These effects represent actions that should be performed once, such as navigation or error notifications,
- * and are typically collected in the Fragment layer.
- */
-sealed class EmailAuthEffect: Effect {
+sealed class EmailAuthEffect : Effect {
 
-    data object ClearFocusAndHideKeyboard : EmailAuthEffect()
+    sealed class Navigation : EmailAuthEffect() {
+        data object ToNotification : Navigation()
+        data object ToLogin : Navigation()
+        data object ToVerifyEmail : Navigation()
+        data object ToNoConnection: Navigation()
+    }
 
-    data class ShowToast(val message: String): EmailAuthEffect()
-
-    data object NavigateToNotification: EmailAuthEffect()
-
-    data object NavigateToLogin : EmailAuthEffect()
-
-    data object NavigateToVerifyEmail: EmailAuthEffect()
+    sealed class View : EmailAuthEffect() {
+        data object ClearFocusAndKeyboard : View()
+        data class WarningToast(val message: String) : View()
+    }
 
 }

@@ -8,7 +8,7 @@ import com.example.truckercore.core.my_lib.expressions.slideOutBottom
 import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
 
-class WelcomeFragmentUiStateHandlerII : StateHandler<FragmentWelcomeBinding>() {
+class WelcomeFragmentUiStateHandler : StateHandler<FragmentWelcomeBinding>() {
 
     private val fab get() = binding.fragWelcomeLeftFab
 

@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.navigation.NavController
 import com.example.truckercore.layers.domain.model.access.Role
 import com.example.truckercore.layers.presentation.nav_login.fragments.login.navigator.LoginFragmentStrategy
-import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.WelcomePagerData
+import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.data.WelcomePagerData
 
 class FlavorService(private val strategy: FlavorStrategy) {
 

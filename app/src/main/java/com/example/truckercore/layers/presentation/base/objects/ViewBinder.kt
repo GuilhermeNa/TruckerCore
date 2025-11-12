@@ -9,10 +9,9 @@ import android.widget.TextView
 import com.example.truckercore.domain._shared.components.Visibility
 import com.example.truckercore.domain._shared.components.ButtonComponent
 import com.example.truckercore.domain._shared.components.TextInputComponent
-import com.example.truckercore.domain._shared._contracts.UiComponent
 import com.example.truckercore.domain._shared.components.FabComponent
 import com.example.truckercore.domain._shared.components.TextComponent
-import com.example.truckercore.layers.presentation.viewmodels.base._contracts.UiComponent
+import com.example.truckercore.core.my_lib.ui_components.UiComponent
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 

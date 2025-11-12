@@ -1,9 +1,9 @@
-package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.uiState
+package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state
 
 import com.example.truckercore.core.classes.EmailCredential
 import com.example.truckercore.domain._shared._base.managers.StateManager
 
-class EmailAuthUiStateManager : StateManager<com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiState>(initialState = com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiState()) {
+class EmailAuthUiStateManager : StateManager<com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state.EmailAuthFragmentState>(initialState = com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state.EmailAuthFragmentState()) {
 
     fun updateComponentsOnEmailChange(email: String) {
         val newState = getStateValue().updateEmail(email)

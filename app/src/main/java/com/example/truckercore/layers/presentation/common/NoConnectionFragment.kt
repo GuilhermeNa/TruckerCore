@@ -13,7 +13,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.example.truckercore.core.my_lib.expressions.isInternetAvailable
-import com.example.truckercore.core.my_lib.expressions.launchOnFragmentLifecycle
+import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.popBackstack
 import com.example.truckercore.core.my_lib.expressions.showToast
 import com.example.truckercore.databinding.FragmentNoConnectionBinding
@@ -67,7 +67,7 @@ class NoConnectionFragment : LockedFragment() {
             stateHandler.checking() // Switch to loading state
 
             // Launch coroutine tied to fragment lifecycle
-            launchOnFragmentLifecycle {
+            launchAndRepeatOnFragmentStartedLifeCycle {
                 delay(ANIMATION_DELAY)
 
                 if (requireContext().isInternetAvailable()) {

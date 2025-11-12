@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.uiState
+package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state
 
 import com.example.truckercore.domain._shared.components.ButtonComponent
 import com.example.truckercore.domain._shared.components.TextInputComponent

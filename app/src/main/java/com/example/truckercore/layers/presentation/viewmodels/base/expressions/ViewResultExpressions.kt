@@ -4,6 +4,8 @@ import com.example.truckercore.core.expressions.getClassName
 import com.example.truckercore.core.util.AppLogger
 import com.example.truckercore.domain._shared.helpers.ViewError
 import com.example.truckercore.domain._shared.helpers.ViewResult
+import com.example.truckercore.layers.presentation.viewmodels.base.helpers.ViewError
+import com.example.truckercore.layers.presentation.viewmodels.base.helpers.ViewResult
 import java.security.InvalidParameterException
 
 fun <R, T> ViewResult<T>.mapResult(
@@ -25,7 +27,7 @@ fun <T> ViewResult<T>.getOrElse(orElse: (ViewError) -> Nothing): T =
 
 fun <T> ViewResult<T>.get() = (this as ViewResult.Success).data
 
-fun <T> ViewResult<T>.handleResult(
+fun <T> ViewResult<T>.handle(
     onSuccess: (T) -> Unit,
     onCriticalError: (ViewError.Critical) -> Unit,
     onRecoverableError: (ViewError.Recoverable) -> Unit

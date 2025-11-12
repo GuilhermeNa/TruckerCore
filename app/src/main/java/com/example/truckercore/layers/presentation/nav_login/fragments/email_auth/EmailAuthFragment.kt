@@ -6,95 +6,104 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
-import androidx.navigation.fragment.findNavController
-import com.example.truckercore.core.expressions.logEffect
-import com.example.truckercore.core.expressions.logState
-import com.example.truckercore.core.expressions.showRedSnackBar
+import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
+import com.example.truckercore.core.my_lib.expressions.navigateToDirection
+import com.example.truckercore.core.my_lib.expressions.showWarningSnackbar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
-import com.example.truckercore.presentation._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.presentation._shared.expressions.launchOnFragmentLifecycle
-import com.example.truckercore.presentation._shared.views.dialogs.LoadingDialog
-import com.example.truckercore.domain.view_models.email_auth.EmailAuthViewModel
-import com.example.truckercore.domain.view_models.email_auth.effect.EmailAuthEffect
-import com.example.truckercore.domain.view_models.email_auth.event.EmailAuthEvent
+import com.example.truckercore.layers.presentation.base.abstractions._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.EmailAuthViewModel
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.effect.EmailAuthEffect
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.event.EmailAuthenticationFragmentEvent
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state.EmailAuthUiStatus
+import com.example.truckercore.presentation.nav_login.fragments.email_auth.EmailAuthFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-/**
- * EmailAuthFragment is responsible for handling the email registration screen in the application.
- * It allows users to create an account using an email, password, and confirmation, and it reacts
- * to ViewModel state, effect, and event updates to properly manage UI feedback and navigation.
- */
-class EmailAuthFragment : CloseAppFragment() {
+private val verifyEmailFragmentDirection =
+    EmailAuthFragmentDirections.actionEmailAuthFragmentToVerifyingEmailFragment()
 
+private val loginFragmentDirection =
+    EmailAuthFragmentDirections.actionGlobalLoginFragment()
+
+private typealias BackgroundClicked = EmailAuthenticationFragmentEvent.Click.Background
+private typealias CreateButtonClicked = EmailAuthenticationFragmentEvent.Click.ButtonCreate
+private typealias AlreadyRegisteredAccountButtonClicked = EmailAuthenticationFragmentEvent.Click.ButtonHaveAccount
+private typealias ImeActionDoneClicked = EmailAuthenticationFragmentEvent.Click.ImeActionDone
+
+private typealias TypeEmail = EmailAuthenticationFragmentEvent.Typing.Email
+private typealias TypePassword = EmailAuthenticationFragmentEvent.Typing.Password
+private typealias TypeConfirmation = EmailAuthenticationFragmentEvent.Typing.Confirmation
+
+
+// navigateToNoConnection
+
+class EmailAuthFragment : PublicLockedFragment() {
+
+    // View Binding
     private var _binding: FragmentEmailAuthBinding? = null
     private val binding get() = _binding!!
 
-    private val stateHandler by lazy { EmailAuthStateHandler() }
-
-    private val navigator by lazy {
-        com.example.truckercore.layers.presentation.nav_login.fragments.email_auth.EmailAuthNavigator(
-            findNavController()
-        )
-    }
-
-    private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
-
+    // ViewModel and Helpers
     private val viewModel: EmailAuthViewModel by viewModel()
+    private val stateHandler = EmailAuthFragmentUiStateHandler()
+
+    // Helper View
+    private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
     //----------------------------------------------------------------------------------------------
     // onCreate()
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchOnFragmentLifecycle {
+        launchAndRepeatOnFragmentStartedLifeCycle {
             setFragmentStateManager()
             setFragmentEffectManager()
         }
     }
 
-    /**
-     * Collects and handles state updates from the ViewModel.
-     * It manages UI behavior based on the current authentication state.
-     */
     private fun CoroutineScope.setFragmentStateManager() {
         launch {
             viewModel.state.collect { state ->
-                logState(this@EmailAuthFragment, state)
                 stateHandler.handleUiComponents(state.components)
                 handleUiStatus(state.status)
             }
         }
     }
 
-    private fun handleUiStatus(status: com.example.truckercore.presentation.viewmodels.view_models.email_auth.uiState.EmailAuthUiStatus) {
+    private fun handleUiStatus(status: EmailAuthUiStatus) {
         if (status.isCreating()) dialog.show()
         else dialog.dismissIfShowing()
     }
 
-    /**
-     * Collects and handles side effects emitted by the ViewModel, such as success or failure messages.
-     */
     private suspend fun setFragmentEffectManager() {
         viewModel.effect.collect { effect ->
-            logEffect(this@EmailAuthFragment, effect)
             when (effect) {
-                EmailAuthEffect.ClearFocusAndHideKeyboard ->
-                    hideKeyboardAndClearFocus()
-
-                EmailAuthEffect.NavigateToLogin ->
-                    navigator.navigateToLogin()
-
-                EmailAuthEffect.NavigateToNotification ->
-                    navigator.navigateToNotification(requireActivity())
-
-                EmailAuthEffect.NavigateToVerifyEmail ->
-                    navigator.navigateToVerifyEmail()
-
-                is EmailAuthEffect.ShowToast ->
-                    showRedSnackBar(effect.message)
+                is EmailAuthEffect.Navigation -> handleNavigationEffect(effect)
+                is EmailAuthEffect.View -> handleViewEffect(effect)
             }
+        }
+    }
+
+    private fun handleNavigationEffect(effect: EmailAuthEffect.Navigation) {
+        when (effect) {
+            EmailAuthEffect.Navigation.ToLogin -> navigateToDirection(loginFragmentDirection)
+
+            EmailAuthEffect.Navigation.ToVerifyEmail ->
+                navigateToDirection(verifyEmailFragmentDirection)
+
+            EmailAuthEffect.Navigation.ToNotification -> navigateToErrorActivity(requireActivity())
+
+            EmailAuthEffect.Navigation.ToNoConnection -> TODO()
+
+        }
+    }
+
+    private fun handleViewEffect(effect: EmailAuthEffect.View) {
+        when (effect) {
+            EmailAuthEffect.View.ClearFocusAndKeyboard -> hideKeyboardAndClearFocus()
+            is EmailAuthEffect.View.WarningToast -> showWarningSnackbar(effect.message)
         }
     }
 
@@ -126,72 +135,63 @@ class EmailAuthFragment : CloseAppFragment() {
         setBackgroundClickListener()
         setCreateButtonListener()
         setAlreadyRegisteredButtonListener()
+        setImeOptionsClickListener()
         setEmailTextChangeListener()
         setPasswordTextChangeListener()
         setConfirmationTextChangeListener()
-        setImeOptionsClickListener()
     }
 
-    // Notifica ao viewmodel que houve um evento de toque no background
     private fun setBackgroundClickListener() {
         binding.fragEmailAuthMain.setOnClickListener {
-            viewModel.onEvent(EmailAuthEvent.UiEvent.Click.Background)
+            viewModel.onEvent(BackgroundClicked)
         }
     }
 
-    // Notifica ao viewModel um evento de click no botao "Criar conta".
     private fun setCreateButtonListener() = with(binding) {
         fragEmailAuthRegisterButton.setOnClickListener {
-            fragEmailAuthConfirmPasswordEditText.clearFocus()
-            creationRequested()
+            viewModel.onEvent(CreateButtonClicked)
         }
     }
 
-    private fun creationRequested() {
-        val clickEvent = EmailAuthEvent.UiEvent.Click.ButtonCreate
-        viewModel.onEvent(clickEvent)
-    }
-
-    // Notifica ao viewModel um evento de click no botao "Já tenho conta".
     private fun setAlreadyRegisteredButtonListener() {
         binding.fragEmailAuthAlreadyRegisteredButton.setOnClickListener {
-            viewModel.onEvent(EmailAuthEvent.UiEvent.Click.ButtonAlreadyHaveAccount)
-        }
-    }
-
-    private fun setEmailTextChangeListener() {
-        binding.fragEmailAuthEmailEditText.addTextChangedListener { editable ->
-            doIfResumedView {
-                val text = editable.toString()
-                viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.EmailTextChange(text))
-            }
-        }
-    }
-
-    private fun setPasswordTextChangeListener() {
-        binding.fragEmailAuthPasswordEditText.addTextChangedListener { editable ->
-            doIfResumedView {
-                val text = editable.toString()
-                viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.PasswordTextChange(text))
-            }
-        }
-    }
-
-    private fun setConfirmationTextChangeListener() {
-        binding.fragEmailAuthConfirmPasswordEditText.addTextChangedListener { editable ->
-            doIfResumedView {
-                val text = editable.toString()
-                viewModel.onEvent(EmailAuthEvent.UiEvent.Typing.ConfirmationTextChange(text))
-            }
+            viewModel.onEvent(AlreadyRegisteredAccountButtonClicked)
         }
     }
 
     private fun setImeOptionsClickListener() {
         binding.fragEmailAuthConfirmPasswordEditText.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                v.clearFocus()
+                viewModel.onEvent(ImeActionDoneClicked)
                 false
             } else false
+        }
+    }
+
+    private fun setEmailTextChangeListener() {
+        binding.fragEmailAuthEmailEditText.addTextChangedListener { editable ->
+            onViewResumed {
+                val text = editable.toString()
+                viewModel.onEvent(TypeEmail(text))
+            }
+        }
+    }
+
+    private fun setPasswordTextChangeListener() {
+        binding.fragEmailAuthPasswordEditText.addTextChangedListener { editable ->
+            onViewResumed {
+                val text = editable.toString()
+                viewModel.onEvent(TypePassword(text))
+            }
+        }
+    }
+
+    private fun setConfirmationTextChangeListener() {
+        binding.fragEmailAuthConfirmPasswordEditText.addTextChangedListener { editable ->
+            onViewResumed {
+                val text = editable.toString()
+                viewModel.onEvent(TypeConfirmation(text))
+            }
         }
     }
 

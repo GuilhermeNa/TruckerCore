@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment
+package com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.data
 
 import android.os.Parcelable
 import com.example.truckercore.R
@@ -31,6 +31,7 @@ data class WelcomePagerData(
 ) : Parcelable {
 
     companion object {
+
         // Common welcome data for all flavors
         fun welcomeData() = WelcomePagerData(
             res = R.drawable.gif_welcome,
@@ -67,6 +68,7 @@ data class WelcomePagerData(
                     " Portanto, espere muitas novidades em breve." +
                     " Nosso objetivo é atendê-lo com excelência."
         )
+
     }
 
 }

@@ -1,22 +1,25 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth
 
-import com.example.truckercore.core.expressions.launch
-import com.example.truckercore.core.expressions.logEvent
-import com.example.truckercore.domain._shared.expressions.mapResult
-import com.example.truckercore.domain.view_models.email_auth.event.EmailAuthEvent
-import com.example.truckercore.domain.view_models.email_auth.uiState.EmailAuthUiStateManager
-import com.example.truckercore.domain.view_models.email_auth.use_case.AuthenticationViewUseCase
+import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.EffectManager
+import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.StateManager
+import com.example.truckercore.layers.presentation.viewmodels.base.abstractions.BaseViewModel
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.effect.EmailAuthEffect
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state.EmailAuthFragmentState
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.use_case.AuthenticationViewUseCase
 import kotlinx.coroutines.delay
 
 class EmailAuthViewModel(
     private val authViewUseCase: AuthenticationViewUseCase
-) : com.example.truckercore.presentation.viewmodels._shared._base.view_model.LoggerViewModel() {
+) : BaseViewModel() {
 
-    private val stateManager = EmailAuthUiStateManager()
+    private val initialUiState by lazy {
+        EmailAuthFragmentState()
+    }
+
+    private val stateManager = StateManager(initialUiState)
     val state get() = stateManager.stateFlow
 
-    private val effectManager =
-        com.example.truckercore.presentation.viewmodels.view_models.email_auth.effect.EmailAuthEffectManager()
+    private val effectManager = EffectManager<EmailAuthEffect>()
     val effect get() = effectManager.effectFlow
 
     //----------------------------------------------------------------------------------------------

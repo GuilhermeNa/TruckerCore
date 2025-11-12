@@ -1,6 +1,4 @@
-package com.example.truckercore.layers.presentation.viewmodels.base.components
-
-import com.example.truckercore.domain._shared._contracts.UiComponent
+package com.example.truckercore.core.my_lib.ui_components
 
 data class TextInputComponent(
     val text: String = "",

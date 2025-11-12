@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import com.example.truckercore.core.my_lib.expressions.getClassName
 import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.contracts.BaseNavigator
@@ -70,13 +69,13 @@ abstract class BaseFragment : Fragment(), BaseNavigator {
         if(this.lifecycle.currentState == Lifecycle.State.RESUMED) resumed()
     }
 
-    protected inline fun onRecreating(savedInstanceState: Bundle?, block: () -> Unit) {
+    protected inline fun onRecreatingView(savedInstanceState: Bundle?, block: () -> Unit) {
         if (isRecreatingFragment(savedInstanceState, lifecycle.currentState)) {
             block()
         }
     }
 
-    protected inline fun onResumed(block: () -> Unit) {
+    protected inline fun onViewResumed(block: () -> Unit) {
         if (this.lifecycle.currentState == Lifecycle.State.RESUMED) block()
     }
 

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.truckercore.core.my_lib.expressions.getTag
-import com.example.truckercore.core.my_lib.expressions.launchOnFragmentLifecycle
+import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.infra.logger.AppLogger
@@ -70,7 +70,7 @@ class SplashFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchOnFragmentLifecycle {
+        launchAndRepeatOnFragmentStartedLifeCycle {
             setStateManager(savedInstanceState)
             setEffectManager()
         }
@@ -80,7 +80,7 @@ class SplashFragment : PublicLockedFragment() {
         launch {
             viewModel.stateFlow.collect { state ->
                 stateHandler.handleNameComponent(state.nameComponent)
-                onRecreating(savedInstanceState) { stateHandler.handleStatus(state.status) }
+                onRecreatingView(savedInstanceState) { stateHandler.handleStatus(state.status) }
             }
         }
     }

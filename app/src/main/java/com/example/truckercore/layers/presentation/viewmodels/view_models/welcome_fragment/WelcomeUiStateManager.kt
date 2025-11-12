@@ -1,6 +1,7 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment
 
 import com.example.truckercore.core.classes.ButtonState
+import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.data.WelcomePagerData
 import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.state.WelcomeFragmentState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -24,11 +25,11 @@ class WelcomeUiStateManager(pagerData: List<WelcomePagerData>) {
     }
 
     private fun getStateForFirstPos(): WelcomeFragmentState {
-        return value.copy(pagerPos = 0, fabState = ButtonState(false))
+        return value.copy(pagerPos = 0, fab = ButtonState(false))
     }
 
     private fun getStateForPage(newPos: Int): WelcomeFragmentState {
-        return value.copy(pagerPos = newPos, fabState = ButtonState(true))
+        return value.copy(pagerPos = newPos, fab = ButtonState(true))
     }
 
     companion object {
