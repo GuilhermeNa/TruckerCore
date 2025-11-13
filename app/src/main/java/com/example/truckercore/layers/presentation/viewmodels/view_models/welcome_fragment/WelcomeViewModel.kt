@@ -2,6 +2,7 @@ package com.example.truckercore.layers.presentation.viewmodels.view_models.welco
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.config.flavor.FlavorService
+import com.example.truckercore.core.my_lib.expressions.launchOnViewModelScope
 import com.example.truckercore.core.my_lib.ui_components.FabComponent
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
 import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.EffectManager
@@ -90,7 +91,7 @@ class WelcomeViewModel(
      * by updating the stored preference asynchronously.
      */
     fun markFirstAccessCompleteOnPreferences() {
-        viewModelScope.launch {
+        launchOnViewModelScope {
             preferences.setFirstAccessComplete()
         }
     }

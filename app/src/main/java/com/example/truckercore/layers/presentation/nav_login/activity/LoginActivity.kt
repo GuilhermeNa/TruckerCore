@@ -2,11 +2,14 @@ package com.example.truckercore.layers.presentation.nav_login.activity
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.truckercore.R
+import com.example.truckercore.core.my_lib.expressions.isKeyboardOpen
 
 class LoginActivity : AppCompatActivity() {
 
@@ -24,5 +27,18 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val view = currentFocus
+
+        if (view != null && isKeyboardOpen()) {
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        return super.dispatchTouchEvent(ev)
+    }
+
+
 
 }

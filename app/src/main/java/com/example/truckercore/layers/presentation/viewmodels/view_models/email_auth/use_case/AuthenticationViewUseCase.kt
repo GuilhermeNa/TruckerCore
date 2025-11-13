@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.use_case
 
-import com.example.truckercore.core.expressions.mapAppResult
 import com.example.truckercore.core.classes.EmailCredential
+import com.example.truckercore.core.expressions.mapAppResult
 import com.example.truckercore.data.modules.authentication.manager.AuthManager
 import com.example.truckercore.domain._shared.helpers.ViewError
 import com.example.truckercore.domain._shared.helpers.ViewResult
@@ -16,7 +16,7 @@ class AuthenticationViewUseCase(private val authManager: AuthManager) {
     }
 
     private fun handleError(exception: com.example.truckercore.data.infrastructure.app_errors.abstractions.AppException): ViewResult.Error {
-        if (exception is com.example.truckercore.core.error.classes.data.InfraException.NetworkUnavailable) {
+        if (exception is NetworkUnavailable) {
             val error = ViewError.Recoverable(CONNECTION_ERROR)
             return ViewResult.Error(error)
         }

@@ -1,7 +1,9 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state
 
+import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.domain._shared.components.ButtonComponent
 import com.example.truckercore.domain._shared.components.TextInputComponent
+import com.example.truckercore.layers.presentation.viewmodels.base.components.ButtonComponent
 
 data class EmailAuthUiComponents(
     val emailComponent: TextInputComponent = TextInputComponent(),

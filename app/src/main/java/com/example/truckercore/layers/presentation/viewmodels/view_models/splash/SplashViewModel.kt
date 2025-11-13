@@ -24,7 +24,7 @@ private typealias TaskSuccess = SplashEvent.SystemEvent.LoadUserTask.Success
 private typealias TaskError = SplashEvent.SystemEvent.LoadUserTask.Error
 
 class SplashViewModel(
-    private val checkUserRegistration: CheckUserRegistrationUseCase,
+    private val checkUserRegistrationUseCase: CheckUserRegistrationUseCase,
     private val preferences: PreferencesRepository,
     flavorService: FlavorService
 ) : BaseViewModel() {
@@ -74,7 +74,7 @@ class SplashViewModel(
         viewModelScope.launch {
             delay(ONE_SEC)
 
-            val outcome = checkUserRegistration()
+            val outcome = checkUserRegistrationUseCase()
             val newEvent = when {
                 outcome.isNotSuccess() -> TaskError
                 else -> handleSuccessTask(outcome)

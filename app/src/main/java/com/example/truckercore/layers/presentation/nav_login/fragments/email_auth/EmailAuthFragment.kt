@@ -13,7 +13,7 @@ import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.layers.presentation.base.abstractions._public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.EmailAuthViewModel
-import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.effect.EmailAuthEffect
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.effect.EmailAuthenticationFragmentEffect
 import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.event.EmailAuthenticationFragmentEvent
 import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state.EmailAuthUiStatus
 import com.example.truckercore.presentation.nav_login.fragments.email_auth.EmailAuthFragmentDirections
@@ -27,7 +27,7 @@ private val verifyEmailFragmentDirection =
 private val loginFragmentDirection =
     EmailAuthFragmentDirections.actionGlobalLoginFragment()
 
-private typealias BackgroundClicked = EmailAuthenticationFragmentEvent.Click.Background
+//private typealias BackgroundClicked = EmailAuthenticationFragmentEvent.Click.Background
 private typealias CreateButtonClicked = EmailAuthenticationFragmentEvent.Click.ButtonCreate
 private typealias AlreadyRegisteredAccountButtonClicked = EmailAuthenticationFragmentEvent.Click.ButtonHaveAccount
 private typealias ImeActionDoneClicked = EmailAuthenticationFragmentEvent.Click.ImeActionDone
@@ -65,8 +65,8 @@ class EmailAuthFragment : PublicLockedFragment() {
 
     private fun CoroutineScope.setFragmentStateManager() {
         launch {
-            viewModel.state.collect { state ->
-                stateHandler.handleUiComponents(state.components)
+            viewModel.stateFlow.collect { state ->
+                stateHandler.handleUiComponents(state.uiComponents)
                 handleUiStatus(state.status)
             }
         }
@@ -78,42 +78,45 @@ class EmailAuthFragment : PublicLockedFragment() {
     }
 
     private suspend fun setFragmentEffectManager() {
-        viewModel.effect.collect { effect ->
+        viewModel.effectFlow.collect { effect ->
             when (effect) {
-                is EmailAuthEffect.Navigation -> handleNavigationEffect(effect)
-                is EmailAuthEffect.View -> handleViewEffect(effect)
+                is EmailAuthenticationFragmentEffect.Navigation -> handleNavigationEffect(effect)
+                is EmailAuthenticationFragmentEffect.View -> handleViewEffect(effect)
             }
         }
     }
 
-    private fun handleNavigationEffect(effect: EmailAuthEffect.Navigation) {
+    private fun handleNavigationEffect(effect: EmailAuthenticationFragmentEffect.Navigation) {
         when (effect) {
-            EmailAuthEffect.Navigation.ToLogin -> navigateToDirection(loginFragmentDirection)
+            EmailAuthenticationFragmentEffect.Navigation.ToLogin ->
+                navigateToDirection(loginFragmentDirection)
 
-            EmailAuthEffect.Navigation.ToVerifyEmail ->
+            EmailAuthenticationFragmentEffect.Navigation.ToVerifyEmail ->
                 navigateToDirection(verifyEmailFragmentDirection)
 
-            EmailAuthEffect.Navigation.ToNotification -> navigateToErrorActivity(requireActivity())
+            EmailAuthenticationFragmentEffect.Navigation.ToNotification ->
+                navigateToErrorActivity(requireActivity())
 
-            EmailAuthEffect.Navigation.ToNoConnection -> TODO()
+            EmailAuthenticationFragmentEffect.Navigation.ToNoConnection ->
+                navigateToNoConnection()
 
         }
     }
 
-    private fun handleViewEffect(effect: EmailAuthEffect.View) {
+    private fun handleViewEffect(effect: EmailAuthenticationFragmentEffect.View) {
         when (effect) {
-            EmailAuthEffect.View.ClearFocusAndKeyboard -> hideKeyboardAndClearFocus()
-            is EmailAuthEffect.View.WarningToast -> showWarningSnackbar(effect.message)
+           // EmailAuthenticationFragmentEffect.View.ClearFocusAndKeyboard -> hideKeyboardAndClearFocus()
+            is EmailAuthenticationFragmentEffect.View.WarningToast -> showWarningSnackbar(effect.message)
         }
     }
 
-    private fun hideKeyboardAndClearFocus() {
+/*    private fun hideKeyboardAndClearFocus() {
         hideKeyboardAndClearFocus(
             binding.fragEmailAuthEmailLayout,
             binding.fragEmailAuthPasswordLayout,
             binding.fragEmailAuthConfirmPasswordLayout
         )
-    }
+    }*/
 
     //----------------------------------------------------------------------------------------------
     // onCreateView()
@@ -132,7 +135,7 @@ class EmailAuthFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBackgroundClickListener()
+       // setBackgroundClickListener()
         setCreateButtonListener()
         setAlreadyRegisteredButtonListener()
         setImeOptionsClickListener()
@@ -141,11 +144,11 @@ class EmailAuthFragment : PublicLockedFragment() {
         setConfirmationTextChangeListener()
     }
 
-    private fun setBackgroundClickListener() {
+/*    private fun setBackgroundClickListener() {
         binding.fragEmailAuthMain.setOnClickListener {
             viewModel.onEvent(BackgroundClicked)
         }
-    }
+    }*/
 
     private fun setCreateButtonListener() = with(binding) {
         fragEmailAuthRegisterButton.setOnClickListener {

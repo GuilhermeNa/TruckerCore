@@ -19,3 +19,5 @@ fun Context.isInternetAvailable(): Boolean {
                 && netCap.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     } ?: false
 }
+
+

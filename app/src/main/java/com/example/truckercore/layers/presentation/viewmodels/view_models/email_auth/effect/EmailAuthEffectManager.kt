@@ -3,7 +3,7 @@ package com.example.truckercore.layers.presentation.viewmodels.view_models.email
 import com.example.truckercore.layers.presentation.viewmodels.base._base.managers.EffectManager
 import com.example.truckercore.layers.presentation.viewmodels.view_models.login.effect.LoginEffect
 
-class EmailAuthEffectManager : EffectManager<EmailAuthEffect>() {
+class EmailAuthEffectManager : EffectManager<EmailAuthenticationFragmentEffect>() {
 
     fun setClearFocusAndHideKeyboardEffect() {
         trySend(LoginEffect.ClearFocusAndHideKeyboard)
