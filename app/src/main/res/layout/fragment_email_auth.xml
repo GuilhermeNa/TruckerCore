@@ -5,7 +5,7 @@
     android:id="@+id/frag_email_auth_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.nav_login.fragments.email_auth.EmailAuthFragment">
+    tools:context=".layers.presentation.nav_login.fragments.email_auth.EmailAuthFragment">
 
     <TextView
         android:id="@+id/frag_email_auth_header"

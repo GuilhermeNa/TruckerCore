@@ -1,52 +1,66 @@
 package com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.state
 
+import com.example.truckercore.core.my_lib.expressions.isEmailFormat
 import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
-import com.example.truckercore.domain._shared.components.ButtonComponent
-import com.example.truckercore.domain._shared.components.TextInputComponent
-import com.example.truckercore.layers.presentation.viewmodels.base.components.ButtonComponent
 
 data class EmailAuthUiComponents(
     val emailComponent: TextInputComponent = TextInputComponent(),
     val passwordComponent: TextInputComponent = TextInputComponent(),
-    val confirmationComponent: TextInputComponent = TextInputComponent(),
-    val createButtonComponent: ButtonComponent = ButtonComponent(isEnabled = false)
+    val confirmationComponent: TextInputComponent = TextInputComponent()
 ) {
 
-    private val componentFactory = EmailAuthComponentFactory()
-
     fun updateEmail(email: String): EmailAuthUiComponents {
-        val updatedEmail = componentFactory.email(email)
-        val updatedButton = createButtonComponent(newEmail = updatedEmail)
-        return copy(emailComponent = updatedEmail, createButtonComponent = updatedButton)
+        val updatedEmail = when {
+            email.isEmpty() -> TextInputComponent(text = email, errorText = MSG_EMPTY_FIELD)
+            !email.isEmailFormat() -> TextInputComponent(
+                text = email,
+                errorText = MSG_INVALID_EMAIL
+            )
+
+            else -> TextInputComponent(text = email, isValid = true)
+        }
+        return copy(emailComponent = updatedEmail)
     }
 
     fun updatePassword(password: String): EmailAuthUiComponents {
-        val updatedPassword = componentFactory.password(password)
-        val updatedButton = createButtonComponent(newPassword = updatedPassword)
-        return copy(passwordComponent = updatedPassword, createButtonComponent = updatedButton)
+        val updatedPassword = when {
+            password.isEmpty() -> TextInputComponent(text = password, errorText = MSG_EMPTY_FIELD)
+            password.length !in 6..12 -> TextInputComponent(
+                text = password,
+                errorText = MSG_INVALID_PASS
+            )
+
+            else -> TextInputComponent(text = password, isValid = true)
+        }
+        return copy(passwordComponent = updatedPassword)
     }
 
     fun updateConfirmation(confirmation: String): EmailAuthUiComponents {
         val password = passwordComponent.text
-        val updatedConfirmation = componentFactory.confirmation(confirmation, password)
-        val updatedButton = createButtonComponent(newConfirmation = updatedConfirmation)
-        return copy(
-            confirmationComponent = updatedConfirmation,
-            createButtonComponent = updatedButton
-        )
+        val updatedConfirmation = when {
+            confirmation.isEmpty() -> TextInputComponent(
+                text = confirmation,
+                errorText = MSG_EMPTY_FIELD
+            )
+
+            confirmation != password -> TextInputComponent(
+                text = confirmation,
+                errorText = MSG_INVALID_CONFIRMATION
+            )
+
+            else -> TextInputComponent(text = confirmation, isValid = true)
+        }
+        return copy(confirmationComponent = updatedConfirmation)
     }
 
-    private fun createButtonComponent(
-        newEmail: TextInputComponent? = null,
-        newPassword: TextInputComponent? = null,
-        newConfirmation: TextInputComponent? = null
-    ) = componentFactory.button(
-        emailComponent = newEmail ?: emailComponent,
-        passwordComponent = newPassword ?: passwordComponent,
-        confirmationComponent = newConfirmation ?: confirmationComponent
-    )
+    companion object {
+        private const val MSG_EMPTY_FIELD = "Este campo deve ser preenchido"
 
-    fun disableButton(): EmailAuthUiComponents =
-        this.copy(createButtonComponent = ButtonComponent(isEnabled = false))
+        private const val MSG_INVALID_EMAIL = "Formato de email inválido"
+
+        private const val MSG_INVALID_PASS = "Senha deve ter entre 6 e 12 caracteres"
+
+        private const val MSG_INVALID_CONFIRMATION = "Confirmação inválida"
+    }
 
 }

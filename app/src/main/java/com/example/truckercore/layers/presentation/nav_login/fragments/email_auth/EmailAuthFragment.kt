@@ -27,15 +27,15 @@ private val verifyEmailFragmentDirection =
 private val loginFragmentDirection =
     EmailAuthFragmentDirections.actionGlobalLoginFragment()
 
-//private typealias BackgroundClicked = EmailAuthenticationFragmentEvent.Click.Background
-private typealias CreateButtonClicked = EmailAuthenticationFragmentEvent.Click.ButtonCreate
-private typealias AlreadyRegisteredAccountButtonClicked = EmailAuthenticationFragmentEvent.Click.ButtonHaveAccount
-private typealias ImeActionDoneClicked = EmailAuthenticationFragmentEvent.Click.ImeActionDone
+private typealias CreateButtonClickedEvent = EmailAuthenticationFragmentEvent.Click.ButtonCreate
+private typealias AlreadyRegisteredButtonClickedEvent = EmailAuthenticationFragmentEvent.Click.ButtonHaveAccount
+private typealias ImeActionDoneClickedEvent = EmailAuthenticationFragmentEvent.Click.ImeActionDone
 
-private typealias TypeEmail = EmailAuthenticationFragmentEvent.Typing.Email
-private typealias TypePassword = EmailAuthenticationFragmentEvent.Typing.Password
-private typealias TypeConfirmation = EmailAuthenticationFragmentEvent.Typing.Confirmation
+private typealias TypeEmailEvent = EmailAuthenticationFragmentEvent.Typing.Email
+private typealias TypePasswordEvent = EmailAuthenticationFragmentEvent.Typing.Password
+private typealias TypeConfirmationEvent = EmailAuthenticationFragmentEvent.Typing.Confirmation
 
+private typealias RetryAuthenticationEvent = EmailAuthenticationFragmentEvent.RetryAuthentication
 
 // navigateToNoConnection
 
@@ -80,8 +80,13 @@ class EmailAuthFragment : PublicLockedFragment() {
     private suspend fun setFragmentEffectManager() {
         viewModel.effectFlow.collect { effect ->
             when (effect) {
-                is EmailAuthenticationFragmentEffect.Navigation -> handleNavigationEffect(effect)
-                is EmailAuthenticationFragmentEffect.View -> handleViewEffect(effect)
+                is EmailAuthenticationFragmentEffect.Navigation ->
+                    handleNavigationEffect(effect)
+
+                is EmailAuthenticationFragmentEffect.WarningToast ->
+                    showWarningSnackbar(effect.message)
+
+                else -> Unit
             }
         }
     }
@@ -97,26 +102,13 @@ class EmailAuthFragment : PublicLockedFragment() {
             EmailAuthenticationFragmentEffect.Navigation.ToNotification ->
                 navigateToErrorActivity(requireActivity())
 
-            EmailAuthenticationFragmentEffect.Navigation.ToNoConnection ->
-                navigateToNoConnection()
-
+            EmailAuthenticationFragmentEffect.Navigation.ToNoConnection -> {
+                navigateToNoConnection(this) {
+                    viewModel.onEvent(RetryAuthenticationEvent)
+                }
+            }
         }
     }
-
-    private fun handleViewEffect(effect: EmailAuthenticationFragmentEffect.View) {
-        when (effect) {
-           // EmailAuthenticationFragmentEffect.View.ClearFocusAndKeyboard -> hideKeyboardAndClearFocus()
-            is EmailAuthenticationFragmentEffect.View.WarningToast -> showWarningSnackbar(effect.message)
-        }
-    }
-
-/*    private fun hideKeyboardAndClearFocus() {
-        hideKeyboardAndClearFocus(
-            binding.fragEmailAuthEmailLayout,
-            binding.fragEmailAuthPasswordLayout,
-            binding.fragEmailAuthConfirmPasswordLayout
-        )
-    }*/
 
     //----------------------------------------------------------------------------------------------
     // onCreateView()
@@ -135,7 +127,6 @@ class EmailAuthFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // setBackgroundClickListener()
         setCreateButtonListener()
         setAlreadyRegisteredButtonListener()
         setImeOptionsClickListener()
@@ -144,28 +135,22 @@ class EmailAuthFragment : PublicLockedFragment() {
         setConfirmationTextChangeListener()
     }
 
-/*    private fun setBackgroundClickListener() {
-        binding.fragEmailAuthMain.setOnClickListener {
-            viewModel.onEvent(BackgroundClicked)
-        }
-    }*/
-
     private fun setCreateButtonListener() = with(binding) {
         fragEmailAuthRegisterButton.setOnClickListener {
-            viewModel.onEvent(CreateButtonClicked)
+            viewModel.onEvent(CreateButtonClickedEvent)
         }
     }
 
     private fun setAlreadyRegisteredButtonListener() {
         binding.fragEmailAuthAlreadyRegisteredButton.setOnClickListener {
-            viewModel.onEvent(AlreadyRegisteredAccountButtonClicked)
+            viewModel.onEvent(AlreadyRegisteredButtonClickedEvent)
         }
     }
 
     private fun setImeOptionsClickListener() {
         binding.fragEmailAuthConfirmPasswordEditText.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.onEvent(ImeActionDoneClicked)
+                viewModel.onEvent(ImeActionDoneClickedEvent)
                 false
             } else false
         }
@@ -175,7 +160,7 @@ class EmailAuthFragment : PublicLockedFragment() {
         binding.fragEmailAuthEmailEditText.addTextChangedListener { editable ->
             onViewResumed {
                 val text = editable.toString()
-                viewModel.onEvent(TypeEmail(text))
+                viewModel.onEvent(TypeEmailEvent(text))
             }
         }
     }
@@ -184,7 +169,7 @@ class EmailAuthFragment : PublicLockedFragment() {
         binding.fragEmailAuthPasswordEditText.addTextChangedListener { editable ->
             onViewResumed {
                 val text = editable.toString()
-                viewModel.onEvent(TypePassword(text))
+                viewModel.onEvent(TypePasswordEvent(text))
             }
         }
     }
@@ -193,7 +178,7 @@ class EmailAuthFragment : PublicLockedFragment() {
         binding.fragEmailAuthConfirmPasswordEditText.addTextChangedListener { editable ->
             onViewResumed {
                 val text = editable.toString()
-                viewModel.onEvent(TypeConfirmation(text))
+                viewModel.onEvent(TypeConfirmationEvent(text))
             }
         }
     }

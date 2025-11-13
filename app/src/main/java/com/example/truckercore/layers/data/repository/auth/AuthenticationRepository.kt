@@ -73,35 +73,4 @@ interface AuthenticationRepository {
      */
     fun getUid(): DataOutcome<UID>
 
-    suspend fun runSafeOperation(block: suspend () -> Unit): OperationOutcome =
-        try {
-            block()
-            OperationOutcome.Completed
-        } catch (e: AppException) {
-            OperationOutcome.Failure(e)
-        } catch (e: Exception) {
-            OperationOutcome.Failure(
-                DataException.Unknown(
-                    message = "An unknown error occurred in Auth Repository.",
-                    cause = e
-                )
-            )
-        }
-
-    fun <T>runSafeSearch(block: () -> T?): DataOutcome<T> = try {
-        val result = block()
-        result?.let {
-            DataOutcome.Success(result)
-        } ?: DataOutcome.Empty
-    } catch (e: AppException){
-        DataOutcome.Failure(e)
-    } catch (e: Exception) {
-        DataOutcome.Failure(
-            DataException.Unknown(
-                message = "An unknown error occurred in Auth Repository.",
-                cause = e
-            )
-        )
-    }
-
 }

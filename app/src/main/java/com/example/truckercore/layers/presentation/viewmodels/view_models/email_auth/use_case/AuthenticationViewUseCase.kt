@@ -15,29 +15,28 @@ class AuthenticationViewUseCase(private val authManager: AuthManager) {
         )
     }
 
-    private fun handleError(exception: com.example.truckercore.data.infrastructure.app_errors.abstractions.AppException): ViewResult.Error {
+    private fun handleError(exception: AppException): ViewResult.Error {
         if (exception is NetworkUnavailable) {
             val error = ViewError.Recoverable(CONNECTION_ERROR)
             return ViewResult.Error(error)
         }
 
-        if (exception is com.example.truckercore.core.error.classes.data.InfraException.AuthError &&
-            exception.code is _root_ide_package_.com.example.truckercore.core.error.classes.data.error_code.AuthErrorCode.CreateUserWithEmail
-        ) {
+        if (exception is InfraException.AuthError && AuthErrorCode.CreateUserWithEmail) {
             val error = when (exception.code) {
-                _root_ide_package_.com.example.truckercore.core.error.classes.data.error_code.AuthErrorCode.CreateUserWithEmail.InvalidCredential -> ViewError.Recoverable(
-                    INVALID_CREDENTIAL
-                )
+              AuthErrorCode.CreateUserWithEmail.InvalidCredential ->
+                  ViewError.Recoverable(INVALID_CREDENTIAL)
 
-                _root_ide_package_.com.example.truckercore.core.error.classes.data.error_code.AuthErrorCode.CreateUserWithEmail.TaskFailure -> ViewError.Critical
-                _root_ide_package_.com.example.truckercore.core.error.classes.data.error_code.AuthErrorCode.CreateUserWithEmail.Unknown -> ViewError.Critical
-                _root_ide_package_.com.example.truckercore.core.error.classes.data.error_code.AuthErrorCode.CreateUserWithEmail.UserCollision -> ViewError.Recoverable(
-                    COLLISION_USER
-                )
+              AuthErrorCode.CreateUserWithEmail.TaskFailure ->
+                  ViewError.Critical
 
-                _root_ide_package_.com.example.truckercore.core.error.classes.data.error_code.AuthErrorCode.CreateUserWithEmail.WeakPassword -> ViewError.Recoverable(
-                    WEEK_PASSWORD
-                )
+              AuthErrorCode.CreateUserWithEmail.Unknown ->
+                  ViewError.Critical
+
+              AuthErrorCode.CreateUserWithEmail.UserCollision ->
+                  ViewError.Recoverable(COLLISION_USER)
+
+                AuthErrorCode.CreateUserWithEmail.WeakPassword ->
+                    ViewError.Recoverable(WEEK_PASSWORD)
             }
             return ViewResult.Error(error)
         }

@@ -7,9 +7,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
-import androidx.lifecycle.LifecycleOwner
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.example.truckercore.core.my_lib.expressions.isInternetAvailable
@@ -82,8 +80,8 @@ class NoConnectionFragment : LockedFragment() {
      * Pops this fragment and returns a result to the caller.
      */
     private fun closeFragmentAndNotifyListener() {
-        popBackstack()
         setFragmentResult(REQUEST_KEY, bundleOf(BUNDLE_KEY to true))
+        popBackstack()
     }
 
     /**
@@ -105,33 +103,16 @@ class NoConnectionFragment : LockedFragment() {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Companion Object (Constants & Listener Setup)
+    // Companion Object
     //----------------------------------------------------------------------------------------------
 
     companion object {
         private const val ANIMATION_DELAY = 3000L
         private const val TOAST_MESSAGE = "Failed to connect"
-        private const val REQUEST_KEY = "no_connection_result"
-        private const val BUNDLE_KEY = "reconnected"
-
-        /**
-         * Registers a listener for receiving the reconnection result.
-         *
-         * @param fragmentManager The FragmentManager used to register the listener.
-         * @param lifecycleOwner The LifecycleOwner to observe the result within.
-         * @param onResult Callback invoked with `true` if reconnected successfully.
-         */
-        fun setResultListener(
-            fragmentManager: FragmentManager,
-            lifecycleOwner: LifecycleOwner,
-            onResult: (Boolean) -> Unit
-        ) {
-            fragmentManager.setFragmentResultListener(REQUEST_KEY, lifecycleOwner) { _, bundle ->
-                val result = bundle.getBoolean(BUNDLE_KEY, false)
-                onResult(result)
-            }
-        }
+        const val REQUEST_KEY = "no_connection_result"
+        const val BUNDLE_KEY = "restored"
     }
+
 }
 
 /**

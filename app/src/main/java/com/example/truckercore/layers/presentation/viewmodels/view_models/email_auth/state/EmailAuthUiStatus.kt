@@ -2,9 +2,9 @@ package com.example.truckercore.layers.presentation.viewmodels.view_models.email
 
 sealed class EmailAuthUiStatus {
 
-    data object Idle : EmailAuthUiStatus()
+    data object WaitingInput : EmailAuthUiStatus()
+    data object ReadyToCreate: EmailAuthUiStatus()
     data object Creating : EmailAuthUiStatus()
-    data object Created : EmailAuthUiStatus()
 
     fun isCreating() = this is Creating
 

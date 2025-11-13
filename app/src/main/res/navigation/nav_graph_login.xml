@@ -107,7 +107,7 @@
         tools:layout="@layout/fragment_forget_password" />
     <fragment
         android:id="@+id/userNameFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.user_name.UserNameFragment"
+        android:name="com.example.truckercore.layers.presentation.nav_login.fragments.user_name.UserNameFragment"
         android:label="fragment_user_name"
         tools:layout="@layout/fragment_user_name" />
     <action android:id="@+id/action_global_continueRegisterFragment"
@@ -131,10 +131,12 @@
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/noConnectionFragment"
-        android:name="com.example.truckercore.presentation._shared.views.fragments.no_connection.NoConnectionFragment"
+        android:name="com.example.truckercore.layers.presentation.common.NoConnectionFragment"
         android:label="fragment_no_connection"
         tools:layout="@layout/fragment_no_connection" />
-    <action android:id="@+id/action_global_noConnectionFragment_nav_login" app:destination="@id/noConnectionFragment" />
+
+    <action android:id="@+id/action_global_noConnectionFragment_nav_login"
+        app:destination="@id/noConnectionFragment" />
 
 
 </navigation>

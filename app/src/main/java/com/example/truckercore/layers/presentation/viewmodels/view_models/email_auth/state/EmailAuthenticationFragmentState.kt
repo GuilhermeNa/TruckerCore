@@ -10,38 +10,33 @@ private typealias Status = EmailAuthUiStatus
 
 data class EmailAuthenticationFragmentState(
     val uiComponents: UiComponents = UiComponents(),
-    val status: Status = EmailAuthUiStatus.Idle
+    val status: Status = EmailAuthUiStatus.WaitingInput
 ) : State {
 
-    fun idle() = updateStatus(EmailAuthUiStatus.Idle)
+    fun waitingInput() = copy(status = EmailAuthUiStatus.WaitingInput)
 
-    fun creating() = updateStatus(EmailAuthUiStatus.Creating)
+    fun readyToCreate() = copy(status = EmailAuthUiStatus.ReadyToCreate)
 
-    fun created(): EmailAuthenticationFragmentState {
-        val newComponents = uiComponents.disableButton()
-        val newStatus = EmailAuthUiStatus.Created
-        return copy(uiComponents = newComponents, status = newStatus)
-    }
+    fun creating() = copy(status = EmailAuthUiStatus.Creating)
 
     fun updateEmail(email: String): EmailAuthenticationFragmentState {
         val newComponents = uiComponents.updateEmail(email)
-        return updateComponents(newComponents)
+        return copy(uiComponents = newComponents)
     }
 
     fun updatePassword(password: String): EmailAuthenticationFragmentState {
         val newComponents = uiComponents.updatePassword(password)
-        return updateComponents(newComponents)
+        return copy(uiComponents = newComponents)
     }
 
     fun updateConfirmation(confirmation: String): EmailAuthenticationFragmentState {
         val newComponents = uiComponents.updateConfirmation(confirmation)
-        return updateComponents(newComponents)
+        return copy(uiComponents = newComponents)
     }
 
-    private fun updateComponents(newComponents: EmailAuthUiComponents) =
-        copy(uiComponents = newComponents)
-
-    private fun updateStatus(newStatus: EmailAuthUiStatus) = copy(status = newStatus)
+    fun isReadyToCreate(): Boolean {
+        //TODO(adicionar verificação se o ready o create pode ser emitido ou nao)
+    }
 
     fun getCredential() = EmailCredential(
         Email.from(uiComponents.emailComponent.text),

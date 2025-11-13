@@ -18,10 +18,15 @@ sealed class EmailAuthenticationFragmentEvent : Event {
 
     sealed class AuthenticationTask : EmailAuthenticationFragmentEvent() {
         data object Complete : AuthenticationTask()
-        data object Failure : AuthenticationTask()
-        data object NoConnection : AuthenticationTask()
+        sealed class Failure : AuthenticationTask() {
+            data object NoConnection : Failure()
+            data object InvalidCredentials : Failure()
+            data object WeakPassword : Failure()
+            data object UserCollision : Failure()
+            data object Irrecoverable : Failure()
+        }
     }
 
-    data object ConnectionReestablished : EmailAuthenticationFragmentEvent()
+    data object RetryAuthentication : EmailAuthenticationFragmentEvent()
 
 }

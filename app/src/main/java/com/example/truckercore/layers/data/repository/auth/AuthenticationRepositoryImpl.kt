@@ -1,5 +1,7 @@
 package com.example.truckercore.layers.data.repository.auth
 
+import com.example.truckercore.core.error.DataException
+import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Password
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
@@ -42,5 +44,39 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
 
     override fun getUid(): DataOutcome<UID> =
         runSafeSearch { UID(authSource.getUid()) }
+
+    //----------------------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------------------
+    private suspend fun runSafeOperation(block: suspend () -> Unit): OperationOutcome =
+        try {
+            block()
+            OperationOutcome.Completed
+        } catch (e: AppException) {
+            OperationOutcome.Failure(e)
+        } catch (e: Exception) {
+            OperationOutcome.Failure(
+                DataException.Unknown(
+                    message = "An unknown error occurred in Auth Repository.",
+                    cause = e
+                )
+            )
+        }
+
+    private fun <T>runSafeSearch(block: () -> T?): DataOutcome<T> = try {
+        val result = block()
+        result?.let {
+            DataOutcome.Success(result)
+        } ?: DataOutcome.Empty
+    } catch (e: AppException){
+        DataOutcome.Failure(e)
+    } catch (e: Exception) {
+        DataOutcome.Failure(
+            DataException.Unknown(
+                message = "An unknown error occurred in Auth Repository.",
+                cause = e
+            )
+        )
+    }
 
 }

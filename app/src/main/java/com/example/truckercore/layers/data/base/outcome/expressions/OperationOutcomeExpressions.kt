@@ -2,6 +2,8 @@ package com.example.truckercore.layers.data.base.outcome.expressions
 
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
+import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Event
+import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.event.EmailAuthenticationFragmentEvent
 
 /**
  * Maps the [OperationOutcome] to a value by applying the appropriate callback
