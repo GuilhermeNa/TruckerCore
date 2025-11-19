@@ -34,6 +34,13 @@ fun Fragment.showToast(msg: String, duration: Int = LENGTH_SHORT) {
     Toast.makeText(this.requireContext(), msg, duration).show()
 }
 
+fun Fragment.showSuccessSnackbar(msg: String, duration: Int = Snackbar.LENGTH_SHORT) {
+    Snackbar.make(requireView(), msg, duration).apply {
+        setBackgroundTint(Color.GREEN)
+        setTextColor(Color.WHITE)
+    }.show()
+}
+
 fun Fragment.showWarningSnackbar(msg: String, duration: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(requireView(), msg, duration).apply {
         setBackgroundTint(Color.RED)

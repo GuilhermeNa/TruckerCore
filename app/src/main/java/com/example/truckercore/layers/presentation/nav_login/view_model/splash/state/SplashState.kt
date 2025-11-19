@@ -1,0 +1,24 @@
+package com.example.truckercore.layers.presentation.nav_login.view_model.splash.state
+
+import com.example.truckercore.layers.presentation.base.contracts.State
+import com.example.truckercore.layers.presentation.base.components.TextComponent
+
+data class SplashState(
+    val nameComponent: TextComponent = TextComponent(),
+    val status: SplashStatus = SplashStatus.Initial
+) : State {
+
+    fun updateName(appName: String): SplashState {
+        val newNameComponent = nameComponent.updateText(appName)
+        return copy(nameComponent = newNameComponent)
+    }
+
+    fun loading(): SplashState {
+        return copy(status = SplashStatus.Loading)
+    }
+
+    fun loaded(): SplashState {
+        return copy(status = SplashStatus.Loaded)
+    }
+
+}

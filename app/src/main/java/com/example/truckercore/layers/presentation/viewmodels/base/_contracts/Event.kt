@@ -1,3 +1,0 @@
-package com.example.truckercore.layers.presentation.viewmodels.base._contracts
-
-interface Event

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.nav_login.fragments.continue_register.ContinueRegisterFragment">
+    tools:context=".layers.presentation.nav_login.fragments.continue_register.ContinueRegisterFragment">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/frag_continue_register_card_shimmer"

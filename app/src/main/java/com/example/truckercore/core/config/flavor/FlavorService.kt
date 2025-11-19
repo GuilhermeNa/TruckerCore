@@ -8,6 +8,8 @@ import com.example.truckercore.layers.presentation.viewmodels.view_models.welcom
 
 class FlavorService(private val strategy: FlavorStrategy) {
 
+    fun navigateToCheckIn(current: Activity) = strategy.navigateToCheckIn(current)
+
     fun getLoginFragmentStrategy(navController: NavController): LoginFragmentStrategy =
         strategy.getLoginNavigatorStrategy(navController)
 

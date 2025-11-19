@@ -1,6 +1,5 @@
 package com.example.truckercore.unit.model.shared.outcome.operation
 
-import com.example.truckercore.data.shared.outcome.operation.OperationOutcome
 import com.example.truckercore.layers.data.base.outcome.expressions.handle
 import com.example.truckercore.layers.data.base.outcome.expressions.map
 import org.junit.jupiter.api.Assertions.assertFalse

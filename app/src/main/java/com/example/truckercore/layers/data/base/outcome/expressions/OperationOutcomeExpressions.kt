@@ -1,9 +1,8 @@
 package com.example.truckercore.layers.data.base.outcome.expressions
 
+import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
-import com.example.truckercore.layers.presentation.viewmodels.base._contracts.Event
-import com.example.truckercore.layers.presentation.viewmodels.view_models.email_auth.event.EmailAuthenticationFragmentEvent
 
 /**
  * Maps the [OperationOutcome] to a value by applying the appropriate callback
@@ -37,3 +36,14 @@ inline fun OperationOutcome.handle(
         is OperationOutcome.Failure -> onFailure(exception)
     }
 }
+
+fun OperationOutcome.isFailure(): Boolean = this is OperationOutcome.Failure
+
+fun OperationOutcome.isSuccess(): Boolean = this is OperationOutcome.Completed
+
+
+fun OperationOutcome.isConnectionError(): Boolean =
+    when {
+        this.isFailure() -> (this as OperationOutcome.Failure).exception is InfraException.Network
+        else -> false
+    }

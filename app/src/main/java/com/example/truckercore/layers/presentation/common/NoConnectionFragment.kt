@@ -15,7 +15,7 @@ import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragment
 import com.example.truckercore.core.my_lib.expressions.popBackstack
 import com.example.truckercore.core.my_lib.expressions.showToast
 import com.example.truckercore.databinding.FragmentNoConnectionBinding
-import com.example.truckercore.layers.presentation.base.abstractions.LockedFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.LockedFragment
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
 import kotlinx.coroutines.delay
 

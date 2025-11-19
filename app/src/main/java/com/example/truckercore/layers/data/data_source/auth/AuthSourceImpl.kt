@@ -62,11 +62,12 @@ class AuthSourceImpl(
 
     override fun updateName(name: Name) {
         TODO("Not yet implemented")
-        userProfileChangeRequest {
+        val req = userProfileChangeRequest {
             displayName = ""
 
         }
     }
+
 
     override fun isNameDefined(): Boolean {
         TODO("Not yet implemented")

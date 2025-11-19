@@ -26,7 +26,7 @@ inline fun <R, T> DataOutcome<T>.map(
 /**
  * Returns the data if the [DataOutcome] is [DataOutcome.Success], or throws an [InvalidOutcomeException] otherwise.
  */
-fun <T> DataOutcome<T>.getRequired(): T = when (this) {
+fun <T> DataOutcome<T>.get(): T = when (this) {
     is DataOutcome.Success -> data
     is DataOutcome.Empty -> throw InfraException.Outcome(
         "DataOutcome is Empty. Expected a value, but got Empty."
@@ -65,10 +65,21 @@ inline fun <T> DataOutcome<T>.handle(
     }
 }
 
-fun <T> DataOutcome<T>.isNotSuccess(): Boolean = this !is DataOutcome.Success
+fun  DataOutcome<*>.isNotSuccess(): Boolean = this !is DataOutcome.Success
+
+fun DataOutcome<*>.isFailure(): Boolean = this is DataOutcome.Failure
+
+fun DataOutcome<*>.isSuccess(): Boolean = this is DataOutcome.Success
+
+fun DataOutcome<*>.isEmpty(): Boolean = this is DataOutcome.Empty
 
 fun <T> DataOutcome<T>.onFailure(action: (AppException) -> Unit): DataOutcome<T> {
     if (this is DataOutcome.Failure) action(this.exception)
+    return this
+}
+
+fun <T> DataOutcome<T>.onEmpty(action: () -> Unit): DataOutcome<T> {
+    if (this is DataOutcome.Empty) action()
     return this
 }
 
@@ -81,3 +92,14 @@ fun <T> DataOutcome<T>.onSuccess(action: (T) -> Unit): DataOutcome<T> {
     if (this is DataOutcome.Success) action(this.data)
     return this
 }
+
+fun  DataOutcome<*>.isConnectionError(): Boolean =
+    when {
+        this.isFailure() -> (this as DataOutcome.Failure).exception is InfraException.Network
+        else -> false
+    }
+
+
+
+
+

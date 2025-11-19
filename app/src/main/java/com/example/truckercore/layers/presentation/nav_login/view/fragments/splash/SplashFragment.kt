@@ -1,0 +1,157 @@
+package com.example.truckercore.layers.presentation.nav_login.view.fragments.splash
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
+import com.example.truckercore.core.my_lib.expressions.getTag
+import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
+import com.example.truckercore.core.my_lib.expressions.navigateToDirection
+import com.example.truckercore.databinding.FragmentSplashBinding
+import com.example.truckercore.infra.logger.AppLogger
+import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.viewmodels.view_models.splash.SplashViewModel
+import com.example.truckercore.layers.presentation.viewmodels.view_models.splash.effect.SplashEffect
+import com.example.truckercore.presentation.nav_login.fragments.splash.SplashFragmentDirections
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
+class SplashFragment : PublicLockedFragment() {
+
+    private var _binding: FragmentSplashBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: SplashViewModel by viewModel()
+
+    private var stateHandler = SplashFragmentUiStateHandler()
+
+    private val transitionListener = object : MotionLayout.TransitionListener {
+
+        override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+            when (currentId) {
+                stateHandler.loadingUiState -> viewModel.toLoadingTransitionEnd()
+                stateHandler.loadedUiState -> viewModel.toLoadedTransitionEnd()
+                else -> handleUiStateError(currentId)
+            }
+        }
+
+        private fun handleUiStateError(currentId: Int) {
+            AppLogger.e(
+                tag = getTag,
+                message = "Unexpected id for transition: $currentId."
+            )
+            navigateToErrorActivity(requireActivity())
+        }
+
+        override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
+
+        override fun onTransitionChange(
+            motionLayout: MotionLayout?,
+            startId: Int,
+            endId: Int,
+            progress: Float
+        ) {
+        }
+
+        override fun onTransitionTrigger(
+            motionLayout: MotionLayout?,
+            triggerId: Int,
+            positive: Boolean,
+            progress: Float
+        ) {
+        }
+
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // On Create
+    //----------------------------------------------------------------------------------------------
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        launchAndRepeatOnFragmentStartedLifeCycle {
+            setStateManager(savedInstanceState)
+            setEffectManager()
+        }
+    }
+
+    private fun CoroutineScope.setStateManager(savedInstanceState: Bundle?) {
+        launch {
+            viewModel.stateFlow.collect { state ->
+                stateHandler.handleNameComponent(state.nameComponent)
+                onRecreatingView(savedInstanceState) { stateHandler.handleStatus(state.status) }
+            }
+        }
+    }
+
+    private suspend fun setEffectManager() {
+        viewModel.effectFlow.collect { effect ->
+            when (effect) {
+                is SplashEffect.UiEffect.Transition -> stateHandler.handleTransition(effect)
+                is SplashEffect.UiEffect.Navigation -> handleNavigation(effect)
+                else -> Unit
+            }
+        }
+    }
+
+    private fun handleNavigation(effect: SplashEffect.UiEffect.Navigation) {
+        when (effect) {
+            SplashEffect.UiEffect.Navigation.ToContinue -> {
+                val direction = SplashFragmentDirections.actionGlobalContinueRegisterFragment()
+                navigateToDirection(direction)
+            }
+
+            SplashEffect.UiEffect.Navigation.ToLogin -> {
+                val direction = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+                navigateToDirection(direction)
+            }
+
+            SplashEffect.UiEffect.Navigation.ToMain -> {
+                val direction = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
+                navigateToDirection(direction)
+            }
+
+            SplashEffect.UiEffect.Navigation.ToNotification -> navigateToErrorActivity(requireActivity())
+
+            SplashEffect.UiEffect.Navigation.ToWelcome -> {
+                val direction = SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()
+                navigateToDirection(direction)
+            }
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // On Create View
+    //----------------------------------------------------------------------------------------------
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSplashBinding.inflate(layoutInflater)
+        stateHandler.initialize(binding)
+        return binding.root
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // On View Created
+    //----------------------------------------------------------------------------------------------
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setTransitionListener()
+    }
+
+    private fun setTransitionListener() {
+        binding.motionLayout.setTransitionListener(transitionListener)
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // On Destroy View
+    //----------------------------------------------------------------------------------------------
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.motionLayout.removeTransitionListener(transitionListener)
+        _binding = null
+    }
+
+}
