@@ -5,15 +5,17 @@ import com.example.truckercore.layers.data.repository.auth.AuthenticationReposit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-interface SendEmailVerificationUseCase {
+interface VerifyEmailValidationUseCase {
+
     suspend operator fun invoke(): OperationOutcome
 }
 
-internal class SendEmailVerificationUseCaseImp(
-    private val authRepository: AuthenticationRepository
-) : SendEmailVerificationUseCase {
+class ObserveEmailValidationUseCaseImp(
+    private val authenticationRepository: AuthenticationRepository
+) : VerifyEmailValidationUseCase {
 
-    override suspend operator fun invoke(): OperationOutcome =
-        withContext(Dispatchers.IO) { authRepository.sendEmailVerification() }
+    override suspend operator fun invoke(): OperationOutcome = withContext(Dispatchers.IO) {
+        authenticationRepository.observeEmailValidation()
+    }
 
 }

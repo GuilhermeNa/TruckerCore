@@ -36,8 +36,9 @@ class AuthSourceImpl(
         task.awaitSuccessOrThrow { errorMapper(it) }
     }
 
-    override suspend fun observeEmailValidation(refreshTime: Long) {
+    override suspend fun observeEmailValidation() {
         val fbUser = getLoggedUser()
+        val refreshTime = 1000L
 
         suspendCancellableCoroutine { cont ->
             // Launches a coroutine tied to the caller's context.
@@ -46,10 +47,10 @@ class AuthSourceImpl(
                 while (isActive) {
                     delay(refreshTime)
                     fbUser.reload()
+
                     if (fbUser.isEmailVerified) {
                         cont.resume(Unit)
-
-                        // Cancel CoroutineScope Job.
+                        // Cancel CoroutineScope Job manually.
                         // Because the caller context may not be canceled after this completion.
                         cancelJob()
                     }
@@ -89,8 +90,6 @@ class AuthSourceImpl(
     }
 
     private fun getLoggedUser(): FirebaseUser {
-
-
         return auth.currentUser ?: throw DomainException.UserNotFound()
     }
 

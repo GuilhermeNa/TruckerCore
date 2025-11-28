@@ -4,22 +4,33 @@ import com.example.truckercore.layers.presentation.base.contracts.Event
 
 sealed class VerifyingEmailFragmentEvent: Event {
 
+    data object VerifiedUiTransitionEnd: VerifyingEmailFragmentEvent()
+
+    data object Timeout: VerifyingEmailFragmentEvent()
+
+    data object RetryTask: VerifyingEmailFragmentEvent()
+
+    sealed class Click :VerifyingEmailFragmentEvent() {
+        data object SendEmailButton: Click()
+        data object NewEmailButton: Click()
+    }
+
     sealed class GetEmailTask: VerifyingEmailFragmentEvent() {
         data object Complete: GetEmailTask()
         data object Failure: GetEmailTask()
-        data object Empty: GetEmailTask()
+        data object NotFound: GetEmailTask()
     }
 
-    sealed class SendVerificationTask: VerifyingEmailFragmentEvent() {
-        data object Complete: SendVerificationTask()
-        data object Failure: SendVerificationTask()
-        data object NoConnection: SendVerificationTask()
+    sealed class SendEmailTask: VerifyingEmailFragmentEvent() {
+        data object Complete: SendEmailTask()
+        data object Failure: SendEmailTask()
+        data object NoConnection: SendEmailTask()
     }
 
-    sealed class CheckEmailTask: VerifyingEmailFragmentEvent() {
-        data object Complete: CheckEmailTask()
-        data object Failure: CheckEmailTask()
-        data object NoConnection: CheckEmailTask()
+    sealed class VerifyEmailTask: VerifyingEmailFragmentEvent() {
+        data object Complete: VerifyEmailTask()
+        data object Failure: VerifyEmailTask()
+        data object NoConnection: VerifyEmailTask()
     }
 
 }

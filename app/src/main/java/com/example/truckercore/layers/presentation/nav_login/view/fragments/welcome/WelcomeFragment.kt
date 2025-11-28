@@ -127,7 +127,7 @@ class WelcomeFragment : PublicLockedFragment() {
             stateHandler.animateFabOut()
         } else {
             onFragmentUiState(
-                savedInstanceState = savedInstanceState,
+                instanceState = savedInstanceState,
                 resumed = stateHandler::animateFabIn,
                 recreating = stateHandler::showFab
             )

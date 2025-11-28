@@ -74,22 +74,7 @@ abstract class AuthSource(protected val errorMapper: ErrorMapper) {
      */
     abstract suspend fun signInWithEmail(email: Email, password: Password)
 
-    /**
-     * Observes email validation state and suspends until the user's email is verified.
-     *
-     * ### Example:
-     * ```
-     * try {
-     *     authSource.observeEmailValidation(email, password)
-     *     // operation succeed
-     * } catch (e: Exception) {
-     *     // handle operation error
-     * }
-     * ```
-     *
-     * @throws AuthSourceException If the session is inactive or an unexpected error occurs.
-     */
-    abstract suspend fun observeEmailValidation(refreshTime: Long = ONE_SEC)
+    abstract suspend fun observeEmailValidation()
 
     /**
      * Signs out the currently authenticated user.

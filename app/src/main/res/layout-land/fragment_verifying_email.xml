@@ -5,94 +5,166 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient_primary"
-    tools:context=".presentation.nav_login.fragments.verifying_email.VerifyingEmailFragment">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="16dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/o_email"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/frag_verifying_email_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22" />
+    tools:context=".layers.presentation.nav_login.view.fragments.verifying_email.VerifyingEmailFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_verifying_email_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.4" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/frag_verifying_email_motion"
+    <!-- Shimmer image layout -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/frag_verifying_email_email_shimmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/frag_verifying_email_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/background_circle"
+                android:backgroundTint="@color/shimmer" />
+
+            <View
+                android:layout_width="180dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/shimmer" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <!-- Email layout -->
+    <LinearLayout
+        android:id="@+id/frag_verifying_email_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layoutDescription="@xml/fragment_verifying_email_xml_frag_verifying_email_motion_scene"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/o_email" />
+
+        <TextView
+            android:id="@+id/frag_verifying_email_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/textSmall"
+            android:textStyle="bold|italic"
+            tools:text="someMail@email.com" />
+    </LinearLayout>
+
+    <!-- Shimmer idle layout -->
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/frag_verifying_email_button_shimmer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        app:layout_constraintBottom_toBottomOf="@id/frag_verifying_email_button_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintTop_toTopOf="@+id/frag_verifying_email_button_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/shimmer" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/shimmer" />
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <!-- Idle layout -->
+    <LinearLayout
+        android:id="@+id/frag_verifying_email_button_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/frag_verifying_email_button_send"
+            style="@style/buttonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="48dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/send_verification_email" />
+
+        <Button
+            android:id="@+id/frag_verifying_email_button_new_email"
+            style="@style/buttonSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="48dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/register_new_email" />
+
+    </LinearLayout>
+
+    <!-- Verifying layout -->
+    <LinearLayout
+        android:id="@+id/frag_verifying_email_timer_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/frag_verifying_email_guideline"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/frag_verifying_email_shimmer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.30">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:background="@drawable/background_circle"
-                    android:backgroundTint="@color/shimmer" />
-
-                <View
-                    android:layout_width="90dp"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/shimmer" />
-
-                <View
-                    android:layout_width="125dp"
-                    android:layout_height="16dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/shimmer" />
-
-                <View
-                    android:layout_width="240dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@color/shimmer" />
-
-            </LinearLayout>
-        </com.facebook.shimmer.ShimmerFrameLayout>
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/frag_verifying_email_layout_timer"
             android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2">
+            android:layout_height="80dp">
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/frag_verifying_email_progressbar"
+                android:id="@+id/frag_verifying_email_progress_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:max="61"
@@ -114,21 +186,40 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/validating_email_description"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/textSmall"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Verified layout -->
+    <LinearLayout
+        android:id="@+id/frag_verifying_email_verified_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frag_verifying_email_guideline"
+        app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/frag_verifying_email_card_check"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_marginTop="16dp"
             android:animateLayoutChanges="true"
             android:translationZ="11dp"
-            android:visibility="invisible"
             app:cardBackgroundColor="?attr/colorSecondaryVariant"
             app:cardCornerRadius="50dp"
             app:cardElevation="11dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.2"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -142,55 +233,16 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/frag_verifying_email_text_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/email_valid"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/textMedium"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="@id/frag_verifying_email_card_check"
-            app:layout_constraintStart_toStartOf="@id/frag_verifying_email_card_check"
-            app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_card_check" />
-
-        <LinearLayout
-            android:id="@+id/frag_verifying_email_helper_text_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/frag_verifying_email_text_header">
+            android:text="@string/email_verified"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/textSmall"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/frag_verifying_email_text_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnPrimary"
-                android:textSize="@dimen/textSmall"
-                android:textStyle="bold|italic"
-                tools:text="someMail@email.com" />
-
-            <TextView
-                android:id="@+id/frag_verifying_email_text_body"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="@string/validating_email_description"
-                android:textColor="?attr/colorOnPrimary"
-                android:textSize="@dimen/textSmall"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

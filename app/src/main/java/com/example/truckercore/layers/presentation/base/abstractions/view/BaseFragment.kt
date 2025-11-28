@@ -61,11 +61,11 @@ abstract class BaseFragment : Fragment(), BaseNavigator {
 
     //----------------------------------------------------------------------------------------------
     protected inline fun onFragmentUiState(
-        savedInstanceState: Bundle?,
+        instanceState: Bundle?,
         recreating: () -> Unit,
         resumed: () -> Unit
     ) {
-        if (isRecreatingFragment(savedInstanceState, lifecycle.currentState)) recreating()
+        if (isRecreatingFragment(instanceState, lifecycle.currentState)) recreating()
         if(this.lifecycle.currentState == Lifecycle.State.RESUMED) resumed()
     }
 

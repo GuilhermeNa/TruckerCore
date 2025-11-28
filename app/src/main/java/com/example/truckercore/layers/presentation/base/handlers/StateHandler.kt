@@ -37,4 +37,8 @@ abstract class StateHandler<T : ViewBinding> {
         binder.bindText(component, view)
     }
 
+    protected fun bindText(text: String, view: TextView) {
+        binder.bindText(text, view)
+    }
+
 }

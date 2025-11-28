@@ -57,5 +57,6 @@
     <string name="home">Início</string>
     <string name="connection_error_header">Erro de rede</string>
     <string name="connection_error_body">Verifique sua conexão com a internet e tente novamente</string>
+    <string name="send_verification_email">Enviar email</string>
 
 </resources>

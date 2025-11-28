@@ -36,7 +36,7 @@ val commonViewModelModule = module {
         )
     }
     single { SendVerificationEmailViewUseCase(get()) }
-    factory { CounterUseCase() }
+    factory { CountdownUseCase() }
 
 
     viewModel<SplashViewModel> { SplashViewModel(get(), get()) }
