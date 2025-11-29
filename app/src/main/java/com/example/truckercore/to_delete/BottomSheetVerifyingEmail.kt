@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.nav_login.view.fragments.verifying_email
+package com.example.truckercore.to_delete
 
 import android.content.Context
 import android.content.DialogInterface
@@ -19,7 +19,7 @@ class BottomSheetVerifyingEmail : BottomSheetDialogFragment() {
 
     private var listener: BottomSheetVerifyingEmailListener? = null
 
-   //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // On Create View
     //----------------------------------------------------------------------------------------------
     override fun onAttach(context: Context) {
@@ -101,7 +101,7 @@ class BottomSheetVerifyingEmail : BottomSheetDialogFragment() {
     }
 
     companion object {
-         const val TAG = "BottomSheetVerifyingEmail"
+        const val TAG = "BottomSheetVerifyingEmail"
     }
 
 }

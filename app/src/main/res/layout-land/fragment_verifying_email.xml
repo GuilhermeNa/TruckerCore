@@ -16,7 +16,7 @@
 
     <!-- Shimmer image layout -->
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/frag_verifying_email_email_shimmer"
+        android:id="@+id/frag_verifying_email_shimmer_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -82,7 +82,7 @@
 
     <!-- Shimmer idle layout -->
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/frag_verifying_email_button_shimmer"
+        android:id="@+id/frag_verifying_email_button_shimmer_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"
