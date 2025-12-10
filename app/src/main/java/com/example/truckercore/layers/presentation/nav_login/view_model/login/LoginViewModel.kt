@@ -1,101 +1,67 @@
 package com.example.truckercore.layers.presentation.nav_login.view_model.login
 
 import androidx.lifecycle.viewModelScope
-import com.example.truckercore.core.expressions.logEvent
-import com.example.truckercore.data.infrastructure.repository.preferences.contracts.PreferencesRepository
-import com.example.truckercore.domain._shared.expressions.mapResult
-import com.example.truckercore.domain.view_models.login.state.LoginStateManager
-import kotlinx.coroutines.delay
+import com.example.truckercore.core.my_lib.classes.EmailCredential
+import com.example.truckercore.core.my_lib.expressions.handle
+import com.example.truckercore.layers.data.base.outcome.OperationOutcome
+import com.example.truckercore.layers.data.base.outcome.expressions.isConnectionError
+import com.example.truckercore.layers.data.base.outcome.expressions.isInvalidCredential
+import com.example.truckercore.layers.data.base.outcome.expressions.isInvalidUser
+import com.example.truckercore.layers.data.base.outcome.expressions.isUserNotFound
+import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.domain.use_case.authentication.SignInUseCase
+import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
+import com.example.truckercore.layers.presentation.base.managers.EffectManager
+import com.example.truckercore.layers.presentation.base.managers.StateManager
+import com.example.truckercore.layers.presentation.nav_login.view_model.login.helpers.LoginFragmentEffect
+import com.example.truckercore.layers.presentation.nav_login.view_model.login.helpers.LoginFragmentEvent
+import com.example.truckercore.layers.presentation.nav_login.view_model.login.helpers.LoginFragmentReducer
+import com.example.truckercore.layers.presentation.nav_login.view_model.login.helpers.LoginFragmentState
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: com.example.truckercore.layers.presentation.viewmodels.view_models.login.LoginViewUseCase,
+    private val loginUseCase: SignInUseCase,
     private val preferencesRepository: PreferencesRepository
-) : com.example.truckercore.presentation.viewmodels._shared._base.view_model.LoggerViewModel() {
+) : BaseViewModel() {
 
-    private val stateManager = LoginStateManager()
+    private val stateManager = StateManager(LoginFragmentState())
     val stateFlow get() = stateManager.stateFlow
 
-    private val effectManager =
-        com.example.truckercore.presentation.viewmodels.view_models.login.effect.LoginEffectManager()
+    private val effectManager = EffectManager<LoginFragmentEffect>()
     val effectFlow get() = effectManager.effectFlow
 
+    private val reducer = LoginFragmentReducer()
+
     //----------------------------------------------------------------------------------------------
-    fun onEvent(event: com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent) {
-        logEvent(this@LoginViewModel, event)
-        when (event) {
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing -> handleTypingEvent(event)
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click -> handleClickEvent(event)
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent -> handleSystemEvent(event)
+    fun onEvent(event: LoginFragmentEvent) {
+        val result = reducer.reduce(stateManager.currentState(), event)
+        result.handle(stateManager::update, ::handleEffect)
+    }
+
+    private fun handleEffect(effect: LoginFragmentEffect) {
+        when (effect) {
+            is LoginFragmentEffect.LaunchLoginTask -> tryToLogin(effect.credential)
+            else -> effectManager.trySend(effect)
         }
     }
 
-    private fun handleTypingEvent(event: com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing) {
-        when (event) {
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing.EmailField ->
-                stateManager.updateComponentsOnEmailChange(event.text)
-
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing.PasswordField ->
-                stateManager.updateComponentsOnPasswordChange(event.text)
-        }
-    }
-
-    private fun handleClickEvent(event: com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click) {
-        when (event) {
-            com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.Background ->
-                effectManager.setCLearFocusAndHideKeyboardEffect()
-
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.CheckBox -> {
-                stateManager.updateComponentsOnCheckBoxChange(event.isChecked)
-            }
-
-            com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.EnterButton ->
-                onEvent(com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.Executing)
-
-            com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.NewAccountButton ->
-                effectManager.setNavigateToNewUserEffect()
-
-            com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.RecoverPasswordButton ->
-                effectManager.setNavigateToForgetPasswordEffect()
-
-
-        }
-    }
-
-    private fun handleSystemEvent(event: com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent) {
-        when (event) {
-            com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.Executing -> {
-                stateManager.setLoadingState()
-                tryToLogin()
-            }
-
-            com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.Success -> launch {
-                val isChecked = stateManager.getCheckBoxState()
-                preferencesRepository.setKeepLogged(isChecked)
-                effectManager.setNavigateToMainEffect()
-            }
-
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.CriticalError ->
-                effectManager.setNavigateToNotificationEffect()
-
-            is com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.RecoverableError -> {
-                stateManager.setIdleState()
-                effectManager.setShowToastEffect(event.e.message)
-            }
-
-        }
-    }
-
-    private fun tryToLogin() {
+    private fun tryToLogin(credential: EmailCredential) {
         viewModelScope.launch {
-            delay(500)
-            val credentials = stateManager.getCredential()
-            val result = loginUseCase(credentials).mapResult(
-                onSuccess = { com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.Success },
-                onRecoverableError = { com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.RecoverableError(it) },
-                onCriticalError = { com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.SystemEvent.LoginTask.CriticalError(it) }
-            )
-            onEvent(result)
+            val outcome = loginUseCase(credential)
+            val event = outcome.toLoginEvent()
+            onEvent(event)
+        }
+    }
+
+    private fun OperationOutcome.toLoginEvent() = when (this) {
+        OperationOutcome.Completed -> LoginFragmentEvent.LoginTask.Complete
+        is OperationOutcome.Failure -> when {
+            isConnectionError() -> LoginFragmentEvent.LoginTask.NoConnection
+
+            isInvalidCredential() || isInvalidUser() || isUserNotFound() ->
+                LoginFragmentEvent.LoginTask.InvalidCredential
+
+            else -> LoginFragmentEvent.LoginTask.Failure
         }
     }
 

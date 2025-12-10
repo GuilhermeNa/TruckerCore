@@ -5,72 +5,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.core.expressions.hideKeyboardAndClearFocus
-import com.example.truckercore.core.expressions.logEffect
-import com.example.truckercore.core.expressions.logState
-import com.example.truckercore.core.expressions.navController
-import com.example.truckercore.core.expressions.showRedSnackBar
+import com.example.truckercore.core.config.flavor.FlavorService
+import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.databinding.FragmentLoginBinding
-import com.example.truckercore.presentation._shared._base.fragments.CloseAppFragment
-import com.example.truckercore.presentation._shared.views.dialogs.LoadingDialog
-import com.example.truckercore.presentation.nav_login.fragments.login.navigator.LoginFragmentStrategy
-import com.example.truckercore.presentation.nav_login.fragments.login.navigator.LoginNavigator
-import com.example.truckercore.presentation.nav_login.fragments.login.ui_handler.LoginUiStateHandler
-import com.example.truckercore.presentation.nav_login.fragments.login.ui_handler.LoginUiStateHandlerImpl
-import com.example.truckercore.domain.view_models.login.LoginViewModel
-import com.example.truckercore.domain.view_models.login.state.LoginUiState
+import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.nav_login.view_model.login.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginFragment : CloseAppFragment() {
+class LoginFragment : PublicLockedFragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    private val flavorService: com.example.truckercore.core.config.flavor.FlavorService by inject()
-    private val strategy: LoginFragmentStrategy by lazy {
-        flavorService.getLoginFragmentStrategy(navController())
-    }
-
-    private val navigator: LoginNavigator by lazy {
-        com.example.truckercore.layers.presentation.nav_login.fragments.login.navigator.LoginNavigatorImpl(
-            strategy
-        )
-    }
-    private val stateHandler: LoginUiStateHandler by lazy { LoginUiStateHandlerImpl() }
-
     private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
 
     private val viewModel: LoginViewModel by viewModel()
+    private val flavorService: FlavorService by inject()
+    private val stateHandler = LoginFragmentUiStateHandler()
 
     //----------------------------------------------------------------------------------------------
     // OnCreate
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                setUiStateManager()
-                setEffectManager()
-            }
+        launchAndRepeatOnFragmentStartedLifeCycle {
+            setUiStateManager()
+            setEffectManager()
         }
     }
 
     private fun CoroutineScope.setUiStateManager() {
         launch {
             viewModel.stateFlow.collect { state ->
-                logState(this@LoginFragment, state)
-                stateHandler.handleEmailComponent(state.emailComponent)
-                stateHandler.handlePasswordComponent(state.passComponent)
-                stateHandler.handleEnterBtnComponent(state.enterBtnComponent)
-                stateHandler.handleNewAccountBtnComponent(strategy.getNewAccountButtonComponent())
-                handleDialog(state.status)
+                stateHandler.handle(state, dialog)
             }
         }
     }
@@ -82,8 +54,6 @@ class LoginFragment : CloseAppFragment() {
 
     private suspend fun setEffectManager() {
         viewModel.effectFlow.collect { effect ->
-            logEffect(this@LoginFragment, effect)
-
             when (effect) {
                 com.example.truckercore.presentation.viewmodels.view_models.login.effect.LoginEffect.ClearFocusAndHideKeyboard ->
                     hideKeyboardAndClearFocus(*getFocusableViews())
@@ -140,21 +110,33 @@ class LoginFragment : CloseAppFragment() {
     private fun setEmailChangeListener() {
         binding.fragLoginEmailText.addTextChangedListener { editable ->
             val text = editable.toString()
-            viewModel.onEvent(com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing.EmailField(text))
+            viewModel.onEvent(
+                Typing.EmailField(
+                    text
+                )
+            )
         }
     }
 
     private fun setCheckBoxClickListener() {
         binding.fragLoginCheckbox.setOnCheckedChangeListener { checkBox, _ ->
             val isChecked = checkBox.isChecked
-            viewModel.onEvent(com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.CheckBox(isChecked))
+            viewModel.onEvent(
+                com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Click.CheckBox(
+                    isChecked
+                )
+            )
         }
     }
 
     private fun setPasswordChangeListener() {
         binding.fragLoginPasswordText.addTextChangedListener { editable ->
             val text = editable.toString()
-            viewModel.onEvent(com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing.PasswordField(text))
+            viewModel.onEvent(
+                com.example.truckercore.presentation.viewmodels.view_models.login.LoginEvent.UiEvent.Typing.PasswordField(
+                    text
+                )
+            )
         }
     }
 

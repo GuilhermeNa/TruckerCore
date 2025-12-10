@@ -1,5 +1,6 @@
 package com.example.truckercore.layers.data.base.outcome.expressions
 
+import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
@@ -45,5 +46,24 @@ fun OperationOutcome.isSuccess(): Boolean = this is OperationOutcome.Completed
 fun OperationOutcome.isConnectionError(): Boolean =
     when {
         this.isFailure() -> (this as OperationOutcome.Failure).exception is InfraException.Network
+        else -> false
+    }
+
+fun OperationOutcome.isInvalidCredential(): Boolean =
+    when {
+        this.isFailure() -> (this as OperationOutcome.Failure).exception is DomainException.InvalidCredentials
+        else -> false
+    }
+
+fun OperationOutcome.isUserNotFound(): Boolean =
+    when {
+        this.isFailure() -> (this as OperationOutcome.Failure).exception is DomainException.UserNotFound
+        else -> false
+    }
+
+
+fun OperationOutcome.isInvalidUser(): Boolean =
+    when {
+        this.isFailure() -> (this as OperationOutcome.Failure).exception is DomainException.InvalidUser
         else -> false
     }

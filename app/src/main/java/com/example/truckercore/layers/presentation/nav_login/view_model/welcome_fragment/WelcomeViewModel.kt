@@ -9,6 +9,10 @@ import com.example.truckercore.layers.presentation.base.managers.EffectManager
 import com.example.truckercore.layers.presentation.base.managers.StateManager
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.core.my_lib.expressions.handle
+import com.example.truckercore.layers.presentation.nav_login.view_model.welcome_fragment.effect.WelcomeFragmentEffect
+import com.example.truckercore.layers.presentation.nav_login.view_model.welcome_fragment.event.WelcomeFragmentEvent
+import com.example.truckercore.layers.presentation.nav_login.view_model.welcome_fragment.reducer.WelcomeFragmentReducer
+import com.example.truckercore.layers.presentation.nav_login.view_model.welcome_fragment.state.WelcomeFragmentState
 import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.effect.WelcomeFragmentEffect
 import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.event.WelcomeFragmentEvent
 import com.example.truckercore.layers.presentation.viewmodels.view_models.welcome_fragment.reducer.WelcomeFragmentReducer

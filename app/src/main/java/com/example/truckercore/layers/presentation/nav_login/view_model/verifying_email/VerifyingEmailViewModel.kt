@@ -90,9 +90,8 @@ class VerifyingEmailViewModel(
      * State manager for screen UI state.
      * The screen starts in [VerifyingEmailFragmentState.Initial].
      */
-    private val stateManager = StateManager<VerifyingEmailFragmentState>(
-        VerifyingEmailFragmentState.Initial
-    )
+    private val stateManager =
+        StateManager<VerifyingEmailFragmentState>(VerifyingEmailFragmentState.Initial)
     val stateFLow = stateManager.stateFlow
 
     /**

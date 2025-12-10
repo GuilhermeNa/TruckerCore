@@ -13,4 +13,6 @@ data class TextInputComponent(
 
     fun hasHelper() = helperText != null
 
+    fun updateText(newTxt: String) = copy(text = newTxt)
+
 }

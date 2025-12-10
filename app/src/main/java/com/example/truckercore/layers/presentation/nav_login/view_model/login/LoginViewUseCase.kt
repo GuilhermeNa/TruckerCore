@@ -1,10 +1,6 @@
 package com.example.truckercore.layers.presentation.nav_login.view_model.login
 
-import com.example.truckercore.core.expressions.mapAppResult
-import com.example.truckercore.core.classes.EmailCredential
-import com.example.truckercore.data.modules.authentication.manager.AuthManager
-import com.example.truckercore.domain._shared.helpers.ViewError
-import com.example.truckercore.domain._shared.helpers.ViewResult
+import com.example.truckercore.core.my_lib.classes.EmailCredential
 
 class LoginViewUseCase(private val authService: AuthManager) {
 

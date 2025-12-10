@@ -2,18 +2,16 @@ package com.example.truckercore.business_admin.config.flavor
 
 import android.app.Activity
 import android.content.Intent
-import androidx.navigation.NavController
 import com.example.truckercore.business_admin.view.activities.MainActivity
 import com.example.truckercore.core.config.flavor.FlavorStrategy
+import com.example.truckercore.layers.domain.model.access.Role
+import com.example.truckercore.layers.presentation.nav_login.view_model.welcome_fragment.data.WelcomePagerData
 
 class FlavorAdminStrategy : FlavorStrategy {
 
-    override fun getWelcomeNavigatorStrategy(): WelcomeNavigatorStrategy {
-        return AdminWelcomeNavigatorStrategy()
+    override fun navigateToCheckIn(current: Activity) {
+        TODO("Not yet implemented")
     }
-
-    override fun getLoginNavigatorStrategy(navController: NavController) =
-        AdminLoginNavigatorStrategy(navController)
 
     override fun getRole() = Role.ADMIN
 
@@ -24,7 +22,6 @@ class FlavorAdminStrategy : FlavorStrategy {
         current.startActivity(intent)
         current.finish()
     }
-
 
     override fun getWelcomePagerData(): List<WelcomePagerData> {
         return listOf(

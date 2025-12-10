@@ -54,6 +54,12 @@ fun String.isFullNameFormat(): Boolean {
     return parts.size >= 2 && trimmed.matches("[\\p{L} ]+".toRegex())
 }
 
+fun String.isPasswordFormat(): Boolean {
+    val trimmed = this.trim()
+    return trimmed.length in 6..12 && trimmed.all { it.isDigit() }
+}
+
+
 /**
  * Extension function that removes all blank spaces from the string.
  * @receiver String The string from which spaces should be removed.
