@@ -6,8 +6,8 @@ class MainViewModel(
     private val isUserLogged: HasLoggedUserUseCase
 ): BaseViewModel() {
 
-    fun hasLoggedUser(): Boolean {
-        isUserLogged()
-    }
+/*    fun hasLoggedUser(): Boolean {
+       return isUserLogged()
+    }*/
 
 }

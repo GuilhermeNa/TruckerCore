@@ -6,7 +6,7 @@ interface SignOutUseCase {
     fun invoke()
 }
 
-class SignOutUseCaseImp(
+class SignOutUseCaseImpl(
     private val authRepository: AuthenticationRepository
 ) : SignOutUseCase {
 

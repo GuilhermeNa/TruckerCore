@@ -7,126 +7,69 @@ import com.example.truckercore.layers.domain.base.contracts.entity.BaseEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Interface representing a high-level data access layer.
+ * Repository interface for accessing and manipulating data in the domain layer.
  *
- * Serves as an abstraction over a concrete [DataSource], providing a unified contract for
- * fetching and observing DTOs in a standardized [DataOutcome] wrapper. This enables consistent
- * error handling and response interpretation across different layers of the application.
+ * Provides both suspend-based and Flow-based methods to retrieve single or multiple
+ * entities from a data source, applying a given [Specification] for querying.
  *
- * @see DataSource
- * @see Specification
  * @see DataOutcome
  */
 interface DataRepository {
 
     /**
-     * Fetches a single DTO that matches the given [Specification].
+     * Retrieves a single entity that matches the given [specification].
      *
-     * ### Example:
-     * ```kotlin
-     * val response = repository.findOneBy(spec)
-     * when (response) {
-     *     is AppResponse.Success -> {
-     *         val user = response.data
-     *         // Use the user DTO
-     *     }
-     *     is AppResponse.Empty -> {
-     *         // No user found with the given ID
-     *     }
-     *     is AppResponse.Error -> {
-     *         // Handle the error
-     *         logError(response.throwable)
-     *     }
-     * }
-     * ```
+     * @param D The type of the DTO used by the data source.
+     * @param E The type of the domain entity returned.
+     * @param spec The specification defining the query criteria.
      *
-     * @param D The type of DTO to retrieve.
-     * @param spec The criteria used to find the DTO.
-     * @return [DataOutcome] containing the result, or error if applicable.
+     * @return [DataOutcome.Success] containing the mapped entity if found,
+     *         [DataOutcome.Empty] if no data is found, or
+     *         [DataOutcome.Failure] if an exception occurs.
      */
     suspend fun <D : BaseDto, E : BaseEntity> findOneBy(spec: Specification<D>): DataOutcome<E>
 
     /**
-     * Fetches all DTOs that match the given [Specification].
+     * Retrieves all entities that match the given [specification].
      *
-     * ### Example:
-     * ```kotlin
-     * val response = repository.findAllBy(spec)
-     * when (response) {
-     *     is AppResponse.Success -> {
-     *         val users = response.data
-     *         // Use the list of active users
-     *     }
-     *     is AppResponse.Empty -> {
-     *         // No active users found
-     *     }
-     *     is AppResponse.Error -> {
-     *         // Handle the error
-     *         logError(response.throwable)
-     *     }
-     * }
-     * ```
+     * @param D The type of the DTO used by the data source.
+     * @param E The type of the domain entity returned.
+     * @param spec The specification defining the query criteria.
      *
-     * @param T The type of DTOs to retrieve.
-     * @param spec The filtering criteria for the query.
-     * @return [DataOutcome] containing a list of DTOs or an appropriate state.
+     * @return [DataOutcome.Success] containing the mapped list of entities,
+     *         [DataOutcome.Empty] if no data is found, or
+     *         [DataOutcome.Failure] if an exception occurs.
      */
     suspend fun <D : BaseDto, E : BaseEntity> findAllBy(spec: Specification<D>): DataOutcome<List<E>>
 
     /**
-     * Observes changes to a single DTO in real-time that matches the [Specification].
+     * Returns a [Flow] emitting a single entity that matches the given [specification].
      *
-     * ### Example:
-     * ```kotlin
-     * val flow = repository.flowOneBy(spec)
-     * flow.collect { response ->
-     *     when (response) {
-     *         is AppResponse.Success -> {
-     *             val user = response.data
-     *             // React to updates to this user
-     *         }
-     *         is AppResponse.Empty -> {
-     *             // The user was deleted or not found
-     *         }
-     *         is AppResponse.Error -> {
-     *             // Handle real-time error
-     *         }
-     *     }
-     * }
-     * ```
+     * The emitted data is mapped into a domain-level [DataOutcome].
      *
-     * @param T The type of DTO to observe.
-     * @param spec The criteria used to subscribe to changes.
-     * @return [Flow] emitting [DataOutcome] on each update.
+     * @param D The type of the DTO used by the data source.
+     * @param E The type of the domain entity returned.
+     * @param spec The specification defining the query criteria.
+     *
+     * @return A [Flow] emitting [DataOutcome.Success], [DataOutcome.Empty], or
+     *         [DataOutcome.Failure] in case of an exception.
      */
     fun <D : BaseDto, E : BaseEntity> flowOneBy(spec: Specification<D>): Flow<DataOutcome<E>>
 
     /**
-     * Observes changes to a list of DTOs in real-time that match the [Specification].
+     * Returns a [Flow] emitting a list of entities that match the given [specification].
      *
-     * ### Example:
-     * ```kotlin
-     * val flow = repository.flowAllBy(spec)
-     * flow.collect { response ->
-     *     when (response) {
-     *         is AppResponse.Success -> {
-     *             val users = response.data
-     *             // Update UI with new user list
-     *         }
-     *         is AppResponse.Empty -> {
-     *             // No matching users at this time
-     *         }
-     *         is AppResponse.Error -> {
-     *             // Handle the error
-     *         }
-     *     }
-     * }
-     * ```
+     * The emitted data is mapped into a domain-level [DataOutcome].
      *
-     * @param T The type of DTOs to observe.
-     * @param spec The criteria used to subscribe to list updates.
-     * @return [Flow] emitting [DataOutcome] containing updated lists.
+     * @param D The type of the DTO used by the data source.
+     * @param E The type of the domain entity returned.
+     * @param spec The specification defining the query criteria.
+     *
+     * @return A [Flow] emitting [DataOutcome.Success] with a list of entities,
+     *         [DataOutcome.Empty] if no data is found, or
+     *         [DataOutcome.Failure] in case of an exception.
      */
     fun <D : BaseDto, E : BaseEntity> flowAllBy(spec: Specification<D>): Flow<DataOutcome<List<E>>>
 
 }
+

@@ -1,5 +1,7 @@
 package com.example.truckercore.core.my_lib.classes
 
+import com.example.truckercore.core.error.DomainException
+
 /**
  * Represents a validated and formatted full name.
  *
@@ -15,7 +17,7 @@ package com.example.truckercore.core.my_lib.classes
  * - Name must contain **at least two words** (e.g., "John Doe").
  * - Name must consist of **letters and spaces only** (no digits or symbols).
  *
- * If any rule is violated, an [InvalidNameException] is thrown.
+ * If any rule is violated, an [DomainException.InvalidName] is thrown.
  *
  * ### Example:
  * ```kotlin
@@ -24,17 +26,17 @@ package com.example.truckercore.core.my_lib.classes
  * ```
  *
  * @property value The validated and formatted full name
- * @throws InvalidNameException if the input is blank or invalid
+ * @throws DomainException.InvalidName if the input is blank or invalid
  */
 @JvmInline
 value class Name private constructor(val value: String) {
 
     init {
         if (value.isBlank()) {
-            throw InvalidNameException("Name must not be blank.")
+            throw DomainException.InvalidName("Name must not be blank.")
         }
         if (!value.isFullNameFormat()) {
-            throw InvalidNameException("Invalid name format: '$value'")
+            throw DomainException.InvalidName("Invalid name format: '$value'")
         }
     }
 
@@ -68,5 +70,3 @@ value class Name private constructor(val value: String) {
     }
 
 }
-
-class InvalidNameException(message: String? = null) : Exception(message)

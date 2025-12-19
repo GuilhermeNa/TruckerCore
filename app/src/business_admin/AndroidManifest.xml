@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <application android:name=".business_admin.AdminApplication">
+    <application android:name=".business_admin.AdminApplication" >
         <activity
-            android:name=".business_admin.view.activities.MainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.TruckerCore.NoActionBar" />
+            android:name=".business_admin.presentation.check_in.CheckInActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

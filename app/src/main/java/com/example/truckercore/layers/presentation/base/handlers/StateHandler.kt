@@ -3,10 +3,10 @@ package com.example.truckercore.layers.presentation.base.handlers
 import android.widget.Button
 import android.widget.TextView
 import androidx.viewbinding.ViewBinding
-import com.example.truckercore.layers.presentation.base.objects.ViewBinder
+import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.layers.presentation.base.components.ButtonComponent
 import com.example.truckercore.layers.presentation.base.components.TextComponent
-import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
+import com.example.truckercore.layers.presentation.base.objects.ViewBinder
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
 

@@ -47,4 +47,19 @@ sealed class DomainException(
         cause: Throwable? = null
     ) : DomainException(message, cause)
 
+    class InvalidEmail(
+        message: String = "Provided email is not valid.",
+        cause: Throwable? = null
+    ) : DomainException(message, cause)
+
+    class InvalidPassword(
+        message: String = "Provided password is not valid.",
+        cause: Throwable? = null
+    ) : DomainException(message, cause)
+
+    class InvalidName(
+        message: String = "Provided name is not valid.",
+        cause: Throwable? = null
+    ) : DomainException(message, cause)
+
 }

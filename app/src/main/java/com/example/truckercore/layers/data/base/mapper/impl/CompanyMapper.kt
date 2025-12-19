@@ -29,8 +29,8 @@ object CompanyMapper : Mapper<CompanyDto, Company> {
         throw DataException.Mapping("Error while mapping an dto to entity: $dto")
     }
 
-    override fun toDtoList(entities: List<Company>): List<CompanyDto> = entities.map { toDto(it) }
+    override fun toDtos(entities: List<Company>): List<CompanyDto> = entities.map { toDto(it) }
 
-    override fun toEntityList(dtos: List<CompanyDto>): List<Company> = dtos.map { toEntity(it) }
+    override fun toEntities(dtos: List<CompanyDto>): List<Company> = dtos.map { toEntity(it) }
 
 }

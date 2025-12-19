@@ -1,5 +1,6 @@
 package com.example.truckercore.core.my_lib.classes
 
+import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.my_lib.classes.Password.Companion.from
 import java.security.MessageDigest
 
@@ -17,7 +18,7 @@ import java.security.MessageDigest
  * - Password must be composed **only of digits** (`0-9`)
  * - Password length must be between **6 and 12 characters**
  *
- * If validation fails, an [InvalidPasswordException] is thrown.
+ * If validation fails, an [DomainException.InvalidPassword] is thrown.
  *
  * ---
  * ### Default Hashing Algorithm:
@@ -32,7 +33,7 @@ import java.security.MessageDigest
  * ```
  *
  * @property value the hashed password string
- * @throws InvalidPasswordException if the raw password does not meet the required format
+ * @throws DomainException.InvalidPassword if the raw password does not meet the required format
  */
 @JvmInline
 value class Password private constructor(val value: String) {
@@ -46,9 +47,9 @@ value class Password private constructor(val value: String) {
          * @return a [Password] instance with a hashed value
          * @throws InvalidPasswordException if validation fails
          */
-        fun from(raw: String): com.example.truckercore.core.my_lib.classes.Password {
-            com.example.truckercore.core.my_lib.classes.Password.Companion.validateRule(raw)
-            return com.example.truckercore.core.my_lib.classes.Password(raw)
+        fun from(raw: String): Password {
+            validateRule(raw)
+            return Password(raw)
         }
 
         // Hashes the raw password using the specified algorithm.
@@ -63,8 +64,8 @@ value class Password private constructor(val value: String) {
 
         // Validates whether the raw password meets the expected rule.
         private fun validateRule(raw: String) {
-            if (!com.example.truckercore.core.my_lib.classes.Password.Companion.isValidRule(raw))
-                throw com.example.truckercore.core.my_lib.classes.InvalidPasswordException(
+            if (!isValidRule(raw))
+                throw DomainException.InvalidPassword(
                     "Password must contain only numbers and be 6 to 12 characters and got: [$raw]."
                 )
         }
@@ -75,5 +76,3 @@ value class Password private constructor(val value: String) {
     }
 
 }
-
-class InvalidPasswordException(message: String? = null): Exception(message)

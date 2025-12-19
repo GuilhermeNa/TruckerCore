@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.data.data_source.data
 
-import com.example.truckercore.layers.data.data_source.data.expressions.toDto
-import com.example.truckercore.layers.data.data_source.data.expressions.toList
+import com.example.truckercore.core.my_lib.expressions.toDto
+import com.example.truckercore.core.my_lib.expressions.toList
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
 import com.example.truckercore.layers.data.base.specification._contracts.Specification
 import com.example.truckercore.layers.data.base.specification._contracts.SpecificationInterpreter
@@ -12,6 +12,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Concrete implementation of [DataSource] using a backend data source (e.g., Firebase).
+ *
+ * This class executes actual data retrieval operations based on the specifications
+ * provided by the [Specification] pattern. It handles both synchronous data fetches
+ * (suspend functions) and reactive streams (Flow) for real-time updates.
+ *
+ * @property interpreter Responsible for converting [Specification] instances into
+ * backend-specific queries or document references.
+ * @property errorMapper Maps low-level exceptions into domain/application-specific exceptions.
+ */
 class DataSourceImpl(
     interpreter: SpecificationInterpreter,
     errorMapper: DataSourceErrorMapper

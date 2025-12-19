@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".business_admin.view.activities.ui.home.HomeFragment">
+    tools:context=".business_admin.presentation.activities.ui.home.HomeFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/frag_home_card_employee"

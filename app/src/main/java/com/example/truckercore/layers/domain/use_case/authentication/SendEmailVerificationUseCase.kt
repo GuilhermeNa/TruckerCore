@@ -9,7 +9,7 @@ interface SendEmailVerificationUseCase {
     suspend operator fun invoke(): OperationOutcome
 }
 
-internal class SendEmailVerificationUseCaseImp(
+internal class SendEmailVerificationUseCaseImpl(
     private val authRepository: AuthenticationRepository
 ) : SendEmailVerificationUseCase {
 

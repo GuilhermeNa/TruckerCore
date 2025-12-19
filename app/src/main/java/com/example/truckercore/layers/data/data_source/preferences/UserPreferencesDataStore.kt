@@ -17,9 +17,25 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  */
 class UserPreferencesDataStore(private val context: Context) {
 
+    /**
+     * Key used to store and retrieve the flag indicating whether the user is accessing
+     * the app for the first time.
+     *
+     * Stored in DataStore as a Boolean. Defaults to `true` if not set.
+     */
     private val isFirstAccess = booleanPreferencesKey(FIRST_ACCESS)
+
+    /**
+     * Key used to store and retrieve the user's preference for staying logged in
+     * across app sessions.
+     *
+     * Stored in DataStore as a Boolean. Defaults to `true` if not set.
+     */
     private val keepLogged = booleanPreferencesKey(KEEP_LOGGED)
 
+    //----------------------------------------------------------------------------------------------
+    // First Access Methods
+    //----------------------------------------------------------------------------------------------
     /**
      * Checks if this is the user's first time opening the app.
      *
@@ -31,15 +47,6 @@ class UserPreferencesDataStore(private val context: Context) {
     }
 
     /**
-     * Retrieves the current values stored in the DataStore.
-     *
-     * @return [Preferences] containing all stored key-value pairs.
-     */
-    private suspend fun getPreferences(): Preferences {
-        return context.dataStore.data.first()
-    }
-
-    /**
      * Marks that the user has completed their first access to the application.
      */
     suspend fun markFirstAccessComplete() {
@@ -48,8 +55,11 @@ class UserPreferencesDataStore(private val context: Context) {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    // Keep Logged Methods
+    //----------------------------------------------------------------------------------------------
     /**
-     * Checks whether the user has opted to stay logged in.
+     * Checks whether the user has opted to stay logged in. Default value is *true*.
      *
      * @return `true` if the user should remain logged in, `false` otherwise.
      */
@@ -67,6 +77,18 @@ class UserPreferencesDataStore(private val context: Context) {
         context.dataStore.edit { settings ->
             settings[keepLogged] = active
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------------------
+    /**
+     * Retrieves the current values stored in the DataStore.
+     *
+     * @return [Preferences] containing all stored key-value pairs.
+     */
+    private suspend fun getPreferences(): Preferences {
+        return context.dataStore.data.first()
     }
 
     companion object {

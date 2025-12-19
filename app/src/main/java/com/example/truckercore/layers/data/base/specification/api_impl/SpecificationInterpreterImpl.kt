@@ -5,6 +5,7 @@ import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.layers.data.base.filter.collection.SearchFilters
 import com.example.truckercore.layers.data.base.filter.filters.WhereEqual
 import com.example.truckercore.layers.data.base.filter.filters.WhereIn
+import com.example.truckercore.layers.data.base.specification._contracts.Specification
 import com.example.truckercore.layers.data.base.specification._contracts.SpecificationInterpreter
 import com.example.truckercore.layers.data.base.specification.api_impl.wrappers.DocumentWrapper
 import com.example.truckercore.layers.data.base.specification.api_impl.wrappers.QueryWrapper
@@ -12,6 +13,13 @@ import com.example.truckercore.layers.domain.base.contracts.entity.ID
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
+/**
+ * Concrete implementation of [SpecificationInterpreter] for Firebase Firestore.
+ *
+ * Converts domain-level [Specification]s into Firestore-specific queries or document references.
+ *
+ * @property firestore The [FirebaseFirestore] instance used to execute queries and access documents.
+ */
 class SpecificationInterpreterImpl(private val firestore: FirebaseFirestore) :
     SpecificationInterpreter {
 

@@ -1,15 +1,12 @@
 package com.example.truckercore.core.config.flavor
 
 import android.app.Activity
-import androidx.navigation.NavController
 import com.example.truckercore.layers.domain.model.access.Role
+import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.helpers.WelcomePagerData
 
 class FlavorService(private val strategy: FlavorStrategy) {
 
     fun navigateToCheckIn(current: Activity) = strategy.navigateToCheckIn(current)
-
-    fun getLoginFragmentStrategy(navController: NavController): LoginFragmentStrategy =
-        strategy.getLoginNavigatorStrategy(navController)
 
     fun getRole(): Role = strategy.getRole()
 
@@ -18,7 +15,5 @@ class FlavorService(private val strategy: FlavorStrategy) {
     fun getAppName(): String = getFlavor().appName
 
     fun getWelcomeFragmentPagerData(): List<WelcomePagerData> = strategy.getWelcomePagerData()
-
-    fun navigateToMain(current: Activity) = strategy.navigateToMain(current)
 
 }

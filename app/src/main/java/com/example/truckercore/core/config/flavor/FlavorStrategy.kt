@@ -2,7 +2,7 @@ package com.example.truckercore.core.config.flavor
 
 import android.app.Activity
 import com.example.truckercore.layers.domain.model.access.Role
-import com.example.truckercore.layers.presentation.nav_login.view_model.welcome_fragment.data.WelcomePagerData
+import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.helpers.WelcomePagerData
 
 interface FlavorStrategy {
 

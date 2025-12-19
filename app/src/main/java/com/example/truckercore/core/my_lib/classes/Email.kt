@@ -1,5 +1,7 @@
 package com.example.truckercore.core.my_lib.classes
 
+import com.example.truckercore.core.error.DomainException
+
 /**
  * Represents a validated email address.
  *
@@ -22,7 +24,7 @@ package com.example.truckercore.core.my_lib.classes
  * ```
  *
  * @property value The validated and normalized (lowercase) email string.
- * @throws InvalidEmailException if the input is blank or incorrectly formatted.
+ * @throws Exception if the input is blank or incorrectly formatted.
  */
 @JvmInline
 value class Email private constructor(val value: String) {
@@ -46,7 +48,7 @@ value class Email private constructor(val value: String) {
 
         private fun checkEmpty(value: String) {
             if (value.isBlank()) {
-                throw InvalidEmailException("The email address cannot be empty or blank.")
+                throw DomainException.InvalidEmail("The email address cannot be empty or blank.")
             }
         }
 
@@ -54,20 +56,9 @@ value class Email private constructor(val value: String) {
             val isEmailFormat =
                 value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex())
             if (!isEmailFormat) {
-                throw InvalidEmailException("The email address format is invalid: '$value'.")
+                throw DomainException.InvalidEmail("The email address format is invalid: '$value'.")
             }
         }
     }
 
 }
-
-/**
- * Exception thrown when an [Email] creation fails due to validation issues.
- *
- * This can happen if:
- * - The input string is blank.
- * - The input string does not match the required email format.
- *
- * @param message A detailed message indicating the validation error.
- */
-class InvalidEmailException(message: String? = null) : Exception(message)

@@ -1,6 +1,5 @@
 package com.example.truckercore.layers.presentation.base.managers
 
-
 import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.contracts.Effect

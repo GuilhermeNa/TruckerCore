@@ -1,8 +1,9 @@
 package com.example.truckercore.core.di
 
-import com.example.truckercore.data.infrastructure.security.service.PermissionService
+import com.example.truckercore.infra.security.service.PermissionService
+import com.example.truckercore.infra.security.service.PermissionServiceImpl
 import org.koin.dsl.module
 
 val securityModule = module {
-    single<PermissionService> { com.example.truckercore.core.security.service.PermissionServiceImpl() }
+    single<PermissionService> { PermissionServiceImpl() }
 }

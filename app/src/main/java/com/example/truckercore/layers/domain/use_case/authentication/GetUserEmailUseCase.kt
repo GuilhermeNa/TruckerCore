@@ -10,7 +10,7 @@ interface GetUserEmailUseCase {
 
 }
 
-class GetUserEmailUseCaseImp(
+class GetUserEmailUseCaseImpl(
     private val authRepository: AuthenticationRepository
 ) : GetUserEmailUseCase {
 

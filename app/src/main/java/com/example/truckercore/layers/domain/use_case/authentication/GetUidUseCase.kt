@@ -8,7 +8,7 @@ interface GetUidUseCase {
     fun invoke(): DataOutcome<UID>
 }
 
-class GetUidUseCaseImp(private val repository: AuthenticationRepository) : GetUidUseCase {
+class GetUidUseCaseImpl(private val repository: AuthenticationRepository) : GetUidUseCase {
 
     override fun invoke(): DataOutcome<UID> = repository.getUid()
 

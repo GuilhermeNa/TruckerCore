@@ -9,23 +9,16 @@ import com.example.truckercore.layers.data.base.specification._contracts.Specifi
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Abstract class representing a generic data source.
+ * Abstract data source that defines standard operations for querying data from a backend.
  *
- * This class must be implemented by any backend-specific data layer responsible for providing
- * data to the application. All data operations are driven by [Specification]s, which define the
- * structure and criteria for data queries.
+ * This class uses the Specification pattern to build queries in a generic and reusable way,
+ * delegating the specifics of the query construction to a [SpecificationInterpreter].
  *
- * These specifications are interpreted into concrete backend query types, represented by [R1]
- * for single-entity lookups and [R2] for filtered multi-entity queries.
+ * Subclasses should implement the actual data retrieval logic (e.g., Firebase, REST API, database).
  *
- * @param R1 The backend query type used for unique lookups (e.g., `DocumentReference` in Firestore).
- * @param R2 The backend query type used for filtered queries (e.g., `Query` in Firestore).
- * @property interpreter Converts [Specification]s into backend-understandable queries ([R1], [R2]).
- * @property errorMapper Maps backend-specific exceptions into standardized [DataSourceException]s.
- *
- * @see Specification
- * @see SpecificationInterpreter
- * @see DataSourceErrorMapper
+ * @property interpreter Responsible for translating [Specification] objects into
+ * API-specific query or document references.
+ * @property errorMapper Maps low-level exceptions into domain/application-specific exceptions.
  */
 abstract class DataSource(
     protected val interpreter: SpecificationInterpreter,
@@ -33,93 +26,51 @@ abstract class DataSource(
 ) {
 
     /**
-     * Retrieves a single DTO based on the provided [Specification].
+     * Finds a single entity by its identifier or filter specified in [spec].
      *
-     * ### Example:
-     * ```kotlin
-     * val response = dataSource.findById(spec)
-     * if(response == null) {
-     *      // data is not found in the specified criteria
-     * } else {
-     *      // the data is found and returned as DTO
-     *      response = MyDto()...
-     * }
-     *  ```
-     *
-     * @param T The type of the DTO to retrieve.
-     * @param spec The specification defining the lookup parameters.
-     * @return The matching DTO, or `null` if not found.
-     * @throws DataSourceException If any backend or mapping error occurs during retrieval.
+     * @param spec The specification defining the query.
+     * @return The entity as a [BaseDto], or `null` if not found.
      */
     abstract suspend fun <D : BaseDto> findById(spec: Specification<D>): D?
 
     /**
-     * Retrieves all DTOs that match the given [Specification].
+     * Finds multiple entities matching the criteria specified in [spec].
      *
-     * ### Example:
-     * ```kotlin
-     * val response = dataSource.findAllBy(spec)
-     * if(response == null) {
-     *      // data is not found in the specified criteria
-     * } else {
-     *      // the data is found and returned as DTO List
-     *      response = List(MyDto())...
-     * }
-     *  ```
-     *
-     * @param T The type of the DTOs to retrieve.
-     * @param spec The specification defining the filtering criteria.
-     * @return A list of matching DTOs, or `null` if none are found.
-     * @throws DataSourceException If any backend or mapping error occurs during retrieval.
+     * @param spec The specification defining the query.
+     * @return A list of entities as [BaseDto], or `null` if no results found.
      */
     abstract suspend fun <D : BaseDto> findAllBy(spec: Specification<D>): List<D>?
 
     /**
-     * Observes changes to a single DTO in real-time, based on the provided [Specification].
+     * Returns a [Flow] that emits updates for a single entity matching the specification.
      *
-     * ### Example:
-     * ```kotlin
-     * val response = dataSource.flowOneBy(spec)
-     * response.collect { data ->
-     *      if(data == null) {
-     *          // data is not found in specified criteria
-     *      } else {
-     *          // data is found and returned a DTO
-     *          response = MyDto()...
-     *      }
-     * }
-     *  ```
+     * @param spec The specification defining the query.
+     * @return A [Flow] emitting the entity as [BaseDto], or `null` if it does not exist.
      *
-     * @param T The type of the DTO to observe.
-     * @param spec The specification defining the lookup parameters.
-     * @return A cold [Flow] emitting updates to the DTO, or `null` if it doesn't exist.
-     * @throws DataSourceException If any backend or mapping error occurs during observation.
+     * The flow is **cold** and starts listening to updates only when collected.
+     * Listeners are removed automatically when the flow collection is cancelled.
      */
     abstract fun <D : BaseDto> flowOneBy(spec: Specification<D>): Flow<D?>
 
     /**
-     * Observes changes to a list of DTOs in real-time, based on the provided [Specification].
+     * Returns a [Flow] that emits updates for multiple entities matching the specification.
      *
-     * ### Example:
-     * ```kotlin
-     * val response = dataSource.flowOneBy(spec)
-     * response.collect { data ->
-     *      if(data == null) {
-     *          // data is not found in specified criteria
-     *      } else {
-     *          // data is found and returned a DTO List
-     *          response = List(MyDto())...
-     *      }
-     * }
-     *  ```
+     * @param spec The specification defining the query.
+     * @return A [Flow] emitting a list of entities as [BaseDto], or `null` if no results exist.
      *
-     * @param T The type of the DTOs to observe.
-     * @param spec The specification defining the filtering criteria.
-     * @return A cold [Flow] emitting updated lists of matching DTOs, or `null` if none are found.
-     * @throws DataSourceException If any backend or mapping error occurs during observation.
+     * The flow is **cold** and starts listening to updates only when collected.
+     * Listeners are removed automatically when the flow collection is cancelled.
      */
     abstract fun <D : BaseDto> flowAllBy(spec: Specification<D>): Flow<List<D>?>
 
+    /**
+     * Translates a generic [Specification] into an API-specific wrapper (document or query).
+     *
+     * This method uses the [SpecificationInterpreter] to obtain the corresponding
+     * [ApiSpecificationWrapper] instance (e.g., [DocumentWrapper] or [QueryWrapper]).
+     *
+     * @throws InfraException.Specification if the resulting wrapper type does not match [D].
+     */
     protected inline fun <reified D : ApiSpecificationWrapper> getApiSpecification(spec: Specification<*>): D {
         val result = spec.entityId?.let {
             interpreter.byId(it, spec.collection)

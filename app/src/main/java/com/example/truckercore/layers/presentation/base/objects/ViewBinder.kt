@@ -6,12 +6,11 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.TextView
-import com.example.truckercore.domain._shared.components.Visibility
-import com.example.truckercore.domain._shared.components.ButtonComponent
-import com.example.truckercore.domain._shared.components.TextInputComponent
-import com.example.truckercore.domain._shared.components.FabComponent
-import com.example.truckercore.domain._shared.components.TextComponent
+import com.example.truckercore.core.my_lib.ui_components.FabComponent
+import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.core.my_lib.ui_components.UiComponent
+import com.example.truckercore.core.my_lib.ui_components.Visibility
+import com.example.truckercore.layers.presentation.base.components.ButtonComponent
 import com.example.truckercore.layers.presentation.base.components.TextComponent
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
@@ -22,7 +21,7 @@ object ViewBinder {
         if (textInput.errorText != view.error) {
             view.error = textInput.errorText
             view.helperText = null
-            if(view.endIconDrawable != null) {
+            if (view.endIconDrawable != null) {
                 view.errorIconDrawable = null
             }
         }
@@ -81,8 +80,11 @@ object ViewBinder {
     }
 
     fun bindText(component: TextComponent, view: TextView) {
-       view.text = component.text
+        view.text = component.text
     }
 
+    fun bindText(text: String, view: TextView) {
+        view.text = text
+    }
 
 }

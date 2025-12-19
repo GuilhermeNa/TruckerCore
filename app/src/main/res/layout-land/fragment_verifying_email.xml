@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient_primary"
-    tools:context=".layers.presentation.nav_login.view.fragments.verifying_email.VerifyingEmailFragment">
+    tools:context=".layers.presentation.login.view.fragments.verifying_email.VerifyingEmailFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/frag_verifying_email_guideline"

@@ -1,6 +1,5 @@
 package com.example.truckercore.core.my_lib.classes
 
-import com.example.truckercore.data.shared.value_classes.exceptions.InvalidUrlException
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -27,17 +26,13 @@ import java.net.URL
  * ```
  *
  * @property value the validated URL string
- * @throws InvalidUrlException if the string does not represent a valid URL
+ * @throws MalformedURLException if the string does not represent a valid URL
  */
 @JvmInline
 value class Url(val value: String) {
 
     init {
-        try {
-            URL(value) // throws MalformedURLException if invalid
-        } catch (e: MalformedURLException) {
-            throw InvalidUrlException("Invalid URL format: '$value'")
-        }
+        URL(value) // throws MalformedURLException if invalid
     }
 
 }

@@ -9,9 +9,9 @@ interface Mapper<D : BaseDto, E : BaseEntity> {
 
     fun toEntity(dto: D): E
 
-    fun toDtoList(entities: List<E>): List<D>
+    fun toDtos(entities: List<E>): List<D>
 
-    fun toEntityList(dtos: List<D>): List<E>
+    fun toEntities(dtos: List<D>): List<E>
 
 }
 

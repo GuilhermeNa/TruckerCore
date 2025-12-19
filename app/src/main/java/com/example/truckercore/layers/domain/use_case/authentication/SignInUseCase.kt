@@ -10,7 +10,7 @@ interface SignInUseCase {
     suspend operator fun invoke(credential: EmailCredential): OperationOutcome
 }
 
-class SignInUseCaseImp(private val authRepository: AuthenticationRepository) : SignInUseCase {
+class SignInUseCaseImpl(private val authRepository: AuthenticationRepository) : SignInUseCase {
 
     override suspend operator fun invoke(credential: EmailCredential): OperationOutcome =
         withContext(Dispatchers.IO) { authRepository.signIn(credential.email, credential.password) }

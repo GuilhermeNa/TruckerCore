@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.domain.use_case.authentication
 
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
-import com.example.truckercore.layers.data.base.outcome.expressions.get
+import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 
 interface CheckUserRegistrationUseCase {

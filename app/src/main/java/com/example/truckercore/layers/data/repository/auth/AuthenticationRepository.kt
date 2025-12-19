@@ -1,7 +1,5 @@
 package com.example.truckercore.layers.data.repository.auth
 
-import com.example.truckercore.core.error.DataException
-import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Password
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
@@ -31,7 +29,7 @@ interface AuthenticationRepository {
     /**
      * This method can be used to wait for the user's email to be verified after registration.
      */
-    suspend fun observeEmailValidation(): OperationOutcome
+    suspend fun waitEmailValidation(): OperationOutcome
 
     /**
      * Sends a password reset email to the given [email] address.

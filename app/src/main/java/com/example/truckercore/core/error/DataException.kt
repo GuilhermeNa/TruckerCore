@@ -12,6 +12,16 @@ sealed class DataException(
         cause: Throwable? = null
     ) : DataException(message, cause)
 
+    class DataSource(
+        message: String = "An unknown error occurred on data source.",
+        cause: Throwable? = null
+    ) : DataException(message, cause)
+
+    class AuthSource(
+        message: String = "An unknown error occurred on authentication source.",
+        cause: Throwable? = null
+    ) : DataException(message, cause)
+
     class TooManyRequests(
         message: String = "Too many requests while sending email verification.",
         cause: Throwable? = null

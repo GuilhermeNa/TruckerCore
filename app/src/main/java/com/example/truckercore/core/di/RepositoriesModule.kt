@@ -1,17 +1,12 @@
 package com.example.truckercore.core.di
 
-import com.example.truckercore.data.infrastructure.data_source.preferences.UserPreferencesDataStore
-import com.example.truckercore.data.infrastructure.repository.auth.error_factory.AuthRepositoryErrorFactory
-import com.example.truckercore.data.infrastructure.repository.auth.contracts.AuthenticationRepository
-import com.example.truckercore.data.infrastructure.repository.auth.impl.AuthenticationRepositoryImpl
-import com.example.truckercore.data.infrastructure.repository.data.contracts.DataRepository
-import com.example.truckercore.data.infrastructure.repository.data.error_factory.DataRepositoryErrorFactory
-import com.example.truckercore.data.infrastructure.repository.data.impl.DataRepositoryImpl
-import com.example.truckercore.data.infrastructure.repository.writer.error_factory.InstructionRepositoryErrorFactory
-import com.example.truckercore.data.infrastructure.repository.writer.contracts.InstructionExecutorRepository
-import com.example.truckercore.data.infrastructure.repository.writer.impl.InstructionExecutorRepositoryImpl
-import com.example.truckercore.data.infrastructure.repository.preferences.contracts.PreferencesRepository
-import com.example.truckercore.data.infrastructure.repository.preferences.impl.PreferencesRepositoryImpl
+import com.example.truckercore.layers.data.data_source.preferences.UserPreferencesDataStore
+import com.example.truckercore.layers.data.repository.auth.AuthenticationRepository
+import com.example.truckercore.layers.data.repository.auth.AuthenticationRepositoryImpl
+import com.example.truckercore.layers.data.repository.data.DataRepository
+import com.example.truckercore.layers.data.repository.data.DataRepositoryImpl
+import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.data.repository.preferences.PreferencesRepositoryImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -20,13 +15,13 @@ val repositoriesModule = module {
     single { UserPreferencesDataStore(androidContext()) }
     single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
 
-    // Data Repository
-    single { DataRepositoryErrorFactory() }
-    single<DataRepository> { DataRepositoryImpl(get(), get()) }
-
     // Auth Repository
-    single { AuthRepositoryErrorFactory() }
-    single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get()) }
+    single<AuthenticationRepository> { AuthenticationRepositoryImpl(get()) }
+
+    // Data Repository
+    single<DataRepository> { DataRepositoryImpl(get()) }
+
+
 
     // Instruction Repository
     single { InstructionRepositoryErrorFactory() }

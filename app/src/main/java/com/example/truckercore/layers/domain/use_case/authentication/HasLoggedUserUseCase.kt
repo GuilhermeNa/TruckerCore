@@ -9,7 +9,7 @@ interface HasLoggedUserUseCase {
 
 }
 
-class IsUserLoggedUseCaseImp(
+class HasLoggedUserUseCaseImpl(
     private val authenticationRepository: AuthenticationRepository
 ) : HasLoggedUserUseCase {
 

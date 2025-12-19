@@ -9,6 +9,18 @@ import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.data.data_source.auth.AuthSource
 import com.example.truckercore.layers.domain.base.ids.UID
 
+/**
+ * Implementation of [AuthenticationRepository] that delegates authentication operations
+ * to an underlying [AuthSource].
+ *
+ * This class provides a safe and standardized way to perform authentication operations
+ * by:
+ *  - Wrapping suspending operations in [OperationOutcome] to indicate success or failure.
+ *  - Wrapping synchronous or query-like operations in [DataOutcome] to handle empty, success, or failure states.
+ *  - Converting any unexpected exceptions into [DataException.Unknown] with a default error message.
+ *
+ * All domain-specific exceptions from [AuthSource] are preserved when possible.
+ */
 class AuthenticationRepositoryImpl(private val authSource: AuthSource) : AuthenticationRepository {
 
     override suspend fun createUserWithEmail(email: Email, password: Password): OperationOutcome =
@@ -17,8 +29,8 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
     override suspend fun sendEmailVerification(): OperationOutcome =
         runSafeOperation { authSource.sendEmailVerification() }
 
-    override suspend fun observeEmailValidation(): OperationOutcome =
-        runSafeOperation { authSource.observeEmailValidation() }
+    override suspend fun waitEmailValidation(): OperationOutcome =
+        runSafeOperation { authSource.waitEmailValidation() }
 
     override suspend fun signIn(email: Email, password: Password): OperationOutcome =
         runSafeOperation { authSource.signInWithEmail(email, password) }
@@ -48,6 +60,14 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
     //----------------------------------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------------------------------
+    /**
+     * Executes a suspending operation safely, capturing any exceptions and
+     * wrapping the result in an [OperationOutcome].
+     *
+     * - If the operation completes successfully, returns [OperationOutcome.Completed].
+     * - If a known [AppException] is thrown, returns [OperationOutcome.Failure] with the exception.
+     * - If an unknown exception is thrown, wraps it in [DataException.Unknown] and returns failure.
+     */
     private suspend fun runSafeOperation(block: suspend () -> Unit): OperationOutcome =
         try {
             block()
@@ -55,28 +75,33 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
         } catch (e: AppException) {
             OperationOutcome.Failure(e)
         } catch (e: Exception) {
-            OperationOutcome.Failure(
-                DataException.Unknown(
-                    message = "An unknown error occurred in Auth Repository.",
-                    cause = e
-                )
-            )
+            OperationOutcome.Failure(DataException.Unknown(DEFAULT_ERROR_MSG, e))
         }
 
-    private fun <T>runSafeSearch(block: () -> T?): DataOutcome<T> = try {
-        val result = block()
-        result?.let {
-            DataOutcome.Success(result)
-        } ?: DataOutcome.Empty
-    } catch (e: AppException){
-        DataOutcome.Failure(e)
-    } catch (e: Exception) {
-        DataOutcome.Failure(
-            DataException.Unknown(
-                message = "An unknown error occurred in Auth Repository.",
-                cause = e
-            )
-        )
+    /**
+     * Executes a synchronous or query-like operation safely, capturing any exceptions
+     * and wrapping the result in a [DataOutcome].
+     *
+     * - If the block returns a non-null value, returns [DataOutcome.Success].
+     * - If the block returns null, returns [DataOutcome.Empty].
+     * - If a known [AppException] is thrown, returns [DataOutcome.Failure] with the exception.
+     * - If an unknown exception is thrown, wraps it in [DataException.Unknown] and returns failure.
+     */
+    private fun <T> runSafeSearch(block: () -> T?): DataOutcome<T> =
+        try {
+            val result = block()
+
+            if (result != null) DataOutcome.Success(result)
+            else DataOutcome.Empty
+
+        } catch (e: AppException) {
+            DataOutcome.Failure(e)
+        } catch (e: Exception) {
+            DataOutcome.Failure(DataException.Unknown(DEFAULT_ERROR_MSG, e))
+        }
+
+    companion object {
+        private const val DEFAULT_ERROR_MSG = "An unknown error occurred in Auth Repository."
     }
 
 }

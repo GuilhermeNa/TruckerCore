@@ -7,7 +7,7 @@ interface IsEmailVerifiedUseCase {
     operator fun invoke(): DataOutcome<Boolean>
 }
 
-class IsEmailVerifiedUseCaseImp(
+class IsEmailVerifiedUseCaseImpl(
     private val authRepository: AuthenticationRepository
 ) : IsEmailVerifiedUseCase {
 

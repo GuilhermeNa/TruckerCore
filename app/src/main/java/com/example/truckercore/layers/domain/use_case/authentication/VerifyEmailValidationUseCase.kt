@@ -10,12 +10,12 @@ interface VerifyEmailValidationUseCase {
     suspend operator fun invoke(): OperationOutcome
 }
 
-class ObserveEmailValidationUseCaseImp(
+class ObserveEmailValidationUseCaseImpl(
     private val authenticationRepository: AuthenticationRepository
 ) : VerifyEmailValidationUseCase {
 
     override suspend operator fun invoke(): OperationOutcome = withContext(Dispatchers.IO) {
-        authenticationRepository.observeEmailValidation()
+        authenticationRepository.waitEmailValidation()
     }
 
 }

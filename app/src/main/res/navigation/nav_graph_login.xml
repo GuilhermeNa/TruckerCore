@@ -102,14 +102,14 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
-        android:name="com.example.truckercore.layers.presentation.nav_login.fragments.forget_password.ForgetPasswordFragment"
+        android:name="com.example.truckercore.layers.presentation.login.fragments.forget_password.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
     <fragment
         android:id="@+id/userNameFragment"
-        android:name="com.example.truckercore.layers.presentation.nav_login.fragments.user_profile.UserProfileFragment"
+        android:name="com.example.truckercore.layers.presentation.login.fragments.user_profile.UserProfileFragment"
         android:label="fragment_user_name"
-        tools:layout="@layout/fragment_user_name" />
+        tools:layout="@layout/fragment_user_profile" />
     <action android:id="@+id/action_global_continueRegisterFragment"
         app:destination="@id/continueRegisterFragment"
         app:enterAnim="@anim/slide_in_top"
