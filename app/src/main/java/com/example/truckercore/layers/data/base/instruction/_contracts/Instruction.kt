@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.data.base.instruction.base
+package com.example.truckercore.layers.data.base.instruction._contracts
 
 /**
  * Interface representing an instruction within the system, typically used in workflows or processing pipelines.

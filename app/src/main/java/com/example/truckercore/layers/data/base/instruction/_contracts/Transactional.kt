@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.data.base.instruction.firebase_impl.base
+package com.example.truckercore.layers.data.base.instruction._contracts
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Transaction

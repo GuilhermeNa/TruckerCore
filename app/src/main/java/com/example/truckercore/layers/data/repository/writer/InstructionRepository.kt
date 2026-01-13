@@ -2,7 +2,7 @@ package com.example.truckercore.layers.data.repository.writer
 
 import com.example.truckercore.core.error.DataException
 import com.example.truckercore.core.error.core.AppException
-import com.example.truckercore.layers.data.base.instruction.for_app_impl.InstructionDeque
+import com.example.truckercore.layers.data.base.instruction.collections.InstructionDeque
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 
 /**
@@ -40,7 +40,7 @@ interface InstructionRepository {
      * @param deque The [InstructionDeque] containing instructions to be executed.
      * @return [AppResult] containing the operation result.
      */
-    suspend operator fun invoke(deque: com.example.truckercore.layers.data.base.instruction.for_app_impl.InstructionDeque): OperationOutcome
+    suspend operator fun invoke(deque: InstructionDeque): OperationOutcome
 
     suspend fun runSafeOperation(block: suspend () -> Unit): OperationOutcome =
         try {

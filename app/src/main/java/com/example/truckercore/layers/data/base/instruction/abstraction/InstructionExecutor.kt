@@ -1,7 +1,9 @@
-package com.example.truckercore.layers.data.data_source.writer
+package com.example.truckercore.layers.data.base.instruction.abstraction
 
-import com.example.truckercore.layers.data.base.instruction.base.InstructionInterpreter
-import com.example.truckercore.layers.data.base.instruction.for_app_impl.InstructionDeque
+import com.example.truckercore.layers.data.base.instruction._contracts.ApiInstructionWrapper
+import com.example.truckercore.layers.data.base.instruction._contracts.Instruction
+import com.example.truckercore.layers.data.base.instruction._contracts.InstructionInterpreter
+import com.example.truckercore.layers.data.base.instruction.collections.InstructionDeque
 
 /**
  * Abstract class responsible for orchestrating the execution of a sequence of [Instruction]s.
@@ -11,8 +13,7 @@ import com.example.truckercore.layers.data.base.instruction.for_app_impl.Instruc
  *
  * Concrete implementations should define how instructions are executed (e.g., in Firestore, SQLite, etc.).
  *
- * @param I The specific type of [ApiInstruction] produced by the interpreter.
- * @property interpreter The interpreter responsible for transforming raw [Instruction]s into [ApiInstruction]s.
+ * @property interpreter The interpreter responsible for transforming raw [Instruction]s into [ApiInstructionWrapper]s.
  */
 abstract class InstructionExecutor(protected val interpreter: InstructionInterpreter) {
 
@@ -21,7 +22,7 @@ abstract class InstructionExecutor(protected val interpreter: InstructionInterpr
      *
      * ### Example usage:
      * ```kotlin
-     * val executor = FirestoreInstructionExecutor(firestore, FirestoreInstInterpreter(firestore))
+     * val executor = FirestoreInstructionExecutor(FirestoreInstInterpreter(firestore))
      * val deque = ArrayDeque<Instruction>().apply {
      *     add(Put(...))
      *     add(Remove(...))
@@ -30,8 +31,6 @@ abstract class InstructionExecutor(protected val interpreter: InstructionInterpr
      * ```
      *
      * @param deque An [InstructionDeque] with instructions to execute.
-     * @throws InvalidInstructionException if validation fails
-     * @throws InterpreterException for interpreter or execution errors
      */
     abstract suspend operator fun invoke(deque: InstructionDeque)
 
