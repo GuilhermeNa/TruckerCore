@@ -16,7 +16,7 @@ val viewModelModule = module {
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<ForgetPasswordViewModel> { ForgetPasswordViewModel(get()) }
     viewModel<LoginViewModel> { LoginViewModel(get(), get(), get()) }
-    viewModel<SplashViewModel> { SplashViewModel(get(), get(), get()) }
+    viewModel<SplashViewModel> { SplashViewModel(get(), get(), get(), get()) }
     viewModel<VerifyingEmailViewModel> { VerifyingEmailViewModel(get(), get(), get(), get(), get()) }
     viewModel<WelcomeViewModel> { WelcomeViewModel(get(), get()) }
     viewModel<UserProfileViewModel> { UserProfileViewModel(get(), get()) }

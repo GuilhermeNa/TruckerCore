@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.core.config.flavor.FlavorService
-import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentUserProfileBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
@@ -51,9 +53,11 @@ class UserProfileFragment : PublicLockedFragment() {
 
         onInitializing(savedInstanceState) { viewModel.initialize() }
 
-        launchAndRepeatOnFragmentStartedLifeCycle {
-            setFragmentStateManager()
-            setFragmentEffectManager()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setFragmentStateManager()
+                setFragmentEffectManager()
+            }
         }
     }
 
@@ -81,9 +85,10 @@ class UserProfileFragment : PublicLockedFragment() {
         // Effect Manager
         viewModel.effectFlow.collect { effect ->
             when (effect) {
-
-                UserProfileFragmentEffect.Navigation.ToCheckIn ->
+                UserProfileFragmentEffect.Navigation.ToCheckIn -> {
                     flavorService.navigateToCheckIn(requireActivity())
+                    dialog?.dismiss()
+                }
 
                 UserProfileFragmentEffect.Navigation.ToLogin ->
                     navigateToDirection(loginFragmentDirection)

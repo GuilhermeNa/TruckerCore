@@ -253,8 +253,11 @@ class VerifyingEmailViewModel(
         if (counterJob != null) return
 
         counterJob = viewModelScope.launch {
-            countdownUseCase(ONE_MINUTE).onCompletion {
-                onEvent(VerifyingEmailFragmentEvent.Timeout)
+            countdownUseCase(ONE_MINUTE).onCompletion { cause ->
+                // Using the completion cause to avoid sending the event when the job is canceled
+                if (cause == null) {
+                    onEvent(VerifyingEmailFragmentEvent.Timeout)
+                }
             }.collect { remainingSeconds ->
                 _counterStateFlow.value = remainingSeconds
             }

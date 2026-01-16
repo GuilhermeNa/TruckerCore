@@ -1,5 +1,6 @@
 package com.example.truckercore.layers.presentation.login.view_model.user_profile
 
+import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
@@ -16,6 +17,7 @@ import com.example.truckercore.layers.presentation.login.view_model.user_profile
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentEvent
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentReducer
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentState
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel responsible for managing all logic related to the user profile creation screen.
@@ -80,11 +82,13 @@ class UserProfileViewModel(
      */
     private fun handleEffect(effect: UserProfileFragmentEffect) {
         when (effect) {
-            UserProfileFragmentEffect.ProfileTask ->
+            UserProfileFragmentEffect.ProfileTask -> {
                 launchSaveProfileTask()
+            }
 
-            is UserProfileFragmentEffect.Navigation ->
-                effectManager::trySend
+            is UserProfileFragmentEffect.Navigation -> {
+                effectManager.trySend(effect)
+            }
         }
     }
 
@@ -93,7 +97,7 @@ class UserProfileViewModel(
      * Extracts the current name from the state, executes the use case,
      * maps the result to an event, and feeds it back into the state machine.
      */
-    private fun launchSaveProfileTask() {
+    private fun launchSaveProfileTask() = viewModelScope.launch {
         val name = stateManager.currentState().getName()
         val result = createUserProfileUseCase(name).toEvent()
         onEvent(result)

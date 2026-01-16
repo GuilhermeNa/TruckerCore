@@ -6,7 +6,7 @@ import com.example.truckercore.layers.data.repository.auth.AuthenticationReposit
 
 interface CreateUserProfileUseCase {
 
-    operator fun invoke(name: Name): OperationOutcome
+    suspend operator fun invoke(name: Name): OperationOutcome
 
 }
 
@@ -14,8 +14,7 @@ class CreateUserProfileUseCaseImpl(
     private val repository: AuthenticationRepository
 ): CreateUserProfileUseCase {
 
-    override fun invoke(name: Name): OperationOutcome {
-        repository.
-    }
+    override suspend operator fun invoke(name: Name): OperationOutcome =
+        repository.updateName(name)
 
 }

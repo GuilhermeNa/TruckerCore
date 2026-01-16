@@ -21,7 +21,6 @@ class UserProfileFragmentReducer :
         event: UserProfileFragmentEvent
     ): ReducerResult<UserProfileFragmentState, UserProfileFragmentEffect> =
         when (event) {
-
             UserProfileFragmentEvent.UserNotLogged ->
                 triggerNavigateToLoginEffectAndWarnUser()
 
@@ -76,7 +75,6 @@ class UserProfileFragmentReducer :
         event: UserProfileFragmentEvent.ProfileTask
     ): ReducerResult<UserProfileFragmentState, UserProfileFragmentEffect> =
         when (event) {
-
             UserProfileFragmentEvent.ProfileTask.Complete -> {
                 val newEffect = UserProfileFragmentEffect.Navigation.ToCheckIn
                 resultWithEffect(newEffect)

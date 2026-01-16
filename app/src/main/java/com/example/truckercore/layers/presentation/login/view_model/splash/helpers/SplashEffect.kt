@@ -7,35 +7,21 @@ sealed class SplashEffect : Effect {
     sealed class UiEffect : SplashEffect() {
 
         sealed class Transition : UiEffect() {
-            data object ToLoading : Transition() {
-                override fun toString() = "Transition -> ToLoading"
-            }
+            data object ToLoading : Transition()
 
-            data object ToLoaded : Transition() {
-                override fun toString() = "Transition -> ToLoaded"
-            }
+            data object ToLoaded : Transition()
         }
 
         sealed class Navigation : UiEffect() {
-            data object ToWelcome : Navigation() {
-                override fun toString() = "Navigate -> ToWelcome"
-            }
+            data object ToWelcome : Navigation()
 
-            data object ToContinue : Navigation() {
-                override fun toString() = "Navigate -> ToContinue"
-            }
+            data object ToContinue : Navigation()
 
-            data object ToLogin : Navigation() {
-                override fun toString() = "Navigate -> ToLogin"
-            }
+            data object ToLogin : Navigation()
 
-            data object ToMain : Navigation() {
-                override fun toString() = "Navigate -> ToMain"
-            }
+            data object ToCheckIn : Navigation()
 
-            data object ToNotification : Navigation() {
-                override fun toString() = "Navigate -> ToNotification"
-            }
+            data object ToNotification : Navigation()
         }
     }
 

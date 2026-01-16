@@ -2,14 +2,15 @@ package com.example.truckercore.layers.presentation.login.view_model.splash
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.config.flavor.FlavorService
-import com.example.truckercore.core.my_lib.expressions.get
+import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
-import com.example.truckercore.core.my_lib.expressions.isNotSuccess
 import com.example.truckercore.core.my_lib.files.ONE_SEC
+import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase
+import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.layers.presentation.base.managers.EffectManager
 import com.example.truckercore.layers.presentation.base.managers.StateManager
@@ -21,13 +22,11 @@ import com.example.truckercore.layers.presentation.login.view_model.splash.helpe
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private typealias TaskSuccess = SplashEvent.SystemEvent.LoadUserTask.Success
-private typealias TaskError = SplashEvent.SystemEvent.LoadUserTask.Error
-
 class SplashViewModel(
     private val checkUserRegistrationUseCase: CheckUserRegistrationUseCase,
     private val preferences: PreferencesRepository,
-    flavorService: FlavorService
+    flavorService: FlavorService,
+    private val signOutUseCase: SignOutUseCase
 ) : BaseViewModel() {
 
     private val stateManager = StateManager(SplashState())
@@ -42,9 +41,17 @@ class SplashViewModel(
 
     //----------------------------------------------------------------------------------------------
     init {
+        // Check for keepLogged preferences and apply it
+        applyKeepLoggedPreference()
+
+        // Search for application context name
         val appName = flavorService.getAppName()
         val event = SplashEvent.SystemEvent.Initialize(appName)
         onEvent(event)
+    }
+
+    private fun applyKeepLoggedPreference() = viewModelScope.launch {
+        if (!preferences.keepLogged()) signOutUseCase()
     }
 
     fun toLoadingTransitionEnd() {
@@ -76,27 +83,39 @@ class SplashViewModel(
             delay(ONE_SEC)
 
             val outcome = checkUserRegistrationUseCase()
-            val newEvent = when {
-                outcome.isNotSuccess() -> TaskError
-                else -> handleSuccessTask(outcome)
-            }
-
+            val newEvent = outcome.toEvent()
             onEvent(newEvent)
         }
     }
 
-    private suspend fun handleSuccessTask(outcome: DataOutcome<RegistrationStatus>): TaskSuccess {
-        direction = when (outcome.get()) {
-            RegistrationStatus.ACCOUNT_NOT_FOUND -> when {
-                preferences.isFirstAccess() -> SplashDirection.WELCOME
-                else -> SplashDirection.LOGIN
-            }
+    private suspend fun DataOutcome<RegistrationStatus>.toEvent() = when (this) {
+        is DataOutcome.Failure, DataOutcome.Empty -> handleUnexpectedOutcome()
 
-            RegistrationStatus.COMPLETE -> SplashDirection.MAIN
+        is DataOutcome.Success -> {
+            defineDirectionByRegistrationStatus(data)
+            SplashEvent.SystemEvent.LoadUserTask.Success
+        }
+    }
 
+    private suspend fun defineDirectionByRegistrationStatus(status: RegistrationStatus) {
+        direction = when (status) {
+            RegistrationStatus.ACCOUNT_NOT_FOUND -> handleAccountNotFound()
+            RegistrationStatus.COMPLETE -> SplashDirection.CHECK_IN
             else -> SplashDirection.CONTINUE_REGISTER
         }
-        return TaskSuccess
+    }
+
+    private fun handleUnexpectedOutcome(): SplashEvent.SystemEvent.LoadUserTask {
+        AppLogger.e(getTag, REGISTRATION_ERROR_MSG)
+        return SplashEvent.SystemEvent.LoadUserTask.Error
+    }
+
+    private suspend fun handleAccountNotFound() =
+        if (preferences.isFirstAccess()) SplashDirection.WELCOME else SplashDirection.LOGIN
+
+    private companion object {
+        private const val REGISTRATION_ERROR_MSG =
+            "Unexpected outcome while loading user registration status."
     }
 
 }

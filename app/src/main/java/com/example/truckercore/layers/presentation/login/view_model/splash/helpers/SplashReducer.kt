@@ -51,7 +51,7 @@ class SplashReducer : Reducer<SplashEvent, SplashState, SplashEffect>() {
             val newEffect = when (event.direction) {
                 SplashDirection.WELCOME -> SplashEffect.UiEffect.Navigation.ToWelcome
                 SplashDirection.LOGIN -> SplashEffect.UiEffect.Navigation.ToLogin
-                SplashDirection.MAIN -> SplashEffect.UiEffect.Navigation.ToMain
+                SplashDirection.CHECK_IN -> SplashEffect.UiEffect.Navigation.ToCheckIn
                 SplashDirection.CONTINUE_REGISTER -> SplashEffect.UiEffect.Navigation.ToContinue
             }
             resultWithEffect(newEffect)

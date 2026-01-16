@@ -1,6 +1,7 @@
 package com.example.truckercore.layers.data.repository.auth
 
 import com.example.truckercore.core.my_lib.classes.Email
+import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.classes.Password
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
@@ -64,15 +65,15 @@ interface AuthenticationRepository {
      */
     fun isEmailVerified(): DataOutcome<Boolean>
 
-/**
-    * Checks whether the authenticated user's profile has already been created.
-    *
-    * @return [DataOutcome] containing true if the user's name is already stored
-    * and the profile is considered created, or false otherwise.
-    */
+    /**
+     * Checks whether the authenticated user's profile has already been created.
+     *
+     * @return [DataOutcome] containing true if the user's name is already stored
+     * and the profile is considered created, or false otherwise.
+     */
     fun isProfileCreated(): DataOutcome<Boolean>
-//TODO metodo para salvar perfil(nome do usuario)
-    fun
+
+    suspend fun updateName(name: Name): OperationOutcome
 
     /**
      * Retrieves the unique identifier (UID) of the currently authenticated user.

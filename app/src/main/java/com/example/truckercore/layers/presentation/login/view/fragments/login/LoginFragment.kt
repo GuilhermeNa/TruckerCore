@@ -151,6 +151,7 @@ class LoginFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onInitializing(savedInstanceState) { configCheckBox() }
         dialog = LoadingDialog(requireContext())
         setCheckBoxClickListener()
         setEnterButtonClickListener()
@@ -159,6 +160,13 @@ class LoginFragment : PublicLockedFragment() {
         setEmailChangeListener()
         setPasswordChangeListener()
         setImeOptionsClickListener()
+    }
+
+    private fun configCheckBox() {
+        lifecycleScope.launch {
+            val checkBoxState = viewModel.getKeepLoggedState()
+            binding.fragLoginCheckbox.isChecked = checkBoxState
+        }
     }
 
     /**
@@ -233,8 +241,8 @@ class LoginFragment : PublicLockedFragment() {
     }
 
     //----------------------------------------------------------------------------------------------
-    // Lifecycle - onDestroyView
-    //----------------------------------------------------------------------------------------------
+// Lifecycle - onDestroyView
+//----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
         dialog?.dismiss()

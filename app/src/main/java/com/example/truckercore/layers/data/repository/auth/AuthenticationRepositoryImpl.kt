@@ -3,6 +3,7 @@ package com.example.truckercore.layers.data.repository.auth
 import com.example.truckercore.core.error.DataException
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.core.my_lib.classes.Email
+import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.classes.Password
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
@@ -53,6 +54,10 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
 
     override fun isProfileCreated(): DataOutcome<Boolean> =
         runSafeSearch { authSource.isNameDefined() }
+
+    override suspend fun updateName(name: Name): OperationOutcome = runSafeOperation {
+        authSource.updateName(name)
+    }
 
     override suspend fun sendPasswordResetEmail(email: Email): OperationOutcome =
         runSafeOperation { authSource.sendPasswordResetEmail(email) }

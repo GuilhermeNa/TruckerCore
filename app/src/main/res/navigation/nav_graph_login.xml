@@ -60,7 +60,9 @@
         tools:layout="@layout/fragment_verifying_email">
         <action
             android:id="@+id/action_verifyingEmailFragment_to_userNameFragment"
-            app:destination="@id/userNameFragment" />
+            app:destination="@id/userNameFragment"
+            app:popUpTo="@id/verifyingEmailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/continueRegisterFragment"
@@ -85,7 +87,9 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_continueRegisterFragment_to_userNameFragment"
-            app:destination="@id/userNameFragment" />
+            app:destination="@id/userNameFragment"
+            app:popUpTo="@id/continueRegisterFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

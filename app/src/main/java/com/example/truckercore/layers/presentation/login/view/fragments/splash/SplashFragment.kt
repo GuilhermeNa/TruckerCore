@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
+import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
@@ -15,6 +16,7 @@ import com.example.truckercore.layers.presentation.login.view_model.splash.Splas
 import com.example.truckercore.layers.presentation.login.view_model.splash.helpers.SplashEffect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : PublicLockedFragment() {
@@ -23,6 +25,7 @@ class SplashFragment : PublicLockedFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SplashViewModel by viewModel()
+    private val flavorService: FlavorService by inject()
 
     private var stateHandler = SplashFragmentUiStateHandler()
 
@@ -103,12 +106,13 @@ class SplashFragment : PublicLockedFragment() {
                 navigateToDirection(direction)
             }
 
-            SplashEffect.UiEffect.Navigation.ToMain -> {
-                val direction = SplashFragmentDirections.actionSplashFragmentToLoginFragment()
-                navigateToDirection(direction)
-            }
+            SplashEffect.UiEffect.Navigation.ToCheckIn -> flavorService.navigateToCheckIn(
+                requireActivity()
+            )
 
-            SplashEffect.UiEffect.Navigation.ToNotification -> navigateToErrorActivity(requireActivity())
+            SplashEffect.UiEffect.Navigation.ToNotification -> navigateToErrorActivity(
+                requireActivity()
+            )
 
             SplashEffect.UiEffect.Navigation.ToWelcome -> {
                 val direction = SplashFragmentDirections.actionSplashFragmentToWelcomeFragment()

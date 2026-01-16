@@ -2,16 +2,20 @@ package com.example.truckercore.layers.presentation.login.view_model.login
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.my_lib.classes.EmailCredential
+import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.expressions.isConnectionError
 import com.example.truckercore.core.my_lib.expressions.isInvalidCredential
 import com.example.truckercore.core.my_lib.expressions.isInvalidUser
+import com.example.truckercore.core.my_lib.expressions.isTrue
 import com.example.truckercore.core.my_lib.expressions.isUserNotFound
+import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase
+import com.example.truckercore.layers.domain.use_case.authentication.HasLoggedUserUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignInUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.layers.presentation.base.managers.EffectManager
@@ -62,6 +66,8 @@ class LoginViewModel(
 
     // Reducer responsible for translating events into state updates or effects
     private val reducer = LoginFragmentReducer()
+
+    suspend fun getKeepLoggedState() = preferences.keepLogged()
 
     //----------------------------------------------------------------------------------------------
     // Event Handling
