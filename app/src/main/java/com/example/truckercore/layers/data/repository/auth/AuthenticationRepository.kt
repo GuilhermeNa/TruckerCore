@@ -64,6 +64,16 @@ interface AuthenticationRepository {
      */
     fun isEmailVerified(): DataOutcome<Boolean>
 
+/**
+    * Checks whether the authenticated user's profile has already been created.
+    *
+    * @return [DataOutcome] containing true if the user's name is already stored
+    * and the profile is considered created, or false otherwise.
+    */
+    fun isProfileCreated(): DataOutcome<Boolean>
+//TODO metodo para salvar perfil(nome do usuario)
+    fun
+
     /**
      * Retrieves the unique identifier (UID) of the currently authenticated user.
      *

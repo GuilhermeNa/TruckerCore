@@ -35,7 +35,7 @@ class VerifyingEmailFragmentStateHandler : StateHandler<FragmentVerifyingEmailBi
      */
     fun handleState(
         state: VerifyingEmailFragmentState,
-        dialog: LoadingDialog,
+        dialog: LoadingDialog?,
         onVerified: () -> Unit
     ) {
         when (state) {
@@ -49,7 +49,7 @@ class VerifyingEmailFragmentStateHandler : StateHandler<FragmentVerifyingEmailBi
             }
 
             VerifyingEmailFragmentState.EmailFound -> {
-                dialog.hide()
+                dialog?.hide()
                 showShimmer(false)
                 showEmailLayout(true)
                 showButtonLayout(true)
@@ -59,7 +59,7 @@ class VerifyingEmailFragmentStateHandler : StateHandler<FragmentVerifyingEmailBi
             }
 
             VerifyingEmailFragmentState.SendingEmail -> {
-                dialog.show()
+                dialog?.show()
                 showShimmer(false)
                 showEmailLayout(true)
                 showButtonLayout(true)
@@ -69,7 +69,7 @@ class VerifyingEmailFragmentStateHandler : StateHandler<FragmentVerifyingEmailBi
             }
 
             VerifyingEmailFragmentState.VerifyingEmail -> {
-                dialog.hide()
+                dialog?.hide()
                 showShimmer(false)
                 showEmailLayout(true)
                 showButtonLayout(false)

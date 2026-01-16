@@ -18,8 +18,8 @@ class RigCollection(
         dataSet.addAll(items)
     }
 
-    fun findBy(plate: Plate): Rig? = dataSet.firstOrNull { rig -> rig.contains(plate) }
-
     override fun findBy(id: ID): Rig? = null
+
+    fun findBy(plate: Plate): Rig? = dataSet.firstOrNull { rig -> rig.contains(plate) }
 
 }

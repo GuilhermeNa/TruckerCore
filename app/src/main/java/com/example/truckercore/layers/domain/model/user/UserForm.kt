@@ -1,8 +1,8 @@
 package com.example.truckercore.layers.domain.model.user
 
-import com.example.truckercore.data.infrastructure.security.data.enums.Role
-import com.example.truckercore.data.modules.authentication.data.UID
-import com.example.truckercore.data.modules.company.data.CompanyID
+import com.example.truckercore.layers.domain.base.ids.CompanyID
+import com.example.truckercore.layers.domain.base.ids.UID
+import com.example.truckercore.layers.domain.model.access.Role
 
 data class UserForm(
     val companyId: CompanyID,

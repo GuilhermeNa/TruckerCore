@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_login"
-    app:startDestination="@id/verifyingEmailFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.splash.SplashFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.splash.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.welcome.WelcomeFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.welcome.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -42,9 +42,9 @@
     </fragment>
     <fragment
         android:id="@+id/emailAuthFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.email_auth.EmailAuthFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.email_auth.EmailAuthFragment"
         android:label="fragment_email_auth"
-        tools:layout="@layout/fragment_email_auth" >
+        tools:layout="@layout/fragment_email_auth">
         <action
             android:id="@+id/action_emailAuthFragment_to_verifyingEmailFragment"
             app:destination="@id/verifyingEmailFragment"
@@ -55,18 +55,18 @@
     </fragment>
     <fragment
         android:id="@+id/verifyingEmailFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.verifying_email.VerifyingEmailFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.verifying_email.VerifyingEmailFragment"
         android:label="fragment_verifying_email"
-        tools:layout="@layout/fragment_verifying_email" >
+        tools:layout="@layout/fragment_verifying_email">
         <action
             android:id="@+id/action_verifyingEmailFragment_to_userNameFragment"
             app:destination="@id/userNameFragment" />
     </fragment>
     <fragment
         android:id="@+id/continueRegisterFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.continue_register.ContinueRegisterFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.continue_register.ContinueRegisterFragment"
         android:label="fragment_continue_register"
-        tools:layout="@layout/fragment_continue_register" >
+        tools:layout="@layout/fragment_continue_register">
         <action
             android:id="@+id/action_continueRegisterFragment_to_verifyingEmailFragment"
             app:destination="@id/verifyingEmailFragment"
@@ -89,9 +89,9 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.truckercore.presentation.nav_login.fragments.login.LoginFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_forgetPasswordFragment"
             app:destination="@id/forgetPasswordFragment"
@@ -102,15 +102,16 @@
     </fragment>
     <fragment
         android:id="@+id/forgetPasswordFragment"
-        android:name="com.example.truckercore.layers.presentation.login.fragments.forget_password.ForgetPasswordFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.forget_password.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
     <fragment
         android:id="@+id/userNameFragment"
-        android:name="com.example.truckercore.layers.presentation.login.fragments.user_profile.UserProfileFragment"
+        android:name="com.example.truckercore.layers.presentation.login.view.fragments.user_profile.UserProfileFragment"
         android:label="fragment_user_name"
         tools:layout="@layout/fragment_user_profile" />
-    <action android:id="@+id/action_global_continueRegisterFragment"
+    <action
+        android:id="@+id/action_global_continueRegisterFragment"
         app:destination="@id/continueRegisterFragment"
         app:enterAnim="@anim/slide_in_top"
         app:exitAnim="@anim/slide_out_bottom"
@@ -123,7 +124,8 @@
         app:exitAnim="@anim/slide_out_top"
         app:popUpTo="@id/nav_graph_login"
         app:popUpToInclusive="true" />
-    <action android:id="@+id/action_global_emailAuthFragment"
+    <action
+        android:id="@+id/action_global_emailAuthFragment"
         app:destination="@id/emailAuthFragment"
         app:enterAnim="@anim/slide_in_top"
         app:exitAnim="@anim/slide_out_bottom"
@@ -135,7 +137,8 @@
         android:label="fragment_no_connection"
         tools:layout="@layout/fragment_no_connection" />
 
-    <action android:id="@+id/action_global_noConnectionFragment_nav_login"
+    <action
+        android:id="@+id/action_global_noConnectionFragment_nav_login"
         app:destination="@id/noConnectionFragment" />
 
 

@@ -81,4 +81,20 @@ sealed class LoginFragmentEvent : Event {
         data object InvalidCredential : LoginTask()
     }
 
+    /**
+     * Represents the result of checking whether the authenticated user
+     * has a complete registration.
+     */
+    sealed class CheckRegistrationTask : LoginFragmentEvent() {
+
+        /** User registration is complete; proceed to the check-in flow. */
+        data object Complete : CheckRegistrationTask()
+
+        /** User registration is incomplete; proceed to the registration completion flow. */
+        data object Incomplete : CheckRegistrationTask()
+
+        /** Failed to determine registration status due to an error. */
+        data object Failure : CheckRegistrationTask()
+    }
+
 }

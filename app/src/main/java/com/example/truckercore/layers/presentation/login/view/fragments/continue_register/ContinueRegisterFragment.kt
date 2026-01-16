@@ -13,7 +13,6 @@ import com.example.truckercore.layers.presentation.base.abstractions.view._publi
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.ContinueRegisterViewModel
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers.ContinueRegisterFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers.ContinueRegisterFragmentEvent
-import com.example.truckercore.presentation.nav_login.fragments.continue_register.ContinueRegisterFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

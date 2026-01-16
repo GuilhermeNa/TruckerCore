@@ -1,6 +1,7 @@
 package com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers
 
 import com.example.truckercore.layers.presentation.base.reducer.Reducer
+import com.example.truckercore.layers.presentation.base.reducer.ReducerResult
 
 /**
  * Reducer implementation responsible for transforming incoming UI/business events
@@ -151,9 +152,9 @@ class VerifyingEmailFragmentReducer :
         event: VerifyingEmailFragmentEvent.SendEmailTask
     ) = when (event) {
 
-        // Email successfully sent → start verification/coutdown process
+        // Email successfully sent → start verification/countdown process
         VerifyingEmailFragmentEvent.SendEmailTask.Complete ->
-            resultWithState(state.verifyingEmail())
+          triggerVerifyEmailTaskAndUpdateState(state)
 
         // Unexpected error → notification screen
         VerifyingEmailFragmentEvent.SendEmailTask.Failure ->
@@ -162,6 +163,14 @@ class VerifyingEmailFragmentReducer :
         // No connection → go to dedicated NoConnection screen
         VerifyingEmailFragmentEvent.SendEmailTask.NoConnection ->
             triggerNavigateToNoConnection()
+    }
+
+    private fun triggerVerifyEmailTaskAndUpdateState(
+        state: VerifyingEmailFragmentState
+    ): ReducerResult<VerifyingEmailFragmentState, VerifyingEmailFragmentEffect> {
+        val newState = state.verifyingEmail()
+        val newEffect = VerifyingEmailFragmentEffect.LaunchVerifyEmailTask
+        return resultWithStateAndEffect(newState, newEffect)
     }
 
     private fun triggerNavigateToNoConnection() =

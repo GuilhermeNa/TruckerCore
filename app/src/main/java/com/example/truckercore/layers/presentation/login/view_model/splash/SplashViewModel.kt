@@ -2,11 +2,11 @@ package com.example.truckercore.layers.presentation.login.view_model.splash
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.config.flavor.FlavorService
+import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.core.my_lib.expressions.handle
+import com.example.truckercore.core.my_lib.expressions.isNotSuccess
 import com.example.truckercore.core.my_lib.files.ONE_SEC
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
-import com.example.truckercore.core.my_lib.expressions.get
-import com.example.truckercore.core.my_lib.expressions.isNotSuccess
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase

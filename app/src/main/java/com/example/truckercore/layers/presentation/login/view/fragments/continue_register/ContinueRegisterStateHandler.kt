@@ -69,7 +69,7 @@ class ContinueRegisterStateHandler : StateHandler<FragmentContinueRegisterBindin
         if (status.isEmailVerified()) {
             val drawable = ContextCompat.getDrawable(context, R.drawable.icon_check)
 
-            binding.fragContinueRegisterEmailStatusText
+            binding.fragContinueRegisterVerifiedStatusText
                 .setCompoundDrawablesRelativeWithIntrinsicBounds(
                     drawable, null, null, null
                 )

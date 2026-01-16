@@ -19,22 +19,22 @@ class CheckUserRegistrationUseCaseImpl(
     override operator fun invoke(): DataOutcome<RegistrationStatus> {
 
         // Check if there is a logged-in user
-        val userNotFound = !hasLoggedUser().get()
-        if (userNotFound) {
+        val userFound = hasLoggedUser().get()
+        if (!userFound) {
             val status = RegistrationStatus.ACCOUNT_NOT_FOUND
             return DataOutcome.Success(status)
         }
 
         // Check if the user's email has been verified
-        val emailNotVerified = !isEmailVerified().get()
-        if (emailNotVerified) {
+        val emailVerified = isEmailVerified().get()
+        if (!emailVerified) {
             val status = RegistrationStatus.EMAIL_NOT_VERIFIED
             return DataOutcome.Success(status)
         }
 
         // Check if the user's profile information is complete
-        val profileIncomplete = !isProfileComplete().get()
-        if (profileIncomplete) {
+        val profileComplete = isProfileComplete().get()
+        if (!profileComplete) {
             val status = RegistrationStatus.MISSING_PROFILE
             return DataOutcome.Success(status)
         }

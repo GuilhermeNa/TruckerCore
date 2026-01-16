@@ -25,39 +25,58 @@ data class EmailAuthUiComponents(
      * Returns a new instance of [EmailAuthUiComponents] with updated email state.
      */
     fun updateEmail(email: String): EmailAuthUiComponents {
-        val updatedEmail = when {
-            email.isEmpty() ->
-                TextInputComponent(text = email, errorText = MSG_EMPTY_FIELD)
-
-            !email.isEmailFormat() ->
-                TextInputComponent(text = email, errorText = MSG_INVALID_EMAIL)
-
-            else -> TextInputComponent(text = email, isValid = true)
-        }
+        val updatedEmail = createEmailComponent(email)
         return copy(emailComponent = updatedEmail)
+    }
+
+    private fun createEmailComponent(email: String) = when {
+        email.isEmpty() ->
+            TextInputComponent(text = email, errorText = MSG_EMPTY_FIELD)
+
+        !email.isEmailFormat() ->
+            TextInputComponent(text = email, errorText = MSG_INVALID_EMAIL)
+
+        else -> TextInputComponent(text = email, isValid = true)
     }
 
     /**
      * Updates the password component with the provided [password] value.
      *
+     * In addition to validating and updating the password field, this method
+     * may also revalidate and update the confirmation field if it has already
+     * been filled by the user. This ensures consistency between both fields
+     * whenever the password changes.
+     *
      * Validation rules:
      * - Field must not be empty
      * - Password length must be between 6 and 12 characters
      *
-     * Returns a new instance of [EmailAuthUiComponents] with updated password state.
+     * Returns a new instance of [EmailAuthUiComponents] with the updated password
+     * state and, when applicable, an updated confirmation state.
      */
     fun updatePassword(password: String): EmailAuthUiComponents {
-        val updatedPassword = when {
-            password.isEmpty() ->
-                TextInputComponent(text = password, errorText = MSG_EMPTY_FIELD)
-
-            password.length !in 6..12 ->
-                TextInputComponent(text = password, errorText = MSG_INVALID_PASS)
-
-            else -> TextInputComponent(text = password, isValid = true)
-        }
-        return copy(passwordComponent = updatedPassword)
+        val updatedPassword = createPasswordComponent(password)
+        val updatedConfirmation = createConfirmationComponentWhenFilled(password)
+        return copy(
+            passwordComponent = updatedPassword,
+            confirmationComponent = updatedConfirmation ?: confirmationComponent
+        )
     }
+
+    private fun createPasswordComponent(password: String) = when {
+        password.isEmpty() ->
+            TextInputComponent(text = password, errorText = MSG_EMPTY_FIELD)
+
+        password.length !in 6..12 ->
+            TextInputComponent(text = password, errorText = MSG_INVALID_PASS)
+
+        else -> TextInputComponent(text = password, isValid = true)
+    }
+
+    private fun createConfirmationComponentWhenFilled(password: String) =
+        if (confirmationComponent.text.isNotEmpty()) {
+            createConfirmationComponent(confirmationComponent.text, password = password)
+        } else null
 
     /**
      * Updates the confirmation component with the provided [confirmation] value.
@@ -70,17 +89,23 @@ data class EmailAuthUiComponents(
      */
     fun updateConfirmation(confirmation: String): EmailAuthUiComponents {
         val password = passwordComponent.text
-        val updatedConfirmation = when {
-            confirmation.isEmpty() ->
-                TextInputComponent(text = confirmation, errorText = MSG_EMPTY_FIELD)
-
-            confirmation != password ->
-                TextInputComponent(text = confirmation, errorText = MSG_INVALID_CONFIRMATION)
-
-            else -> TextInputComponent(text = confirmation, isValid = true)
-        }
+        val updatedConfirmation = createConfirmationComponent(confirmation, password = password)
         return copy(confirmationComponent = updatedConfirmation)
     }
+
+    private fun createConfirmationComponent(
+        confirmation: String,
+        password: String
+    ) = when {
+        confirmation.isEmpty() ->
+            TextInputComponent(text = confirmation, errorText = MSG_EMPTY_FIELD)
+
+        confirmation != password ->
+            TextInputComponent(text = confirmation, errorText = MSG_INVALID_CONFIRMATION)
+
+        else -> TextInputComponent(text = confirmation, isValid = true)
+    }
+
 
     /**
      * Sets an error on the email component indicating a user collision.

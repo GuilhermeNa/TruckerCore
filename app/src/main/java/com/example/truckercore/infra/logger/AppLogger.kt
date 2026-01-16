@@ -1,7 +1,6 @@
 package com.example.truckercore.infra.logger
 
 import android.util.Log
-import com.example.truckercore.core.expressions.getClassName
 
 /**
  * AppLogger is a centralized logging utility for the application.
@@ -30,74 +29,22 @@ import com.example.truckercore.core.expressions.getClassName
  */
 object AppLogger {
 
-    private const val M_LOG = "mLog:"
-    private const val DEFAULT_TAG = "AppLogger"
+    private const val LOGGER = "Logger:"
 
-    /**
-     * Logs a debug-level message.
-     * Used for development-time diagnostics, such as variable values or execution flow.
-     * These logs are only shown in debug builds.
-     *
-     * @param tag A custom tag identifying the source of the log message.
-     * @param message The debug message to log.
-     */
-    fun d(tag: String = DEFAULT_TAG, message: String) {
-        // if (BuildConfig.DEBUG)
-        Log.d("$M_LOG [$tag]", message)
+    fun d(tag: String, message: String) {
+        Log.d("$LOGGER [$tag]", message)
     }
 
-    /**
-     * Logs an informational message.
-     * Represents general application events such as successful operations.
-     * Only shown in debug builds.
-     *
-     * @param tag A custom tag identifying the source of the log message.
-     * @param message The informational message to log.
-     */
-    fun i(tag: String = DEFAULT_TAG, message: String) {
-        //if (BuildConfig.DEBUG)
-        Log.i("$M_LOG [$tag]", message)
+    fun i(tag: String, message: String) {
+        Log.i("$LOGGER [$tag]", message)
     }
 
-    /**
-     * Logs a warning message.
-     * Represents unexpected or borderline-invalid states that do not crash the app.
-     * Logged in debug builds.
-     *
-     * @param tag A custom tag identifying the source of the log message.
-     * @param message The warning message to log.
-     */
-    fun w(tag: String = DEFAULT_TAG, message: String) {
-        // if (BuildConfig.DEBUG)
-        Log.w("$M_LOG [$tag]", message)
+    fun w(tag: String, message: String) {
+        Log.w("$LOGGER [$tag]", message)
     }
 
-    /**
-     * Logs an error message along with an optional exception.
-     * Always logged regardless of build type.
-     *
-     * @param tag A custom tag identifying the source of the log message.
-     * @param message The error message to log.
-     * @param throwable An optional Throwable to include with the error log.
-     */
-    fun e(tag: String = DEFAULT_TAG, message: String, throwable: Throwable? = null) {
-        val logMessage = throwable?.let { t ->
-            "$message ${t.getClassName()} - ${t.message}"
-        } ?: message
-
-        Log.e("$M_LOG [$tag]", logMessage)
-    }
-
-    /**
-     * Logs a critical failure that should never happen under normal conditions.
-     * Use with caution. Logged in both debug and release builds.
-     *
-     * @param tag A custom tag identifying the source of the log message.
-     * @param message The critical failure message to log.
-     * @param throwable An optional Throwable to include with the log.
-     */
-    fun wtf(tag: String = DEFAULT_TAG, message: String, throwable: Throwable? = null) {
-        Log.wtf("$M_LOG [$tag]", message, throwable)
+    fun e(tag: String, msg: String = "", throwable: Throwable? = null) {
+        Log.e("$LOGGER [$tag]", "$msg ($throwable)")
     }
 
 }

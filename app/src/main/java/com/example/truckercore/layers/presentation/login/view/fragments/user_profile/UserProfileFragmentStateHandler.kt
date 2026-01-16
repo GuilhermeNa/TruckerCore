@@ -22,7 +22,7 @@ class UserProfileFragmentStateHandler : StateHandler<FragmentUserProfileBinding>
      * @param dialog The loading dialog shown during creation/processing.
      * @param state The current UI state of the user profile screen.
      */
-    fun handleState(dialog: LoadingDialog, state: UserProfileFragmentState) {
+    fun handleState(dialog: LoadingDialog?, state: UserProfileFragmentState) {
         handleFab(state)
         handleDialog(state, dialog)
     }
@@ -44,9 +44,9 @@ class UserProfileFragmentStateHandler : StateHandler<FragmentUserProfileBinding>
      * @param status The current UI state, used to determine dialog visibility.
      * @param dialog The dialog object used to indicate loading progress.
      */
-    private fun handleDialog(status: UserProfileFragmentState, dialog: LoadingDialog) {
-        if (status.isCreating()) dialog.show()
-        else dialog.dismiss()
+    private fun handleDialog(status: UserProfileFragmentState, dialog: LoadingDialog?) {
+        if (status.isCreating()) dialog?.show()
+        else dialog?.dismiss()
     }
 
 }

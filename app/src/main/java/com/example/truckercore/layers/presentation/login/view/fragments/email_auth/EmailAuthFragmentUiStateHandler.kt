@@ -36,7 +36,7 @@ class EmailAuthFragmentUiStateHandler : StateHandler<FragmentEmailAuthBinding>()
      * @param dialog The [LoadingDialog] used to display loading animations.
      * @param state The current UI state produced by the ViewModel.
      */
-    fun handleState(dialog: LoadingDialog, state: EmailAuthenticationFragmentState) {
+    fun handleState(dialog: LoadingDialog?, state: EmailAuthenticationFragmentState) {
         handleEmailLayout(state.uiComponents.emailComponent)
         handlePasswordLayout(state.uiComponents.passwordComponent)
         handleConfirmationLayout(state.uiComponents.confirmationComponent)
@@ -103,11 +103,11 @@ class EmailAuthFragmentUiStateHandler : StateHandler<FragmentEmailAuthBinding>()
      * @param dialog The loading dialog used to present a progress animation.
      * @param status The status determining whether a task is running.
      */
-    private fun handleDialog(dialog: LoadingDialog, status: EmailAuthUiStatus) {
+    private fun handleDialog(dialog: LoadingDialog?, status: EmailAuthUiStatus) {
         if (status.isCreating()) {
-            dialog.show()
+            dialog?.show()
         } else {
-            dialog.dismiss()
+            dialog?.dismiss()
         }
     }
 

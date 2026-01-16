@@ -4,5 +4,5 @@ import com.example.truckercore.layers.domain.base.enums.Status
 
 interface BaseDto {
     val id: String?
-    val persistenceState: Status?
+    val status: Status?
 }

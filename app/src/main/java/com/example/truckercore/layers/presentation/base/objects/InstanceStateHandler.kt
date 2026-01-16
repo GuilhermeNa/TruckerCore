@@ -54,7 +54,7 @@ object InstanceStateHandler {
      * @return True if the fragment is being created for the first time, false otherwise.
      */
     fun isInitializingFragment(savedInstanceState: Bundle?): Boolean {
-        return savedInstanceState?.let { !it.getBoolean(CREATED) } ?: false
+        return savedInstanceState?.let { !it.getBoolean(CREATED) } ?: true
     }
 
 }

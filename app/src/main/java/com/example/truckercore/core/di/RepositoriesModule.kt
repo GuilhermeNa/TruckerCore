@@ -7,6 +7,8 @@ import com.example.truckercore.layers.data.repository.data.DataRepository
 import com.example.truckercore.layers.data.repository.data.DataRepositoryImpl
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepositoryImpl
+import com.example.truckercore.layers.data.repository.instruction.InstructionRepository
+import com.example.truckercore.layers.data.repository.instruction.InstructionRepositoryImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -21,10 +23,7 @@ val repositoriesModule = module {
     // Data Repository
     single<DataRepository> { DataRepositoryImpl(get()) }
 
-
-
     // Instruction Repository
-    single { InstructionRepositoryErrorFactory() }
-    single<InstructionExecutorRepository> { InstructionExecutorRepositoryImpl(get(), get()) }
+    single<InstructionRepository> { InstructionRepositoryImpl(get()) }
 
 }

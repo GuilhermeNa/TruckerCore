@@ -1,6 +1,7 @@
 package com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers
 
 import com.example.truckercore.layers.presentation.base.contracts.Event
+import com.example.truckercore.layers.presentation.login.view.fragments.email_auth.EmailAuthFragment
 
 /**
  * Represents all possible events in the [EmailAuthFragment] screen.

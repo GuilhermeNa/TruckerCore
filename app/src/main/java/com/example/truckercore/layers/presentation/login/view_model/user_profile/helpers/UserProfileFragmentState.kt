@@ -17,8 +17,8 @@ import com.example.truckercore.layers.presentation.base.contracts.State
  * validated domain-level information such as [Name].
  */
 data class UserProfileFragmentState(
-    val nameComponent: TextInputComponent,
-    val status: UserProfileFragmentStatus
+    val nameComponent: TextInputComponent = TextInputComponent(),
+    val status: UserProfileFragmentStatus = UserProfileFragmentStatus.WaitingInput
 ) : State {
 
     /**

@@ -2,6 +2,7 @@ package com.example.truckercore.layers.presentation.login.view_model.email_auth.
 
 import com.example.truckercore.layers.presentation.base.reducer.Reducer
 import com.example.truckercore.layers.presentation.base.reducer.ReducerResult
+import com.example.truckercore.layers.presentation.login.view.fragments.email_auth.EmailAuthFragment
 
 /**
  * Reducer responsible for managing all state transitions and one-time effects

@@ -13,7 +13,6 @@ import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.login.view_model.splash.SplashViewModel
 import com.example.truckercore.layers.presentation.login.view_model.splash.helpers.SplashEffect
-import com.example.truckercore.presentation.nav_login.fragments.splash.SplashFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,10 +37,7 @@ class SplashFragment : PublicLockedFragment() {
         }
 
         private fun handleUiStateError(currentId: Int) {
-            AppLogger.e(
-                tag = getTag,
-                message = "Unexpected id for transition: $currentId."
-            )
+            AppLogger.e(tag = getTag, msg = "Unexpected id for transition: $currentId.")
             navigateToErrorActivity(requireActivity())
         }
 

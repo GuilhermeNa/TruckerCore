@@ -15,7 +15,6 @@ import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.EmailAuthViewModel
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthenticationFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthenticationFragmentEvent
-import com.example.truckercore.presentation.nav_login.fragments.email_auth.EmailAuthFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -64,9 +63,8 @@ class EmailAuthFragment : PublicLockedFragment() {
 
     /**
      * Dialog displayed during authentication attempts.
-     * Lazily initialized to ensure a valid Fragment context.
      */
-    private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
+    private var dialog: LoadingDialog? = null
 
     //----------------------------------------------------------------------------------------------
     // Lifecycle - onCreate()
@@ -151,6 +149,7 @@ class EmailAuthFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog = LoadingDialog(requireContext())
         setCreateButtonListener()
         setAlreadyRegisteredButtonListener()
         setImeOptionsClickListener()
@@ -210,6 +209,8 @@ class EmailAuthFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        dialog?.dismiss()
+        dialog = null
         _binding = null
     }
 

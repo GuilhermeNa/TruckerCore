@@ -1,22 +1,14 @@
 package com.example.truckercore.layers.data.base.mapper.impl
 
-import com.example.truckercore.core.classes.Url
-import com.example.truckercore.core.classes.validity.Validity
-import com.example.truckercore.core.classes.validity.ValidityDto
-import com.example.truckercore.data.modules._shared._contracts.mapper.Mapper
-import com.example.truckercore.data.modules.company.data.CompanyID
-import com.example.truckercore.data.modules.document.crlv.data.Crlv
-import com.example.truckercore.data.modules.document.crlv.data.CrlvDto
-import com.example.truckercore.data.modules.document.crlv.data.CrlvID
-import com.example.truckercore.data.modules.fleet._shared.Plate
-import com.example.truckercore.data.shared.utils.expressions.toDate
-import com.example.truckercore.data.shared.utils.expressions.toLocalDate
-import java.time.Year
+import com.example.truckercore.layers.data.base.dto.impl.CrlvDto
+import com.example.truckercore.layers.data.base.mapper.base.Mapper
+import com.example.truckercore.layers.domain.model.crlv.Crlv
 
-object CrlvMapper : Mapper<Crlv, CrlvDto> {
+object CrlvMapper : Mapper<CrlvDto, Crlv> {
 
     override fun toDto(entity: Crlv): CrlvDto = try {
-        CrlvDto(
+        TODO()
+    /*    CrlvDto(
             id = entity.id.value,
             companyId = entity.companyId.value,
             persistenceState = entity.persistenceState,
@@ -27,13 +19,15 @@ object CrlvMapper : Mapper<Crlv, CrlvDto> {
             refYear = entity.refYear.value,
             plate = entity.plate.value,
             url = entity.url.value
-        )
+        )*/
     } catch (e: Exception) {
-        handleError(entity, e)
+        TODO()
+       // handleError(entity, e)
     }
 
     override fun toEntity(dto: CrlvDto): Crlv = try {
-        Crlv(
+        TODO()
+      /*  Crlv(
             id = CrlvID(dto.id!!),
             companyId = CompanyID(dto.companyId!!),
             persistenceState = dto.persistenceState!!,
@@ -44,9 +38,18 @@ object CrlvMapper : Mapper<Crlv, CrlvDto> {
             refYear = Year.of(dto.refYear!!),
             plate = Plate(dto.plate!!),
             url = Url(dto.url!!)
-        )
+        )*/
     } catch (e: Exception) {
-        handleError(dto, e)
+        TODO()
+       // handleError(dto, e)
+    }
+
+    override fun toDtos(entities: List<Crlv>): List<CrlvDto> {
+        TODO("Not yet implemented")
+    }
+
+    override fun toEntities(dtos: List<CrlvDto>): List<Crlv> {
+        TODO("Not yet implemented")
     }
 
 }

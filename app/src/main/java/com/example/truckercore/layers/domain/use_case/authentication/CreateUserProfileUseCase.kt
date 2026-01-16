@@ -15,7 +15,7 @@ class CreateUserProfileUseCaseImpl(
 ): CreateUserProfileUseCase {
 
     override fun invoke(name: Name): OperationOutcome {
-        TODO("Not yet implemented")
+        repository.
     }
 
 }

@@ -51,6 +51,9 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
     override fun isEmailVerified(): DataOutcome<Boolean> =
         runSafeSearch { authSource.isEmailVerified() }
 
+    override fun isProfileCreated(): DataOutcome<Boolean> =
+        runSafeSearch { authSource.isNameDefined() }
+
     override suspend fun sendPasswordResetEmail(email: Email): OperationOutcome =
         runSafeOperation { authSource.sendPasswordResetEmail(email) }
 

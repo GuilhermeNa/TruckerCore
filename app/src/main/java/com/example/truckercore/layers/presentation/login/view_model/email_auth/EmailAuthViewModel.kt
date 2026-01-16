@@ -9,9 +9,11 @@ import com.example.truckercore.core.my_lib.expressions.launchOnViewModelScope
 import com.example.truckercore.core.my_lib.files.HALF_SEC
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.domain.use_case.authentication.CreateUserWithEmailUseCase
+import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.layers.presentation.base.managers.EffectManager
 import com.example.truckercore.layers.presentation.base.managers.StateManager
+import com.example.truckercore.layers.presentation.login.view.fragments.email_auth.EmailAuthFragment
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthenticationFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthenticationFragmentEvent
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthenticationFragmentReducer
@@ -56,6 +58,7 @@ private typealias TaskFailedByIrrecoverableEvent =
  * - Emitting navigation or error effects to the Fragment
  */
 class EmailAuthViewModel(
+    private val signOutUseCase: SignOutUseCase,
     private val createUserWithEmailUseCase: CreateUserWithEmailUseCase
 ) : BaseViewModel() {
 
@@ -79,6 +82,21 @@ class EmailAuthViewModel(
      * Reducer responsible for converting user events into new state or effects.
      */
     private val reducer = EmailAuthenticationFragmentReducer()
+
+    //----------------------------------------------------------------------------------------------
+    // Initializing
+    //----------------------------------------------------------------------------------------------
+    init {
+        clearPreviousSession()
+    }
+
+    /**
+     * Clears any existing authenticated user session.
+     *
+     * This method invokes [SignOutUseCase] to ensure that no user remains logged in
+     * when the email authentication flow begins.
+     */
+    private fun clearPreviousSession() = signOutUseCase()
 
     //----------------------------------------------------------------------------------------------
     // Event Handling

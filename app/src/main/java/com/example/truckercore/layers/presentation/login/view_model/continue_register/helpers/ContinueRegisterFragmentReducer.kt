@@ -2,7 +2,6 @@ package com.example.truckercore.layers.presentation.login.view_model.continue_re
 
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
-import com.example.truckercore.layers.presentation.login.fragments.continue_register.ContinueRegisterFragment
 import com.example.truckercore.layers.presentation.base.reducer.Reducer
 import com.example.truckercore.layers.presentation.base.reducer.ReducerResult
 

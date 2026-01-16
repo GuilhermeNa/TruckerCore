@@ -30,8 +30,7 @@ class ForgetPasswordFragment : PublicFragment() {
 
     private val viewModel: ForgetPasswordViewModel by viewModel()
 
-    /** Lazy-initialized loading dialog shown when sending email. */
-    private val dialog by lazy { LoadingDialog(requireContext()) }
+    private var dialog: LoadingDialog? = null
 
     //----------------------------------------------------------------------------------------------
     // Lifecycle OnCreate
@@ -77,8 +76,8 @@ class ForgetPasswordFragment : PublicFragment() {
      * Shows or dismisses a loading dialog depending on sending status.
      */
     private fun enableDialog(sending: Boolean) {
-        if (sending) dialog.show()
-        else dialog.dismiss()
+        if (sending) dialog?.show()
+        else dialog?.dismiss()
     }
 
     /**
@@ -125,6 +124,7 @@ class ForgetPasswordFragment : PublicFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog = LoadingDialog(requireContext())
         setButtonClickListener()
         setEmailTextChangeListener()
     }
@@ -154,6 +154,8 @@ class ForgetPasswordFragment : PublicFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        dialog?.dismiss()
+        dialog = null
         _binding = null
     }
 

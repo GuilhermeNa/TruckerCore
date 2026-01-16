@@ -2,133 +2,130 @@ package com.example.truckercore.layers.presentation.login.view_model.login.helpe
 
 import com.example.truckercore.core.my_lib.expressions.isEmailFormat
 import com.example.truckercore.core.my_lib.expressions.isPasswordFormat
+import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.layers.presentation.base.contracts.State
 import com.example.truckercore.layers.presentation.login.view.fragments.login.LoginFragment
 
 /**
- * Represents the UI state for the [LoginFragment].
+ * Represents the immutable UI state for the [LoginFragment].
  *
- * This state tracks:
- * - Validation messages for the email and password fields.
- * - The current login status (waiting for input, ready to submit, or attempting login).
+ * This state holds the current values and validation results for the
+ * email and password input components, as well as the overall screen status.
  *
- * The class is immutable; every state-changing operation returns a new instance,
- * ensuring predictable state flows for MVI / MVVM architectures.
- *
- * @param emailMsg Validation message for the email field, or `null` if valid.
- * @param passMsg Validation message for the password field, or `null` if valid.
- * @param status Current state of the login process.
+ * This class follows immutability principles: every state change results
+ * in a new instance via [copy], making it predictable and easy to reason about.
  */
 data class LoginFragmentState(
-    val emailMsg: String? = null,
-    val passMsg: String? = null,
+    val emailComponent: TextInputComponent = TextInputComponent(),
+    val passwordComponent: TextInputComponent = TextInputComponent(),
     val status: LoginFragmentStatus = LoginFragmentStatus.WaitingInput
 ) : State {
 
     /**
-     * Determines whether both fields are valid and the login action can proceed.
+     * Updates the state to indicate that a login attempt is in progress.
      */
-    private val isReadyToLogin get() = emailMsg == null && passMsg == null
+    fun tryToLogin() = copy(status = LoginFragmentStatus.TryingLogin)
 
     /**
-     * Updates the email field and recalculates the validation message and status.
-     *
-     * @param txt The new email input provided by the user.
-     * @return A new [LoginFragmentState] containing the updated email validation result.
+     * Resets the state after an invalid credential attempt, returning
+     * the screen to a state where user input is expected.
      */
-    fun updateEmail(txt: String): LoginFragmentState {
-        val newMsg = defineEmailStateMsg(txt)
-        val newStatus = defineStatus(newEmailMsg = newMsg)
-        return copy(emailMsg = newMsg, status = newStatus)
+    fun invalidCredentials() = copy(status = LoginFragmentStatus.WaitingInput)
+
+    /**
+     * Updates the state to indicate that the screen is ready to perform
+     * the login operation.
+     */
+    fun readyToCreate() = copy(status = LoginFragmentStatus.ReadyToLogin)
+
+    /**
+     * Updates the email input component and recalculates the overall screen status.
+     *
+     * @param email The new email value provided by the user
+     * @return A new [LoginFragmentState] with the updated email component
+     */
+    fun updateEmail(email: String): LoginFragmentState {
+        val updatedEmail = createEmailComponent(email)
+        val updatedStatus = determineStatus(emailComp = updatedEmail)
+        return copy(emailComponent = updatedEmail, status = updatedStatus)
     }
 
     /**
-     * Updates the password field and recalculates the validation message and status.
+     * Creates and validates a [TextInputComponent] for the email field.
      *
-     * @param txt The new password input provided by the user.
-     * @return A new [LoginFragmentState] containing the updated password validation result.
+     * Validation rules:
+     * - Email must not be blank
+     * - Email must follow a valid email format
      */
-    fun updatePassword(txt: String): LoginFragmentState {
-        val newMsg = definePassStateMsg(txt)
-        val newStatus = defineStatus(newPassMsg = newMsg)
-        return copy(passMsg = newMsg, status = newStatus)
+    private fun createEmailComponent(email: String) = when {
+        email.isBlank() ->
+            TextInputComponent(text = email, isValid = false)
+
+        !email.isEmailFormat() ->
+            TextInputComponent(text = email, errorText = EMAIL_WRONG_FORMAT_MSG)
+
+        else ->
+            TextInputComponent(text = email, isValid = true)
     }
 
     /**
-     * Called when the user attempts to log in.
+     * Updates the password input component and recalculates the overall screen status.
      *
-     * @throws IllegalStateException if any validation errors are present.
-     * @return A new state indicating that login is being attempted.
+     * @param password The new password value provided by the user
+     * @return A new [LoginFragmentState] with the updated password component
      */
-    fun tryToLogin(): LoginFragmentState {
-        if (!isReadyToLogin) throw IllegalStateException(ILLEGAL_STATE_MSG)
-        return copy(status = LoginFragmentStatus.TryingLogin)
+    fun updatePassword(password: String): LoginFragmentState {
+        val updatedPassword = createPasswordComponent(password)
+        val updatedStatus = determineStatus(passwordComp = updatedPassword)
+        return copy(passwordComponent = updatedPassword, status = updatedStatus)
     }
 
     /**
-     * Sets error messages when the backend reports invalid credentials.
+     * Creates and validates a [TextInputComponent] for the password field.
      *
-     * @return A state with updated error messages and reset status.
+     * Validation rules:
+     * - Password must not be blank
+     * - Password must be numeric
+     * - Password length must be between 6 and 12 digits
      */
-    fun invalidCredentials() = copy(
-        emailMsg = EMAIL_NOT_FOUND_ERROR_MSG,
-        passMsg = PASSWORD_INVALID_MSG,
-        status = LoginFragmentStatus.WaitingInput
-    )
+    private fun createPasswordComponent(password: String) = when {
+        password.isBlank() ->
+            TextInputComponent(text = password, isValid = false)
 
-    //----------------------------------------------------------------------------------------------
-    // VALIDATION HELPERS
-    //----------------------------------------------------------------------------------------------
-    /**
-     * Validates the email input and returns an appropriate error message,
-     * or `null` if the email is valid.
-     */
-    private fun defineEmailStateMsg(input: String) = when {
-        input.isBlank() -> EMAIL_BLANK_ERROR_MSG
-        !input.isEmailFormat() -> EMAIL_WRONG_FORMAT_MSG
-        else -> null
+        !password.isPasswordFormat() ->
+            TextInputComponent(text = password, errorText = PASSWORD_WRONG_FORMAT_MSG)
+
+        else ->
+            TextInputComponent(text = password, isValid = true)
     }
 
     /**
-     * Validates the password input and returns an appropriate error message,
-     * or `null` if the password is valid.
-     */
-    private fun definePassStateMsg(input: String) = when {
-        input.isBlank() -> PASSWORD_BLANK_ERROR_MSG
-        !input.isPasswordFormat() -> PASSWORD_WRONG_FORMAT_MSG
-        else -> null
-    }
-
-    /**
-     * Computes the new high-level state of the fragment based on the latest
-     * validation results of the email and password fields.
+     * Determines the overall screen status based on the validity of
+     * the email and password input components.
      *
-     * @param newEmailMsg Optional fresh validation result for the email field.
-     * @param newPassMsg Optional fresh validation result for the password field.
+     * @param emailComp Optional email component override
+     * @param passwordComp Optional password component override
+     * @return The calculated [LoginFragmentStatus]
      */
-    private fun defineStatus(
-        newEmailMsg: String? = null,
-        newPassMsg: String? = null
-    ) = if ((newEmailMsg ?: emailMsg) == null && (newPassMsg ?: passMsg) == null) {
-        LoginFragmentStatus.ReadyToLogin
-    } else {
-        LoginFragmentStatus.WaitingInput
+    private fun determineStatus(
+        emailComp: TextInputComponent = emailComponent,
+        passwordComp: TextInputComponent = passwordComponent
+    ) = when {
+        emailComp.isValid && passwordComp.isValid -> LoginFragmentStatus.ReadyToLogin
+        else -> LoginFragmentStatus.WaitingInput
     }
 
     //----------------------------------------------------------------------------------------------
     // CONSTANTS
     //----------------------------------------------------------------------------------------------
     private companion object {
-        private const val EMAIL_BLANK_ERROR_MSG = "Por favor, informe seu e-mail."
-        private const val EMAIL_WRONG_FORMAT_MSG = "Formato de e-mail inválido."
-        private const val EMAIL_NOT_FOUND_ERROR_MSG = "E-mail não encontrado."
 
-        private const val PASSWORD_BLANK_ERROR_MSG = "Por favor, informe sua senha."
+        private const val EMAIL_WRONG_FORMAT_MSG =
+            "Formato de e-mail inválido."
+
         private const val PASSWORD_WRONG_FORMAT_MSG =
             "A senha deve ser numérica e ter entre 6 e 12 dígitos."
-        private const val PASSWORD_INVALID_MSG = "Senha incorreta."
 
-        private const val ILLEGAL_STATE_MSG = "Não é possível continuar: dados inválidos."
     }
 
 }

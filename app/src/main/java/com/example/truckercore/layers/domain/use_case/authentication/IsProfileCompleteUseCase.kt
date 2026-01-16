@@ -11,8 +11,7 @@ class IsProfileCompleteUseCaseImpl(
     private val repository: AuthenticationRepository
 ) : IsProfileCompleteUseCase {
 
-    override fun invoke(): DataOutcome<Boolean> {
-        TODO("Not yet implemented")
-    }
+    override fun invoke(): DataOutcome<Boolean> =
+        repository.isProfileCreated()
 
 }

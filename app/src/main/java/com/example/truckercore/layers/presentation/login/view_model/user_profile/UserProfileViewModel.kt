@@ -1,11 +1,12 @@
 package com.example.truckercore.layers.presentation.login.view_model.user_profile
 
+import com.example.truckercore.core.my_lib.expressions.get
+import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.expressions.isByNetwork
-import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
-import com.example.truckercore.layers.data.base.outcome.OperationOutcome
-import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.core.my_lib.expressions.map
+import com.example.truckercore.infra.logger.AppLogger
+import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.domain.use_case.authentication.CreateUserProfileUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.HasLoggedUserUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
@@ -15,7 +16,6 @@ import com.example.truckercore.layers.presentation.login.view_model.user_profile
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentEvent
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentReducer
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentState
-import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentStatus
 
 /**
  * ViewModel responsible for managing all logic related to the user profile creation screen.
@@ -35,21 +35,8 @@ class UserProfileViewModel(
     private val createUserProfileUseCase: CreateUserProfileUseCase
 ) : BaseViewModel() {
 
-    /**
-     * Lazily constructed initial state for the fragment.
-     * Contains:
-     * - A basic [TextInputComponent] for the user name field.
-     * - Initial status indicating that no input has been provided yet.
-     */
-    private val initialState by lazy {
-        UserProfileFragmentState(
-            nameComponent = TextInputComponent(),
-            status = UserProfileFragmentStatus.WaitingInput
-        )
-    }
-
     // State & Effect Management
-    private val stateManager = StateManager(initialState)
+    private val stateManager = StateManager(UserProfileFragmentState())
     val stateFlow get() = stateManager.stateFlow
 
     private val effectManager = EffectManager<UserProfileFragmentEffect>()
@@ -124,8 +111,16 @@ class UserProfileViewModel(
         onComplete = { UserProfileFragmentEvent.ProfileTask.Complete },
         onFailure = { e ->
             if (e.isByNetwork()) UserProfileFragmentEvent.ProfileTask.Failure.NoConnection
-            else UserProfileFragmentEvent.ProfileTask.Failure.Irrecoverable
+            else {
+                AppLogger.e(getTag, CREATE_PROFILE_ERROR_MSG, e)
+                UserProfileFragmentEvent.ProfileTask.Failure.Irrecoverable
+            }
         }
+
     )
+
+    private companion object {
+        private const val CREATE_PROFILE_ERROR_MSG = "Failed to create a profile"
+    }
 
 }

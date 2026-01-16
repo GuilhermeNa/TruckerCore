@@ -1,7 +1,6 @@
 package com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers
 
 import com.example.truckercore.core.my_lib.classes.Email
-import com.example.truckercore.layers.presentation.login.fragments.continue_register.ContinueRegisterFragment
 import com.example.truckercore.layers.presentation.base.contracts.State
 import com.example.truckercore.layers.presentation.base.components.TextComponent
 

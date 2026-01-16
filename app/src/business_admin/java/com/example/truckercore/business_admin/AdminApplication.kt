@@ -3,7 +3,6 @@ package com.example.truckercore.business_admin
 import android.app.Application
 import com.example.truckercore.business_admin.config.di.adminModules
 import com.example.truckercore.core.di.appModules
-import com.example.truckercore.domain.di.commonViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -19,9 +18,6 @@ class AdminApplication : Application() {
         }
     }
 
-    private fun getKoinModules(): List<Module> =
-        appModules
-            .plus(commonViewModelModule)
-            .plus(adminModules)
+    private fun getKoinModules(): List<Module> = appModules.plus(adminModules)
 
 }

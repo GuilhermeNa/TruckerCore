@@ -11,10 +11,10 @@ import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentUserProfileBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
-import com.example.truckercore.layers.presentation.login.fragments.user_profile.UserProfileFragmentDirections
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.UserProfileViewModel
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentEvent
+import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -41,11 +41,7 @@ class UserProfileFragment : PublicLockedFragment() {
     private val flavorService by inject<FlavorService>()
     private val viewModel: UserProfileViewModel by viewModel()
     private val stateHandler = UserProfileFragmentStateHandler()
-    private val dialog by lazy { LoadingDialog(requireContext()) }
-
-    // Navigation ---------------------------------------------------------------------------------
-    private val loginFragmentDirection =
-        UserProfileFragmentDirections.actionGlobalLoginFragment()
+    private var dialog: LoadingDialog? = null
 
     //----------------------------------------------------------------------------------------------
     // Lifecycle - onCreate()
@@ -77,6 +73,12 @@ class UserProfileFragment : PublicLockedFragment() {
      * retry flows, and error redirections.
      */
     private suspend fun setFragmentEffectManager() {
+
+        // Navigation Direction
+        val loginFragmentDirection =
+            UserProfileFragmentDirections.actionGlobalLoginFragment()
+
+        // Effect Manager
         viewModel.effectFlow.collect { effect ->
             when (effect) {
 
@@ -117,6 +119,7 @@ class UserProfileFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog = LoadingDialog(requireContext())
         setNameChangedListener()
         setFabClickListener()
     }
@@ -139,6 +142,8 @@ class UserProfileFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        dialog?.dismiss()
+        dialog = null
         _binding = null
     }
 }

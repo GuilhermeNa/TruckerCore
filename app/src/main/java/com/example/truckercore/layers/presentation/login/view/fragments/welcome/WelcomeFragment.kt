@@ -13,10 +13,9 @@ import com.example.truckercore.databinding.FragmentWelcomeBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.login.view.fragments.welcome.view_pager.WelcomePagerAdapter
 import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.WelcomeViewModel
-import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.helpers.WelcomePagerData
 import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.helpers.WelcomeFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.helpers.WelcomeFragmentEvent
-import com.example.truckercore.presentation.nav_login.fragments.welcome.WelcomeFragmentDirections
+import com.example.truckercore.layers.presentation.login.view_model.welcome_fragment.helpers.WelcomePagerData
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

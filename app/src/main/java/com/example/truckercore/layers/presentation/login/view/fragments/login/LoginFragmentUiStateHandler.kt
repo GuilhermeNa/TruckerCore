@@ -1,5 +1,6 @@
 package com.example.truckercore.layers.presentation.login.view.fragments.login
 
+import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
 import com.example.truckercore.layers.presentation.common.LoadingDialog
@@ -23,34 +24,34 @@ class LoginFragmentUiStateHandler : StateHandler<FragmentLoginBinding>() {
      * - emailMsg: validation message for email field
      * - passMsg: validation message for password field
      */
-    fun handle(state: LoginFragmentState, dialog: LoadingDialog) {
+    fun handle(state: LoginFragmentState, dialog: LoadingDialog?) {
         handleStatus(state.status, dialog)
-        handleEmailMsg(state.emailMsg)
-        handlePassMsg(state.passMsg)
+        handleEmailComponent(state.emailComponent)
+        handlePasswordComponent(state.passwordComponent)
     }
 
     /**
      * Handles enabling/disabling UI components and showing/dismissing
      * the loading dialog depending on the current login status.
      */
-    private fun handleStatus(status: LoginFragmentStatus, dialog: LoadingDialog) {
+    private fun handleStatus(status: LoginFragmentStatus, dialog: LoadingDialog?) {
         when (status) {
             LoginFragmentStatus.WaitingInput -> {
                 // User is typing; login button should be disabled
                 enableEnterButton(false)
-                dialog.dismiss()
+                dialog?.dismiss()
             }
 
             LoginFragmentStatus.ReadyToLogin -> {
                 // Input is valid; button enabled, but no loading visible
                 enableEnterButton(true)
-                dialog.dismiss()
+                dialog?.dismiss()
             }
 
             LoginFragmentStatus.TryingLogin -> {
                 // Login initiated; disable button and show loading
                 enableEnterButton(false)
-                dialog.show()
+                dialog?.show()
             }
         }
     }
@@ -58,15 +59,15 @@ class LoginFragmentUiStateHandler : StateHandler<FragmentLoginBinding>() {
     /**
      * Sets or clears the password field error message.
      */
-    private fun handlePassMsg(passMsg: String?) {
-        binding.fragLoginPasswordLayout.error = passMsg
+    private fun handlePasswordComponent(component: TextInputComponent) {
+        binding.fragLoginPasswordLayout.error = component.errorText
     }
 
     /**
      * Sets or clears the email field error message.
      */
-    private fun handleEmailMsg(emailMsg: String?) {
-        binding.fragLoginEmailLayout.error = emailMsg
+    private fun handleEmailComponent(component: TextInputComponent) {
+        binding.fragLoginEmailLayout.error = component.errorText
     }
 
     /**

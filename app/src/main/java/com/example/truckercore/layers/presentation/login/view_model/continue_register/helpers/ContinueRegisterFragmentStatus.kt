@@ -1,7 +1,5 @@
 package com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers
 
-import com.example.truckercore.layers.presentation.login.fragments.continue_register.ContinueRegisterFragment
-
 /**
  * Represents the different UI states of the [ContinueRegisterFragment].
  *

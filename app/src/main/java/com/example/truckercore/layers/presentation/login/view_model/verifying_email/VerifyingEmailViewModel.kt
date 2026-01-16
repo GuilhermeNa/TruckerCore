@@ -3,18 +3,20 @@ package com.example.truckercore.layers.presentation.login.view_model.verifying_e
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.my_lib.classes.Email
+import com.example.truckercore.core.my_lib.expressions.get
+import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.expressions.isByNetwork
-import com.example.truckercore.layers.data.base.outcome.OperationOutcome
-import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.core.my_lib.expressions.isEmpty
 import com.example.truckercore.core.my_lib.expressions.isSuccess
 import com.example.truckercore.core.my_lib.expressions.isTrue
+import com.example.truckercore.infra.logger.AppLogger
+import com.example.truckercore.layers.data.base.outcome.OperationOutcome
+import com.example.truckercore.layers.domain.use_case._common.CountdownUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.IsEmailVerifiedUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SendEmailVerificationUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.VerifyEmailValidationUseCase
-import com.example.truckercore.layers.domain.use_case._common.CountdownUseCase
 import com.example.truckercore.layers.presentation.base.managers.EffectManager
 import com.example.truckercore.layers.presentation.base.managers.StateManager
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentEffect
@@ -119,6 +121,7 @@ class VerifyingEmailViewModel(
                 _email = result.get()
                 VerifyingEmailFragmentEvent.GetEmailTask.Complete
             }
+
             result.isEmpty() -> VerifyingEmailFragmentEvent.GetEmailTask.NotFound
             else -> VerifyingEmailFragmentEvent.GetEmailTask.Failure
         }
@@ -193,6 +196,7 @@ class VerifyingEmailViewModel(
                 if (exception.isByNetwork()) {
                     VerifyingEmailFragmentEvent.SendEmailTask.NoConnection
                 } else {
+                    AppLogger.e(getTag, SENDING_EMAIL_ERROR, exception)
                     VerifyingEmailFragmentEvent.SendEmailTask.Failure
                 }
         }
@@ -236,6 +240,7 @@ class VerifyingEmailViewModel(
                 if (exception.isByNetwork()) {
                     VerifyingEmailFragmentEvent.VerifyEmailTask.NoConnection
                 } else {
+                    AppLogger.e(getTag, VERIFY_EMAIL_ERROR, exception)
                     VerifyingEmailFragmentEvent.VerifyEmailTask.Failure
                 }
         }
@@ -248,13 +253,11 @@ class VerifyingEmailViewModel(
         if (counterJob != null) return
 
         counterJob = viewModelScope.launch {
-            countdownUseCase(ONE_MINUTE)
-                .onCompletion {
-                    onEvent(VerifyingEmailFragmentEvent.Timeout)
-                }
-                .collect { remainingSeconds ->
-                    _counterStateFlow.value = remainingSeconds
-                }
+            countdownUseCase(ONE_MINUTE).onCompletion {
+                onEvent(VerifyingEmailFragmentEvent.Timeout)
+            }.collect { remainingSeconds ->
+                _counterStateFlow.value = remainingSeconds
+            }
         }
     }
 
@@ -267,6 +270,11 @@ class VerifyingEmailViewModel(
          * Value is in seconds (59 = 1 minute minus 1 for inclusive counting).
          */
         private const val ONE_MINUTE = 59
+
+        private const val SENDING_EMAIL_ERROR =
+            "Unexpected result while sending verification email."
+
+        private const val VERIFY_EMAIL_ERROR = "Unexpected result while verifying email."
     }
 
 }

@@ -21,6 +21,7 @@ class LoginFragmentReducer :
     override fun reduce(state: LoginFragmentState, event: LoginFragmentEvent) = when (event) {
         is LoginFragmentEvent.Click -> handleClickEvent(state, event)
         is LoginFragmentEvent.LoginTask -> handleLoginTaskEvent(state, event)
+        is LoginFragmentEvent.CheckRegistrationTask -> handleCheckTaskEvent(event)
         is LoginFragmentEvent.Retry -> triggerLoginTaskAndUpdateState(state, event.credential)
         is LoginFragmentEvent.TextChange -> handleTextChangeEvent(state, event)
     }
@@ -93,7 +94,7 @@ class LoginFragmentReducer :
     ): ReducerResult<LoginFragmentState, LoginFragmentEffect> = when (event) {
 
         LoginFragmentEvent.LoginTask.Complete -> {
-            val effect = LoginFragmentEffect.Navigation.ToCheckIn
+            val effect = LoginFragmentEffect.CheckRegistration
             resultWithEffect(effect)
         }
 
@@ -104,11 +105,35 @@ class LoginFragmentReducer :
 
         LoginFragmentEvent.LoginTask.InvalidCredential -> {
             val newState = state.invalidCredentials()
-            resultWithState(newState)
+            val newEffect = LoginFragmentEffect.ShowErrorToast(INVALID_CREDENTIALS_MSG)
+            resultWithStateAndEffect(newState, newEffect)
         }
 
         LoginFragmentEvent.LoginTask.NoConnection -> {
+            val newState = state.readyToCreate()
             val effect = LoginFragmentEffect.Navigation.ToNoConnection
+            resultWithStateAndEffect(newState, effect)
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Handle Login Task Events
+    //----------------------------------------------------------------------------------------------
+    private fun handleCheckTaskEvent(
+        event: LoginFragmentEvent.CheckRegistrationTask
+    ): ReducerResult<LoginFragmentState, LoginFragmentEffect> = when (event) {
+        LoginFragmentEvent.CheckRegistrationTask.Complete -> {
+            val newEffect = LoginFragmentEffect.Navigation.ToCheckIn
+            resultWithEffect(newEffect)
+        }
+
+        LoginFragmentEvent.CheckRegistrationTask.Incomplete -> {
+            val newEffect = LoginFragmentEffect.Navigation.ToContinueRegister
+            resultWithEffect(newEffect)
+        }
+
+        LoginFragmentEvent.CheckRegistrationTask.Failure -> {
+            val effect = LoginFragmentEffect.Navigation.ToNotification
             resultWithEffect(effect)
         }
     }
@@ -133,6 +158,10 @@ class LoginFragmentReducer :
             is LoginFragmentEvent.TextChange.Password -> state.updatePassword(event.text)
         }
         return resultWithState(newState)
+    }
+
+    private companion object {
+        private const val INVALID_CREDENTIALS_MSG = "Credenciais inválidas"
     }
 
 }

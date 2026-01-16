@@ -4,20 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.EmailCredential
 import com.example.truckercore.core.my_lib.classes.Password
-import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
+import com.example.truckercore.core.my_lib.expressions.showToast
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.login.LoginViewModel
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentEvent
-import com.example.truckercore.presentation.nav_login.fragments.login.LoginFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -36,7 +39,7 @@ class LoginFragment : PublicLockedFragment() {
     private val binding get() = _binding!!
 
     // Loading dialog displayed during login operations
-    private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
+    private var dialog: LoadingDialog? = null
 
     // ViewModel and dependencies injected via Koin
     private val viewModel: LoginViewModel by viewModel()
@@ -50,11 +53,11 @@ class LoginFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Collects state and effects only when the Fragment lifecycle is STARTED
-        launchAndRepeatOnFragmentStartedLifeCycle {
-            setFragmentStateManager()
-            setFragmentEffectManager()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setFragmentStateManager()
+                setFragmentEffectManager()
+            }
         }
     }
 
@@ -77,7 +80,10 @@ class LoginFragment : PublicLockedFragment() {
         // Navigation directions
         val toForgetPassword = LoginFragmentDirections
             .actionLoginFragmentToForgetPasswordFragment()
+
         val toEmailAuth = LoginFragmentDirections.actionGlobalEmailAuthFragment()
+
+        val toContinueRegister = LoginFragmentDirections.actionGlobalContinueRegisterFragment()
 
         viewModel.effectFlow.collect { effect ->
             when (effect) {
@@ -96,7 +102,13 @@ class LoginFragment : PublicLockedFragment() {
                 LoginFragmentEffect.Navigation.ToNotification ->
                     navigateToErrorActivity(requireActivity())
 
-                else -> throw IllegalArgumentException("Unknown navigation effect")
+                is LoginFragmentEffect.ShowErrorToast ->
+                    showToast(effect.message)
+
+                is LoginFragmentEffect.Navigation.ToContinueRegister ->
+                    navigateToDirection(toContinueRegister)
+
+                else -> throw IllegalArgumentException("LoginFragment: Unknown navigation effect ($effect)")
             }
         }
     }
@@ -139,14 +151,14 @@ class LoginFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Configure all View listeners
+        dialog = LoadingDialog(requireContext())
         setCheckBoxClickListener()
         setEnterButtonClickListener()
         setNewAccountButtonClickListener()
         setForgetPasswordButtonClickListener()
         setEmailChangeListener()
         setPasswordChangeListener()
+        setImeOptionsClickListener()
     }
 
     /**
@@ -208,12 +220,26 @@ class LoginFragment : PublicLockedFragment() {
         }
     }
 
+    private fun setImeOptionsClickListener() {
+        binding.fragLoginPasswordText
+            .setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val credential = getCredential()
+                    val newEvent = LoginFragmentEvent.Click.Enter(credential)
+                    viewModel.onEvent(newEvent)
+                    false
+                } else false
+            }
+    }
+
     //----------------------------------------------------------------------------------------------
     // Lifecycle - onDestroyView
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Avoid memory leaks
+        dialog?.dismiss()
+        dialog = null
+        _binding = null
     }
 
 }

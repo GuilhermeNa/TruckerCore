@@ -13,7 +13,6 @@ import com.example.truckercore.layers.presentation.login.view_model.verifying_em
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentEvent
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentState
-import com.example.truckercore.presentation.nav_login.fragments.verifying_email.VerifyingEmailFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,12 +34,10 @@ class VerifyingEmailFragment : PublicLockedFragment() {
 
     private val viewModel: VerifyingEmailViewModel by viewModel()
 
-    /** Loading dialog shown during long-running operations (e.g., sending email). */
-    private val dialog: LoadingDialog by lazy { LoadingDialog(requireContext()) }
+    private var dialog: LoadingDialog? = null
 
     /** Handler responsible for all UI updates based on fragment state. */
     private val stateHandler = VerifyingEmailFragmentStateHandler()
-
 
     // ---------------------------------------------------------------------------------------------
     // Lifecycle: onCreate
@@ -162,6 +159,7 @@ class VerifyingEmailFragment : PublicLockedFragment() {
     // ---------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog = LoadingDialog(requireContext())
         setSendButtonClickListener()
         setNewEmailClickListener()
     }
@@ -189,6 +187,8 @@ class VerifyingEmailFragment : PublicLockedFragment() {
     // ---------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        dialog?.dismiss()
+        dialog = null
         _binding = null
     }
 

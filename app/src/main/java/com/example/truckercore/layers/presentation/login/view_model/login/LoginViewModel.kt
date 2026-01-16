@@ -3,12 +3,15 @@ package com.example.truckercore.layers.presentation.login.view_model.login
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.my_lib.classes.EmailCredential
 import com.example.truckercore.core.my_lib.expressions.handle
-import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.core.my_lib.expressions.isConnectionError
 import com.example.truckercore.core.my_lib.expressions.isInvalidCredential
 import com.example.truckercore.core.my_lib.expressions.isInvalidUser
 import com.example.truckercore.core.my_lib.expressions.isUserNotFound
+import com.example.truckercore.layers.data.base.outcome.DataOutcome
+import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
+import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignInUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.layers.presentation.base.managers.EffectManager
@@ -22,17 +25,30 @@ import kotlinx.coroutines.launch
 
 /**
  * This ViewModel coordinates the login flow for [LoginFragment]. It:
- * - Processes UI events via a reducer (unidirectional data flow)
- * - Updates immutable UI state via a [StateManager]
- * - Emits one-time effects for navigation or messages via an [EffectManager]
- * - Executes login use cases and persists preferences when requested
  *
- * It follows a predictable MVI-style structure:
- *   UI Event → Reducer → New State / Effect → UI Rendering
+ * - Processes UI events via a reducer (unidirectional data flow / MVI)
+ * - Maintains and updates immutable UI state through a [StateManager]
+ * - Emits one-time UI effects (navigation, messages, etc.) via an [EffectManager]
+ * - Executes authentication and registration-related use cases
+ * - Persists user preferences when required
+ *
+ * Responsibilities include:
+ * - Handling login attempts and retry actions
+ * - Mapping domain outcomes into UI events
+ * - Checking user registration status after authentication
+ * - Updating "keep logged in" preferences asynchronously
+ *
+ * The ViewModel follows a predictable MVI-style flow:
+ *
+ *   UI Event → Reducer → New State and/or Effect → UI Rendering
+ *
+ * Side effects are isolated and handled explicitly to ensure testability,
+ * traceability, and a clear separation of concerns.
  */
 class LoginViewModel(
     private val loginUseCase: SignInUseCase,
-    private val preferences: PreferencesRepository
+    private val preferences: PreferencesRepository,
+    private val checkRegistrationUseCase: CheckUserRegistrationUseCase
 ) : BaseViewModel() {
 
     //----------------------------------------------------------------------------------------------
@@ -56,8 +72,6 @@ class LoginViewModel(
      */
     fun onEvent(event: LoginFragmentEvent) {
         val result = reducer.reduce(stateManager.currentState(), event)
-
-        // The reducer result decides whether to update state or trigger effects
         result.handle(stateManager::update, ::handleEffect)
     }
 
@@ -72,6 +86,9 @@ class LoginViewModel(
 
             is LoginFragmentEffect.UpdatePreferences ->
                 updateKeepLoggedPreferences(effect.keepLogged)
+
+            is LoginFragmentEffect.CheckRegistration ->
+                checkRegistration()
 
             else -> effectManager.trySend(effect) // Forward to UI layer
         }
@@ -92,22 +109,6 @@ class LoginViewModel(
         }
     }
 
-    /**
-     * Updates a user preference indicating whether the user wants to stay logged in.
-     */
-    private fun updateKeepLoggedPreferences(keepLogged: Boolean) {
-        viewModelScope.launch {
-            preferences.setKeepLogged(keepLogged)
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------
-    // Outcome Mapping
-    //----------------------------------------------------------------------------------------------
-    /**
-     * Converts a domain-level OperationOutcome into a specific ViewModel event
-     * that the reducer understands. Keeps the domain layer decoupled from the UI layer.
-     */
     private fun OperationOutcome.toLoginEvent() = when (this) {
         OperationOutcome.Completed ->
             LoginFragmentEvent.LoginTask.Complete
@@ -121,6 +122,46 @@ class LoginViewModel(
 
             else ->
                 LoginFragmentEvent.LoginTask.Failure
+        }
+    }
+
+    /**
+     * Checks whether the current user already has a complete registration.
+     *
+     * This method executes the [CheckUserRegistrationUseCase] to determine the
+     * user's registration status after authentication.
+     *
+     * - If the registration is complete, the user will proceed to the check-in flow.
+     * - If the registration is incomplete, the user will be redirected to the
+     *   registration completion flow.
+     * - Any unexpected failure is handled as an error state.
+     *
+     * The domain outcome is mapped into a corresponding UI event and fed back
+     * into the reducer, preserving the unidirectional data flow and keeping all
+     * navigation decisions centralized.
+     */
+    private fun checkRegistration() {
+        val outcome = checkRegistrationUseCase()
+        val newEvent = outcome.toRegistrationEvent()
+        onEvent(newEvent)
+    }
+
+    private fun DataOutcome<RegistrationStatus>.toRegistrationEvent() = when (this) {
+        is DataOutcome.Success -> {
+            if (data == RegistrationStatus.COMPLETE)
+                LoginFragmentEvent.CheckRegistrationTask.Complete
+            else LoginFragmentEvent.CheckRegistrationTask.Incomplete
+        }
+
+        else -> LoginFragmentEvent.CheckRegistrationTask.Failure
+    }
+
+    /**
+     * Updates a user preference indicating whether the user wants to stay logged in.
+     */
+    private fun updateKeepLoggedPreferences(keepLogged: Boolean) {
+        viewModelScope.launch {
+            preferences.setKeepLogged(keepLogged)
         }
     }
 
