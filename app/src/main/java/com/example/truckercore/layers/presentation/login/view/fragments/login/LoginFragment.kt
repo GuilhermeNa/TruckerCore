@@ -13,6 +13,7 @@ import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.EmailCredential
 import com.example.truckercore.core.my_lib.classes.Password
+import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.showToast
 import com.example.truckercore.databinding.FragmentLoginBinding
@@ -210,7 +211,7 @@ class LoginFragment : PublicLockedFragment() {
         }
     }
 
-    /**
+     /**
      * Handles "Create New Account" button clicks.
      */
     private fun setNewAccountButtonClickListener() {

@@ -59,13 +59,13 @@ class UserPreferencesDataStore(private val context: Context) {
     // Keep Logged Methods
     //----------------------------------------------------------------------------------------------
     /**
-     * Checks whether the user has opted to stay logged in. Default value is *true*.
+     * Checks whether the user has opted to stay logged in. Default value is *false*.
      *
      * @return `true` if the user should remain logged in, `false` otherwise.
      */
     suspend fun keepLogged(): Boolean {
         val preferences = getPreferences()
-        return preferences[keepLogged] ?: true
+        return preferences[keepLogged] ?: false
     }
 
     /**

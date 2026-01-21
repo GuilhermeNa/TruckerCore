@@ -6,7 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
-import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
+import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsetsIgnoringTop
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.showWarningSnackbar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
@@ -71,9 +75,11 @@ class EmailAuthFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchAndRepeatOnFragmentStartedLifeCycle {
-            setFragmentStateManager()
-            setFragmentEffectManager()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setFragmentStateManager()
+                setFragmentEffectManager()
+            }
         }
     }
 
@@ -149,6 +155,7 @@ class EmailAuthFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.applySystemBarsInsets()
         dialog = LoadingDialog(requireContext())
         setCreateButtonListener()
         setAlreadyRegisteredButtonListener()

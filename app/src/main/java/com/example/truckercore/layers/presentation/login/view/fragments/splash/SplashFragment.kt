@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.expressions.getTag
-import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.infra.logger.AppLogger
@@ -69,9 +71,11 @@ class SplashFragment : PublicLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchAndRepeatOnFragmentStartedLifeCycle {
-            setStateManager(savedInstanceState)
-            setEffectManager()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                setStateManager(savedInstanceState)
+                setEffectManager()
+            }
         }
     }
 

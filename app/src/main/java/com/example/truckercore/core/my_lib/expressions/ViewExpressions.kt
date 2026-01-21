@@ -7,6 +7,8 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
@@ -77,3 +79,16 @@ fun ImageView.loadGif(url: Any? = null, context: Context) {
 }
 
 
+fun View.applySystemBarsInsets() =
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+        val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+        insets
+    }
+
+fun View.applySystemBarsInsetsIgnoringTop() =
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+        val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        v.setPadding(bars.left, 0, bars.right, bars.bottom)
+        insets
+    }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
 import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.popBackstack
 import com.example.truckercore.core.my_lib.expressions.showSuccessSnackbar
@@ -124,6 +125,7 @@ class ForgetPasswordFragment : PublicFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.applySystemBarsInsets()
         dialog = LoadingDialog(requireContext())
         setButtonClickListener()
         setEmailTextChangeListener()

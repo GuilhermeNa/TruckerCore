@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.truckercore.core.my_lib.enums.Direction
+import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
 import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.ui_components.FabComponent
@@ -187,6 +190,7 @@ class WelcomeFragment : PublicLockedFragment() {
         setTopButtonListener()
         setLeftFabListener()
         setRightFabListener()
+        view.applySystemBarsInsets()
     }
 
     /**
