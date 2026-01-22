@@ -70,7 +70,10 @@ class AuthSourceImpl(
         }
     }
 
-    override fun isNameDefined(): Boolean = getLoggedUser().displayName != null
+    override fun isNameDefined(): Boolean {
+        val name = getLoggedUser().displayName
+        return !name.isNullOrBlank()
+    }
 
     override fun hasLoggedUser(): Boolean = auth.currentUser != null
 

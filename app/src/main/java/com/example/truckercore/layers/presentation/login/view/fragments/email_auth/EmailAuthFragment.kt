@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
-import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsetsIgnoringTop
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.showWarningSnackbar
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
@@ -103,6 +102,7 @@ class EmailAuthFragment : PublicLockedFragment() {
     private suspend fun setFragmentEffectManager() {
         viewModel.effectFlow.collect { effect ->
             when (effect) {
+
                 is EmailAuthenticationFragmentEffect.Navigation ->
                     handleNavigationEffect(effect)
 

@@ -10,7 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.expressions.getTag
+import com.example.truckercore.core.my_lib.expressions.lockOrientationPortrait
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
+import com.example.truckercore.core.my_lib.expressions.unlockOrientation
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
@@ -83,7 +85,9 @@ class SplashFragment : PublicLockedFragment() {
         launch {
             viewModel.stateFlow.collect { state ->
                 stateHandler.handleNameComponent(state.nameComponent)
-                onRecreatingView(savedInstanceState) { stateHandler.handleStatus(state.status) }
+                onRecreatingView(savedInstanceState) {
+                    stateHandler.handleStatus(state.status)
+                }
             }
         }
     }
@@ -150,10 +154,19 @@ class SplashFragment : PublicLockedFragment() {
     }
 
     //----------------------------------------------------------------------------------------------
+    // On Resume
+    //----------------------------------------------------------------------------------------------
+    override fun onResume() {
+        super.onResume()
+        lockOrientationPortrait()
+    }
+
+    //----------------------------------------------------------------------------------------------
     // On Destroy View
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        unlockOrientation()
         binding.motionLayout.removeTransitionListener(transitionListener)
         _binding = null
     }

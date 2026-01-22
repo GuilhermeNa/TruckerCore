@@ -165,7 +165,7 @@ class ForgetPasswordFragment : PublicFragment() {
     // Constants
     //----------------------------------------------------------------------------------------------
     private companion object {
-        private const val SUCCESS_MESSAGE = "Recovery email sent successfully"
-        private const val ERROR_MESSAGE = "Invalid email format"
+        private const val SUCCESS_MESSAGE = "Email enviado com successo"
+        private const val ERROR_MESSAGE = "Formato de email inválido"
     }
 }

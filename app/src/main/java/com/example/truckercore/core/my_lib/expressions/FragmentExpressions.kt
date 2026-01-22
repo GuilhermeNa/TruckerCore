@@ -1,5 +1,7 @@
 package com.example.truckercore.core.my_lib.expressions
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
@@ -46,4 +48,15 @@ fun Fragment.showWarningSnackbar(msg: String, duration: Int = Snackbar.LENGTH_SH
         setBackgroundTint(Color.RED)
         setTextColor(Color.WHITE)
     }.show()
+}
+
+@SuppressLint("SourceLockedOrientationActivity")
+fun Fragment.lockOrientationPortrait() {
+    requireActivity().requestedOrientation =
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+}
+
+fun Fragment.unlockOrientation() {
+    requireActivity().requestedOrientation =
+        ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }
