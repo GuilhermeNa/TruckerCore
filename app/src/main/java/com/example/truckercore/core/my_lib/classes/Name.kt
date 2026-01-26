@@ -1,23 +1,14 @@
 package com.example.truckercore.core.my_lib.classes
 
 import com.example.truckercore.core.error.DomainException
+import com.example.truckercore.core.my_lib.expressions.isFullNameFormat
+import com.example.truckercore.core.my_lib.expressions.normalizeAsFullName
 
 /**
- * Represents a validated and formatted full name.
+ * Represents a validated and formatted name.
  *
  * This inline class enforces formatting and validation rules to ensure consistency and correctness
  * of personal names throughout the domain layer.
- *
- * ### Creation
- * Use the [from] factory method to create a [Name] instance. This ensures the name is
- * formatted correctly (e.g., capitalized) and validated before use.
- *
- * ### Validation Rules:
- * - Name must **not** be blank.
- * - Name must contain **at least two words** (e.g., "John Doe").
- * - Name must consist of **letters and spaces only** (no digits or symbols).
- *
- * If any rule is violated, an [DomainException.InvalidName] is thrown.
  *
  * ### Example:
  * ```kotlin
@@ -26,45 +17,53 @@ import com.example.truckercore.core.error.DomainException
  * ```
  *
  * @property value The validated and formatted full name
- * @throws DomainException.InvalidName if the input is blank or invalid
  */
 @JvmInline
 value class Name private constructor(val value: String) {
 
-    init {
-        if (value.isBlank()) {
-            throw DomainException.InvalidName("Name must not be blank.")
-        }
-        if (!value.isFullNameFormat()) {
-            throw DomainException.InvalidName("Invalid name format: '$value'")
-        }
-    }
-
-    private fun String.isFullNameFormat(): Boolean {
-        val trimmed = this.trim()
-        val parts = trimmed.split("\\s+".toRegex())
-        return parts.size >= 2 && trimmed.matches("[\\p{L} ]+".toRegex())
-    }
-
     companion object {
 
         /**
-         *  Automatically formats the name by:
-         *  - Trimming leading/trailing spaces
-         *  - Lowercasing the entire input
-         *  - Capitalizing the first letter of each word
+         * Creates a validated [Name] value object from a raw string input.
+         *
+         * This factory method performs all validations and normalization
+         * before creating the value object.
+         *
+         * Validation rules:
+         * - The name must not be blank
+         * - The name must contain at least two words
+         * - The name must contain only alphabetic characters and spaces
+         *
+         * Normalization rules:
+         * - Trims leading and trailing spaces
+         * - Collapses multiple spaces into a single space
+         * - Converts all words to lowercase
+         * - Capitalizes the first letter of words longer than two characters
+         *
+         * Short words (length ≤ 2) remain lowercase to preserve common
+         * name particles such as "de", "da", or "of".
+         *
+         * @param raw The raw name string provided by the user.
+         * @return A formatted and validated [Name] instance.
+         * @throws DomainException.InvalidName If any validation rule is violated.
          */
         fun from(raw: String): Name {
-            val formatted = raw.formatAsFullName()
-            return Name(formatted)
-        }
 
-        private fun String.formatAsFullName(): String {
-            return trim().split(Regex("\\s+")) // Evita strings vazias se houver múltiplos espaços
-                .joinToString(" ") { word ->
-                    if (word.length <= 2) word.lowercase()
-                    else word.lowercase().replaceFirstChar { it.titlecase() }
-                }
+            // Step 1: Validate that the input is not blank
+            if (raw.isBlank()) {
+                throw DomainException.InvalidName("Name must not be blank.")
+            }
+
+            // Step 2: Validate full name format
+            if (!raw.isFullNameFormat()) {
+                throw DomainException.InvalidName("Invalid name format: '$raw'")
+            }
+
+            // Step 3: Format and normalize the raw name input
+            val formatted = raw.normalizeAsFullName()
+
+            // Step 4: Create the Name value object
+            return Name(formatted)
         }
 
     }

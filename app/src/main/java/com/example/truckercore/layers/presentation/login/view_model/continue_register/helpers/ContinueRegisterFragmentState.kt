@@ -2,7 +2,7 @@ package com.example.truckercore.layers.presentation.login.view_model.continue_re
 
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.layers.presentation.base.contracts.State
-import com.example.truckercore.layers.presentation.base.components.TextComponent
+import com.example.truckercore.core.my_lib.ui_components.TextComponent
 
 /**
  * Represents the UI state of the [ContinueRegisterFragment].

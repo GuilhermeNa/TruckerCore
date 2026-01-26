@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
 import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragmentStartedLifeCycle
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
-import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.VerifyingEmailViewModel
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentEffect

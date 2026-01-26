@@ -15,7 +15,7 @@ import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.unlockOrientation
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.infra.logger.AppLogger
-import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.login.view_model.splash.SplashViewModel
 import com.example.truckercore.layers.presentation.login.view_model.splash.helpers.SplashEffect
 import kotlinx.coroutines.CoroutineScope

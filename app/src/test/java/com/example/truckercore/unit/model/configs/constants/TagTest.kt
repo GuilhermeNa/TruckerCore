@@ -1,6 +1,5 @@
 package com.example.truckercore.unit.model.configs.constants
 
-import com.example.truckercore.core.config.enums.Tag
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

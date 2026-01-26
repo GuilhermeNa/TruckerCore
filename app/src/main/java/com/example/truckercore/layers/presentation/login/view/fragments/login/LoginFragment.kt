@@ -13,11 +13,10 @@ import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.EmailCredential
 import com.example.truckercore.core.my_lib.classes.Password
-import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.showToast
 import com.example.truckercore.databinding.FragmentLoginBinding
-import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.login.LoginViewModel
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentEffect

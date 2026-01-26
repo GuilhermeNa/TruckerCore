@@ -23,6 +23,28 @@ fun String.capitalizeEveryFirstChar(): String {
 }
 
 /**
+ * Formats a string as a normalized full name.
+ *
+ * Formatting rules:
+ * - Trims leading and trailing spaces
+ * - Collapses multiple spaces into a single space
+ * - Converts all words to lowercase
+ * - Capitalizes the first letter of words longer than two characters
+ */
+fun String.normalizeAsFullName(): String {
+    return trim()
+        .split(Regex("\\s+"))
+        .joinToString(" ") { word ->
+            if (word.length <= 2) {
+                word.lowercase()
+            } else {
+                word.lowercase().replaceFirstChar { it.titlecase() }
+            }
+        }
+}
+
+
+/**
  * Extension function to check if the string is in a valid name format (only alphabetic characters).
  *
  * This function returns `true` if the string consists only of alphabetic characters (letters),

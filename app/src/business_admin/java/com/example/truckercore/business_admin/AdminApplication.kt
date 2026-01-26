@@ -1,7 +1,7 @@
 package com.example.truckercore.business_admin
 
 import android.app.Application
-import com.example.truckercore.business_admin.config.di.adminModules
+import com.example.truckercore.business_admin.config.adminModules
 import com.example.truckercore.core.di.appModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

@@ -6,7 +6,7 @@ import android.view.View.VISIBLE
 import androidx.core.content.ContextCompat
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
-import com.example.truckercore.layers.presentation.base.components.TextComponent
+import com.example.truckercore.core.my_lib.ui_components.TextComponent
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers.ContinueRegisterFragmentState
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers.ContinueRegisterFragmentStatus

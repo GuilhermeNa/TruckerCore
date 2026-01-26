@@ -3,7 +3,7 @@
 
     <application android:name=".business_admin.AdminApplication" >
         <activity
-            android:name=".business_admin.presentation.check_in.CheckInActivity"
+            android:name=".business_admin.layers.presentation.check_in.view.activity.CheckInActivity"
             android:exported="false" />
     </application>
 

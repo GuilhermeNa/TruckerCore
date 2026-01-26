@@ -10,7 +10,7 @@ import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragment
 import com.example.truckercore.core.my_lib.expressions.popBackstack
 import com.example.truckercore.core.my_lib.expressions.showSuccessSnackbar
 import com.example.truckercore.databinding.FragmentForgetPasswordBinding
-import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.forget_password.ForgetPasswordViewModel
 import com.example.truckercore.layers.presentation.login.view_model.forget_password.helpers.ForgetPasswordFragmentEffect

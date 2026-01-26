@@ -10,7 +10,7 @@ import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.showWarningSnackbar
 import com.example.truckercore.databinding.FragmentContinueRegisterBinding
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
-import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.ContinueRegisterViewModel
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers.ContinueRegisterFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.helpers.ContinueRegisterFragmentEvent

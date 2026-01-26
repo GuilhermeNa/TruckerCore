@@ -3,7 +3,7 @@ package com.example.truckercore.layers.presentation.login.view.fragments.splash
 import com.example.truckercore.R
 import com.example.truckercore.databinding.FragmentSplashBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
-import com.example.truckercore.layers.presentation.base.components.TextComponent
+import com.example.truckercore.core.my_lib.ui_components.TextComponent
 import com.example.truckercore.layers.presentation.login.view_model.splash.helpers.SplashEffect
 import com.example.truckercore.layers.presentation.login.view_model.splash.helpers.SplashStatus
 

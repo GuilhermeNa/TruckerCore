@@ -10,10 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsets
-import com.example.truckercore.core.my_lib.expressions.applySystemBarsInsetsIgnoringTop
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentUserProfileBinding
-import com.example.truckercore.layers.presentation.base.abstractions.view._public.PublicLockedFragment
+import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicLockedFragment
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.UserProfileViewModel
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentEffect

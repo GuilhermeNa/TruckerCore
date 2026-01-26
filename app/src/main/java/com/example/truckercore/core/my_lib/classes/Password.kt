@@ -1,39 +1,11 @@
 package com.example.truckercore.core.my_lib.classes
 
 import com.example.truckercore.core.error.DomainException
-import com.example.truckercore.core.my_lib.classes.Password.Companion.from
-import java.security.MessageDigest
 
 /**
- * Represents a validated and securely hashed password.
+ * Represents a password.
  *
- * This value class encapsulates a password value by:
- * - Enforcing format validation rules before creation
- * - Automatically hashing the raw password upon instantiation
- *
- * Instances must be created using the [from] factory method to ensure safety and consistency.
- *
- * ---
- * ### Validation Rules:
- * - Password must be composed **only of digits** (`0-9`)
- * - Password length must be between **6 and 12 characters**
- *
- * If validation fails, an [DomainException.InvalidPassword] is thrown.
- *
- * ---
- * ### Default Hashing Algorithm:
- * - SHA-256 (can be changed by passing a different algorithm string)
- *
- * ### Example:
- * ```kotlin
- * val password = Password.from("123456")         // ✅ result: "8d969eef6ecad3c29a3a629280e686cf0e4eecb019b6ccac4de9cb7f0b0c97cd" (SHA-256)
- * val invalid = Password.from("abc123")          // ❌ throws InvalidPasswordException
- * val tooShort = Password.from("123")            // ❌ throws InvalidPasswordException
- * val tooLong = Password.from("1234567890123")   // ❌ throws InvalidPasswordException
- * ```
- *
- * @property value the hashed password string
- * @throws DomainException.InvalidPassword if the raw password does not meet the required format
+ * @property value the password string
  */
 @JvmInline
 value class Password private constructor(val value: String) {
@@ -41,38 +13,37 @@ value class Password private constructor(val value: String) {
     companion object {
 
         /**
-         * Factory method that validates and hashes a raw password before instantiating [Password].
+         * Factory method that validates a raw password before creating a [Password] value object.
          *
-         * @param raw the plain-text password input
-         * @return a [Password] instance with a hashed value
-         * @throws InvalidPasswordException if validation fails
+         * Validation rules:
+         * - Must not be blank
+         * - Must contain only digits
+         * - Length must be between 6 and 12 characters
+         *
+         * @param raw The plain-text password provided by the user.
+         * @return A [Password] instance with a validated value.
+         * @throws DomainException.InvalidPassword If the password does not meet the rules.
          */
         fun from(raw: String): Password {
-            validateRule(raw)
+
+            // Step 1: Validate that the password is not blank
+            if (raw.isBlank()) {
+                throw DomainException.InvalidPassword("Password must not be blank.")
+            }
+
+            // Step 2: Validate the password against the rule
+            if (!rule(raw)) {
+                throw DomainException.InvalidPassword(
+                    "Password must contain only numbers and be 6 to 12 characters long. Provided: [$raw]."
+                )
+            }
+
+            // Step 3: Create and return the Password value object
             return Password(raw)
         }
 
-        // Hashes the raw password using the specified algorithm.
-        private fun String.toHash(algorithm: String = "SHA-256"): String {
-            return MessageDigest
-                .getInstance(algorithm)
-                .digest(this.toByteArray())
-                .fold("") { str, byte ->
-                    str + "%02x".format(byte)
-                }
-        }
-
-        // Validates whether the raw password meets the expected rule.
-        private fun validateRule(raw: String) {
-            if (!isValidRule(raw))
-                throw DomainException.InvalidPassword(
-                    "Password must contain only numbers and be 6 to 12 characters and got: [$raw]."
-                )
-        }
-
-        // Expected rules for validation
-        private fun isValidRule(raw: String) = raw.matches("^\\d{6,12}$".toRegex())
-
+        // Validates the password format using a regex rule.
+        private fun rule(raw: String) = raw.matches("^\\d{6,12}$".toRegex())
     }
 
 }

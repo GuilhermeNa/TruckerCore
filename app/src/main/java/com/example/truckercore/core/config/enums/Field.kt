@@ -9,8 +9,7 @@ enum class Field(private val fieldName: String) {
     USER_ID("userId"),
     CATEGORY("category"),
     COMPANY_ID("companyId"),
-    UID("uid")
-    ;
+    UID("uid");
 
     /**
      * Gets the name of the field.

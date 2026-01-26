@@ -97,7 +97,7 @@ class SplashViewModel(
         applyKeepLoggedPreference()
 
         // Initialize app with correct flavor's name
-        val appName = flavorService.getAppName()
+        val appName = flavorService.appName
         val event = SplashEvent.SystemEvent.Initialize(appName)
         onEvent(event)
     }

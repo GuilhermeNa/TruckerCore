@@ -7,58 +7,65 @@ import com.example.truckercore.core.error.DomainException
  *
  * This inline class enforces validation rules at creation time to ensure the email is well-formed.
  *
- * ### Validation Rules:
- * - Email must **not** be blank.
- * - Email must follow a valid format (e.g., `user@example.com`).
- * - Email is normalized to lowercase.
- *
- * If any rule is violated, an [InvalidEmailException] is thrown.
- *
  * ### Example:
  *
  * ```kotlin
- * val email = Email.from("john.doe@example.com") // ✅ valid
+ * val email = Email.from("john.doe@example.com")      // ✅ valid
  * val upper = Email.from("JOHN.doe@example.com")      // ✅ normalized to lowercase
  * val blank = Email.from("")                          // ❌ throws InvalidEmailException
  * val malformed = Email.from("invalid@")              // ❌ throws InvalidEmailException
  * ```
  *
  * @property value The validated and normalized (lowercase) email string.
- * @throws Exception if the input is blank or incorrectly formatted.
  */
 @JvmInline
 value class Email private constructor(val value: String) {
 
     companion object {
+
         /**
-         * Factory method to create a validated [Email] instance.
+         * Creates a validated [Email] value object from a raw string input.
          *
-         * This method performs format and emptiness checks and throws an exception
-         * if any validation rule is broken.
+         * This factory method is the single entry point for creating an [Email]
+         * instance, ensuring that all domain validation rules are applied
+         * before the object is instantiated.
          *
-         * @param raw the raw email string input.
-         * @return a validated [Email] instance with lowercase value.
-         * @throws InvalidEmailException if the input is blank or has invalid format.
+         * Validation rules:
+         * - The email must not be blank or empty
+         * - The email must match a valid email format
+         * - The email value is normalized to lowercase
+         *
+         * @param raw The raw email string provided by the user or external source.
+         * @return A validated [Email] instance with a normalized lowercase value.
+         * @throws DomainException.InvalidEmail If any validation rule is violated.
          */
         fun from(raw: String): Email {
-            checkEmpty(raw)
-            checkFormat(raw)
-            return Email(raw.lowercase())
+
+            // Step 1: Validate that the input is not empty or blank
+            // Blank values are not allowed in the domain
+            if (raw.isBlank()) {
+                throw DomainException.InvalidEmail(
+                    "The email address cannot be empty or blank."
+                )
+            }
+
+            // Step 2: Validate the email format using a regular expression
+            // This ensures the value follows a standard email structure
+            val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+            if (!raw.matches(emailRegex)) {
+                throw DomainException.InvalidEmail(
+                    "The email address format is invalid: '$raw'."
+                )
+            }
+
+            // Step 3: Normalize the value by converting it to lowercase
+            // This prevents case-sensitivity issues across the system
+            val normalizedEmail = raw.lowercase()
+
+            // Step 4: Create and return the Email value object
+            return Email(normalizedEmail)
         }
 
-        private fun checkEmpty(value: String) {
-            if (value.isBlank()) {
-                throw DomainException.InvalidEmail("The email address cannot be empty or blank.")
-            }
-        }
-
-        private fun checkFormat(value: String) {
-            val isEmailFormat =
-                value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex())
-            if (!isEmailFormat) {
-                throw DomainException.InvalidEmail("The email address format is invalid: '$value'.")
-            }
-        }
     }
 
 }
