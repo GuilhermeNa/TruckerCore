@@ -1,7 +1,15 @@
 package com.example.truckercore.infra.security
 
 enum class Resource {
-    COMPANY, USER, EMPLOYEE, VEHICLE, DRIVE_LICENSE, CRLV, STATE_AET, FEDERAL_AET;
+    COMPANY,
+    USER,
+    EMPLOYEE,
+    PERMISSION_CODE,
+    VEHICLE,
+    DRIVE_LICENSE,
+    CRLV,
+    STATE_AET,
+    FEDERAL_AET;
 
     fun isCompany() = this == COMPANY
 
