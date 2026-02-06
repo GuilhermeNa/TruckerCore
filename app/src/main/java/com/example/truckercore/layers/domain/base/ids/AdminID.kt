@@ -11,7 +11,7 @@ value class AdminID(override val value: String) : EmployeeID {
     }
 
     companion object {
-        fun create() = AdminID(ID.generateRandomUUID())
+        fun generate() = AdminID(ID.generateUUID())
     }
 
 }

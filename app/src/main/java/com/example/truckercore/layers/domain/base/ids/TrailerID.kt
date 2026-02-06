@@ -11,7 +11,7 @@ value class TrailerID(override val value: String) : VehicleID {
     }
 
     companion object {
-        fun create() = TrailerID(ID.generateRandomUUID())
+        fun create() = TrailerID(ID.generateUUID())
     }
 
 }

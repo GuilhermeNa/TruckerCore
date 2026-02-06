@@ -10,7 +10,7 @@ value class AccessID(override val value: String) : ID {
     }
 
     companion object {
-        fun create() = AccessID(ID.generateRandomUUID())
+        fun generate() = AccessID(ID.generateUUID())
     }
 
 }

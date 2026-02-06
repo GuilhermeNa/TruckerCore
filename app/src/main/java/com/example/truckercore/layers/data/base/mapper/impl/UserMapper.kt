@@ -1,50 +1,45 @@
 package com.example.truckercore.layers.data.base.mapper.impl
 
+import com.example.truckercore.core.error.DataException
 import com.example.truckercore.layers.data.base.dto.impl.UserDto
 import com.example.truckercore.layers.data.base.mapper.base.Mapper
-import com.example.truckercore.layers.domain.model.user.User
+import com.example.truckercore.layers.domain.base.ids.CompanyID
+import com.example.truckercore.layers.domain.base.ids.UID
+import com.example.truckercore.layers.domain.base.ids.UserID
+import com.example.truckercore.layers.domain.model.user.UserDraft
 
-object UserMapper : Mapper<UserDto, User> {
+object UserMapper : Mapper<UserDto, UserDraft> {
 
-    override fun toDto(entity: User): UserDto =
-        try {
-            TODO()
-            /*   UserDto(
-                   uid = entity.uid.value,
-                   id = entity.id.value,
-                   companyId = entity.companyId.value,
-                   persistenceState = entity.status,
-                   profile = entity.profile.toDto()
-               )*/
-        } catch (e: Exception) {
-            TODO()
-            //handleError(entity, e)
+    override fun toDto(entity: UserDraft): UserDto = try {
+        with(entity) {
+            UserDto(
+                uid = uid.value,
+                id = idValue,
+                companyId = companyId.value,
+                status = status
+            )
         }
+    } catch (e: Exception) {
+        throw DataException.Mapping("Error while mapping an UserDraft to dto: $entity")
+    }
 
-    /*    private fun ContactsContract.Profile.toDto(): ProfileDto {
-            return ProfileDto(
-                this.role,
-                this.permissions.data().toList()
+    override fun toEntity(dto: UserDto): UserDraft = try {
+        with(dto) {
+            UserDraft(
+                uid = UID(uid!!),
+                id = UserID(id!!),
+                companyId = CompanyID(companyId!!),
+                status = status!!
             )
-        }*/
-
-    /*    private fun ProfileDto.toEntity(): Profile {
-            return Profile(
-                role!!,
-                com.example.truckercore.security.data.collections.PermissionSet(permissions!!.toSet())
-            )
-        }*/
-
-    override fun toEntity(dto: UserDto): User {
-        TODO("Not yet implemented")
+        }
+    } catch (e: Exception) {
+        throw DataException.Mapping("Error while mapping an UserDto to entity: $dto")
     }
 
-    override fun toDtos(entities: List<User>): List<UserDto> {
-        TODO("Not yet implemented")
-    }
+    override fun toEntities(dtos: List<UserDto>): List<UserDraft> =
+        dtos.map { toEntity(it) }
 
-    override fun toEntities(dtos: List<UserDto>): List<User> {
-        TODO("Not yet implemented")
-    }
+    override fun toDtos(entities: List<UserDraft>): List<UserDto> =
+        entities.map { toDto(it) }
 
 }

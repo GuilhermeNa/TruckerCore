@@ -14,4 +14,3 @@ interface Mapper<D : BaseDto, E : BaseEntity> {
     fun toEntities(dtos: List<D>): List<E>
 
 }
-

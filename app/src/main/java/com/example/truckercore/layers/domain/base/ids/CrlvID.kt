@@ -10,7 +10,7 @@ value class CrlvID(override val value: String) : ID {
     }
 
     companion object {
-        fun create() = CrlvID(ID.generateRandomUUID())
+        fun create() = CrlvID(ID.generateUUID())
     }
 
 }

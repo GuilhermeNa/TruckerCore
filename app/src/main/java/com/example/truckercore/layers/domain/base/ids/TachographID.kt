@@ -10,7 +10,7 @@ value class TachographID(override val value: String): ID {
     }
 
     companion object {
-        fun create() = TachographID(ID.generateRandomUUID())
+        fun create() = TachographID(ID.generateUUID())
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.truckercore.layers.data.base.instruction.collections
 
 import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.layers.data.base.instruction._contracts.Instruction
+import com.example.truckercore.layers.data.base.instruction.abstraction.InstructionExecutor
 
 /**
  * A wrapper around an [ArrayDeque] that manages a sequence of [Instruction]s.

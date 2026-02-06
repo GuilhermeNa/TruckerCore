@@ -25,18 +25,9 @@ data class User(
 ) : Entity {
 
     init {
-        validate()
-    }
-
-    /**
-     * Validates internal foreign key relationships to ensure
-     * domain consistency.
-     *
-     * - Ensures the Access entity belongs to this User
-     * - Ensures the Person entity is linked to this User
-     */
-    private fun validate() {
+        // Validate domain rules for the provided aggregates.
         checkFK(access.userId)
         checkFK(person.userId!!)
     }
+
 }

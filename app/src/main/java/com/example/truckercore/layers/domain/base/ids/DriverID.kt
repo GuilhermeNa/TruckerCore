@@ -11,7 +11,7 @@ value class DriverID(override val value: String) : EmployeeID {
     }
 
     companion object {
-        fun create() = DriverID(ID.generateRandomUUID())
+        fun create() = DriverID(ID.generateUUID())
     }
 
 }

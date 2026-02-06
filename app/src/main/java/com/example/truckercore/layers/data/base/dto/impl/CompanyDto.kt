@@ -5,10 +5,5 @@ import com.example.truckercore.layers.domain.base.enums.Status
 
 data class CompanyDto(
     override val id: String? = null,
-    override val status: Status? = null,
-    val keysRegistry: List<String>? = null
-): BaseDto {
-
-}
-
-
+    override val status: Status? = null
+) : BaseDto

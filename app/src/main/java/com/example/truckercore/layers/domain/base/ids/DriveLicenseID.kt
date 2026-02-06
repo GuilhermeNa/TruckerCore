@@ -10,7 +10,7 @@ value class DriveLicenseID(override val value: String) : ID {
     }
 
     companion object {
-        fun create() = DriveLicenseID(ID.generateRandomUUID())
+        fun create() = DriveLicenseID(ID.generateUUID())
     }
 
 }

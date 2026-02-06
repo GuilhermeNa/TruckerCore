@@ -15,7 +15,7 @@ interface ID {
     }
 
     companion object {
-        fun generateRandomUUID(): String = UUID.randomUUID().toString()
+        fun generateUUID(): String = UUID.randomUUID().toString()
     }
 
 }

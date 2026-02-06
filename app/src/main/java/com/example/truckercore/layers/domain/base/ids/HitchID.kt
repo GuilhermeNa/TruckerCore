@@ -10,7 +10,7 @@ value class HitchID(override val value: String) : ID {
     }
 
     companion object {
-        fun create() = HitchID(ID.generateRandomUUID())
+        fun create() = HitchID(ID.generateUUID())
     }
 
 

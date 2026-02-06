@@ -20,4 +20,9 @@ interface Person : Entity {
     val name: Name
     val email: Email
     val userId: UserID?
+
+    fun nameValue() = name.value
+
+    fun emailValue() = email.value
+
 }
