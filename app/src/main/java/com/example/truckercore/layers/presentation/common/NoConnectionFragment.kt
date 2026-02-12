@@ -110,7 +110,7 @@ class NoConnectionFragment : LockedFragment() {
         private const val ANIMATION_DELAY = 3000L
         private const val TOAST_MESSAGE = "Falha na conexão"
         const val REQUEST_KEY = "no_connection_result"
-        const val BUNDLE_KEY = "restored"
+        const val BUNDLE_KEY = "connection_restored"
     }
 
 }

@@ -29,7 +29,11 @@ fun Fragment.launchAndRepeatOnFragmentStartedLifeCycle(block: suspend CoroutineS
 }
 
 fun Fragment.popBackstack() {
-    findNavController().popBackStack()
+    runCatching {
+        findNavController().popBackStack()
+    }.getOrElse {
+        parentFragmentManager.popBackStack()
+    }
 }
 
 fun Fragment.showToast(msg: String, duration: Int = LENGTH_SHORT) {

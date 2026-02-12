@@ -4,12 +4,8 @@ import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.repository.auth.AuthenticationRepository
 import com.example.truckercore.layers.domain.base.ids.UID
 
-interface GetUidUseCase {
-    fun invoke(): DataOutcome<UID>
-}
+class GetUidUseCase(private val repository: AuthenticationRepository) {
 
-class GetUidUseCaseImpl(private val repository: AuthenticationRepository) : GetUidUseCase {
-
-    override fun invoke(): DataOutcome<UID> = repository.getUid()
+    operator fun invoke(): DataOutcome<UID> = repository.getUid()
 
 }

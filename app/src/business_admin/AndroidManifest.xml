@@ -3,8 +3,15 @@
 
     <application android:name=".business_admin.AdminApplication" >
         <activity
-            android:name=".business_admin.layers.presentation.check_in.view.activity.CheckInActivity"
-            android:exported="false" />
+            android:name=".business_admin.layers.presentation.check_in.view.CheckInActivity"
+            android:theme="@style/Theme.TruckerCore.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

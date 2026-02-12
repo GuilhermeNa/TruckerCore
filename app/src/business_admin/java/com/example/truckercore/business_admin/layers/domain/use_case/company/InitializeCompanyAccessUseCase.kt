@@ -21,7 +21,7 @@ class InitializeCompanyAccessUseCase(
     val instructionRepository: InstructionRepository,
 ) {
 
-    suspend fun invoke(uid: UID, name: Name, email: Email): OperationOutcome {
+    suspend operator fun invoke(uid: UID, name: Name, email: Email): OperationOutcome {
         val deque = InstructionDeque()
 
         // Create Domain Objects

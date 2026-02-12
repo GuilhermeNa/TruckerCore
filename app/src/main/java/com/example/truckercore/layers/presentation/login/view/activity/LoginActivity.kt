@@ -1,14 +1,10 @@
 package com.example.truckercore.layers.presentation.login.view.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.navigation.fragment.NavHostFragment
 import com.example.truckercore.R
 import com.example.truckercore.core.my_lib.expressions.isKeyboardOpen
 
@@ -30,31 +26,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         enableEdgeToEdge()
-
-        // Retrieves the NavHostFragment responsible for handling navigation
-   /*     val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_login) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        navController.addOnDestinationChangedListener { _, dest, _ ->
-            if (dest.label == "fragment_forget_password") {
-
-                // Allows the layout to extend into the system window areas
-                WindowCompat.setDecorFitsSystemWindows(window, false)
-
-                // Makes the status bar transparent
-                window.statusBarColor = Color.TRANSPARENT
-
-                // Sets the status bar icons to a dark appearance (light background)
-                WindowInsetsControllerCompat(
-                    window,
-                    window.decorView
-                ).isAppearanceLightStatusBars = true
-            }
-        }*/
-
-
-
     }
 
     /**

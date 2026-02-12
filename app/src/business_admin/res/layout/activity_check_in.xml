@@ -5,13 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".business_admin.layers.presentation.check_in.view.activity.CheckInActivity">
+    tools:context=".business_admin.layers.presentation.check_in.view.CheckInActivity">
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/act_check_in_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Business Admin"
-        android:gravity="center"
-        android:textSize="32sp"/>
+        android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

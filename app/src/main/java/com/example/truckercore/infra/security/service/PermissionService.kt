@@ -10,8 +10,6 @@ import com.example.truckercore.layers.domain.model.user.User
  */
 interface PermissionService {
 
-    fun hasPermission(user: User, action: Action, resource: Resource): Boolean
-
     operator fun invoke(user: User, action: Action, resource: Resource): Boolean
 
 }

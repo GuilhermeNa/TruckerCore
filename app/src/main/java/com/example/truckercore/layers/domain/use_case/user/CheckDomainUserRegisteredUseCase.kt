@@ -8,7 +8,7 @@ import com.example.truckercore.layers.domain.base.ids.UID
 import com.example.truckercore.layers.domain.model.user.UserDraft
 
 class CheckDomainUserRegisteredUseCase(
-    val repository: DataRepository
+    private val repository: DataRepository
 ) {
 
     suspend operator fun invoke(uid: UID): DataOutcome<Boolean> {

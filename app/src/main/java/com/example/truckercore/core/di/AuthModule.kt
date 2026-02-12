@@ -9,7 +9,6 @@ import com.example.truckercore.layers.domain.use_case.authentication.ResetPasswo
 import com.example.truckercore.layers.domain.use_case.authentication.CreateUserWithEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.CreateUserWithEmailUseCaseImpl
 import com.example.truckercore.layers.domain.use_case.authentication.GetUidUseCase
-import com.example.truckercore.layers.domain.use_case.authentication.GetUidUseCaseImpl
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCaseImpl
 import com.example.truckercore.layers.domain.use_case.authentication.HasLoggedUserUseCase
@@ -34,7 +33,7 @@ val authModule = module {
     single<IsEmailVerifiedUseCase> { IsEmailVerifiedUseCaseImpl(get()) }
     single<HasLoggedUserUseCase> { HasLoggedUserUseCaseImpl(get()) }
     single<GetUserEmailUseCase> { GetUserEmailUseCaseImpl(get()) }
-    single<GetUidUseCase> { GetUidUseCaseImpl(get()) }
+    single<GetUidUseCase> { GetUidUseCase(get()) }
     single<SendEmailVerificationUseCase> { SendEmailVerificationUseCaseImpl(get()) }
     single<SignOutUseCase> { SignOutUseCaseImpl(get()) }
     single<VerifyEmailValidationUseCase> { ObserveEmailValidationUseCaseImpl(get()) }

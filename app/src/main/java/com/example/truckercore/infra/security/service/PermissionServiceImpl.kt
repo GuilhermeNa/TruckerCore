@@ -7,7 +7,7 @@ import com.example.truckercore.layers.domain.model.user.User
 
 internal class PermissionServiceImpl : PermissionService {
 
-    override fun hasPermission(user: User, action: Action, resource: Resource): Boolean =
+    override fun invoke(user: User, action: Action, resource: Resource): Boolean =
         when (user.access.role) {
             Role.ADMIN -> true
             Role.AUTONOMOUS -> true

@@ -73,6 +73,8 @@ fun DataOutcome<*>.isSuccess(): Boolean = this is DataOutcome.Success
 
 fun DataOutcome<Boolean>.isTrue(): Boolean = this is DataOutcome.Success && this.data
 
+fun DataOutcome<Boolean>.isFalse(): Boolean = this is DataOutcome.Success && !this.data
+
 fun DataOutcome<*>.isEmpty(): Boolean = this is DataOutcome.Empty
 
 fun <T> DataOutcome<T>.onFailure(action: (AppException) -> Unit): DataOutcome<T> {
