@@ -225,7 +225,6 @@ class SplashViewModel(
      * Logs the error and returns a failure event to the reducer.
      */
     private fun handleUnexpectedOutcome(): SplashEvent.SystemEvent.LoadUserTask {
-        AppLogger.e(getTag, REGISTRATION_ERROR_MSG)
         return SplashEvent.SystemEvent.LoadUserTask.Error
     }
 

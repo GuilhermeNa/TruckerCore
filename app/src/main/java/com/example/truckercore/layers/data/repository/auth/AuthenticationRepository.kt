@@ -75,6 +75,8 @@ interface AuthenticationRepository {
 
     suspend fun updateName(name: Name): OperationOutcome
 
+    fun getUserName(): DataOutcome<Name>
+
     /**
      * Retrieves the unique identifier (UID) of the currently authenticated user.
      *

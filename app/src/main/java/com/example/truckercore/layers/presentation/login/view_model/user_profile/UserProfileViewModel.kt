@@ -116,7 +116,6 @@ class UserProfileViewModel(
         onFailure = { e ->
             if (e.isByNetwork()) UserProfileFragmentEvent.ProfileTask.Failure.NoConnection
             else {
-                AppLogger.e(getTag, CREATE_PROFILE_ERROR_MSG, e)
                 UserProfileFragmentEvent.ProfileTask.Failure.Irrecoverable
             }
         }

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:name=".business_admin.AdminApplication" >
+    <application android:name=".business_admin.AdminApplication">
+
         <activity
-            android:name=".business_admin.layers.presentation.check_in.view.CheckInActivity"
-            android:theme="@style/Theme.TruckerCore.NoActionBar"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".business_admin.layers.presentation.main.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.TruckerCore.NoActionBar" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name=".business_admin.layers.presentation.check_in.CheckInActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TruckerCore.NoActionBar"/>
+
     </application>
 
 </manifest>

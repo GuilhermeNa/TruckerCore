@@ -2,6 +2,7 @@ package com.example.truckercore.business_admin.layers.domain.use_case.company
 
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
+import com.example.truckercore.infra.logger.Logable
 import com.example.truckercore.layers.data.base.instruction.collections.InstructionDeque
 import com.example.truckercore.layers.data.base.instruction.instructions.Put
 import com.example.truckercore.layers.data.base.mapper.impl.AccessMapper
@@ -18,8 +19,8 @@ import com.example.truckercore.layers.domain.model.company.CompanyFactory
 import com.example.truckercore.layers.domain.model.user.UserFactory
 
 class InitializeCompanyAccessUseCase(
-    val instructionRepository: InstructionRepository,
-) {
+    val instructionRepository: InstructionRepository
+) : Logable {
 
     suspend operator fun invoke(uid: UID, name: Name, email: Email): OperationOutcome {
         val deque = InstructionDeque()
@@ -46,7 +47,14 @@ class InitializeCompanyAccessUseCase(
             Put(adminDto)
         )
 
+        val outcome = instructionRepository(deque)
+        outcome.logFailure(CREATE_ACCESS_ERROR)
         return instructionRepository(deque)
+    }
+
+    private companion object {
+        private const val CREATE_ACCESS_ERROR =
+            "An error occurred while creating a domain access."
     }
 
 }

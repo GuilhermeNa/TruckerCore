@@ -1,21 +1,24 @@
-package com.example.truckercore.business_admin.layers.presentation.check_in.view
+package com.example.truckercore.business_admin.layers.presentation.check_in
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.truckercore.R
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.CheckInViewModel
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInEffect
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInState
+import com.example.truckercore.business_admin.layers.presentation.main.MainActivity
+import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.contracts.BaseNavigator
 import com.example.truckercore.layers.presentation.common.LoadingDialog
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CheckInActivity : AppCompatActivity(), BaseNavigator {
 
-    private val viewModel: CheckInViewModel by viewModels()
+    private val viewModel: CheckInViewModel by viewModel()
 
     private var dialog: LoadingDialog? = null
 
@@ -28,6 +31,13 @@ class CheckInActivity : AppCompatActivity(), BaseNavigator {
         enableEdgeToEdge()
         initializeDialog()
         setActivityManagers()
+        initializeViewModel(savedInstanceState)
+    }
+
+    private fun initializeViewModel(sis: Bundle?) {
+        if (sis == null) {
+            viewModel.initialize()
+        }
     }
 
     private fun initializeDialog() {
@@ -43,7 +53,8 @@ class CheckInActivity : AppCompatActivity(), BaseNavigator {
 
     private suspend fun setStateManager() {
         viewModel.stateFlow.collect { state ->
-            when(state) {
+            AppLogger.d("Activity(State): ", "$state")
+            when (state) {
                 CheckInState.Idle -> dialog?.dismiss()
                 CheckInState.Loading -> dialog?.show()
             }
@@ -52,9 +63,12 @@ class CheckInActivity : AppCompatActivity(), BaseNavigator {
 
     private suspend fun setEffectManager() {
         viewModel.effectFlow.collect { effect ->
-            when(effect) {
+            AppLogger.d("Activity(State): ", "$effect")
+            when (effect) {
                 CheckInEffect.Navigation.ToMain -> {
-                    TODO()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
 
                 CheckInEffect.Navigation.ToNoConnection -> {

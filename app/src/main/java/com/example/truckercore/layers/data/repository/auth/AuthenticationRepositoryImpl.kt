@@ -43,11 +43,10 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
     override fun thereIsLoggedUser(): DataOutcome<Boolean> =
         DataOutcome.Success(authSource.hasLoggedUser())
 
-    override fun getUserEmail(): DataOutcome<Email> =
-        runSafeSearch {
-            val email = authSource.getUserEmail()
-            email?.let { Email.from(it) }
-        }
+    override fun getUserEmail(): DataOutcome<Email> = runSafeSearch {
+        val email = authSource.getUserEmail()
+        email?.let { Email.from(it) }
+    }
 
     override fun isEmailVerified(): DataOutcome<Boolean> =
         runSafeSearch { authSource.isEmailVerified() }
@@ -57,6 +56,11 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
 
     override suspend fun updateName(name: Name): OperationOutcome = runSafeOperation {
         authSource.updateName(name)
+    }
+
+    override fun getUserName(): DataOutcome<Name> = runSafeSearch {
+        val name = authSource.getUserName()
+        name?.let { Name.from(name) }
     }
 
     override suspend fun sendPasswordResetEmail(email: Email): OperationOutcome =

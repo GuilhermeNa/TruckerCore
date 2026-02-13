@@ -29,22 +29,24 @@ import android.util.Log
  */
 object AppLogger {
 
-    private const val LOGGER = "Logger:"
+    private const val LOGGER = "AppLogger:"
 
     fun d(tag: String, message: String) {
-        Log.d("$LOGGER [$tag]", message)
+        Log.d(LOGGER, "[$tag] -> $message")
     }
 
     fun i(tag: String, message: String) {
-        Log.i("$LOGGER [$tag]", message)
+        Log.i(LOGGER, "[$tag] -> $message")
     }
 
     fun w(tag: String, message: String) {
-        Log.w("$LOGGER [$tag]", message)
+        Log.w(LOGGER, "[$tag] -> $message")
     }
 
-    fun e(tag: String, msg: String = "", throwable: Throwable? = null) {
-        Log.e("$LOGGER [$tag]", "$msg ($throwable)")
+    fun e(tag: String, message: String = "", throwable: Throwable? = null) {
+        Log.e(
+            LOGGER, "$message /n ${throwable?.stackTraceToString()}"
+        )
     }
 
 }

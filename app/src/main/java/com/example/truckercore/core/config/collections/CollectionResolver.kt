@@ -4,6 +4,8 @@ import com.example.truckercore.core.config.collections.CollectionResolver.invoke
 import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
+import com.example.truckercore.layers.data.base.dto.impl.AccessDto
+import com.example.truckercore.layers.data.base.dto.impl.AdminDto
 import com.example.truckercore.layers.data.base.dto.impl.CompanyDto
 import com.example.truckercore.layers.data.base.dto.impl.UserDto
 import com.example.truckercore.layers.domain.base.contracts.entity.ID
@@ -36,14 +38,14 @@ object CollectionResolver {
         return when (dto) {
             is CompanyDto -> AppCollection.COMPANY
             is UserDto -> AppCollection.USER
+            is AccessDto -> AppCollection.ACCESS
+            is AdminDto -> AppCollection.ADMIN
             else -> dto.handleError()
         }
     }
 
     private fun BaseDto.handleError(): Nothing {
         val message = "Unsupported DTO type: ${this::class.simpleName}"
-
-        AppLogger.e(getTag, message)
         throw IllegalArgumentException(message)
     }
 
@@ -64,8 +66,6 @@ object CollectionResolver {
 
     private fun ID.handleError(): Nothing {
         val message = "Unsupported ID type: ${this::class.simpleName}"
-
-        AppLogger.e(getTag, message)
         throw IllegalArgumentException(message)
     }
 
@@ -89,8 +89,6 @@ object CollectionResolver {
 
     private fun <T : BaseDto> Class<T>.handleError(): Nothing {
         val message = "Unsupported Class type: ${this::class.simpleName}"
-
-        AppLogger.e(getTag, message)
         throw IllegalArgumentException(message)
     }
 

@@ -11,12 +11,14 @@ import com.example.truckercore.business_admin.layers.presentation.check_in.view_
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInState
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.mappers.toCheckAccessEvent
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.mappers.toCreateAccessEvent
+import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.mappers.toRetryEvent
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.objects.CurrentUser
 import com.example.truckercore.core.error.PresentationException
 import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.infra.logger.AppLogger
+import com.example.truckercore.infra.logger.Logable
 import com.example.truckercore.layers.domain.use_case.authentication.GetUidUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
@@ -32,7 +34,7 @@ class CheckInViewModel(
     private val getUidUseCase: GetUidUseCase,
     private val getNameUseCase: GetUserNameUseCase,
     private val getEmailUseCase: GetUserEmailUseCase
-) : BaseViewModel() {
+) : BaseViewModel(){
 
     private val stateManager = StateManager<CheckInState>(CheckInState.Loading)
     val stateFlow = stateManager.stateFlow
@@ -50,11 +52,11 @@ class CheckInViewModel(
         )
     }
 
-    private var retryReason: CheckInRetryReason? = null
-
-    init {
-        onEvent(CheckInEvent.Initialize)
-    }
+    private var _retryReason: CheckInRetryReason? = null
+    private val retryReason
+        get() = _retryReason ?: run {
+            throw PresentationException.Unknown(INVALID_RETRY_REASON)
+        }
 
     // ---------------------------------------------------------------------------------------------
     // Event Dispatcher
@@ -88,18 +90,19 @@ class CheckInViewModel(
     // Create Company Access Task
     // ---------------------------------------------------------------------------------------------
     private fun createAccessTask() = viewModelScope.launch {
-        val outcome =
-            initializeCompanyAccessUseCase(currentUser.uid, currentUser.name, currentUser.email)
+        val outcome = initializeCompanyAccessUseCase(
+            currentUser.uid, currentUser.name, currentUser.email
+        )
         val newEvent = outcome.toCreateAccessEvent()
         verifyReconnectionRequest(newEvent)
         onEvent(newEvent)
     }
 
     //----------------------------------------------------------------------------------------------
-    // Generic Methods
+    // Other Methods
     //----------------------------------------------------------------------------------------------
     private fun verifyReconnectionRequest(newEvent: CheckInEvent) = with(newEvent) {
-        retryReason = when {
+        _retryReason = when {
             isCheckageConnectionError -> CHECKING_ACCESS
             isCreationConnectionError -> CREATING_ACCESS
             else -> return
@@ -109,18 +112,13 @@ class CheckInViewModel(
     // ---------------------------------------------------------------------------------------------
     // Public API
     // ---------------------------------------------------------------------------------------------
+    fun initialize() {
+        onEvent(CheckInEvent.Initialize)
+    }
+
     fun retry() {
-        if (retryReason == null) {
-            AppLogger.e(getTag, INVALID_RETRY_REASON)
-            throw PresentationException.Unknown(INVALID_RETRY_REASON)
-        }
-
-        val newEvent =
-            if (retryReason == CHECKING_ACCESS) {
-                CheckInEvent.Retry.CheckAccess
-            } else CheckInEvent.Retry.CreateAccess
-
-        retryReason = null
+        val newEvent = retryReason.toRetryEvent()
+        _retryReason = null
         onEvent(newEvent)
     }
 

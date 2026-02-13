@@ -1,13 +1,11 @@
 package com.example.truckercore.layers.presentation.login.view_model.continue_register
 
 import com.example.truckercore.core.my_lib.classes.Email
-import com.example.truckercore.core.my_lib.expressions.handle
-import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.core.my_lib.expressions.get
-import com.example.truckercore.core.my_lib.expressions.getTag
+import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.expressions.isConnectionError
 import com.example.truckercore.core.my_lib.expressions.isNotSuccess
-import com.example.truckercore.infra.logger.AppLogger
+import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
@@ -80,7 +78,6 @@ class ContinueRegisterViewModel(
             ContinueRegisterFragmentEvent.CheckRegisterTask.Failure.NoConnection
 
         hasAnyOtherErrorOrEmptyData() -> {
-            AppLogger.e(getTag, REGISTRATION_ERROR_MSG)
             ContinueRegisterFragmentEvent.CheckRegisterTask.Failure.Irrecoverable
         }
 

@@ -10,7 +10,8 @@ package com.example.truckercore.core.config.collections
 enum class AppCollection {
     COMPANY,
     USER,
+    ACCESS,
     ADMIN,
-    AUTONOMOUS,
-    DRIVER;
+    DRIVER,
+    AUTONOMOUS;
 }

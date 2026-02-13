@@ -23,6 +23,10 @@ class DataRepositoryImpl(private val dataSource: DataSource) : DataRepository {
     //----------------------------------------------------------------------------------------------
     // Find
     //----------------------------------------------------------------------------------------------
+    // TODO o find one está direcionando para o findById e a busca na verdade está sendo feita pelo UID
+    //  e nao pelo proprio ID do objeto. Isso irá me retornar uma lista desses objetos com provavelmente
+    //  apenas um objeto
+
     override suspend fun <D : BaseDto, E : BaseEntity> findOneBy(spec: Specification<D>): DataOutcome<E> =
         try {
             // Retrieves data from the data source

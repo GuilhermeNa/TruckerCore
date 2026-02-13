@@ -6,6 +6,7 @@ val appModules = listOf(
     securityModule,
     repositoriesModule,
     serviceModule,
+    domainModule,
     viewModelModule,
     utilModule
 )

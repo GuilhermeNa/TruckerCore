@@ -11,6 +11,7 @@ import com.example.truckercore.layers.domain.use_case.authentication.CreateUserW
 import com.example.truckercore.layers.domain.use_case.authentication.GetUidUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCaseImpl
+import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.HasLoggedUserUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.HasLoggedUserUseCaseImpl
 import com.example.truckercore.layers.domain.use_case.authentication.IsEmailVerifiedUseCase
@@ -41,4 +42,5 @@ val authModule = module {
     single<CreateUserProfileUseCase> { CreateUserProfileUseCaseImpl(get()) }
     single<CreateUserWithEmailUseCase> { CreateUserWithEmailUseCaseImpl(get()) }
     single<IsProfileCompleteUseCase> { IsProfileCompleteUseCaseImpl(get()) }
+    single { GetUserNameUseCase(get()) }
 }

@@ -1,6 +1,8 @@
 package com.example.truckercore.business_admin.layers.presentation.check_in.view_model.mappers
 
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInEvent
+import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInRetryReason
+import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInRetryReason.CHECKING_ACCESS
 import com.example.truckercore.core.my_lib.expressions.getOrNull
 import com.example.truckercore.core.my_lib.expressions.isByNetwork
 import com.example.truckercore.core.my_lib.expressions.isConnectionError
@@ -29,7 +31,7 @@ private fun mapEmptyOrError(outcome: DataOutcome<Boolean>) =
     } else CheckInEvent.CheckAccessTask.Unregistered
 
 //--------------------------------------------------------------------------------------------------
-// Check Access Event Mapper
+// Create Access Event Mapper
 //--------------------------------------------------------------------------------------------------
 fun OperationOutcome.toCreateAccessEvent() = map(
     onComplete = { CheckInEvent.CreateAccessTask.Complete },
@@ -39,3 +41,11 @@ fun OperationOutcome.toCreateAccessEvent() = map(
         } else CheckInEvent.CreateAccessTask.Failure
     }
 )
+
+//--------------------------------------------------------------------------------------------------
+// Retry Event Mapper
+//--------------------------------------------------------------------------------------------------
+fun CheckInRetryReason.toRetryEvent() =
+    if (this == CHECKING_ACCESS) {
+        CheckInEvent.Retry.CheckAccess
+    } else CheckInEvent.Retry.CreateAccess

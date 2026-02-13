@@ -76,9 +76,11 @@ abstract class DataSource(
             interpreter.byId(it, spec.collection)
         } ?: interpreter.byFilter(spec.getFilter(), spec.collection)
 
-        if (result !is D) throw InfraException.Specification(
-            "Expected ${D::class.simpleName}, but got ${result::class.simpleName}"
-        )
+        if (result !is D) {
+            throw InfraException.Specification(
+                "Expected ${D::class.simpleName}, but got ${result::class.simpleName}"
+            )
+        }
 
         return result
     }

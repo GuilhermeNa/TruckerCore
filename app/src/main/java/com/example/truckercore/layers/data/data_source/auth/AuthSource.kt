@@ -92,6 +92,8 @@ abstract class AuthSource(protected val errorMapper: ErrorMapper) {
      */
     abstract fun getUserEmail(): String?
 
+    abstract fun getUserName(): String?
+
     /**
      * Checks if the currently logged-in user's email is verified.
      *

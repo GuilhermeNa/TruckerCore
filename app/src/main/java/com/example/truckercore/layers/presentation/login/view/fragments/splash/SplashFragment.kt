@@ -44,7 +44,6 @@ class SplashFragment : PublicLockedFragment() {
         }
 
         private fun handleUiStateError(currentId: Int) {
-            AppLogger.e(tag = getTag, msg = "Unexpected id for transition: $currentId.")
             navigateToErrorActivity(requireActivity())
         }
 

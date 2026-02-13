@@ -15,6 +15,4 @@ sealed class CheckInState: State {
 
     fun loading() = Loading
 
-
-
 }

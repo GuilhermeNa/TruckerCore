@@ -79,6 +79,8 @@ class AuthSourceImpl(
 
     override fun getUserEmail(): String? = getLoggedUser().email
 
+    override fun getUserName(): String? = getLoggedUser().displayName
+
     override fun getUid(): String = getLoggedUser().uid
 
     override fun isEmailVerified(): Boolean = getLoggedUser().isEmailVerified

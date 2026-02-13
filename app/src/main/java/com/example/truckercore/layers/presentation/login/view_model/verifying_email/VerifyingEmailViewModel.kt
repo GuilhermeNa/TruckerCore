@@ -196,7 +196,6 @@ class VerifyingEmailViewModel(
                 if (exception.isByNetwork()) {
                     VerifyingEmailFragmentEvent.SendEmailTask.NoConnection
                 } else {
-                    AppLogger.e(getTag, SENDING_EMAIL_ERROR, exception)
                     VerifyingEmailFragmentEvent.SendEmailTask.Failure
                 }
         }
@@ -240,7 +239,6 @@ class VerifyingEmailViewModel(
                 if (exception.isByNetwork()) {
                     VerifyingEmailFragmentEvent.VerifyEmailTask.NoConnection
                 } else {
-                    AppLogger.e(getTag, VERIFY_EMAIL_ERROR, exception)
                     VerifyingEmailFragmentEvent.VerifyEmailTask.Failure
                 }
         }

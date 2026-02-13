@@ -1,7 +1,5 @@
 package com.example.truckercore.layers.presentation.base.managers
 
-import com.example.truckercore.core.my_lib.expressions.getTag
-import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.contracts.Effect
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -39,11 +37,7 @@ class EffectManager<T : Effect> {
      * @param effect The effect to be emitted.
      */
     fun trySend(effect: T) {
-        val result = _effectChannel.trySend(effect)
-
-        if (!result.isSuccess) {
-            AppLogger.e(getTag, "Channel failed to emit effect: $effect.")
-        }
+        _effectChannel.trySend(effect)
     }
 
 }

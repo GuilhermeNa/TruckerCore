@@ -17,11 +17,11 @@
             android:name=".layers.presentation.login.view.activity.LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.TruckerCore.NoActionBar">
-<!--            <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
 
         <activity
