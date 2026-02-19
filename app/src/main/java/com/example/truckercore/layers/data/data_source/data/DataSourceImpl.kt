@@ -1,8 +1,10 @@
 package com.example.truckercore.layers.data.data_source.data
 
+import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.core.my_lib.expressions.toDto
 import com.example.truckercore.core.my_lib.expressions.toList
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
+import com.example.truckercore.layers.data.base.specification._contracts.ApiSpecificationWrapper
 import com.example.truckercore.layers.data.base.specification._contracts.Specification
 import com.example.truckercore.layers.data.base.specification._contracts.SpecificationInterpreter
 import com.example.truckercore.layers.data.base.specification.api_impl.wrappers.DocumentWrapper
@@ -29,20 +31,20 @@ class DataSourceImpl(
 ) : DataSource(interpreter, errorMapper) {
 
     override suspend fun <T : BaseDto> findById(spec: Specification<T>): T? {
-        val docReference = getApiSpecification<DocumentWrapper>(spec).document
+        val docReference = toApiSpec<DocumentWrapper>(spec).document
         val docSnap = docReference.get().await()
         return docSnap.toDto(spec.dtoClass)
     }
 
-    override suspend fun <T : BaseDto> findAllBy(spec: Specification<T>): List<T>? {
-        val query = getApiSpecification<QueryWrapper>(spec).query
+    override suspend fun <T : BaseDto> findByFilter(spec: Specification<T>): List<T>? {
+        val query = toApiSpec<QueryWrapper>(spec).query
         val querySnap = query.get().await()
         return querySnap.toList(spec.dtoClass)
     }
 
-    override fun <T : BaseDto> flowOneBy(spec: Specification<T>): Flow<T?> = callbackFlow {
+    override fun <T : BaseDto> flowById(spec: Specification<T>): Flow<T?> = callbackFlow {
         val document = try {
-            getApiSpecification<DocumentWrapper>(spec).document
+            toApiSpec<DocumentWrapper>(spec).document
         } catch (e: Exception) {
             this.close(e)
             return@callbackFlow
@@ -63,9 +65,9 @@ class DataSourceImpl(
         awaitClose { listener.remove() }
     }
 
-    override fun <T : BaseDto> flowAllBy(spec: Specification<T>): Flow<List<T>?> = callbackFlow {
+    override fun <T : BaseDto> flowByFilter(spec: Specification<T>): Flow<List<T>?> = callbackFlow {
         val query = try {
-            getApiSpecification<QueryWrapper>(spec).query
+            toApiSpec<QueryWrapper>(spec).query
         } catch (e: Exception) {
             this.close(e)
             return@callbackFlow
@@ -84,6 +86,44 @@ class DataSourceImpl(
         }
 
         awaitClose { listener.remove() }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // Helpers
+    //----------------------------------------------------------------------------------------------
+    /**
+     * Translates a generic [Specification] into an API-specific wrapper (document or query).
+     *
+     * This method uses the [SpecificationInterpreter] to obtain the corresponding
+     * [ApiSpecificationWrapper] instance (e.g., [DocumentWrapper] or [QueryWrapper]).
+     *
+     * @throws InfraException.Specification if the resulting wrapper type does not match [D].
+     */
+    private inline fun <reified D : ApiSpecificationWrapper> toApiSpec(spec: Specification<*>): D {
+        // Converts an App Specification to Api Specification
+        val apiSpec = interpretAppSpec(spec)
+
+        // Validate Api Wrapper (Document or Query)
+        validateType<D>(apiSpec)
+
+        return apiSpec as D
+    }
+
+    private fun interpretAppSpec(spec: Specification<*>): ApiSpecificationWrapper {
+        return if(spec.isSearchById) {
+            interpreter.byId(spec.entityId!!, spec.collection)
+        } else {
+            interpreter.byFilter(spec.getFilter(), spec.collection)
+        }
+    }
+
+    private inline fun <reified D : ApiSpecificationWrapper> validateType(apiSpec: ApiSpecificationWrapper): D {
+        if (apiSpec !is D) {
+            throw InfraException.Specification(
+                "Expected ${D::class.simpleName}, but got ${apiSpec::class.simpleName}"
+            )
+        }
+        return apiSpec
     }
 
 }

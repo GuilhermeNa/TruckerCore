@@ -27,7 +27,7 @@ interface DataRepository {
      *         [DataOutcome.Empty] if no data is found, or
      *         [DataOutcome.Failure] if an exception occurs.
      */
-    suspend fun <D : BaseDto, E : BaseEntity> findOneBy(spec: Specification<D>): DataOutcome<E>
+    suspend fun <D : BaseDto, E : BaseEntity> findById(spec: Specification<D>): DataOutcome<E>
 
     /**
      * Retrieves all entities that match the given [specification].
@@ -40,7 +40,7 @@ interface DataRepository {
      *         [DataOutcome.Empty] if no data is found, or
      *         [DataOutcome.Failure] if an exception occurs.
      */
-    suspend fun <D : BaseDto, E : BaseEntity> findAllBy(spec: Specification<D>): DataOutcome<List<E>>
+    suspend fun <D : BaseDto, E : BaseEntity> findByFilter(spec: Specification<D>): DataOutcome<List<E>>
 
     /**
      * Returns a [Flow] emitting a single entity that matches the given [specification].
@@ -54,7 +54,7 @@ interface DataRepository {
      * @return A [Flow] emitting [DataOutcome.Success], [DataOutcome.Empty], or
      *         [DataOutcome.Failure] in case of an exception.
      */
-    fun <D : BaseDto, E : BaseEntity> flowOneBy(spec: Specification<D>): Flow<DataOutcome<E>>
+    fun <D : BaseDto, E : BaseEntity> flowById(spec: Specification<D>): Flow<DataOutcome<E>>
 
     /**
      * Returns a [Flow] emitting a list of entities that match the given [specification].
@@ -69,7 +69,7 @@ interface DataRepository {
      *         [DataOutcome.Empty] if no data is found, or
      *         [DataOutcome.Failure] in case of an exception.
      */
-    fun <D : BaseDto, E : BaseEntity> flowAllBy(spec: Specification<D>): Flow<DataOutcome<List<E>>>
+    fun <D : BaseDto, E : BaseEntity> flowByFilter(spec: Specification<D>): Flow<DataOutcome<List<E>>>
 
 }
 

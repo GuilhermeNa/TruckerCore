@@ -13,8 +13,7 @@ import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 //--------------------------------------------------------------------------------------------------
 // Check Access Event Mapper
 //--------------------------------------------------------------------------------------------------
-fun DataOutcome<Boolean>.toCheckAccessEvent():
-        CheckInEvent.CheckAccessTask {
+fun DataOutcome<Boolean>.toCheckAccessEvent(): CheckInEvent.CheckAccessTask {
     val data = getOrNull()
     return data?.let(::mapSuccess) ?: mapEmptyOrError(this)
 }

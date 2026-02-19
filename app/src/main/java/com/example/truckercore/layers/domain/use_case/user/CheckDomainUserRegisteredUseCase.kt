@@ -19,12 +19,12 @@ class CheckDomainUserRegisteredUseCase(
         return response
     }
 
-    private suspend fun fetchUser(uid: UID): DataOutcome<UserDraft> {
+    private suspend fun fetchUser(uid: UID): DataOutcome<List<UserDraft>> {
         val spec = UserSpec(uid = uid)
-        return repository.findOneBy(spec)
+        return repository.findByFilter(spec)
     }
 
-    private fun DataOutcome<UserDraft>.toResponse() = this.map(
+    private fun DataOutcome<List<UserDraft>>.toResponse() = this.map(
         onSuccess = { DataOutcome.Success(true) },
         onFailure = { DataOutcome.Failure(it) },
         onEmpty = { DataOutcome.Success(false) }

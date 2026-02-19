@@ -18,11 +18,11 @@ import com.example.truckercore.layers.domain.model.user.User
  */
 interface Person : Entity {
     val name: Name
-    val email: Email
+    val email: Email?
     val userId: UserID?
 
     fun nameValue() = name.value
 
-    fun emailValue() = email.value
+    fun emailValue() = email?.value
 
 }

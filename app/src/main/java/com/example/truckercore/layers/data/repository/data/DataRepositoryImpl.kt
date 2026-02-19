@@ -23,11 +23,7 @@ class DataRepositoryImpl(private val dataSource: DataSource) : DataRepository {
     //----------------------------------------------------------------------------------------------
     // Find
     //----------------------------------------------------------------------------------------------
-    // TODO o find one está direcionando para o findById e a busca na verdade está sendo feita pelo UID
-    //  e nao pelo proprio ID do objeto. Isso irá me retornar uma lista desses objetos com provavelmente
-    //  apenas um objeto
-
-    override suspend fun <D : BaseDto, E : BaseEntity> findOneBy(spec: Specification<D>): DataOutcome<E> =
+    override suspend fun <D : BaseDto, E : BaseEntity> findById(spec: Specification<D>): DataOutcome<E> =
         try {
             // Retrieves data from the data source
             val dto = dataSource.findById(spec)
@@ -43,10 +39,10 @@ class DataRepositoryImpl(private val dataSource: DataSource) : DataRepository {
             handleUnknownError(e)
         }
 
-    override suspend fun <D : BaseDto, E : BaseEntity> findAllBy(spec: Specification<D>): DataOutcome<List<E>> =
+    override suspend fun <D : BaseDto, E : BaseEntity> findByFilter(spec: Specification<D>): DataOutcome<List<E>> =
         try {
             // Retrieves data from the data source
-            val dtos = dataSource.findAllBy(spec)
+            val dtos = dataSource.findByFilter(spec)
             // Converts it into the expected domain outcome
             dtos.toOutcome(spec.dtoClass)
 
@@ -62,8 +58,8 @@ class DataRepositoryImpl(private val dataSource: DataSource) : DataRepository {
     //----------------------------------------------------------------------------------------------
     // Flow
     //----------------------------------------------------------------------------------------------
-    override fun <D : BaseDto, E : BaseEntity> flowOneBy(spec: Specification<D>) =
-        dataSource.flowOneBy(spec)
+    override fun <D : BaseDto, E : BaseEntity> flowById(spec: Specification<D>) =
+        dataSource.flowById(spec)
             .map { dto ->
                 // Transforms each emitted DTO into a domain-level DataOutcome
                 dto.toOutcome<D, E>(spec.dtoClass)
@@ -73,9 +69,9 @@ class DataRepositoryImpl(private val dataSource: DataSource) : DataRepository {
                 handleFlowError(e)
             }
 
-    override fun <D : BaseDto, E : BaseEntity> flowAllBy(
+    override fun <D : BaseDto, E : BaseEntity> flowByFilter(
         spec: Specification<D>
-    ) = dataSource.flowAllBy(spec)
+    ) = dataSource.flowByFilter(spec)
         .map<List<D>?, DataOutcome<List<E>>> { dtos ->
             // Transforms the emitted list of DTOs into a domain-level DataOutcome
             dtos.toOutcome(spec.dtoClass)

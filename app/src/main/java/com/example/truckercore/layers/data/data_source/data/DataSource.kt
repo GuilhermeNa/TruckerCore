@@ -1,9 +1,7 @@
 package com.example.truckercore.layers.data.data_source.data
 
-import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.core.error.core.ErrorMapper
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
-import com.example.truckercore.layers.data.base.specification._contracts.ApiSpecificationWrapper
 import com.example.truckercore.layers.data.base.specification._contracts.Specification
 import com.example.truckercore.layers.data.base.specification._contracts.SpecificationInterpreter
 import kotlinx.coroutines.flow.Flow
@@ -39,7 +37,7 @@ abstract class DataSource(
      * @param spec The specification defining the query.
      * @return A list of entities as [BaseDto], or `null` if no results found.
      */
-    abstract suspend fun <D : BaseDto> findAllBy(spec: Specification<D>): List<D>?
+    abstract suspend fun <D : BaseDto> findByFilter(spec: Specification<D>): List<D>?
 
     /**
      * Returns a [Flow] that emits updates for a single entity matching the specification.
@@ -50,7 +48,7 @@ abstract class DataSource(
      * The flow is **cold** and starts listening to updates only when collected.
      * Listeners are removed automatically when the flow collection is cancelled.
      */
-    abstract fun <D : BaseDto> flowOneBy(spec: Specification<D>): Flow<D?>
+    abstract fun <D : BaseDto> flowById(spec: Specification<D>): Flow<D?>
 
     /**
      * Returns a [Flow] that emits updates for multiple entities matching the specification.
@@ -61,28 +59,6 @@ abstract class DataSource(
      * The flow is **cold** and starts listening to updates only when collected.
      * Listeners are removed automatically when the flow collection is cancelled.
      */
-    abstract fun <D : BaseDto> flowAllBy(spec: Specification<D>): Flow<List<D>?>
-
-    /**
-     * Translates a generic [Specification] into an API-specific wrapper (document or query).
-     *
-     * This method uses the [SpecificationInterpreter] to obtain the corresponding
-     * [ApiSpecificationWrapper] instance (e.g., [DocumentWrapper] or [QueryWrapper]).
-     *
-     * @throws InfraException.Specification if the resulting wrapper type does not match [D].
-     */
-    protected inline fun <reified D : ApiSpecificationWrapper> getApiSpecification(spec: Specification<*>): D {
-        val result = spec.entityId?.let {
-            interpreter.byId(it, spec.collection)
-        } ?: interpreter.byFilter(spec.getFilter(), spec.collection)
-
-        if (result !is D) {
-            throw InfraException.Specification(
-                "Expected ${D::class.simpleName}, but got ${result::class.simpleName}"
-            )
-        }
-
-        return result
-    }
+    abstract fun <D : BaseDto> flowByFilter(spec: Specification<D>): Flow<List<D>?>
 
 }

@@ -23,7 +23,7 @@ data class Driver(
     override val userId: UserID? = null,
     override val status: Status,
     override val name: Name,
-    override val email: Email
+    override val email: Email? = null
 ) : Employee {
 
     /**

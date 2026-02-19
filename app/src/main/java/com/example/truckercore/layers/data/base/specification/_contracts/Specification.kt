@@ -47,6 +47,8 @@ interface Specification<T : BaseDto> {
 
     val collection: AppCollection get() = CollectionResolver(dtoClass)
 
+    val isSearchById get() = entityId != null
+
     /**
      * Builds a dynamic list of [Filter] to apply in multi-entity queries.
      *
