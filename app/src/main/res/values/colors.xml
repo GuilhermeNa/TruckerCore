@@ -11,10 +11,10 @@
     <color name="colorSecondaryVariant">#388E3C</color>
     <color name="colorOnSecondary">#FFFFFF</color>
 
-    <color name="colorSurface">#EDEBEB</color>
-    <color name="colorOnSurface">#1E1E1E</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#6E6E6E</color>
     <color name="colorSurfaceVariant">#F2F2F2</color>
-    <color name="colorOnSurfaceVariant">#6E6E6E</color>
+    <color name="colorOnSurfaceVariant">#1E1E1E</color>
 
     <color name="colorPrimaryContainer">#C8E6C9</color>
     <color name="colorOnPrimaryContainer">#1B5E20</color>
@@ -23,7 +23,7 @@
 
     <color name="colorError">@android:color/holo_red_dark</color>
 
-    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBackground">#EDEBEB</color>
     <color name="colorOnBackground">#212121</color>
 
     <!-- ======================================================================================= -->

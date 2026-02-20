@@ -3,6 +3,7 @@ package com.example.truckercore.core.my_lib.expressions
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
@@ -92,3 +93,53 @@ fun View.applySystemBarsInsetsIgnoringTop() =
         v.setPadding(bars.left, 0, bars.right, bars.bottom)
         insets
     }
+
+fun View.popClickEffect() {
+        animate()
+            .scaleX(1.06f)
+            .scaleY(1.06f)
+            .setDuration(100)
+            .withEndAction {
+                animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(100)
+                    .start()
+            }.start()
+}
+
+fun View.popTouchEffect() = setOnTouchListener { view, event ->
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                view.animate()
+                    .scaleX(1.06f)
+                    .scaleY(1.06f)
+                    .setDuration(100)
+                    .start()
+                false
+            }
+
+            MotionEvent.ACTION_UP -> {
+                view.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(100)
+                    .start()
+
+                view.performClick() // For accessibility
+                false
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                view.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(100)
+                    .start()
+                false
+            }
+
+            else -> false
+    }
+
+}

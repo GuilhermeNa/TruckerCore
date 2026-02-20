@@ -17,6 +17,8 @@
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
 
+        <item name="elevationOverlayEnabled">false</item>
+
         <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
 

@@ -12,12 +12,12 @@
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/frag_home_business_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardElevation="11dp"
-            app:cardBackgroundColor="#2E7D32">
+            app:cardElevation="11dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -29,40 +29,42 @@
                     android:id="@+id/frag_home_business_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Empresa"
+                    android:text="@string/business"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/frag_home_business_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gerencie seus\n dados"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
                     android:layout_marginTop="4dp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/frag_home_business_header"
-                    app:layout_constraintTop_toBottomOf="@+id/frag_home_business_header" />
+                    app:layout_constraintTop_toBottomOf="@+id/frag_home_business_header"
+                    tools:text="Controle da empresa e\ninformações gerais" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/business"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.16"
+                    app:tint="@color/colorOnSurface"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/frag_home_employees_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardElevation="11dp"
-            app:cardBackgroundColor="#F9A825">
+            app:cardElevation="11dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -74,38 +76,43 @@
                     android:id="@+id/frag_home_employees_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Funcionários"
+                    android:text="@string/employee"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/frag_home_employees_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Registre seus \n colaboradores"
-                    android:textSize="12sp"
                     android:layout_marginTop="4dp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/frag_home_employees_header"
-                    app:layout_constraintTop_toBottomOf="@+id/frag_home_employees_header" />
+                    app:layout_constraintTop_toBottomOf="@+id/frag_home_employees_header"
+                    tools:text="Gestão de equipe e\ncadastros ativos" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/employees"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.16"
+                    app:tint="@color/colorOnSurface"
+                    />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/frag_home_fleet_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardElevation="11dp"
-            app:cardBackgroundColor="#1565C0">
+            app:cardElevation="11dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -117,40 +124,42 @@
                     android:id="@+id/frag_home_fleet_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Frota"
+                    android:text="@string/fleet"
                     android:textSize="16sp"
-                    android:textColor="@android:color/white"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/frag_home_fleet_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Acesse sua \n frota"
-                    android:textSize="12sp"
-                    android:textColor="@android:color/white"
                     android:layout_marginTop="4dp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/frag_home_fleet_header"
-                    app:layout_constraintTop_toBottomOf="@+id/frag_home_fleet_header" />
+                    app:layout_constraintTop_toBottomOf="@+id/frag_home_fleet_header"
+                    tools:text="Veículos e\ncontrole operacional" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/fleet"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.16"
+                    app:tint="@color/colorOnSurface"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/frag_home_fine_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:cardElevation="11dp"
-            app:cardBackgroundColor="#29B6F6">
+            app:cardElevation="11dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -162,27 +171,31 @@
                     android:id="@+id/frag_home_fine_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Infrações"
+                    android:text="@string/fines"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/frag_home_fine_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Visualize suas \n multas"
-                    android:textSize="12sp"
                     android:layout_marginTop="4dp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/frag_home_fine_header"
-                    app:layout_constraintTop_toBottomOf="@+id/frag_home_fine_header" />
+                    app:layout_constraintTop_toBottomOf="@+id/frag_home_fine_header"
+                    tools:text="Multas e ocorrências\nhistórico completo" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:src="@drawable/police"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent="0.16"
+                    app:tint="@color/colorOnSurface"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
