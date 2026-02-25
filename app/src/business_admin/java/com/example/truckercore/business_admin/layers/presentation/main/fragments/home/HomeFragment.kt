@@ -1,17 +1,20 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.home
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.home.view_model.HomeState
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.home.view_model.HomeViewModel
 import com.example.truckercore.core.my_lib.expressions.popClickEffect
 import com.example.truckercore.databinding.FragmentHomeBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateLockedFragment
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,34 +37,39 @@ class HomeFragment : PrivateLockedFragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.stateFlow.collect { state ->
-
-                    // Bind description text
-                    binding.fragHomeBusinessDescription.text = state.businessSpannable
-                    binding.fragHomeEmployeesDescription.text = state.employeesSpannable
-                    binding.fragHomeFleetDescription.text = state.fleetSpannable
-                    binding.fragHomeFineDescription.text = state.fineSpannable
-
-                    // Enable or Disable View interaction
-                    state.interactionEnabled.run {
-                      //  binding.fragHomeBusinessDescription.isClickable = this
-                        binding.fragHomeBusinessDescription.foreground = null
-
-                      //  binding.fragHomeEmployeesDescription.isClickable = this
-                        binding.fragHomeEmployeesDescription.foreground = null
-
-                       // binding.fragHomeFleetDescription.isClickable = this
-                        binding.fragHomeFleetDescription.foreground = null
-
-                       // binding.fragHomeFineDescription.isClickable = this
-                        binding.fragHomeFineDescription.foreground = null
-                    }
-
+                    bindCardText(state)
+                    handleCardEnabled(state.interactionEnabled)
                 }
             }
         }
     }
 
-    private fun interactionEnabled() = viewModel.stateFlow.value.interactionEnabled
+    private fun bindCardText(state: HomeState) {
+        binding.fragHomeBusinessDescription.text = state.businessSpannable
+        binding.fragHomeEmployeesDescription.text = state.employeesSpannable
+        binding.fragHomeFleetDescription.text = state.fleetSpannable
+        binding.fragHomeFineDescription.text = state.fineSpannable
+    }
+
+
+    // TODO(transferir interação do card para dentro dos listeners)
+
+    private suspend fun handleCardEnabled(interactionEnabled: Boolean) {
+        val rippleColor = getRippleColor(interactionEnabled)
+
+        if (!interactionEnabled) delay(1000)
+
+        binding.fragHomeBusinessCard.rippleColor = rippleColor
+        binding.fragHomeEmployeesCard.rippleColor = rippleColor
+        binding.fragHomeFleetCard.rippleColor = rippleColor
+        binding.fragHomeFineCard.rippleColor = rippleColor
+    }
+
+    private fun getRippleColor(interactionEnabled: Boolean) =
+        if (interactionEnabled) binding.fragHomeBusinessCard.rippleColor
+        else ColorStateList.valueOf(Color.TRANSPARENT)
+
+
 
     //----------------------------------------------------------------------------------------------
     // On Create View
@@ -80,47 +88,42 @@ class HomeFragment : PrivateLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setOnClickListeners()
-
     }
+
+    // TODO(adicionar navegação para novos fragments a partir do click listener)
 
     private fun setOnClickListeners() {
         // Business Card Listener
         binding.fragHomeBusinessCard.setOnClickListener {
-            //if(!interactionEnabled()) return@setOnClickListener
-
-            it.popClickEffect()
-            Toast.makeText(requireContext(), "Empresa", Toast.LENGTH_SHORT).show()
-            viewModel.setInteraction(enabled = false)
+            if (!interactionEnabled()) return@setOnClickListener
+            else it.popAndDisableInteraction()
         }
 
         // Employee Card Listener
         binding.fragHomeEmployeesCard.setOnClickListener {
-          //  if(!interactionEnabled()) return@setOnClickListener
-
-            it.popClickEffect()
-            Toast.makeText(requireContext(), "Funcionários", Toast.LENGTH_SHORT).show()
-            viewModel.setInteraction(enabled = false)
+            if (!interactionEnabled()) return@setOnClickListener
+            else it.popAndDisableInteraction()
         }
 
         // Fleet Card Listener
         binding.fragHomeFleetCard.setOnClickListener {
-         //   if(!interactionEnabled()) return@setOnClickListener
-
-            it.popClickEffect()
-            Toast.makeText(requireContext(), "Frota", Toast.LENGTH_SHORT).show()
-            viewModel.setInteraction(enabled = false)
+            if (!interactionEnabled()) return@setOnClickListener
+            else it.popAndDisableInteraction()
         }
 
         // Fine Card Listener
         binding.fragHomeFineCard.setOnClickListener {
-          //  if(!interactionEnabled()) return@setOnClickListener
-
-            it.popClickEffect()
-            Toast.makeText(requireContext(), "Infrações", Toast.LENGTH_SHORT).show()
-            viewModel.setInteraction(enabled = false)
+            if (!interactionEnabled()) return@setOnClickListener
+            else it.popAndDisableInteraction()
         }
+    }
+
+    private fun interactionEnabled() = viewModel.stateFlow.value.interactionEnabled
+
+    private fun View.popAndDisableInteraction() {
+        popClickEffect()
+        viewModel.setInteraction(enabled = false)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -138,4 +141,5 @@ class HomeFragment : PrivateLockedFragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

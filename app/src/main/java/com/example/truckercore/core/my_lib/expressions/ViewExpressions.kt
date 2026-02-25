@@ -79,7 +79,6 @@ fun ImageView.loadGif(url: Any? = null, context: Context) {
     load(url, imageLoaderGifSupport)
 }
 
-
 fun View.applySystemBarsInsets() =
     ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
         val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

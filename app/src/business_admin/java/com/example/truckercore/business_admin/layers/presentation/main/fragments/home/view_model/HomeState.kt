@@ -4,12 +4,12 @@ import android.text.SpannableString
 import com.example.truckercore.core.my_lib.expressions.span
 import com.example.truckercore.layers.presentation.base.contracts.State
 
-data class HomeState private constructor(
+data class HomeState(
     val businessSpannable: SpannableString,
     val employeesSpannable: SpannableString,
     val fleetSpannable: SpannableString,
     val fineSpannable: SpannableString,
-    val interactionEnabled: Boolean = true
+    val interactionEnabled: Boolean
 ) : State {
 
     fun setInteraction(enabled: Boolean) = copy(interactionEnabled = enabled)
@@ -32,7 +32,9 @@ data class HomeState private constructor(
             FLEET_TXT.span("documentos", bold = true, size = EMPHASIS_SIZE),
 
             fineSpannable =
-            FINE_TXT.span("historico", bold = true, size = EMPHASIS_SIZE)
+            FINE_TXT.span("historico", bold = true, size = EMPHASIS_SIZE),
+
+            interactionEnabled = true
         )
 
     }
