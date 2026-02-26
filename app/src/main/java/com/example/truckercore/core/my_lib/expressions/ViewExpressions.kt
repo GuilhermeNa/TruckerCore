@@ -93,16 +93,16 @@ fun View.applySystemBarsInsetsIgnoringTop() =
         insets
     }
 
-fun View.popClickEffect() {
+fun View.popClickEffect(duration: Long = 100) {
         animate()
             .scaleX(1.06f)
             .scaleY(1.06f)
-            .setDuration(100)
+            .setDuration(duration)
             .withEndAction {
                 animate()
                     .scaleX(1f)
                     .scaleY(1f)
-                    .setDuration(100)
+                    .setDuration(duration)
                     .start()
             }.start()
 }

@@ -1,7 +1,5 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.home
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +7,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.home.view_model.HomeState
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.home.view_model.HomeViewModel
+import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.core.my_lib.expressions.popClickEffect
 import com.example.truckercore.databinding.FragmentHomeBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateLockedFragment
@@ -25,15 +25,13 @@ class HomeFragment : PrivateLockedFragment() {
 
     private val viewModel: HomeViewModel by viewModel()
 
+    private var fragRes = HomeResource()
+
     //----------------------------------------------------------------------------------------------
     // On Create
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStateManager()
-    }
-
-    private fun setStateManager() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.stateFlow.collect { state ->
@@ -51,25 +49,16 @@ class HomeFragment : PrivateLockedFragment() {
         binding.fragHomeFineDescription.text = state.fineSpannable
     }
 
-
-    // TODO(transferir interação do card para dentro dos listeners)
-
     private suspend fun handleCardEnabled(interactionEnabled: Boolean) {
-        val rippleColor = getRippleColor(interactionEnabled)
+        val color = fragRes.get(interactionEnabled)
 
-        if (!interactionEnabled) delay(1000)
+        if(!interactionEnabled) delay(UI_TIMER)
 
-        binding.fragHomeBusinessCard.rippleColor = rippleColor
-        binding.fragHomeEmployeesCard.rippleColor = rippleColor
-        binding.fragHomeFleetCard.rippleColor = rippleColor
-        binding.fragHomeFineCard.rippleColor = rippleColor
+        binding.fragHomeBusinessCard.rippleColor = color
+        binding.fragHomeEmployeesCard.rippleColor = color
+        binding.fragHomeFleetCard.rippleColor = color
+        binding.fragHomeFineCard.rippleColor = color
     }
-
-    private fun getRippleColor(interactionEnabled: Boolean) =
-        if (interactionEnabled) binding.fragHomeBusinessCard.rippleColor
-        else ColorStateList.valueOf(Color.TRANSPARENT)
-
-
 
     //----------------------------------------------------------------------------------------------
     // On Create View
@@ -88,42 +77,70 @@ class HomeFragment : PrivateLockedFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initFragmentResource()
         setOnClickListeners()
     }
 
-    // TODO(adicionar navegação para novos fragments a partir do click listener)
+    private fun initFragmentResource() {
+        if (fragRes.isInitialized()) return
+
+        fragRes.setBaseRipple(binding.fragHomeBusinessCard.rippleColor)
+    }
 
     private fun setOnClickListeners() {
         // Business Card Listener
         binding.fragHomeBusinessCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
-            else it.popAndDisableInteraction()
+            else {
+                it.popAndDisableInteraction()
+                val direction = HomeFragmentDirections.actionNavHomeToBusinessFragment()
+                navigateAfterDelay(direction)
+            }
         }
 
         // Employee Card Listener
         binding.fragHomeEmployeesCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
-            else it.popAndDisableInteraction()
+            else {
+                it.popAndDisableInteraction()
+                val direction = HomeFragmentDirections.actionNavHomeToEmployeeFragment()
+                navigateAfterDelay(direction)
+            }
         }
 
         // Fleet Card Listener
         binding.fragHomeFleetCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
-            else it.popAndDisableInteraction()
+            else {
+                it.popAndDisableInteraction()
+                val direction = HomeFragmentDirections.actionNavHomeToFleetFragment()
+                navigateAfterDelay(direction)
+            }
         }
 
         // Fine Card Listener
         binding.fragHomeFineCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
-            else it.popAndDisableInteraction()
+            else {
+                it.popAndDisableInteraction()
+                val direction = HomeFragmentDirections.actionNavHomeToFineFragment()
+                navigateAfterDelay(direction)
+            }
         }
     }
 
     private fun interactionEnabled() = viewModel.stateFlow.value.interactionEnabled
 
     private fun View.popAndDisableInteraction() {
-        popClickEffect()
+        this.popClickEffect()
         viewModel.setInteraction(enabled = false)
+    }
+
+    private fun navigateAfterDelay(direction: NavDirections) {
+        lifecycleScope.launch {
+            delay(UI_TIMER)
+            navigateToDirection(direction)
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -140,6 +157,10 @@ class HomeFragment : PrivateLockedFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private companion object {
+        private const val UI_TIMER = 250L
     }
 
 }

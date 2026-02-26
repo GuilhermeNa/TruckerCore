@@ -9,7 +9,20 @@
         android:id="@+id/nav_home"
         android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_businessFragment"
+            app:destination="@id/businessFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_fleetFragment"
+            app:destination="@id/fleetFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_fineFragment"
+            app:destination="@id/fineFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_employeeFragment"
+            app:destination="@id/employeeFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -22,4 +35,24 @@
         android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/businessFragment"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.business.BusinessFragment"
+        android:label="fragment_business"
+        tools:layout="@layout/fragment_business" />
+    <fragment
+        android:id="@+id/employeeFragment"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employee.EmployeeFragment"
+        android:label="fragment_employee"
+        tools:layout="@layout/fragment_employee" />
+    <fragment
+        android:id="@+id/fineFragment"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.fine.FineFragment"
+        android:label="fragment_fine"
+        tools:layout="@layout/fragment_fine" />
+    <fragment
+        android:id="@+id/fleetFragment"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.fleet.FleetFragment"
+        android:label="fragment_fleet"
+        tools:layout="@layout/fragment_fleet" />
 </navigation>
