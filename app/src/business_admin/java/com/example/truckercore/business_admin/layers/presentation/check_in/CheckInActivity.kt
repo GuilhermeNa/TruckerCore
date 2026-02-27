@@ -9,7 +9,7 @@ import com.example.truckercore.R
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.CheckInViewModel
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInEffect
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.helpers.CheckInState
-import com.example.truckercore.business_admin.layers.presentation.main.MainActivity
+import com.example.truckercore.business_admin.layers.presentation.main.activity.MainActivity
 import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.contracts.BaseNavigator
 import com.example.truckercore.layers.presentation.common.LoadingDialog
