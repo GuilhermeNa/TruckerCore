@@ -10,16 +10,36 @@
 
     <include
         android:id="@+id/app_bar_main"
-        layout="@layout/app_bar_main"
+        layout="@layout/act_main_app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        android:orientation="vertical">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/drawerView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:headerLayout="@layout/drawer_header"
+            app:itemTextAppearance="@style/normalText"
+            app:menu="@menu/act_main_drawer_menu" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorOutline" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/logoutView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:menu="@menu/act_main_drawer_logout" />
+
+    </LinearLayout>
+
 </androidx.drawerlayout.widget.DrawerLayout>

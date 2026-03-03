@@ -17,7 +17,6 @@
     <string name="phone_verification_message">Você receberá um código de verificação por mensagem de texto</string>
     <string name="receive_code">Receber código</string>
 
-
     <string name="enter_code">Digite o código de verificação</string>
     <string name="try_again">Tentar novamente</string>
     <string name="already_have_a_code">Já tenho um código</string>
@@ -60,5 +59,10 @@
     <string name="send_verification_email">Enviar email</string>
     <string name="business">Empresa</string>
     <string name="fines">Infrações</string>
+    <string name="preferences">Preferências</string>
+    <string name="logout">Sair do app</string>
+    <string name="messages">Mensagens</string>
+    <string name="settings">Configurações</string>
+    <string name="profile">Perfil</string>
 
 </resources>

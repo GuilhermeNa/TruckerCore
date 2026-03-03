@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/icon_home_filled"
+            android:title="@string/menu_home" />
+
+        <item
+            android:id="@+id/nav_business"
+            android:icon="@drawable/icon_business"
+            android:title="@string/business" />
+
+        <item
+            android:id="@+id/nav_employees"
+            android:icon="@drawable/icon_persons"
+            android:title="@string/employee" />
+
+        <item
+            android:id="@+id/nav_fleet"
+            android:icon="@drawable/icon_truck"
+            android:title="@string/fleet" />
+
+        <item
+            android:id="@+id/nav_fines"
+            android:icon="@drawable/icon_fine"
+            android:title="@string/fines" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/icon_settings"
+            android:title="@string/settings" />
+    </group>
+
+</menu>

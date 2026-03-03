@@ -42,7 +42,7 @@
                 android:hint="@string/email"
                 app:errorEnabled="true"
                 app:helperTextEnabled="true"
-                app:startIconDrawable="@drawable/icon_email"
+                app:startIconDrawable="@drawable/icon_mail"
                 app:helperTextTextColor="@android:color/holo_green_dark">
 
                 <com.google.android.material.textfield.TextInputEditText

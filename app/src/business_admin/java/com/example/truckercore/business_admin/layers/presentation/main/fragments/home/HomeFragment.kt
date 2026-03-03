@@ -142,29 +142,29 @@ class HomeFragment : PrivateLockedFragment() {
         binding.fragHomeBusinessCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
 
-            val direction = HomeFragmentDirections.actionNavHomeToBusinessFragment()
-            triggerCardInteraction(direction, it)
+            //val direction = HomeFragmentDirections.actionNavHomeToBusinessFragment()
+          //  triggerCardInteraction(direction, it)
         }
 
         binding.fragHomeEmployeesCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
 
-            val direction = HomeFragmentDirections.actionNavHomeToEmployeeFragment()
-            triggerCardInteraction(direction, it)
+           // val direction = HomeFragmentDirections.actionNavHomeToEmployeeFragment()
+           // triggerCardInteraction(direction, it)
         }
 
         binding.fragHomeFleetCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
 
-            val direction = HomeFragmentDirections.actionNavHomeToFleetFragment()
-            triggerCardInteraction(direction, it)
+         //   val direction = HomeFragmentDirections.actionNavHomeToFleetFragment()
+           // triggerCardInteraction(direction, it)
         }
 
         binding.fragHomeFineCard.setOnClickListener {
             if (!interactionEnabled()) return@setOnClickListener
 
-            val direction = HomeFragmentDirections.actionNavHomeToFineFragment()
-            triggerCardInteraction(direction, it)
+          //  val direction = HomeFragmentDirections.actionNavHomeToFineFragment()
+          //  triggerCardInteraction(direction, it)
         }
     }
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_business"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.business.BusinessFragment"
+        android:label="@string/business"
+        tools:layout="@layout/fragment_business" />
+    <fragment
+        android:id="@+id/nav_employees"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employee.EmployeeFragment"
+        android:label="@string/employee"
+        tools:layout="@layout/fragment_employee" />
+    <fragment
+        android:id="@+id/nav_fines"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.fine.FineFragment"
+        android:label="@string/fines"
+        tools:layout="@layout/fragment_fine" />
+    <fragment
+        android:id="@+id/nav_fleet"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.fleet.FleetFragment"
+        android:label="@string/fleet"
+        tools:layout="@layout/fragment_fleet" />
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.settings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.example.truckercore.layers.presentation.common.message_center.MessagesFragment"
+        android:label="@string/messages"
+        tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.truckercore.layers.presentation.common.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

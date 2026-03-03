@@ -5,17 +5,21 @@ import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
+import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 
 class MainViewModel(
     getUserNameUseCase: GetUserNameUseCase,
-    getUserEmailUseCase: GetUserEmailUseCase
+    getUserEmailUseCase: GetUserEmailUseCase,
+    private val signOutUseCase: SignOutUseCase
 ): BaseViewModel() {
 
     val name: Name = getUserNameUseCase().get()
     val email: Email = getUserEmailUseCase().get()
 
-
+    fun logout() {
+        signOutUseCase()
+    }
 
 
 }

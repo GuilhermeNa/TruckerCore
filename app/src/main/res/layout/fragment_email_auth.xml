@@ -39,7 +39,7 @@
             android:imeOptions="actionNext"
             app:errorEnabled="true"
             android:hint="@string/email"
-            app:startIconDrawable="@drawable/icon_email">
+            app:startIconDrawable="@drawable/icon_mail">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/frag_email_auth_email_edit_text"

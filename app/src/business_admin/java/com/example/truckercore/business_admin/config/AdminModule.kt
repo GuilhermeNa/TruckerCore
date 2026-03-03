@@ -18,7 +18,7 @@ val adminModules = module {
     viewModel<CheckInViewModel> { CheckInViewModel(get(), get(), get(), get(), get()) }
 
     // UseCases
-    single { MainViewModel(get(), get()) }
+    single { MainViewModel(get(), get(), get()) }
     single { AuthorizeEmployeeAccessUseCase(get()) }
     single { InitializeCompanyAccessUseCase(get()) }
     single { GenerateRegistrationCodeUseCase(get()) }
