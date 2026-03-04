@@ -7,19 +7,93 @@ import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmai
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * MainViewModel
+ *
+ * Responsible for managing user session data and UI-related state
+ * for MainActivity.
+ *
+ * Responsibilities:
+ * - Provides authenticated user information (name and email).
+ * - Handles logout action.
+ * - Controls Toolbar menu visibility state.
+ *
+ * Architecture:
+ * - Follows MVVM principles.
+ * - Delegates business logic to UseCases.
+ * - Exposes immutable UI state via StateFlow.
+ * - Extends BaseViewModel for shared ViewModel behavior.
+ */
 class MainViewModel(
     getUserNameUseCase: GetUserNameUseCase,
     getUserEmailUseCase: GetUserEmailUseCase,
     private val signOutUseCase: SignOutUseCase
-): BaseViewModel() {
+) : BaseViewModel() {
 
+    /**
+     * Authenticated user's display name.
+     *
+     * Retrieved through a dedicated UseCase to preserve
+     * separation between domain and presentation layers.
+     */
     val name: Name = getUserNameUseCase().get()
+
+    /**
+     * Authenticated user's email address.
+     *
+     * Retrieved through a dedicated UseCase to preserve
+     * separation between domain and presentation layers.
+     */
     val email: Email = getUserEmailUseCase().get()
 
+    /**
+     * Backing property for Toolbar menu visibility state.
+     *
+     * Default value: true (menu enabled).
+     */
+    private val _menuState = MutableStateFlow(true)
+
+    /**
+     * Public immutable StateFlow representing
+     * whether the Toolbar menu should be visible.
+     *
+     * Exposed as read-only to prevent external mutation.
+     */
+    val menuState get() = _menuState.asStateFlow()
+
+    /**
+     * Executes the logout process.
+     *
+     * Responsibilities:
+     * - Delegates sign-out logic to the domain layer.
+     * - Keeps ViewModel free of authentication implementation details.
+     */
     fun logout() {
         signOutUseCase()
     }
 
+    /**
+     * Disables the Toolbar menu.
+     *
+     * Typically used when navigating to destinations
+     * triggered from the options menu to prevent
+     * duplicate navigation events.
+     */
+    fun disableMenu() {
+        _menuState.value = false
+    }
+
+    /**
+     * Enables the Toolbar menu.
+     *
+     * Ensures state change occurs only if necessary
+     * to avoid redundant emissions.
+     */
+    fun enableMenu() {
+        _menuState.value = true
+    }
 
 }

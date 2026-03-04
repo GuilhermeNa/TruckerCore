@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_profile"
+        android:id="@+id/action_profile"
         android:orderInCategory="100"
         android:title="@string/action_profile"
         app:showAsAction="ifRoom"
         android:icon="@drawable/icon_person"/>
 
     <item
-        android:id="@+id/nav_messages"
+        android:id="@+id/action_message"
         android:orderInCategory="99"
         android:title="@string/messages"
         app:showAsAction="ifRoom"

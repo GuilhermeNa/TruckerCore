@@ -46,5 +46,13 @@
         android:name="com.example.truckercore.layers.presentation.common.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
+    <action
+        android:id="@+id/action_global_nav_messages"
+        app:destination="@id/nav_messages"
+        app:launchSingleTop="true" />
+    <action
+        android:id="@+id/action_global_nav_profile"
+        app:destination="@id/nav_profile"
+        app:launchSingleTop="true" />
 
 </navigation>

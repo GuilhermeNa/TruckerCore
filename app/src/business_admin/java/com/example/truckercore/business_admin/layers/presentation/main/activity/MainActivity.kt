@@ -6,9 +6,11 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavBackStackEntry
+import androidx.core.view.forEach
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,6 +19,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.truckercore.R
 import com.example.truckercore.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -63,20 +66,7 @@ class MainActivity : AppCompatActivity() {
         findNavController(R.id.act_main_nav_host)
     }
 
-    /**
-     * Defines all top-level destinations of the Drawer.
-     * These destinations will:
-     * - Show the hamburger icon instead of the Up arrow
-     * - Close the drawer when selected
-     */
-    private val drawerTopLevelDestination = setOf(
-        R.id.nav_home,
-        R.id.nav_business,
-        R.id.nav_employees,
-        R.id.nav_fleet,
-        R.id.nav_fines,
-        R.id.nav_settings
-    )
+    private val res = MainResources()
 
     //----------------------------------------------------------------------------------------------
     // On Create
@@ -95,24 +85,8 @@ class MainActivity : AppCompatActivity() {
         setupDrawerNavController()
         setLogoutCLickListener()
         bindDrawerHeader()
+        setNavDestinationListener()
     }
-
-    /**
-     * Handles Up navigation behavior.
-     *
-     * Delegates navigation handling to the NavController using
-     * the AppBarConfiguration to determine whether to:
-     * - Open the drawer (for top-level destinations)
-     * - Navigate up in the back stack
-     */
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(drawerConfiguration)
-                || super.onSupportNavigateUp()
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Drawer Configuration
-    // ---------------------------------------------------------------------------------------------
 
     /**
      * Configures the Drawer with the NavController.
@@ -121,35 +95,12 @@ class MainActivity : AppCompatActivity() {
      * - Defines top-level destinations.
      * - Connects the Toolbar with the Navigation Component.
      * - Binds the Drawer menu with the NavController.
-     * - Closes the drawer when navigating to a top-level destination.
      */
     private fun setupDrawerNavController() {
-
-        drawerConfiguration =
-            AppBarConfiguration(drawerTopLevelDestination, binding.drawerLayout)
-
+        drawerConfiguration = AppBarConfiguration(res.topLevelDestination, binding.drawerLayout)
         setupActionBarWithNavController(navController, drawerConfiguration)
         binding.drawerView.setupWithNavController(navController)
-
-        // Manually close the drawer whenever navigation reaches
-        // a top-level destination to restore the expected standard behavior.
-        // Since the Drawer layout is composed of two separate NavigationViews
-        // and we loosed the automatic drawer-closing behavior.
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (isTopLevel(destination)) {
-                binding.drawerLayout.closeDrawers()
-            }
-        }
     }
-
-    /**
-     * Checks whether a given destination is a top-level destination.
-     *
-     * @param destination Current navigation destination
-     * @return true if destination is top-level
-     */
-    private fun isTopLevel(destination: NavDestination): Boolean =
-        drawerTopLevelDestination.contains(destination.id)
 
     /**
      * Configures the logout menu item behavior.
@@ -165,26 +116,6 @@ class MainActivity : AppCompatActivity() {
                 binding.drawerLayout.closeDrawers()
                 true
             }
-    }
-
-    /**
-     * Binds user information to the Drawer header.
-     *
-     * Retrieves the header layout and updates:
-     * - Profile image
-     * - User name
-     * - User email
-     */
-    private fun bindDrawerHeader() {
-        val headerView = binding.drawerView.getHeaderView(0)
-
-        val imageView = headerView.findViewById<ImageView>(R.id.drawer_image)
-        val mainTextView = headerView.findViewById<TextView>(R.id.drawer_header_text)
-        val helperTextView = headerView.findViewById<TextView>(R.id.drawer_email_text)
-
-        imageView.setImageResource(R.drawable.icon_person)
-        mainTextView.text = viewModel.name.value
-        helperTextView.text = viewModel.email.value
     }
 
     /**
@@ -210,48 +141,117 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Binds user information to the Drawer header.
+     *
+     * Retrieves the header layout and updates:
+     * - Profile image
+     * - User name
+     * - User email
+     */
+    private fun bindDrawerHeader() {
+        val headerView = binding.drawerView.getHeaderView(0)
+
+        val imageView = headerView.findViewById<ImageView>(R.id.drawer_image)
+        val mainTextView = headerView.findViewById<TextView>(R.id.drawer_header_text)
+        val helperTextView = headerView.findViewById<TextView>(R.id.drawer_email_text)
+
+        imageView.setImageResource(R.drawable.icon_person)
+        mainTextView.text = viewModel.name.value
+        helperTextView.text = viewModel.email.value
+    }
+
+    /**
+     * Registers a NavController destination change listener.
+     *
+     * Responsibilities:
+     * - Observes navigation destination changes.
+     * - Closes the Drawer when navigating to a top-level destination.
+     * - Controls Toolbar menu visibility based on the current destination.
+     */
+    private fun setNavDestinationListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+
+            // Close the drawer when reaching a top-level destination
+            // to preserve expected Material navigation behavior.
+            if (res.isTopLevelDestination(destination)) {
+                binding.drawerLayout.closeDrawers()
+            }
+
+            // Disable Toolbar menu items when navigating to
+            // destinations triggered from the options menu.
+            if (res.isMenuDestination(destination)) {
+                viewModel.disableMenu()
+            } else viewModel.enableMenu()
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(drawerConfiguration)
+                || super.onSupportNavigateUp()
+    }
+
     // ---------------------------------------------------------------------------------------------
     // Options Menu Configuration (Toolbar)
     // ---------------------------------------------------------------------------------------------
-
-    /**
-     * Inflates the toolbar menu.
-     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.act_main_appbar_main, menu)
+        menuInflater.inflate(R.menu.act_main_appbar_menu, menu)
         return true
     }
 
-    /**
-     * Handles toolbar menu item selection.
-     *
-     * Delegates navigation handling to the NavController.
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.nav_messages -> {
-                checkEntry(navController.currentBackStackEntry)
-                navController.navigate(R.id.nav_messages)
-            }
-
-            R.id.nav_profile -> {
-                navController.navigate(R.id.nav_profile)
-            }
-        }
-
-
-        return super.onOptionsItemSelected(item)
-
-        /*  return item.onNavDestinationSelected(navController)
-                  || super.onOptionsItemSelected(item)*/
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        setMenuStateManager(menu)
+        return super.onPrepareOptionsMenu(menu)
     }
 
-    private fun checkEntry(entry: NavBackStackEntry?) {
-        if (entry == null) throw NullPointerException()
-        if (entry.destination.id == R.id.nav_messages) {
-            navController
+    /**
+     * Connects the menu visibility state with the ViewModel.
+     *
+     * Responsibilities:
+     * - Collects the menuState Flow from the ViewModel.
+     * - Updates menu item visibility reactively.
+     *
+     * Lifecycle-aware:
+     * - Collection runs only while the Activity is at least STARTED.
+     * - Prevents leaks and unnecessary processing.
+     */
+    private fun setMenuStateManager(menu: Menu?) {
+        if (menu == null) return
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.menuState.collect { menu.handle(it) }
+            }
         }
+    }
+
+    /**
+     * Applies visibility changes to all menu items.
+     *
+     * @param isEnabled Defines whether menu items should be visible.
+     *
+     * Responsibilities:
+     * - Iterates through all menu items.
+     * - Toggles their visibility based on the provided state.
+     *
+     * Extension Function:
+     * - Improves readability and encapsulates menu manipulation logic.
+     */
+    private fun Menu.handle(isEnabled: Boolean) {
+        this.forEach { it.isVisible = isEnabled }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_message -> {
+                navController.navigate(R.id.action_global_nav_messages)
+            }
+
+            R.id.action_profile -> {
+                navController.navigate(R.id.action_global_nav_profile)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
