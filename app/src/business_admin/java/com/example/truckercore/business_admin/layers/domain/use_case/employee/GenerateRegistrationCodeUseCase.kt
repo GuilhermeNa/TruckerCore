@@ -3,7 +3,7 @@ package com.example.truckercore.business_admin.layers.domain.use_case.employee
 import com.example.truckercore.infra.security.Action
 import com.example.truckercore.infra.security.Resource
 import com.example.truckercore.infra.security.service.PermissionService
-import com.example.truckercore.layers.domain.base.contracts.others.Employee
+import com.example.truckercore.layers.domain.base.contracts.Employee
 import com.example.truckercore.layers.domain.model.user.User
 
 class GenerateRegistrationCodeUseCase(

@@ -2,7 +2,7 @@ package com.example.truckercore.layers.domain.model.admin
 
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
-import com.example.truckercore.layers.domain.base.contracts.others.Employee
+import com.example.truckercore.layers.domain.base.contracts.Employee
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.AdminID
 import com.example.truckercore.layers.domain.base.ids.CompanyID

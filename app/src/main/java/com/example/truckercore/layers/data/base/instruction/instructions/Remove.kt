@@ -2,7 +2,7 @@ package com.example.truckercore.layers.data.base.instruction.instructions
 
 import com.example.truckercore.core.config.collections.CollectionResolver
 import com.example.truckercore.layers.data.base.instruction._contracts.Instruction
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
+import com.example.truckercore.layers.domain.base.contracts.ID
 
 /**
  * Represents a remove (delete) instruction within the system.

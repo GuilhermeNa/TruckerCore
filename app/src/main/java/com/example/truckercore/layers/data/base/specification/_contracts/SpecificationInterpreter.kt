@@ -1,9 +1,8 @@
 package com.example.truckercore.layers.data.base.specification._contracts
 
 import com.example.truckercore.core.config.collections.AppCollection
-import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.layers.data.base.filter.collection.SearchFilters
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
+import com.example.truckercore.layers.domain.base.contracts.ID
 
 /**
  * Interface responsible for translating domain-level [Specification] objects into

@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.domain.model.state_aet
 
 import com.example.truckercore.core.my_lib.classes.Url
-import com.example.truckercore.layers.domain.base.contracts.others.Document
+import com.example.truckercore.layers.domain.base.contracts.Document
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.enums.Uf
 import com.example.truckercore.layers.domain.base.ids.CompanyID

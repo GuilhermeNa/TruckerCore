@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.domain.base.contracts.others
+package com.example.truckercore.layers.domain.base.contracts
 
 import com.example.truckercore.layers.domain.base.abstractions.Vehicle
 import com.example.truckercore.layers.domain.base.others.Plate

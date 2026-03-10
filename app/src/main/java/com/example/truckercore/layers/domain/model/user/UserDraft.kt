@@ -1,6 +1,6 @@
 package com.example.truckercore.layers.domain.model.user
 
-import com.example.truckercore.layers.domain.base.contracts.entity.Draft
+import com.example.truckercore.layers.domain.base.contracts.Draft
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.ids.UID

@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.domain.base.abstractions
 
 import com.example.truckercore.core.error.DomainException
-import com.example.truckercore.layers.domain.base.contracts.entity.Entity
+import com.example.truckercore.layers.domain.base.contracts.Entity
 import com.example.truckercore.layers.domain.base.others.Chassi
 import com.example.truckercore.layers.domain.base.enums.Color
 import com.example.truckercore.layers.domain.base.others.Plate

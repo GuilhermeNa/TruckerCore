@@ -5,7 +5,7 @@ import com.example.truckercore.core.config.collections.CollectionResolver
 import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
 import com.example.truckercore.layers.data.base.filter.collection.SearchFilters
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
+import com.example.truckercore.layers.domain.base.contracts.ID
 
 /**
  * Defines the structure for querying data in a type-safe and declarative way.

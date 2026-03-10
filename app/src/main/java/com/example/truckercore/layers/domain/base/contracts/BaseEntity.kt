@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.domain.base.contracts.entity
+package com.example.truckercore.layers.domain.base.contracts
 
 import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.layers.domain.base.enums.Status

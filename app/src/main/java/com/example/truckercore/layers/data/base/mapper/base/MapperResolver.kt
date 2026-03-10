@@ -6,7 +6,7 @@ import com.example.truckercore.layers.data.base.dto.impl.CompanyDto
 import com.example.truckercore.layers.data.base.dto.impl.UserDto
 import com.example.truckercore.layers.data.base.mapper.impl.CompanyMapper
 import com.example.truckercore.layers.data.base.mapper.impl.UserMapper
-import com.example.truckercore.layers.domain.base.contracts.entity.BaseEntity
+import com.example.truckercore.layers.domain.base.contracts.BaseEntity
 
 object MapperResolver {
 

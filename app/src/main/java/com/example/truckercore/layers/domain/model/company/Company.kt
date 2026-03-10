@@ -1,12 +1,17 @@
 package com.example.truckercore.layers.domain.model.company
 
-import com.example.truckercore.layers.domain.base.contracts.entity.BaseEntity
-import com.example.truckercore.layers.domain.base.contracts.others.Optional
+import com.example.truckercore.layers.domain.base.contracts.BaseEntity
+import com.example.truckercore.layers.domain.base.contracts.Optional
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.others.Cnpj
+import com.example.truckercore.layers.domain.base.others.CompanyName
+import com.example.truckercore.layers.domain.base.others.MunicipalRegistration
+import com.example.truckercore.layers.domain.base.others.StateRegistration
 import com.example.truckercore.layers.domain.departments.fleet.FleetDepartment
 import com.example.truckercore.layers.domain.departments.hr.HrDepartment
+import com.example.truckercore.layers.domain.model.antt.AnttCollection
+import com.example.truckercore.layers.domain.model.social_contract.SocialContractCollection
 
 /**
  * Represents a company within the system.
@@ -16,15 +21,26 @@ import com.example.truckercore.layers.domain.departments.hr.HrDepartment
  */
 class Company(
     override val id: CompanyID,
-    override val status: Status
-) : BaseEntity, Optional {
+    override val status: Status,
+    private var _cnpj: Cnpj? = null,
+    private var _name: CompanyName? = null,
+    private var _stateRegistration: StateRegistration? = null,
+    private var _municipalRegistration: MunicipalRegistration? = null
+) : BaseEntity, Optional<CompanyOptional> {
 
-    // Optional fields
-    var cnpj: Cnpj? = null
-        private set
+    // Getters
+    val cnpj get() = _cnpj
 
-    var name: String? = null
-        private set
+    val name get() = _name
+
+    val stateRegistration get() = _stateRegistration
+
+    val municipalRegistration get() = _municipalRegistration
+
+    // Collections
+    private val anttCollection = AnttCollection()
+
+    private val socialContractCollection = SocialContractCollection()
 
     // Departments
     private val hr = HrDepartment()
@@ -32,9 +48,22 @@ class Company(
     private val fleet = FleetDepartment()
 
     //----------------------------------------------------------------------------------------------
-    //
+    // Methods
     //----------------------------------------------------------------------------------------------
     override fun isFilled(): Boolean =
-        cnpj != null && name != null
+        cnpj != null ||
+                name != null ||
+                stateRegistration != null ||
+                municipalRegistration != null
+
+    override fun completeRegistration(data: CompanyOptional) {
+        super.completeRegistration(data)
+        _cnpj = data.cnpj
+        _name = data.name
+        _stateRegistration = data.stateRegistration
+        _municipalRegistration = data.municipalRegistration
+
+    }
 
 }
+

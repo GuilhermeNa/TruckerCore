@@ -1,8 +1,7 @@
-package com.example.truckercore.layers.domain.base.contracts.others
+package com.example.truckercore.layers.domain.base.contracts
 
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
-import com.example.truckercore.layers.domain.base.contracts.entity.Entity
 import com.example.truckercore.layers.domain.base.ids.UserID
 import com.example.truckercore.layers.domain.model.user.User
 

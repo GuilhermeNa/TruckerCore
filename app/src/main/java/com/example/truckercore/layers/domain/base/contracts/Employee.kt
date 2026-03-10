@@ -1,6 +1,4 @@
-package com.example.truckercore.layers.domain.base.contracts.others
-
-import com.example.truckercore.layers.domain.base.contracts.entity.EmployeeID
+package com.example.truckercore.layers.domain.base.contracts
 
 /**
  * Base contract for all employees.

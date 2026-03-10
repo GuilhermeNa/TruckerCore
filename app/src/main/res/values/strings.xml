@@ -64,5 +64,9 @@
     <string name="messages">Mensagens</string>
     <string name="settings">Configurações</string>
     <string name="profile">Perfil</string>
+    <string name="business_info">Informações da Empresa</string>
+    <string name="cnpj">Cnpj</string>
+    <string name="cnpj_caps">CNPJ</string>
+    <string name="opening">Abertura</string>
 
 </resources>

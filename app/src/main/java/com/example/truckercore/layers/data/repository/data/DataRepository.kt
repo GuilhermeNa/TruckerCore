@@ -3,7 +3,7 @@ package com.example.truckercore.layers.data.repository.data
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.specification._contracts.Specification
-import com.example.truckercore.layers.domain.base.contracts.entity.BaseEntity
+import com.example.truckercore.layers.domain.base.contracts.BaseEntity
 import kotlinx.coroutines.flow.Flow
 
 /**

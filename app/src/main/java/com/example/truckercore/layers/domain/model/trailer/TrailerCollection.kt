@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.domain.model.trailer
 
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
-import com.example.truckercore.layers.domain.base.contracts.others.VehicleCollection
+import com.example.truckercore.layers.domain.base.contracts.ID
+import com.example.truckercore.layers.domain.base.contracts.VehicleCollection
 import com.example.truckercore.layers.domain.base.others.Plate
 
 class TrailerCollection(

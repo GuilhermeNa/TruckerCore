@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/text"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="16dp"
+    android:padding="16dp"
+    android:textSize="15sp"
+    android:background="@drawable/shape_rectangular"
+    android:backgroundTint="@android:color/holo_orange_light"
+    app:drawableTint="@color/colorOnSurfaceVariant"
+    tools:text="Você ainda não cadastrou os dados da sua empresa."
+    android:drawablePadding="16dp"
+    app:drawableStartCompat="@drawable/icon_exclamation"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:textColor="@color/colorOnSurfaceVariant" />

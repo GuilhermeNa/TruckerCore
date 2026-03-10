@@ -7,7 +7,7 @@ import com.example.truckercore.layers.data.base.mapper.base.MapperResolver
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.specification._contracts.Specification
 import com.example.truckercore.layers.data.data_source.data.DataSource
-import com.example.truckercore.layers.domain.base.contracts.entity.BaseEntity
+import com.example.truckercore.layers.domain.base.contracts.BaseEntity
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 

@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.domain.model.notification
 
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
-import com.example.truckercore.layers.domain.base.contracts.others.DomainCollection
+import com.example.truckercore.layers.domain.base.contracts.ID
+import com.example.truckercore.layers.domain.base.contracts.DomainCollection
 
 class NotificationCollection(
     private val dataSet: MutableSet<Notification> = mutableSetOf()

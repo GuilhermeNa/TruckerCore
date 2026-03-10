@@ -1,14 +1,12 @@
 package com.example.truckercore.core.config.collections
 
 import com.example.truckercore.core.config.collections.CollectionResolver.invoke
-import com.example.truckercore.core.my_lib.expressions.getTag
-import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
 import com.example.truckercore.layers.data.base.dto.impl.AccessDto
 import com.example.truckercore.layers.data.base.dto.impl.AdminDto
 import com.example.truckercore.layers.data.base.dto.impl.CompanyDto
 import com.example.truckercore.layers.data.base.dto.impl.UserDto
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
+import com.example.truckercore.layers.domain.base.contracts.ID
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.ids.UserID
 

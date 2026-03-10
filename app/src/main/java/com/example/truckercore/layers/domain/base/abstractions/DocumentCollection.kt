@@ -1,8 +1,8 @@
 package com.example.truckercore.layers.domain.base.abstractions
 
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
-import com.example.truckercore.layers.domain.base.contracts.others.Document
-import com.example.truckercore.layers.domain.base.contracts.others.DomainCollection
+import com.example.truckercore.layers.domain.base.contracts.ID
+import com.example.truckercore.layers.domain.base.contracts.Document
+import com.example.truckercore.layers.domain.base.contracts.DomainCollection
 import java.time.LocalDate
 
 abstract class DocumentCollection<T : Document>(

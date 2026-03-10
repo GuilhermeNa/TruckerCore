@@ -1,8 +1,8 @@
 package com.example.truckercore.layers.domain.departments.hr
 
 import com.example.truckercore.core.error.DomainException
-import com.example.truckercore.layers.domain.base.contracts.entity.EmployeeID
-import com.example.truckercore.layers.domain.base.contracts.others.Employee
+import com.example.truckercore.layers.domain.base.contracts.EmployeeID
+import com.example.truckercore.layers.domain.base.contracts.Employee
 import com.example.truckercore.layers.domain.base.ids.AdminID
 import com.example.truckercore.layers.domain.base.ids.DriverID
 import com.example.truckercore.layers.domain.model.admin.Admin

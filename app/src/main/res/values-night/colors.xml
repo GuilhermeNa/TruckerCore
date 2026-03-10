@@ -11,10 +11,10 @@
     <color name="colorSecondaryVariant">#2E7D32</color>
     <color name="colorOnSecondary">#000000</color>
 
-    <color name="colorSurface">#121212</color>
+    <color name="colorSurface">#1E1E1E</color>
     <color name="colorOnSurface">#FFFFFF</color>
-    <color name="colorSurfaceVariant">#1E1E1E</color>
-    <color name="colorOnSurfaceVariant">#CCCCCC</color>
+    <color name="colorSurfaceVariant">#423939</color>
+    <color name="colorOnSurfaceVariant">#1B1B1B</color>
 
     <color name="colorPrimaryContainer">#1B5E20</color>
     <color name="colorOnPrimaryContainer">#A5D6A7</color>

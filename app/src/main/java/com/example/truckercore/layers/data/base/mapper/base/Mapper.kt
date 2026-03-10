@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.data.base.mapper.base
 
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
-import com.example.truckercore.layers.domain.base.contracts.entity.BaseEntity
+import com.example.truckercore.layers.domain.base.contracts.BaseEntity
 
 interface Mapper<D : BaseDto, E : BaseEntity> {
 

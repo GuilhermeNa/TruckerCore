@@ -1,6 +1,4 @@
-package com.example.truckercore.layers.domain.base.contracts.others
-
-import com.example.truckercore.layers.domain.base.contracts.entity.ID
+package com.example.truckercore.layers.domain.base.contracts
 
 interface DomainCollection<T: Any> {
 
