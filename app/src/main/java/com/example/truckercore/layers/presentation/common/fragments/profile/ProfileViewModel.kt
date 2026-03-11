@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.common.profile
+package com.example.truckercore.layers.presentation.common.fragments.profile
 
 import androidx.lifecycle.ViewModel
 

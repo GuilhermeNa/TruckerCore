@@ -2,7 +2,7 @@ package com.example.truckercore.layers.presentation.login.view.fragments.user_pr
 
 import com.example.truckercore.databinding.FragmentUserProfileBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
-import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.user_profile.helpers.UserProfileFragmentState
 
 /**

@@ -3,7 +3,7 @@ package com.example.truckercore.layers.presentation.login.view.fragments.email_a
 import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.databinding.FragmentEmailAuthBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
-import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthUiStatus
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers.EmailAuthenticationFragmentState
 

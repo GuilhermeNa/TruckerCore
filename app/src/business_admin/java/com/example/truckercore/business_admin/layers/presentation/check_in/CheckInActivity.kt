@@ -12,7 +12,7 @@ import com.example.truckercore.business_admin.layers.presentation.check_in.view_
 import com.example.truckercore.business_admin.layers.presentation.main.activity.MainActivity
 import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.presentation.base.contracts.BaseNavigator
-import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

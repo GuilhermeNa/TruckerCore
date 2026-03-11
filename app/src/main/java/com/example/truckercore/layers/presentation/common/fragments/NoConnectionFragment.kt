@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.common
+package com.example.truckercore.layers.presentation.common.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

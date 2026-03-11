@@ -13,7 +13,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_profile">Perfil</string>
 
-    <string name="menu_home">Início</string>
+    <string name="menu_trucker">Trucker</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_main">MainActivity</string>

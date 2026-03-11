@@ -1,11 +1,10 @@
-package com.example.truckercore.layers.presentation.common
+package com.example.truckercore.layers.presentation.common.dialogs
 
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.example.truckercore.R
 import com.example.truckercore.core.my_lib.expressions.getTag

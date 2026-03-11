@@ -6,7 +6,7 @@ import android.view.View.VISIBLE
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
-import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentState
 
 /**

@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.common.message_center
+package com.example.truckercore.layers.presentation.common.fragments.message_center
 
 import androidx.lifecycle.ViewModel
 

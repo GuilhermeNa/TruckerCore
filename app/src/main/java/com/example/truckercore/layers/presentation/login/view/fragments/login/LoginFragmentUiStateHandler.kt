@@ -3,7 +3,7 @@ package com.example.truckercore.layers.presentation.login.view.fragments.login
 import com.example.truckercore.core.my_lib.ui_components.TextInputComponent
 import com.example.truckercore.databinding.FragmentLoginBinding
 import com.example.truckercore.layers.presentation.base.handlers.StateHandler
-import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.login.LoginViewModel
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentState
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentStatus

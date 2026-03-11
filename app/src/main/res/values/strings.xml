@@ -68,5 +68,9 @@
     <string name="cnpj">Cnpj</string>
     <string name="cnpj_caps">CNPJ</string>
     <string name="opening">Abertura</string>
+    <string name="municipal_registration_abbrev">Insc. Municipal</string>
+    <string name="state_registration_abbrev">Insc. Estadual</string>
+    <string name="antt_caps">ANTT</string>
+    <string name="complete_register">Concluir cadastro</string>
 
 </resources>

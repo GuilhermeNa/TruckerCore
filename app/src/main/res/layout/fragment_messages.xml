@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".layers.presentation.common.message_center.MessagesFragment">
+    tools:context=".layers.presentation.common.fragments.message_center.MessagesFragment">
 
     <TextView
         android:layout_width="match_parent"

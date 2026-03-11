@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.common
+package com.example.truckercore.layers.presentation.common.activities
 
 import android.content.Context
 import android.content.Intent

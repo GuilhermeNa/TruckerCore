@@ -1,7 +1,7 @@
 package com.example.truckercore.layers.presentation.login.view_model.email_auth.helpers
 
-import com.example.truckercore.layers.presentation.common.NoConnectionFragment
-import com.example.truckercore.layers.presentation.common.NotificationActivity
+import com.example.truckercore.layers.presentation.common.fragments.NoConnectionFragment
+import com.example.truckercore.layers.presentation.common.activities.NotificationActivity
 import com.example.truckercore.layers.presentation.login.view.fragments.verifying_email.VerifyingEmailFragment
 import com.example.truckercore.layers.presentation.base.contracts.Effect
 

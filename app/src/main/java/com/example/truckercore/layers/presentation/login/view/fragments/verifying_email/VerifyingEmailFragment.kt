@@ -8,7 +8,7 @@ import com.example.truckercore.core.my_lib.expressions.launchAndRepeatOnFragment
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentVerifyingEmailBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.public.PublicLockedFragment
-import com.example.truckercore.layers.presentation.common.LoadingDialog
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.VerifyingEmailViewModel
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentEffect
 import com.example.truckercore.layers.presentation.login.view_model.verifying_email.helpers.VerifyingEmailFragmentEvent

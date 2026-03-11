@@ -2,8 +2,8 @@ package com.example.truckercore.layers.presentation.login.view_model.login.helpe
 
 import com.example.truckercore.core.my_lib.classes.EmailCredential
 import com.example.truckercore.layers.presentation.base.contracts.Effect
-import com.example.truckercore.layers.presentation.common.NoConnectionFragment
-import com.example.truckercore.layers.presentation.common.NotificationActivity
+import com.example.truckercore.layers.presentation.common.fragments.NoConnectionFragment
+import com.example.truckercore.layers.presentation.common.activities.NotificationActivity
 import com.example.truckercore.layers.presentation.login.view.fragments.continue_register.ContinueRegisterFragment
 import com.example.truckercore.layers.presentation.login.view.fragments.email_auth.EmailAuthFragment
 import com.example.truckercore.layers.presentation.login.view.fragments.forget_password.ForgetPasswordFragment

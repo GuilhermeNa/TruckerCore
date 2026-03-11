@@ -5,6 +5,7 @@ import com.example.truckercore.business_admin.layers.domain.use_case.company.Ini
 import com.example.truckercore.business_admin.layers.domain.use_case.employee.GenerateRegistrationCodeUseCase
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.CheckInViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.activity.MainViewModel
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.home.view_model.HomeViewModel
 import com.example.truckercore.core.config.flavor.FlavorStrategy
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,5 +24,6 @@ val adminModules = module {
     single { InitializeCompanyAccessUseCase(get()) }
     single { GenerateRegistrationCodeUseCase(get()) }
     single { HomeViewModel() }
+    single { BusinessViewModel() }
 
 }

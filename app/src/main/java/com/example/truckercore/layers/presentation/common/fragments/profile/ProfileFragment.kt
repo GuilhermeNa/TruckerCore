@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.presentation.common.message_center
+package com.example.truckercore.layers.presentation.common.fragments.profile
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.truckercore.R
-import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 
-class MessagesFragment : PrivateFragment() {
+class ProfileFragment : Fragment() {
 
-    private val viewModel: MessagesViewModel by viewModels()
+    companion object {
+        fun newInstance() = ProfileFragment()
+    }
+
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,6 @@ class MessagesFragment : PrivateFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_messages, container, false)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 }

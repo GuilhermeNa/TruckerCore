@@ -8,8 +8,8 @@ import androidx.fragment.app.setFragmentResultListener
 import com.example.truckercore.NavGraphLoginDirections
 import com.example.truckercore.R
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
-import com.example.truckercore.layers.presentation.common.NoConnectionFragment
-import com.example.truckercore.layers.presentation.common.NotificationActivity
+import com.example.truckercore.layers.presentation.common.fragments.NoConnectionFragment
+import com.example.truckercore.layers.presentation.common.activities.NotificationActivity
 
 /**
  * Defines the navigation contract for fragments and activities that require

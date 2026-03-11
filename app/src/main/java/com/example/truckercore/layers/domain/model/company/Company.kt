@@ -12,6 +12,7 @@ import com.example.truckercore.layers.domain.departments.fleet.FleetDepartment
 import com.example.truckercore.layers.domain.departments.hr.HrDepartment
 import com.example.truckercore.layers.domain.model.antt.AnttCollection
 import com.example.truckercore.layers.domain.model.social_contract.SocialContractCollection
+import java.time.LocalDate
 
 /**
  * Represents a company within the system.
@@ -25,7 +26,8 @@ class Company(
     private var _cnpj: Cnpj? = null,
     private var _name: CompanyName? = null,
     private var _stateRegistration: StateRegistration? = null,
-    private var _municipalRegistration: MunicipalRegistration? = null
+    private var _municipalRegistration: MunicipalRegistration? = null,
+    private var _opening: LocalDate? = null
 ) : BaseEntity, Optional<CompanyOptional> {
 
     // Getters
@@ -36,6 +38,8 @@ class Company(
     val stateRegistration get() = _stateRegistration
 
     val municipalRegistration get() = _municipalRegistration
+
+    val opening get() = _opening
 
     // Collections
     private val anttCollection = AnttCollection()
@@ -54,7 +58,8 @@ class Company(
         cnpj != null ||
                 name != null ||
                 stateRegistration != null ||
-                municipalRegistration != null
+                municipalRegistration != null ||
+                opening != null
 
     override fun completeRegistration(data: CompanyOptional) {
         super.completeRegistration(data)
@@ -62,7 +67,7 @@ class Company(
         _name = data.name
         _stateRegistration = data.stateRegistration
         _municipalRegistration = data.municipalRegistration
-
+        _opening = data.opening
     }
 
 }
