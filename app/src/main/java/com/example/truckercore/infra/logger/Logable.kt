@@ -21,7 +21,7 @@ interface Logable {
 
     }
 
-    fun Throwable.logFailure(message: String) {
+    fun Throwable.logFailure(message: String? = null) {
         Log.e(tag, "$message\n${stackTraceToString()}")
     }
 
