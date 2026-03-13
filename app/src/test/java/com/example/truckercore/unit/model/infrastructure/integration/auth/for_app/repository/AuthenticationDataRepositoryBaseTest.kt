@@ -31,7 +31,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
 
-class AuthenticationRepositoryTest : KoinTest {
+class AuthenticationDataRepositoryBaseTest : KoinTest {
 
     private val authSource: AuthSource by inject()
     private val repository: AuthenticationRepository by inject()
