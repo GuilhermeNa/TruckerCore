@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AdminRemoteDataSource : RemoteDataSource {
 
-    suspend fun fetch(userId: UserID): AdminDto?
-
     fun observe(userId: UserID): Flow<AdminDto?>
 
 }

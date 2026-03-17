@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AccessRepository {
 
-    suspend fun fetch(userId: UserID): DataOutcome<Access>
-
     fun observe(userId: UserID): Flow<DataOutcome<Access>>
 
 }

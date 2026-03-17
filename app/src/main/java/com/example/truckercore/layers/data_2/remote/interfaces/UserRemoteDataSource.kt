@@ -5,9 +5,7 @@ import com.example.truckercore.layers.data_2.remote.base.RemoteDataSource
 import com.example.truckercore.layers.domain.base.ids.UID
 import kotlinx.coroutines.flow.Flow
 
-interface UserRemoteDataSource: RemoteDataSource {
-
-    suspend fun fetch(uid: UID): UserDto?
+interface UserRemoteDataSource : RemoteDataSource {
 
     fun observe(uid: UID): Flow<UserDto?>
 

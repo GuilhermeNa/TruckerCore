@@ -1,6 +1,7 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model
 
 import com.example.truckercore.core.my_lib.expressions.span
+import com.example.truckercore.layers.data_2.repository.interfaces.UserRepository
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.base.others.Cnpj
@@ -12,8 +13,7 @@ import com.example.truckercore.layers.presentation.base.abstractions.view_model.
 import com.example.truckercore.layers.presentation.base.managers.StateManager
 
 class BusinessViewModel(
-    private val getUserUseCase: GetUserUserCase,
-    private val getCompanyUseCase: GetCompanyUseCase
+
 ) : BaseViewModel() {
 
     private val stateManager = StateManager(BusinessState())

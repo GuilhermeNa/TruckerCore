@@ -38,7 +38,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertTrue
 
-class DataDataSourceImplTest : KoinTest {
+class DataRepositoryImplTest : KoinTest {
 
     //----------------------------------------------------------------------------------------------
     // Setup

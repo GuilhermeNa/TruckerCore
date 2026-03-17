@@ -4,8 +4,11 @@ import com.example.truckercore.layers.data.base.dto.contracts.Dto
 import com.example.truckercore.layers.domain.base.enums.Status
 
 data class DriverDto(
-    override val id: String?,
-    override val companyId: String?,
-    override val status: Status?
+    override val id: String? = null,
+    override val companyId: String? = null,
+    override val status: Status? = null,
+    val name: String? = null,
+    val email: String? = null,
+    val userId: String? = null
 ):Dto {
 }

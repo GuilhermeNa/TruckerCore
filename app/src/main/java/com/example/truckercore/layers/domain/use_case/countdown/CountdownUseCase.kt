@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.domain.use_case._common
+package com.example.truckercore.layers.domain.use_case.countdown
 
 import com.example.truckercore.core.my_lib.files.ONE_SEC
 import kotlinx.coroutines.delay

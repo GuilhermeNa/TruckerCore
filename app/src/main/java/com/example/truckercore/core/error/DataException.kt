@@ -24,8 +24,8 @@ sealed class DataException(
     /**
      * Represents an error originating from a data source.
      */
-    class DataSource(
-        message: String = "An unknown error occurred on data source.",
+    class Repository(
+        message: String? = "An unknown error occurred on data source.",
         cause: Throwable? = null
     ) : DataException(message, cause)
 

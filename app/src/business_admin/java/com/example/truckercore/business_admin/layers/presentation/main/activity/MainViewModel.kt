@@ -1,5 +1,7 @@
 package com.example.truckercore.business_admin.layers.presentation.main.activity
 
+import androidx.lifecycle.viewModelScope
+import com.example.truckercore.business_admin.layers.domain.use_case.session.ObserveSessionUseCase
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.expressions.get
@@ -9,6 +11,7 @@ import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseC
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * MainViewModel
@@ -30,23 +33,14 @@ import kotlinx.coroutines.flow.asStateFlow
 class MainViewModel(
     getUserNameUseCase: GetUserNameUseCase,
     getUserEmailUseCase: GetUserEmailUseCase,
-    private val signOutUseCase: SignOutUseCase
+    private val signOutUseCase: SignOutUseCase,
+    private val observeSessionUseCase: ObserveSessionUseCase
 ) : BaseViewModel() {
 
-    /**
-     * Authenticated user's display name.
-     *
-     * Retrieved through a dedicated UseCase to preserve
-     * separation between domain and presentation layers.
-     */
+    // Authenticated user's display name.
     val name: Name = getUserNameUseCase().get()
 
-    /**
-     * Authenticated user's email address.
-     *
-     * Retrieved through a dedicated UseCase to preserve
-     * separation between domain and presentation layers.
-     */
+    // Authenticated user's email address.
     val email: Email = getUserEmailUseCase().get()
 
     /**
@@ -55,14 +49,19 @@ class MainViewModel(
      * Default value: true (menu enabled).
      */
     private val _menuState = MutableStateFlow(true)
-
-    /**
-     * Public immutable StateFlow representing
-     * whether the Toolbar menu should be visible.
-     *
-     * Exposed as read-only to prevent external mutation.
-     */
     val menuState get() = _menuState.asStateFlow()
+
+    init {
+        observeSession()
+    }
+
+    //----------------------------------------------------------------------------------------------
+    private fun observeSession() = viewModelScope.launch {
+        observeSessionUseCase().collect {
+            it
+        }
+
+    }
 
     /**
      * Executes the logout process.

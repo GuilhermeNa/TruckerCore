@@ -103,8 +103,11 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
         try {
             val result = block()
 
-            if (result != null) DataOutcome.Success(result)
-            else DataOutcome.Empty
+            if (result != null) {
+                DataOutcome.Success(result)
+            } else {
+                DataOutcome.Empty
+            }
 
         } catch (e: AppException) {
             DataOutcome.Failure(e)

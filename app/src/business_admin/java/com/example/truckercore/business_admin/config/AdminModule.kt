@@ -3,6 +3,7 @@ package com.example.truckercore.business_admin.config
 import com.example.truckercore.business_admin.layers.domain.use_case.access.AuthorizeEmployeeAccessUseCase
 import com.example.truckercore.business_admin.layers.domain.use_case.company.InitializeCompanyAccessUseCase
 import com.example.truckercore.business_admin.layers.domain.use_case.employee.GenerateRegistrationCodeUseCase
+import com.example.truckercore.business_admin.layers.domain.use_case.session.ObserveSessionUseCase
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.CheckInViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.activity.MainViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
@@ -17,13 +18,15 @@ val adminModules = module {
 
     // ViewModel
     viewModel<CheckInViewModel> { CheckInViewModel(get(), get(), get(), get(), get()) }
+    viewModel<HomeViewModel> { HomeViewModel() }
+    viewModel<BusinessViewModel> { BusinessViewModel() }
+    viewModel<MainViewModel> { MainViewModel(get(), get(), get(), get()) }
 
-    // UseCases
-    single { MainViewModel(get(), get(), get()) }
+    // Domain
     single { AuthorizeEmployeeAccessUseCase(get()) }
     single { InitializeCompanyAccessUseCase(get()) }
     single { GenerateRegistrationCodeUseCase(get()) }
-    single { HomeViewModel() }
-    single { BusinessViewModel() }
+    single { ObserveSessionUseCase(get(), get(), get(), get(), get()) }
+
 
 }

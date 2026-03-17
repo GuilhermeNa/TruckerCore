@@ -1,11 +1,9 @@
 package com.example.truckercore.core.my_lib.expressions
 
-import android.provider.ContactsContract.Data
+import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.core.error.core.AppException
-import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
-import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 
 /**
  * Maps the [DataOutcome] to a value by applying the corresponding function
@@ -24,6 +22,31 @@ inline fun <R, T> DataOutcome<T>.map(
     is DataOutcome.Empty -> onEmpty()
     is DataOutcome.Success -> onSuccess(data)
     is DataOutcome.Failure -> onFailure(exception)
+}
+
+inline fun <R, T> DataOutcome<T>.map(transform: (T) -> R): DataOutcome<R> =
+    when (this) {
+        is DataOutcome.Success -> DataOutcome.Success(transform(data))
+        is DataOutcome.Failure -> this
+        DataOutcome.Empty -> DataOutcome.Empty
+    }
+
+fun <T> DataOutcome<T>.requireOrFailure(
+    message: String
+): DataOutcome<T> = when (this) {
+    is DataOutcome.Success -> this
+    is DataOutcome.Failure -> this
+    DataOutcome.Empty -> DataOutcome.Failure(
+        DomainException.RuleViolation(message)
+    )
+}
+
+inline fun <T, R> DataOutcome<T>.requireOrElse(
+    onSuccess: (T) -> R,
+    orElse: (AppException?) -> R
+): R = when (this) {
+    is DataOutcome.Success -> onSuccess(data)
+    else -> orElse((this as? DataOutcome.Failure)?.exception)
 }
 
 /**
@@ -68,7 +91,8 @@ inline fun <T> DataOutcome<T>.handle(
     }
 }
 
-fun  DataOutcome<*>.isNotSuccess(): Boolean = this !is DataOutcome.Success
+
+fun DataOutcome<*>.isNotSuccess(): Boolean = this !is DataOutcome.Success
 
 fun DataOutcome<*>.isFailure(): Boolean = this is DataOutcome.Failure
 
@@ -100,7 +124,7 @@ fun <T> DataOutcome<T>.onSuccess(action: (T) -> Unit): DataOutcome<T> {
     return this
 }
 
-fun  DataOutcome<*>.isConnectionError(): Boolean =
+fun DataOutcome<*>.isConnectionError(): Boolean =
     when {
         this.isFailure() -> (this as DataOutcome.Failure).exception is InfraException.Network
         else -> false

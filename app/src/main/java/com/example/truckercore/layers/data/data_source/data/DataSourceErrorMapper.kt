@@ -20,7 +20,7 @@ class DataSourceErrorMapper : ErrorMapper {
 
     override fun invoke(e: Throwable): AppException = when (e) {
         is FirebaseNetworkException -> InfraException.Network(cause = e)
-        is FirebaseFirestoreException -> DataException.DataSource(cause = e)
+        is FirebaseFirestoreException -> DataException.Repository(cause = e)
         else -> InfraException.Unknown(cause = e)
     }
 

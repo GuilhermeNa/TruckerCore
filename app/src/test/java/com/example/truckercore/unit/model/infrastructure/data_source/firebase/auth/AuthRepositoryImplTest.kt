@@ -41,7 +41,7 @@ import org.koin.test.inject
 import kotlin.reflect.KClass
 import kotlin.test.assertTrue
 
-class AuthDataSourceImplTest : KoinTest {
+class AuthRepositoryImplTest : KoinTest {
 
     //----------------------------------------------------------------------------------------------
     // Setup

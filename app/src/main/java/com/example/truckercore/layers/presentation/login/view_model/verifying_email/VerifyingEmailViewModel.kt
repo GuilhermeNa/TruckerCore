@@ -4,15 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.expressions.get
-import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.expressions.isByNetwork
 import com.example.truckercore.core.my_lib.expressions.isEmpty
 import com.example.truckercore.core.my_lib.expressions.isSuccess
 import com.example.truckercore.core.my_lib.expressions.isTrue
-import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
-import com.example.truckercore.layers.domain.use_case._common.CountdownUseCase
+import com.example.truckercore.layers.domain.use_case.countdown.CountdownUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.IsEmailVerifiedUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SendEmailVerificationUseCase

@@ -1,5 +1,6 @@
 package com.example.truckercore.core.di
 
+import com.example.truckercore.layers.domain.use_case._base.UseCasePipeline
 import com.example.truckercore.layers.presentation.login.view_model.continue_register.ContinueRegisterViewModel
 import com.example.truckercore.layers.presentation.login.view_model.email_auth.EmailAuthViewModel
 import com.example.truckercore.layers.presentation.login.view_model.forget_password.ForgetPasswordViewModel
@@ -12,6 +13,8 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    single { UseCasePipeline() }
+
     viewModel<ContinueRegisterViewModel> { ContinueRegisterViewModel(get(), get()) }
     viewModel<EmailAuthViewModel> { EmailAuthViewModel(get(), get()) }
     viewModel<ForgetPasswordViewModel> { ForgetPasswordViewModel(get()) }
