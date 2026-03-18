@@ -201,4 +201,5 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
             .whereEqualTo("userId", userId.value)
         return DataSource.Query(query)
     }
+
 }

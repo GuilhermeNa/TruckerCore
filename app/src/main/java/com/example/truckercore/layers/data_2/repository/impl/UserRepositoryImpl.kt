@@ -14,8 +14,6 @@ class UserRepositoryImpl(
 ) : DataRepositoryBase(remote),
     UserRepository {
 
-    override val classTag = "UserRepositoryImpl"
-
     override fun observe(uid: UID): Flow<DataOutcome<UserDraft>> =
         observe(
             dataFlow = remote.observe(uid),

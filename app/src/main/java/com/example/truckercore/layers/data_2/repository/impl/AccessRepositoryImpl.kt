@@ -14,8 +14,6 @@ class AccessRepositoryImpl(
 ) : DataRepositoryBase(remote),
     AccessRepository {
 
-    override val classTag = "AccessRepositoryImpl"
-
     override fun observe(userId: UserID): Flow<DataOutcome<Access>> =
         observe(
             dataFlow = remote.observe(userId),

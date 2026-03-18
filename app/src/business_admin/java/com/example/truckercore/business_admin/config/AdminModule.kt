@@ -5,7 +5,7 @@ import com.example.truckercore.business_admin.layers.domain.use_case.company.Ini
 import com.example.truckercore.business_admin.layers.domain.use_case.employee.GenerateRegistrationCodeUseCase
 import com.example.truckercore.business_admin.layers.domain.use_case.session.ObserveSessionUseCase
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.CheckInViewModel
-import com.example.truckercore.business_admin.layers.presentation.main.activity.MainViewModel
+import com.example.truckercore.business_admin.layers.presentation.main.activity.view_model.MainViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.home.view_model.HomeViewModel
 import com.example.truckercore.core.config.flavor.FlavorStrategy

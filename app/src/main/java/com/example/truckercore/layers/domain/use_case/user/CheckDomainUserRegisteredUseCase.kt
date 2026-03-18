@@ -1,6 +1,6 @@
 package com.example.truckercore.layers.domain.use_case.user
 
-import com.example.truckercore.core.my_lib.expressions.map
+import com.example.truckercore.core.my_lib.expressions.mapSuccess
 import com.example.truckercore.infra.logger.Logable
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.specification.specs_impl.UserSpec
@@ -24,7 +24,7 @@ class CheckDomainUserRegisteredUseCase(
         return repository.findByFilter(spec)
     }
 
-    private fun DataOutcome<List<UserDraft>>.toResponse() = this.map(
+    private fun DataOutcome<List<UserDraft>>.toResponse() = this.mapSuccess(
         onSuccess = { DataOutcome.Success(true) },
         onFailure = { DataOutcome.Failure(it) },
         onEmpty = { DataOutcome.Success(false) }

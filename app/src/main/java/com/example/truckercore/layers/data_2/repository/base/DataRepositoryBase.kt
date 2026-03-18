@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 
 abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
 
-    abstract val classTag: String
+    private val classTag = this::class.simpleName
 
     //----------------------------------------------------------------------------------------------
     // Fetch single object

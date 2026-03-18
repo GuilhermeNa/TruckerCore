@@ -2,11 +2,9 @@ package com.example.truckercore.layers.presentation.login.view_model.user_profil
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.my_lib.expressions.get
-import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.expressions.isByNetwork
-import com.example.truckercore.core.my_lib.expressions.map
-import com.example.truckercore.infra.logger.AppLogger
+import com.example.truckercore.core.my_lib.expressions.mapSuccess
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.domain.use_case.authentication.CreateUserProfileUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.HasLoggedUserUseCase
@@ -111,7 +109,7 @@ class UserProfileViewModel(
      * - Failure by network → [UserProfileFragmentEvent.ProfileTask.Failure.NoConnection]
      * - Any other failure → [UserProfileFragmentEvent.ProfileTask.Failure.Irrecoverable]
      */
-    private fun OperationOutcome.toEvent(): UserProfileFragmentEvent = this.map(
+    private fun OperationOutcome.toEvent(): UserProfileFragmentEvent = this.mapSuccess(
         onComplete = { UserProfileFragmentEvent.ProfileTask.Complete },
         onFailure = { e ->
             if (e.isByNetwork()) UserProfileFragmentEvent.ProfileTask.Failure.NoConnection

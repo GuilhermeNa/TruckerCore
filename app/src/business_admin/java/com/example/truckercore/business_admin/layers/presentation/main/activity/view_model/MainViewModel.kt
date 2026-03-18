@@ -1,10 +1,12 @@
-package com.example.truckercore.business_admin.layers.presentation.main.activity
+package com.example.truckercore.business_admin.layers.presentation.main.activity.view_model
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.business_admin.layers.domain.use_case.session.ObserveSessionUseCase
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.expressions.get
+import com.example.truckercore.layers.domain.base.ids.CompanyID
+import com.example.truckercore.layers.domain.model.session.Session
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
@@ -43,6 +45,9 @@ class MainViewModel(
     // Authenticated user's email address.
     val email: Email = getUserEmailUseCase().get()
 
+    private val _session = MutableStateFlow(SessionState.Loading)
+    val sessionFLow get() = _session.asStateFlow()
+
     /**
      * Backing property for Toolbar menu visibility state.
      *
@@ -62,6 +67,11 @@ class MainViewModel(
         }
 
     }
+
+    fun companyId(): CompanyID {
+        sessionFLow.value
+    }
+
 
     /**
      * Executes the logout process.

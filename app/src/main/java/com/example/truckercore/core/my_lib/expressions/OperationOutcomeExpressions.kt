@@ -13,7 +13,7 @@ import com.example.truckercore.layers.data.base.outcome.OperationOutcome
  * @param onFailure Function to invoke if the outcome is [OperationOutcome.Failure].
  * @return The result of the corresponding function.
  */
-inline fun <R> OperationOutcome.map(
+inline fun <R> OperationOutcome.mapSuccess(
     onComplete: () -> R,
     onFailure: (e: AppException) -> R
 ): R = when (this) {

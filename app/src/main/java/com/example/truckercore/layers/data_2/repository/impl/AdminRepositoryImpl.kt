@@ -14,8 +14,6 @@ class AdminRepositoryImpl(
 ) : DataRepositoryBase(remote),
     AdminRepository {
 
-    override val classTag = "AdminRepositoryImpl"
-
     override fun observe(userId: UserID): Flow<DataOutcome<Admin>> =
         observe(
             dataFlow = remote.observe(userId),

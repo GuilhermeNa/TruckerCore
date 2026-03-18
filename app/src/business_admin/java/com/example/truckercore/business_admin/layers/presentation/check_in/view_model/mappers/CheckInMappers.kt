@@ -6,7 +6,7 @@ import com.example.truckercore.business_admin.layers.presentation.check_in.view_
 import com.example.truckercore.core.my_lib.expressions.getOrNull
 import com.example.truckercore.core.my_lib.expressions.isByNetwork
 import com.example.truckercore.core.my_lib.expressions.isConnectionError
-import com.example.truckercore.core.my_lib.expressions.map
+import com.example.truckercore.core.my_lib.expressions.mapSuccess
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 
@@ -32,7 +32,7 @@ private fun mapEmptyOrError(outcome: DataOutcome<Boolean>) =
 //--------------------------------------------------------------------------------------------------
 // Create Access Event Mapper
 //--------------------------------------------------------------------------------------------------
-fun OperationOutcome.toCreateAccessEvent() = map(
+fun OperationOutcome.toCreateAccessEvent() = mapSuccess(
     onComplete = { CheckInEvent.CreateAccessTask.Complete },
     onFailure = {
         if (it.isByNetwork()) {

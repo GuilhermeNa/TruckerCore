@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.truckercore.business_admin.layers.presentation.main.activity.view_model.MainViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessStatus
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
 import com.example.truckercore.databinding.FragmentBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.common.lists.recycler_grid.RecyclerGrid
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class BusinessFragment: PrivateFragment() {
+class BusinessFragment : PrivateFragment() {
 
     // Cleared in onDestroyView to prevent memory leaks.
     private var _binding: FragmentBusinessBinding? = null
@@ -23,6 +25,7 @@ class BusinessFragment: PrivateFragment() {
 
     // ViewModel providing UI state and interaction control.
     private val viewModel: BusinessViewModel by viewModel()
+    private val actViewModel: MainViewModel by activityViewModel()
 
     private val res: BusinessResources by lazy { BusinessResources() }
 
@@ -31,7 +34,19 @@ class BusinessFragment: PrivateFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setActivityStateManager()
         setStateManager()
+    }
+
+    private fun setActivityStateManager() {
+        // onInitializing() { }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                actViewModel.sessionFLow.collect {
+
+                }
+            }
+        }
     }
 
     private fun setStateManager() {

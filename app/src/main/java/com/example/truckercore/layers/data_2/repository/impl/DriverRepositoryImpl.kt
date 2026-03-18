@@ -14,8 +14,6 @@ class DriverRepositoryImpl(
 ) : DataRepositoryBase(remote),
     DriverRepository {
 
-    override val classTag = "DriverRepositoryImpl"
-
     override fun observe(userId: UserID): Flow<DataOutcome<Driver>> =
         observe(
             dataFlow = remote.observe(userId),

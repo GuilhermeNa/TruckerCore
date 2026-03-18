@@ -14,7 +14,7 @@ import com.example.truckercore.layers.data.base.outcome.DataOutcome
  * @param onFailure Function to invoke if the outcome is [DataOutcome.Failure].
  * @return The result of the function corresponding to the current outcome.
  */
-inline fun <R, T> DataOutcome<T>.map(
+inline fun <R, T> DataOutcome<T>.mapSuccess(
     onSuccess: (data: T) -> R,
     onEmpty: () -> R,
     onFailure: (e: AppException) -> R
@@ -24,7 +24,7 @@ inline fun <R, T> DataOutcome<T>.map(
     is DataOutcome.Failure -> onFailure(exception)
 }
 
-inline fun <R, T> DataOutcome<T>.map(transform: (T) -> R): DataOutcome<R> =
+inline fun <R, T> DataOutcome<T>.mapSuccess(transform: (T) -> R): DataOutcome<R> =
     when (this) {
         is DataOutcome.Success -> DataOutcome.Success(transform(data))
         is DataOutcome.Failure -> this
@@ -64,13 +64,6 @@ fun <T> DataOutcome<T>.get(): T = when (this) {
     )
 }
 
-/**
- * Returns the data if the [DataOutcome] is [DataOutcome.Success], or `null` otherwise.
- */
-fun <T> DataOutcome<T>.getOrNull(): T? = when (this) {
-    is DataOutcome.Success -> data
-    else -> null
-}
 
 /**
  * Executes the appropriate action based on the current [DataOutcome].
@@ -94,20 +87,10 @@ inline fun <T> DataOutcome<T>.handle(
 
 fun DataOutcome<*>.isNotSuccess(): Boolean = this !is DataOutcome.Success
 
-fun DataOutcome<*>.isFailure(): Boolean = this is DataOutcome.Failure
-
-fun DataOutcome<*>.isSuccess(): Boolean = this is DataOutcome.Success
-
 fun DataOutcome<Boolean>.isTrue(): Boolean = this is DataOutcome.Success && this.data
 
 fun DataOutcome<Boolean>.isFalse(): Boolean = this is DataOutcome.Success && !this.data
 
-fun DataOutcome<*>.isEmpty(): Boolean = this is DataOutcome.Empty
-
-fun <T> DataOutcome<T>.onFailure(action: (AppException) -> Unit): DataOutcome<T> {
-    if (this is DataOutcome.Failure) action(this.exception)
-    return this
-}
 
 fun <T> DataOutcome<T>.onEmpty(action: () -> Unit): DataOutcome<T> {
     if (this is DataOutcome.Empty) action()
