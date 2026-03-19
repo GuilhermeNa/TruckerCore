@@ -8,4 +8,6 @@ sealed class BusinessStatus {
 
     data object Complete: BusinessStatus()
 
+    data object Failure: BusinessStatus()
+
 }

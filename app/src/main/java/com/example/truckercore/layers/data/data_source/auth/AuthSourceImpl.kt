@@ -8,7 +8,9 @@ import com.example.truckercore.core.my_lib.files.ONE_SEC
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 /**
@@ -97,5 +99,14 @@ class AuthSourceImpl(
     }
 
     override fun signOut() = auth.signOut()
+
+    override fun observeAuthState() = callbackFlow {
+        val listener = FirebaseAuth.AuthStateListener { auth ->
+            val user = auth.currentUser
+            trySend(user != null)
+        }
+        auth.addAuthStateListener(listener)
+        awaitClose { auth.removeAuthStateListener(listener) }
+    }
 
 }

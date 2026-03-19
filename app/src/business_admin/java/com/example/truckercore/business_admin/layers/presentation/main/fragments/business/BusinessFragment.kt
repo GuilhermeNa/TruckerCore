@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.business_admin.layers.presentation.main.activity.view_model.MainViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessStatus
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
 import com.example.truckercore.databinding.FragmentBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.common.lists.recycler_grid.RecyclerGrid
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BusinessFragment : PrivateFragment() {
@@ -25,7 +23,6 @@ class BusinessFragment : PrivateFragment() {
 
     // ViewModel providing UI state and interaction control.
     private val viewModel: BusinessViewModel by viewModel()
-    private val actViewModel: MainViewModel by activityViewModel()
 
     private val res: BusinessResources by lazy { BusinessResources() }
 
@@ -34,18 +31,13 @@ class BusinessFragment : PrivateFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setActivityStateManager()
+        initializeViewModel(savedInstanceState)
         setStateManager()
     }
 
-    private fun setActivityStateManager() {
-        // onInitializing() { }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                actViewModel.sessionFLow.collect {
-
-                }
-            }
+    private fun initializeViewModel(savedInstanceState: Bundle?) {
+        onInitializing(savedInstanceState) {
+            viewModel.initialize()
         }
     }
 
@@ -57,6 +49,7 @@ class BusinessFragment : PrivateFragment() {
                         BusinessStatus.Loading -> setLoadingStatus()
                         BusinessStatus.Incomplete -> setIncompleteStatus()
                         BusinessStatus.Complete -> setCompleteStatus()
+                        BusinessStatus.Failure -> navigateToErrorActivity(requireActivity())
                     }
                 }
             }
@@ -96,7 +89,7 @@ class BusinessFragment : PrivateFragment() {
             binding.fragBusinessLayoutIncomplete.visibility = View.VISIBLE
 
             binding.fragBusinessNotification.notificationTextView.text =
-                viewModel.notification
+                res.notification
 
         } else {
             binding.fragBusinessLayoutIncomplete.visibility = View.GONE
@@ -115,11 +108,11 @@ class BusinessFragment : PrivateFragment() {
     }
 
     private fun bindData() {
-        binding.fragBusinessName.text = viewModel.getName()
-        binding.fragBusinessCnpj.text = viewModel.getCnpj()
-        binding.fragBusinessOpening.text = viewModel.getOpening()
-        binding.fragBusinessMunicipal.text = viewModel.getMunicipalInsc()
-        binding.fragBusinessState.text = viewModel.getStateInsc()
+        binding.fragBusinessName.text = viewModel.name
+        binding.fragBusinessCnpj.text = viewModel.cnpj
+        binding.fragBusinessOpening.text = viewModel.opening
+        binding.fragBusinessMunicipal.text = viewModel.municipalInsc
+        binding.fragBusinessState.text = viewModel.stateInsc
     }
 
     private fun initRecycler() {

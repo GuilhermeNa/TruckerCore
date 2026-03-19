@@ -6,6 +6,7 @@ import com.example.truckercore.core.my_lib.classes.Password
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.domain.base.ids.UID
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Repository interface that defines authentication-related operations used by the application layer.
@@ -83,5 +84,7 @@ interface AuthenticationRepository {
      * @return [DataOutcome] containing the user's [UID].
      */
     fun getUid(): DataOutcome<UID>
+
+    fun observeAuthState(): Flow<DataOutcome<Boolean>>
 
 }

@@ -11,10 +11,12 @@ import com.example.truckercore.layers.data.repository.instruction.InstructionRep
 import com.example.truckercore.layers.data.repository.instruction.InstructionRepositoryImpl
 import com.example.truckercore.layers.data_2.repository.impl.AccessRepositoryImpl
 import com.example.truckercore.layers.data_2.repository.impl.AdminRepositoryImpl
+import com.example.truckercore.layers.data_2.repository.impl.CompanyRepositoryImpl
 import com.example.truckercore.layers.data_2.repository.impl.DriverRepositoryImpl
 import com.example.truckercore.layers.data_2.repository.impl.UserRepositoryImpl
 import com.example.truckercore.layers.data_2.repository.interfaces.AccessRepository
 import com.example.truckercore.layers.data_2.repository.interfaces.AdminRepository
+import com.example.truckercore.layers.data_2.repository.interfaces.CompanyRepository
 import com.example.truckercore.layers.data_2.repository.interfaces.DriverRepository
 import com.example.truckercore.layers.data_2.repository.interfaces.UserRepository
 import org.koin.android.ext.koin.androidContext
@@ -30,6 +32,7 @@ val repositoriesModule = module {
     single<AdminRepository> { AdminRepositoryImpl(get()) }
     single<DriverRepository> { DriverRepositoryImpl(get()) }
     single<UserRepository> { UserRepositoryImpl(get()) }
+    single<CompanyRepository> { CompanyRepositoryImpl(get()) }
 
 
     // Auth Repository

@@ -5,6 +5,7 @@ import com.example.truckercore.core.error.core.ErrorMapper
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.classes.Password
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Abstract source for authentication operations.
@@ -118,5 +119,7 @@ abstract class AuthSource(protected val errorMapper: ErrorMapper) {
      * @throws AppException if no user is logged in.
      */
     abstract fun getUid(): String
+
+    abstract fun observeAuthState(): Flow<Boolean>
 
 }

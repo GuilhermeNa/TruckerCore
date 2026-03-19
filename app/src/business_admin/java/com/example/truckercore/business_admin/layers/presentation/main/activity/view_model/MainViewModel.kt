@@ -1,19 +1,16 @@
 package com.example.truckercore.business_admin.layers.presentation.main.activity.view_model
 
-import androidx.lifecycle.viewModelScope
-import com.example.truckercore.business_admin.layers.domain.use_case.session.ObserveSessionUseCase
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.expressions.get
 import com.example.truckercore.layers.domain.base.ids.CompanyID
-import com.example.truckercore.layers.domain.model.session.Session
+import com.example.truckercore.layers.domain.singletons.session.SessionManager
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 /**
  * MainViewModel
@@ -36,17 +33,16 @@ class MainViewModel(
     getUserNameUseCase: GetUserNameUseCase,
     getUserEmailUseCase: GetUserEmailUseCase,
     private val signOutUseCase: SignOutUseCase,
-    private val observeSessionUseCase: ObserveSessionUseCase
+    private val sessionManager: SessionManager
 ) : BaseViewModel() {
+
+    val sessionFlow get() = sessionManager.sessionFLow
 
     // Authenticated user's display name.
     val name: Name = getUserNameUseCase().get()
 
     // Authenticated user's email address.
     val email: Email = getUserEmailUseCase().get()
-
-    private val _session = MutableStateFlow(SessionState.Loading)
-    val sessionFLow get() = _session.asStateFlow()
 
     /**
      * Backing property for Toolbar menu visibility state.
@@ -56,20 +52,10 @@ class MainViewModel(
     private val _menuState = MutableStateFlow(true)
     val menuState get() = _menuState.asStateFlow()
 
-    init {
-        observeSession()
-    }
-
     //----------------------------------------------------------------------------------------------
-    private fun observeSession() = viewModelScope.launch {
-        observeSessionUseCase().collect {
-            it
-        }
-
-    }
 
     fun companyId(): CompanyID {
-        sessionFLow.value
+        TODO()/*sessionFLow.value*/
     }
 
 

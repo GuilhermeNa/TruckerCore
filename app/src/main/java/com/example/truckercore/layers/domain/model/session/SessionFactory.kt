@@ -10,10 +10,11 @@ object SessionFactory {
     fun toEntity(
         userDraft: UserDraft,
         access: Access,
-        employee: Employee
+        employee: Employee,
+        active: Boolean
     ): Session {
         val user = UserFactory.toEntity(userDraft, access, employee)
-        return Session(user)
+        return Session(user, active)
     }
 
 }

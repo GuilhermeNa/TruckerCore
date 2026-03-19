@@ -19,7 +19,7 @@ val adminModules = module {
     // ViewModel
     viewModel<CheckInViewModel> { CheckInViewModel(get(), get(), get(), get(), get()) }
     viewModel<HomeViewModel> { HomeViewModel() }
-    viewModel<BusinessViewModel> { BusinessViewModel() }
+    viewModel<BusinessViewModel> { BusinessViewModel(get(), get()) }
     viewModel<MainViewModel> { MainViewModel(get(), get(), get(), get()) }
 
     // Domain

@@ -9,6 +9,8 @@ import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.data.data_source.auth.AuthSource
 import com.example.truckercore.layers.domain.base.ids.UID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Implementation of [AuthenticationRepository] that delegates authentication operations
@@ -68,6 +70,12 @@ class AuthenticationRepositoryImpl(private val authSource: AuthSource) : Authent
 
     override fun getUid(): DataOutcome<UID> =
         runSafeSearch { UID(authSource.getUid()) }
+
+    override fun observeAuthState(): Flow<DataOutcome<Boolean>> {
+        return authSource.observeAuthState().map {
+            DataOutcome.Success(it)
+        }
+    }
 
     //----------------------------------------------------------------------------------------------
     // Helpers

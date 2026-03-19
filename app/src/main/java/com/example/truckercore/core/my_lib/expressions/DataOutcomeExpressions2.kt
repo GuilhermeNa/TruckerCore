@@ -42,6 +42,22 @@ inline fun <A, B, R> zip(
     else -> DataOutcome.Empty
 }
 
+inline fun <A, B, C, R> zip(
+    a: DataOutcome<A>,
+    b: DataOutcome<B>,
+    c: DataOutcome<C>,
+    transform: (A, B, C) -> R
+): DataOutcome<R> = when {
+    a is DataOutcome.Failure -> a
+    b is DataOutcome.Failure -> b
+    c is DataOutcome.Failure -> c
+
+    a is DataOutcome.Success && b is DataOutcome.Success && c is DataOutcome.Success ->
+        DataOutcome.Success(transform(a.data, b.data, c.data))
+
+    else -> DataOutcome.Empty
+}
+
 fun <T> DataOutcome<T>.required(
     message: String
 ): DataOutcome<T> = when (this) {

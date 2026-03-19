@@ -8,7 +8,7 @@ import com.example.truckercore.layers.domain.base.ids.UserID
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 
-class AccessRemoteDataSourceImpl(firestore: FirebaseFirestore) :
+class AccessRemoteDataSourceImpl(firestore: FirebaseFirestore):
     RemoteDataSourceBase<AccessDto>(firestore),
     AccessRemoteDataSource {
 

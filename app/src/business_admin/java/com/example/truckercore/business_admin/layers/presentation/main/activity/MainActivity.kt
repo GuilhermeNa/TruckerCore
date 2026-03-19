@@ -1,6 +1,7 @@
 package com.example.truckercore.business_admin.layers.presentation.main.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -19,6 +20,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.truckercore.R
 import com.example.truckercore.business_admin.layers.presentation.main.activity.view_model.MainViewModel
 import com.example.truckercore.databinding.ActivityMainBinding
+import com.example.truckercore.layers.presentation.base.contracts.BaseNavigator
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,7 +43,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * - Uses Koin (or DI framework) for ViewModel injection.
  * - Uses Android Navigation Component for fragment navigation.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BaseNavigator {
 
     /**
      * AppBarConfiguration defines the top-level destinations.
@@ -87,6 +89,23 @@ class MainActivity : AppCompatActivity() {
         setLogoutCLickListener()
         bindDrawerHeader()
         setNavDestinationListener()
+
+        // State Managers
+        observeSessionState()
+
+    }
+
+    private fun observeSessionState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sessionFlow.collect { session ->
+                    session.exitApp(
+                        onError = { navigateToErrorActivity(this@MainActivity) },
+                        onLogout = { finish() }
+                    )
+                }
+            }
+        }
     }
 
     /**
@@ -135,11 +154,9 @@ class MainActivity : AppCompatActivity() {
      * Executes the logout process.
      *
      * - Clears user session via ViewModel.
-     * - Finishes the activity.
      */
     private fun logout() {
         viewModel.logout()
-        finish()
     }
 
     /**

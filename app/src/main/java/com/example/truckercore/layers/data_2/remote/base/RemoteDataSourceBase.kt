@@ -4,6 +4,7 @@ import com.example.truckercore.core.config.collections.AppCollection
 import com.example.truckercore.core.error.default_errors.FirebaseRemoteDataException
 import com.example.truckercore.core.my_lib.expressions.toDto
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
+import com.example.truckercore.layers.domain.base.contracts.ID
 import com.example.truckercore.layers.domain.base.ids.UID
 import com.example.truckercore.layers.domain.base.ids.UserID
 import com.google.firebase.firestore.DocumentSnapshot
@@ -81,7 +82,12 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
 
                     // Step 2: Handle listener errors by closing the flow
                     if (error != null) {
-                        this.close(error)
+                        this.close(
+                            FirebaseRemoteDataException(
+                                "Failed to observe document from Firestore collection [${collection.name}].",
+                                error
+                            )
+                        )
                         return@addSnapshotListener
                     }
 
@@ -113,7 +119,12 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
 
                     // Step 2: Handle listener errors by closing the flow
                     if (error != null) {
-                        this.close(error)
+                        close(
+                            FirebaseRemoteDataException(
+                                "Failed to observe query from Firestore collection [${collection.name}].",
+                                error
+                            )
+                        )
                         return@addSnapshotListener
                     }
 
@@ -200,6 +211,12 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
         val query = firestore.collection(collection.name)
             .whereEqualTo("userId", userId.value)
         return DataSource.Query(query)
+    }
+
+    fun getDocument(id: ID): DataSource.Document {
+        // Build document by id
+        val document = firestore.document(id.value)
+        return DataSource.Document(document)
     }
 
 }

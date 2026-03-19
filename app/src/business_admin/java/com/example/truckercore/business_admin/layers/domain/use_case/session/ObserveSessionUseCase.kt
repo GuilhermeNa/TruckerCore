@@ -30,7 +30,7 @@ class ObserveSessionUseCase(
     private val userRepository: UserRepository,
     private val accessRepository: AccessRepository,
     private val adminRepository: AdminRepository,
-    private val driverRepository: DriverRepository
+    private val driverRepository: DriverRepository,
 ) : UseCase() {
 
     operator fun invoke(): Flow<DataOutcome<Session>> =
@@ -44,7 +44,7 @@ class ObserveSessionUseCase(
     private fun observeUserFlow(uid: UID): Flow<DataOutcome<Session>> =
         userRepository.observe(uid).flatMapLatest { userOutcome ->
             userOutcome.fold(
-                onSuccess = ::combineAccessAndEmployeesFlow,
+                onSuccess = ::combineOtherFlowsAndBuildSession,
                 onFailure = ::toFailureOutcomeFlow,
                 onEmpty = { ruleViolatedOutcomeFlow(USER_NOT_FOUND) }
             )
@@ -52,15 +52,17 @@ class ObserveSessionUseCase(
             emit(failureOutcome(throwable, UNKNOWN_ERROR))
         }
 
-    private fun combineAccessAndEmployeesFlow(it: UserDraft): Flow<DataOutcome<Session>> =
+    private fun combineOtherFlowsAndBuildSession(user: UserDraft): Flow<DataOutcome<Session>> =
         combine(
-            accessRepository.observe(it.id),
-            combineAdminAndDriverFlows(it.id)
-        ) { accessOutcome, employeeOutcome ->
-            zip(accessOutcome, employeeOutcome) { a, e ->
-                SessionFactory.toEntity(it, a, e)
+            accessRepository.observe(user.id),
+            combineAdminAndDriverFlows(user.id),
+            authRepository.observeAuthState()
+        ) { accessOutcome, eOutcome, authRepository ->
+            zip(accessOutcome, eOutcome, authRepository) { access, employee, auth ->
+                SessionFactory.toEntity(user, access, employee, auth)
             }.required(ACCESS_XOR_EMPLOYEE_NOT_FOUND)
         }
+
 
     private fun combineAdminAndDriverFlows(userId: UserID): Flow<DataOutcome<Employee>> =
         combine(
