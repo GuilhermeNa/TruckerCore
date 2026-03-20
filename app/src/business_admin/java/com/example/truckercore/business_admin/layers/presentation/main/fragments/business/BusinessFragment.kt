@@ -37,7 +37,7 @@ class BusinessFragment : PrivateFragment() {
 
     private fun initializeViewModel(savedInstanceState: Bundle?) {
         onInitializing(savedInstanceState) {
-            viewModel.initialize()
+            viewModel.fetchCompany()
         }
     }
 

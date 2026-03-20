@@ -23,9 +23,9 @@ data class BusinessState(
 
     //----------------------------------------------------------------------------------------------
 
-    fun incomplete(company: Company) = copy(status = BusinessStatus.Incomplete)
+    fun incomplete(nCompany: Company) = copy(company = nCompany, status = BusinessStatus.Incomplete)
 
-    fun complete(company: Company) = copy(status = BusinessStatus.Complete)
+    fun complete(nCompany: Company) = copy(company = nCompany, status = BusinessStatus.Complete)
 
     fun failure() = copy(status = BusinessStatus.Failure)
 

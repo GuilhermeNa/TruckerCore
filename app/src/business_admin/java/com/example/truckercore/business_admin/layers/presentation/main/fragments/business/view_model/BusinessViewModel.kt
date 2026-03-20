@@ -16,6 +16,8 @@ class BusinessViewModel(
     private val repository: CompanyRepository
 ) : BaseViewModel() {
 
+    private val companyId get() = sessionManager.companyId()
+
     private val stateManager = StateManager(BusinessState())
     val stateFlow get() = stateManager.stateFlow
     val currentState get() = stateManager.currentState()
@@ -29,11 +31,9 @@ class BusinessViewModel(
     //----------------------------------------------------------------------------------------------
     //
     //----------------------------------------------------------------------------------------------
-    fun initialize() {
+    fun fetchCompany() {
         viewModelScope.launch {
-            repository.fetch(
-                id = sessionManager.companyId()
-            ).foldRequired(
+            repository.fetch(companyId).foldRequired(
                 onSuccess = ::handleSuccess,
                 orElse = ::handleFailure
             )
