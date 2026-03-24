@@ -12,10 +12,16 @@ sealed class SessionState : State {
 
     data class Error(val exception: AppException) : SessionState()
 
+
     //----------------------------------------------------------------------------------------------
+
+    val companyId get() = (this as? Success)?.session?.companyId()
+
+
     val SessionState.isLoading get() = this is Loading
     val SessionState.isSuccess get() = this is Success
     val SessionState.isError get() = this is Error
+
 
     fun isActive(): Boolean? = (this as? Success)?.session?.active
 

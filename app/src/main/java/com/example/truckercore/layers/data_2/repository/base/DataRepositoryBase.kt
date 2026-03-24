@@ -24,7 +24,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
         try {
             data.mapToOutcome(mapper)
         } catch (exception: Exception) {
-            exception.mapToFailureOutcome(
+            exception.logAndMapToOutcome(
                 "Failed to fetch single object in repository [$classTag]. " +
                         "DTO type: ${data?.javaClass?.simpleName}, data: ${data?.toString() ?: "null"}"
             )
@@ -40,7 +40,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
         try {
             data.mapToOutcome(mapper)
         } catch (exception: Exception) {
-            exception.mapToFailureOutcome(
+            exception.logAndMapToOutcome(
                 "Failed to fetch list of objects in repository [$classTag]. " +
                         "DTO type: ${data?.firstOrNull()?.javaClass?.simpleName ?: "unknown"}, " +
                         "items count: ${data?.size ?: 0}"
@@ -58,7 +58,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
             dto.mapToOutcome(mapper)
         }.catch { throwable ->
             emit(
-                throwable.mapToFailureOutcome(
+                throwable.logAndMapToOutcome(
                     "Failed to observe single object in repository [$classTag]. " +
                             "Flow type: ${dataFlow.javaClass.simpleName}"
                 )
@@ -76,7 +76,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
             dtos.mapToOutcome(mapper)
         }.catch { throwable ->
             emit(
-                throwable.mapToFailureOutcome(
+                throwable.logAndMapToOutcome(
                     "Failed to observe list of objects in repository [$classTag]. " +
                             "Flow type: ${dataFlow.javaClass.simpleName}"
                 )
@@ -86,7 +86,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
     //----------------------------------------------------------------------------------------------
     // Internal mapping helpers
     //----------------------------------------------------------------------------------------------
-    private fun Throwable.mapToFailureOutcome(message: String): DataOutcome.Failure {
+    private fun Throwable.logAndMapToOutcome(message: String): DataOutcome.Failure {
         Log.e(classTag, message, this) // full stack trace for debugging
         val appError = DataException.Repository(message, this)
         return DataOutcome.Failure(appError)

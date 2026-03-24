@@ -16,8 +16,6 @@ class BusinessViewModel(
     private val repository: CompanyRepository
 ) : BaseViewModel() {
 
-    private val companyId get() = sessionManager.companyId()
-
     private val stateManager = StateManager(BusinessState())
     val stateFlow get() = stateManager.stateFlow
     val currentState get() = stateManager.currentState()
@@ -27,6 +25,8 @@ class BusinessViewModel(
     val opening get() = valueOrDefault(currentState.opening)
     val municipalInsc get() = valueOrDefault(currentState.municipalInsc)
     val stateInsc get() = valueOrDefault(currentState.stateInsc)
+
+    private val companyId get() = sessionManager.companyId()
 
     //----------------------------------------------------------------------------------------------
     //

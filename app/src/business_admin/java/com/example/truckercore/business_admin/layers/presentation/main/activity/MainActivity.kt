@@ -1,7 +1,6 @@
 package com.example.truckercore.business_admin.layers.presentation.main.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -223,30 +222,7 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
     }
 
     /**
-     * Connects the menu visibility state with the ViewModel.
-     *
-     * Responsibilities:
-     * - Collects the menuState Flow from the ViewModel.
-     * - Updates menu item visibility reactively.
-     *
-     * Lifecycle-aware:
-     * - Collection runs only while the Activity is at least STARTED.
-     * - Prevents leaks and unnecessary processing.
-     */
-    private fun setMenuStateManager(menu: Menu?) {
-        if (menu == null) return
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.menuState.collect { menu.handle(it) }
-            }
-        }
-    }
-
-    /**
      * Applies visibility changes to all menu items.
-     *
-     * @param isEnabled Defines whether menu items should be visible.
      *
      * Responsibilities:
      * - Iterates through all menu items.
@@ -255,8 +231,16 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
      * Extension Function:
      * - Improves readability and encapsulates menu manipulation logic.
      */
-    private fun Menu.handle(isEnabled: Boolean) {
-        this.forEach { it.isVisible = isEnabled }
+    private fun setMenuStateManager(menu: Menu?) {
+        if (menu == null) return
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.menuState.collect { isEnabled ->
+                    menu.forEach { it.isVisible = isEnabled }
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
