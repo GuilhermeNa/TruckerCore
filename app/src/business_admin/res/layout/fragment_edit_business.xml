@@ -11,14 +11,15 @@
         android:id="@+id/frag_edit_business_layout_shimmer"
         layout="@layout/layout_shimmer_edit_texts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/frag_edit_business_layout_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="">
         <!-- NAME -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
