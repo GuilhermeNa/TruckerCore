@@ -30,9 +30,10 @@ class EditBusinessViewModel(
     }
 
     private fun handleSuccess(company: Company) {
-        stateManager.update(
-            state.companyFound(company)
-        )
+        val companyView = CompanyView.from(company)
+
+        stateManager.update(state.companyFound(companyView))
+
     }
 
     private fun handleError(error: AppException) {

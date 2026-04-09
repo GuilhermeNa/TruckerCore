@@ -1,6 +1,5 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model
 
-import com.example.truckercore.layers.domain.model.company.Company
 import com.example.truckercore.layers.presentation.base.contracts.State
 
 data class EditBusinessState(
@@ -13,32 +12,21 @@ data class EditBusinessState(
     //----------------------------------------------------------------------------------------------
     //
     //----------------------------------------------------------------------------------------------
-    fun companyFound(company: Company) = copy(
-        companyView = CompanyView.from(company),
+    fun companyFound(companyView: CompanyView) = copy(
+        companyView = companyView,
         status = EditBusinessStatus.Loaded
     )
 
     fun failure() = copy(status = EditBusinessStatus.Failure)
 
-    fun updateName(value: String): EditBusinessState {
-        val newState = validator.
-    }
+    fun updateName(value: String) = copy(companyView = companyView.updateName(value))
 
-    fun updateCnpj(value: String): EditBusinessState {
-        val newState = state.updateCnpj(value)
-    }
+    fun updateCnpj(value: String) = copy(companyView = companyView.updateCnpj(value))
 
-    fun updateState(value: String): EditBusinessState {
-        val newState = state.updateState(value)
-    }
+    fun updateState(value: String) = copy(companyView = companyView.updateStateReg(value))
 
-    fun updateMunicipal(value: String): EditBusinessState {
-        val newState = state.updateMunicipal(value)
-    }
+    fun updateMunicipal(value: String) = copy(companyView = companyView.updateMunicipalReg(value))
 
-    fun updateOpening(value: String): EditBusinessState {
-        val newState = state.updateOpening(value)
-    }
-
+    fun updateOpening(value: String) = copy(companyView = companyView.updateOpening(value))
 
 }

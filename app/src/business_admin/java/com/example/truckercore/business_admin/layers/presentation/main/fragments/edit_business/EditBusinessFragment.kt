@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.CompanyView
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessState
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessStatus
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessViewModel
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
@@ -37,17 +38,17 @@ class EditBusinessFragment : PrivateFragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.stateFlow.collect { state ->
-                    when (state) {
-                        EditBusinessState.Failure -> {
+                    when (state.status) {
+                        EditBusinessStatus.Failure -> {
                             navigateToErrorActivity(requireActivity())
                         }
 
-                        EditBusinessState.Loading -> {
+                        EditBusinessStatus.Loading -> {
                             enableShimmer(true)
                             enableEditText(false)
                         }
 
-                        is EditBusinessState.Loaded -> {
+                        is EditBusinessStatus.Loaded -> {
                             enableShimmer(false)
                             enableEditText(true)
                             bindContent(state.companyView)
