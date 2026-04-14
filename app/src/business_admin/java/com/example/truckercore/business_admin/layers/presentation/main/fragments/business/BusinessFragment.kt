@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavDirections
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessStatus
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
+import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.common.lists.recycler_grid.RecyclerGrid
@@ -134,6 +136,22 @@ class BusinessFragment : PrivateFragment() {
         _binding = FragmentBusinessBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    //----------------------------------------------------------------------------------------------
+    // on View Created
+    //----------------------------------------------------------------------------------------------
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setEditBusinessButtonListener()
+    }
+
+    private fun setEditBusinessButtonListener() {
+        binding.fragBusinessButton.setOnClickListener {
+            val direction = BusinessFragmentDirections.actionNavBusinessToEditBusinessFragment()
+            navigateToDirection(direction)
+        }
+    }
+
 
     //----------------------------------------------------------------------------------------------
     // on Destroy View

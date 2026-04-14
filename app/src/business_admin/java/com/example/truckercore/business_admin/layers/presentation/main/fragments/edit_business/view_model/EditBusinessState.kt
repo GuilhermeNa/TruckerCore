@@ -3,17 +3,17 @@ package com.example.truckercore.business_admin.layers.presentation.main.fragment
 import com.example.truckercore.layers.presentation.base.contracts.State
 
 data class EditBusinessState(
-    val companyView: CompanyView = CompanyView(),
+    val companyView: EditBusinessView = EditBusinessView(),
     val status: EditBusinessStatus = EditBusinessStatus.Loading
 ) : State {
 
-    private val validator: EditBusinessValidator = EditBusinessValidator()
+    val hasError get() = !companyView.hasError
 
     //----------------------------------------------------------------------------------------------
     //
     //----------------------------------------------------------------------------------------------
-    fun companyFound(companyView: CompanyView) = copy(
-        companyView = companyView,
+    fun companyFound(editBusinessView: EditBusinessView) = copy(
+        companyView = editBusinessView,
         status = EditBusinessStatus.Loaded
     )
 

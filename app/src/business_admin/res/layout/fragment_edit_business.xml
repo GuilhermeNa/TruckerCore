@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="">
+        android:visibility="gone">
         <!-- NAME -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName"
+                android:inputType="textCapWords"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:maxLength="18"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -66,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:maxLength="12"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -83,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="number"
+                android:maxLength="15"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -100,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="date"
+                android:maxLength="8"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>

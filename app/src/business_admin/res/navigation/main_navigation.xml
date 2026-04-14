@@ -15,7 +15,12 @@
         android:id="@+id/nav_business"
         android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.business.BusinessFragment"
         android:label="@string/business"
-        tools:layout="@layout/fragment_business" />
+        tools:layout="@layout/fragment_business" >
+        <action
+            android:id="@+id/action_nav_business_to_editBusinessFragment"
+            app:destination="@id/nav_edit_business"
+            app:launchSingleTop="false" />
+    </fragment>
     <fragment
         android:id="@+id/nav_employees"
         android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employee.EmployeeFragment"
@@ -54,5 +59,10 @@
         android:id="@+id/action_global_nav_profile"
         app:destination="@id/nav_profile"
         app:launchSingleTop="true" />
+    <fragment
+        android:id="@+id/nav_edit_business"
+        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.EditBusinessFragment"
+        android:label="@string/edit_business"
+        tools:layout="@layout/fragment_edit_business" />
 
 </navigation>

@@ -58,6 +58,7 @@
     <string name="connection_error_body">Verifique sua conexão com a internet e tente novamente</string>
     <string name="send_verification_email">Enviar email</string>
     <string name="business">Empresa</string>
+    <string name="edit_business">Editar empresa</string>
     <string name="fines">Infrações</string>
     <string name="preferences">Preferências</string>
     <string name="logout">Sair do app</string>

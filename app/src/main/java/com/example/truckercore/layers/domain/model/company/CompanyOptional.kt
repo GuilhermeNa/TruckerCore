@@ -8,9 +8,9 @@ import com.example.truckercore.layers.domain.base.others.StateRegistration
 import java.time.LocalDate
 
 data class CompanyOptional(
-    val cnpj: Cnpj,
-    val name: CompanyName,
-    val stateRegistration: StateRegistration,
-    val municipalRegistration: MunicipalRegistration,
-    val opening: LocalDate
+    val cnpj: Cnpj? = null,
+    val name: CompanyName? = null,
+    val stateRegistration: StateRegistration? = null,
+    val municipalRegistration: MunicipalRegistration? = null,
+    val opening: LocalDate? = null
 ) : OptionalData

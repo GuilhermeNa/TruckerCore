@@ -5,14 +5,22 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.core.my_lib.expressions.foldRequired
 import com.example.truckercore.layers.data_2.repository.interfaces.CompanyRepository
+import com.example.truckercore.layers.domain.base.others.Cnpj
+import com.example.truckercore.layers.domain.base.others.CompanyName
+import com.example.truckercore.layers.domain.base.others.MunicipalRegistration
+import com.example.truckercore.layers.domain.base.others.StateRegistration
 import com.example.truckercore.layers.domain.model.company.Company
-import com.example.truckercore.layers.domain.singletons.session.SessionState
+import com.example.truckercore.layers.domain.model.company.CompanyOptional
+import com.example.truckercore.layers.domain.singletons.session.SessionManager
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.layers.presentation.base.managers.StateManager
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class EditBusinessViewModel(
-    private val sessionState: SessionState,
+    private val sessionManager: SessionManager,
     private val repository: CompanyRepository
 ) : BaseViewModel() {
 
@@ -20,28 +28,25 @@ class EditBusinessViewModel(
     val stateFlow = stateManager.stateFlow
     val state get() = stateManager.currentState()
 
-    private val id get() = sessionState.companyId ?: throw IllegalStateException(ERROR)
+    private val _messageChannel = Channel<String>(Channel.BUFFERED)
+    val messageFlow get() = _messageChannel.receiveAsFlow()
 
     //----------------------------------------------------------------------------------------------
     fun fetchCompany() {
         viewModelScope.launch {
-            repository.fetch(id).foldRequired(::handleSuccess, ::handleError)
+            repository.fetch(id = sessionManager.companyId())
+                .foldRequired(::handleSuccess, ::handleError)
         }
     }
 
     private fun handleSuccess(company: Company) {
-        val companyView = CompanyView.from(company)
-
-        stateManager.update(state.companyFound(companyView))
-
+        val editBusinessView = EditBusinessView.from(company)
+        stateManager.update(state.companyFound(editBusinessView))
     }
 
     private fun handleError(error: AppException) {
         Log.e(classTag, "${error.message}", error)
-
-        stateManager.update(
-            state.failure()
-        )
+        stateManager.update(state.failure())
     }
 
     //----------------------------------------------------------------------------------------------
@@ -72,8 +77,35 @@ class EditBusinessViewModel(
         stateManager.update(newState)
     }
 
+    fun save() {
+        if (!dataReady()) {
+            _messageChannel.trySend(ERROR)
+            return
+        }
+
+        val optional = getCompanyOptional()
+
+        optional
+        // TODO("salvar")
+
+    }
+
+    private fun getCompanyOptional(): CompanyOptional {
+        return with(state.companyView) {
+            CompanyOptional(
+                cnpj = Cnpj(cnpj),
+                name = CompanyName(name),
+                stateRegistration = StateRegistration(stateReg),
+                municipalRegistration = MunicipalRegistration(municipalReg),
+                opening = LocalDate.of(year, month, day)
+            )
+        }
+    }
+
+    private fun dataReady() = !state.hasError
+
     private companion object {
-        private const val ERROR = "Company id could not be loaded in EditBusinessViewModel"
+        private const val ERROR = "Campos inválidos"
     }
 
 }

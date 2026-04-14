@@ -17,7 +17,6 @@ sealed class SessionState : State {
 
     val companyId get() = (this as? Success)?.session?.companyId()
 
-
     val SessionState.isLoading get() = this is Loading
     val SessionState.isSuccess get() = this is Success
     val SessionState.isError get() = this is Error

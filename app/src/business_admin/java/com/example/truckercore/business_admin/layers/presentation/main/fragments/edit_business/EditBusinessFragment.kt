@@ -1,19 +1,24 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
+import android.widget.EditText
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.CompanyView
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessState
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessStatus
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessView
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessViewModel
+import com.example.truckercore.core.my_lib.expressions.addCnpjMask
+import com.example.truckercore.core.my_lib.expressions.addDateMask
+import com.example.truckercore.core.my_lib.expressions.onTextChange
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -24,6 +29,9 @@ class EditBusinessFragment : PrivateFragment() {
     private val binding get() = _binding!!
 
     private val viewModel: EditBusinessViewModel by viewModel()
+
+    private var cnpjMask: TextWatcher? = null
+    private var dateMask: TextWatcher? = null
 
     //----------------------------------------------------------------------------------------------
     // on Create
@@ -59,12 +67,30 @@ class EditBusinessFragment : PrivateFragment() {
         }
     }
 
-    private fun bindContent(companyView: CompanyView) {
-        binding.fragEditBusinessName.setText(companyView.name)
-        binding.fragEditBusinessCnpj.setText(companyView.cnpj)
-        binding.fragEditBusinessState.setText(companyView.stateReg)
-        binding.fragEditBusinessMunicipal.setText(companyView.municipalReg)
-        binding.fragEditBusinessOpening.setText(companyView.opening)
+    private fun bindContent(editBusinessView: EditBusinessView) {
+        with(binding) {
+            editBusinessView.run {
+                updateEditText(
+                    Pair(fragEditBusinessName, name),
+                    Pair(fragEditBusinessCnpj, cnpj),
+                    Pair(fragEditBusinessState, stateReg),
+                    Pair(fragEditBusinessMunicipal, municipalReg),
+                    Pair(fragEditBusinessOpening, opening)
+                )
+            }
+        }
+    }
+
+    private fun updateEditText(vararg pairArr: Pair<TextInputEditText, String>) {
+        pairArr.forEach { pair ->
+            val editText = pair.first
+            val content = pair.second
+
+            val current = editText.text.toString()
+            if (current != content) {
+                editText.setText(content)
+            }
+        }
     }
 
     private fun enableShimmer(enabled: Boolean) {
@@ -102,38 +128,26 @@ class EditBusinessFragment : PrivateFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setEditTextMasks()
         setEditTextListeners()
     }
 
-    private fun setEditTextListeners() {
-        // Name
-        binding.fragEditBusinessName.doAfterTextChanged { text ->
-            viewModel.updateName(text.toString())
-        }
 
-        // Cnpj
-        binding.fragEditBusinessCnpj.doAfterTextChanged { text ->
-            viewModel.updateCnpj(text.toString())
-        }
+    private fun setEditTextMasks() = with(binding) {
+        cnpjMask = fragEditBusinessCnpj.addCnpjMask()
+        dateMask = fragEditBusinessOpening.addDateMask()
+    }
 
-        // State
-        binding.fragEditBusinessState.doAfterTextChanged { text ->
-            viewModel.updateState(text.toString())
-        }
-
-        // Municipal
-        binding.fragEditBusinessMunicipal.doAfterTextChanged { text ->
-            viewModel.updateMunicipal(text.toString())
-        }
-
-        // Opening
-        binding.fragEditBusinessOpening.doAfterTextChanged { text ->
-            viewModel.updateOpening(text.toString())
-        }
+    private fun setEditTextListeners() = with(binding) {
+        fragEditBusinessName.onTextChange(lifecycleScope, viewModel::updateName)
+        fragEditBusinessCnpj.onTextChange(lifecycleScope, viewModel::updateCnpj)
+        fragEditBusinessState.onTextChange(lifecycleScope, viewModel::updateState)
+        fragEditBusinessMunicipal.onTextChange(lifecycleScope, viewModel::updateMunicipal)
+        fragEditBusinessOpening.onTextChange(lifecycleScope, viewModel::updateOpening)
     }
 
     fun save() {
-        CompanyView(
+        EditBusinessView(
             name = binding.fragEditBusinessName.text.toString(),
             cnpj = binding.fragEditBusinessCnpj.text.toString(),
             stateReg = binding.fragEditBusinessState.text.toString(),
@@ -147,6 +161,8 @@ class EditBusinessFragment : PrivateFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.fragEditBusinessCnpj.removeTextChangedListener(cnpjMask)
+        binding.fragEditBusinessOpening.removeTextChangedListener(dateMask)
         _binding = null
     }
 
