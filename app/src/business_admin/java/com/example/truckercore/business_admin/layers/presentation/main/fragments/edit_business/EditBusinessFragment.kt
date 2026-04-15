@@ -1,12 +1,10 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle

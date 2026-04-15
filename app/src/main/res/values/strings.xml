@@ -73,5 +73,6 @@
     <string name="state_registration_abbrev">Insc. Estadual</string>
     <string name="antt_caps">ANTT</string>
     <string name="complete_register">Concluir cadastro</string>
+    <string name="save">Salvar</string>
 
 </resources>

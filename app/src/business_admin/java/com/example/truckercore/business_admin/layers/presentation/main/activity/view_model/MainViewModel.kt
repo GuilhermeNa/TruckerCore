@@ -1,5 +1,6 @@
 package com.example.truckercore.business_admin.layers.presentation.main.activity.view_model
 
+import com.example.truckercore.business_admin.layers.presentation.main.activity.ActivityMenu
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.core.my_lib.expressions.get
@@ -49,15 +50,13 @@ class MainViewModel(
      *
      * Default value: true (menu enabled).
      */
-    private val _menuState = MutableStateFlow(true)
+    private val _menuState = MutableStateFlow(ActivityMenu.DEFAULT)
     val menuState get() = _menuState.asStateFlow()
 
     //----------------------------------------------------------------------------------------------
-
     fun companyId(): CompanyID {
         TODO()/*sessionFLow.value*/
     }
-
 
     /**
      * Executes the logout process.
@@ -78,7 +77,7 @@ class MainViewModel(
      * duplicate navigation events.
      */
     fun disableMenu() {
-        _menuState.value = false
+        _menuState.value = ActivityMenu.NONE
     }
 
     /**
@@ -87,8 +86,12 @@ class MainViewModel(
      * Ensures state change occurs only if necessary
      * to avoid redundant emissions.
      */
-    fun enableMenu() {
-        _menuState.value = true
+    fun enableDefaultMenu() {
+        _menuState.value = ActivityMenu.DEFAULT
+    }
+
+    fun enableSaveMenu() {
+        _menuState.value = ActivityMenu.SAVE_OR_EDIT
     }
 
 }
