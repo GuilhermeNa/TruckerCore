@@ -193,6 +193,7 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
             // to preserve expected Material navigation behavior.
             if (res.isTopLevelDestination(destination)) {
                 binding.drawerLayout.closeDrawers()
+                viewModel.enableDefaultMenu()
                 return@addOnDestinationChangedListener
             }
 
@@ -208,9 +209,6 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
                 viewModel.enableSaveMenu()
                 return@addOnDestinationChangedListener
             }
-
-            // Enable default menu when no previous option was triggered
-            viewModel.enableDefaultMenu()
 
         }
     }
@@ -255,7 +253,8 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
                             activeSaveMenu(menu, false)
                         }
                         ActivityMenu.NONE -> {
-                            menu.clear()
+                            activeDefaultMenu(menu, false)
+                            activeSaveMenu(menu, false)
                         }
                         ActivityMenu.SAVE_OR_EDIT -> {
                             activeSaveMenu(menu, true)
@@ -268,8 +267,8 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
     }
 
     private fun activeSaveMenu(menu: Menu, active: Boolean) {
-        menu.setGroupEnabled(R.id.menu_group_save_edit, active)
         menu.setGroupVisible(R.id.menu_group_save_edit, active)
+        menu.setGroupEnabled(R.id.menu_group_save_edit, false)
     }
 
     private fun activeDefaultMenu(menu: Menu, active: Boolean) {
