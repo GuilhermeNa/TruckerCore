@@ -63,11 +63,11 @@ class Company(
 
     override fun completeRegistration(data: CompanyOptional) {
         super.completeRegistration(data)
-        _cnpj = data.cnpj
-        _name = data.name
-        _stateRegistration = data.stateRegistration
-        _municipalRegistration = data.municipalRegistration
-        _opening = data.opening
+        _cnpj = data.cnpj ?: cnpj
+        _name = data.name ?: name
+        _stateRegistration = data.stateRegistration ?: stateRegistration
+        _municipalRegistration = data.municipalRegistration ?: municipalRegistration
+        _opening = data.opening ?: opening
     }
 
 }

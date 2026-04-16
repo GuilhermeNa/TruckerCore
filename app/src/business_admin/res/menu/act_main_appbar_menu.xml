@@ -2,38 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group
-        android:id="@+id/menu_group_default"
-        android:visible="false"
-        android:enabled="false">
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/icon_person"
+        android:orderInCategory="100"
+        android:title="@string/action_profile"
+        app:showAsAction="ifRoom" />
 
-        <item
-            android:id="@+id/action_profile"
-            android:orderInCategory="100"
-            android:title="@string/action_profile"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/icon_person"/>
-
-        <item
-            android:id="@+id/action_message"
-            android:orderInCategory="99"
-            android:title="@string/messages"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/icon_mail"/>
-
-    </group>
-
-    <group
-        android:id="@+id/menu_group_save_edit"
-        android:visible="false"
-        android:enabled="false">
-
-        <item
-            android:id="@+id/action_save"
-            android:title="@string/save"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/icon_check"/>
-
-    </group>
+    <item
+        android:id="@+id/action_message"
+        android:icon="@drawable/icon_mail"
+        android:orderInCategory="99"
+        android:title="@string/messages"
+        app:showAsAction="ifRoom" />
 
 </menu>

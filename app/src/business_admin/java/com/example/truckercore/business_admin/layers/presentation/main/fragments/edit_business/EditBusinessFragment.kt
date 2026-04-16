@@ -16,6 +16,7 @@ import com.example.truckercore.core.my_lib.expressions.addDateMask
 import com.example.truckercore.core.my_lib.expressions.onTextChange
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
+import com.example.truckercore.layers.presentation.base.managers.SaveMenuManager
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,6 +31,13 @@ class EditBusinessFragment : PrivateFragment() {
 
     private var cnpjMask: TextWatcher? = null
     private var dateMask: TextWatcher? = null
+
+    private val menuManager: SaveMenuManager by lazy {
+        SaveMenuManager(
+            invalidate = requireActivity()::invalidateOptionsMenu,
+            onSave = ::save
+        )
+    }
 
     //----------------------------------------------------------------------------------------------
     // on Create
@@ -128,8 +136,8 @@ class EditBusinessFragment : PrivateFragment() {
         super.onViewCreated(view, savedInstanceState)
         setEditTextMasks()
         setEditTextListeners()
+        setMenuProvider()
     }
-
 
     private fun setEditTextMasks() = with(binding) {
         cnpjMask = fragEditBusinessCnpj.addCnpjMask()
@@ -142,6 +150,10 @@ class EditBusinessFragment : PrivateFragment() {
         fragEditBusinessState.onTextChange(lifecycleScope, viewModel::updateState)
         fragEditBusinessMunicipal.onTextChange(lifecycleScope, viewModel::updateMunicipal)
         fragEditBusinessOpening.onTextChange(lifecycleScope, viewModel::updateOpening)
+    }
+
+    private fun setMenuProvider() {
+        requireActivity().addMenuProvider(menuManager.provider(), viewLifecycleOwner)
     }
 
     fun save() {

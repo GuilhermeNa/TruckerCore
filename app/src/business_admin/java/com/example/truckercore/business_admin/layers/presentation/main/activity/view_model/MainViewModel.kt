@@ -90,8 +90,4 @@ class MainViewModel(
         _menuState.value = ActivityMenu.DEFAULT
     }
 
-    fun enableSaveMenu() {
-        _menuState.value = ActivityMenu.SAVE_OR_EDIT
-    }
-
 }

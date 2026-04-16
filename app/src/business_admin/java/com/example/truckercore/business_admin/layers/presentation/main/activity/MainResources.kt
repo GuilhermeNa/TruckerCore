@@ -35,10 +35,6 @@ class MainResources {
         R.id.nav_settings
     )
 
-    private val editContentDestination = setOf(
-        R.id.nav_edit_business
-    )
-
     /**
      * Defines destinations that are triggered from the Toolbar Options Menu.
      *
@@ -47,9 +43,10 @@ class MainResources {
      * - Are typically accessed through action items in the app bar.
      * - May require specific UI state handling (e.g., temporarily disabling menu items).
      */
-    private val disableMenuDestination = setOf(
+    private val disableDefaultMenuDestination = setOf(
         R.id.nav_messages,
-        R.id.nav_profile
+        R.id.nav_profile,
+        R.id.nav_edit_business
     )
 
     /**
@@ -60,9 +57,6 @@ class MainResources {
      */
     fun isTopLevelDestination(destination: NavDestination): Boolean =
         topLevelDestination.contains(destination.id)
-
-    fun isEditContentDestination(destination: NavDestination): Boolean =
-        editContentDestination.contains(destination.id)
 
     /**
      * Determines whether the given NavDestination
@@ -75,9 +69,7 @@ class MainResources {
      * - Allows differentiated handling between Drawer and Toolbar navigation.
      * - Can be used to manage menu visibility or UI state.
      */
-    fun isDisableMenuDestination(destination: NavDestination): Boolean =
-        disableMenuDestination.contains(destination.id)
-
-
+    fun isDisableDefaultMenuDestination(destination: NavDestination): Boolean =
+        disableDefaultMenuDestination.contains(destination.id)
 
 }

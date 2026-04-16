@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -199,14 +198,8 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
 
             // Disable Toolbar menu items when navigating to
             // destinations triggered from the options menu.
-            if (res.isDisableMenuDestination(destination)) {
+            if (res.isDisableDefaultMenuDestination(destination)) {
                 viewModel.disableMenu()
-                return@addOnDestinationChangedListener
-            }
-
-            // Show options to save/edit content
-            if(res.isEditContentDestination(destination)) {
-                viewModel.enableSaveMenu()
                 return@addOnDestinationChangedListener
             }
 
@@ -247,33 +240,18 @@ class MainActivity : AppCompatActivity(), BaseNavigator {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.menuState.collect { state ->
-                    when(state) {
-                        ActivityMenu.DEFAULT -> {
-                            activeDefaultMenu(menu, true)
-                            activeSaveMenu(menu, false)
-                        }
-                        ActivityMenu.NONE -> {
-                            activeDefaultMenu(menu, false)
-                            activeSaveMenu(menu, false)
-                        }
-                        ActivityMenu.SAVE_OR_EDIT -> {
-                            activeSaveMenu(menu, true)
-                            activeDefaultMenu(menu, false)
-                        }
+                    when (state) {
+                        ActivityMenu.DEFAULT -> setDefaultMenu(menu, visible = true)
+                        ActivityMenu.NONE -> setDefaultMenu(menu, visible = false)
                     }
                 }
             }
         }
     }
 
-    private fun activeSaveMenu(menu: Menu, active: Boolean) {
-        menu.setGroupVisible(R.id.menu_group_save_edit, active)
-        menu.setGroupEnabled(R.id.menu_group_save_edit, false)
-    }
-
-    private fun activeDefaultMenu(menu: Menu, active: Boolean) {
-        menu.setGroupEnabled(R.id.menu_group_default, active)
-        menu.setGroupVisible(R.id.menu_group_default, active)
+    private fun setDefaultMenu(menu: Menu, visible: Boolean) {
+        menu.findItem(R.id.action_message).isVisible = visible
+        menu.findItem(R.id.action_profile).isVisible = visible
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
