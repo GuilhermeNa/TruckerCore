@@ -18,13 +18,21 @@ class EditBusinessViewModel(
 ) : BaseViewModel() {
 
     private val stateManager =
-        StateManager<EditBusinessStateNew>(EditBusinessStateNew.Loading)
+        StateManager<EditBusinessState>(EditBusinessState.Loading)
     val stateFlow = stateManager.stateFlow
 
     private val effectManager = EffectManager<EditBusinessEffect>()
     val effectFlow = effectManager.effectFlow
 
-    private var fieldsAreValid: Boolean = INITIAL_STATE
+    private val validationHash = hashMapOf(
+        Pair(NAME, false),
+        Pair(CNPJ, false),
+        Pair(STATE, false),
+        Pair(MUNICIPAL, false),
+        Pair(OPENING, false)
+    )
+    private var ignored = 0
+    private val shouldIgnore get() = ignored < AMOUNT_OF_FIELDS + NUMBER_OF_TXT_MASKS
 
     //----------------------------------------------------------------------------------------------
     // FETCH COMPANY
@@ -55,13 +63,23 @@ class EditBusinessViewModel(
     //----------------------------------------------------------------------------------------------
     // PUBLIC
     //----------------------------------------------------------------------------------------------
-    private fun validateFieldsState(actual: Boolean) {
-        if (fieldsAreValid == actual) return
-        else fieldsAreValid = actual
+    private fun validateField(field: Int, actual: Boolean) {
+        validationHash[field] = actual
+        updateState()
+    }
+
+    private fun updateState() {
+        if (shouldIgnore) {
+            ignored++
+            return
+        }
 
         val newState =
-            if (actual) stateManager.currentState().readyToSave()
-            else stateManager.currentState().waitingInput()
+            if (validationHash.containsValue(false)) {
+                stateManager.currentState().waitingInput()
+            } else {
+                stateManager.currentState().readyToSave()
+            }
 
         stateManager.update(newState)
     }
@@ -70,11 +88,11 @@ class EditBusinessViewModel(
         val clean = text.trim()
         val hasMinimumSize = clean.length >= NAME_MIN_SIZE
 
-        return if (clean.isBlank() || hasMinimumSize) {
-            validateFieldsState(true)
+        return if (clean.isEmpty() || hasMinimumSize) {
+            validateField(NAME, true)
             null
         } else {
-            validateFieldsState(false)
+            validateField(NAME, false)
             SHORT_NAME
         }
     }
@@ -83,11 +101,11 @@ class EditBusinessViewModel(
         val clean = text.trim()
         val correctSize = clean.length == CNPJ_SIZE
 
-        return if (clean.isBlank() || correctSize) {
-            validateFieldsState(true)
+        return if (clean.isEmpty() || correctSize) {
+            validateField(CNPJ, true)
             null
         } else {
-            validateFieldsState(false)
+            validateField(CNPJ, false)
             INCORRECT_CNPJ
         }
     }
@@ -96,11 +114,11 @@ class EditBusinessViewModel(
         val clean = text.trim()
         val correctSize = clean.length in STATE_MIN_SIZE..STATE_MAX_SIZE
 
-        return if (text.isBlank() || correctSize) {
-            validateFieldsState(true)
+        return if (text.isEmpty() || correctSize) {
+            validateField(STATE, true)
             null
         } else {
-            validateFieldsState(false)
+            validateField(STATE, false)
             INCORRECT_STATE
         }
     }
@@ -109,11 +127,11 @@ class EditBusinessViewModel(
         val clean = text.trim()
         val correctSize = clean.length in MUNICIPAL_MIN_SIZE..MUNICIPAL_MAX_SIZE
 
-        return if (text.isBlank() || correctSize) {
-            validateFieldsState(true)
+        return if (text.isEmpty() || correctSize) {
+            validateField(MUNICIPAL, true)
             null
         } else {
-            validateFieldsState(false)
+            validateField(MUNICIPAL, false)
             INCORRECT_MUNICIPAL
         }
     }
@@ -122,22 +140,22 @@ class EditBusinessViewModel(
         val clean = text.trim()
         val correctSize = clean.length == DATE_SIZE
 
-        return if (clean.isBlank() || correctSize) {
-            validateFieldsState(true)
+        return if (clean.isEmpty() || correctSize) {
+            validateField(OPENING, true)
             null
         } else {
-            validateFieldsState(false)
+            validateField(OPENING, false)
             INCORRECT_DATE
         }
-
     }
 
     private companion object {
-        private const val INITIAL_STATE = true
-
         private const val CNPJ_SIZE = 14
         private const val NAME_MIN_SIZE = 3
         private const val DATE_SIZE = 6
+
+        private const val AMOUNT_OF_FIELDS = 5
+        private const val NUMBER_OF_TXT_MASKS = 2
 
         private const val STATE_MIN_SIZE = 8
         private const val STATE_MAX_SIZE = 12
@@ -150,6 +168,12 @@ class EditBusinessViewModel(
         private const val INCORRECT_CNPJ = "Cnpj deve ter 14 caracteres"
         private const val INCORRECT_STATE = "Deve ter entre 8 e 12 caracteres"
         private const val INCORRECT_MUNICIPAL = "Deve ter entre 7 e 15 caracteres"
+
+        private const val NAME = 1
+        private const val CNPJ = 2
+        private const val STATE = 3
+        private const val MUNICIPAL = 4
+        private const val OPENING = 5
     }
 
 }

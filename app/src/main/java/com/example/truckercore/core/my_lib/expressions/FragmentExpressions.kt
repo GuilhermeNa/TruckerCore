@@ -7,6 +7,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDirections
@@ -22,23 +23,23 @@ fun Fragment.navigateToDirection(direction: NavDirections) {
     navController.navigate(direction)
 }
 
-inline fun <T> Fragment.collectState(
+inline fun <T> LifecycleOwner.collectState(
     flow: StateFlow<T>,
     crossinline onCollect: (T) -> Unit
 ) {
-    viewLifecycleOwner.lifecycleScope.launch {
-        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
             flow.collect { onCollect(it) }
         }
     }
 }
 
-inline fun <T> Fragment.collectEffect(
+inline fun <T> LifecycleOwner.collectEffect(
     flow: Flow<T>,
     crossinline onCollect: (T) -> Unit
 ) {
-    viewLifecycleOwner.lifecycleScope.launch {
-        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
             flow.collect { onCollect(it) }
         }
     }

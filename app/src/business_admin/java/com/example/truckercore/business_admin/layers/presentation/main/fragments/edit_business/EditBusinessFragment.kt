@@ -6,16 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.lifecycleScope
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessEffect
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessStateNew
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessState
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessView
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessViewModel
 import com.example.truckercore.core.my_lib.expressions.addCnpjMask
 import com.example.truckercore.core.my_lib.expressions.addDateMask
 import com.example.truckercore.core.my_lib.expressions.collectEffect
 import com.example.truckercore.core.my_lib.expressions.collectState
-import com.example.truckercore.core.my_lib.expressions.onTextChange
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.base.managers.SaveMenuManager
@@ -52,20 +50,20 @@ class EditBusinessFragment : PrivateFragment() {
     private fun setStateManager() {
         collectState(viewModel.stateFlow) { state ->
             when (state) {
-                EditBusinessStateNew.Failure -> {
+                EditBusinessState.Failure -> {
                     navigateToErrorActivity(requireActivity())
                 }
 
-                EditBusinessStateNew.Loading -> {
+                EditBusinessState.Loading -> {
                     enableShimmer(true)
                     enableEditText(false)
                 }
 
-                is EditBusinessStateNew.Loaded -> {
+                is EditBusinessState.Loaded -> {
                     enableShimmer(false)
                     enableEditText(true)
 
-                    if(state is EditBusinessStateNew.Loaded.Waiting){
+                    if(state is EditBusinessState.Loaded.Waiting){
                         menuManager.disableMenu()
                     } else {
                         menuManager.enableMenu()

@@ -2,13 +2,13 @@ package com.example.truckercore.business_admin.layers.presentation.main.fragment
 
 import com.example.truckercore.layers.presentation.base.contracts.State
 
-sealed class EditBusinessStateNew: State {
+sealed class EditBusinessState: State {
 
-    data object Loading : EditBusinessStateNew()
+    data object Loading : EditBusinessState()
 
-    data object Failure : EditBusinessStateNew()
+    data object Failure : EditBusinessState()
 
-    sealed class Loaded: EditBusinessStateNew() {
+    sealed class Loaded: EditBusinessState() {
         data object Waiting: Loaded()
         data object Ready: Loaded()
     }
