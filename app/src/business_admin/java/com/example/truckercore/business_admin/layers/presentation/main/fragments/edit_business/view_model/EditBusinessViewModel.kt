@@ -98,7 +98,9 @@ class EditBusinessViewModel(
     }
 
     fun validateCnpj(text: String): String? {
-        val clean = text.trim()
+        val clean = text
+            .replace(Regex("\\D"), "")
+            .trim()
         val correctSize = clean.length == CNPJ_SIZE
 
         return if (clean.isEmpty() || correctSize) {
@@ -137,7 +139,9 @@ class EditBusinessViewModel(
     }
 
     fun validateOpening(text: String): String? {
-        val clean = text.trim()
+        val clean = text
+            .replace(Regex("\\D"), "")
+            .trim()
         val correctSize = clean.length == DATE_SIZE
 
         return if (clean.isEmpty() || correctSize) {
