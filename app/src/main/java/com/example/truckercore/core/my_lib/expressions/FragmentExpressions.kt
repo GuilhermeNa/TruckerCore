@@ -13,11 +13,35 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 fun Fragment.navigateToDirection(direction: NavDirections) {
     val navController = this.findNavController()
     navController.navigate(direction)
+}
+
+inline fun <T> Fragment.collectState(
+    flow: StateFlow<T>,
+    crossinline onCollect: (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collect { onCollect(it) }
+        }
+    }
+}
+
+inline fun <T> Fragment.collectEffect(
+    flow: Flow<T>,
+    crossinline onCollect: (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            flow.collect { onCollect(it) }
+        }
+    }
 }
 
 fun Fragment.launchAndRepeatOnFragmentStartedLifeCycle(block: suspend CoroutineScope.() -> Unit) {

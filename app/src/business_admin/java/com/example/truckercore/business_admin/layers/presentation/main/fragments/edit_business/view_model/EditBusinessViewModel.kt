@@ -5,32 +5,29 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.core.my_lib.expressions.foldRequired
 import com.example.truckercore.layers.data_2.repository.interfaces.CompanyRepository
-import com.example.truckercore.layers.domain.base.others.Cnpj
-import com.example.truckercore.layers.domain.base.others.CompanyName
-import com.example.truckercore.layers.domain.base.others.MunicipalRegistration
-import com.example.truckercore.layers.domain.base.others.StateRegistration
 import com.example.truckercore.layers.domain.model.company.Company
-import com.example.truckercore.layers.domain.model.company.CompanyOptional
 import com.example.truckercore.layers.domain.singletons.session.SessionManager
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
+import com.example.truckercore.layers.presentation.base.managers.EffectManager
 import com.example.truckercore.layers.presentation.base.managers.StateManager
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class EditBusinessViewModel(
     private val sessionManager: SessionManager,
     private val repository: CompanyRepository
 ) : BaseViewModel() {
 
-    private val stateManager = StateManager(EditBusinessState())
+    private val stateManager =
+        StateManager<EditBusinessStateNew>(EditBusinessStateNew.Loading)
     val stateFlow = stateManager.stateFlow
-    val state get() = stateManager.currentState()
 
-    private val _messageChannel = Channel<String>(Channel.BUFFERED)
-    val messageFlow get() = _messageChannel.receiveAsFlow()
+    private val effectManager = EffectManager<EditBusinessEffect>()
+    val effectFlow = effectManager.effectFlow
 
+    private var fieldsAreValid: Boolean = INITIAL_STATE
+
+    //----------------------------------------------------------------------------------------------
+    // FETCH COMPANY
     //----------------------------------------------------------------------------------------------
     fun fetchCompany() {
         viewModelScope.launch {
@@ -40,72 +37,133 @@ class EditBusinessViewModel(
     }
 
     private fun handleSuccess(company: Company) {
-        val editBusinessView = EditBusinessView.from(company)
-        stateManager.update(state.companyFound(editBusinessView))
+        // Emit new State
+        val newState = stateManager.currentState().waitingInput()
+        stateManager.update(newState)
+
+        // Emit bind data Effect
+        val data = EditBusinessView.from(company)
+        effectManager.trySend(EditBusinessEffect.BindData(data))
     }
 
     private fun handleError(error: AppException) {
         Log.e(classTag, "${error.message}", error)
-        stateManager.update(state.failure())
+        val newState = stateManager.currentState().failure()
+        stateManager.update(newState)
     }
 
     //----------------------------------------------------------------------------------------------
     // PUBLIC
     //----------------------------------------------------------------------------------------------
-    fun updateName(value: String) {
-        val newState = state.updateName(value)
+    private fun validateFieldsState(actual: Boolean) {
+        if (fieldsAreValid == actual) return
+        else fieldsAreValid = actual
+
+        val newState =
+            if (actual) stateManager.currentState().readyToSave()
+            else stateManager.currentState().waitingInput()
+
         stateManager.update(newState)
     }
 
-    fun updateCnpj(value: String) {
-        val newState = state.updateCnpj(value)
-        stateManager.update(newState)
-    }
+    fun validateName(text: String): String? {
+        val clean = text.trim()
+        val hasMinimumSize = clean.length >= NAME_MIN_SIZE
 
-    fun updateState(value: String) {
-        val newState = state.updateState(value)
-        stateManager.update(newState)
-    }
-
-    fun updateMunicipal(value: String) {
-        val newState = state.updateMunicipal(value)
-        stateManager.update(newState)
-    }
-
-    fun updateOpening(value: String) {
-        val newState = state.updateOpening(value)
-        stateManager.update(newState)
-    }
-
-    fun save() {
-        if (!dataReady()) {
-            _messageChannel.trySend(ERROR)
-            return
-        }
-
-        val optional = getCompanyOptional()
-
-        optional
-        // TODO("salvar")
-
-    }
-
-    private fun getCompanyOptional(): CompanyOptional {
-        return with(state.companyView) {
-            CompanyOptional(
-                cnpj = Cnpj(cnpj),
-                name = CompanyName(name),
-                stateRegistration = StateRegistration(stateReg),
-                municipalRegistration = MunicipalRegistration(municipalReg),
-                opening = LocalDate.of(year, month, day)
-            )
+        return if (clean.isBlank() || hasMinimumSize) {
+            validateFieldsState(true)
+            null
+        } else {
+            validateFieldsState(false)
+            SHORT_NAME
         }
     }
 
-    private fun dataReady() = !state.hasError
+    fun validateCnpj(text: String): String? {
+        val clean = text.trim()
+        val correctSize = clean.length == CNPJ_SIZE
+
+        return if (clean.isBlank() || correctSize) {
+            validateFieldsState(true)
+            null
+        } else {
+            validateFieldsState(false)
+            INCORRECT_CNPJ
+        }
+    }
+
+    fun validateState(text: String): String? {
+        val clean = text.trim()
+        val correctSize = clean.length in STATE_MIN_SIZE..STATE_MAX_SIZE
+
+        return if (text.isBlank() || correctSize) {
+            validateFieldsState(true)
+            null
+        } else {
+            validateFieldsState(false)
+            INCORRECT_STATE
+        }
+    }
+
+    fun validateMunicipal(text: String): String? {
+        val clean = text.trim()
+        val correctSize = clean.length in MUNICIPAL_MIN_SIZE..MUNICIPAL_MAX_SIZE
+
+        return if (text.isBlank() || correctSize) {
+            validateFieldsState(true)
+            null
+        } else {
+            validateFieldsState(false)
+            INCORRECT_MUNICIPAL
+        }
+    }
+
+    fun validateOpening(text: String): String? {
+        val clean = text.trim()
+        val correctSize = clean.length == DATE_SIZE
+
+        return if (clean.isBlank() || correctSize) {
+            validateFieldsState(true)
+            null
+        } else {
+            validateFieldsState(false)
+            INCORRECT_DATE
+        }
+
+    }
 
     private companion object {
-        private const val ERROR = "Campos inválidos"
+        private const val INITIAL_STATE = true
+
+        private const val CNPJ_SIZE = 14
+        private const val NAME_MIN_SIZE = 3
+        private const val DATE_SIZE = 6
+
+        private const val STATE_MIN_SIZE = 8
+        private const val STATE_MAX_SIZE = 12
+
+        private const val MUNICIPAL_MIN_SIZE = 7
+        private const val MUNICIPAL_MAX_SIZE = 15
+
+        private const val INCORRECT_DATE = "Data deve ter 6 caracteres"
+        private const val SHORT_NAME = "Nome deve ter pelo menos 3 caracteres"
+        private const val INCORRECT_CNPJ = "Cnpj deve ter 14 caracteres"
+        private const val INCORRECT_STATE = "Deve ter entre 8 e 12 caracteres"
+        private const val INCORRECT_MUNICIPAL = "Deve ter entre 7 e 15 caracteres"
     }
 
 }
+
+/*
+private fun getCompanyOptional(): CompanyOptional {
+    return with(state.companyView) {
+        CompanyOptional(
+            cnpj = Cnpj(cnpj),
+            name = CompanyName(name),
+            stateRegistration = StateRegistration(stateReg),
+            municipalRegistration = MunicipalRegistration(municipalReg),
+            opening = LocalDate.of(year, month, day)
+        )
+    }
+}
+*/

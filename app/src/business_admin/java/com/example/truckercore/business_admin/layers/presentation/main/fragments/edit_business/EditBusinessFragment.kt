@@ -5,20 +5,20 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessStatus
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessEffect
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessStateNew
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessView
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessViewModel
 import com.example.truckercore.core.my_lib.expressions.addCnpjMask
 import com.example.truckercore.core.my_lib.expressions.addDateMask
+import com.example.truckercore.core.my_lib.expressions.collectEffect
+import com.example.truckercore.core.my_lib.expressions.collectState
 import com.example.truckercore.core.my_lib.expressions.onTextChange
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.base.managers.SaveMenuManager
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditBusinessFragment : PrivateFragment() {
@@ -46,55 +46,31 @@ class EditBusinessFragment : PrivateFragment() {
         super.onCreate(savedInstanceState)
         onInitializing(savedInstanceState, viewModel::fetchCompany)
         setStateManager()
+        setEffectManager()
     }
 
     private fun setStateManager() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.stateFlow.collect { state ->
-                    when (state.status) {
-                        EditBusinessStatus.Failure -> {
-                            navigateToErrorActivity(requireActivity())
-                        }
+        collectState(viewModel.stateFlow) { state ->
+            when (state) {
+                EditBusinessStateNew.Failure -> {
+                    navigateToErrorActivity(requireActivity())
+                }
 
-                        EditBusinessStatus.Loading -> {
-                            enableShimmer(true)
-                            enableEditText(false)
-                        }
+                EditBusinessStateNew.Loading -> {
+                    enableShimmer(true)
+                    enableEditText(false)
+                }
 
-                        is EditBusinessStatus.Loaded -> {
-                            enableShimmer(false)
-                            enableEditText(true)
-                            bindContent(state.companyView)
-                        }
+                is EditBusinessStateNew.Loaded -> {
+                    enableShimmer(false)
+                    enableEditText(true)
+
+                    if(state is EditBusinessStateNew.Loaded.Waiting){
+                        menuManager.disableMenu()
+                    } else {
+                        menuManager.enableMenu()
                     }
                 }
-            }
-        }
-    }
-
-    private fun bindContent(editBusinessView: EditBusinessView) {
-        with(binding) {
-            editBusinessView.run {
-                updateEditText(
-                    Pair(fragEditBusinessName, name),
-                    Pair(fragEditBusinessCnpj, cnpj),
-                    Pair(fragEditBusinessState, stateReg),
-                    Pair(fragEditBusinessMunicipal, municipalReg),
-                    Pair(fragEditBusinessOpening, opening)
-                )
-            }
-        }
-    }
-
-    private fun updateEditText(vararg pairArr: Pair<TextInputEditText, String>) {
-        pairArr.forEach { pair ->
-            val editText = pair.first
-            val content = pair.second
-
-            val current = editText.text.toString()
-            if (current != content) {
-                editText.setText(content)
             }
         }
     }
@@ -116,6 +92,25 @@ class EditBusinessFragment : PrivateFragment() {
         }
 
         binding.fragEditBusinessLayoutText.visibility = value
+    }
+
+    //--------------------
+    private fun setEffectManager() {
+        collectEffect(viewModel.effectFlow) { effect ->
+            if (effect is EditBusinessEffect.BindData) {
+                bindContent(effect.data)
+            }
+        }
+    }
+
+    private fun bindContent(data: EditBusinessView) = binding.run {
+        with(data) {
+            fragEditBusinessName.setText(name)
+            fragEditBusinessCnpj.setText(cnpj)
+            fragEditBusinessState.setText(stateReg)
+            fragEditBusinessMunicipal.setText(municipalReg)
+            fragEditBusinessOpening.setText(opening)
+        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -144,12 +139,31 @@ class EditBusinessFragment : PrivateFragment() {
         dateMask = fragEditBusinessOpening.addDateMask()
     }
 
-    private fun setEditTextListeners() = with(binding) {
-        fragEditBusinessName.onTextChange(lifecycleScope, viewModel::updateName)
-        fragEditBusinessCnpj.onTextChange(lifecycleScope, viewModel::updateCnpj)
-        fragEditBusinessState.onTextChange(lifecycleScope, viewModel::updateState)
-        fragEditBusinessMunicipal.onTextChange(lifecycleScope, viewModel::updateMunicipal)
-        fragEditBusinessOpening.onTextChange(lifecycleScope, viewModel::updateOpening)
+    private fun setEditTextListeners() = binding.run {
+        // Name
+        fragEditBusinessName.addTextChangedListener { text ->
+            viewModel.validateName(text.toString())
+        }
+
+        // CNpj
+        fragEditBusinessCnpj.addTextChangedListener { text ->
+            viewModel.validateCnpj(text.toString())
+        }
+
+        // State
+        fragEditBusinessState.addTextChangedListener { text ->
+            viewModel.validateState(text.toString())
+        }
+
+        // Municipal
+        fragEditBusinessMunicipal.addTextChangedListener { text ->
+            viewModel.validateMunicipal(text.toString())
+        }
+
+        // Opening
+        fragEditBusinessOpening.addTextChangedListener { text ->
+            viewModel.validateOpening(text.toString())
+        }
     }
 
     private fun setMenuProvider() {
@@ -177,3 +191,4 @@ class EditBusinessFragment : PrivateFragment() {
     }
 
 }
+

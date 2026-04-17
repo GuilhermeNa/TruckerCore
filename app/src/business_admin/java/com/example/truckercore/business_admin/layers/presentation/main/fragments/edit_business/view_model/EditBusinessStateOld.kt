@@ -2,7 +2,7 @@ package com.example.truckercore.business_admin.layers.presentation.main.fragment
 
 import com.example.truckercore.layers.presentation.base.contracts.State
 
-data class EditBusinessState(
+data class EditBusinessStateOld(
     val companyView: EditBusinessView = EditBusinessView(),
     val status: EditBusinessStatus = EditBusinessStatus.Loading
 ) : State {
