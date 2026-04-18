@@ -22,6 +22,7 @@
         android:visibility="gone">
         <!-- NAME -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_edit_business_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name">
@@ -38,6 +39,7 @@
 
         <!-- CNPJ -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_edit_business_cnpj_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -56,6 +58,7 @@
 
         <!-- STATE -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_edit_business_state_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -74,6 +77,7 @@
 
         <!-- MUNICIPAL -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_edit_business_municipal_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -92,6 +96,7 @@
 
         <!-- OPENING -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/frag_edit_business_opening_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

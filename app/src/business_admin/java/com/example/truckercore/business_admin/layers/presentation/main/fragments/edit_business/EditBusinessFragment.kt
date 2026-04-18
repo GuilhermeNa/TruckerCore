@@ -63,7 +63,7 @@ class EditBusinessFragment : PrivateFragment() {
                     enableShimmer(false)
                     enableEditText(true)
 
-                    if(state is EditBusinessState.Loaded.Waiting){
+                    if (state is EditBusinessState.Loaded.Waiting) {
                         menuManager.disableMenu()
                     } else {
                         menuManager.enableMenu()
@@ -95,8 +95,28 @@ class EditBusinessFragment : PrivateFragment() {
     //--------------------
     private fun setEffectManager() {
         collectEffect(viewModel.effectFlow) { effect ->
-            if (effect is EditBusinessEffect.BindData) {
-                bindContent(effect.data)
+            when (effect) {
+                is EditBusinessEffect.BindData ->
+                    bindContent(effect.data)
+
+                is EditBusinessEffect.BindError.Name -> {
+                    if(effect.text == null) {
+                        binding.fragEditBusinessNameLayout.isErrorEnabled = false
+                    }
+                    binding.fragEditBusinessNameLayout.error = effect.text
+                }
+
+                is EditBusinessEffect.BindError.Cnpj ->
+                    binding.fragEditBusinessNameLayout.error = effect.text
+
+                is EditBusinessEffect.BindError.State ->
+                    binding.fragEditBusinessStateLayout.error = effect.text
+
+                is EditBusinessEffect.BindError.Municipal ->
+                    binding.fragEditBusinessMunicipalLayout.error = effect.text
+
+                is EditBusinessEffect.BindError.Opening ->
+                    binding.fragEditBusinessMunicipalLayout.error = effect.text
             }
         }
     }

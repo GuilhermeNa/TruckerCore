@@ -17,8 +17,7 @@ class EditBusinessViewModel(
     private val repository: CompanyRepository
 ) : BaseViewModel() {
 
-    private val stateManager =
-        StateManager<EditBusinessState>(EditBusinessState.Loading)
+    private val stateManager = StateManager<EditBusinessState>(EditBusinessState.Loading)
     val stateFlow = stateManager.stateFlow
 
     private val effectManager = EffectManager<EditBusinessEffect>()
@@ -84,73 +83,88 @@ class EditBusinessViewModel(
         stateManager.update(newState)
     }
 
-    fun validateName(text: String): String? {
+    fun validateName(text: String) {
         val clean = text.trim()
         val hasMinimumSize = clean.length >= NAME_MIN_SIZE
 
-        return if (clean.isEmpty() || hasMinimumSize) {
-            validateField(NAME, true)
-            null
-        } else {
-            validateField(NAME, false)
-            SHORT_NAME
-        }
+        val newEffect =
+            if (clean.isEmpty() || hasMinimumSize) {
+                validateField(NAME, true)
+                EditBusinessEffect.BindError.Name(null)
+            } else {
+                validateField(NAME, false)
+                EditBusinessEffect.BindError.Name(SHORT_NAME)
+            }
+
+        effectManager.trySend(newEffect)
     }
 
-    fun validateCnpj(text: String): String? {
+    fun validateCnpj(text: String) {
         val clean = text
             .replace(Regex("\\D"), "")
             .trim()
         val correctSize = clean.length == CNPJ_SIZE
 
-        return if (clean.isEmpty() || correctSize) {
-            validateField(CNPJ, true)
-            null
-        } else {
-            validateField(CNPJ, false)
-            INCORRECT_CNPJ
-        }
+        val newEffect =
+            if (clean.isEmpty() || correctSize) {
+                validateField(CNPJ, true)
+                EditBusinessEffect.BindError.Cnpj(null)
+            } else {
+                validateField(CNPJ, false)
+                EditBusinessEffect.BindError.Cnpj(INCORRECT_CNPJ)
+            }
+
+        effectManager.trySend(newEffect)
     }
 
-    fun validateState(text: String): String? {
+    fun validateState(text: String) {
         val clean = text.trim()
         val correctSize = clean.length in STATE_MIN_SIZE..STATE_MAX_SIZE
 
-        return if (text.isEmpty() || correctSize) {
-            validateField(STATE, true)
-            null
-        } else {
-            validateField(STATE, false)
-            INCORRECT_STATE
-        }
+        val newEffect =
+            if (text.isEmpty() || correctSize) {
+                validateField(STATE, true)
+                EditBusinessEffect.BindError.State(null)
+            } else {
+                validateField(STATE, false)
+                EditBusinessEffect.BindError.State(INCORRECT_STATE)
+            }
+
+        effectManager.trySend(newEffect)
     }
 
-    fun validateMunicipal(text: String): String? {
+    fun validateMunicipal(text: String) {
         val clean = text.trim()
         val correctSize = clean.length in MUNICIPAL_MIN_SIZE..MUNICIPAL_MAX_SIZE
 
-        return if (text.isEmpty() || correctSize) {
-            validateField(MUNICIPAL, true)
-            null
-        } else {
-            validateField(MUNICIPAL, false)
-            INCORRECT_MUNICIPAL
-        }
+        val newEffect =
+            if (text.isEmpty() || correctSize) {
+                validateField(MUNICIPAL, true)
+                EditBusinessEffect.BindError.Municipal(null)
+            } else {
+                validateField(MUNICIPAL, false)
+                EditBusinessEffect.BindError.Municipal(INCORRECT_MUNICIPAL)
+            }
+
+        effectManager.trySend(newEffect)
     }
 
-    fun validateOpening(text: String): String? {
+    fun validateOpening(text: String) {
         val clean = text
             .replace(Regex("\\D"), "")
             .trim()
         val correctSize = clean.length == DATE_SIZE
 
-        return if (clean.isEmpty() || correctSize) {
-            validateField(OPENING, true)
-            null
-        } else {
-            validateField(OPENING, false)
-            INCORRECT_DATE
-        }
+        val newEffect =
+            if (clean.isEmpty() || correctSize) {
+                validateField(OPENING, true)
+                EditBusinessEffect.BindError.Opening(null)
+            } else {
+                validateField(OPENING, false)
+                EditBusinessEffect.BindError.Opening(INCORRECT_DATE)
+            }
+
+        effectManager.trySend(newEffect)
     }
 
     private companion object {
@@ -181,17 +195,3 @@ class EditBusinessViewModel(
     }
 
 }
-
-/*
-private fun getCompanyOptional(): CompanyOptional {
-    return with(state.companyView) {
-        CompanyOptional(
-            cnpj = Cnpj(cnpj),
-            name = CompanyName(name),
-            stateRegistration = StateRegistration(stateReg),
-            municipalRegistration = MunicipalRegistration(municipalReg),
-            opening = LocalDate.of(year, month, day)
-        )
-    }
-}
-*/
