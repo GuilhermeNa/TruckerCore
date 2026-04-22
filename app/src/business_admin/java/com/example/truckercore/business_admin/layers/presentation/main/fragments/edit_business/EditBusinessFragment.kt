@@ -6,18 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessEffect
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data.EditBusinessView
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessState
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessView
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model.EditBusinessViewModel
 import com.example.truckercore.core.my_lib.expressions.addCnpjMask
 import com.example.truckercore.core.my_lib.expressions.addDateMask
-import com.example.truckercore.core.my_lib.expressions.collectEffect
 import com.example.truckercore.core.my_lib.expressions.collectState
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.base.managers.SaveMenuManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.log
 
 class EditBusinessFragment : PrivateFragment() {
 
@@ -44,7 +43,6 @@ class EditBusinessFragment : PrivateFragment() {
         super.onCreate(savedInstanceState)
         onInitializing(savedInstanceState, viewModel::fetchCompany)
         setStateManager()
-        setEffectManager()
     }
 
     private fun setStateManager() {
@@ -62,15 +60,32 @@ class EditBusinessFragment : PrivateFragment() {
                 is EditBusinessState.Loaded -> {
                     enableShimmer(false)
                     enableEditText(true)
-
-                    if (state is EditBusinessState.Loaded.Waiting) {
-                        menuManager.disableMenu()
-                    } else {
-                        menuManager.enableMenu()
-                    }
+                    enableMenu(state.ready)
+                    bindContent(state.data)
                 }
             }
         }
+    }
+
+    private fun bindContent(data: EditBusinessView) {
+        if (viewModel.isViewInit) return
+
+        binding.run {
+            with(data) {
+                fragEditBusinessName.setText(name)
+                fragEditBusinessCnpj.setText(cnpj)
+                fragEditBusinessState.setText(stateReg)
+                fragEditBusinessMunicipal.setText(municipalReg)
+                fragEditBusinessOpening.setText(opening)
+            }
+        }
+
+        viewModel.markAsInitialized()
+    }
+
+    private fun enableMenu(enabled: Boolean) {
+        if (enabled) menuManager.enableMenu()
+        else menuManager.disableMenu()
     }
 
     private fun enableShimmer(enabled: Boolean) {
@@ -90,45 +105,6 @@ class EditBusinessFragment : PrivateFragment() {
         }
 
         binding.fragEditBusinessLayoutText.visibility = value
-    }
-
-    //--------------------
-    private fun setEffectManager() {
-        collectEffect(viewModel.effectFlow) { effect ->
-            when (effect) {
-                is EditBusinessEffect.BindData ->
-                    bindContent(effect.data)
-
-                is EditBusinessEffect.BindError.Name -> {
-                    if(effect.text == null) {
-                        binding.fragEditBusinessNameLayout.isErrorEnabled = false
-                    }
-                    binding.fragEditBusinessNameLayout.error = effect.text
-                }
-
-                is EditBusinessEffect.BindError.Cnpj ->
-                    binding.fragEditBusinessNameLayout.error = effect.text
-
-                is EditBusinessEffect.BindError.State ->
-                    binding.fragEditBusinessStateLayout.error = effect.text
-
-                is EditBusinessEffect.BindError.Municipal ->
-                    binding.fragEditBusinessMunicipalLayout.error = effect.text
-
-                is EditBusinessEffect.BindError.Opening ->
-                    binding.fragEditBusinessMunicipalLayout.error = effect.text
-            }
-        }
-    }
-
-    private fun bindContent(data: EditBusinessView) = binding.run {
-        with(data) {
-            fragEditBusinessName.setText(name)
-            fragEditBusinessCnpj.setText(cnpj)
-            fragEditBusinessState.setText(stateReg)
-            fragEditBusinessMunicipal.setText(municipalReg)
-            fragEditBusinessOpening.setText(opening)
-        }
     }
 
     //----------------------------------------------------------------------------------------------
@@ -160,27 +136,27 @@ class EditBusinessFragment : PrivateFragment() {
     private fun setEditTextListeners() = binding.run {
         // Name
         fragEditBusinessName.addTextChangedListener { text ->
-            viewModel.validateName(text.toString())
+            viewModel.updateName(text.toString())
         }
 
         // CNpj
         fragEditBusinessCnpj.addTextChangedListener { text ->
-            viewModel.validateCnpj(text.toString())
+            viewModel.updateCnpj(text.toString())
         }
 
         // State
         fragEditBusinessState.addTextChangedListener { text ->
-            viewModel.validateState(text.toString())
+            viewModel.updateState(text.toString())
         }
 
         // Municipal
         fragEditBusinessMunicipal.addTextChangedListener { text ->
-            viewModel.validateMunicipal(text.toString())
+            viewModel.updateMunicipal(text.toString())
         }
 
         // Opening
         fragEditBusinessOpening.addTextChangedListener { text ->
-            viewModel.validateOpening(text.toString())
+            viewModel.updateOpening(text.toString())
         }
     }
 

@@ -1,22 +1,29 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.view_model
 
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data.EditBusinessView
 import com.example.truckercore.layers.presentation.base.contracts.State
 
-sealed class EditBusinessState: State {
-
-    data object Loading : EditBusinessState()
+sealed class EditBusinessState : State {
 
     data object Failure : EditBusinessState()
 
-    sealed class Loaded: EditBusinessState() {
-        data object Waiting: Loaded()
-        data object Ready: Loaded()
-    }
+    data object Loading : EditBusinessState()
+
+    data class Loaded(
+        val data: EditBusinessView,
+        val ready: Boolean
+    ) : EditBusinessState()
 
     fun failure() = Failure
 
-    fun waitingInput() = Loaded.Waiting
+    fun loaded(rData: EditBusinessView) = Loaded(data = rData, ready = true)
 
-    fun readyToSave() = Loaded.Ready
+    fun textChange(validationMap: Map<Int, String?>, fieldsAreValid: Boolean): Loaded {
+        if (this !is Loaded) throw IllegalStateException()
+
+        val newData = data.update(validationMap)
+
+        return copy(data = newData, ready = fieldsAreValid)
+    }
 
 }
