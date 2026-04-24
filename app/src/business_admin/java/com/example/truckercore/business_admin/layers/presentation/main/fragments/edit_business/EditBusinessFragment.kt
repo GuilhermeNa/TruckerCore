@@ -12,11 +12,12 @@ import com.example.truckercore.business_admin.layers.presentation.main.fragments
 import com.example.truckercore.core.my_lib.expressions.addCnpjMask
 import com.example.truckercore.core.my_lib.expressions.addDateMask
 import com.example.truckercore.core.my_lib.expressions.collectState
+import com.example.truckercore.core.my_lib.expressions.popBackstack
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.base.managers.SaveMenuManager
+import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.log
 
 class EditBusinessFragment : PrivateFragment() {
 
@@ -35,6 +36,8 @@ class EditBusinessFragment : PrivateFragment() {
             onSave = ::save
         )
     }
+
+    private var dialog: LoadingDialog? = null
 
     //----------------------------------------------------------------------------------------------
     // on Create
@@ -58,12 +61,30 @@ class EditBusinessFragment : PrivateFragment() {
                 }
 
                 is EditBusinessState.Loaded -> {
+                    handleSaved(state.saved)
                     enableShimmer(false)
                     enableEditText(true)
                     enableMenu(state.ready)
+                    enableDialog(state.saving)
                     bindContent(state.data)
                 }
             }
+        }
+    }
+
+    private fun handleSaved(saved: Boolean) {
+        if (saved) popBackstack()
+    }
+
+    private fun enableDialog(saving: Boolean) {
+        if (dialog == null) {
+            dialog = LoadingDialog(requireContext())
+        }
+
+        if (saving) {
+            dialog?.show()
+        } else {
+            dialog?.dismiss()
         }
     }
 
@@ -165,12 +186,14 @@ class EditBusinessFragment : PrivateFragment() {
     }
 
     fun save() {
-        EditBusinessView(
-            name = binding.fragEditBusinessName.text.toString(),
-            cnpj = binding.fragEditBusinessCnpj.text.toString(),
-            stateReg = binding.fragEditBusinessState.text.toString(),
-            municipalReg = binding.fragEditBusinessMunicipal.text.toString(),
-            opening = binding.fragEditBusinessOpening.text.toString()
+        viewModel.saveCompany(
+            EditBusinessView(
+                name = binding.fragEditBusinessName.text.toString(),
+                cnpj = binding.fragEditBusinessCnpj.text.toString(),
+                stateReg = binding.fragEditBusinessState.text.toString(),
+                municipalReg = binding.fragEditBusinessMunicipal.text.toString(),
+                opening = binding.fragEditBusinessOpening.text.toString()
+            )
         )
     }
 
@@ -179,6 +202,7 @@ class EditBusinessFragment : PrivateFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onDestroyView() {
         super.onDestroyView()
+        dialog = null
         binding.fragEditBusinessCnpj.removeTextChangedListener(cnpjMask)
         binding.fragEditBusinessOpening.removeTextChangedListener(dateMask)
         _binding = null

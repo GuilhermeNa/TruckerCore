@@ -27,6 +27,7 @@ navigationUiKtx = "2.9.0"
 shimmerVersion = "0.5.0"
 legacySupportV4 = "1.0.0"
 fragmentKtx = "1.5.6"
+work_version = "2.11.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +64,7 @@ navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx",
 shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "shimmerVersion" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+androidx-work = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work_version"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "pluginAgp" }

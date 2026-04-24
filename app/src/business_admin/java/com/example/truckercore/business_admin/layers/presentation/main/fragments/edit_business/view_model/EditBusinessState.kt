@@ -11,7 +11,9 @@ sealed class EditBusinessState : State {
 
     data class Loaded(
         val data: EditBusinessView,
-        val ready: Boolean
+        val ready: Boolean,
+        val saving: Boolean = false,
+        val saved: Boolean = false
     ) : EditBusinessState()
 
     fun failure() = Failure
@@ -24,6 +26,18 @@ sealed class EditBusinessState : State {
         val newData = data.update(validationMap)
 
         return copy(data = newData, ready = fieldsAreValid)
+    }
+
+    fun saving(): Loaded {
+        if (this !is Loaded)
+            throw IllegalStateException()
+        return copy(saving = true)
+    }
+
+    fun saved(): Loaded {
+        if (this !is Loaded)
+            throw IllegalStateException()
+        return copy(saving = false, saved = true)
     }
 
 }

@@ -219,4 +219,9 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
         return DataSource.Document(document)
     }
 
+    fun getDocument(id: String): DataSource.Document {
+        val document = firestore.collection(collection.name).document(id)
+        return DataSource.Document(document)
+    }
+
 }

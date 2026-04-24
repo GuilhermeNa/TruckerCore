@@ -14,7 +14,6 @@ import com.example.truckercore.layers.presentation.base.managers.StateManager
 import kotlinx.coroutines.launch
 
 private typealias Validator = EditBusinessValidator
-
 private typealias LoadingState = EditBusinessState.Loading
 
 class EditBusinessViewModel(
@@ -36,21 +35,53 @@ class EditBusinessViewModel(
     fun fetchCompany() {
         viewModelScope.launch {
             repository.fetch(id = sessionManager.companyId())
-                .foldRequired(::handleSuccess, ::handleError)
+                .foldRequired(::fetchSuccess, ::fetchError)
         }
     }
 
-    private fun handleSuccess(company: Company) {
+    private fun fetchSuccess(company: Company) {
         val data = EditBusinessView.from(company)
         val newState = stateManager.currentState().loaded(data)
         stateManager.update(newState)
     }
 
-    private fun handleError(error: AppException) {
+    private fun fetchError(error: AppException) {
         Log.e(classTag, "${error.message}", error)
         val newState = stateManager.currentState().failure()
         stateManager.update(newState)
     }
+
+    //----------------------------------------------------------------------------------------------
+    // SAVE COMPANY
+    //----------------------------------------------------------------------------------------------
+    fun saveCompany(data: EditBusinessView) {
+
+        // Update State
+        val newState = stateManager.currentState().saving()
+        stateManager.update(newState)
+
+        viewModelScope.launch {
+            repository
+
+
+        }
+    }
+
+    private fun saveSuccess() {
+
+        //
+
+
+        // Update State
+        val newState = stateManager.currentState().saved()
+        stateManager.update(newState)
+
+    }
+
+    private fun saveError() {
+
+    }
+
 
     //----------------------------------------------------------------------------------------------
     // PUBLIC
@@ -98,5 +129,7 @@ class EditBusinessViewModel(
         )
         stateManager.update(newState)
     }
+
+
 
 }
