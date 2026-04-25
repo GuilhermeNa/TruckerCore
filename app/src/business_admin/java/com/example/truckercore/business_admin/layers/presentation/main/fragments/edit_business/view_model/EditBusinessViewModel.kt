@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data.EditBusinessValidator
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data.EditBusinessView
 import com.example.truckercore.core.error.core.AppException
+import com.example.truckercore.core.my_lib.expressions.fold
 import com.example.truckercore.core.my_lib.expressions.foldRequired
 import com.example.truckercore.layers.data_2.repository.interfaces.CompanyRepository
 import com.example.truckercore.layers.domain.model.company.Company
 import com.example.truckercore.layers.domain.singletons.session.SessionManager
+import com.example.truckercore.layers.domain.use_case.company.CompleteCompanyRegistration
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
 import com.example.truckercore.layers.presentation.base.managers.StateManager
 import kotlinx.coroutines.launch
@@ -18,13 +20,16 @@ private typealias LoadingState = EditBusinessState.Loading
 
 class EditBusinessViewModel(
     private val sessionManager: SessionManager,
-    private val repository: CompanyRepository
+    private val repository: CompanyRepository,
+    private val completeRegistration: CompleteCompanyRegistration
 ) : BaseViewModel() {
 
     private val stateManager = StateManager<EditBusinessState>(LoadingState)
     val stateFlow = stateManager.stateFlow
 
     private val validator = Validator()
+
+    private lateinit var company: Company
 
     private var _isViewInitialized: Boolean = false
     val isViewInit get() = _isViewInitialized
@@ -40,6 +45,7 @@ class EditBusinessViewModel(
     }
 
     private fun fetchSuccess(company: Company) {
+        this.company = company
         val data = EditBusinessView.from(company)
         val newState = stateManager.currentState().loaded(data)
         stateManager.update(newState)
@@ -60,28 +66,24 @@ class EditBusinessViewModel(
         val newState = stateManager.currentState().saving()
         stateManager.update(newState)
 
+        // Complete Registration
         viewModelScope.launch {
-            repository
-
-
+            completeRegistration(data, company)
+                .fold(::saveSuccess, ::saveError)
         }
+
     }
 
     private fun saveSuccess() {
-
-        //
-
-
-        // Update State
         val newState = stateManager.currentState().saved()
         stateManager.update(newState)
-
     }
 
-    private fun saveError() {
-
+    private fun saveError(exception: AppException) {
+        Log.e(classTag, "${exception.message}", exception)
+        val newState = stateManager.currentState().failure()
+        stateManager.update(newState)
     }
-
 
     //----------------------------------------------------------------------------------------------
     // PUBLIC
@@ -129,7 +131,6 @@ class EditBusinessViewModel(
         )
         stateManager.update(newState)
     }
-
 
 
 }

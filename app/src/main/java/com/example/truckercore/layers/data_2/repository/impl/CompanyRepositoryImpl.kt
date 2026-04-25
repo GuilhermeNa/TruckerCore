@@ -19,8 +19,10 @@ class CompanyRepositoryImpl(
             mapper = { CompanyMapper.toEntity(it) }
         )
 
-    override suspend fun save(company: Company): OperationOutcome {
-        TODO("Not yet implemented")
-    }
+    override suspend fun save(company: Company): OperationOutcome =
+        save(
+            mapper = { CompanyMapper.toDto(company) },
+            operation = { dto -> remote.save(dto) }
+        )
 
 }

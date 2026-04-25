@@ -13,4 +13,6 @@ data class CompanyOptional(
     val stateRegistration: StateRegistration? = null,
     val municipalRegistration: MunicipalRegistration? = null,
     val opening: LocalDate? = null
-) : OptionalData
+) : OptionalData {
+
+}

@@ -22,7 +22,7 @@ val adminModules = module {
     viewModel<HomeViewModel> { HomeViewModel() }
     viewModel<BusinessViewModel> { BusinessViewModel(get(), get()) }
     viewModel<MainViewModel> { MainViewModel(get(), get(), get(), get()) }
-    viewModel<EditBusinessViewModel> { EditBusinessViewModel(get(), get()) }
+    viewModel<EditBusinessViewModel> { EditBusinessViewModel(get(), get(), get()) }
 
     // Domain
     single { AuthorizeEmployeeAccessUseCase(get()) }

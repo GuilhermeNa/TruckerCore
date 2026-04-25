@@ -3,6 +3,7 @@ package com.example.truckercore.core.my_lib.expressions
 import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.error.InfraException
 import com.example.truckercore.core.error.core.AppException
+import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 
 /**
@@ -36,6 +37,14 @@ inline fun OperationOutcome.handle(
         OperationOutcome.Completed -> onComplete()
         is OperationOutcome.Failure -> onFailure(exception)
     }
+}
+
+inline fun <R> OperationOutcome.fold(
+    onComplete: () -> R,
+    onFailure: (AppException) -> R,
+): R = when (this) {
+    is OperationOutcome.Completed -> onComplete()
+    is OperationOutcome.Failure -> onFailure(exception)
 }
 
 fun OperationOutcome.isFailure(): Boolean = this is OperationOutcome.Failure

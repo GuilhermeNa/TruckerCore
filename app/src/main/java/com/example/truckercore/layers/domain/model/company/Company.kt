@@ -28,7 +28,7 @@ class Company(
     private var _stateRegistration: StateRegistration? = null,
     private var _municipalRegistration: MunicipalRegistration? = null,
     private var _opening: LocalDate? = null
-) : BaseEntity, Optional<CompanyOptional> {
+) : BaseEntity, Optional<CompanyOptional, Company> {
 
     // Getters
     val cnpj get() = _cnpj
@@ -61,13 +61,16 @@ class Company(
                 municipalRegistration != null ||
                 opening != null
 
-    override fun completeRegistration(data: CompanyOptional) {
-        super.completeRegistration(data)
-        _cnpj = data.cnpj ?: cnpj
-        _name = data.name ?: name
-        _stateRegistration = data.stateRegistration ?: stateRegistration
-        _municipalRegistration = data.municipalRegistration ?: municipalRegistration
-        _opening = data.opening ?: opening
+    override fun completeRegistration(data: CompanyOptional): Company {
+        return Company(
+            id = this.id,
+            status = this.status,
+            _cnpj = data.cnpj ?: cnpj,
+            _name = data.name ?: name,
+            _stateRegistration = data.stateRegistration ?: stateRegistration,
+            _municipalRegistration = data.municipalRegistration ?: municipalRegistration,
+            _opening = data.opening ?: opening
+        )
     }
 
 }

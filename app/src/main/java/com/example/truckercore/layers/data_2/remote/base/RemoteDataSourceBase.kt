@@ -155,6 +155,23 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
     }
 
     //----------------------------------------------------------------------------------------------
+    // Save a single document
+    //----------------------------------------------------------------------------------------------
+    protected suspend fun <D : BaseDto> save(dto: D) {
+        // Check the ID
+        if (dto.id == null) {
+            throw FirebaseRemoteDataException(
+                "Failed to save a document. Received an object with null ID."
+            )
+        }
+
+        // Save or replace the document
+        val document = firestore.collection(collection.name).document(dto.id!!)
+        document.set(dto).await()
+
+    }
+
+    //----------------------------------------------------------------------------------------------
     // Internal mapping helpers
     //----------------------------------------------------------------------------------------------
     private fun <T : BaseDto> DocumentSnapshot?.mapToDto(dtoClazz: Class<T>): T? {
@@ -216,11 +233,6 @@ abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: Fireba
     fun getDocument(id: ID): DataSource.Document {
         // Build document by id
         val document = firestore.collection(collection.name).document(id.value)
-        return DataSource.Document(document)
-    }
-
-    fun getDocument(id: String): DataSource.Document {
-        val document = firestore.collection(collection.name).document(id)
         return DataSource.Document(document)
     }
 

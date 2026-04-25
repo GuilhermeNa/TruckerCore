@@ -1,10 +1,17 @@
 package com.example.truckercore.layers.data.base.mapper.impl
 
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data.EditBusinessView
 import com.example.truckercore.core.error.DataException
 import com.example.truckercore.layers.data.base.dto.impl.CompanyDto
 import com.example.truckercore.layers.data.base.mapper.base.Mapper
 import com.example.truckercore.layers.domain.base.ids.CompanyID
+import com.example.truckercore.layers.domain.base.others.Cnpj
+import com.example.truckercore.layers.domain.base.others.CompanyName
+import com.example.truckercore.layers.domain.base.others.MunicipalRegistration
+import com.example.truckercore.layers.domain.base.others.StateRegistration
 import com.example.truckercore.layers.domain.model.company.Company
+import com.example.truckercore.layers.domain.model.company.CompanyOptional
+import java.time.LocalDate
 
 object CompanyMapper : Mapper<CompanyDto, Company> {
 

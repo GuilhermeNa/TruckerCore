@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.truckercore.core.error.DataException
 import com.example.truckercore.layers.data.base.dto.contracts.BaseDto
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
+import com.example.truckercore.layers.data.base.outcome.OperationOutcome
 import com.example.truckercore.layers.data_2.remote.base.RemoteDataSource
 import com.example.truckercore.layers.domain.base.contracts.BaseEntity
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
         try {
             data.mapToOutcome(mapper)
         } catch (exception: Exception) {
-            exception.logAndMapToOutcome(
+            exception.mapToDataFailure(
                 "Failed to fetch single object in repository [$classTag]. " +
                         "DTO type: ${data?.javaClass?.simpleName}, data: ${data?.toString() ?: "null"}"
             )
@@ -40,7 +41,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
         try {
             data.mapToOutcome(mapper)
         } catch (exception: Exception) {
-            exception.logAndMapToOutcome(
+            exception.mapToDataFailure(
                 "Failed to fetch list of objects in repository [$classTag]. " +
                         "DTO type: ${data?.firstOrNull()?.javaClass?.simpleName ?: "unknown"}, " +
                         "items count: ${data?.size ?: 0}"
@@ -58,7 +59,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
             dto.mapToOutcome(mapper)
         }.catch { throwable ->
             emit(
-                throwable.logAndMapToOutcome(
+                throwable.mapToDataFailure(
                     "Failed to observe single object in repository [$classTag]. " +
                             "Flow type: ${dataFlow.javaClass.simpleName}"
                 )
@@ -76,7 +77,7 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
             dtos.mapToOutcome(mapper)
         }.catch { throwable ->
             emit(
-                throwable.logAndMapToOutcome(
+                throwable.mapToDataFailure(
                     "Failed to observe list of objects in repository [$classTag]. " +
                             "Flow type: ${dataFlow.javaClass.simpleName}"
                 )
@@ -84,12 +85,34 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
         }
 
     //----------------------------------------------------------------------------------------------
+    // Save an object
+    //----------------------------------------------------------------------------------------------
+    suspend fun <D: BaseDto> save(
+        mapper: () -> D,
+        operation: suspend (dto: D) -> Unit
+    ): OperationOutcome = try {
+        val dto = mapper()
+        operation(dto)
+        OperationOutcome.Completed
+    } catch (e: Exception) {
+        e.mapToOperationFailure(
+            "Failed to save an object in repository [$classTag]."
+        )
+    }
+
+    //----------------------------------------------------------------------------------------------
     // Internal mapping helpers
     //----------------------------------------------------------------------------------------------
-    private fun Throwable.logAndMapToOutcome(message: String): DataOutcome.Failure {
+    private fun Throwable.mapToDataFailure(message: String): DataOutcome.Failure {
         Log.e(classTag, message, this) // full stack trace for debugging
         val appError = DataException.Repository(message, this)
         return DataOutcome.Failure(appError)
+    }
+
+    private fun Throwable.mapToOperationFailure(message: String): OperationOutcome.Failure {
+        Log.e(classTag, message, this) // full stack trace for debugging
+        val appError = DataException.Repository(message, this)
+        return OperationOutcome.Failure(appError)
     }
 
     private fun <D : BaseDto, E : BaseEntity> D?.mapToOutcome(mapper: (D) -> E): DataOutcome<E> =

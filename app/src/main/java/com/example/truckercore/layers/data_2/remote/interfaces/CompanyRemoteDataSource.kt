@@ -9,6 +9,6 @@ interface CompanyRemoteDataSource : RemoteDataSource {
 
     suspend fun fetch(id: CompanyID): CompanyDto?
 
-    suspend fun save(dto: CompanyDto): OperationOutcome
+    suspend fun save(dto: CompanyDto)
 
 }
