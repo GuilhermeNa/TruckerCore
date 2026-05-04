@@ -136,7 +136,7 @@ class VerifyingEmailViewModel(
      * @param newEvent The event to process.
      */
     fun onEvent(newEvent: VerifyingEmailFragmentEvent) {
-        val result = reducer.reduce(stateManager.currentState(), newEvent)
+        val result = reducer.reduce(stateManager.getState(), newEvent)
         result.handle(stateManager::update, ::handleEffect)
     }
 

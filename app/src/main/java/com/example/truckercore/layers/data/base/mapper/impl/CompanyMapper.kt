@@ -1,7 +1,8 @@
 package com.example.truckercore.layers.data.base.mapper.impl
 
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data.EditBusinessView
 import com.example.truckercore.core.error.DataException
+import com.example.truckercore.core.my_lib.expressions.toDate
+import com.example.truckercore.core.my_lib.expressions.toLocalDate
 import com.example.truckercore.layers.data.base.dto.impl.CompanyDto
 import com.example.truckercore.layers.data.base.mapper.base.Mapper
 import com.example.truckercore.layers.domain.base.ids.CompanyID
@@ -10,14 +11,20 @@ import com.example.truckercore.layers.domain.base.others.CompanyName
 import com.example.truckercore.layers.domain.base.others.MunicipalRegistration
 import com.example.truckercore.layers.domain.base.others.StateRegistration
 import com.example.truckercore.layers.domain.model.company.Company
-import com.example.truckercore.layers.domain.model.company.CompanyOptional
-import java.time.LocalDate
 
 object CompanyMapper : Mapper<CompanyDto, Company> {
 
     override fun toDto(entity: Company): CompanyDto = try {
         with(entity) {
-            CompanyDto(id = idValue, status = status)
+            CompanyDto(
+                id = idValue,
+                status = status,
+                cnpj = cnpj?.value,
+                name = name?.value,
+                stateRegistration = stateRegistration?.value,
+                municipalRegistration = municipalRegistration?.value,
+                opening = opening?.toDate()
+            )
         }
     } catch (e: Exception) {
         throw DataException.Mapping("Error while mapping a Company to dto: $entity")
@@ -25,10 +32,20 @@ object CompanyMapper : Mapper<CompanyDto, Company> {
 
     override fun toEntity(dto: CompanyDto): Company = try {
         with(dto) {
-            Company(id = CompanyID(id!!), status = status!!)
+            Company(
+                id = CompanyID(id!!),
+                status = status!!,
+                cnpj = cnpj?.let { Cnpj(it) },
+                name = name?.let { CompanyName(it) },
+                stateRegistration = stateRegistration?.let { StateRegistration(it) },
+                municipalRegistration = municipalRegistration?.let { MunicipalRegistration(it) },
+                opening = opening?.toLocalDate()
+            )
         }
     } catch (e: Exception) {
-        throw DataException.Mapping("Error while mapping an CompanyDto to entity: $dto")
+        throw DataException.Mapping(
+            "Error while mapping an CompanyDto to entity: $dto"
+        )
     }
 
     override fun toDtos(entities: List<Company>): List<CompanyDto> = entities.map { toDto(it) }

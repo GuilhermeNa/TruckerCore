@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavDirections
-import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessStatus
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.content.BusinessResources
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.content.BusinessView
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessState
 import com.example.truckercore.business_admin.layers.presentation.main.fragments.business.view_model.BusinessViewModel
+import com.example.truckercore.core.my_lib.expressions.collectState
 import com.example.truckercore.core.my_lib.expressions.navigateToDirection
 import com.example.truckercore.databinding.FragmentBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.common.lists.recycler_grid.RecyclerGrid
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private typealias LoadingState = BusinessState.Loading
+private typealias ContentState = BusinessState.Content
+private typealias FailureState = BusinessState.Failure
 
 class BusinessFragment : PrivateFragment() {
 
@@ -33,47 +35,36 @@ class BusinessFragment : PrivateFragment() {
     //----------------------------------------------------------------------------------------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initializeViewModel(savedInstanceState)
-        setStateManager()
+        onInitializing(savedInstanceState, viewModel::observeContent)
+        collectState(viewModel.stateFlow, ::handleState)
     }
 
-    private fun initializeViewModel(savedInstanceState: Bundle?) {
-        onInitializing(savedInstanceState) {
-            viewModel.fetchCompany()
+    private fun handleState(state: BusinessState) {
+        when (state) {
+            is LoadingState -> loadingState()
+            is ContentState -> contentState(state.data)
+            is FailureState -> failureState()
         }
     }
 
-    private fun setStateManager() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.stateFlow.collect { state ->
-                    when (state.status) {
-                        BusinessStatus.Loading -> setLoadingStatus()
-                        BusinessStatus.Incomplete -> setIncompleteStatus()
-                        BusinessStatus.Complete -> setCompleteStatus()
-                        BusinessStatus.Failure -> navigateToErrorActivity(requireActivity())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setLoadingStatus() {
+    private fun loadingState() {
         shimmerEnabled(true)
-        incompleteEnabled(false)
+        notificationEnabled(false)
+        fabEnabled(false)
         mainEnabled(false)
     }
 
-    private fun setIncompleteStatus() {
-        shimmerEnabled(false)
-        incompleteEnabled(true)
-        mainEnabled(false)
+    private fun failureState() {
+        navigateToErrorActivity(requireActivity())
     }
 
-    private fun setCompleteStatus() {
+    private fun contentState(data: BusinessView) {
         shimmerEnabled(false)
-        incompleteEnabled(false)
         mainEnabled(true)
+        notificationEnabled(data.notificationEnabled)
+        fabEnabled(data.fabEnabled)
+        initRecycler()
+        bindData(data)
     }
 
     private fun shimmerEnabled(enable: Boolean) {
@@ -86,35 +77,37 @@ class BusinessFragment : PrivateFragment() {
         }
     }
 
-    private fun incompleteEnabled(enable: Boolean) {
-        if (enable) {
-            binding.fragBusinessLayoutIncomplete.visibility = View.VISIBLE
-
-            binding.fragBusinessNotification.notificationTextView.text =
-                res.notification
-
+    private fun notificationEnabled(enabled: Boolean) = with(binding) {
+        if (enabled) {
+            fragBusinessLayoutIncomplete.visibility = View.VISIBLE
+            fragBusinessNotification.notificationTextView.text = res.notification
         } else {
-            binding.fragBusinessLayoutIncomplete.visibility = View.GONE
+            fragBusinessLayoutIncomplete.visibility = View.GONE
+        }
+    }
+
+    private fun fabEnabled(enabled: Boolean) = with(binding) {
+        if (enabled) {
+            fragBusinessFab.visibility = View.VISIBLE
+        } else {
+            fragBusinessFab.visibility = View.INVISIBLE
         }
     }
 
     private fun mainEnabled(enable: Boolean) {
         if (enable) {
             binding.fragBusinessMain.visibility = View.VISIBLE
-            initRecycler()
-            bindData()
-
         } else {
             binding.fragBusinessMain.visibility = View.INVISIBLE
         }
     }
 
-    private fun bindData() {
-        binding.fragBusinessName.text = viewModel.name
-        binding.fragBusinessCnpj.text = viewModel.cnpj
-        binding.fragBusinessOpening.text = viewModel.opening
-        binding.fragBusinessMunicipal.text = viewModel.municipalInsc
-        binding.fragBusinessState.text = viewModel.stateInsc
+    private fun bindData(data: BusinessView) = with(data) {
+        binding.fragBusinessName.text = name
+        binding.fragBusinessCnpj.text = cnpj
+        binding.fragBusinessOpening.text = opening
+        binding.fragBusinessState.text = inscState
+        binding.fragBusinessMunicipal.text = inscMunicipal
     }
 
     private fun initRecycler() {
@@ -143,15 +136,25 @@ class BusinessFragment : PrivateFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setEditBusinessButtonListener()
+        setFabClickListener()
     }
 
     private fun setEditBusinessButtonListener() {
         binding.fragBusinessButton.setOnClickListener {
-            val direction = BusinessFragmentDirections.actionNavBusinessToEditBusinessFragment()
-            navigateToDirection(direction)
+            navigateToEditBusiness()
         }
     }
 
+    private fun setFabClickListener() {
+        binding.fragBusinessFab.setOnClickListener {
+            navigateToEditBusiness()
+        }
+    }
+
+    private fun navigateToEditBusiness() {
+        val direction = BusinessFragmentDirections.actionNavBusinessToEditBusinessFragment()
+        navigateToDirection(direction)
+    }
 
     //----------------------------------------------------------------------------------------------
     // on Destroy View

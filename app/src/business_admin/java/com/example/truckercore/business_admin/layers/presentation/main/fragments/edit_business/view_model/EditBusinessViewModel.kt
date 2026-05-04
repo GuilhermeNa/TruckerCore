@@ -47,41 +47,39 @@ class EditBusinessViewModel(
     private fun fetchSuccess(company: Company) {
         this.company = company
         val data = EditBusinessView.from(company)
-        val newState = stateManager.currentState().loaded(data)
+        val newState = stateManager.getState().loaded(data)
         stateManager.update(newState)
     }
 
     private fun fetchError(error: AppException) {
         Log.e(classTag, "${error.message}", error)
-        val newState = stateManager.currentState().failure()
+        val newState = stateManager.getState().failure()
         stateManager.update(newState)
     }
 
     //----------------------------------------------------------------------------------------------
     // SAVE COMPANY
     //----------------------------------------------------------------------------------------------
-    fun saveCompany(data: EditBusinessView) {
+    fun saveCompany(data: EditBusinessView) = viewModelScope.launch {
 
         // Update State
-        val newState = stateManager.currentState().saving()
+        val newState = stateManager.getState().saving()
         stateManager.update(newState)
 
         // Complete Registration
-        viewModelScope.launch {
-            completeRegistration(data, company)
-                .fold(::saveSuccess, ::saveError)
-        }
+        completeRegistration(data, company)
+            .fold(::saveSuccess, ::saveError)
 
     }
 
     private fun saveSuccess() {
-        val newState = stateManager.currentState().saved()
+        val newState = stateManager.getState().saved()
         stateManager.update(newState)
     }
 
     private fun saveError(exception: AppException) {
         Log.e(classTag, "${exception.message}", exception)
-        val newState = stateManager.currentState().failure()
+        val newState = stateManager.getState().failure()
         stateManager.update(newState)
     }
 
@@ -93,7 +91,7 @@ class EditBusinessViewModel(
     }
 
     fun updateName(text: String) {
-        val newState = stateManager.currentState().textChange(
+        val newState = stateManager.getState().textChange(
             validationMap = validator.validateName(text),
             fieldsAreValid = validator.fieldsAreValid
         )
@@ -101,7 +99,7 @@ class EditBusinessViewModel(
     }
 
     fun updateCnpj(text: String) {
-        val newState = stateManager.currentState().textChange(
+        val newState = stateManager.getState().textChange(
             validationMap = validator.validateCnpj(text),
             fieldsAreValid = validator.fieldsAreValid
         )
@@ -109,7 +107,7 @@ class EditBusinessViewModel(
     }
 
     fun updateState(text: String) {
-        val newState = stateManager.currentState().textChange(
+        val newState = stateManager.getState().textChange(
             validationMap = validator.validateState(text),
             fieldsAreValid = validator.fieldsAreValid
         )
@@ -117,7 +115,7 @@ class EditBusinessViewModel(
     }
 
     fun updateMunicipal(text: String) {
-        val newState = stateManager.currentState().textChange(
+        val newState = stateManager.getState().textChange(
             validationMap = validator.validateMunicipal(text),
             fieldsAreValid = validator.fieldsAreValid
         )
@@ -125,7 +123,7 @@ class EditBusinessViewModel(
     }
 
     fun updateOpening(text: String) {
-        val newState = stateManager.currentState().textChange(
+        val newState = stateManager.getState().textChange(
             validationMap = validator.validateOpening(text),
             fieldsAreValid = validator.fieldsAreValid
         )

@@ -1,5 +1,6 @@
 package com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.data
 
+import com.example.truckercore.core.my_lib.files.dateTimeFormatPtBr
 import com.example.truckercore.layers.domain.model.company.Company
 
 private typealias Validator = EditBusinessValidator
@@ -34,7 +35,7 @@ data class EditBusinessView(
                 name = company.name?.value ?: "",
                 stateReg = company.stateRegistration?.value ?: "",
                 municipalReg = company.municipalRegistration?.value ?: "",
-                opening = company.opening?.toString() ?: ""
+                opening = company.opening?.format(dateTimeFormatPtBr) ?: ""
             )
         }
     }

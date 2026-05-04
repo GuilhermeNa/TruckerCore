@@ -106,7 +106,7 @@ class ContinueRegisterViewModel(
      * @param newEvent The event emitted from the Continue Register Fragment.
      */
     fun onEvent(newEvent: ContinueRegisterFragmentEvent) {
-        val result = reducer.reduce(stateManager.currentState(), newEvent)
+        val result = reducer.reduce(stateManager.getState(), newEvent)
         result.handle(stateManager::update, effectManager::trySend)
     }
 

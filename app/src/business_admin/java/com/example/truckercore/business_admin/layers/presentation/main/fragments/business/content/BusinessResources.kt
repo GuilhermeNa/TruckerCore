@@ -1,4 +1,4 @@
-package com.example.truckercore.business_admin.layers.presentation.main.fragments.business
+package com.example.truckercore.business_admin.layers.presentation.main.fragments.business.content
 
 import com.example.truckercore.R
 import com.example.truckercore.core.my_lib.expressions.span

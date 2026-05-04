@@ -1,12 +1,12 @@
 package com.example.truckercore.core.di
 
-import com.example.truckercore.layers.data.data_source.preferences.UserPreferencesDataStore
+import com.example.truckercore.layers.data_2.preferences.UserPreferencesDataStore
 import com.example.truckercore.layers.data.repository.auth.AuthenticationRepository
 import com.example.truckercore.layers.data.repository.auth.AuthenticationRepositoryImpl
 import com.example.truckercore.layers.data.repository.data.DataRepository
 import com.example.truckercore.layers.data.repository.data.DataRepositoryImpl
-import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
-import com.example.truckercore.layers.data.repository.preferences.PreferencesRepositoryImpl
+import com.example.truckercore.layers.data_2.repository.interfaces.PreferencesRepository
+import com.example.truckercore.layers.data_2.repository.impl.PreferencesRepositoryImpl
 import com.example.truckercore.layers.data.repository.instruction.InstructionRepository
 import com.example.truckercore.layers.data.repository.instruction.InstructionRepositoryImpl
 import com.example.truckercore.layers.data_2.repository.impl.AccessRepositoryImpl

@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.data.repository.preferences
+package com.example.truckercore.layers.data_2.repository.interfaces
 
 /**
  * Interface that defines the contract for interacting with generic user preferences.

@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-abstract class RemoteDataSourceBase<D : BaseDto>(protected val firestore: FirebaseFirestore) {
+abstract class RemoteDataSourceBase<D : BaseDto>(
+    private val firestore: FirebaseFirestore
+) {
 
     abstract val dtoClazz: Class<D>  // Class reference for the DTO type
 

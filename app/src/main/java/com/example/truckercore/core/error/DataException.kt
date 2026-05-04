@@ -52,4 +52,5 @@ sealed class DataException(
         message: String = "An error occurred while mapping an object.",
         cause: Throwable? = null
     ) : InfraException(message, cause)
+
 }

@@ -8,6 +8,7 @@ import com.example.truckercore.layers.data_2.repository.base.DataRepositoryBase
 import com.example.truckercore.layers.data_2.repository.interfaces.CompanyRepository
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.example.truckercore.layers.domain.model.company.Company
+import kotlinx.coroutines.flow.Flow
 
 class CompanyRepositoryImpl(
     override val remote: CompanyRemoteDataSource
@@ -16,13 +17,20 @@ class CompanyRepositoryImpl(
     override suspend fun fetch(id: CompanyID): DataOutcome<Company> =
         fetch(
             data = remote.fetch(id),
-            mapper = { CompanyMapper.toEntity(it) }
+            mapper = CompanyMapper::toEntity
         )
+
+    override fun observe(id: CompanyID): Flow<DataOutcome<Company>> =
+        observe(
+            dataFlow = remote.observe(id),
+            mapper = CompanyMapper::toEntity
+        )
+
 
     override suspend fun save(company: Company): OperationOutcome =
         save(
-            mapper = { CompanyMapper.toDto(company) },
-            operation = { dto -> remote.save(dto) }
+            operation = { dto -> remote.save(dto) },
+            mapper = { CompanyMapper.toDto(company) }
         )
 
 }

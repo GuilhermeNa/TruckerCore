@@ -1,4 +1,4 @@
-package com.example.truckercore.layers.data.data_source.preferences
+package com.example.truckercore.layers.data_2.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore

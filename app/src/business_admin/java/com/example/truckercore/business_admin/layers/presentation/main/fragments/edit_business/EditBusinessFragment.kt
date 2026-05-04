@@ -13,11 +13,17 @@ import com.example.truckercore.core.my_lib.expressions.addCnpjMask
 import com.example.truckercore.core.my_lib.expressions.addDateMask
 import com.example.truckercore.core.my_lib.expressions.collectState
 import com.example.truckercore.core.my_lib.expressions.popBackstack
+import com.example.truckercore.core.my_lib.expressions.showSuccessSnackbar
 import com.example.truckercore.databinding.FragmentEditBusinessBinding
 import com.example.truckercore.layers.presentation.base.abstractions.view.private.PrivateFragment
 import com.example.truckercore.layers.presentation.base.managers.SaveMenuManager
 import com.example.truckercore.layers.presentation.common.dialogs.LoadingDialog
+import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private typealias LoadingState = EditBusinessState.Loading
+private typealias LoadedState = EditBusinessState.Loaded
+private typealias FailureState = EditBusinessState.Failure
 
 class EditBusinessFragment : PrivateFragment() {
 
@@ -45,35 +51,36 @@ class EditBusinessFragment : PrivateFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onInitializing(savedInstanceState, viewModel::fetchCompany)
-        setStateManager()
+        collectState(viewModel.stateFlow, ::handleState)
     }
 
-    private fun setStateManager() {
-        collectState(viewModel.stateFlow) { state ->
-            when (state) {
-                EditBusinessState.Failure -> {
-                    navigateToErrorActivity(requireActivity())
-                }
-
-                EditBusinessState.Loading -> {
-                    enableShimmer(true)
-                    enableEditText(false)
-                }
-
-                is EditBusinessState.Loaded -> {
-                    handleSaved(state.saved)
-                    enableShimmer(false)
-                    enableEditText(true)
-                    enableMenu(state.ready)
-                    enableDialog(state.saving)
-                    bindContent(state.data)
-                }
-            }
+    private fun handleState(state: EditBusinessState) {
+        when (state) {
+            is LoadingState -> loadingState()
+            is LoadedState -> loadedState(state)
+            is FailureState -> navigateToErrorActivity(requireActivity())
         }
     }
 
+    private fun loadingState() {
+        enableShimmer(true)
+        enableEditText(false)
+    }
+
+    private fun loadedState(state: LoadedState) {
+        handleSaved(state.saved)
+        enableShimmer(false)
+        enableEditText(true)
+        enableMenu(state.ready)
+        enableDialog(state.saving)
+        bindContent(state.data)
+    }
+
     private fun handleSaved(saved: Boolean) {
-        if (saved) popBackstack()
+        if (saved) {
+            showSuccessSnackbar("Salvo com sucesso")
+            popBackstack()
+        }
     }
 
     private fun enableDialog(saving: Boolean) {
@@ -89,10 +96,17 @@ class EditBusinessFragment : PrivateFragment() {
     }
 
     private fun bindContent(data: EditBusinessView) {
-        if (viewModel.isViewInit) return
-
         binding.run {
             with(data) {
+                setError(fragEditBusinessNameLayout, nameError)
+                setError(fragEditBusinessCnpjLayout, cnpjError)
+                setError(fragEditBusinessStateLayout, stateRegError)
+                setError(fragEditBusinessMunicipalLayout, municipalRegError)
+                setError(fragEditBusinessOpeningLayout, openingError)
+
+                // Bind data only if is first bind
+                if (viewModel.isViewInit) return
+
                 fragEditBusinessName.setText(name)
                 fragEditBusinessCnpj.setText(cnpj)
                 fragEditBusinessState.setText(stateReg)
@@ -102,6 +116,16 @@ class EditBusinessFragment : PrivateFragment() {
         }
 
         viewModel.markAsInitialized()
+    }
+
+    private fun setError(layout: TextInputLayout, text: String?) {
+        layout.error = null
+        layout.isErrorEnabled = false
+
+        if (!text.isNullOrEmpty()) {
+            layout.error = text
+        }
+
     }
 
     private fun enableMenu(enabled: Boolean) {

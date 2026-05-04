@@ -32,7 +32,7 @@ class StateManager<T : State>(initialState: T) {
      *
      * Useful for one-off reads or decision-making logic.
      */
-    fun currentState(): T = _stateFlow.value
+    fun getState(): T = _stateFlow.value
 
     /**
      * Updates the current state.

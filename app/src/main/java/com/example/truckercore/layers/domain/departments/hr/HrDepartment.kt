@@ -16,6 +16,7 @@ class HrDepartment {
     // Initialize
     //----------------------------------------------------------------------------------------------
     fun initFromDatabase(employeeList: List<Employee>) {
+        employees.clear()
         employeeList.forEach(::registerEmployee)
     }
 

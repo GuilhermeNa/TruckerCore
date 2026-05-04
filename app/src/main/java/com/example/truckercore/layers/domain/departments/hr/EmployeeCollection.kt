@@ -23,4 +23,8 @@ class EmployeeCollection(
 
     fun contains(id: ID): Boolean = dataSet.any { it.id == id }
 
+    fun clear() {
+        dataSet.clear()
+    }
+
 }

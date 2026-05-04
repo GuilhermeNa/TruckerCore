@@ -67,7 +67,7 @@ class UserProfileViewModel(
      * @param newEvent The event originating from the UI or internal operations.
      */
     fun onEvent(newEvent: UserProfileFragmentEvent) {
-        val result = reducer.reduce(stateManager.currentState(), newEvent)
+        val result = reducer.reduce(stateManager.getState(), newEvent)
         result.handle(stateManager::update, ::handleEffect)
     }
 
@@ -96,7 +96,7 @@ class UserProfileViewModel(
      * maps the result to an event, and feeds it back into the state machine.
      */
     private fun launchSaveProfileTask() = viewModelScope.launch {
-        val name = stateManager.currentState().getName()
+        val name = stateManager.getState().getName()
         val result = createUserProfileUseCase(name).toEvent()
         onEvent(result)
     }

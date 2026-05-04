@@ -88,8 +88,8 @@ abstract class DataRepositoryBase(protected open val remote: RemoteDataSource) {
     // Save an object
     //----------------------------------------------------------------------------------------------
     suspend fun <D: BaseDto> save(
-        mapper: () -> D,
-        operation: suspend (dto: D) -> Unit
+        operation: suspend (dto: D) -> Unit,
+        mapper: () -> D
     ): OperationOutcome = try {
         val dto = mapper()
         operation(dto)

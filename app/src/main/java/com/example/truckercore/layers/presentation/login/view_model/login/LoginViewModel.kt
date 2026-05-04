@@ -9,7 +9,7 @@ import com.example.truckercore.core.my_lib.expressions.isInvalidUser
 import com.example.truckercore.core.my_lib.expressions.isUserNotFound
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data.base.outcome.OperationOutcome
-import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.data_2.repository.interfaces.PreferencesRepository
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignInUseCase
@@ -21,7 +21,6 @@ import com.example.truckercore.layers.presentation.login.view_model.login.helper
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentEvent
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentReducer
 import com.example.truckercore.layers.presentation.login.view_model.login.helpers.LoginFragmentState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -74,7 +73,7 @@ class LoginViewModel(
      * which returns a result indicating new state or effects.
      */
     fun onEvent(event: LoginFragmentEvent) {
-        val result = reducer.reduce(stateManager.currentState(), event)
+        val result = reducer.reduce(stateManager.getState(), event)
         result.handle(stateManager::update, ::handleEffect)
     }
 

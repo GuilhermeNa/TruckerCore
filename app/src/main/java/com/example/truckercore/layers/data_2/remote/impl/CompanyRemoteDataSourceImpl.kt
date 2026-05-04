@@ -6,6 +6,7 @@ import com.example.truckercore.layers.data_2.remote.base.RemoteDataSourceBase
 import com.example.truckercore.layers.data_2.remote.interfaces.CompanyRemoteDataSource
 import com.example.truckercore.layers.domain.base.ids.CompanyID
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
 
 class CompanyRemoteDataSourceImpl(
     firestore: FirebaseFirestore
@@ -17,6 +18,9 @@ class CompanyRemoteDataSourceImpl(
 
     override suspend fun fetch(id: CompanyID): CompanyDto? =
         super.fetch(source = getDocument(id), dataClazz = dtoClazz)
+
+    override fun observe(id: CompanyID): Flow<CompanyDto?> =
+        super.observe(source = getDocument(id), dataClazz = dtoClazz)
 
     override suspend fun save(dto: CompanyDto) = super.save(dto)
 

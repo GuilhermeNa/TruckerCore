@@ -4,7 +4,7 @@ import com.example.truckercore.core.config.flavor.FlavorService
 import com.example.truckercore.core.my_lib.expressions.launchOnViewModelScope
 import com.example.truckercore.core.my_lib.ui_components.FabComponent
 import com.example.truckercore.core.my_lib.ui_components.Visibility
-import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.data_2.repository.interfaces.PreferencesRepository
 import com.example.truckercore.layers.presentation.base.managers.EffectManager
 import com.example.truckercore.layers.presentation.base.managers.StateManager
 import com.example.truckercore.layers.presentation.base.abstractions.view_model.BaseViewModel
@@ -73,7 +73,7 @@ class WelcomeViewModel(
      * @param event The event emitted from the Welcome Fragment (e.g., button click, pager swipe).
      */
     fun onEvent(event: WelcomeFragmentEvent) {
-        val result = reducer.reduce(stateManager.currentState(), event)
+        val result = reducer.reduce(stateManager.getState(), event)
         result.handle(stateManager::update, effectManager::trySend)
     }
 
@@ -82,7 +82,7 @@ class WelcomeViewModel(
      *
      * @return The current pager index as an [Int].
      */
-    fun currentPagerPosition(): Int = stateManager.currentState().pagerPos
+    fun currentPagerPosition(): Int = stateManager.getState().pagerPos
 
     /**
      * Marks that the user has completed the first access (onboarding) process

@@ -110,7 +110,7 @@ class EmailAuthViewModel(
      * @param event The UI event being processed.
      */
     fun onEvent(event: EmailAuthenticationFragmentEvent) = launchOnViewModelScope {
-        val result = reducer.reduce(stateManager.currentState(), event)
+        val result = reducer.reduce(stateManager.getState(), event)
         result.handle(stateManager::update, ::handleEffect)
     }
 
@@ -146,7 +146,7 @@ class EmailAuthViewModel(
     private fun authenticateEmail() = launchOnViewModelScope {
         delay(HALF_SEC) // Waiting for animation on UI
 
-        val credential = stateManager.currentState().getCredential()
+        val credential = stateManager.getState().getCredential()
         val newEvent = createUserWithEmailUseCase(credential).toEvent()
 
         // Feed the outcome back into the reducer cycle

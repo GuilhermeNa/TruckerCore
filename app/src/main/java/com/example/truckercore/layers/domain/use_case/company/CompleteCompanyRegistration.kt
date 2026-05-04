@@ -45,8 +45,8 @@ class CompleteCompanyRegistrationImpl(
 
                 opening = if (opening.isBlank()) null
                 else LocalDate.of(
-                    opening.substring(4, 6).toInt(),
-                    opening.substring(2, 4).toInt(),
+                    opening.substring(6, 8).toInt(),
+                    opening.substring(3, 5).toInt(),
                     opening.substring(0, 2).toInt()
                 )
             )

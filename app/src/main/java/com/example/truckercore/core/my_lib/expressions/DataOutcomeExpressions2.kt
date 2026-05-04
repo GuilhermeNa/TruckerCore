@@ -4,6 +4,7 @@ import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.error.core.AppException
 import com.example.truckercore.core.error.default_errors.EmptyDataException
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
+import kotlinx.coroutines.flow.Flow
 
 fun DataOutcome<*>.isFailure(): Boolean = this is DataOutcome.Failure
 
@@ -29,13 +30,18 @@ inline fun <T, R> DataOutcome<T>.fold(
     DataOutcome.Empty -> onEmpty()
 }
 
+fun <A, B> anyError(a: DataOutcome<A>, b: DataOutcome<B>) = a.isFailure() || b.isFailure()
+
 inline fun <A, B, R> zip(
     a: DataOutcome<A>,
     b: DataOutcome<B>,
-    transform: (A, B) -> R
+    transform: (A?, B?) -> R
 ): DataOutcome<R> = when {
     a is DataOutcome.Failure -> a
     b is DataOutcome.Failure -> b
+    a.isEmpty() && b.isEmpty() -> DataOutcome.Empty
+    a.isEmpty() && b is DataOutcome.Success -> DataOutcome.Success(transform(null, b.data))
+    a is DataOutcome.Success && b.isEmpty() -> DataOutcome.Success(transform(a.data, null))
     a is DataOutcome.Success && b is DataOutcome.Success ->
         DataOutcome.Success(transform(a.data, b.data))
 
@@ -127,7 +133,6 @@ fun <T> DataOutcome<T>.getOrThrow(): T = when (this) {
     DataOutcome.Empty -> throw EmptyDataException("Value is empty")
 }
 
-
 inline fun <T, R> DataOutcome<T>.foldRequired(
     onSuccess: (T) -> R,
     orElse: (AppException) -> R
@@ -143,43 +148,16 @@ inline fun <T, R> DataOutcome<T>.foldRequired(
     )
 }
 
-// Dado é necessario. Mapeia os resultados empty em erros
-
-
-/*
-
-operator fun invoke(): Flow<DataOutcome<Session>> {
-    val uidOutcome = authRepository.getUid()
-        .mapEmptyToFailure(EMPTY_UID)
-
-    return when (uidOutcome) {
-        is DataOutcome.Failure -> flowOf(uidOutcome)
-        is DataOutcome.Success -> {
-            userRepository.observe(uidOutcome.data)
-                .map { it.mapEmptyToFailure(EMPTY_USER) }
-                .flatMapOutcome { user ->
-
-                    combine(
-                        accessRepository.observe(user.id)
-                            .map { it.mapEmptyToFailure(EMPTY_ACCESS) },
-
-                        combineAdminAndDriverFlows(user.id)
-                            .map { it.mapEmptyToFailure(EMPTY_EMPLOYEE) }
-
-                    ) { access, employee ->
-
-                        zip(access, employee) { a, e ->
-                            SessionFactory.toEntity(user, a, e)
-                        }
-                    }
-                }
-                .catch {
-                    Log.e(classTag, MAIN_FLOW_ERROR, it)
-                    emit(it.toOutcome())
-                }
-        }
-        DataOutcome.Empty -> flowOf(DataOutcome.Failure(
-            DomainException.NotFound(EMPTY_UID)
-        ))
+suspend inline fun <T> Flow<DataOutcome<T>>.collectFoldRequired(
+    crossinline onSuccess: (T) -> Unit,
+    crossinline orElse: (AppException) -> Unit
+) = this.collect { outcome ->
+    when (outcome) {
+        is DataOutcome.Success -> onSuccess(outcome.data)
+        is DataOutcome.Failure -> orElse(outcome.exception)
+        DataOutcome.Empty -> orElse(
+            DomainException.RuleViolation("Empty outcome")
+        )
     }
-}*/
+}
+

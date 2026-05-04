@@ -2,12 +2,10 @@ package com.example.truckercore.layers.presentation.login.view_model.splash
 
 import androidx.lifecycle.viewModelScope
 import com.example.truckercore.core.config.flavor.FlavorService
-import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
 import com.example.truckercore.core.my_lib.files.ONE_SEC
-import com.example.truckercore.infra.logger.AppLogger
 import com.example.truckercore.layers.data.base.outcome.DataOutcome
-import com.example.truckercore.layers.data.repository.preferences.PreferencesRepository
+import com.example.truckercore.layers.data_2.repository.interfaces.PreferencesRepository
 import com.example.truckercore.layers.domain.base.enums.RegistrationStatus
 import com.example.truckercore.layers.domain.use_case.authentication.CheckUserRegistrationUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.SignOutUseCase
@@ -145,7 +143,7 @@ class SplashViewModel(
      * a new UI state or a one-time effect.
      */
     private fun onEvent(newEvent: SplashEvent) {
-        reducer.reduce(stateManager.currentState(), newEvent).handle(
+        reducer.reduce(stateManager.getState(), newEvent).handle(
             state = stateManager::update,
             effect = ::handleEffect
         )

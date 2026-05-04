@@ -23,15 +23,15 @@ import java.time.LocalDate
 class Company(
     override val id: CompanyID,
     override val status: Status,
-    private var _cnpj: Cnpj? = null,
-    private var _name: CompanyName? = null,
-    private var _stateRegistration: StateRegistration? = null,
-    private var _municipalRegistration: MunicipalRegistration? = null,
-    private var _opening: LocalDate? = null
+    val cnpj: Cnpj? = null,
+    val name: CompanyName? = null,
+    val stateRegistration: StateRegistration? = null,
+    val municipalRegistration: MunicipalRegistration? = null,
+    val opening: LocalDate? = null
 ) : BaseEntity, Optional<CompanyOptional, Company> {
 
     // Getters
-    val cnpj get() = _cnpj
+/*    val cnpj get() = _cnpj
 
     val name get() = _name
 
@@ -39,7 +39,7 @@ class Company(
 
     val municipalRegistration get() = _municipalRegistration
 
-    val opening get() = _opening
+    val opening get() = _opening*/
 
     // Collections
     private val anttCollection = AnttCollection()
@@ -55,21 +55,21 @@ class Company(
     // Methods
     //----------------------------------------------------------------------------------------------
     override fun isFilled(): Boolean =
-        cnpj != null ||
-                name != null ||
-                stateRegistration != null ||
-                municipalRegistration != null ||
+        cnpj != null &&
+                name != null &&
+                stateRegistration != null &&
+                municipalRegistration != null &&
                 opening != null
 
     override fun completeRegistration(data: CompanyOptional): Company {
         return Company(
             id = this.id,
             status = this.status,
-            _cnpj = data.cnpj ?: cnpj,
-            _name = data.name ?: name,
-            _stateRegistration = data.stateRegistration ?: stateRegistration,
-            _municipalRegistration = data.municipalRegistration ?: municipalRegistration,
-            _opening = data.opening ?: opening
+            cnpj = data.cnpj,
+            name = data.name,
+            stateRegistration = data.stateRegistration,
+            municipalRegistration = data.municipalRegistration,
+            opening = data.opening
         )
     }
 

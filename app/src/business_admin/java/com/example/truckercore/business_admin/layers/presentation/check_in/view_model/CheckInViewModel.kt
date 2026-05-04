@@ -15,10 +15,7 @@ import com.example.truckercore.business_admin.layers.presentation.check_in.view_
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.objects.CurrentUser
 import com.example.truckercore.core.error.PresentationException
 import com.example.truckercore.core.my_lib.expressions.get
-import com.example.truckercore.core.my_lib.expressions.getTag
 import com.example.truckercore.core.my_lib.expressions.handle
-import com.example.truckercore.infra.logger.AppLogger
-import com.example.truckercore.infra.logger.Logable
 import com.example.truckercore.layers.domain.use_case.authentication.GetUidUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserEmailUseCase
 import com.example.truckercore.layers.domain.use_case.authentication.GetUserNameUseCase
@@ -62,7 +59,7 @@ class CheckInViewModel(
     // Event Dispatcher
     // ---------------------------------------------------------------------------------------------
     private fun onEvent(newEvent: CheckInEvent) {
-        val result = reducer.reduce(stateManager.currentState(), newEvent)
+        val result = reducer.reduce(stateManager.getState(), newEvent)
         result.handle(stateManager::update, ::handleEffect)
     }
 
