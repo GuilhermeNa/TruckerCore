@@ -29,7 +29,7 @@ class MainResources {
     val topLevelDestination = setOf(
         R.id.nav_home,
         R.id.nav_business,
-        R.id.nav_employees,
+        R.id.nav_employee,
         R.id.nav_fleet,
         R.id.nav_fines,
         R.id.nav_settings

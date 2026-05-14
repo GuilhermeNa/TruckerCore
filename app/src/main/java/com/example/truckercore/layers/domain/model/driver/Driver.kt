@@ -1,6 +1,8 @@
 package com.example.truckercore.layers.domain.model.driver
 
+import com.example.truckercore.business_admin.layers.presentation.main.fragments.employees.view_model.EmployeesState
 import com.example.truckercore.core.error.DomainException
+import com.example.truckercore.core.my_lib.classes.Cpf
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.layers.domain.base.contracts.Employee
@@ -23,8 +25,14 @@ data class Driver(
     override val userId: UserID? = null,
     override val status: Status,
     override val name: Name,
-    override val email: Email? = null
+    override val email: Email? = null,
+    override val state: EmployeesState,
+    override val cpf: Cpf,
+
+    override val cnh: DriveLicense? = null
 ) : Employee {
+
+
 
     /**
      * Collection of driving licenses associated with the driver.
@@ -71,6 +79,10 @@ data class Driver(
     companion object {
         private const val LICENSE_OVERLAPS_ERROR =
             "Cannot register License: the provided document period overlaps with an existing License."
+    }
+
+    override fun position(): String {
+     return "Motorista"
     }
 
 }

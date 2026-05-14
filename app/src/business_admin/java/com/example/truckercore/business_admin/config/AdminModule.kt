@@ -2,7 +2,7 @@ package com.example.truckercore.business_admin.config
 
 import com.example.truckercore.business_admin.layers.domain.use_case.access.AuthorizeEmployeeAccessUseCase
 import com.example.truckercore.business_admin.layers.domain.use_case.company.InitializeCompanyAccessUseCase
-import com.example.truckercore.business_admin.layers.domain.use_case.employee.GenerateRegistrationCodeUseCase
+import com.example.truckercore.business_admin.layers.domain.use_case.admin.GenerateRegistrationCodeUseCase
 import com.example.truckercore.business_admin.layers.domain.use_case.session.ObserveSessionUseCase
 import com.example.truckercore.business_admin.layers.presentation.check_in.view_model.CheckInViewModel
 import com.example.truckercore.business_admin.layers.presentation.main.activity.view_model.MainViewModel

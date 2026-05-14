@@ -5,10 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".business_admin.layers.presentation.main.fragments.employees.EmployeesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include
+        android:id="@+id/frag_employees_recycler"
+        layout="@layout/recycler_line"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/frag_employees_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/icon_add" />
 
 </FrameLayout>

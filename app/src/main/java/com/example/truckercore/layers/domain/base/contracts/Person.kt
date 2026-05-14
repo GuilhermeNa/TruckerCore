@@ -1,8 +1,10 @@
 package com.example.truckercore.layers.domain.base.contracts
 
+import com.example.truckercore.core.my_lib.classes.Cpf
 import com.example.truckercore.core.my_lib.classes.Email
 import com.example.truckercore.core.my_lib.classes.Name
 import com.example.truckercore.layers.domain.base.ids.UserID
+import com.example.truckercore.layers.domain.model.drive_license.DriveLicense
 import com.example.truckercore.layers.domain.model.user.User
 
 /**
@@ -19,6 +21,8 @@ interface Person : Entity {
     val name: Name
     val email: Email?
     val userId: UserID?
+    val cpf: Cpf
+    val cnh: DriveLicense?
 
     fun nameValue() = name.value
 

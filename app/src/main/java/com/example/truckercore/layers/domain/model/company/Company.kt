@@ -1,6 +1,7 @@
 package com.example.truckercore.layers.domain.model.company
 
 import com.example.truckercore.layers.domain.base.contracts.BaseEntity
+import com.example.truckercore.layers.domain.base.contracts.Employee
 import com.example.truckercore.layers.domain.base.contracts.Optional
 import com.example.truckercore.layers.domain.base.enums.Status
 import com.example.truckercore.layers.domain.base.ids.CompanyID
@@ -29,17 +30,6 @@ class Company(
     val municipalRegistration: MunicipalRegistration? = null,
     val opening: LocalDate? = null
 ) : BaseEntity, Optional<CompanyOptional, Company> {
-
-    // Getters
-/*    val cnpj get() = _cnpj
-
-    val name get() = _name
-
-    val stateRegistration get() = _stateRegistration
-
-    val municipalRegistration get() = _municipalRegistration
-
-    val opening get() = _opening*/
 
     // Collections
     private val anttCollection = AnttCollection()
@@ -71,6 +61,10 @@ class Company(
             municipalRegistration = data.municipalRegistration,
             opening = data.opening
         )
+    }
+
+    fun hire(employee: Employee) {
+        hr.register(employee)
     }
 
 }

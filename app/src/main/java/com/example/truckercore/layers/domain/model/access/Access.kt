@@ -25,4 +25,9 @@ data class Access(
     val authorized: Boolean = false,
     val userId: UserID,
     val role: Role
-) : Entity
+) : Entity {
+
+    fun update(role: Role) = copy(role = role)
+
+
+}

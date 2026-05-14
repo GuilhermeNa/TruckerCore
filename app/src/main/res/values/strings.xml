@@ -59,6 +59,7 @@
     <string name="send_verification_email">Enviar email</string>
     <string name="business">Empresa</string>
     <string name="edit_business">Editar empresa</string>
+    <string name="edit_employee">Editar funcionário</string>
     <string name="fines">Infrações</string>
     <string name="preferences">Preferências</string>
     <string name="logout">Sair do app</string>

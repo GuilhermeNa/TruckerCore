@@ -22,11 +22,6 @@
             app:launchSingleTop="false" />
     </fragment>
     <fragment
-        android:id="@+id/nav_employees"
-        android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employee.EmployeeFragment"
-        android:label="@string/employee"
-        tools:layout="@layout/fragment_employee" />
-    <fragment
         android:id="@+id/nav_fines"
         android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.fine.FineFragment"
         android:label="@string/fines"
@@ -64,5 +59,48 @@
         android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_business.EditBusinessFragment"
         android:label="@string/edit_business"
         tools:layout="@layout/fragment_edit_business" />
+
+    <navigation android:id="@+id/employee_navigation"
+        app:startDestination="@id/nav_employees">
+        <fragment
+            android:id="@+id/nav_edit_employee"
+            android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.edit_employee.EditEmployeeFragment"
+            android:label="@string/edit_employee>"
+            tools:layout="@layout/fragment_edit_employee">
+            <argument
+                android:name="id"
+                app:argType="string"
+                app:nullable="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/nav_employee"
+            android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employee.EmployeeFragment"
+            android:label="@string/employee"
+            tools:layout="@layout/fragment_employee"/>
+        <fragment
+            android:id="@+id/nav_employees"
+            android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employees.EmployeesFragment"
+            android:label="@string/employee"
+            tools:layout="@layout/fragment_employees">
+            <action
+                android:id="@+id/action_nav_employees_to_employeeTypeFragment"
+                app:destination="@id/employeeTypeFragment" />
+            <action
+                android:id="@+id/action_nav_employees_to_nav_employee"
+                app:destination="@id/nav_employee" />
+        </fragment>
+        <fragment
+            android:id="@+id/employeeTypeFragment"
+            android:name="com.example.truckercore.business_admin.layers.presentation.main.fragments.employee_type.EmployeeTypeFragment"
+            android:label="fragment_employee_type"
+            tools:layout="@layout/fragment_employee_type" >
+            <argument
+                android:name="id"
+                app:argType="string" />
+            <action
+                android:id="@+id/action_employeeTypeFragment_to_nav_edit_employee"
+                app:destination="@id/nav_edit_employee" />
+        </fragment>
+    </navigation>
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.truckercore.business_admin.layers.domain.use_case.employee
+package com.example.truckercore.business_admin.layers.domain.use_case.admin
 
 import com.example.truckercore.core.error.DomainException
 import com.example.truckercore.core.my_lib.expressions.zip
@@ -6,7 +6,7 @@ import com.example.truckercore.layers.data.base.outcome.DataOutcome
 import com.example.truckercore.layers.data_2.cache.SessionCache
 import com.example.truckercore.layers.data_2.repository.interfaces.AdminRepository
 import com.example.truckercore.layers.data_2.repository.interfaces.DriverRepository
-import com.example.truckercore.layers.domain.departments.hr.EmployeeCollection
+import com.example.truckercore.layers.domain.departments.hr.HrDepartment
 import com.example.truckercore.layers.domain.model.access.Role
 import com.example.truckercore.layers.domain.model.admin.Admin
 import com.example.truckercore.layers.domain.model.driver.Driver
@@ -14,19 +14,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 
-interface GetEmployeesUseCase {
-
-    fun observe(): Flow<DataOutcome<EmployeeCollection>>
-
+interface GetHrDepartmentUseCase {
+    fun observe(): Flow<DataOutcome<HrDepartment>>
 }
 
-
-class GetEmployeesUseCaseImpl(
+class GetHrDepartmentUseCaseImpl(
     private val adminRepository: AdminRepository,
     private val driverRepository: DriverRepository
-) : GetEmployeesUseCase {
+) : GetHrDepartmentUseCase {
 
-    override fun observe(): Flow<DataOutcome<EmployeeCollection>> {
+    override fun observe(): Flow<DataOutcome<HrDepartment>> {
 
         // 1: Check if user has permission
         // to get employee collection
@@ -43,21 +40,21 @@ class GetEmployeesUseCaseImpl(
             adminRepository.observeList(companyId),
             driverRepository.observeList(companyId),
         ) { adminOutcome, driverOutcome ->
-            zip(adminOutcome, driverOutcome, ::collectionFactory)
+            zip(adminOutcome, driverOutcome, ::hrDepartmentFactory)
         }
 
     }
 
-    private fun collectionFactory(
+    private fun hrDepartmentFactory(
         admins: List<Admin>?,
         drivers: List<Driver>?
-    ): EmployeeCollection {
-        val collection = EmployeeCollection()
+    ): HrDepartment {
+        val hr = HrDepartment()
 
-        admins?.let { collection.addAll(it) }
-        drivers?.let { collection.addAll(it) }
+        val employees = listOfNotNull(admins, drivers).flatten().toHashSet()
+        hr.initFromDatabase(employees)
 
-        return collection
+        return hr
     }
 
     private fun unauthorizedFlow() = flowOf(

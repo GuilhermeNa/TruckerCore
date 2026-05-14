@@ -31,6 +31,14 @@ sealed class DomainException(
     ) : DomainException(message, cause)
 
     /**
+     * Indicates that the user is trying to register an cpf already existent.
+     */
+    class CpfRegistered(
+        message: String = "Already registered Person.",
+        cause: Throwable? = null
+    ) : DomainException(message, cause)
+
+    /**
      * Indicates a violation of a business rule.
      */
     class RuleViolation(
